@@ -2,7 +2,7 @@
 
 - **Statut** : Accepté
 - **Date** : 2026-06-04
-- **Contexte** : suite de l'[audit pré-dev](../AUDIT_PRE_DEV.md). Cet ADR tranche la
+- **Contexte** : suite de l'[audit pré-dev](AUDIT_PRE_DEV.md). Cet ADR tranche la
   **priorité 3** : entités du Domain incomplètes/contradictoires (C4, C5) et points de
   périmètre (M6 observations, M9 sync des fiches perso), plus deux corrections mécaniques
   (M7, M8) et l'unification des unités (P2).
@@ -124,5 +124,5 @@ Une fiche perso est une **donnée utilisateur** au même titre qu'un potager : e
 
 ## Liens
 
-- Audit source : [AUDIT_PRE_DEV.md](../AUDIT_PRE_DEV.md) (C4, C5, M6, M7, M8, M9, P2)
+- Audit source : [AUDIT_PRE_DEV.md](AUDIT_PRE_DEV.md) (C4, C5, M6, M7, M8, M9, P2)
 - Décisions liées : [ADR-0001](0001-arbitrages-de-coherence.md) (A8 récolte, A10 préférences/paramètres)

@@ -7,7 +7,7 @@ conservées hors du repo).
 
 > En cas de contradiction avec une source historique, **`docs/` fait foi**. Les
 > arbitrages sont consignés dans
-> [decisions/0001-arbitrages-de-coherence.md](decisions/0001-arbitrages-de-coherence.md).
+> [decisions/0001-arbitrages-de-coherence.md](decisions/archive/PRE_DEV/0001-arbitrages-de-coherence.md).
 
 ## Plan de lecture
 

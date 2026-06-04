@@ -17,10 +17,10 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 
 | #                                       | Titre                                                  | Statut  |
 |-----------------------------------------|--------------------------------------------------------|---------|
-| [0001](0001-arbitrages-de-coherence.md) | Arbitrages de cohérence lors du découpage documentaire | Accepté |
-| [0002](0002-arbitrages-structurants-pre-dev.md) | Arbitrages structurants pré-dev (taxonomie, surface, i18n des fiches) | Accepté |
-| [0003](0003-reconciliation-enums.md) | Réconciliation des énumérations (parcelles, sol, climat, localisation) | Accepté |
-| [0004](0004-entites-domain-et-perimetre.md) | Entités du Domain & périmètre (récolte, préférences, observations, sync) | Accepté |
+| [0001](archive/PRE_DEV/0001-arbitrages-de-coherence.md) | Arbitrages de cohérence lors du découpage documentaire | Accepté |
+| [0002](archive/PRE_DEV/0002-arbitrages-structurants-pre-dev.md) | Arbitrages structurants pré-dev (taxonomie, surface, i18n des fiches) | Accepté |
+| [0003](archive/PRE_DEV/0003-reconciliation-enums.md) | Réconciliation des énumérations (parcelles, sol, climat, localisation) | Accepté |
+| [0004](archive/PRE_DEV/0004-entites-domain-et-perimetre.md) | Entités du Domain & périmètre (récolte, préférences, observations, sync) | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

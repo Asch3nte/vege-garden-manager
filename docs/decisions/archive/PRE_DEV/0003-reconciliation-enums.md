@@ -2,7 +2,7 @@
 
 - **Statut** : Accepté
 - **Date** : 2026-06-04
-- **Contexte** : l'[audit pré-dev](../AUDIT_PRE_DEV.md) a relevé de multiples divergences
+- **Contexte** : l'[audit pré-dev](AUDIT_PRE_DEV.md) a relevé de multiples divergences
   `enum Domain ↔ CHECK SQL ↔ vocabulaire YAML`. Cet ADR tranche la **priorité 2** :
   C2 (`TypeParcelle`), C6 (source de localisation), M1 (sol & besoin en eau), M3 (climat) —
   et **résout au passage M4** (rusticité non persistée) et **M5** (traçabilité du sol).
@@ -223,5 +223,5 @@ periodes:
 
 ## Liens
 
-- Audit source : [AUDIT_PRE_DEV.md](../AUDIT_PRE_DEV.md) (C2, C6, M1, M3, M4, M5, P5)
+- Audit source : [AUDIT_PRE_DEV.md](AUDIT_PRE_DEV.md) (C2, C6, M1, M3, M4, M5, P5)
 - Décision liée : [ADR-0002](0002-arbitrages-structurants-pre-dev.md) (patron catégorie + multi-valué)

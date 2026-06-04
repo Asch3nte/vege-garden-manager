@@ -40,7 +40,7 @@ spécialisés** dans [`docs/`](docs/). Le point d'entrée est
 > ⚠️ En cas de doute ou de contradiction, **`docs/` fait foi** sur les anciens
 > fichiers `CAHIER_DES_CHARGES.md` / `ARCHITECTURE.md` (conservés hors repo
 > comme sources historiques). Les arbitrages sont consignés dans
-> [`docs/decisions/0001-arbitrages-de-coherence.md`](docs/decisions/0001-arbitrages-de-coherence.md).
+> [`docs/decisions/archive/PRE_DEV/0001-arbitrages-de-coherence.md`](docs/decisions/archive/PRE_DEV/0001-arbitrages-de-coherence.md).
 
 ---
 

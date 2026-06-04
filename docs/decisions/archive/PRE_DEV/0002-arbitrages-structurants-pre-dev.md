@@ -2,7 +2,7 @@
 
 - **Statut** : Accepté (directions) · concrétisation des listes de valeurs **à confirmer** (cf. fin)
 - **Date** : 2026-06-04
-- **Contexte** : l'[audit pré-dev](../AUDIT_PRE_DEV.md) a identifié 6 incohérences
+- **Contexte** : l'[audit pré-dev](AUDIT_PRE_DEV.md) a identifié 6 incohérences
   critiques. Cet ADR tranche les **trois décisions structurantes** de priorité 1
   (C1, C3, M2) qui conditionnent les enums du Domain, le schéma SQL et les mappers.
   Les points C2, C4, C5, C6 et les majeurs/mineurs seront traités lors de la passe
@@ -148,5 +148,5 @@ Les **directions** D1/D2/D3 **et** les listes de valeurs de D1 sont actées :
 
 ## Liens
 
-- Audit source : [AUDIT_PRE_DEV.md](../AUDIT_PRE_DEV.md) (points C1, C3, M2)
+- Audit source : [AUDIT_PRE_DEV.md](AUDIT_PRE_DEV.md) (points C1, C3, M2)
 - Décisions antérieures : [ADR-0001](0001-arbitrages-de-coherence.md) (A6 sur le format des fiches)

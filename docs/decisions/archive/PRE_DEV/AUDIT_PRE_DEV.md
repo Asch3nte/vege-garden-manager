@@ -2,9 +2,9 @@
 
 > ## ✅ CLÔTURÉ — propagation effectuée le 2026-06-04
 > Les **28 points** (6 critiques, 9 majeurs, 13 mineurs) ont été **tranchés puis propagés**
-> dans les specs. Décisions : [ADR-0002](decisions/0002-arbitrages-structurants-pre-dev.md),
-> [ADR-0003](decisions/0003-reconciliation-enums.md),
-> [ADR-0004](decisions/0004-entites-domain-et-perimetre.md) — ce sont elles qui **font foi**.
+> dans les specs. Décisions : [ADR-0002](0002-arbitrages-structurants-pre-dev.md),
+> [ADR-0003](0003-reconciliation-enums.md),
+> [ADR-0004](0004-entites-domain-et-perimetre.md) — ce sont elles qui **font foi**.
 > Les dossiers `assets/fiches_plantes/` ont été réorganisés et la fiche golden
 > `legumes/tomate.yaml` créée. Ce document est conservé comme **trace de l'audit** ; il peut
 > être archivé. *(Suivis reportés : réconciliation fine de `TypeEquipement`, entité `Traitement` V1.1.)*
@@ -13,8 +13,8 @@
 > **Portée** : audit de la **spécification** (le repo est à l'état documentation +
 > ossature, aucun code Dart). L'objet est la **cohérence interne** de la spec, qui
 > deviendra contraignante dès la première entité du Domain.
-> **Méthode** : lecture croisée des 13 docs `docs/` + [ADR-0001](decisions/0001-arbitrages-de-coherence.md)
-> + [schéma YAML](../assets/fiches_plantes/_schema/fiche_plante_schema.yaml) + méta-fichiers,
+> **Méthode** : lecture croisée des 13 docs `docs/` + [ADR-0001](0001-arbitrages-de-coherence.md)
+> + [schéma YAML](../../../../assets/fiches_plantes/_schema/fiche_plante_schema.yaml) + méta-fichiers,
 > en confrontant les **3 sources de vérité** qui doivent rester alignées :
 > `enums Domain` (doc 05) ↔ `CHECK SQL` (doc 06) ↔ `vocabulaire YAML` (doc 07 / schema).
 >
@@ -55,7 +55,7 @@
 
 ### [~] C1 — Trois taxonomies de catégories de plantes incompatibles
 
-> ✅ **Tranché** par [ADR-0002 / D1](decisions/0002-arbitrages-structurants-pre-dev.md) :
+> ✅ **Tranché** par [ADR-0002 / D1](0002-arbitrages-structurants-pre-dev.md) :
 > catégorie large exclusive + `usages` multi-valués + `sous_type` légume optionnel.
 > Propagation dans les specs encore à faire.
 
@@ -72,7 +72,7 @@ céréales, engrais verts) **sans bucket** dans les 4 catégories.
 
 ### [~] C2 — `TypeParcelle` : Domain et SQL divergent de 5 valeurs
 
-> ✅ **Tranché** par [ADR-0003 / D1–D4](decisions/0003-reconciliation-enums.md) :
+> ✅ **Tranché** par [ADR-0003 / D1–D4](0003-reconciliation-enums.md) :
 > `TypeParcelle` = structure seule ; nouvel enum multi `TechniqueSol` ; `balcon`→emplacement
 > Potager ; `cultureVerticale` booléen ; `serre`/`chassis` répartis parcelle/équipement.
 > Propagation dans les specs encore à faire.
@@ -87,7 +87,7 @@ du SQL ; `chassis/balcon/autre` absents du Domain). À réconcilier complètemen
 
 ### [~] C3 — `Parcelle.surface` : trois vérités contradictoires
 
-> ✅ **Tranché** par [ADR-0002 / D2](decisions/0002-arbitrages-structurants-pre-dev.md) :
+> ✅ **Tranché** par [ADR-0002 / D2](0002-arbitrages-structurants-pre-dev.md) :
 > surface saisie = source de vérité (V1) ; `position_*` nullable (vue plan V2).
 > Propagation dans les specs encore à faire.
 
@@ -104,7 +104,7 @@ surface saisie peut contredire largeur×hauteur.
 
 ### [~] C4 — `Recolte` : Domain et SQL se contredisent
 
-> ✅ **Tranché** par [ADR-0004 / D1–D2](decisions/0004-entites-domain-et-perimetre.md) :
+> ✅ **Tranché** par [ADR-0004 / D1–D2](0004-entites-domain-et-perimetre.md) :
 > `qualite` nullable, `destination` ajoutée au Domain, `UniteQuantite` fusionné
 > (P2 résolu). Propagation à faire.
 
@@ -116,7 +116,7 @@ L'entité `Recolte` du doc 05 est incomplète/contradictoire vs la table.
 
 ### [~] C5 — `PreferencesUtilisateur.id` : String vs Integer
 
-> ✅ **Tranché** par [ADR-0004 / D3](decisions/0004-entites-domain-et-perimetre.md) :
+> ✅ **Tranché** par [ADR-0004 / D3](0004-entites-domain-et-perimetre.md) :
 > SQL `id TEXT CHECK (id = 'singleton')`, aligné sur la convention String. Propagation à faire.
 
 - Domain (05 §3.7) : `id == "singleton"` (String).
@@ -126,7 +126,7 @@ Type et valeur incompatibles. Trancher la valeur singleton et l'aligner.
 
 ### [~] C6 — Vocabulaire « source de localisation » : trois orthographes
 
-> ✅ **Tranché** par [ADR-0003 / D5](decisions/0003-reconciliation-enums.md) :
+> ✅ **Tranché** par [ADR-0003 / D5](0003-reconciliation-enums.md) :
 > `SourceLocalisation { nonDefinie, manuelle, gps }` (origine donnée) + préférence globale
 > séparée (`desactivee/manuelle/gps`). Propagation à faire.
 
@@ -145,7 +145,7 @@ Même concept, 3 vocabulaires (`gps`/`geolocalisation`/`automatique`,
 
 ### [~] M1 — `BesoinsCulture` ↔ YAML : vocabulaires structurés divergents
 
-> ✅ **Tranché** par [ADR-0003 / D6–D7](decisions/0003-reconciliation-enums.md) :
+> ✅ **Tranché** par [ADR-0003 / D6–D7](0003-reconciliation-enums.md) :
 > `BesoinEau { faible, modere, eleve }` ; modèle de sol à 3 enums distincts
 > (`TextureSol` parcelle / `QualiteSol` fiche / `PhSol`) + table de dérivation moteur.
 > Propagation à faire.
@@ -160,7 +160,7 @@ sans table de correspondance (inexistante).
 
 ### [~] M2 — `FichePlante` (Domain) ↔ structure YAML : modèles structurellement différents
 
-> ✅ **i18n tranché** par [ADR-0002 / D3](decisions/0002-arbitrages-structurants-pre-dev.md) :
+> ✅ **i18n tranché** par [ADR-0002 / D3](0002-arbitrages-structurants-pre-dev.md) :
 > texte localisé **inline** dans le YAML ; ARB réservé à l'UI. Restent à traiter en passe
 > de correction : structure plate vs imbriquée (hémisphère/zone), `espaceRequisParPied`
 > vs `espacement_cm`, `dureeAvantRecolte` scalaire vs intervalle.
@@ -179,7 +179,7 @@ hémisphère/zone pourtant nécessaire à `estPlantableEn(date, zone)`.
 
 ### [~] M3 — `enum TypeClimat` non défini + pas de CHECK SQL
 
-> ✅ **Tranché** par [ADR-0003 / D8](decisions/0003-reconciliation-enums.md) :
+> ✅ **Tranché** par [ADR-0003 / D8](0003-reconciliation-enums.md) :
 > `TypeClimat` (9 valeurs) + `ZoneRusticite` (zone1–13) ; fiches indexées par
 > `TypeClimat`+hémisphère ; CHECK `climat_type` ajouté. Propagation à faire.
 
@@ -190,7 +190,7 @@ Premier contre-exemple direct de « chaque enum persistée a un CHECK ».
 
 ### [~] M4 — `ZoneClimatique` : rusticité USDA non persistée
 
-> ✅ **Résolu** par [ADR-0003 / D8](decisions/0003-reconciliation-enums.md) :
+> ✅ **Résolu** par [ADR-0003 / D8](0003-reconciliation-enums.md) :
 > `ZoneRusticite` devient un enum (zone1–13) + colonne `potagers.zone_rusticite`.
 > Propagation à faire.
 
@@ -200,7 +200,7 @@ pluviométrie). Donnée du Domain non stockable.
 
 ### [~] M5 — `parcelles` : colonne `type_sol_source` manquante
 
-> ✅ **Résolu** par [ADR-0003 / D7](decisions/0003-reconciliation-enums.md) :
+> ✅ **Résolu** par [ADR-0003 / D7](0003-reconciliation-enums.md) :
 > colonne `texture_sol_source` (`SourceTypeSol`) ajoutée avec le nouveau modèle de sol.
 > Propagation à faire.
 
@@ -210,7 +210,7 @@ l'origine du sol (atout UX annoncé) est perdue en base.
 
 ### [~] M6 — Double modèle d'observations (V1 vs V1.1) conflictuel
 
-> ✅ **Tranché** par [ADR-0004 / D6](decisions/0004-entites-domain-et-perimetre.md) :
+> ✅ **Tranché** par [ADR-0004 / D6](0004-entites-domain-et-perimetre.md) :
 > une seule entité `Observation` (V1, polymorphe), photos en V1.1, retrait de
 > `Plantation._notes` (accès par repository). Propagation à faire.
 
@@ -225,7 +225,7 @@ V1 l'autre V1.1. Clarifier le périmètre V1 exact.
 
 ### [~] M7 — `sync.enabled` dupliqué entre `parametres` et `preferences`
 
-> ✅ **Tranché** par [ADR-0004 / D4](decisions/0004-entites-domain-et-perimetre.md) :
+> ✅ **Tranché** par [ADR-0004 / D4](0004-entites-domain-et-perimetre.md) :
 > retrait de `sync.enabled` ; l'interrupteur vit dans `preferences.sync_locale_active`.
 > Propagation à faire.
 
@@ -235,7 +235,7 @@ Mais le registre `parametres.*` (doc 11 §8) liste encore `sync.enabled (bool, f
 
 ### [~] M8 — Niveau d'expérience : défaut contradictoire
 
-> ✅ **Tranché** par [ADR-0004 / D5](decisions/0004-entites-domain-et-perimetre.md) :
+> ✅ **Tranché** par [ADR-0004 / D5](0004-entites-domain-et-perimetre.md) :
 > défaut `debutant` partout (corriger le parcours 1). Propagation à faire.
 
 - Onboarding (parcours 1, doc 10) : **défaut Intermédiaire**.
@@ -246,7 +246,7 @@ Le défaut devrait être `debutant` (cible novice) ; corriger le parcours 1.
 
 ### [~] M9 — Tables « non synchronisées » : liste incohérente
 
-> ✅ **Tranché** par [ADR-0004 / D7](decisions/0004-entites-domain-et-perimetre.md) :
+> ✅ **Tranché** par [ADR-0004 / D7](0004-entites-domain-et-perimetre.md) :
 > les fiches perso **se synchronisent** (ajout colonnes de sync) ; sortent de la liste
 > non-synchronisée. Propagation à faire.
 
@@ -260,10 +260,10 @@ Trancher : l'ajouter à la liste explicite, ou lui ajouter les colonnes de sync.
 ## 🟡 Incohérences mineures & pratiques
 
 - [x] **P1 — `lib/app/` fantôme** → ✅ Propagé : `lib/app/` créé dans l'ossature + ajouté à `lib/README`.
-- [x] **P2 — `UniteQuantite` vs `UniteRecolte`** → ✅ [ADR-0004 D2](decisions/0004-entites-domain-et-perimetre.md) : enum `UniteQuantite` unique, propagé (docs 05/06).
+- [x] **P2 — `UniteQuantite` vs `UniteRecolte`** → ✅ [ADR-0004 D2](0004-entites-domain-et-perimetre.md) : enum `UniteQuantite` unique, propagé (docs 05/06).
 - [x] **P3 — ~200 vs « ~150 fichiers »** → ✅ Harmonisé à « ~200 » (doc 07 §6).
 - [x] **P4 — Packages « à arbitrer »** → ✅ `phosphor_flutter`, `flutter_markdown`, `freezed` validés (doc 03 §4).
-- [x] **P5 — `localisation_source DEFAULT 'manuelle'`** → ✅ [ADR-0003 D5](decisions/0003-reconciliation-enums.md) : défaut `nonDefinie` + CHECK de cohérence (doc 06).
+- [x] **P5 — `localisation_source DEFAULT 'manuelle'`** → ✅ [ADR-0003 D5](0003-reconciliation-enums.md) : défaut `nonDefinie` + CHECK de cohérence (doc 06).
 - [x] **P6 — Récurrence `mensuel`** → ✅ Colonne `jour_du_mois` ajoutée à `rappels` + CHECK (doc 06).
 - [x] **P7 — `pubspec.lock` ignoré** → ✅ Dé-ignoré dans `.gitignore` (sera versionné).
 - [x] **P8 — `langue` autorise `'en'`** → ✅ CHECK conservé (`auto/fr/en`), `en` masqué dans l'UI V1 (docs 06/12).

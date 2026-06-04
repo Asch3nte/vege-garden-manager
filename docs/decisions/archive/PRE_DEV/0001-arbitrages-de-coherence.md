@@ -49,7 +49,7 @@ d'IDs codés et les registres `categories/families/species.yaml` sont abandonné
 ### A7 — Architecture : **4 couches**
 `ARCHITECTURE.md` décrivait 3 couches (domain/data/presentation + services/core) ;
 le CAHIER §3.4 décrit **4 couches** (Presentation → Application → Domain ←
-Infrastructure). → **4 couches** retenues (cf. [04](../04-architecture-en-couches.md)).
+Infrastructure). → **4 couches** retenues (cf. [04](../../../04-architecture-en-couches.md)).
 `services` devient `infrastructure/services`, `data` devient `infrastructure`.
 
 ### A8 — Table `recoltes` définie deux fois
