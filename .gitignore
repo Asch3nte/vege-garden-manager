@@ -16,6 +16,8 @@ doc/api/
 *.freezed.dart
 *.gr.dart
 *.config.dart
+# i18n généré par flutter gen-l10n (regénéré au build)
+lib/l10n/app_localizations*.dart
 
 # ──────────────────────────────────────────────
 # IDE / Éditeurs
