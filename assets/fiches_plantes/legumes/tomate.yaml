@@ -1,0 +1,126 @@
+# Fiche plante de référence — sert d'exemple aux contributeurs et de golden file de test.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+# Métadonnées techniques
+id: tomate # unique, immuable, snake_case, sans accents
+version_fiche: 1 # incrémenté à chaque modification de cette fiche
+categorie: legume # CategoriePlante : legume | aromatique | fruit | petit_fruit | fleur | cereale | engrais_vert
+sous_type: legume_fruit # (optionnel, seulement si categorie: legume) SousTypeLegume
+usages: # UsagePlante (≥ 1)
+  - alimentaire
+schema_version: 1
+
+# Identification botanique
+nom_scientifique: Solanum lycopersicum
+famille_botanique: Solanaceae
+
+# Contenu multilingue — 'fr' obligatoire, autres langues optionnelles (texte inline)
+i18n:
+  fr:
+    nom_commun: Tomate
+    noms_alternatifs: [Pomme d'amour]
+    description: >
+      Plante annuelle de la famille des Solanacées, cultivée pour ses fruits
+      charnus. Gourmande en eau, en soleil et en sol riche.
+    conseils_culture: >
+      Tuteurer dès la plantation. Arroser au pied, jamais sur le feuillage
+      (le mildiou se développe sur les feuilles humides). Pailler pour garder
+      le sol frais et espacer les arrosages.
+    conseils_recolte: >
+      Récolter à pleine maturité, quand le fruit est ferme et bien coloré.
+    erreurs_frequentes:
+      - Arrosage du feuillage (favorise le mildiou)
+      - Plantation trop précoce (sensible au gel)
+      - Manque de tuteurage (tiges cassantes sous le poids des fruits)
+  en:
+    nom_commun: Tomato
+    noms_alternatifs: [Love apple]
+    description: >
+      Annual plant of the Solanaceae family, grown for its fleshy fruit.
+      Demanding in water, sunlight and rich soil.
+    conseils_culture: >
+      Stake from planting time. Water at the base, never on the foliage.
+
+# Besoins agronomiques (données structurées pour le moteur)
+besoins:
+  ensoleillement: plein_soleil # NiveauSoleil : plein_soleil | mi_ombre | ombre
+  arrosage: eleve # BesoinEau : faible | modere | eleve
+  qualites_sol: # QualiteSol recherchées (liste)
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0 # 0.0–14.0, <= ph_max
+  ph_max: 7.0
+  temperature_min_germination: 18 # °C (optionnel)
+  temperature_optimale: 22 # °C (optionnel)
+
+# Cycle de culture
+cycle:
+  type: annuelle # annuelle | bisannuelle | vivace
+  duree_germination_jours: [6, 10]
+  duree_avant_recolte_jours: [70, 90]
+  hauteur_adulte_cm: [80, 200]
+  espacement_cm: 60
+  profondeur_semis_cm: 1
+
+# Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 4]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    mediterraneen:
+      semis_interieur: [1, 3]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 10]
+      plantation: [11, 12]
+      recolte: [1, 4]
+
+# Associations & rotation — références par 'id' de fiche, jamais par nom
+associations:
+  beneficies:
+    - id: basilic
+      raison_i18n: { fr: "Repousse les pucerons, améliore le goût", en: "Repels aphids, enhances flavor" }
+    - id: soucis
+      raison_i18n: { fr: "Repousse les nématodes du sol", en: "Repels soil nematodes" }
+    - id: capucine
+      raison_i18n: { fr: "Plante-piège à pucerons", en: "Aphid trap crop" }
+  defavorables:
+    - id: pomme_de_terre
+      raison_i18n: { fr: "Même famille, partage le mildiou", en: "Same family, shares blight" }
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+
+# Post-récolte (optionnel)
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: lactofermentation
+    duree_mois: 6
+  - methode: sechage
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, cuite en sauce, farcie, confite, séchée]
+  en: [Raw in salads, cooked in sauces, stuffed, candied, dried]
+
+# Source & contribution
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

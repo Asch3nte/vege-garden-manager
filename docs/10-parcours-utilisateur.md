@@ -6,13 +6,13 @@
 
 ## Parcours 1 — Premier lancement (onboarding) · cible < 60 s
 
-| # | Écran                | Action                                  | Notes                                                        |
+| # | Écran | Action | Notes |
 |---|----------------------|-----------------------------------------|--------------------------------------------------------------|
-| 1 | Splash (≤ 1.5 s)     | —                                       | Init BDD locale, chargement des fiches YAML                  |
-| 2 | Bienvenue            | `[Faire le tour rapide]` ou `[Passer]`  | « 100% local, sans compte, open source »                     |
-| 3 | Localisation         | Saisie ville **ou** `[Utiliser GPS]`    | GPS refusé → fallback saisie. Skip possible.                 |
-| 4 | Niveau d'expérience  | Sélection segmentée                     | Débutant / Intermédiaire / Expert (défaut : Intermédiaire)   |
-| 5 | Accueil (état vide)  | `[+ Créer mon premier potager]`         | `AppEmptyState` avec CTA                                     |
+| 1 | Splash (≤ 1.5 s) | — | Init BDD locale, chargement des fiches YAML |
+| 2 | Bienvenue | `[Faire le tour rapide]` ou `[Passer]` | « 100% local, sans compte, open source » |
+| 3 | Localisation | Saisie ville **ou** `[Utiliser GPS]` | GPS refusé → fallback saisie. Skip possible. |
+| 4 | Niveau d'expérience | Sélection segmentée | Débutant / Intermédiaire / Expert (défaut : **Débutant**) |
+| 5 | Accueil (état vide) | `[+ Créer mon premier potager]` | `AppEmptyState` avec CTA |
 
 **Décisions** : 3 écrans max ; tous skippables sauf la bienvenue ; **aucune
 création de compte** ; géoloc **opt-in explicite** ; niveau modifiable plus tard.
@@ -106,10 +106,10 @@ bienvenue]`.
 
 **Paramètres associés** :
 
-| Paramètre                  | Type | Défaut | Description                                            |
+| Paramètre | Type | Défaut | Description |
 |----------------------------|------|--------|--------------------------------------------------------|
-| `aide_contextuelle_active` | bool | `true` | Affiche l'icône `?` dans l'AppBar                      |
-| `aide_doc_complete_active` | bool | `true` | Affiche « Voir l'aide complète » dans le bottom sheet  |
+| `aide_contextuelle_active` | bool | `true` | Affiche l'icône `?` dans l'AppBar |
+| `aide_doc_complete_active` | bool | `true` | Affiche « Voir l'aide complète » dans le bottom sheet |
 
 **Contenu par panel** : Accueil (vue d'ensemble, météo, tâches) · Mes potagers
 (hiérarchie, swipe) · Calendrier (vues, swipe = faire, génération auto) ·
@@ -118,10 +118,10 @@ Catalogue (filtres, fiches perso, « à planter maintenant ») · Paramètres
 
 ## Synthèse des cibles de performance
 
-| Parcours                          | Cible     |
+| Parcours | Cible |
 |-----------------------------------|-----------|
-| 1. Premier lancement              | < 60 s    |
-| 2. Création potager + plantation  | < 2 min   |
-| 3. Consultation calendrier        | < 10 s    |
-| 4. Sauvegarde / restauration      | < 30 s    |
-| 5. Opt-out automation             | < 3 taps  |
+| 1. Premier lancement | < 60 s |
+| 2. Création potager + plantation | < 2 min |
+| 3. Consultation calendrier | < 10 s |
+| 4. Sauvegarde / restauration | < 30 s |
+| 5. Opt-out automation | < 3 taps |

@@ -8,7 +8,7 @@ build/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-pubspec.lock        # application : on versionne ; package : on ignore. Ici = app → à dé-ignorer si besoin.
+# pubspec.lock : VERSIONNÉ (c'est une application, pas un package — ADR-0004 P7).
 doc/api/
 
 # Fichiers générés (drift, riverpod, json_serializable, i18n…)

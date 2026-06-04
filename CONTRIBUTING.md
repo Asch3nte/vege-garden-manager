@@ -12,8 +12,8 @@ plante, rangés par catégorie. Aucun savoir-faire en programmation n'est requis
 
 ### Procédure
 
-1. Repérez le bon dossier dans `assets/fiches_plantes/` :
-   `legumes/`, `aromatiques/`, `fruits/` ou `fleurs_compagnonnage/`.
+1. Repérez le bon dossier dans `assets/fiches_plantes/` : `legumes/`, `aromatiques/`,
+   `fruits/` (arbres), `petits_fruits/`, `fleurs/`, `cereales/` ou `engrais_verts/`.
 2. Dupliquez une fiche existante comme modèle (ex. `legumes/tomate.yaml`).
 3. Renseignez les champs (voir le schéma de référence
    [`assets/fiches_plantes/_schema/fiche_plante_schema.yaml`](assets/fiches_plantes/_schema/)
@@ -29,8 +29,10 @@ plante, rangés par catégorie. Aucun savoir-faire en programmation n'est requis
 |---|---|
 | Nom de fichier | `[id_plante].yaml` en `snake_case`, sans accents |
 | `id` | unique, immuable, `snake_case`, minuscules |
-| Catégorie | une seule parmi `legume`, `aromatique`, `fruit`, `fleur_compagnonnage` |
-| Champs `i18n` | `fr` **obligatoire**, autres langues optionnelles |
+| `categorie` | une seule parmi `legume`, `aromatique`, `fruit`, `petit_fruit`, `fleur`, `cereale`, `engrais_vert` |
+| `sous_type` | optionnel, seulement si `categorie: legume` |
+| `usages` | liste d'au moins un usage (`alimentaire`, `medicinale`, `compagnonnage`…) |
+| Champs `i18n` | `fr` **obligatoire**, autres langues optionnelles, texte traduit **inline** |
 | Périodes | mois en entiers `1`–`12` |
 | Références croisées (associations, rotation) | par `id` de fiche, jamais par nom commun |
 | Encodage | UTF-8 |

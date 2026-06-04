@@ -1,8 +1,6 @@
 # 13 — Roadmap & versioning
 
 > Source : CAHIER §7 + annotations « V1.1 / V2 » disséminées dans le document.
-> Les arbitrages de périmètre sont consignés dans
-> [decisions/0001-arbitrages-de-coherence.md](decisions/0001-arbitrages-de-coherence.md).
 
 ## 1. V1 — scope validé
 
@@ -21,22 +19,23 @@ Toutes les fonctionnalités décrites dans [01](01-vision-et-perimetre.md) et
 
 ## 2. V1.1 — incréments rapprochés
 
-| Fonctionnalité                      | Note                                                                                                                      |
+| Fonctionnalité | Note |
 |-------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| Entité `Traitement`                 | Interventions naturelles (purins, paillage) chargées depuis YAML dédié ; en V1, consignées via `NoteObservation`/`Tache`  |
-| `NoteObservation` enrichie / photos | Photos d'observations et de récoltes (reportées de V1 pour ne pas alourdir sync & stockage)                               |
-| Seuils météo configurables          | `risque_gel`/`risque_canicule` paramétrables (figés en V1)                                                                |
-| Déduction du type de sol            | Depuis API géologique / heuristique climat                                                                                |
+| Entité `Traitement` | Interventions naturelles ponctuelles (purins/extraits, `thePurin`) chargées depuis YAML dédié ; en V1, consignées via `Observation`/`Tache` |
+| Photos (`Observation`, récoltes) | Photos d'observations et de récoltes (reportées de V1 pour ne pas alourdir sync & stockage) |
+| Réconciliation `TypeEquipement` | Revue fonctionnelle fine de l'enum équipements |
+| Seuils météo configurables | `risque_gel`/`risque_canicule` paramétrables (figés en V1) |
+| Déduction du type de sol | Depuis API géologique / heuristique climat |
 
 ## 3. V2 — évolutions prévues (opt-in, désactivées par défaut)
 
-| Fonctionnalité                            | Note                                                                                          |
+| Fonctionnalité | Note |
 |-------------------------------------------|-----------------------------------------------------------------------------------------------|
-| **Communauté P2P locale**                 | Échanges de semis, conseils, entraide ; aucune identité réelle ; opt-in strict                |
-| **Calendrier lunaire**                    | Désactivé par défaut                                                                          |
-| **Vue graphique des relations**           | Graph view interactif (type Obsidian), critère d'arête sélectionnable ; UX complexe, reportée |
-| Vue « plan du potager »                   | Exploite `position_x/y` des parcelles (déjà préparées en BDD)                                 |
-| Sync bidirectionnelle base communautaire  | Après acceptation d'une PR GitHub                                                             |
+| **Communauté P2P locale** | Échanges de semis, conseils, entraide ; aucune identité réelle ; opt-in strict |
+| **Calendrier lunaire** | Désactivé par défaut |
+| **Vue graphique des relations** | Graph view interactif (type Obsidian), critère d'arête sélectionnable ; UX complexe, reportée |
+| Vue « plan du potager » | Exploite `position_x/y` des parcelles (déjà préparées en BDD) |
+| Sync bidirectionnelle base communautaire | Après acceptation d'une PR GitHub |
 
 ## 4. Hors scope total
 

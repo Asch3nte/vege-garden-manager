@@ -5,6 +5,8 @@ complète : [`../docs/04-architecture-en-couches.md`](../docs/04-architecture-en
 
 ```
 lib/
+├── main.dart        # point d'entrée
+├── app/             # bootstrap, router (go_router), thème (design system)
 ├── domain/          # Cœur métier — ne dépend de RIEN
 │   ├── entities/        Potager, Parcelle, Plantation, Recolte, Tache, Rappel, Equipement…
 │   ├── value_objects/   Surface, Periode, Quantite, Localisation, ZoneClimatique…

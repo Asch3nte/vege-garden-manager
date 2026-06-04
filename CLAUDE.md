@@ -129,6 +129,8 @@ pot-a-gerer/
 ├── docs/                  # Documentation découpée (source de vérité)
 │   └── decisions/         # ADR
 ├── lib/
+│   ├── main.dart          # point d'entrée
+│   ├── app/               # bootstrap, router (go_router), thème
 │   ├── domain/            # entities, value_objects, enums, repositories, exceptions
 │   ├── application/       # use_cases, state (orchestration)
 │   ├── infrastructure/    # database (drift), repositories impl, mappers, catalogue (YAML), api, services
@@ -136,7 +138,7 @@ pot-a-gerer/
 │   ├── core/              # constants, extensions, utils
 │   └── l10n/              # ARB i18n
 ├── assets/
-│   └── fiches_plantes/    # YAML : legumes, aromatiques, fruits, fleurs_compagnonnage, _schema
+│   └── fiches_plantes/    # YAML : legumes, aromatiques, fruits, petits_fruits, fleurs, cereales, engrais_verts, _schema
 ├── test/                  # unit, widget, integration
 ├── pubspec.yaml           # (à générer via flutter create)
 ├── README.md · LICENSE (MIT) · CONTRIBUTING.md · .gitignore · CLAUDE.md

@@ -18,6 +18,12 @@ du contenu textuel, traduisible indépendamment via la section `i18n` des fiches
 (cf. [07-base-de-connaissances-yaml.md](07-base-de-connaissances-yaml.md)).
 `fr` est obligatoire dans chaque fiche.
 
+> **Séparation des deux mondes** : les **ARB** (`l10n/`) ne portent que le
+> **texte d'interface** (chrome de l'UI). Les **textes des fiches plantes** (descriptions,
+> conseils, conservation) sont **traduits inline dans le YAML** — jamais dans les ARB.
+> En V1 l'UI est FR-only ; la langue `en` est masquée dans les réglages (pas de `en.arb`
+> livré), tandis que les fiches peuvent déjà contenir leur bloc `en`.
+
 ## 2. Données & stockage
 
 - **100% local** sur l'appareil.
@@ -45,11 +51,11 @@ du contenu textuel, traduisible indépendamment via la section `i18n` des fiches
 
 ## 4. Vie privée — synthèse des garanties
 
-| Garantie                          | Mise en œuvre                                                                           |
+| Garantie | Mise en œuvre |
 |-----------------------------------|-----------------------------------------------------------------------------------------|
-| Aucune donnée sur serveur externe | Stockage 100% local, sync LAN uniquement                                                |
-| Aucune identité requise           | Pas de compte, pseudo communautaire anonyme (V2)                                        |
-| Géolocalisation arrondie          | Coordonnées à ~1 km (2 décimales), aucune adresse précise                               |
-| Tout opt-out possible             | Géoloc, météo, notifications, sync, communauté (cf. [11](11-parametres-et-opt-outs.md)) |
-| Transparence                      | Visualisation des données stockées + journal des accès sensibles                        |
-| Pas de télémétrie                 | Aucune collecte analytique                                                              |
+| Aucune donnée sur serveur externe | Stockage 100% local, sync LAN uniquement |
+| Aucune identité requise | Pas de compte, pseudo communautaire anonyme (V2) |
+| Géolocalisation arrondie | Coordonnées à ~1 km (2 décimales), aucune adresse précise |
+| Tout opt-out possible | Géoloc, météo, notifications, sync, communauté (cf. [11](11-parametres-et-opt-outs.md)) |
+| Transparence | Visualisation des données stockées + journal des accès sensibles |
+| Pas de télémétrie | Aucune collecte analytique |

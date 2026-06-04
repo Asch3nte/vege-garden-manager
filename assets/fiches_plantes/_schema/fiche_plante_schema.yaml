@@ -4,86 +4,94 @@
 # Spécification : docs/07-base-de-connaissances-yaml.md
 #
 # Légende des annotations :
-#   (requis)    : champ obligatoire
-#   (optionnel) : champ facultatif
-#   [a, b]      : intervalle [min, max]
-#   enum: …     : valeurs autorisées
+# (requis) : champ obligatoire
+# (optionnel) : champ facultatif
+# [a, b] : intervalle [min, max]
+# enum: … : valeurs autorisées
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Métadonnées techniques
-id:               # (requis) unique, immuable, snake_case, minuscules, sans accents
-version_fiche:    # (requis) entier, incrémenté à chaque modification de la fiche
-categorie:        # (requis) enum: legume | aromatique | fruit | fleur_compagnonnage
-schema_version:   # (requis) entier, version du présent schéma
+id: # (requis) unique, immuable, snake_case, minuscules, sans accents
+version_fiche: # (requis) entier, incrémenté à chaque modification de la fiche
+categorie: # (requis) enum CategoriePlante : legume | aromatique | fruit | petit_fruit | fleur | cereale | engrais_vert
+sous_type: # (optionnel — seulement si categorie: legume) enum SousTypeLegume :
+                  # legume_fruit | legume_feuille | legume_racine | legume_bulbe | legume_tige | legume_fleur | legume_tubercule
+usages: [] # (requis, ≥ 1) enum UsagePlante (liste) : alimentaire | condimentaire | medicinale |
+                  # compagnonnage | repulsif | mellifere | pollinisateur | engrais_vert | couvre_sol |
+                  # brise_vent | tuteur_vivant | ornementale | fourrage
+schema_version: # (requis) entier, version du présent schéma
 
 # Identification botanique
 nom_scientifique: # (requis) ex: Solanum lycopersicum
 famille_botanique: # (requis) ex: Solanaceae
 
-# Contenu multilingue — 'fr' obligatoire, autres langues optionnelles
+# Contenu multilingue — 'fr' obligatoire, autres langues optionnelles (texte INLINE)
 i18n:
-  fr:                       # (requis)
-    nom_commun:             # (requis)
-    noms_alternatifs: []    # (optionnel) liste
-    description:            # (requis) texte
-    conseils_culture:       # (optionnel) texte
-    conseils_recolte:       # (optionnel) texte
-    erreurs_frequentes: []  # (optionnel) liste
-  en:                       # (optionnel) même structure que 'fr'
+  fr: # (requis)
+    nom_commun: # (requis)
+    noms_alternatifs: [] # (optionnel) liste
+    description: # (requis) texte
+    conseils_culture: # (optionnel) texte
+    conseils_recolte: # (optionnel) texte
+    erreurs_frequentes: [] # (optionnel) liste
+  en: # (optionnel) même structure que 'fr'
 
 # Besoins agronomiques (données structurées pour le moteur)
 besoins:
-  ensoleillement:   # (requis) enum: plein_soleil | mi_ombre | ombre
-  arrosage:         # (requis) enum: faible | regulier | abondant
-  type_sol: []      # (requis) liste, ex: [riche, bien_draine]
-  ph_min:           # (requis) 0.0–14.0, <= ph_max
-  ph_max:           # (requis) 0.0–14.0
+  ensoleillement: # (requis) enum NiveauSoleil : plein_soleil | mi_ombre | ombre
+  arrosage: # (requis) enum BesoinEau : faible | modere | eleve
+  qualites_sol: [] # (requis) liste de QualiteSol : riche | pauvre | bien_draine | mal_draine | frais | sec | lourd | leger
+  ph_min: # (requis) 0.0–14.0, <= ph_max
+  ph_max: # (requis) 0.0–14.0
   temperature_min_germination: # (optionnel) °C
-  temperature_optimale:        # (optionnel) °C
+  temperature_optimale: # (optionnel) °C
 
 # Cycle de culture
 cycle:
-  type:                      # (requis) enum: annuelle | bisannuelle | vivace
+  type: # (requis) enum: annuelle | bisannuelle | vivace
   duree_germination_jours: [] # (optionnel) [min, max]
   duree_avant_recolte_jours: [] # (requis) [min, max]
-  hauteur_adulte_cm: []      # (optionnel) [min, max]
-  espacement_cm:             # (requis) entier
-  profondeur_semis_cm:       # (optionnel)
+  hauteur_adulte_cm: [] # (optionnel) [min, max]
+  espacement_cm: # (requis) entier
+  profondeur_semis_cm: # (optionnel)
 
-# Périodes — par hémisphère puis zone climatique ; mois en entiers 1–12
+# Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12.
+# Clés de climat autorisées : tropical | subtropical | aride | semi_aride | mediterraneen |
+# oceanique | continental | montagnard | polaire. Le contributeur ne remplit que les
+# climats qu'il connaît. La ZoneRusticite sert d'affinage au moteur (pas dans la fiche).
 periodes:
   hemisphere_nord:
-    zone_temperee:
-      semis_interieur: []    # [mois_debut, mois_fin]
-      semis_exterieur: []
+    oceanique: # (≥ 1 climat requis pour l'hémisphère renseigné)
+      semis_interieur: [] # [mois_debut, mois_fin]
+      semis_exterieur: [] # (optionnel)
       plantation: []
       recolte: []
-    zone_mediterraneenne: {} # même structure (optionnel)
-  hemisphere_sud: {}         # (optionnel) même structure
+    # continental: {…} mediterraneen: {…} (optionnels, même structure)
+  hemisphere_sud: {} # (optionnel) même structure
 
 # Associations & rotation — références par 'id' de fiche, jamais par nom
 associations:
-  beneficies:                # (optionnel) liste de { id, raison_i18n: { fr, en } }
+  beneficies: # (optionnel) liste de { id, raison_i18n: { fr, en } }
     - id:
       raison_i18n: { fr:, en: }
-  defavorables:              # (optionnel) idem
+  defavorables: # (optionnel) idem
     - id:
       raison_i18n: { fr:, en: }
 rotation:
-  famille:                   # (requis) ex: solanaceae
-  delai_retour_annees:       # (requis) entier
-  precedents_favorables: []  # (optionnel)
+  famille: # (requis) ex: solanaceae
+  delai_retour_annees: # (requis) entier
+  precedents_favorables: [] # (optionnel)
   precedents_defavorables: [] # (optionnel)
 
 # Post-récolte (optionnel)
 conservation:
-  - methode:                 # ex: frais | conserves | lactofermentation | sechage | congelation
-    duree_jours:             # OU duree_mois
+  - methode: # ex: frais | conserves | lactofermentation | sechage | congelation
+    duree_jours: # OU duree_mois
     conditions_i18n: { fr:, en: }
 utilisations_culinaires_i18n:
   fr: []
   en: []
 
 # Source & contribution
-sources: []                  # (optionnel) URLs
-contributeurs: []            # (optionnel) ex: ["@github_username"]
+sources: [] # (optionnel) URLs
+contributeurs: [] # (optionnel) ex: ["@github_username"]

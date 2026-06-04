@@ -2,58 +2,76 @@
 
 > Source : CAHIER §1.6 & §3.5. **Format canonique = §3.5** (un fichier par plante,
 > `i18n` imbriqué, `id` en `snake_case`). Le format alternatif de §1.6 (IDs codés
-> `L0101-002`, fichiers data/i18n séparés) est **abandonné** — voir
-> [decisions/0001-arbitrages-de-coherence.md](decisions/0001-arbitrages-de-coherence.md).
+> `L0101-002`, fichiers data/i18n séparés) est **abandonné**.
 
 ## 1. Pourquoi YAML ?
 
-| Critère               | Verdict                                         |
+| Critère | Verdict |
 |-----------------------|-------------------------------------------------|
-| Lisible par un humain | ✅ (mieux que JSON)                             |
-| Contributif           | ✅ diffable proprement sur GitHub (PR claires)  |
-| Multilingue           | ✅ structure imbriquée naturelle                |
-| Pas de BDD requise    | ✅ fichiers texte versionnables                 |
-| Validable             | ✅ schéma + validateur Dart                     |
-| Performant            | ⚠️ parsing → **cache mémoire obligatoire**      |
+| Lisible par un humain | ✅ (mieux que JSON) |
+| Contributif | ✅ diffable proprement sur GitHub (PR claires) |
+| Multilingue | ✅ structure imbriquée naturelle |
+| Pas de BDD requise | ✅ fichiers texte versionnables |
+| Validable | ✅ schéma + validateur Dart |
+| Performant | ⚠️ parsing → **cache mémoire obligatoire** |
 
 **Conclusion** : fiches **embarquées** dans l'app, chargées au démarrage,
 validées, puis mises en cache mémoire pour des accès instantanés.
 
 ## 2. Périmètre au lancement (~200 fiches)
 
-| Catégorie                   | Exemples                                  | Volume  |
-|-----------------------------|-------------------------------------------|---------|
-| Légumes                     | tomates, courgettes, haricots, carottes…  | ~80–100 |
-| Aromatiques                 | basilic, thym, romarin, menthe…           | ~30–40  |
-| Médicinales                 | camomille, calendula, consoude, ortie…    | ~20–30  |
-| Vivaces comestibles         | rhubarbe, artichaut, asperge, oseille…    | ~15–20  |
-| Grains & céréales           | blé, seigle, sarrasin, quinoa…            | ~10–15  |
-| Engrais verts / couvre-sols | moutarde, trèfle, phacélie, vesce…        | ~10–15  |
+La taxonomie suit **deux axes** : une **catégorie** de classement (exclusive,
+= dossier) + des **usages** fonctionnels (multi-valués). « Médicinales » et « vivaces
+comestibles » ne sont **pas** des catégories : ce sont respectivement un **usage**
+(`medicinale`) et un **cycle** (`vivace`).
 
-Extensible sans limite.
+| Catégorie (`categorie`) | Exemples | Volume |
+|-------------------------|-------------------------------------------|---------|
+| `legume` | tomate, courgette, haricot, carotte… | ~80–100 |
+| `aromatique` | basilic, thym, romarin, menthe… | ~30–40 |
+| `fruit` (arbres) | pommier, figuier, cerisier… | ~10–15 |
+| `petit_fruit` | fraisier, framboisier, groseillier… | ~10–15 |
+| `fleur` | souci, capucine, bourrache, camomille… | ~20–30 |
+| `cereale` | blé, seigle, sarrasin, quinoa… | ~10–15 |
+| `engrais_vert` | moutarde, trèfle, phacélie, vesce… | ~10–15 |
+
+> Les plantes **médicinales** (camomille, calendula, consoude, ortie…) portent l'usage
+> `medicinale` dans **leur** catégorie (souvent `fleur` ou `aromatique`). Les **vivaces
+> comestibles** (rhubarbe, artichaut, asperge, oseille…) sont des `legume`/`petit_fruit`
+> avec `cycle.type: vivace`. Extensible sans limite.
 
 ## 3. Localisation dans le projet
 
 ```
 assets/fiches_plantes/
 ├── _schema/
-│   └── fiche_plante_schema.yaml      # schéma de référence
-├── legumes/      (tomate.yaml, courgette.yaml, …)
-├── aromatiques/  (basilic.yaml, persil.yaml, …)
-├── fruits/       (fraise.yaml, …)
-└── fleurs_compagnonnage/ (soucis.yaml, capucine.yaml, …)
+│ └── fiche_plante_schema.yaml # schéma de référence
+├── legumes/ (tomate.yaml, courgette.yaml, …)
+├── aromatiques/ (basilic.yaml, persil.yaml, …)
+├── fruits/ (pommier.yaml, figuier.yaml, …) # arbres fruitiers
+├── petits_fruits/ (fraise.yaml, framboise.yaml, …)
+├── fleurs/ (souci.yaml, capucine.yaml, …)
+├── cereales/ (sarrasin.yaml, …)
+└── engrais_verts/ (phacelie.yaml, moutarde.yaml, …)
 ```
 
-> Une fiche = un fichier. Une catégorie = un dossier. Déclarés dans `pubspec.yaml`
-> (`flutter: assets:`).
+> Une fiche = un fichier. Une **catégorie** (`categorie`) = un dossier. Déclarés dans
+> `pubspec.yaml` (`flutter: assets:`). Le dossier correspond à la `categorie` exclusive ;
+> les `usages` (multi-valués) sont **dans** la fiche, pas dans l'arborescence.
 
 ## 4. Structure d'une fiche (exemple `legumes/tomate.yaml`)
 
+> 📌 La fiche réelle [`assets/fiches_plantes/legumes/tomate.yaml`](../assets/fiches_plantes/legumes/tomate.yaml)
+> sert de **golden file** (référence + test du pipeline de chargement). L'extrait ci-dessous
+> en reprend la structure.
+
 ```yaml
 # Métadonnées techniques
-id: tomate                 # unique, immuable, snake_case
+id: tomate # unique, immuable, snake_case
 version_fiche: 1
-categorie: legume          # legume | aromatique | fruit | fleur_compagnonnage
+categorie: legume # legume | aromatique | fruit | petit_fruit | fleur | cereale | engrais_vert
+sous_type: legume_fruit # (optionnel, si categorie: legume) SousTypeLegume
+usages: [alimentaire] # UsagePlante (≥ 1)
 schema_version: 1
 
 # Identification botanique
@@ -81,9 +99,9 @@ i18n:
 
 # Besoins (données structurées pour le moteur)
 besoins:
-  ensoleillement: plein_soleil   # plein_soleil | mi_ombre | ombre
-  arrosage: regulier             # faible | regulier | abondant
-  type_sol: [riche, bien_draine]
+  ensoleillement: plein_soleil # plein_soleil | mi_ombre | ombre
+  arrosage: eleve # BesoinEau : faible | modere | eleve
+  qualites_sol: [riche, bien_draine, frais] # QualiteSol (liste)
   ph_min: 6.0
   ph_max: 7.0
   temperature_min_germination: 18
@@ -91,27 +109,27 @@ besoins:
 
 # Cycle
 cycle:
-  type: annuelle                 # annuelle | bisannuelle | vivace
+  type: annuelle # annuelle | bisannuelle | vivace
   duree_germination_jours: [6, 10]
   duree_avant_recolte_jours: [70, 90]
   hauteur_adulte_cm: [80, 200]
   espacement_cm: 60
   profondeur_semis_cm: 1
 
-# Périodes (par hémisphère + zone climatique), mois en entiers 1–12
+# Périodes : par hémisphère puis TypeClimat, mois en entiers 1–12.
+# Clés climat : oceanique | continental | mediterraneen | … (les 9 TypeClimat).
 periodes:
   hemisphere_nord:
-    zone_temperee:
+    oceanique:
       semis_interieur: [2, 4]
-      semis_exterieur: [5, 6]
       plantation: [5, 6]
       recolte: [7, 10]
-    zone_mediterraneenne:
+    mediterraneen:
       semis_interieur: [1, 3]
       plantation: [4, 5]
       recolte: [6, 10]
   hemisphere_sud:
-    zone_temperee:
+    oceanique:
       semis_interieur: [8, 10]
       plantation: [11, 12]
       recolte: [1, 4]
@@ -157,27 +175,29 @@ contributeurs:
 
 ## 5. Conventions structurelles strictes
 
-| Élément             | Règle                                                               |
+| Élément | Règle |
 |---------------------|---------------------------------------------------------------------|
-| Nom de fichier      | `[id_plante].yaml`, `snake_case`, sans accents                      |
-| `id`                | unique, immuable, `snake_case`, minuscules                          |
-| Catégorie           | une seule : `legume`, `aromatique`, `fruit`, `fleur_compagnonnage`  |
-| Champs `i18n`       | `fr` **obligatoire**, autres optionnelles                           |
-| Périodes            | mois en entiers `1`–`12`                                            |
-| Références croisées | par `id`, jamais par nom commun                                     |
-| `schema_version`    | incrémenté à chaque évolution du format                             |
-| Encodage            | UTF-8                                                               |
-| Indentation         | 2 espaces (pas de tab)                                              |
+| Nom de fichier | `[id_plante].yaml`, `snake_case`, sans accents |
+| `id` | unique, immuable, `snake_case`, minuscules |
+| `categorie` | une seule : `legume`, `aromatique`, `fruit`, `petit_fruit`, `fleur`, `cereale`, `engrais_vert` |
+| `sous_type` | optionnel, **seulement si** `categorie: legume` (`SousTypeLegume`) |
+| `usages` | liste, **≥ 1** valeur (`UsagePlante`) |
+| Champs `i18n` | `fr` **obligatoire**, autres optionnelles, **texte inline** |
+| Périodes | par hémisphère puis `TypeClimat` ; mois en entiers `1`–`12` |
+| Références croisées | par `id`, jamais par nom commun |
+| `schema_version` | incrémenté à chaque évolution du format |
+| Encodage | UTF-8 |
+| Indentation | 2 espaces (pas de tab) |
 
 ## 6. Pipeline de chargement (Infrastructure)
 
 ```
-1. YamlAssetLoader        → liste & lit les fichiers du bundle (AssetManifest, UTF-8)
-2. YamlParser             → YAML → Map<String, dynamic> (capture erreurs de syntaxe)
-3. FichePlanteValidator   → champs obligatoires, cohérence (ph_min < ph_max), unicité id,
+1. YamlAssetLoader → liste & lit les fichiers du bundle (AssetManifest, UTF-8)
+2. YamlParser → YAML → Map<String, dynamic> (capture erreurs de syntaxe)
+3. FichePlanteValidator → champs obligatoires, cohérence (ph_min < ph_max), unicité id,
                             validité des références croisées → FichePlanteInvalideException
-4. FichePlanteMapper      → Map → FichePlante (Domain) + construction des Value Objects
-5. FichePlanteCache       → Map<String, FichePlante> en mémoire + index (catégorie, famille…)
+4. FichePlanteMapper → Map → FichePlante (Domain) + construction des Value Objects
+5. FichePlanteCache → Map<String, FichePlante> en mémoire + index (catégorie, famille…)
 6. FichePlanteRepositoryImpl → implémente AbstractFichePlanteRepository depuis le cache
 ```
 
@@ -185,7 +205,7 @@ contributeurs:
 visible en debug) — l'app ne plante pas.
 
 **Quand charger ?** Au démarrage, dans un **splash screen**, avant l'accueil
-(chargement asynchrone ~150 fichiers → validation → cache).
+(chargement asynchrone ~200 fichiers → validation → cache).
 
 ## 7. Fiches créées par l'utilisateur
 

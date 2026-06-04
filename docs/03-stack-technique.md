@@ -5,24 +5,24 @@
 
 ## 1. Décisions validées
 
-| Composant           | Choix                                     | Justification                                                     |
+| Composant | Choix | Justification |
 |---------------------|-------------------------------------------|-------------------------------------------------------------------|
-| Langage             | **Dart**                                  | POO native, null safety, compilation native                       |
-| Framework           | **Flutter**                               | Multiplateforme unifié (PC + mobile), un seul codebase            |
-| BDD locale          | **SQLite via `drift`**                    | Requêtes typées, migrations, testable                             |
-| Fiches plantes      | **YAML embarqué**                         | Lisible, contributif, diffable sur Git                            |
-| Météo               | **Open-Meteo** via `http`                 | Gratuit, sans clé API, sans compte                                |
-| Gestion d'état      | **Riverpod**                              | Moderne, testable, bien documenté                                 |
-| Navigation          | **`go_router`**                           | Déclaratif, deep linking                                          |
-| Notifications       | **`flutter_local_notifications`**         | 100% local                                                        |
-| Géolocalisation     | **`geolocator`**                          | Opt-out possible                                                  |
-| i18n                | **`intl`** + ARB (+ YAML pour les fiches) | Architecture multilingue                                          |
-| IDs                 | **`uuid`** (v4)                           | Compatibilité sync multi-appareils                                |
-| Parsing YAML        | **`yaml`**                                | Chargement des fiches plantes                                     |
-| Sync locale         | Sockets / **mDNS** sur WiFi               | Réseau local uniquement, aucun cloud (détail à l'implémentation)  |
-| Tests               | **`flutter_test`** + **`mocktail`**       | Unit + widget + integration                                       |
-| Scripts utilitaires | Dart                                      | Validation YAML, génération de fiches                             |
-| IDE                 | VS Code + extensions Dart/Flutter         | Gratuit, léger, hot reload                                        |
+| Langage | **Dart** | POO native, null safety, compilation native |
+| Framework | **Flutter** | Multiplateforme unifié (PC + mobile), un seul codebase |
+| BDD locale | **SQLite via `drift`** | Requêtes typées, migrations, testable |
+| Fiches plantes | **YAML embarqué** | Lisible, contributif, diffable sur Git |
+| Météo | **Open-Meteo** via `http` | Gratuit, sans clé API, sans compte |
+| Gestion d'état | **Riverpod** | Moderne, testable, bien documenté |
+| Navigation | **`go_router`** | Déclaratif, deep linking |
+| Notifications | **`flutter_local_notifications`** | 100% local |
+| Géolocalisation | **`geolocator`** | Opt-out possible |
+| i18n | **`intl`** + ARB (+ YAML pour les fiches) | Architecture multilingue |
+| IDs | **`uuid`** (v4) | Compatibilité sync multi-appareils |
+| Parsing YAML | **`yaml`** | Chargement des fiches plantes |
+| Sync locale | Sockets / **mDNS** sur WiFi | Réseau local uniquement, aucun cloud (détail à l'implémentation) |
+| Tests | **`flutter_test`** + **`mocktail`** | Unit + widget + integration |
+| Scripts utilitaires | Dart | Validation YAML, génération de fiches |
+| IDE | VS Code + extensions Dart/Flutter | Gratuit, léger, hot reload |
 
 ## 2. APIs externes autorisées
 
@@ -50,7 +50,7 @@
 **Dev** : `flutter_test`, `mocktail`, `drift_dev`, `build_runner`,
 `flutter_lints` (ou `very_good_analysis`).
 
-**À arbitrer avant usage** : `freezed` / `json_serializable` (immutabilité &
+**Validés** : `freezed` / `json_serializable` (immutabilité &
 sérialisation), `phosphor_flutter` (iconographie — cf.
 [08-design-system.md](08-design-system.md)), `flutter_markdown` (doc d'aide
 in-app — cf. [10-parcours-utilisateur.md](10-parcours-utilisateur.md)).

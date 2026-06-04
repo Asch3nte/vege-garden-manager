@@ -17,17 +17,22 @@
 
 ```
 Potager (1) ──▶ (N) Parcelle (1) ──▶ (N) Plantation (1) ──▶ (N) Recolte
-                                          │
-                                          └──▶ (N) NoteObservation (V1.1)
+                         │
+                         ├──▶ (N) TechniqueSol (multi, sur la Parcelle)
+                         └──▶ (N) Equipement
 
-Plantation ──referencé par planteId──▶ FichePlante   (catalogue YAML, jamais en SQL, immuable)
+Plantation ──referencé par planteId──▶ FichePlante (catalogue YAML, jamais en SQL, immuable)
 
+Observation ──cible polymorphe──▶ Potager | Parcelle | Plantation (V1, accès par requête)
 Tache ◀──depuisRappel()── Rappel
 Equipement ──rattaché à──▶ Parcelle (ou transverse au Potager)
 ```
 
-**Agrégat racine** : `Potager`. La `Localisation` et la `ZoneClimatique` sont
-portées au niveau du `Potager` (toutes ses parcelles partagent le même climat).
+**Agrégat racine** : `Potager`. La `Localisation`, la `ZoneClimatique` (type +
+rusticité) et l'`emplacement` sont portés au niveau du `Potager` (toutes ses
+parcelles partagent le même climat). Les `Observation` ne sont **pas embarquées**
+dans l'agrégat `Plantation` : elles ont une cible polymorphe et se récupèrent par
+requête (`AbstractObservationRepository`) — agrégats légers.
 
 ## 3. Entités principales
 
@@ -39,20 +44,23 @@ Représente un potager complet. L'app supporte **plusieurs potagers** dès le MV
 class Potager {
   final String _id;
   String _nom;
+  TypeEmplacement _emplacement; // jardin, balcon, terrasse, toit…
   Localisation _localisation;
-  ZoneClimatique _zoneClimatique;
+  ZoneClimatique _zoneClimatique; // porte TypeClimat + ZoneRusticite
   final DateTime _dateCreation;
   String? _notes;
   final List<Parcelle> _parcelles;
 
   String get id => _id;
   String get nom => _nom;
+  TypeEmplacement get emplacement => _emplacement;
   Localisation get localisation => _localisation;
   ZoneClimatique get zoneClimatique => _zoneClimatique;
   List<Parcelle> get parcelles => List.unmodifiable(_parcelles);
 
   // Setters contrôlés
   void renommer(String nouveauNom);
+  void modifierEmplacement(TypeEmplacement nouvel);
   void mettreAJourLocalisation(Localisation nouvelle);
   void mettreAJourZoneClimatique(ZoneClimatique nouvelle);
   void modifierNotes(String? nouvellesNotes);
@@ -69,27 +77,35 @@ class Potager {
 
 ### 3.2 `Parcelle` (zone physique de culture)
 
-Zone homogène délimitée (planche, bac, pot, serre, butte…). `typeSol` non
-nullable (défaut traçable via `SourceTypeSol`). Maintient ses plantations et
-équipements ; sa `surface` est **calculée** depuis sa `PositionParcelle`
-(source de vérité unique).
+Zone homogène délimitée (planche, bac, pot, serre, butte…). `texture` du sol
+**nullable** (= inconnue, création sans friction ; origine tracée via
+`SourceTypeSol`). Maintient ses plantations et équipements ; sa `surface` est
+**saisie** par l'utilisateur (source de vérité).
 
-Champs clés : `nom`, `type` (`TypeParcelle`), `exposition` (`NiveauSoleil`),
-`typeSol` + `typeSolSource`, `position` (`PositionParcelle`), `ordre`, `notes`.
+Champs clés : `nom`, `type` (`TypeParcelle` — structure seule), `surface`
+(`Surface`, saisie), `exposition` (`NiveauSoleil`), `texture` (`TextureSol?`) +
+`textureSource` (`SourceTypeSol`) + `ph` (`PhSol?`), `techniquesSol`
+(`Set<TechniqueSol>`, multi, optionnel), `cultureVerticale` (`bool`),
+`position` (`PositionParcelle?`, **optionnelle — vue plan V2**), `ordre`, `notes`.
 Méthodes : `surfaceOccupee()`, `surfaceLibre()`, `pasDeConflit(FichePlante)`,
 `plantesActuelles()`, + mutations contrôlées (`renommer`, `modifierExposition`,
-`definirTypeSol`, `deplacer`, `redimensionner`, `pivoter`, `ajouterPlantation`,
-`retirerPlantation`, `ajouterEquipement`…).
+`definirTexture`, `ajouterTechnique`, `retirerTechnique`, `basculerCultureVerticale`,
+`ajouterPlantation`, `retirerPlantation`, `ajouterEquipement`…).
 
-### 3.3 `PositionParcelle`
+> Les techniques de gestion du sol (`butteLasagne`, `hugelkultur`, `noDig`,
+> `paillage`…) sont **orthogonales** au `TypeParcelle` (structure) : un `bacSureleve`
+> peut combiner plusieurs techniques (cf. `TechniqueSol`, §5).
+
+### 3.3 `PositionParcelle` *(vue « plan du potager » — V2)*
 
 Position & dimensions sur le plan du potager. Repère 2D en mètres, origine
-(0,0) = coin haut-gauche.
+(0,0) = coin haut-gauche. **Optionnelle** : non collectée en V1 (la surface est
+saisie directement) ; réservée à la future vue « plan » (roadmap V2).
 
 ```dart
 class PositionParcelle {
   final double _x, _y, _largeur, _hauteur, _rotation; // mètres / degrés [0,360[
-  Surface surfaceCalculee();        // largeur × hauteur
+  Surface surfaceCalculee(); // largeur × hauteur (vue plan uniquement)
   bool chevauche(PositionParcelle autre);
   bool contient(double x, double y);
 }
@@ -109,50 +125,62 @@ class Plantation {
   final MethodeMiseEnPlace _methode;
   final Surface _surfaceOccupee;
   final int _nombrePieds;
-  StatutPlantation _statut;          // enCours, recoltee, echouee, arrachee
+  StatutPlantation _statut; // enCours, recoltee, echouee, arrachee
   final List<Recolte> _recoltes;
-  final List<NoteObservation> _notes;
 
   Duration ageDepuisPlantation();
   DateTime? dateRecolteEstimee(FichePlante fiche, ZoneClimatique zone);
   void enregistrerRecolte(Recolte r);
-  void ajouterNote(NoteObservation n);
   void changerStatut(StatutPlantation nouveau);
   bool estActive();
   Quantite quantiteTotaleRecoltee();
 }
 ```
 
+> Les **observations** d'une plantation ne sont pas embarquées dans l'agrégat :
+> elles ont une cible polymorphe et se récupèrent via
+> `AbstractObservationRepository.obtenirParCible(...)`.
+
 ### 3.5 `Recolte`
 
 Événement de récolte (plusieurs récoltes successives possibles par plantation).
-Champs : `plantationId`, `date`, `quantite` (`Quantite`), `qualite`
-(`QualiteRecolte?`, nullable, ajoutable a posteriori), `notes?`.
+Champs : `plantationId`, `date`, `quantite` (`Quantite`), `destination`
+(`DestinationRecolte`, requise, défaut `consommationFraiche`), `qualite`
+(`QualiteRecolte?`, nullable = non encore évaluée, ajoutable a posteriori),
+`notes?`.
 
 ### 3.6 `FichePlante` (catalogue, chargée depuis YAML)
 
 Fiche de référence d'une espèce/variété. **Non créée par l'utilisateur**
 (chargée depuis YAML), multilingue par conception, associations exprimées par
-**IDs**. Conseils/conservation stockés en **clés i18n**.
+**IDs**. Textes (description, conseils, conservation) **localisés inline** dans
+le YAML — pas de clés ARB.
 
-Champs : `id`, `nomScientifique`, `nomsLocalises` (`Map<String,String>`),
-`categorie`, `periodesSemis/Plantation/Recolte` (`List<Periode>`),
-`associationsBenefiques/Negatives` (IDs), `besoins` (`BesoinsCulture`),
-`zonesCompatibles`, `espaceRequisParPied` (`Surface`), `dureeAvantRecolte`,
-`conseilsPermaculture` / `methodesConservation` (clés i18n).
-Méthodes : `nomLocalise(locale)`, `estPlantableEn(date, zone)`,
-`sAssocieBienAvec(id)`, `entreEnConflitAvec(id)`, `tempsEstimeAvantRecolte()`.
+Champs : `id`, `nomScientifique`, `familleBotanique`, `categorie`
+(`CategoriePlante`), `sousType` (`SousTypeLegume?`), `usages` (`Set<UsagePlante>`),
+`nomsLocalises` (`Map<String,String>`), `textesLocalises`
+(`Map<String, TexteFiche>` par locale : description, conseils…),
+`periodes` (`Map<Hemisphere, Map<TypeClimat, PeriodesCulture>>`),
+`associationsBenefiques/Negatives` (IDs + raisons localisées),
+`besoins` (`BesoinsCulture`), `espacementCm` (int), `dureeAvantRecolteJours`
+(intervalle min/max), `conservation`, `rotation`.
+Méthodes : `nomLocalise(locale)`, `estPlantableEn(date, hemisphere, climat)`,
+`sAssocieBienAvec(id)`, `entreEnConflitAvec(id)`, `aUsage(UsagePlante)`.
+
+> `espacementCm` (distance linéaire entre pieds) remplace l'ancien
+> `espaceRequisParPied` (aire) — aligné sur le YAML. La surface occupée par une
+> plantation est dérivée au besoin par le moteur (espacement × nombre de pieds).
 
 ### 3.7 Autres entités
 
-| Entité                    | Rôle                                                                | Notes                                                                                   |
+| Entité | Rôle | Notes |
 |---------------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `NoteObservation`         | Observation datée (maladie, croissance, floraison…), photos locales | `TypeObservation`, `_photosLocales` (chemins)                                           |
-| `Tache`                   | Action concrète (à faire / faite)                                   | Cible : potager / parcelle / plantation / équipement. `factory Tache.depuisRappel(...)` |
-| `Rappel`                  | Règle de planification (peut être récurrente)                       | Génère des `Tache` ; `prochaineRecurrence()`                                            |
-| `Equipement`              | Installation sur parcelle (oya, voile, tuteur…)                     | Porte un `EffetEquipement` ; jamais supprimé (date de retrait)                          |
-| `PreferencesUtilisateur`  | Singleton des préférences/opt-outs                                  | `id == "singleton"`, pattern `copierAvec` immuable                                      |
-| `Traitement` *(V1.1)*     | Intervention naturelle (purins, paillage…)                          | Reportée — en V1, consigner via `NoteObservation`/`Tache`                               |
+| `Observation` | Journal de bord daté (maladie, ravageur, croissance, floraison…) | Cible **polymorphe** (potager/parcelle/plantation). `TypeObservation`, `GraviteObservation`, `resolu`. **Photos → V1.1**. Non embarquée dans l'agrégat |
+| `Tache` | Action concrète (à faire / faite) | Cible : potager / parcelle / plantation / équipement. `factory Tache.depuisRappel(...)` |
+| `Rappel` | Règle de planification (peut être récurrente) | Génère des `Tache` ; `prochaineRecurrence()` |
+| `Equipement` | Installation sur parcelle (oya, voile, tuteur…) | Porte un `EffetEquipement` ; jamais supprimé (date de retrait) |
+| `PreferencesUtilisateur` | Singleton des préférences/opt-outs | `id == "singleton"`, pattern `copierAvec` immuable |
+| `Traitement` *(V1.1)* | Intervention naturelle ponctuelle (purins/extraits fermentés…) | Reportée — accueillera `thePurin`. En V1, consigner via `Observation`/`Tache` |
 
 > **Tache vs Rappel** : un `Rappel` = règle (récurrente) ; une `Tache` =
 > occurrence unitaire. Un rappel « arroser tous les 2 jours » produit N tâches
@@ -170,37 +198,42 @@ Plage de mois (`1`–`12`), gère le **chevauchement d'année** (ex. nov → fé
 `contient(DateTime)`, `compatibleAvec(ZoneClimatique)`.
 
 ### 4.3 `Localisation` (opt-out strict)
-Trois modes via constructeurs nommés : `.desactivee()`, `.manuelle(...)`,
-`.automatique(...)`. **Coordonnées arrondies à ~1 km** (2 décimales) pour la
-vie privée. `enum SourceLocalisation { desactivee, manuelle, gps }`.
+Trois constructeurs nommés selon l'**origine** de la donnée : `.nonDefinie()`,
+`.manuelle(...)`, `.gps(...)`. **Coordonnées arrondies à ~1 km** (2 décimales)
+pour la vie privée. `enum SourceLocalisation { nonDefinie, manuelle, gps }`
+Le *mode* géoloc souhaité (désactivé/manuel/gps) est une
+**préférence séparée** (`preferences.mode_geolocalisation`), pas porté par le VO.
 
 ```dart
 class Localisation {
   final double? _latitude, _longitude;
-  final String? _nomVille;
-  final bool _geolocalisationActivee;
+  final String? _ville;
   final SourceLocalisation _source;
-  Localisation.desactivee();
+  Localisation.nonDefinie(); // source = nonDefinie, sans coords
   Localisation.manuelle({required String ville, required double latitude, required double longitude});
-  Localisation.automatique({required double latitude, required double longitude});
+  Localisation.gps({required double latitude, required double longitude});
   bool get estDefinie => _latitude != null && _longitude != null;
   static double _arrondir(double c) => (c * 100).roundToDouble() / 100; // ~1 km
 }
 ```
 
 ### 4.4 `BesoinsCulture`
-Besoins agronomiques : `eau` (`BesoinEau`), `soleil` (`NiveauSoleil`),
-`solPrefere` (`TypeSol`), `phMin`/`phMax` (0–14, `phMin <= phMax`).
-Niveaux **qualitatifs** (faible/moyen/élevé), pH numérique.
+Besoins agronomiques (côté **fiche**, ce que la plante *préfère*) : `eau`
+(`BesoinEau` — `faible/modere/eleve`), `soleil` (`NiveauSoleil`), `qualitesSol`
+(`Set<QualiteSol>` — multi), `phMin`/`phMax` (0–14, `phMin <= phMax`).
+À distinguer de la `TextureSol` *possédée* par une parcelle : le moteur dérive
+les qualités d'une texture via une table de correspondance.
 
 ### 4.5 `Quantite`
 Valeur + unité (`UniteQuantite`). Conversions seulement entre unités de même
 nature (masse↔masse, volume↔volume), sinon exception métier.
 
 ### 4.6 `ZoneClimatique`
-Classification climatique simplifiée + zone de rusticité (1–11, échelle USDA
-simplifiée). Déduite de la localisation (Open-Meteo) ou saisie. `compatibleAvec`,
-`supporteGel`.
+Deux dimensions combinées : `type` (`TypeClimat`, Köppen simplifié)
+**+** `rusticite` (`ZoneRusticite`, `zone1`–`zone13`, échelle USDA — tolérance au
+froid). Déduite de la localisation (Open-Meteo) ou saisie. Méthodes :
+`compatibleAvec`, `supporteGel`, `dateDernierGelEstimee()` (depuis la rusticité —
+sert de barrière anti-gel au moteur).
 
 ### 4.7 `EffetEquipement`
 Impact d'un équipement : modificateurs eau/soleil/température, protections
@@ -211,29 +244,64 @@ Fabriques prédéfinies `EffetEquipement.pourType(TypeEquipement)` (ex. oya →
 ## 5. Énumérations principales
 
 ```dart
-enum TypeParcelle { pleineTerre, bacSureleve, potEnPot, serre, butte, butteLasagne, hugelkultur }
-enum TypeSol { argileux, sableux, limoneux, calcaire, humifere, equilibre } // + 'inconnu' côté SQL
-enum CategoriePlante { legumeFruit, legumeFeuille, legumeRacine, legumeBulbe, legumineuse, aromatique, fleur, fruitier }
+// — Catalogue / fiches —
+enum CategoriePlante { legume, aromatique, fruit, petitFruit, fleur, cereale, engraisVert }
+enum SousTypeLegume { legumeFruit, legumeFeuille, legumeRacine, legumeBulbe,
+                      legumeTige, legumeFleur, legumeTubercule } // si categorie == legume
+enum UsagePlante { alimentaire, condimentaire, medicinale, compagnonnage, repulsif,
+                   mellifere, pollinisateur, engraisVert, couvreSol, briseVent,
+                   tuteurVivant, ornementale, fourrage } // multi-valué (≥ 1)
+enum Hemisphere { nord, sud }
+
+// — Parcelle / sol —
+enum TypeParcelle { pleineTerre, bacSureleve, jardiniere, pot, serre, butte, autre } // structure seule
+enum TechniqueSol { // multi-valué, orthogonal au TypeParcelle
+  butteLasagne, hugelkultur, butteRonde, buttePermanente, // structure de sol
+  paillage, brf, mulchVivant, engraisVertCouvert, paillageMineral, carton, // couverture / paillage
+  noDig, grelinette, mulchDeFoin, // sans travail / minimal
+  compostageSurface, compostEnTrou, mycorhization, bokashi, // amendement / fertilité
+  swales, keylineDesign } // gestion eau / structure
+enum TypeEmplacement { jardin, balcon, terrasse, toit, cour, interieur, autre } // attribut Potager
+enum TextureSol { argileux, sableux, limoneux, calcaire, humifere, tourbeux, caillouteux } // parcelle (nullable = inconnue)
+enum QualiteSol { riche, pauvre, bienDraine, malDraine, frais, sec, lourd, leger } // recherchée (fiche)
+enum PhSol { acide, neutre, alcalin }
+enum SourceTypeSol { manuelle, deduitDeLocalisation, deduitDuClimat }
+
+// — Plantation / récolte —
 enum MethodeMiseEnPlace { semisDirect, semisInterieur, repiquage, plantAchete, bouture, division }
 enum StatutPlantation { enCours, recoltee, echouee, arrachee }
-enum NiveauSoleil { ombre, miOmbre, pleinSoleil }       // exposition ET besoin
-enum BesoinEau { faible, moyen, eleve }
-enum UniteQuantite { grammes, kilogrammes, pieces, litres, bottes }
-enum UniteRecolte { kg, g, pieces, bottes, litres }
+enum NiveauSoleil { ombre, miOmbre, pleinSoleil } // exposition ET besoin
+enum BesoinEau { faible, modere, eleve }
+enum UniteQuantite { g, kg, piece, botte, litre, ml } // unique (UniteRecolte supprimé)
 enum QualiteRecolte { excellente, bonne, moyenne, mediocre }
 enum DestinationRecolte { consommationFraiche, conservation, don, semences, compost, autre }
-enum TypeEquipement { /* irrigation, protection, structure, biodiversité, mesure */ oya, voileHivernage, tuteur, treillis, hotelInsectes, /* … */ }
+
+// — Équipement (réconciliation enum en passe dédiée) —
+enum TypeEquipement { /* irrigation, protection, structure, biodiversité, mesure */
+  oya, gouttesAGoutte, tuteur, treillis, tunnel, serreSemis, chassis, cloche,
+  voileHivernage, filetAntiInsecte, hotelInsectes, composteur, recuperateurEau, autre }
 enum EtatEquipement { neuf, bon, use, aRemplacer, horsService }
+
+// — Tâches / rappels —
 enum TypeTache { arrosage, desherbage, paillage, taille, tuteurage, fertilisation, traitementBio, observation, semis, repiquage, recolte, preparationSol, installationEquipement, entretienEquipement, nettoyage, autre }
 enum EtatTache { aFaire, enCours, terminee, annulee }
 enum PrioriteTache { basse, normale, haute, urgente }
-enum TypeRecurrence { ponctuel, quotidien, hebdomadaire, personnalise, mensuel }
+enum TypeRecurrence { ponctuel, quotidien, hebdomadaire, mensuel, personnalise }
 enum EtatRappel { actif, enPause, termine }
 enum JourSemaine { lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche }
+
+// — Observation —
+enum CibleObservation { potager, parcelle, plantation } // cible polymorphe
 enum TypeObservation { maladie, ravageur, carence, meteo, croissance, floraison, fructification, general, autre }
 enum GraviteObservation { info, faible, modere, eleve, critique }
-enum TypeClimat { /* Köppen simplifié : tropicalHumide, mediterraneen, oceanique, continentalHumide, montagnard, polaire, … */ }
-enum SourceTypeSol { manuelle, deduitDeLocalisation, deduitDuClimat }
+
+// — Climat —
+enum TypeClimat { tropical, subtropical, aride, semiAride, mediterraneen,
+                  oceanique, continental, montagnard, polaire }
+enum ZoneRusticite { zone1, zone2, zone3, zone4, zone5, zone6, zone7,
+                     zone8, zone9, zone10, zone11, zone12, zone13 } // USDA
+
+// — Technique / divers —
 enum TypeReleveMeteo { observe, prevu }
 enum TypeParametre { booleen, entier, decimal, texte, json }
 enum SourceFiche { embarquee, telechargee, personnelle }
@@ -241,6 +309,7 @@ enum SourceFiche { embarquee, telechargee, personnelle }
 
 > ⚠️ Cohérence enum ↔ SQL : chaque enum persistée a une contrainte `CHECK`
 > correspondante en BDD (cf. [06-modele-de-donnees-sqlite.md](06-modele-de-donnees-sqlite.md)).
+> Les enums multi-valués (`UsagePlante`, `TechniqueSol`) sont stockés en **tableau JSON**.
 
 ## 6. Interfaces de repositories (contrats du Domain)
 
@@ -271,6 +340,13 @@ abstract class AbstractFichePlanteRepository {
   Future<FichePlante?> obtenirParId(String id);
   Future<List<FichePlante>> rechercher(String terme, String locale);
   Future<List<FichePlante>> filtrerParCategorie(CategoriePlante cat);
+  Future<List<FichePlante>> filtrerParUsage(UsagePlante usage);
+}
+abstract class AbstractObservationRepository { // — cible polymorphe
+  Future<List<Observation>> obtenirParCible(CibleObservation cible, String cibleId);
+  Future<List<Observation>> obtenirNonResolues();
+  Future<void> sauvegarder(Observation observation);
+  Future<void> supprimer(String id);
 }
 // + AbstractPreferencesRepository (charger / sauvegarder / reinitialiser)
 ```
@@ -283,7 +359,7 @@ abstract class AbstractMeteoService {
   Future<List<PrevisionMeteo>> obtenirPrevisions(Localisation loc, int nbJours);
 }
 abstract class AbstractNotificationService {
-  Future<void> programmer(Notification notif);
+  Future<void> programmer(NotificationLocale notif);
   Future<void> annuler(String id);
   Future<bool> sontAutorisees();
 }
@@ -295,6 +371,18 @@ abstract class AbstractSyncService {
 }
 ```
 
+**Value Objects / DTO portés par ces contrats** (Domain, immuables — P9) :
+
+| Type | Champs (résumé) |
+|---------------------|------------------------------------------------------------------------------------------|
+| `DonneesMeteo` | `date`, `tempMin/Max/Moyenne`, `precipitationsMm`, `ventVitesseMax`, `risqueGel/Canicule` |
+| `PrevisionMeteo` | `date`, `tempMin/Max`, `precipitationsMm`, `probabilitePluie`, `type` (`TypeReleveMeteo`) |
+| `NotificationLocale`| `id`, `titre`, `corps`, `dateProgrammee`, `categorie` (clé), `cibleRoute?` |
+| `AppareilDecouvert` | `id`, `nom` (hostname), `adresseIp`, `port`, `derniereVue` |
+
+> `NotificationLocale` (et non `Notification`) pour éviter la collision avec la
+> classe Flutter/OS `Notification`.
+
 ## 8. Exceptions métier
 
 ```dart
@@ -304,20 +392,20 @@ abstract class PotagerException implements Exception {
 }
 
 class AssociationIncompatibleException extends PotagerException { /* plante1Id, plante2Id */ }
-class SurfaceInsuffisanteException     extends PotagerException { /* requise, disponible */ }
+class SurfaceInsuffisanteException extends PotagerException { /* requise, disponible */ }
 class PeriodePlantationInvalideException extends PotagerException {}
 class ZoneClimatiqueIncompatibleException extends PotagerException {}
-class FichePlanteIntrouvableException   extends PotagerException {}
+class FichePlanteIntrouvableException extends PotagerException {}
 ```
 
 ## 9. Points d'attention
 
-| Point                         | Raison                                      |
+| Point | Raison |
 |-------------------------------|---------------------------------------------|
-| `FichePlante` ≠ `Plantation`  | Catalogue YAML immuable vs instance plantée |
-| Value Objects immuables       | Pas d'identité, égalité par valeur          |
-| Attributs privés partout      | Encapsulation stricte                       |
-| Interfaces dans le Domain     | Inversion de dépendance (SOLID)             |
-| Exceptions typées             | Gestion d'erreur explicite                  |
-| IDs en `String` (UUID)        | Sync multi-appareils                        |
-| Listes immuables retournées   | `List.unmodifiable()`                       |
+| `FichePlante` ≠ `Plantation` | Catalogue YAML immuable vs instance plantée |
+| Value Objects immuables | Pas d'identité, égalité par valeur |
+| Attributs privés partout | Encapsulation stricte |
+| Interfaces dans le Domain | Inversion de dépendance (SOLID) |
+| Exceptions typées | Gestion d'erreur explicite |
+| IDs en `String` (UUID) | Sync multi-appareils |
+| Listes immuables retournées | `List.unmodifiable()` |
