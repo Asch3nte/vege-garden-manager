@@ -1,0 +1,89 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Schéma de référence d'une fiche plante — Pot'à Gérer
+# Décrit la structure attendue de chaque fichier assets/fiches_plantes/<cat>/<id>.yaml
+# Spécification : docs/07-base-de-connaissances-yaml.md
+#
+# Légende des annotations :
+#   (requis)    : champ obligatoire
+#   (optionnel) : champ facultatif
+#   [a, b]      : intervalle [min, max]
+#   enum: …     : valeurs autorisées
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Métadonnées techniques
+id:               # (requis) unique, immuable, snake_case, minuscules, sans accents
+version_fiche:    # (requis) entier, incrémenté à chaque modification de la fiche
+categorie:        # (requis) enum: legume | aromatique | fruit | fleur_compagnonnage
+schema_version:   # (requis) entier, version du présent schéma
+
+# Identification botanique
+nom_scientifique: # (requis) ex: Solanum lycopersicum
+famille_botanique: # (requis) ex: Solanaceae
+
+# Contenu multilingue — 'fr' obligatoire, autres langues optionnelles
+i18n:
+  fr:                       # (requis)
+    nom_commun:             # (requis)
+    noms_alternatifs: []    # (optionnel) liste
+    description:            # (requis) texte
+    conseils_culture:       # (optionnel) texte
+    conseils_recolte:       # (optionnel) texte
+    erreurs_frequentes: []  # (optionnel) liste
+  en:                       # (optionnel) même structure que 'fr'
+
+# Besoins agronomiques (données structurées pour le moteur)
+besoins:
+  ensoleillement:   # (requis) enum: plein_soleil | mi_ombre | ombre
+  arrosage:         # (requis) enum: faible | regulier | abondant
+  type_sol: []      # (requis) liste, ex: [riche, bien_draine]
+  ph_min:           # (requis) 0.0–14.0, <= ph_max
+  ph_max:           # (requis) 0.0–14.0
+  temperature_min_germination: # (optionnel) °C
+  temperature_optimale:        # (optionnel) °C
+
+# Cycle de culture
+cycle:
+  type:                      # (requis) enum: annuelle | bisannuelle | vivace
+  duree_germination_jours: [] # (optionnel) [min, max]
+  duree_avant_recolte_jours: [] # (requis) [min, max]
+  hauteur_adulte_cm: []      # (optionnel) [min, max]
+  espacement_cm:             # (requis) entier
+  profondeur_semis_cm:       # (optionnel)
+
+# Périodes — par hémisphère puis zone climatique ; mois en entiers 1–12
+periodes:
+  hemisphere_nord:
+    zone_temperee:
+      semis_interieur: []    # [mois_debut, mois_fin]
+      semis_exterieur: []
+      plantation: []
+      recolte: []
+    zone_mediterraneenne: {} # même structure (optionnel)
+  hemisphere_sud: {}         # (optionnel) même structure
+
+# Associations & rotation — références par 'id' de fiche, jamais par nom
+associations:
+  beneficies:                # (optionnel) liste de { id, raison_i18n: { fr, en } }
+    - id:
+      raison_i18n: { fr:, en: }
+  defavorables:              # (optionnel) idem
+    - id:
+      raison_i18n: { fr:, en: }
+rotation:
+  famille:                   # (requis) ex: solanaceae
+  delai_retour_annees:       # (requis) entier
+  precedents_favorables: []  # (optionnel)
+  precedents_defavorables: [] # (optionnel)
+
+# Post-récolte (optionnel)
+conservation:
+  - methode:                 # ex: frais | conserves | lactofermentation | sechage | congelation
+    duree_jours:             # OU duree_mois
+    conditions_i18n: { fr:, en: }
+utilisations_culinaires_i18n:
+  fr: []
+  en: []
+
+# Source & contribution
+sources: []                  # (optionnel) URLs
+contributeurs: []            # (optionnel) ex: ["@github_username"]
