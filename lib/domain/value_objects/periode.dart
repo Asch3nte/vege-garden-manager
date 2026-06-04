@@ -8,6 +8,11 @@
 /// and its documentation are written in English.
 ///
 /// See `docs/05-modele-de-domaine.md` §4.2.
+///
+/// Note: `compatibleAvec(ZoneClimatique)` is deliberately not implemented here.
+/// A bare month range carries no climate information; the real rule ("is this
+/// plant plantable this month in this zone") needs the plant and the hemisphere,
+/// so it belongs to the recommendation engine.
 class Periode {
   /// First month of the period (1–12).
   final int _moisDebut;
