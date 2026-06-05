@@ -26,6 +26,45 @@ Toutes les fonctionnalités décrites dans [01](01-vision-et-perimetre.md) et
 | Réconciliation `TypeEquipement` | Revue fonctionnelle fine de l'enum équipements |
 | Seuils météo configurables | `risque_gel`/`risque_canicule` paramétrables (figés en V1) |
 | Déduction du type de sol | Depuis API géologique / heuristique climat |
+| **Sensibilité météo par plante** (fiche) | Alertes gel/canicule/forte-pluie ciblées par plante — voir §2.1 ci-dessous |
+
+### 2.1 Extension des fiches pour des alertes météo ciblées (reporté de V1)
+
+En V1, l'alerte météo (gel / canicule / forte pluie) est **générique** : elle vise
+**toutes les plantations en place** du potager concerné, sans distinguer les plantes,
+car **aucune donnée structurée de sensibilité** n'existe encore dans les fiches (seule
+la prose `erreurs_frequentes` la mentionne). Pour un calcul **plante par plante**, il
+faudra enrichir le modèle. Recommandations détaillées (à débattre avant implémentation) :
+
+**Champs YAML à ajouter sous `besoins:`** (puis mapper → `BesoinsCulture`) :
+- `temperature_min_tolerance` (°C) — seuil de **dégât par le froid** (distinct de
+  `temperature_min_germination`). Une plantation est « concernée par le gel » si
+  `prevision.tempMin <= temperature_min_tolerance`. (Ex. tomate ~ 0–2 °C, salade ~ −5 °C.)
+- `temperature_max_tolerance` (°C) — seuil de **stress thermique** → filtre canicule
+  (`prevision.tempMax >= temperature_max_tolerance`).
+- `tolerance_secheresse` (enum `faible|moyenne|forte`) — affine l'**arrosage** (lot 4),
+  pas seulement les alertes.
+- `sensibilite_exces_eau` (enum `faible|moyenne|forte`) — filtre l'alerte **forte pluie**
+  (asphyxie racinaire, éclatement des fruits).
+- Alternative plus simple si on ne veut pas de °C : `sensibilite_gel`
+  (`aucune|legere|forte`) + `sensibilite_chaleur` (idem), tables qualitatives.
+
+**Champs déjà présents au schéma mais NON mappés** (gain rapide, fidèle au schéma) :
+- `besoins.temperature_min_germination` et `besoins.temperature_optimale` : à lire dans
+  le parser/validator/mapper et exposer sur `BesoinsCulture`. Utilisables comme **proxy
+  faible** en attendant les seuils de tolérance dédiés.
+
+**Raffinements possibles (plus lourds) :**
+- **Sensibilité dépendante du stade** : un semis/jeune plant est plus gélif qu'un pied
+  établi → nécessiterait un modèle de stade (date plantation + cycle) croisé avec la
+  tolérance. À évaluer.
+- **Prise en compte des équipements de protection** : un `voileHivernage`/`tunnel` en
+  place sur la parcelle relève le seuil effectif de gel (lié au calibrage `EffetEquipement`).
+
+**Travaux d'implémentation impliqués :** schéma `_schema/fiche_plante_schema.yaml`,
+`CatalogueYamlParser` + `FichePlanteValidator` + `FichePlanteMapper`, VO `BesoinsCulture`,
+valeurs de la fiche golden `tomate.yaml`, doc `07-base-de-connaissances-yaml.md`, puis
+l'évaluateur d'alertes (filtrage par plante au lieu de générique).
 
 ## 3. V2 — évolutions prévues (opt-in, désactivées par défaut)
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../core/constants/constantes_moteur.dart';
 import '../../domain/exceptions/meteo_indisponible_exception.dart';
 import '../../domain/value_objects/donnees_meteo.dart';
 import '../../domain/value_objects/localisation.dart';
@@ -24,14 +25,13 @@ class OpenMeteoClient {
       'temperature_2m_max,temperature_2m_min,precipitation_sum,'
       'precipitation_probability_max,wind_speed_10m_max';
 
-  /// V1 frost threshold: a day's minimum temperature at or below this (°C)
-  /// flags [DonneesMeteo.risqueGel]. Frozen for V1 (see `docs/13-roadmap`),
-  /// made configurable later.
-  static const double seuilGelC = 0;
+  /// V1 frost threshold (°C) flagging [DonneesMeteo.risqueGel]; mirrors the
+  /// engine's single source of truth ([SeuilsMeteo.gelC]).
+  static const double seuilGelC = SeuilsMeteo.gelC;
 
-  /// V1 heatwave threshold: a day's maximum temperature at or above this (°C)
-  /// flags [DonneesMeteo.risqueCanicule]. Frozen for V1.
-  static const double seuilCaniculeC = 35;
+  /// V1 heatwave threshold (°C) flagging [DonneesMeteo.risqueCanicule]; mirrors
+  /// [SeuilsMeteo.caniculeC].
+  static const double seuilCaniculeC = SeuilsMeteo.caniculeC;
 
   /// Maximum time to wait for the remote service before giving up.
   static const Duration _timeout = Duration(seconds: 10);
