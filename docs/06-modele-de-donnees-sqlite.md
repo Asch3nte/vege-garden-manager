@@ -60,7 +60,7 @@ CREATE TABLE potagers (
   localisation_source TEXT NOT NULL DEFAULT 'nonDefinie', -- nonDefinie | manuelle | gps
   -- Value Object ZoneClimatique (aplati) — type + rusticité
   climat_type TEXT NOT NULL, -- enum TypeClimat (9 valeurs)
-  zone_rusticite TEXT NULL, -- enum ZoneRusticite (zone1..zone13)
+  zone_rusticite TEXT NOT NULL, -- enum ZoneRusticite (défaut estimé par zone géo, modifiable)
   climat_temp_moy_annuelle REAL NULL,
   climat_pluviometrie_annuelle REAL NULL,
   climat_source TEXT NOT NULL DEFAULT 'manuelle', -- manuelle | deduitDeLocalisation | openMeteo
@@ -78,7 +78,7 @@ CREATE TABLE potagers (
   CHECK ((localisation_source = 'nonDefinie') = (localisation_latitude IS NULL AND localisation_longitude IS NULL)),
   CHECK (climat_type IN ('tropical','subtropical','aride','semiAride','mediterraneen',
                          'oceanique','continental','montagnard','polaire')),
-  CHECK (zone_rusticite IS NULL OR zone_rusticite IN ('zone1','zone2','zone3','zone4','zone5',
+  CHECK (zone_rusticite IN ('zone1','zone2','zone3','zone4','zone5',
          'zone6','zone7','zone8','zone9','zone10','zone11','zone12','zone13')),
   CHECK (climat_source IN ('manuelle','deduitDeLocalisation','openMeteo'))
 );

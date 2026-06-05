@@ -15,6 +15,7 @@ void main() {
         id: id,
         nom: 'Jardin',
         climatType: 'oceanique',
+        zoneRusticite: 'zone8',
         dateCreation: now,
         createdAt: now,
         updatedAt: now,

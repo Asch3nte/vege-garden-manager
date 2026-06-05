@@ -16,7 +16,7 @@ class Potagers extends Table {
   TextColumn get localisationSource =>
       text().withDefault(const Constant('nonDefinie'))();
   TextColumn get climatType => text()();
-  TextColumn get zoneRusticite => text().nullable()();
+  TextColumn get zoneRusticite => text()();
   RealColumn get climatTempMoyAnnuelle => real().nullable()();
   RealColumn get climatPluviometrieAnnuelle => real().nullable()();
   TextColumn get climatSource =>
@@ -39,7 +39,7 @@ class Potagers extends Table {
         "CHECK (localisation_source IN ('nonDefinie','manuelle','gps'))",
         "CHECK ((localisation_source = 'nonDefinie') = (localisation_latitude IS NULL AND localisation_longitude IS NULL))",
         "CHECK (climat_type IN ('tropical','subtropical','aride','semiAride','mediterraneen','oceanique','continental','montagnard','polaire'))",
-        "CHECK (zone_rusticite IS NULL OR zone_rusticite IN ('zone1','zone2','zone3','zone4','zone5','zone6','zone7','zone8','zone9','zone10','zone11','zone12','zone13'))",
+        "CHECK (zone_rusticite IN ('zone1','zone2','zone3','zone4','zone5','zone6','zone7','zone8','zone9','zone10','zone11','zone12','zone13'))",
         "CHECK (climat_source IN ('manuelle','deduitDeLocalisation','openMeteo'))",
       ];
 }
