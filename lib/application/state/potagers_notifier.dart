@@ -36,6 +36,15 @@ class PotagersNotifier extends AsyncNotifier<List<Potager>> {
     return potager;
   }
 
+  /// Persists changes to an existing potager (upsert) and reloads the list.
+  ///
+  /// The caller mutates the entity through its domain methods first, then passes
+  /// it here.
+  Future<void> modifier(Potager potager) async {
+    await ref.read(potagerRepositoryProvider).sauvegarder(potager);
+    await _recharger();
+  }
+
   /// Reloads the list from the repository, surfacing errors as an error state.
   Future<void> _recharger() async {
     state = const AsyncValue.loading();

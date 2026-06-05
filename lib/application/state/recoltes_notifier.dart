@@ -39,13 +39,25 @@ class RecoltesNotifier extends AsyncNotifier<List<Recolte>> {
           qualite: qualite,
           notes: notes,
         );
+    await _recharger();
+    return recolte;
+  }
+
+  /// Persists changes to an existing harvest (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first
+  /// (e.g. `definirQualite`).
+  Future<void> modifier(Recolte recolte) async {
+    await ref.read(recolteRepositoryProvider).sauvegarder(recolte);
+    await _recharger();
+  }
+
+  Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(
       () => ref
           .read(recolteRepositoryProvider)
           .obtenirParPlantation(plantationId),
     );
-    return recolte;
   }
 }
 

@@ -50,6 +50,14 @@ class EquipementsNotifier extends AsyncNotifier<List<Equipement>> {
     await _recharger();
   }
 
+  /// Persists changes to an existing equipment (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first
+  /// (e.g. `changerEtat`, `retirer`).
+  Future<void> modifier(Equipement equipement) async {
+    await ref.read(equipementRepositoryProvider).sauvegarder(equipement);
+    await _recharger();
+  }
+
   Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(

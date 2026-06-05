@@ -55,6 +55,14 @@ class TachesNotifier extends AsyncNotifier<List<Tache>> {
     await _recharger();
   }
 
+  /// Persists changes to an existing task (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first
+  /// (e.g. `marquerFaite`, `reporter`).
+  Future<void> modifier(Tache tache) async {
+    await ref.read(tacheRepositoryProvider).sauvegarder(tache);
+    await _recharger();
+  }
+
   Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(

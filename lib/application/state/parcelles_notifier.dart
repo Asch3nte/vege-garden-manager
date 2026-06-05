@@ -62,6 +62,13 @@ class ParcellesNotifier extends AsyncNotifier<List<Parcelle>> {
     await _recharger();
   }
 
+  /// Persists changes to an existing parcelle (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first.
+  Future<void> modifier(Parcelle parcelle) async {
+    await ref.read(parcelleRepositoryProvider).sauvegarder(parcelle);
+    await _recharger();
+  }
+
   Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(

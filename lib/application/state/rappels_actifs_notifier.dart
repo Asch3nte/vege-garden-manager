@@ -60,6 +60,15 @@ class RappelsActifsNotifier extends AsyncNotifier<List<Rappel>> {
     await _recharger();
   }
 
+  /// Persists changes to an existing reminder (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first
+  /// (e.g. `mettreEnPause`, `changerPriorite`). Note: a reminder that leaves the
+  /// `actif` state will drop out of this list on reload.
+  Future<void> modifier(Rappel rappel) async {
+    await ref.read(rappelRepositoryProvider).sauvegarder(rappel);
+    await _recharger();
+  }
+
   Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(

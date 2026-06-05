@@ -46,6 +46,13 @@ class PlantationsNotifier extends AsyncNotifier<List<Plantation>> {
     await _recharger();
   }
 
+  /// Persists changes to an existing plantation (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first.
+  Future<void> modifier(Plantation plantation) async {
+    await ref.read(plantationRepositoryProvider).sauvegarder(plantation);
+    await _recharger();
+  }
+
   Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(

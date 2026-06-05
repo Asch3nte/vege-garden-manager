@@ -53,6 +53,14 @@ class ObservationsNotifier extends AsyncNotifier<List<Observation>> {
     await _recharger();
   }
 
+  /// Persists changes to an existing observation (upsert) and reloads the list.
+  /// The caller mutates the entity through its domain methods first
+  /// (e.g. `resoudre`).
+  Future<void> modifier(Observation observation) async {
+    await ref.read(observationRepositoryProvider).sauvegarder(observation);
+    await _recharger();
+  }
+
   Future<void> _recharger() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(

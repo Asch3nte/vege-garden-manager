@@ -10,9 +10,11 @@ import 'package:pot_a_gerer/application/state/recoltes_notifier.dart';
 import 'package:pot_a_gerer/application/state/taches_notifier.dart';
 import 'package:pot_a_gerer/domain/enums/cible_observation.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
+import 'package:pot_a_gerer/domain/enums/etat_equipement.dart';
 import 'package:pot_a_gerer/domain/enums/jour_semaine.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/qualite_recolte.dart';
 import 'package:pot_a_gerer/domain/enums/type_equipement.dart';
 import 'package:pot_a_gerer/domain/enums/type_observation.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
@@ -153,6 +155,53 @@ void main() {
     expect(await container.read(tachesProvider(scope).future), hasLength(1));
     await notifier.supprimer(t.id);
     expect(await container.read(tachesProvider(scope).future), isEmpty);
+  });
+
+  test('taches: modify via a domain method then persist', () async {
+    const scope = (cible: CibleTache.parcelle, cibleId: 'par1');
+    final notifier = container.read(tachesProvider(scope).notifier);
+    final t = await notifier.creer(
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      datePrevue: DateTime.utc(2026, 6, 10),
+    );
+    expect(t.estFaite, isFalse);
+
+    t.marquerFaite(DateTime.utc(2026, 6, 11));
+    await notifier.modifier(t);
+
+    final reloaded = await container.read(tachesProvider(scope).future);
+    expect(reloaded.single.estFaite, isTrue);
+    expect(reloaded.single.dateRealisation, DateTime.utc(2026, 6, 11));
+  });
+
+  test('equipements: modify (changerEtat) then persist', () async {
+    final notifier = container.read(equipementsProvider('pot1').notifier);
+    final e = await notifier.creer(
+      nom: 'Oya 5L',
+      type: TypeEquipement.oya,
+      dateInstallation: DateTime.utc(2026, 4, 10),
+    );
+
+    e.changerEtat(EtatEquipement.aRemplacer);
+    await notifier.modifier(e);
+
+    final reloaded = await container.read(equipementsProvider('pot1').future);
+    expect(reloaded.single.etat, EtatEquipement.aRemplacer);
+  });
+
+  test('recoltes: modify (definirQualite) then persist', () async {
+    final notifier = container.read(recoltesProvider('pl1').notifier);
+    final r = await notifier.creer(
+      date: DateTime.utc(2026, 5, 20),
+      quantite: const Quantite(800, UniteQuantite.g),
+    );
+
+    r.definirQualite(QualiteRecolte.excellente);
+    await notifier.modifier(r);
+
+    final reloaded = await container.read(recoltesProvider('pl1').future);
+    expect(reloaded.single.qualite, QualiteRecolte.excellente);
   });
 
   test('rappels actifs: create then delete', () async {

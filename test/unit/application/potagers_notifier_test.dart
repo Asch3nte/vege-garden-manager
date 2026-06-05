@@ -41,4 +41,17 @@ void main() {
     expect(list.single.id, created.id);
     expect(list.single.nom, 'Jardin maison');
   });
+
+  test('modifier() persists a domain mutation', () async {
+    final container = makeContainer();
+    await container.read(potagersProvider.future);
+    final notifier = container.read(potagersProvider.notifier);
+
+    final created = await notifier.creer(nom: 'Ancien nom', zoneClimatique: zone);
+    created.renommer('Nouveau nom');
+    await notifier.modifier(created);
+
+    final list = await container.read(potagersProvider.future);
+    expect(list.single.nom, 'Nouveau nom');
+  });
 }
