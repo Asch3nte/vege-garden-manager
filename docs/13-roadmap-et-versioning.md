@@ -66,6 +66,53 @@ faudra enrichir le modèle. Recommandations détaillées (à débattre avant imp
 valeurs de la fiche golden `tomate.yaml`, doc `07-base-de-connaissances-yaml.md`, puis
 l'évaluateur d'alertes (filtrage par plante au lieu de générique).
 
+### 2.2 Conformité réglementaire des plantes par territoire (espèces invasives / interdites)
+
+> **Prérequis bloquant** : disposer d'une **source officielle et fiable** par territoire.
+> Tant que cette source n'est pas identifiée et intégrable hors-ligne, la fonctionnalité
+> reste reportée. Cible V1.1, possiblement V2 selon la disponibilité des données.
+
+**Objectif** : le moteur (recommandations + saisie de plantation) doit tenir compte des
+**plantes interdites ou déconseillées sur le territoire de l'utilisateur** — espèces
+**invasives** (ex. réglementées au niveau de l'UE ou national/régional) ou **non endémiques**.
+
+**Deux comportements attendus :**
+1. **Filtrer les recommandations** : `RecommanderPlantes` ne doit jamais proposer une plante
+   interdite/invasive sur le territoire de l'utilisateur (exclusion stricte, ou rétrogradation
+   avec avertissement selon le statut).
+2. **Alerte éducative unique** : si l'utilisateur saisit lui-même une plante interdite/invasive
+   sur son territoire, afficher **une notification/alerte pédagogique ponctuelle** (une seule
+   fois par espèce) expliquant le statut, le risque écologique et la source officielle —
+   sans bloquer (cohérent avec la philosophie : informer, pas contraindre).
+
+**Sources de données (à valider, officielles et datées) :**
+- **UE** : Règlement (UE) n°1143/2014 sur les espèces exotiques envahissantes (liste de
+  l'Union, mise à jour périodiquement).
+- **National / régional** (ex. Belgique : niveau fédéral + Régions wallonne / flamande /
+  bruxelloise ; France : arrêtés ministériels ; etc.). La granularité régionale peut être
+  nécessaire.
+- Critère : source **officielle, versionnée, citable, intégrable hors-ligne** (comme le
+  catalogue YAML — aucune API live, privacy by design). Le fichier `Sources_Referenciel_Botanique.odt`
+  (hors repo) peut servir de point de départ à la recherche.
+
+**Implications de modélisation (n'existent PAS aujourd'hui) :**
+- **Notion de territoire** (pays + éventuellement région) à dériver de la position d'onboarding
+  (lié à la dérivation position → défauts). Aucune donnée pays/région dans le modèle actuel
+  (`Localisation` ne porte que lat/lng/ville).
+- **Jeu de données embarqué** territoire → liste d'espèces (par **`nom_scientifique`**, déjà
+  présent sur la fiche) avec un **statut** (`invasive_ue` | `invasive_nationale` |
+  `interdite` | `non_endemique` | `deconseillee`), un **message éducatif i18n** et un **lien
+  source + date**. Format diffable/contributif (comme les fiches), versionné.
+- **Suivi de l'alerte « vue »** (une fois par espèce/territoire) — persistance d'un drapeau
+  (préférences ou table dédiée), réinitialisable.
+- **Avertissement légal / disclaimer** : afficher la source et sa date ; les listes évoluent ;
+  l'app informe mais ne se substitue pas à la réglementation officielle.
+
+**Travaux impliqués :** recherche & validation de source ; modèle territoire + dérivation
+depuis la position ; nouveau dataset embarqué + parser/validator ; intégration dans
+`RecommanderPlantes` (filtre) ; déclenchement de l'alerte éducative à la création de plantation
+(use case `CreerPlantation` / `DetecterPlanteNonConforme`) ; i18n des messages.
+
 ## 3. V2 — évolutions prévues (opt-in, désactivées par défaut)
 
 | Fonctionnalité | Note |
