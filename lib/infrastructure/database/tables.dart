@@ -324,6 +324,7 @@ class MeteoCache extends Table {
   RealColumn get tempMax => real().nullable()();
   RealColumn get tempMoyenne => real().nullable()();
   RealColumn get precipitationsMm => real().nullable()();
+  RealColumn get probabilitePluie => real().nullable()(); // forecast, 0..1
   IntColumn get heuresEnsoleillement => integer().nullable()();
   RealColumn get ventVitesseMax => real().nullable()();
   IntColumn get ventDirection => integer().nullable()();
@@ -344,6 +345,7 @@ class MeteoCache extends Table {
         'CHECK (longitude BETWEEN -180 AND 180)',
         'CHECK (vent_direction IS NULL OR vent_direction BETWEEN 0 AND 360)',
         'CHECK (precipitations_mm IS NULL OR precipitations_mm >= 0)',
+        'CHECK (probabilite_pluie IS NULL OR probabilite_pluie BETWEEN 0 AND 1)',
         'CHECK (heures_ensoleillement IS NULL OR heures_ensoleillement BETWEEN 0 AND 24)',
         'UNIQUE (latitude, longitude, date, type)',
       ];

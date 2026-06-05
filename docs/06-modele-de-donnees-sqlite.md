@@ -377,7 +377,8 @@ CREATE TABLE meteo_cache (
   date TEXT NOT NULL, -- YYYY-MM-DD
   type TEXT NOT NULL, -- 'observe' | 'prevu'
   temp_min REAL NULL, temp_max REAL NULL, temp_moyenne REAL NULL,
-  precipitations_mm REAL NULL, heures_ensoleillement INTEGER NULL,
+  precipitations_mm REAL NULL, probabilite_pluie REAL NULL, -- prévision, 0..1
+  heures_ensoleillement INTEGER NULL,
   vent_vitesse_max REAL NULL, vent_direction INTEGER NULL,
   risque_gel INTEGER NOT NULL DEFAULT 0, -- pré-calculé : temp_min <= 0
   risque_canicule INTEGER NOT NULL DEFAULT 0, -- pré-calculé : temp_max >= 35
@@ -388,6 +389,7 @@ CREATE TABLE meteo_cache (
   CHECK (latitude BETWEEN -90 AND 90), CHECK (longitude BETWEEN -180 AND 180),
   CHECK (vent_direction IS NULL OR vent_direction BETWEEN 0 AND 360),
   CHECK (precipitations_mm IS NULL OR precipitations_mm >= 0),
+  CHECK (probabilite_pluie IS NULL OR probabilite_pluie BETWEEN 0 AND 1),
   CHECK (heures_ensoleillement IS NULL OR heures_ensoleillement BETWEEN 0 AND 24),
   UNIQUE (latitude, longitude, date, type)
 );
