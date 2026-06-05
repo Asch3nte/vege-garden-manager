@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 // booléens via boolean() (INTEGER 0/1), FK en ON DELETE RESTRICT (cascade logique
 // côté repositories). Les valeurs d'enum sont en camelCase (= noms Dart).
 
+@DataClassName('PotagerRow')
 class Potagers extends Table {
   TextColumn get id => text()();
   TextColumn get nom => text()();
@@ -43,6 +44,7 @@ class Potagers extends Table {
       ];
 }
 
+@DataClassName('ParcelleRow')
 class Parcelles extends Table {
   TextColumn get id => text()();
   TextColumn get nom => text()();
@@ -90,6 +92,7 @@ class Parcelles extends Table {
       ];
 }
 
+@DataClassName('PlantationRow')
 class Plantations extends Table {
   TextColumn get id => text()();
   TextColumn get parcelleId => text()();
@@ -125,6 +128,7 @@ class Plantations extends Table {
       ];
 }
 
+@DataClassName('RecolteRow')
 class Recoltes extends Table {
   TextColumn get id => text()();
   TextColumn get plantationId => text()();
@@ -155,6 +159,7 @@ class Recoltes extends Table {
       ];
 }
 
+@DataClassName('EquipementRow')
 class Equipements extends Table {
   TextColumn get id => text()();
   TextColumn get nom => text()();
@@ -185,6 +190,7 @@ class Equipements extends Table {
       ];
 }
 
+@DataClassName('TacheRow')
 class Taches extends Table {
   TextColumn get id => text()();
   TextColumn get titre => text()();
@@ -225,6 +231,7 @@ class Taches extends Table {
       ];
 }
 
+@DataClassName('RappelRow')
 class Rappels extends Table {
   TextColumn get id => text()();
   TextColumn get titre => text()();
@@ -269,6 +276,7 @@ class Rappels extends Table {
       ];
 }
 
+@DataClassName('ObservationRow')
 class Observations extends Table {
   TextColumn get id => text()();
   TextColumn get dateObservation => text()();
@@ -341,6 +349,7 @@ class MeteoCache extends Table {
       ];
 }
 
+@DataClassName('ParametreRow')
 class Parametres extends Table {
   TextColumn get cle => text()();
   TextColumn get valeur => text()();
@@ -385,6 +394,7 @@ class FichesPlantesPersonnelles extends Table {
       ];
 }
 
+@DataClassName('PreferencesRow')
 class Preferences extends Table {
   TextColumn get id => text().withDefault(const Constant('singleton'))();
   TextColumn get langue => text().withDefault(const Constant('auto'))();
