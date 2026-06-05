@@ -63,7 +63,9 @@ class MeteoCacheMapper {
     );
   }
 
-  /// Companion for a forecast row (`type = prevu`).
+  /// Companion for a forecast/observation row, tagged by the DTO's own
+  /// [PrevisionMeteo.type] (`prevu` for forecasts, `observe` for past days of a
+  /// historical window).
   MeteoCacheCompanion versCompanionPrevu(
     PrevisionMeteo p, {
     required double latitude,
@@ -72,11 +74,11 @@ class MeteoCacheMapper {
     required String dateRecuperation,
   }) {
     return MeteoCacheCompanion(
-      id: Value(cacheId(latitude, longitude, date, TypeReleveMeteo.prevu)),
+      id: Value(cacheId(latitude, longitude, date, p.type)),
       latitude: Value(latitude),
       longitude: Value(longitude),
       date: Value(date),
-      type: Value(TypeReleveMeteo.prevu.name),
+      type: Value(p.type.name),
       tempMin: Value(p.tempMin),
       tempMax: Value(p.tempMax),
       precipitationsMm: Value(p.precipitationsMm),
@@ -107,6 +109,7 @@ class MeteoCacheMapper {
       tempMax: r.tempMax ?? 0,
       precipitationsMm: r.precipitationsMm ?? 0,
       probabilitePluie: r.probabilitePluie ?? 0,
+      type: TypeReleveMeteo.values.byName(r.type),
     );
   }
 }

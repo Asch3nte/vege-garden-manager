@@ -10,6 +10,17 @@ abstract class AbstractMeteoService {
   /// Current weather at [loc].
   Future<DonneesMeteo> obtenirMeteoActuelle(Localisation loc);
 
-  /// Forecast for the next [nbJours] days at [loc].
-  Future<List<PrevisionMeteo>> obtenirPrevisions(Localisation loc, int nbJours);
+  /// Daily weather window at [loc]: the next [nbJours] forecast days, optionally
+  /// preceded by [joursPasses] past days.
+  ///
+  /// The returned list is ordered by date. Past days carry
+  /// `TypeReleveMeteo.observe`, forecast days `TypeReleveMeteo.prevu`. With the
+  /// default [joursPasses] of 0, only the forecast is returned (the common case,
+  /// e.g. weather alerts); the watering engine passes a non-zero [joursPasses]
+  /// to also obtain recent precipitation.
+  Future<List<PrevisionMeteo>> obtenirPrevisions(
+    Localisation loc,
+    int nbJours, {
+    int joursPasses = 0,
+  });
 }

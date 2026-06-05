@@ -3,6 +3,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/domain/exceptions/meteo_indisponible_exception.dart';
+import 'package:pot_a_gerer/domain/enums/type_releve_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/donnees_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_meteo.dart';
@@ -230,6 +231,44 @@ void main() {
         () => service.obtenirPrevisions(loc, 3),
         throwsA(isA<MeteoIndisponibleException>()),
       );
+    });
+  });
+
+  group('obtenirPrevisions window mode (joursPasses > 0)', () {
+    // 2 past (observe) + 2 forecast (prevu) days around 2026-06-05.
+    List<PrevisionMeteo> fenetre() => [
+          PrevisionMeteo(date: DateTime.utc(2026, 6, 3), tempMin: 8, tempMax: 16, precipitationsMm: 2, type: TypeReleveMeteo.observe),
+          PrevisionMeteo(date: DateTime.utc(2026, 6, 4), tempMin: 9, tempMax: 17, precipitationsMm: 0, type: TypeReleveMeteo.observe),
+          PrevisionMeteo(date: DateTime.utc(2026, 6, 5), tempMin: 11, tempMax: 20, precipitationsMm: 0, type: TypeReleveMeteo.prevu),
+          PrevisionMeteo(date: DateTime.utc(2026, 6, 6), tempMin: 12, tempMax: 22, precipitationsMm: 15, type: TypeReleveMeteo.prevu),
+        ];
+
+    test('fetches the past+forecast window fresh and caches it', () async {
+      when(() => client.obtenirPrevisions(loc, 2, joursPasses: 2))
+          .thenAnswer((_) async => fenetre());
+
+      final result = await service.obtenirPrevisions(loc, 2, joursPasses: 2);
+
+      expect(result, hasLength(4));
+      expect(result.first.type, TypeReleveMeteo.observe);
+      expect(result.last.type, TypeReleveMeteo.prevu);
+      final rows = await db.select(db.meteoCache).get();
+      expect(rows.where((r) => r.type == 'observe'), hasLength(2));
+      expect(rows.where((r) => r.type == 'prevu'), hasLength(2));
+    });
+
+    test('falls back to the cached window when offline', () async {
+      when(() => client.obtenirPrevisions(loc, 2, joursPasses: 2))
+          .thenAnswer((_) async => fenetre());
+      await service.obtenirPrevisions(loc, 2, joursPasses: 2); // caches
+
+      when(() => client.obtenirPrevisions(loc, 2, joursPasses: 2))
+          .thenThrow(MeteoIndisponibleException('offline'));
+
+      final result = await service.obtenirPrevisions(loc, 2, joursPasses: 2);
+      expect(result, hasLength(4));
+      expect(result.map((p) => p.type),
+          containsAll([TypeReleveMeteo.observe, TypeReleveMeteo.prevu]));
     });
   });
 }

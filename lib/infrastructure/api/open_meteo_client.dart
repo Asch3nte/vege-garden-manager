@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../core/constants/constantes_moteur.dart';
+import '../../domain/enums/type_releve_meteo.dart';
 import '../../domain/exceptions/meteo_indisponible_exception.dart';
 import '../../domain/value_objects/donnees_meteo.dart';
 import '../../domain/value_objects/localisation.dart';
@@ -52,24 +53,38 @@ class OpenMeteoClient {
     return _donneesMeteoDuJour(daily, 0);
   }
 
-  /// Forecast for the next [nbJours] days at [loc].
+  /// Daily window at [loc]: [nbJours] forecast days, optionally preceded by
+  /// [joursPasses] past days. Past days are tagged [TypeReleveMeteo.observe],
+  /// forecast days [TypeReleveMeteo.prevu] (Open-Meteo returns the past days
+  /// first in the response, then today and the forecast).
   ///
   /// Throws [MeteoIndisponibleException] if [loc] has no coordinates,
-  /// if [nbJours] is not strictly positive, or on any network/parse error.
+  /// if [nbJours] is not strictly positive, [joursPasses] is negative, or on any
+  /// network/parse error.
   Future<List<PrevisionMeteo>> obtenirPrevisions(
     Localisation loc,
-    int nbJours,
-  ) async {
+    int nbJours, {
+    int joursPasses = 0,
+  }) async {
     if (nbJours <= 0) {
       throw MeteoIndisponibleException(
         'Forecast horizon must be strictly positive (got $nbJours).',
       );
     }
-    final daily = await _fetchDaily(loc, nbJours: nbJours);
+    if (joursPasses < 0) {
+      throw MeteoIndisponibleException(
+        'Past-day count must be >= 0 (got $joursPasses).',
+      );
+    }
+    final daily = await _fetchDaily(loc, nbJours: nbJours, joursPasses: joursPasses);
     final dates = (daily['time'] as List);
     return List<PrevisionMeteo>.generate(
       dates.length,
-      (i) => _previsionDuJour(daily, i),
+      (i) => _previsionDuJour(
+        daily,
+        i,
+        i < joursPasses ? TypeReleveMeteo.observe : TypeReleveMeteo.prevu,
+      ),
     );
   }
 
@@ -77,6 +92,7 @@ class OpenMeteoClient {
   Future<Map<String, dynamic>> _fetchDaily(
     Localisation loc, {
     required int nbJours,
+    int joursPasses = 0,
   }) async {
     if (!loc.estDefinie) {
       throw MeteoIndisponibleException(
@@ -89,6 +105,7 @@ class OpenMeteoClient {
       'daily': _dailyVariables,
       'timezone': 'auto',
       'forecast_days': '$nbJours',
+      'past_days': '$joursPasses',
     });
 
     final http.Response response;
@@ -135,7 +152,11 @@ class OpenMeteoClient {
     );
   }
 
-  PrevisionMeteo _previsionDuJour(Map<String, dynamic> daily, int i) {
+  PrevisionMeteo _previsionDuJour(
+    Map<String, dynamic> daily,
+    int i,
+    TypeReleveMeteo type,
+  ) {
     return PrevisionMeteo(
       date: DateTime.parse((daily['time'] as List)[i] as String),
       tempMin: _at(daily, 'temperature_2m_min', i),
@@ -143,6 +164,7 @@ class OpenMeteoClient {
       precipitationsMm: _at(daily, 'precipitation_sum', i),
       // Open-Meteo reports probability as a 0..100 percentage; the DTO is 0..1.
       probabilitePluie: _at(daily, 'precipitation_probability_max', i) / 100,
+      type: type,
     );
   }
 

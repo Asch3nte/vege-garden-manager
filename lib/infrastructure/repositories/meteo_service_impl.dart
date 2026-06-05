@@ -80,13 +80,18 @@ class MeteoServiceImpl implements AbstractMeteoService {
   @override
   Future<List<PrevisionMeteo>> obtenirPrevisions(
     Localisation loc,
-    int nbJours,
-  ) async {
+    int nbJours, {
+    int joursPasses = 0,
+  }) async {
     if (!loc.estDefinie) {
       throw MeteoIndisponibleException(
         'Cannot fetch weather: location is undefined (geolocation opt-out).',
       );
     }
+    if (joursPasses > 0) {
+      return _obtenirFenetre(loc, nbJours, joursPasses);
+    }
+
     final now = _clock();
     final cached = await _lirePrevu(loc, _dateStr(now), nbJours);
 
@@ -98,22 +103,8 @@ class MeteoServiceImpl implements AbstractMeteoService {
 
     try {
       final previsions = await _client.obtenirPrevisions(loc, nbJours);
-      await _db.batch((b) {
-        for (final p in previsions) {
-          b.insert(
-            _db.meteoCache,
-            _mapper.versCompanionPrevu(
-              p,
-              latitude: loc.latitude!,
-              longitude: loc.longitude!,
-              date: _dateStr(p.date),
-              dateRecuperation: _nowIso(now),
-            ),
-            mode: InsertMode.insertOrReplace,
-          );
-        }
-      });
-      await _purgerPrevisionsPassees(now);
+      await _cacherTout(loc, previsions, now);
+      await _purgerCachePasse(now);
       return previsions;
     } on MeteoIndisponibleException {
       // Degraded fallback: serve whatever (possibly stale) forecast we cached.
@@ -122,6 +113,57 @@ class MeteoServiceImpl implements AbstractMeteoService {
       }
       rethrow;
     }
+  }
+
+  /// Window mode (`joursPasses > 0`): a single Open-Meteo call returns the past
+  /// + forecast days. Always fetched fresh (the watering engine wants accurate
+  /// recent precipitation); the result is cached best-effort, and on a network
+  /// failure the matching cached window (any freshness) is served instead.
+  Future<List<PrevisionMeteo>> _obtenirFenetre(
+    Localisation loc,
+    int nbJours,
+    int joursPasses,
+  ) async {
+    final now = _clock();
+    try {
+      final fenetre =
+          await _client.obtenirPrevisions(loc, nbJours, joursPasses: joursPasses);
+      await _cacherTout(loc, fenetre, now);
+      await _purgerCachePasse(now);
+      return fenetre;
+    } on MeteoIndisponibleException {
+      final debut = _dateStr(DateTime(now.year, now.month, now.day - joursPasses));
+      final fin = _dateStr(DateTime(now.year, now.month, now.day + nbJours - 1));
+      final caches = await _lireFenetre(loc, debut, fin);
+      if (caches.isNotEmpty) {
+        return caches.map(_mapper.versPrevisionMeteo).toList();
+      }
+      rethrow;
+    }
+  }
+
+  /// Upserts every [PrevisionMeteo] of a result (each tagged observe/prevu by
+  /// its own type) into the cache.
+  Future<void> _cacherTout(
+    Localisation loc,
+    List<PrevisionMeteo> previsions,
+    DateTime now,
+  ) {
+    return _db.batch((b) {
+      for (final p in previsions) {
+        b.insert(
+          _db.meteoCache,
+          _mapper.versCompanionPrevu(
+            p,
+            latitude: loc.latitude!,
+            longitude: loc.longitude!,
+            date: _dateStr(p.date),
+            dateRecuperation: _nowIso(now),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+      }
+    });
   }
 
   /// Reads the cached observed-weather row for [loc] on [dateJour], or `null`.
@@ -153,16 +195,33 @@ class MeteoServiceImpl implements AbstractMeteoService {
         .get();
   }
 
-  /// Deletes forecast rows whose day is older than [retentionPrevuJours] days.
-  Future<void> _purgerPrevisionsPassees(DateTime now) async {
+  /// Reads cached rows (any type) for [loc] whose day is within `[debut, fin]`,
+  /// ordered by date ascending.
+  Future<List<MeteoCacheRow>> _lireFenetre(
+    Localisation loc,
+    String debut,
+    String fin,
+  ) {
+    return (_db.select(_db.meteoCache)
+          ..where((t) =>
+              t.latitude.equals(loc.latitude!) &
+              t.longitude.equals(loc.longitude!) &
+              t.date.isBiggerOrEqualValue(debut) &
+              t.date.isSmallerOrEqualValue(fin))
+          ..orderBy([(t) => OrderingTerm.asc(t.date)]))
+        .get();
+  }
+
+  /// Deletes any cached row (forecast or past observation) whose day is older
+  /// than [retentionPrevuJours] days — bounds cache growth.
+  Future<void> _purgerCachePasse(DateTime now) async {
     final limite = _dateStr(DateTime(
       now.year,
       now.month,
       now.day - retentionPrevuJours,
     ));
     await (_db.delete(_db.meteoCache)
-          ..where((t) =>
-              t.type.equals('prevu') & t.date.isSmallerThanValue(limite)))
+          ..where((t) => t.date.isSmallerThanValue(limite)))
         .go();
   }
 

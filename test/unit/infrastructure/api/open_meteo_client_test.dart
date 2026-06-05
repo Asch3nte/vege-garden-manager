@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:pot_a_gerer/domain/enums/type_releve_meteo.dart';
 import 'package:pot_a_gerer/domain/exceptions/meteo_indisponible_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/infrastructure/api/open_meteo_client.dart';
@@ -122,6 +123,34 @@ void main() {
       final client = clientReturning(dailyPayload());
       expect(
         () => client.obtenirPrevisions(loc, 0),
+        throwsA(isA<MeteoIndisponibleException>()),
+      );
+    });
+
+    test('with joursPasses, requests past_days and tags observe/prevu by index',
+        () async {
+      late Uri requested;
+      final client = OpenMeteoClient(
+        httpClient: MockClient((req) async {
+          requested = req.url;
+          return http.Response(jsonEncode(dailyPayload()), 200);
+        }),
+      );
+
+      // payload has 3 days: with joursPasses=1, day 0 = observe, 1..2 = prevu.
+      final fenetre = await client.obtenirPrevisions(loc, 2, joursPasses: 1);
+
+      expect(requested.queryParameters['past_days'], '1');
+      expect(requested.queryParameters['forecast_days'], '2');
+      expect(fenetre[0].type, TypeReleveMeteo.observe);
+      expect(fenetre[1].type, TypeReleveMeteo.prevu);
+      expect(fenetre[2].type, TypeReleveMeteo.prevu);
+    });
+
+    test('rejects a negative past-day count', () async {
+      final client = clientReturning(dailyPayload());
+      expect(
+        () => client.obtenirPrevisions(loc, 3, joursPasses: -1),
         throwsA(isA<MeteoIndisponibleException>()),
       );
     });
