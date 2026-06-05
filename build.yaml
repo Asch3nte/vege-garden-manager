@@ -1,0 +1,8 @@
+# Configuration de la génération de code (drift, etc.).
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # Colonnes SQL en snake_case déduites des getters Dart camelCase.
+          case_from_dart_to_sql: snake_case

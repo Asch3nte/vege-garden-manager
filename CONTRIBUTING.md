@@ -49,6 +49,9 @@ multilingue est imbriqué dans la fiche (`i18n: { fr: …, en: … }`).
 - Lisez [`CLAUDE.md`](CLAUDE.md) et [`docs/`](docs/) (architecture, modèle de
   domaine, conventions).
 - Travaillez sur une branche dédiée depuis `develop`.
+- **Génération de code** : les fichiers `*.g.dart` (drift, etc.) ne sont pas
+  versionnés. Générez-les avant de compiler/tester :
+  `dart run build_runner build` (ou `watch` pendant le développement).
 
 ### Règles de développement (non négociables)
 - **POO stricte** : encapsulation (`_field`), abstraction (interfaces), héritage
