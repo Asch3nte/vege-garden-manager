@@ -39,6 +39,7 @@ conservées hors du repo).
 | [11 — Paramètres & opt-outs](11-parametres-et-opt-outs.md) | Préférences, opt-outs, registre des paramètres |
 | [12 — i18n & données](12-internationalisation-et-donnees.md) | Multilingue, stockage, vie privée, contraintes NF |
 | [13 — Roadmap & versioning](13-roadmap-et-versioning.md) | V1 / V1.1 / V2, conventions Git, ordre de dev |
+| [14 — Couverture UI](14-couverture-ui.md) | Matrice fonction → écran : checklist de couverture du moteur par l'UI |
 | [decisions/](decisions/) | ADR — décisions d'architecture |
 
 ## Pour le développement
