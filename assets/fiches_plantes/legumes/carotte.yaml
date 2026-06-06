@@ -1,0 +1,96 @@
+# Fiche plante — carotte.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+# Métadonnées techniques
+id: carotte # unique, immuable, snake_case, sans accents
+version_fiche: 1
+categorie: legume # CategoriePlante
+sous_type: legume_racine # SousTypeLegume
+usages:
+  - alimentaire
+schema_version: 1
+
+# Identification botanique
+nom_scientifique: Daucus carota
+famille_botanique: Apiaceae
+
+# Contenu multilingue — 'fr' obligatoire
+i18n:
+  fr:
+    nom_commun: Carotte
+    noms_alternatifs: [Carotte cultivée]
+    description: >
+      Légume-racine bisannuel de la famille des Apiacées, cultivé en annuel
+      pour sa racine charnue. Préfère les sols meubles, profonds et sans
+      cailloux pour ne pas fourcher.
+    conseils_culture: >
+      Semer clair en ligne, sur sol affiné et sans fumure fraîche. Éclaircir
+      pour laisser ~5 cm entre plants. Biner régulièrement.
+    conseils_recolte: >
+      Récolter au besoin dès que les racines ont grossi ; les variétés
+      tardives se conservent en terre ou en silo.
+    erreurs_frequentes:
+      - Sol caillouteux ou trop riche en fumier frais (racines fourchues)
+      - Semis trop dense non éclairci
+  en:
+    nom_commun: Carrot
+    description: >
+      Biennial root vegetable of the Apiaceae family, grown as an annual for
+      its fleshy root. Prefers loose, deep, stone-free soil.
+
+# Besoins agronomiques (données structurées pour le moteur)
+besoins:
+  ensoleillement: plein_soleil # NiveauSoleil
+  arrosage: modere # BesoinEau
+  qualites_sol: # QualiteSol recherchées
+    - leger
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_optimale: 18
+
+# Cycle de culture
+cycle:
+  type: bisannuelle
+  duree_germination_jours: [12, 21]
+  duree_avant_recolte_jours: [90, 120]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 8
+  profondeur_semis_cm: 1
+
+# Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 7]
+      recolte: [6, 11]
+    continental:
+      semis_exterieur: [4, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_exterieur: [2, 7]
+      recolte: [5, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 1]
+      recolte: [12, 6]
+
+# Associations & rotation — références par 'id' de fiche
+associations:
+  beneficies:
+    - id: poireau
+      raison_i18n: { fr: "Éloignent mutuellement leurs mouches", en: "Mutually repel each other's flies" }
+    - id: laitue
+      raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
+  defavorables:
+    - id: aneth
+      raison_i18n: { fr: "Même famille, attire les mêmes ravageurs", en: "Same family, attracts the same pests" }
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 3
+
+# Source & contribution
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

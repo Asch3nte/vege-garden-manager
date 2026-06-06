@@ -1,0 +1,100 @@
+# Fiche plante — basilic.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+# Métadonnées techniques
+id: basilic # unique, immuable, snake_case, sans accents
+version_fiche: 1
+categorie: aromatique # CategoriePlante
+usages: # UsagePlante (≥ 1)
+  - condimentaire
+  - repulsif
+schema_version: 1
+
+# Identification botanique
+nom_scientifique: Ocimum basilicum
+famille_botanique: Lamiaceae
+
+# Contenu multilingue — 'fr' obligatoire
+i18n:
+  fr:
+    nom_commun: Basilic
+    noms_alternatifs: [Basilic commun, Pistou]
+    description: >
+      Aromatique annuelle de la famille des Lamiacées, frileuse et gourmande
+      en chaleur. Compagne classique de la tomate : on lui prête un effet
+      répulsif sur les pucerons.
+    conseils_culture: >
+      Planter après les dernières gelées, en plein soleil et sol riche.
+      Pincer régulièrement les sommités pour favoriser la ramification et
+      retarder la montée en fleurs.
+    conseils_recolte: >
+      Récolter les feuilles au fur et à mesure des besoins, de préférence le
+      matin. Cueillir avant la floraison pour préserver l'arôme.
+    erreurs_frequentes:
+      - Plantation trop précoce (très sensible au froid)
+      - Manque d'eau en pleine chaleur (flétrissement rapide)
+  en:
+    nom_commun: Basil
+    description: >
+      Annual herb of the Lamiaceae family, cold-sensitive and heat-loving.
+      A classic tomato companion, said to repel aphids.
+
+# Besoins agronomiques (données structurées pour le moteur)
+besoins:
+  ensoleillement: plein_soleil # NiveauSoleil
+  arrosage: modere # BesoinEau
+  qualites_sol: # QualiteSol recherchées
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 15
+  temperature_optimale: 22
+
+# Cycle de culture
+cycle:
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [40, 60]
+  hauteur_adulte_cm: [20, 50]
+  espacement_cm: 25
+  profondeur_semis_cm: 1
+
+# Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 9]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [11, 12]
+      recolte: [12, 3]
+
+# Associations & rotation — références par 'id' de fiche
+associations:
+  beneficies:
+    - id: tomate
+      raison_i18n: { fr: "Améliore le goût et repousse les pucerons", en: "Improves flavour, repels aphids" }
+    - id: poivron
+      raison_i18n: { fr: "Compagnonnage favorable, repousse les ravageurs", en: "Beneficial companion, repels pests" }
+  defavorables: []
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 2
+
+# Source & contribution
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

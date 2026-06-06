@@ -1,0 +1,97 @@
+# Fiche plante — laitue.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+# Métadonnées techniques
+id: laitue # unique, immuable, snake_case, sans accents
+version_fiche: 1
+categorie: legume # CategoriePlante
+sous_type: legume_feuille # SousTypeLegume
+usages:
+  - alimentaire
+schema_version: 1
+
+# Identification botanique
+nom_scientifique: Lactuca sativa
+famille_botanique: Asteraceae
+
+# Contenu multilingue — 'fr' obligatoire
+i18n:
+  fr:
+    nom_commun: Laitue
+    noms_alternatifs: [Salade, Laitue pommée]
+    description: >
+      Légume-feuille annuel de la famille des Astéracées, à cycle court.
+      Apprécie la fraîcheur et tolère la mi-ombre, surtout en été où le plein
+      soleil la fait monter en graines.
+    conseils_culture: >
+      Semer ou repiquer en sol frais, arroser régulièrement pour éviter la
+      montaison. Échelonner les semis pour récolter en continu.
+    conseils_recolte: >
+      Récolter le matin, la pomme bien formée, avant la montée à graines.
+    erreurs_frequentes:
+      - Manque d'eau ou forte chaleur (montaison prématurée)
+      - Semis trop profond (lève mal)
+  en:
+    nom_commun: Lettuce
+    description: >
+      Short-cycle annual leaf vegetable of the Asteraceae family. Likes cool
+      conditions and tolerates partial shade.
+
+# Besoins agronomiques (données structurées pour le moteur)
+besoins:
+  ensoleillement: mi_ombre # NiveauSoleil
+  arrosage: eleve # BesoinEau
+  qualites_sol: # QualiteSol recherchées
+    - frais
+    - riche
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_optimale: 16
+
+# Cycle de culture
+cycle:
+  type: annuelle
+  duree_germination_jours: [6, 12]
+  duree_avant_recolte_jours: [45, 70]
+  hauteur_adulte_cm: [15, 30]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+
+# Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      semis_exterieur: [3, 9]
+      plantation: [3, 9]
+      recolte: [5, 11]
+    continental:
+      semis_exterieur: [4, 8]
+      plantation: [4, 8]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [2, 10]
+      plantation: [2, 10]
+      recolte: [4, 12]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 3]
+      recolte: [11, 5]
+
+# Associations & rotation — références par 'id' de fiche
+associations:
+  beneficies:
+    - id: carotte
+      raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
+    - id: tomate
+      raison_i18n: { fr: "Profite de l'ombre portée des tomates en été", en: "Benefits from tomato shade in summer" }
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 2
+
+# Source & contribution
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue_cultiv%C3%A9e
+contributeurs:
+  - "@potagerer"
