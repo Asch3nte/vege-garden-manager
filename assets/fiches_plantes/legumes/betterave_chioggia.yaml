@@ -1,0 +1,108 @@
+# Fiche plante — betterave_chioggia.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: betterave_chioggia
+version_fiche: 1
+categorie: legume
+sous_type: legume_racine
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Beta vulgaris var. conditiva 'Chioggia'
+famille_botanique: Amaranthaceae
+
+i18n:
+  fr:
+    nom_commun: Betterave Chioggia
+    noms_alternatifs: [Betterave Cible, Candy Stripe Beet]
+    description: >
+      Variété italienne spectaculaire à chair zébrée de rouge et de blanc en
+      anneaux concentriques, à la saveur très douce et moins terreuse que les
+      variétés classiques. Moins de pigments que la betterave rouge standard :
+      ne tache pas lors de la découpe. Racine ronde de 6–8 cm.
+    conseils_culture: >
+      Semer en place, tremper les graines 24 h pour accélérer la germination.
+      Éclaircir à 10 cm. Sol meuble et sans cailloux. Arroser modérément ;
+      la sécheresse rend les racines fibreuses et moins savoureuses.
+    conseils_recolte: >
+      Récolter à 6–7 cm de diamètre pour une saveur optimale. Les grosses
+      betteraves deviennent creuses et ligneuses.
+    erreurs_frequentes:
+      - Sol compact ou caillouteux (racines déformées)
+      - Récolte trop tardive (fibrosité)
+      - Semis non éclairci (grappes de racines grêles)
+  en:
+    nom_commun: Chioggia Beet
+    noms_alternatifs: [Candy Stripe Beet, Bullseye Beet]
+    description: >
+      Spectacular Italian variety with flesh striped in concentric red and white
+      rings, very mild and less earthy than standard beets. Minimal pigment bleed.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - leger
+    - bien_draine
+    - riche
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 10
+  temperature_optimale: 18
+
+cycle:
+  type: bisannuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [55, 80]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 10
+  profondeur_semis_cm: 2
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 8]
+      recolte: [5, 11]
+    continental:
+      semis_exterieur: [4, 7]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [2, 8]
+      recolte: [4, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 2]
+      recolte: [11, 5]
+
+associations:
+  beneficies:
+    - id: laitue
+      raison_i18n: { fr: "Bon usage de l'espace, cycles complémentaires", en: "Good space use, complementary cycles" }
+    - id: ail
+      raison_i18n: { fr: "L'ail repousse certains ravageurs racinaires", en: "Garlic repels certain root pests" }
+  defavorables:
+    - id: haricot
+      raison_i18n: { fr: "La betterave inhibe la croissance des haricots", en: "Beet inhibits bean growth" }
+rotation:
+  famille: amaranthaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [amaranthaceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 30
+    conditions_i18n: { fr: "Cave en sable humide ou réfrigérateur", en: "Cellar in damp sand or refrigerator" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: lactofermentation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Crue râpée, cuite en salade, en carpaccio, en soupe borsch, marinée]
+  en: [Raw grated, cooked in salad, carpaccio, borscht soup, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potagère
+contributeurs:
+  - "@potagerer"

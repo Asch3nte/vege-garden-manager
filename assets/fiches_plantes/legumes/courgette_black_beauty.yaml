@@ -1,0 +1,112 @@
+# Fiche plante — courgette_black_beauty.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: courgette_black_beauty
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Cucurbita pepo 'Black Beauty'
+famille_botanique: Cucurbitaceae
+
+i18n:
+  fr:
+    nom_commun: Courgette Black Beauty
+    noms_alternatifs: [Zucchini Black Beauty]
+    description: >
+      Variété américaine classique très productive, à fruits cylindriques d'un
+      vert sombre brillant, à récolter à 15–20 cm. Plant buissonnant compact,
+      idéal pour les petits espaces. Chair ferme et fine.
+    conseils_culture: >
+      Semer à plat, 2–3 graines par pot, garder le plus vigoureux. Repiquer
+      après les dernières gelées. Arroser copieusement au pied. Récolter
+      fréquemment pour stimuler la production : une courgette oubliée freine
+      les suivantes.
+    conseils_recolte: >
+      Récolter régulièrement à 15–20 cm pour obtenir la chair la plus tendre.
+      Les fruits laissés sur le plant grossissent rapidement et durcissent.
+    erreurs_frequentes:
+      - Laisser les fruits trop grossir (épuise le plant)
+      - Arrosage irrégulier (favorise l'oïdium)
+      - Semis en sol froid (pourriture des graines)
+  en:
+    nom_commun: Black Beauty Zucchini
+    description: >
+      Classic productive American variety with glossy dark-green cylindrical
+      fruits, harvested at 15–20 cm. Compact bushy plant, ideal for small spaces.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 18
+  temperature_optimale: 22
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [50, 70]
+  hauteur_adulte_cm: [50, 80]
+  espacement_cm: 80
+  profondeur_semis_cm: 2
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [6, 10]
+    continental:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_interieur: [3, 4]
+      plantation: [4, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [10, 11]
+      plantation: [11, 12]
+      recolte: [12, 4]
+
+associations:
+  beneficies:
+    - id: haricot
+      raison_i18n: { fr: "Trio des trois sœurs : couvre le sol", en: "Three sisters trio: covers the soil" }
+    - id: capucine
+      raison_i18n: { fr: "Attire les pollinisateurs, piège à pucerons", en: "Attracts pollinators, aphid trap" }
+    - id: aneth
+      raison_i18n: { fr: "Attire les insectes auxiliaires", en: "Attracts beneficial insects" }
+  defavorables:
+    - id: pomme_de_terre
+      raison_i18n: { fr: "Favorisent mutuellement les maladies fongiques", en: "Mutually promote fungal diseases" }
+rotation:
+  famille: cucurbitaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [cucurbitaceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 2 min avant congélation", en: "Blanch 2 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Poêlée, gratinée, farcie, crue en carpaccio, en ratatouille, tarte salée]
+  en: [Sautéed, gratin, stuffed, raw carpaccio, ratatouille, savory tart]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courgette
+contributeurs:
+  - "@potagerer"

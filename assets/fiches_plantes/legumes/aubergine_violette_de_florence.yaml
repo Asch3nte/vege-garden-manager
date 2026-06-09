@@ -1,0 +1,114 @@
+# Fiche plante — aubergine_violette_de_florence.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: aubergine_violette_de_florence
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Solanum melongena 'Violette de Florence'
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Aubergine Violette de Florence
+    noms_alternatifs: [Aubergine ronde de Florence, Florentine Eggplant]
+    description: >
+      Variété italienne ancienne à gros fruits ronds légèrement aplatis,
+      violets et striés de blanc à la base. Chair blanche très dense, peu
+      amère et peu semée. Excellente pour la parmigiana, les tranches grillées
+      et les plats mijotés. Plant vigoureux très productif.
+    conseils_culture: >
+      Exige de la chaleur : semer en intérieur 10–12 semaines avant le
+      repiquage. Repiquer dans un sol très chaud, bien exposé. Tuteurer le
+      plant dès que les fruits grossissent. Arroser régulièrement au pied.
+      Protection contre la chaleur : pailler abondamment.
+    conseils_recolte: >
+      Récolter quand le fruit est ferme et brillant, avant qu'il ne ternisse.
+      Une aubergine terne et molle est trop mûre et amère.
+    erreurs_frequentes:
+      - Plantation en sol froid (plant bloqué en croissance)
+      - Manque de soleil (fruits peu colorés et amers)
+      - Récolte tardive (graine dure, chair spongieuse)
+  en:
+    nom_commun: Florence Eggplant
+    noms_alternatifs: [Florentine Purple Eggplant]
+    description: >
+      Old Italian variety with large, slightly flattened, round fruits, purple
+      streaked with white at the base. Dense, white, mildly bitter flesh.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 22
+  temperature_optimale: 26
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [75, 100]
+  hauteur_adulte_cm: [60, 100]
+  espacement_cm: 60
+  profondeur_semis_cm: 1
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [11, 12]
+      recolte: [1, 4]
+
+associations:
+  beneficies:
+    - id: basilic
+      raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
+    - id: capucine
+      raison_i18n: { fr: "Plante-piège à pucerons et doryphores", en: "Trap crop for aphids and beetles" }
+  defavorables:
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+    - id: pomme_de_terre
+      raison_i18n: { fr: "Même famille solanaceae, partage les maladies", en: "Same solanaceae family, shares diseases" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Griller ou cuire en dés avant congélation", en: "Grill or cook in cubes before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Parmigiana, ratatouille, grillée, farcie, en caviar d'aubergine, en tranche panée]
+  en: [Parmigiana, ratatouille, grilled, stuffed, baba ganoush, breaded slices]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

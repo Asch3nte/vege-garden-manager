@@ -1,0 +1,115 @@
+# Fiche plante — concombre_marketmore.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: concombre_marketmore
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Cucumis sativus 'Marketmore'
+famille_botanique: Cucurbitaceae
+
+i18n:
+  fr:
+    nom_commun: Concombre Marketmore
+    noms_alternatifs: [Marketmore 76]
+    description: >
+      Variété américaine de référence, très productive, à fruits cylindriques
+      d'un vert sombre, 18–22 cm, à peau légèrement épineuse. Résistante au
+      mildiou et à l'angulosphère. Graines petites, peu amères. Idéale pour
+      la culture en plein air comme sous abri.
+    conseils_culture: >
+      Semer sous abri ou en pleine terre après les gelées. Planter en butte
+      ou en pot profond, sol très riche. Conduire sur tuteur ou filet pour
+      économiser l'espace. Arroser régulièrement : la sécheresse rend les
+      fruits amers.
+    conseils_recolte: >
+      Récolter à 18–20 cm, bien vert. Un fruit jauni est trop mûr et amère.
+      Récolter fréquemment pour stimuler la production.
+    erreurs_frequentes:
+      - Irrégularité d'arrosage (amertume des fruits)
+      - Sol pauvre ou acide (chlorose, faible production)
+      - Attendre que le fruit jaunisse pour récolter
+  en:
+    nom_commun: Marketmore Cucumber
+    description: >
+      American reference variety, very productive, with dark-green cylindrical
+      fruits, 18–22 cm, slightly spiny skin. Resistant to mildew. Small, slightly
+      bitter seeds.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 18
+  temperature_optimale: 22
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [55, 70]
+  hauteur_adulte_cm: [150, 250]
+  espacement_cm: 60
+  profondeur_semis_cm: 2
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_interieur: [3, 4]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [10, 11]
+      plantation: [11, 12]
+      recolte: [1, 4]
+
+associations:
+  beneficies:
+    - id: haricot
+      raison_i18n: { fr: "Fixe l'azote, enrichit le sol", en: "Fixes nitrogen, enriches soil" }
+    - id: aneth
+      raison_i18n: { fr: "Attire les insectes auxiliaires, améliore la saveur", en: "Attracts beneficial insects, improves flavor" }
+    - id: capucine
+      raison_i18n: { fr: "Plante-piège à pucerons", en: "Aphid trap crop" }
+  defavorables:
+    - id: pomme_de_terre
+      raison_i18n: { fr: "Favorisent mutuellement le mildiou", en: "Mutually promote mildew" }
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+rotation:
+  famille: cucurbitaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [cucurbitaceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: lactofermentation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en raïta, mariné, cornichons, tzatziki]
+  en: [Raw in salads, raita, pickled, gherkins, tzatziki]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Concombre
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,112 @@
+# Fiche plante — courge_butternut_ponca.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: courge_butternut_ponca
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Cucurbita moschata 'Ponca'
+famille_botanique: Cucurbitaceae
+
+i18n:
+  fr:
+    nom_commun: Courge Butternut Ponca
+    noms_alternatifs: [Butternut Ponca, Squash Ponca]
+    description: >
+      Variété de butternut améliorée, à fruits plus petits et plus uniformes
+      que les butternuts classiques (600 g–1 kg), peau beige lisse, chair
+      orange intense très sucrée et onctueuse. Mûrit plus tôt, excellent pour
+      les régions à été court. Très bonne conservation. Résistante aux maladies.
+    conseils_culture: >
+      Semer sous abri 3 semaines avant la mise en place. Planter dans des
+      buttes enrichies en compost mûr. Laisser courir les tiges sur le sol
+      ou sur un filet pour économiser la place. Pailler abondamment pour
+      conserver l'humidité et freiner les adventices.
+    conseils_recolte: >
+      Récolter quand la tige se liège : couper avec 5 cm de pédoncule pour
+      améliorer la conservation. Laisser sécher 2–3 semaines à l'air sec.
+    erreurs_frequentes:
+      - Récolte trop précoce (chair pas sucrée)
+      - Stockage sans séchage préalable (pourriture)
+      - Manque de pollinisateurs (mauvaise nouaison)
+  en:
+    nom_commun: Ponca Butternut Squash
+    description: >
+      Improved butternut variety with smaller, more uniform fruits (600 g–1 kg),
+      smooth beige skin, intensely sweet and creamy orange flesh. Ripens earlier,
+      excellent for regions with short summers.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 18
+  temperature_optimale: 22
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [7, 12]
+  duree_avant_recolte_jours: [90, 120]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 120
+  profondeur_semis_cm: 3
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    continental:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    mediterraneen:
+      semis_interieur: [3, 4]
+      plantation: [4, 5]
+      recolte: [7, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [10, 11]
+      plantation: [11, 12]
+      recolte: [2, 4]
+
+associations:
+  beneficies:
+    - id: haricot
+      raison_i18n: { fr: "Trio des trois sœurs, fixe l'azote", en: "Three sisters trio, fixes nitrogen" }
+    - id: capucine
+      raison_i18n: { fr: "Attire les pollinisateurs nécessaires à la nouaison", en: "Attracts pollinators needed for fruit set" }
+  defavorables:
+    - id: pomme_de_terre
+      raison_i18n: { fr: "Concurrence pour l'espace et l'eau", en: "Competition for space and water" }
+rotation:
+  famille: cucurbitaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [cucurbitaceae]
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Lieu frais, sec, aéré, 12–15 °C", en: "Cool, dry, airy place, 12–15 °C" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Cuire et mixer en soupe, puis congeler en portions", en: "Cook and blend into soup, freeze in portions" }
+utilisations_culinaires_i18n:
+  fr: [Soupe, velouté, rôtie au four, en purée, farcie, en gratin, en curry]
+  en: [Soup, velvet soup, oven-roasted, purée, stuffed, gratin, curry]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courge_musqu%C3%A9e
+contributeurs:
+  - "@potagerer"

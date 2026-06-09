@@ -1,0 +1,111 @@
+# Fiche plante — oignon_rouge_de_florence.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: oignon_rouge_de_florence
+version_fiche: 1
+categorie: legume
+sous_type: legume_bulbe
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Allium cepa 'Rossa di Firenze'
+famille_botanique: Amaryllidaceae
+
+i18n:
+  fr:
+    nom_commun: Oignon Rouge de Florence
+    noms_alternatifs: [Cipolla Rossa di Firenze, Oignon doux de Florence]
+    description: >
+      Variété italienne ancienne à bulbe allongé légèrement fusiforme, d'un
+      rouge violet intense, chair rose-blanche douce et peu piquante. Excellente
+      crue. Saveur plus sucrée et subtile que les oignons jaunes classiques.
+      Très bonne conservation. Variété emblématique de la cuisine toscane.
+    conseils_culture: >
+      Planter des bulbilles ou semer en février–mars sous abri. Repiquer en sol
+      meuble et bien drainé. Ne pas enterrer le bulbe trop profondément : le
+      collet doit affleurer. Arroser modérément, réduire avant la récolte pour
+      favoriser la conservation.
+    conseils_recolte: >
+      Récolter quand les fanes se couchent et jaunissent. Arracher et laisser
+      sécher 2–3 semaines à l'air avant de stocker.
+    erreurs_frequentes:
+      - Sol trop riche en azote (trop de feuilles, bulbe mal formé)
+      - Humidité excessive en fin de cycle (pourriture du collet)
+      - Récolte avant que les fanes se couchent
+  en:
+    nom_commun: Red Florence Onion
+    noms_alternatifs: [Cipolla Rossa di Firenze]
+    description: >
+      Old Italian variety with slightly elongated, fusiform, intense red-violet
+      bulb, mild pink-white flesh. Excellent raw. Sweeter and more subtle than
+      standard yellow onions.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - leger
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 10
+  temperature_optimale: 18
+
+cycle:
+  type: bisannuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [120, 150]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 10
+  profondeur_semis_cm: 1
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [7, 9]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [3, 4]
+      recolte: [6, 8]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [10, 11]
+      recolte: [1, 3]
+
+associations:
+  beneficies:
+    - id: carotte
+      raison_i18n: { fr: "Éloignent mutuellement leurs mouches", en: "Mutually repel each other's flies" }
+    - id: laitue
+      raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
+  defavorables:
+    - id: haricot
+      raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
+    - id: pois
+      raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
+rotation:
+  famille: amaryllidaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [amaryllidaceae]
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Tresses ou filets en lieu sec et aéré, < 20 °C", en: "Braids or nets in dry airy place, < 20 °C" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en tartine, dans les burgers, confit, en soupe à l'oignon, chutney]
+  en: [Raw in salads, on toast, in burgers, caramelized, French onion soup, chutney]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon
+contributeurs:
+  - "@potagerer"

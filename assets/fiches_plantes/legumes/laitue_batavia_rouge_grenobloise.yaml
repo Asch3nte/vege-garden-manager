@@ -1,0 +1,105 @@
+# Fiche plante — laitue_batavia_rouge_grenobloise.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: laitue_batavia_rouge_grenobloise
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Lactuca sativa var. capitata 'Rouge Grenobloise'
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Laitue Batavia Rouge Grenobloise
+    noms_alternatifs: [Grenobloise, Batavia rouge]
+    description: >
+      Variété batavia ancienne à feuilles très frisées, dorées à vert à la base
+      et rouge acajou sur les bords. Pomme peu serrée, feuilles croquantes
+      et savoureuses, très résistantes à la chaleur et à la montaison. L'une
+      des laitues d'été les plus appréciées des jardiniers. Bien adaptée aux
+      régions chaudes.
+    conseils_culture: >
+      Semer en place ou en terrine, repiquer à 30 cm. Résiste bien à la chaleur
+      et à la sécheresse modérée. Peut se récolter feuille à feuille sur la
+      durée (coupe-et-revient). Adapter les apports en eau pour éviter
+      complètement la sécheresse qui ferait monter à graines.
+    conseils_recolte: >
+      Récolter la pomme entière ou prélever feuille par feuille en laissant le
+      cœur pour prolonger la production.
+    erreurs_frequentes:
+      - Sol trop pauvre (feuilles petites et sans saveur)
+      - Stress hydrique prolongé (montaison)
+  en:
+    nom_commun: Rouge Grenobloise Batavia Lettuce
+    description: >
+      Old batavia variety with very curly leaves, golden-green at the base and
+      mahogany-red at the edges. Loosely packed head, crisp and flavorful leaves,
+      very resistant to heat and bolting.
+
+besoins:
+  ensoleillement: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - riche
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_optimale: 18
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [50, 80]
+  hauteur_adulte_cm: [20, 35]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      semis_exterieur: [3, 9]
+      plantation: [4, 9]
+      recolte: [5, 11]
+    continental:
+      semis_exterieur: [4, 8]
+      plantation: [4, 8]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [3, 10]
+      plantation: [3, 10]
+      recolte: [5, 12]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 3]
+      recolte: [11, 5]
+
+associations:
+  beneficies:
+    - id: carotte
+      raison_i18n: { fr: "Bon usage de l'espace, cycles complémentaires", en: "Good space use, complementary cycles" }
+    - id: radis
+      raison_i18n: { fr: "Cycle ultra-court du radis, libère la place rapidement", en: "Ultra-short radish cycle, frees up space quickly" }
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 2
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [asteraceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, légèrement humidifiée dans un sac", en: "Refrigerator, slightly dampened in a bag" }
+utilisations_culinaires_i18n:
+  fr: [Salade verte, salade composée, dans les sandwichs, wraps, burger]
+  en: [Green salad, composed salad, in sandwiches, wraps, burger]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

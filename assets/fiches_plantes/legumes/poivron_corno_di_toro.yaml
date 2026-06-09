@@ -1,0 +1,112 @@
+# Fiche plante — poivron_corno_di_toro.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: poivron_corno_di_toro
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Capsicum annuum 'Corno di Toro'
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Poivron Corno di Toro
+    noms_alternatifs: [Piment Corne de taureau, Poivron corne rouge]
+    description: >
+      Variété italienne emblématique à fruits longs et effilés en forme de corne
+      (15–20 cm), rouge à maturité, très doux et sucré. Chair épaisse et
+      savoureuse, excellente crue ou grillée. Plant vigoureux très productif.
+    conseils_culture: >
+      Démarrer en semis intérieur 8–10 semaines avant le repiquage. Repiquer
+      après tout risque de gel dans un sol réchauffé. Tuteurer si nécessaire
+      sous le poids des fruits. Arroser régulièrement mais sans excès.
+    conseils_recolte: >
+      Récolter vert pour libérer le plant, ou attendre la coloration rouge
+      complète pour une saveur maximale. Plus le fruit mûrit, plus il est sucré.
+    erreurs_frequentes:
+      - Plantation trop tôt en sol froid (choc thermique, plant chétif)
+      - Stress hydrique (fruits déformés)
+      - Manque de soleil (mauvaise coloration)
+  en:
+    nom_commun: Corno di Toro Pepper
+    noms_alternatifs: [Bull's Horn Pepper]
+    description: >
+      Iconic Italian variety with long, tapered horn-shaped fruits (15–20 cm),
+      red when ripe, very sweet and mild. Thick, flavorful flesh, excellent
+      raw or grilled.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 20
+  temperature_optimale: 24
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [75, 100]
+  hauteur_adulte_cm: [60, 100]
+  espacement_cm: 50
+  profondeur_semis_cm: 1
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [11, 12]
+      recolte: [1, 4]
+
+associations:
+  beneficies:
+    - id: basilic
+      raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
+    - id: carotte
+      raison_i18n: { fr: "Ameublit le sol pour les racines voisines", en: "Loosens soil for nearby roots" }
+  defavorables:
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: sechage
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, grillé, farci, en antipasto, mariné à l'huile]
+  en: [Raw in salads, grilled, stuffed, antipasto, marinated in oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poivron
+contributeurs:
+  - "@potagerer"

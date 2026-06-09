@@ -1,0 +1,112 @@
+# Fiche plante — potimarron_rouge_vif_etampes.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: potimarron_rouge_vif_etampes
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Cucurbita maxima 'Rouge Vif d'Étampes'
+famille_botanique: Cucurbitaceae
+
+i18n:
+  fr:
+    nom_commun: Potiron Rouge Vif d'Étampes
+    noms_alternatifs: [Potiron de Cendrillon, Cinderella Pumpkin]
+    description: >
+      Variété française spectaculaire à gros fruits très aplatis et très côtelés,
+      d'un rouge orangé intense. Peut atteindre 10–20 kg. Chair jaune orangée,
+      légèrement sucrée. Très bonne conservation. Utilisée dans de nombreux
+      desserts et soupes.
+    conseils_culture: >
+      Semer sous abri 3 semaines avant le repiquage. Planter dans des buttes
+      enrichies en compost. Pincer les tiges principales à 4–5 feuilles au-delà
+      du dernier fruit fixé pour concentrer la sève. Pailler abondamment pour
+      conserver l'humidité.
+    conseils_recolte: >
+      Attendre que la tige se liège et brunisse avant de couper. Laisser sécher
+      2 semaines à l'air dans un endroit sec avant la mise en conservation.
+    erreurs_frequentes:
+      - Arrosage excessif (pourriture du collet)
+      - Sol pauvre (fruits petits et peu sucrés)
+      - Récolte avant maturité complète (mauvaise conservation)
+  en:
+    nom_commun: Rouge Vif d'Étampes Pumpkin
+    noms_alternatifs: [Cinderella Pumpkin]
+    description: >
+      Spectacular French variety with large, very flat and deeply ribbed fruits
+      of intense orange-red. Can reach 10–20 kg. Slightly sweet yellow-orange flesh.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 18
+  temperature_optimale: 22
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [7, 12]
+  duree_avant_recolte_jours: [110, 140]
+  hauteur_adulte_cm: [30, 60]
+  espacement_cm: 150
+  profondeur_semis_cm: 3
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [9, 11]
+    continental:
+      semis_interieur: [4, 5]
+      plantation: [5, 6]
+      recolte: [9, 11]
+    mediterraneen:
+      semis_interieur: [3, 4]
+      plantation: [4, 5]
+      recolte: [8, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [10, 11]
+      plantation: [11, 12]
+      recolte: [3, 5]
+
+associations:
+  beneficies:
+    - id: haricot
+      raison_i18n: { fr: "Trio des trois sœurs, fixe l'azote", en: "Three sisters trio, fixes nitrogen" }
+    - id: capucine
+      raison_i18n: { fr: "Attire les pollinisateurs nécessaires à la nouaison", en: "Attracts pollinators needed for fruit set" }
+  defavorables:
+    - id: pomme_de_terre
+      raison_i18n: { fr: "Concurrence pour l'espace et l'eau", en: "Competition for space and water" }
+rotation:
+  famille: cucurbitaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [cucurbitaceae]
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Lieu frais, sec, aéré — 10–15 °C", en: "Cool, dry, airy location — 10–15 °C" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Cuire et mixer avant congélation", en: "Cook and purée before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Soupe, velouté, gratin, tarte sucrée, farci, purée]
+  en: [Soup, velvet soup, gratin, sweet pie, stuffed, purée]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Potiron
+contributeurs:
+  - "@potagerer"

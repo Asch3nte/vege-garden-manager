@@ -1,0 +1,106 @@
+# Fiche plante — epinard_geant_dhiver.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: epinard_geant_dhiver
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+usages:
+  - alimentaire
+schema_version: 1
+
+nom_scientifique: Spinacia oleracea 'Géant d'Hiver'
+famille_botanique: Amaranthaceae
+
+i18n:
+  fr:
+    nom_commun: Épinard Géant d'Hiver
+    noms_alternatifs: [Épinard hivernal, Winter Giant Spinach]
+    description: >
+      Variété robuste à grandes feuilles épaisses, bullées, d'un vert sombre,
+      très résistante au froid (jusqu'à −10 °C). Production généreuse de
+      l'automne au printemps. Saveur fine et moins amère que les variétés
+      d'été. Idéale pour occuper le potager en basse saison.
+    conseils_culture: >
+      Semer en place de août à octobre pour une récolte automnale et hivernale.
+      Sol riche en azote mais bien drainé. Éviter les semis estivaux : la
+      chaleur et les jours longs provoquent la montaison rapide.
+    conseils_recolte: >
+      Cueillir les feuilles externes dès qu'elles sont bien formées, en laissant
+      le cœur intact pour une production continue. Éviter de récolter sous le gel.
+    erreurs_frequentes:
+      - Semis en plein été (montaison immédiate)
+      - Sol acide (croissance chétive)
+      - Manque d'azote (feuilles petites et pâles)
+  en:
+    nom_commun: Giant Winter Spinach
+    description: >
+      Robust variety with large, thick, blistered, dark-green leaves, very frost
+      resistant (down to −10 °C). Generous production from autumn to spring.
+
+besoins:
+  ensoleillement: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.5
+  ph_max: 7.5
+  temperature_min_germination: 7
+  temperature_optimale: 15
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [40, 60]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 15
+  profondeur_semis_cm: 2
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [8, 10]
+      recolte: [10, 4]
+    continental:
+      semis_exterieur: [8, 9]
+      recolte: [10, 4]
+    mediterraneen:
+      semis_exterieur: [9, 11]
+      recolte: [11, 4]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [2, 4]
+      recolte: [4, 10]
+
+associations:
+  beneficies:
+    - id: laitue
+      raison_i18n: { fr: "Mêmes besoins, bonne association de feuilles", en: "Same needs, good leaf vegetable companion" }
+    - id: carotte
+      raison_i18n: { fr: "Bon usage de l'espace en association", en: "Good companion for space use" }
+  defavorables:
+    - id: betterave
+      raison_i18n: { fr: "Même famille Amaranthaceae, mêmes maladies", en: "Same Amaranthaceae family, same diseases" }
+rotation:
+  famille: amaranthaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [amaranthaceae]
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, sac perforé", en: "Refrigerator, perforated bag" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 2 min, presser, congeler en portions", en: "Blanch 2 min, press, freeze in portions" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, sauté à l'ail, gratin dauphinois, soupe, en quiche]
+  en: [Raw salad, sautéed with garlic, potato gratin, soup, quiche]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89pinard
+contributeurs:
+  - "@potagerer"
