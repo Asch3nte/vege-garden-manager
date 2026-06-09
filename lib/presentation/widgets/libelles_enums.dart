@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/enums/langue.dart';
+import '../../domain/enums/mode_geolocalisation.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/sens_swipe.dart';
+import '../../domain/enums/systeme_unites.dart';
+import '../../domain/enums/theme_app.dart' as prefs_theme;
 import '../../domain/enums/type_tache.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -35,6 +41,53 @@ extension LibellesEnums on AppLocalizations {
         NiveauSoleil.pleinSoleil => expositionPleinSoleil,
         NiveauSoleil.miOmbre => expositionMiOmbre,
         NiveauSoleil.ombre => expositionOmbre,
+      };
+
+  /// Label for the interface language.
+  String langue(Langue l) => switch (l) {
+        Langue.auto => langueAuto,
+        Langue.fr => langueFr,
+        Langue.en => langueEn,
+      };
+
+  /// Label for a theme choice.
+  String theme(prefs_theme.ThemeApp t) => switch (t) {
+        prefs_theme.ThemeApp.auto => themeAuto,
+        prefs_theme.ThemeApp.clair => themeClair,
+        prefs_theme.ThemeApp.sombre => themeSombre,
+      };
+
+  /// Label for the unit system.
+  String unites(SystemeUnites u) => switch (u) {
+        SystemeUnites.metrique => unitesMetrique,
+        SystemeUnites.imperial => unitesImperial,
+      };
+
+  /// Label for the list-swipe direction.
+  String sensSwipe(SensSwipe s) => switch (s) {
+        SensSwipe.standard => swipeStandard,
+        SensSwipe.inverse => swipeInverse,
+      };
+
+  /// Label for the experience level.
+  String niveauExperience(NiveauExperience n) => switch (n) {
+        NiveauExperience.debutant => niveauDebutant,
+        NiveauExperience.intermediaire => niveauIntermediaire,
+        NiveauExperience.expert => niveauExpert,
+      };
+
+  /// Short label for a geolocation mode (the chip value).
+  String geolocLabel(ModeGeolocalisation m) => switch (m) {
+        ModeGeolocalisation.desactivee => geolocLabelOff,
+        ModeGeolocalisation.manuelle => geolocLabelManuelle,
+        ModeGeolocalisation.gps => geolocLabelGps,
+      };
+
+  /// Long description for a geolocation mode (the row subtitle).
+  String geolocDescription(ModeGeolocalisation m) => switch (m) {
+        ModeGeolocalisation.desactivee => geolocOff,
+        ModeGeolocalisation.manuelle => geolocManuelle,
+        ModeGeolocalisation.gps => geolocGps,
       };
 
   /// Label for a task type (the gesture).

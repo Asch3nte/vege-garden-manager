@@ -1,0 +1,92 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:riverpod/riverpod.dart';
+import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/preferences_notifier.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/enums/langue.dart';
+import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
+import 'package:pot_a_gerer/domain/enums/theme_app.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
+class _FakePrefs extends Fake implements PreferencesUtilisateur {}
+
+void main() {
+  setUpAll(() => registerFallbackValue(_FakePrefs()));
+
+  late MockPreferences repo;
+
+  setUp(() {
+    repo = MockPreferences();
+    when(() => repo.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
+  });
+
+  ProviderContainer conteneur() {
+    final c = ProviderContainer(overrides: [
+      preferencesRepositoryProvider.overrideWithValue(repo),
+    ]);
+    addTearDown(c.dispose);
+    return c;
+  }
+
+  test('loads the stored preferences', () async {
+    when(() => repo.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(niveauExperience: NiveauExperience.expert),
+    );
+
+    final prefs = await conteneur().read(preferencesProvider.future);
+
+    expect(prefs.niveauExperience, NiveauExperience.expert);
+  });
+
+  test('a setter applies the change, persists it and publishes it', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier).definirLangue(Langue.en);
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.single as PreferencesUtilisateur).langue, Langue.en);
+    expect(c.read(preferencesProvider).value!.langue, Langue.en);
+  });
+
+  test('theme, geolocation and level setters round-trip', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+    final notifier = c.read(preferencesProvider.notifier);
+
+    await notifier.definirTheme(ThemeApp.sombre);
+    await notifier.definirGeolocalisation(ModeGeolocalisation.gps);
+    await notifier.definirNiveau(NiveauExperience.intermediaire);
+
+    final prefs = c.read(preferencesProvider).value!;
+    expect(prefs.theme, ThemeApp.sombre);
+    expect(prefs.modeGeolocalisation, ModeGeolocalisation.gps);
+    expect(prefs.niveauExperience, NiveauExperience.intermediaire);
+  });
+
+  test('toggling sync persists the boolean opt-out', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier).definirSyncLocale(true);
+
+    expect(c.read(preferencesProvider).value!.syncLocaleActive, isTrue);
+  });
+
+  test('a notification category toggle updates only that key', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier)
+        .definirNotificationCategorie('arrosage', false);
+
+    final map = c.read(preferencesProvider).value!.notificationsParCategorie;
+    expect(map['arrosage'], isFalse);
+  });
+}

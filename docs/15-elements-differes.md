@@ -97,7 +97,31 @@ tâches **cochables**). Données réelles : tâches sur fenêtre
 
 ---
 
-## 6. Comment utiliser ce registre
+## 6. Écran Plus / Paramètres (`lib/presentation/screens/ecran_plus.dart` + `parametres/`)
+
+Réalisé : racine Paramètres + 4 sous-panneaux **réels et persistés** (auto-save
+via `PreferencesNotifier`) : **Général** (langue, thème, unités, gestes, niveau),
+**Confidentialité** (géoloc, sync, lunaire, communauté V2), **Notifications**
+(maître + 6 catégories), **À propos** (version, licence MIT, licences tierces,
+crédits). Le **thème de l'app suit la préférence** (`main.dart` → `ThemeMode`).
+
+| Élément | État | Ce qui manque | Où revenir |
+|---|---|---|---|
+| **Menu « Plus » (popover/sheet)** | 🔵 racine directe | La maquette ouvre un menu (Paramètres / Post-récolte / Communauté / À propos) ; ici l'onglet affiche directement la racine Paramètres. | Ajouter un menu si Post-récolte/Communauté arrivent ; sinon garder la racine directe. |
+| **Post-récolte** | ⚪ | Écran de conservation/transformation. | Concevoir la fonctionnalité (hors V1 ?). |
+| **Communauté (P2P)** | ⚪ V2 | Marquée V2, désactivée. | V2. |
+| **Catégorie « Synchronisation & sauvegarde »** | ⚪ | Appairage d'appareils + **export JSON/CSV** + import. `sauvegardeServiceProvider` existe (infra) mais n'est pas branché à une UI. | Brancher `AbstractSauvegardeService` à un panneau Sync ; appairage = fonctionnalité réseau locale à concevoir. |
+| **Réinitialiser toutes les données** | ⚪ | Action destructive (double confirmation + wipe réel). | Brancher sur un service de purge + dialogue à double confirmation. |
+| **Catégorie « Transparence des données »** | ⚪ | Tableau des tailles par table + journal d'accès. Nécessite des stats de taille de la base (drift) + un journal d'accès (inexistant). | Ajouter une lecture de stats DB + (éventuel) journal d'accès. |
+| **Récupération météo auto** (toggle) | ⚪ | La maquette a ce switch, mais **aucun champ** correspondant sur `PreferencesUtilisateur`. | Ajouter le champ (entité + drift) si on garde l'option, ou la dériver du mode géoloc. |
+| **Ne pas déranger (créneau horaire)** | 🔵 champs présents, non exposés | `PreferencesUtilisateur` a `nePasDerangerDebut/Fin` mais pas de `copierAvec` pour eux (méthodes `avecNePasDeranger`/`sansNePasDeranger`) ; pas de sélecteur d'heure dans l'UI. | Ajouter le toggle + time-pickers, brancher sur `avecNePasDeranger`. |
+| **Version dynamique** | 🔵 constante en dur | Lire la version au runtime = `package_info_plus` (hors stack validée). | Ajouter la dépendance (à valider) ou générer la version au build. |
+| **Liens externes** (code source, doc, bug) | 🔵 lignes présentes, inertes | Ouvrir une URL = `url_launcher` (hors stack validée). | Ajouter la dépendance (à valider) puis brancher les `onTap`. |
+| **Langue effective** | 🔵 préférence persistée | Le choix de langue est **stocké** mais l'app ne réagit pas encore (un seul ARB `fr` ; `MaterialApp.locale` pas piloté). | Ajouter l'ARB `en` + piloter `locale`/`localeResolutionCallback` depuis la préférence. |
+
+---
+
+## 7. Comment utiliser ce registre
 
 - En reprenant un sujet, **chercher son entrée ici** : la colonne « Où revenir »
   pointe le fichier/fonction exact à modifier.

@@ -116,12 +116,17 @@ Polymorphisme dès que pertinent.
 12. **Design system → code** : maquettes Claude Design intégrées dans `docs/08` (palette light + déco) ;
     thème « Carnet vivant » (`lib/app/theme/`), polices Manrope/Inter embarquées (SIL OFL)
 13. **Couche Presentation — fondations** : `go_router` (5 onglets), shell responsif
-    (bottom bar / rail), 5 écrans placeholder, i18n des onglets, tests widget de navigation
+    (bottom bar / rail), i18n des onglets, tests widget de navigation
+14. **Les 5 écrans principaux** branchés sur le domaine, avec tests (notifier + widget) :
+    Accueil (tableau de bord), Potager (liste des zones), Catalogue (recherche +
+    fiche détaillée), Calendrier (agenda cochable), Plus/Paramètres (préférences
+    persistées + thème dynamique). Éléments non câblables consignés dans `docs/15`.
 
 ### 🚧 En cours / prochaine étape
-- **Implémentation des écrans** un par un, à partir des maquettes (`vege-garden-export/`),
-  en commençant par **Accueil** (`accueil-final.jsx`), branché sur les providers Application
-- Composants UI normalisés (cartes, empty/error states, snackbar, bottom sheet…)
+- **Affiner / approfondir les écrans** : reprendre les éléments différés de
+  [`docs/15`](docs/15-elements-differes.md) au fur et à mesure que le nécessaire existe
+- Composants UI normalisés restants (snackbar, dialog double-confirmation, swipe…)
+- **Onboarding** (dérivation localisation → hémisphère/climat/rusticité)
 
 ### ⏭️ À venir
 - Onboarding (dérivation localisation → hémisphère/climat/rusticité)
@@ -164,7 +169,7 @@ pot-a-gerer/
 ### Progression par étapes (jamais sauter une étape sans validation)
 1. ✅ Cahier des charges · 2. ✅ Stack · 3. ✅ Architecture · 4. ✅ Setup repo & doc
 5. ✅ Maquettes / design system (intégrées : `docs/08` + thème Flutter)
-6. 🚧 Développement module par module (Domain/Infra/Application ✅ · **Presentation en cours**)
+6. 🚧 Développement module par module (Domain/Infra/Application ✅ · **Presentation : 5 écrans principaux ✅**, affinage en cours)
 7. ✅ Tests unitaires & widget (en //) · 8. ⏭️ README · 9. ⏭️ Déploiement & packaging
 
 ### Dans chaque réponse
@@ -192,12 +197,12 @@ pot-a-gerer/
 
 ## 🎬 PROCHAINE ACTION ATTENDUE
 
-Les fondations de la **couche Presentation** sont posées (thème, router 5 onglets,
-shell responsif, écrans placeholder). Prochaine étape : **implémenter le premier
-écran réel — Accueil** — à partir de la maquette `vege-garden-export/accueil-final.jsx`
-(maquettes React = **référence visuelle**, à réécrire en widgets Flutter, pas à
-copier). Le brancher sur les providers de la couche Application déjà existante,
-**avec ses tests widget en parallèle**.
+Les **5 écrans principaux** de la couche Presentation sont implémentés, branchés
+sur le domaine et testés (Accueil, Potager, Catalogue, Calendrier, Plus/Paramètres).
+Prochaines étapes possibles (à arbitrer avec le dev) : **approfondir les éléments
+différés** de [`docs/15`](docs/15-elements-differes.md) quand le nécessaire existe
+(vues secondaires, météo/alertes, export/sync…), l'**onboarding**, ou les
+**composants UI normalisés** restants — toujours **avec leurs tests en parallèle**.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
 > Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**

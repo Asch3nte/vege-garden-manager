@@ -1,0 +1,86 @@
+import 'package:riverpod/riverpod.dart';
+
+import '../../domain/entities/preferences_utilisateur.dart';
+import '../../domain/enums/langue.dart';
+import '../../domain/enums/mode_geolocalisation.dart';
+import '../../domain/enums/niveau_experience.dart';
+import '../../domain/enums/sens_swipe.dart';
+import '../../domain/enums/systeme_unites.dart';
+import '../../domain/enums/theme_app.dart';
+import '../providers/repository_providers.dart';
+
+/// Exposes the user [PreferencesUtilisateur] and the actions that mutate it.
+///
+/// Every setter applies the change with `copierAvec`, **persists immediately**
+/// (auto-save, docs/09 §6) and reflects the new value in [state]. The single
+/// private [_modifier] helper keeps each setter to one line and guarantees the
+/// save-then-publish order. All preferences are local-only — no network, no
+/// account (privacy by design).
+class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
+  @override
+  Future<PreferencesUtilisateur> build() {
+    return ref.watch(preferencesRepositoryProvider).charger();
+  }
+
+  /// Applies [transformer] to the current preferences, persists, and publishes.
+  Future<void> _modifier(
+    PreferencesUtilisateur Function(PreferencesUtilisateur p) transformer,
+  ) async {
+    final courant = state.value;
+    if (courant == null) return;
+    final misAJour = transformer(courant);
+    await ref.read(preferencesRepositoryProvider).sauvegarder(misAJour);
+    state = AsyncData(misAJour);
+  }
+
+  /// Sets the interface language.
+  Future<void> definirLangue(Langue langue) =>
+      _modifier((p) => p.copierAvec(langue: langue));
+
+  /// Sets the theme (auto / light / dark).
+  Future<void> definirTheme(ThemeApp theme) =>
+      _modifier((p) => p.copierAvec(theme: theme));
+
+  /// Sets the unit system.
+  Future<void> definirUnites(SystemeUnites unites) =>
+      _modifier((p) => p.copierAvec(systemeUnites: unites));
+
+  /// Sets the list-swipe direction.
+  Future<void> definirSensSwipe(SensSwipe sens) =>
+      _modifier((p) => p.copierAvec(sensSwipe: sens));
+
+  /// Sets the experience level (drives advice verbosity and unlocks).
+  Future<void> definirNiveau(NiveauExperience niveau) =>
+      _modifier((p) => p.copierAvec(niveauExperience: niveau));
+
+  /// Sets the geolocation mode (off / manual / GPS).
+  Future<void> definirGeolocalisation(ModeGeolocalisation mode) =>
+      _modifier((p) => p.copierAvec(modeGeolocalisation: mode));
+
+  /// Master notifications switch.
+  Future<void> definirNotificationsGlobales(bool actives) =>
+      _modifier((p) => p.copierAvec(notificationsGlobalesActives: actives));
+
+  /// Local Wi-Fi sync opt-in.
+  Future<void> definirSyncLocale(bool active) =>
+      _modifier((p) => p.copierAvec(syncLocaleActive: active));
+
+  /// Lunar-calendar opt-in.
+  Future<void> definirCalendrierLunaire(bool actif) =>
+      _modifier((p) => p.copierAvec(calendrierLunaireOptIn: actif));
+
+  /// Toggles one notification category on/off.
+  Future<void> definirNotificationCategorie(String cle, bool actif) {
+    return _modifier((p) {
+      final map = Map<String, bool>.from(p.notificationsParCategorie)
+        ..[cle] = actif;
+      return p.copierAvec(notificationsParCategorie: map);
+    });
+  }
+}
+
+/// The user-preferences provider.
+final preferencesProvider =
+    AsyncNotifierProvider<PreferencesNotifier, PreferencesUtilisateur>(
+  PreferencesNotifier.new,
+);
