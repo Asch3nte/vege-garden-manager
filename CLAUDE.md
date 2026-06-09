@@ -108,15 +108,24 @@ Polymorphisme dès que pertinent.
 4. Environnement de dev installé (Flutter 3.44.1 / Fedora 43 / Android SDK 36.1.0)
 5. **Refactor documentaire** : doc découpée en 13 documents spécialisés dans `docs/`
 6. **Ossature du repo** : arborescence Clean Architecture 4 couches, méta-fichiers
+7. **`flutter create` + `pubspec.yaml`** : projet généré, dépendances validées déclarées
+8. **Couche Domain** (~99 fichiers) : entités, value objects, enums, exceptions, interfaces + tests
+9. **Couche Infrastructure** : base Drift (12 tables), repositories, mappers, catalogue YAML, API Open-Meteo, services
+10. **Couche Application** : use cases + moteur de recommandation (évaluateur, RecommanderPlantes) + providers Riverpod
+11. **Bootstrap** (`lib/app/bootstrap.dart`) : DB persistante, fuseau horaire, notifications
+12. **Design system → code** : maquettes Claude Design intégrées dans `docs/08` (palette light + déco) ;
+    thème « Carnet vivant » (`lib/app/theme/`), polices Manrope/Inter embarquées (SIL OFL)
+13. **Couche Presentation — fondations** : `go_router` (5 onglets), shell responsif
+    (bottom bar / rail), 5 écrans placeholder, i18n des onglets, tests widget de navigation
 
 ### 🚧 En cours / prochaine étape
-- `flutter create` du projet `pot_a_gerer` (à valider — voir §PROCHAINE ACTION)
-- Déclaration des dépendances dans `pubspec.yaml`
-- Premières entités du Domain + tests unitaires en parallèle
+- **Implémentation des écrans** un par un, à partir des maquettes (`vege-garden-export/`),
+  en commençant par **Accueil** (`accueil-final.jsx`), branché sur les providers Application
+- Composants UI normalisés (cartes, empty/error states, snackbar, bottom sheet…)
 
 ### ⏭️ À venir
-- Maquettes / design system (Penpot pour écrans pivots)
-- Développement module par module (Domain → Infrastructure → Application → Presentation)
+- Onboarding (dérivation localisation → hémisphère/climat/rusticité)
+- Rebrancher **Phosphor Icons** (package cassé sur Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
 - CI/CD GitHub Actions
 - Packaging multiplateforme (Linux AppImage/Flatpak, APK, .exe, .dmg)
 
@@ -129,8 +138,8 @@ pot-a-gerer/
 ├── docs/                  # Documentation découpée (source de vérité)
 │   └── decisions/         # ADR
 ├── lib/
-│   ├── main.dart          # point d'entrée
-│   ├── app/               # bootstrap, router (go_router), thème
+│   ├── main.dart          # point d'entrée (MaterialApp.router + thèmes + i18n)
+│   ├── app/               # bootstrap, router (go_router), theme/ (design system)
 │   ├── domain/            # entities, value_objects, enums, repositories, exceptions
 │   ├── application/       # use_cases, state (orchestration)
 │   ├── infrastructure/    # database (drift), repositories impl, mappers, catalogue (YAML), api, services
@@ -138,9 +147,10 @@ pot-a-gerer/
 │   ├── core/              # constants, extensions, utils
 │   └── l10n/              # ARB i18n
 ├── assets/
-│   └── fiches_plantes/    # YAML : legumes, aromatiques, fruits, petits_fruits, fleurs, cereales, engrais_verts, _schema
+│   ├── fiches_plantes/    # YAML : legumes, aromatiques, fruits, petits_fruits, fleurs, cereales, engrais_verts, _schema
+│   └── fonts/             # Manrope + Inter (variables, SIL OFL) + licences
 ├── test/                  # unit, widget, integration
-├── pubspec.yaml           # (à générer via flutter create)
+├── pubspec.yaml           # généré + dépendances validées + polices
 ├── README.md · LICENSE (MIT) · CONTRIBUTING.md · .gitignore · CLAUDE.md
 ```
 
@@ -153,8 +163,9 @@ pot-a-gerer/
 
 ### Progression par étapes (jamais sauter une étape sans validation)
 1. ✅ Cahier des charges · 2. ✅ Stack · 3. ✅ Architecture · 4. ✅ Setup repo & doc
-5. 🚧 Maquettes / design system · 6. ⏭️ Développement module par module
-7. ⏭️ Tests unitaires (en // ) · 8. ⏭️ README · 9. ⏭️ Déploiement & packaging
+5. ✅ Maquettes / design system (intégrées : `docs/08` + thème Flutter)
+6. 🚧 Développement module par module (Domain/Infra/Application ✅ · **Presentation en cours**)
+7. ✅ Tests unitaires & widget (en //) · 8. ⏭️ README · 9. ⏭️ Déploiement & packaging
 
 ### Dans chaque réponse
 - Indiquer à quelle étape on se trouve
@@ -181,17 +192,17 @@ pot-a-gerer/
 
 ## 🎬 PROCHAINE ACTION ATTENDUE
 
-Initialiser le projet Flutter sur l'ossature existante :
+Les fondations de la **couche Presentation** sont posées (thème, router 5 onglets,
+shell responsif, écrans placeholder). Prochaine étape : **implémenter le premier
+écran réel — Accueil** — à partir de la maquette `vege-garden-export/accueil-final.jsx`
+(maquettes React = **référence visuelle**, à réécrire en widgets Flutter, pas à
+copier). Le brancher sur les providers de la couche Application déjà existante,
+**avec ses tests widget en parallèle**.
 
-```bash
-# Depuis pot-a-gerer/ — génère les plateformes sans écraser lib/ docs/ assets/
-flutter create --org com.potagerer --project-name pot_a_gerer .
-```
-
-Puis déclarer les dépendances validées dans `pubspec.yaml` (drift, riverpod,
-go_router, http, flutter_local_notifications, geolocator, intl, uuid, yaml,
-freezed/json si retenu) et écrire la **première entité du Domain** (`Surface`
-ou `Localisation`) **avec son test unitaire en parallèle**.
+> ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
+> Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**
+> en Flutter d'après la maquette. Les tokens couleur de la maquette sont déjà
+> remontés dans `docs/08` §2 (source de vérité).
 
 Le développeur guide étape par étape. **Tu n'agis pas seul sur des décisions
 structurantes.**
