@@ -59,7 +59,28 @@ Réalisé : **variante C** de la maquette (liste des zones), données réelles
 
 ---
 
-## 4. Comment utiliser ce registre
+## 4. Écran Catalogue (`lib/presentation/screens/ecran_catalogue.dart`)
+
+Réalisé : **vue Fiches** (recherche + filtre catégorie + cartes + fiche détaillée
+en bottom sheet). Données réelles : nom, catégorie, exposition, eau, espacement,
+délai de récolte, **associations** (bons/mauvais compagnons, dérivées via les
+prédicats `sAssocieBienAvec` / `entreEnConflitAvec` sur tout le catalogue).
+
+| Élément | État | Ce qui manque | Où revenir |
+|---|---|---|---|
+| **Vue « Réseau »** (constellation d'associations) | ⚪ | Un graphe interactif (nœuds = plantes, arêtes = associations). Les données existent (associations), mais la vue (layout, sélection, surbrillance) est lourde. | Nouvelle vue à partir du même `catalogueProvider` + un calcul de layout (cf. maquette `ReseauView`). |
+| **Calendrier semis/récolte de la fiche** | ⚪ | Les périodes (`FichePlante.periodes`) sont indexées par **hémisphère × climat** ; une consultation du catalogue n'a pas ce contexte. | Soit dériver de la localisation du potager actif, soit laisser choisir hémisphère/climat ; brancher dans `fiche_plante_detail.dart` (`_Faits` / nouvelle section). |
+| **Difficulté de culture** | ⚪ | Aucun champ « difficulté » sur `FichePlante` (la maquette a 1–3 points). | Ajouter le champ (YAML + entité) si on garde cette info, ou la dériver. |
+| **Liste des variétés** | 🔵 clé i18n prête (`catalogueNbVarietes`) | Aucun champ « variétés » sur `FichePlante`. | Ajouter au modèle (YAML + entité) puis l'afficher dans la fiche. |
+| **Description textuelle** | ⚪ | Pas de champ description sur `FichePlante`. | Ajouter au YAML/entité si souhaité. |
+| **Gabarit / hauteur** | ⚪ | Pas de champ hauteur. | Idem (modèle). |
+| **Favoris** (cœur en en-tête) | ⚪ | Pas de notion de favori. | Préférences/persistance à concevoir. |
+| **« Ajouter au potager »** (CTA fiche) | ⚪ | Création de plantation depuis une fiche. | Brancher quand le form de création de plantation existe. |
+| **Icône / couleur par catégorie** | 🔵 icône générique + couleur thème | La maquette a une icône + couleur par catégorie. | Mapper catégorie → icône Phosphor (cf. §1) + couleur déco. |
+
+---
+
+## 5. Comment utiliser ce registre
 
 - En reprenant un sujet, **chercher son entrée ici** : la colonne « Où revenir »
   pointe le fichier/fonction exact à modifier.

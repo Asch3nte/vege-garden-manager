@@ -128,5 +128,90 @@
   "potagerErreurChargement": "Impossible de charger le potager.",
   "@potagerErreurChargement": {
     "description": "Message d'erreur de chargement de l'écran potager."
-  }
+  },
+  "catalogueNbPlantes": "{count, plural, =0{Aucune plante} =1{1 plante} other{{count} plantes}}",
+  "@catalogueNbPlantes": {
+    "description": "Nombre de plantes du catalogue, affiché en sous-titre.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "catalogueRecherche": "Nom, sol, exposition…",
+  "@catalogueRecherche": {
+    "description": "Placeholder du champ de recherche du catalogue."
+  },
+  "catalogueEffacer": "Effacer",
+  "@catalogueEffacer": {
+    "description": "Label d'accessibilité du bouton d'effacement de la recherche."
+  },
+  "catalogueTout": "Tout",
+  "@catalogueTout": {
+    "description": "Filtre catégorie : toutes les catégories."
+  },
+  "catalogueAucunResultat": "Aucune plante ne correspond.",
+  "@catalogueAucunResultat": {
+    "description": "État vide de la recherche du catalogue."
+  },
+  "catalogueErreurChargement": "Impossible de charger le catalogue.",
+  "@catalogueErreurChargement": {
+    "description": "Message d'erreur de chargement du catalogue."
+  },
+  "catalogueNbVarietes": "{count} variétés",
+  "@catalogueNbVarietes": {
+    "description": "Nombre de variétés d'une fiche (différé : non encore en base).",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "categorieLegume": "Légumes",
+  "@categorieLegume": { "description": "Catégorie de plante : légumes." },
+  "categorieAromatique": "Aromatiques",
+  "@categorieAromatique": { "description": "Catégorie de plante : aromatiques." },
+  "categorieFruit": "Fruits",
+  "@categorieFruit": { "description": "Catégorie de plante : fruits." },
+  "categoriePetitFruit": "Petits fruits",
+  "@categoriePetitFruit": { "description": "Catégorie de plante : petits fruits." },
+  "categorieFleur": "Fleurs",
+  "@categorieFleur": { "description": "Catégorie de plante : fleurs." },
+  "categorieCereale": "Céréales",
+  "@categorieCereale": { "description": "Catégorie de plante : céréales." },
+  "categorieEngraisVert": "Engrais verts",
+  "@categorieEngraisVert": { "description": "Catégorie de plante : engrais verts." },
+  "eauFaible": "Arrosage faible",
+  "@eauFaible": { "description": "Besoin en eau : faible." },
+  "eauModere": "Arrosage modéré",
+  "@eauModere": { "description": "Besoin en eau : modéré." },
+  "eauEleve": "Arrosage élevé",
+  "@eauEleve": { "description": "Besoin en eau : élevé." },
+  "ficheExposition": "Exposition",
+  "@ficheExposition": { "description": "Libellé de la donnée exposition dans la fiche." },
+  "ficheArrosage": "Arrosage",
+  "@ficheArrosage": { "description": "Libellé de la donnée arrosage dans la fiche." },
+  "ficheEspacement": "Espacement",
+  "@ficheEspacement": { "description": "Libellé de la donnée espacement dans la fiche." },
+  "ficheEspacementCm": "{cm} cm",
+  "@ficheEspacementCm": {
+    "description": "Espacement en centimètres.",
+    "placeholders": {
+      "cm": { "type": "int" }
+    }
+  },
+  "ficheRecolte": "Récolte",
+  "@ficheRecolte": { "description": "Libellé de la donnée délai de récolte dans la fiche." },
+  "ficheRecolteJours": "{min}–{max} jours",
+  "@ficheRecolteJours": {
+    "description": "Délai avant récolte, en jours.",
+    "placeholders": {
+      "min": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "ficheAssociations": "Associations",
+  "@ficheAssociations": { "description": "Titre de la section associations de la fiche." },
+  "ficheBonsCompagnons": "Bons compagnons",
+  "@ficheBonsCompagnons": { "description": "Sous-titre : plantes amies." },
+  "ficheAEviter": "À éviter",
+  "@ficheAEviter": { "description": "Sous-titre : plantes à ne pas associer." },
+  "ficheAucuneAssociation": "Aucune association renseignée.",
+  "@ficheAucuneAssociation": { "description": "État vide des associations." }
 }
