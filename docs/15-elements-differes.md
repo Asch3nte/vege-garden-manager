@@ -80,7 +80,24 @@ prédicats `sAssocieBienAvec` / `entreEnConflitAvec` sur tout le catalogue).
 
 ---
 
-## 5. Comment utiliser ce registre
+## 5. Écran Calendrier (`lib/presentation/screens/ecran_calendrier.dart`)
+
+Réalisé : **vue Agenda** (résumé + sélecteur semaine/mois + groupes par jour de
+tâches **cochables**). Données réelles : tâches sur fenêtre
+(`obtenirEntreDates`), cocher = `Tache.marquerFaite` persisté.
+
+| Élément | État | Ce qui manque | Où revenir |
+|---|---|---|---|
+| **Décocher une tâche** (réouvrir) | ⚪ | Le domaine n'a **pas** de transition « rouvrir » : `Tache` n'expose que `marquerFaite`, `reporter` (qui replanifie) et `annuler`. Pas de retour propre `terminee → aFaire`. | Ajouter une méthode domaine `rouvrir()` (+ test), puis activer le toggle inverse dans `_CarteTache`. |
+| **Vue « Mois »** (grille mensuelle) | ⚪ | Grille calendaire + sélection de jour + pastilles de tâches. Faisable sur les mêmes données, mais c'est une autre vue. | Nouvelle vue à partir du `calendrierProvider` (élargir la fenêtre au mois et grouper par jour — déjà disponible). |
+| **Vue « Saison »** (semis→récolte) | ⚪ | Bandes annuelles semis/plantation/récolte par culture : dépend des **périodes** des fiches (indexées hémisphère×climat, cf. §4) **et** des plantations en cours. | À concevoir avec le contexte localisation + les périodes du catalogue. |
+| **Zone / culture / variété sur la carte** | 🔵 type + titre réels | La maquette affiche la zone (pastille colorée) + culture + variété ; ici on montre `titre` (réel) + type. La tâche porte `cible`/`cibleId` mais pas la culture/variété. | Résoudre la zone via le parcelle repo (`cible == parcelle`) ; culture/variété = nécessite un lien tâche↔plantation (cf. §3). |
+| **Filtre / Ajout de tâche** (en-tête) | ⚪ | Bouton filtre + création de tâche. | Brancher quand le form de création de tâche existe ; filtre = état local de l'écran. |
+| **Icône Phosphor par geste** | 🔵 Material en substitut | cf. §1 (Phosphor en attente). `iconeTypeTache` mappe déjà chaque type → une icône Material. | Remplacer par les icônes Phosphor quand dispo (`libelles_enums.dart`). |
+
+---
+
+## 6. Comment utiliser ce registre
 
 - En reprenant un sujet, **chercher son entrée ici** : la colonne « Où revenir »
   pointe le fichier/fonction exact à modifier.

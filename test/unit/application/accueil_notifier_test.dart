@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/accueil_notifier.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';

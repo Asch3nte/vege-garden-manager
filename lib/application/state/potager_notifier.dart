@@ -8,8 +8,8 @@ import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
+import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
-import 'accueil_notifier.dart' show horlogeProvider;
 import 'potager_vue.dart';
 
 /// Locale used to resolve crop display names (French-first app).

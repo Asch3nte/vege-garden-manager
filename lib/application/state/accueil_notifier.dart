@@ -5,12 +5,9 @@ import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
+import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import 'accueil_vue.dart';
-
-/// Injectable clock for time-dependent reads. Tests override it to pin "today";
-/// production uses the real wall clock.
-final horlogeProvider = Provider<DateTime Function()>((ref) => DateTime.now);
 
 /// Assembles the **Accueil** dashboard view-model from the repositories.
 ///

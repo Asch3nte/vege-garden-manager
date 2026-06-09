@@ -213,5 +213,72 @@
   "ficheAEviter": "À éviter",
   "@ficheAEviter": { "description": "Sous-titre : plantes à ne pas associer." },
   "ficheAucuneAssociation": "Aucune association renseignée.",
-  "@ficheAucuneAssociation": { "description": "État vide des associations." }
+  "@ficheAucuneAssociation": { "description": "État vide des associations." },
+  "calendrierPorteeSemaine": "Semaine",
+  "@calendrierPorteeSemaine": { "description": "Portée de l'agenda : 7 prochains jours." },
+  "calendrierPorteeMois": "Mois",
+  "@calendrierPorteeMois": { "description": "Portée de l'agenda : reste du mois." },
+  "calendrierResume": "{count, plural, =0{Rien à faire} =1{1 tâche à faire} other{{count} tâches à faire}}",
+  "@calendrierResume": {
+    "description": "Résumé : nombre de tâches restantes sur la fenêtre.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "calendrierProgression": "{faites} / {total}",
+  "@calendrierProgression": {
+    "description": "Progression : tâches faites sur total.",
+    "placeholders": {
+      "faites": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "calendrierVide": "Rien de prévu — profitez du jardin.",
+  "@calendrierVide": { "description": "État vide de l'agenda." },
+  "calendrierErreurChargement": "Impossible de charger le calendrier.",
+  "@calendrierErreurChargement": { "description": "Erreur de chargement du calendrier." },
+  "jourAujourdhui": "Aujourd'hui",
+  "@jourAujourdhui": { "description": "Libellé du jour courant dans l'agenda." },
+  "jourDemain": "Demain",
+  "@jourDemain": { "description": "Libellé du lendemain dans l'agenda." },
+  "dateJourMois": "{jour} {mois}",
+  "@dateJourMois": {
+    "description": "Date courte : numéro de jour + mois en toutes lettres.",
+    "placeholders": {
+      "jour": { "type": "int" },
+      "mois": { "type": "String" }
+    }
+  },
+  "tacheArrosage": "Arroser",
+  "@tacheArrosage": { "description": "Type de tâche : arrosage." },
+  "tacheDesherbage": "Désherber",
+  "@tacheDesherbage": { "description": "Type de tâche : désherbage." },
+  "tachePaillage": "Pailler",
+  "@tachePaillage": { "description": "Type de tâche : paillage." },
+  "tacheTaille": "Tailler",
+  "@tacheTaille": { "description": "Type de tâche : taille." },
+  "tacheTuteurage": "Tuteurer",
+  "@tacheTuteurage": { "description": "Type de tâche : tuteurage." },
+  "tacheFertilisation": "Fertiliser",
+  "@tacheFertilisation": { "description": "Type de tâche : fertilisation." },
+  "tacheTraitementBio": "Traiter (bio)",
+  "@tacheTraitementBio": { "description": "Type de tâche : traitement bio." },
+  "tacheObservation": "Observer",
+  "@tacheObservation": { "description": "Type de tâche : observation." },
+  "tacheSemis": "Semer",
+  "@tacheSemis": { "description": "Type de tâche : semis." },
+  "tacheRepiquage": "Repiquer",
+  "@tacheRepiquage": { "description": "Type de tâche : repiquage." },
+  "tacheRecolte": "Récolter",
+  "@tacheRecolte": { "description": "Type de tâche : récolte." },
+  "tachePreparationSol": "Préparer le sol",
+  "@tachePreparationSol": { "description": "Type de tâche : préparation du sol." },
+  "tacheInstallationEquipement": "Installer un équipement",
+  "@tacheInstallationEquipement": { "description": "Type de tâche : installation d'équipement." },
+  "tacheEntretienEquipement": "Entretenir un équipement",
+  "@tacheEntretienEquipement": { "description": "Type de tâche : entretien d'équipement." },
+  "tacheNettoyage": "Nettoyer",
+  "@tacheNettoyage": { "description": "Type de tâche : nettoyage." },
+  "tacheAutre": "Autre",
+  "@tacheAutre": { "description": "Type de tâche : autre." }
 }
