@@ -1,6 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Weather (Open-Meteo) is the only network call; it is the single reason
+         INTERNET is requested. No analytics, no account, no other endpoint. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Local notifications (reminders). On Android 13+ the runtime prompt is
+         requested by flutter_local_notifications; opt-out keeps the app working. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- Location is OPT-IN (géolocalisation désactivée par défaut). Declared so the
+         feature can work if the user enables it; never used otherwise. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
-        android:label="pot_a_gerer"
+        android:label="Pot'à Gérer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

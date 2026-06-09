@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/langue.dart';
+import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart' as prefs_theme;
+import '../../domain/enums/type_climat.dart';
+import '../../domain/enums/type_emplacement.dart';
+import '../../domain/enums/type_parcelle.dart';
 import '../../domain/enums/type_tache.dart';
+import '../../domain/enums/zone_rusticite.dart';
 import '../../l10n/app_localizations.dart';
 
 /// French labels for the domain enums shown across the UI.
@@ -108,6 +113,55 @@ extension LibellesEnums on AppLocalizations {
         TypeTache.entretienEquipement => tacheEntretienEquipement,
         TypeTache.nettoyage => tacheNettoyage,
         TypeTache.autre => tacheAutre,
+      };
+
+  /// Label for a garden location type.
+  String emplacement(TypeEmplacement e) => switch (e) {
+        TypeEmplacement.jardin => emplacementJardin,
+        TypeEmplacement.balcon => emplacementBalcon,
+        TypeEmplacement.terrasse => emplacementTerrasse,
+        TypeEmplacement.toit => emplacementToit,
+        TypeEmplacement.cour => emplacementCour,
+        TypeEmplacement.interieur => emplacementInterieur,
+        TypeEmplacement.autre => emplacementAutre,
+      };
+
+  /// Label for a climate type.
+  String climat(TypeClimat c) => switch (c) {
+        TypeClimat.tropical => climatTropical,
+        TypeClimat.subtropical => climatSubtropical,
+        TypeClimat.aride => climatAride,
+        TypeClimat.semiAride => climatSemiAride,
+        TypeClimat.mediterraneen => climatMediterraneen,
+        TypeClimat.oceanique => climatOceanique,
+        TypeClimat.continental => climatContinental,
+        TypeClimat.montagnard => climatMontagnard,
+        TypeClimat.polaire => climatPolaire,
+      };
+
+  /// Label for a hardiness zone (USDA), e.g. "Zone 8".
+  String rusticite(ZoneRusticite z) =>
+      rusticiteZone(int.parse(z.name.replaceAll('zone', '')));
+
+  /// Label for a parcelle (zone) type.
+  String typeParcelle(TypeParcelle t) => switch (t) {
+        TypeParcelle.pleineTerre => typeParcellePleineTerre,
+        TypeParcelle.bacSureleve => typeParcelleBacSureleve,
+        TypeParcelle.jardiniere => typeParcelleJardiniere,
+        TypeParcelle.pot => typeParcellePot,
+        TypeParcelle.serre => typeParcelleServe,
+        TypeParcelle.butte => typeParcelleButte,
+        TypeParcelle.autre => typeParcelleAutre,
+      };
+
+  /// Label for a planting method.
+  String methode(MethodeMiseEnPlace m) => switch (m) {
+        MethodeMiseEnPlace.semisDirect => methodeSemisDirect,
+        MethodeMiseEnPlace.semisInterieur => methodeSemisInterieur,
+        MethodeMiseEnPlace.repiquage => methodeRepiquage,
+        MethodeMiseEnPlace.plantAchete => methodePlantAchete,
+        MethodeMiseEnPlace.bouture => methodeBouture,
+        MethodeMiseEnPlace.division => methodeDivision,
       };
 }
 

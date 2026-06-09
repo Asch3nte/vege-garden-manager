@@ -161,11 +161,12 @@ void main() {
     expect(find.text('Tâche du jour'), findsNothing);
   });
 
-  testWidgets('shows an empty state when there is no garden', (tester) async {
+  testWidgets('offers to create a garden when there is none', (tester) async {
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
 
     await monter(tester);
 
-    expect(find.text('Aucun potager pour le moment.'), findsOneWidget);
+    expect(find.text('Crée ton premier potager pour commencer.'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Créer un potager'), findsOneWidget);
   });
 }

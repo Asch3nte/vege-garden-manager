@@ -61,18 +61,23 @@ class ZonePotager {
 /// Built by [PotagerNotifier]. When [nomPotager] is `null` there is no active
 /// garden yet (the screen shows an onboarding-style empty state).
 class PotagerVue {
+  final String? _potagerId;
   final String? _nomPotager;
   final List<ZonePotager> _zones;
 
-  PotagerVue._(this._nomPotager, List<ZonePotager> zones)
+  PotagerVue._(this._potagerId, this._nomPotager, List<ZonePotager> zones)
       : _zones = List.unmodifiable(zones);
 
   /// Assembles the Potager view-model. Zones are copied as unmodifiable.
   factory PotagerVue({
+    required String? potagerId,
     required String? nomPotager,
     required List<ZonePotager> zones,
   }) =>
-      PotagerVue._(nomPotager, zones);
+      PotagerVue._(potagerId, nomPotager, zones);
+
+  /// Id of the active garden, or `null` when none exists yet.
+  String? get potagerId => _potagerId;
 
   /// Name of the active garden, or `null` when none exists yet.
   String? get nomPotager => _nomPotager;

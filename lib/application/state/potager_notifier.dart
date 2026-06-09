@@ -44,7 +44,7 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
   ) async {
     final potager = await potagers.obtenirPotagerActif();
     if (potager == null) {
-      return PotagerVue(nomPotager: null, zones: const []);
+      return PotagerVue(potagerId: null, nomPotager: null, zones: const []);
     }
 
     final parcellesPotager = await parcelles.obtenirParPotager(potager.id);
@@ -64,7 +64,7 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
       );
     }
 
-    return PotagerVue(nomPotager: potager.nom, zones: zones);
+    return PotagerVue(potagerId: potager.id, nomPotager: potager.nom, zones: zones);
   }
 
   /// Localized names of the active crops of [parcelle], catalogue-resolved.

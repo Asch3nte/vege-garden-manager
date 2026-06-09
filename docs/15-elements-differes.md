@@ -121,7 +121,35 @@ crédits). Le **thème de l'app suit la préférence** (`main.dart` → `ThemeMo
 
 ---
 
-## 7. Comment utiliser ce registre
+## 7. Milestone « Alpha installable » (Android) — état & reste à faire
+
+> Objectif du jalon : un APK installable sur téléphone Android, **utilisable**
+> (création de potager / zone / plantation), pour un premier retour terrain.
+
+### Fait pour l'alpha
+- **Config Android** : permissions `INTERNET` (Open-Meteo), `POST_NOTIFICATIONS`,
+  localisation (opt-in) ; label « Pot'à Gérer » ; desugaring activé
+  (`flutter_local_notifications`) ; release signé avec la clé **debug**.
+- **Formulaires de création** (`lib/presentation/forms/`) : potager, zone,
+  plantation — branchés sur les use cases existants, persistés, testés.
+- **Points d'entrée** : écran Potager → bouton « Créer un potager » (état vide),
+  FAB « Ajouter une zone », tap sur une zone → « Ajouter une plantation ».
+
+### À faire après l'alpha (priorité descendante)
+| Élément | Pourquoi différé | Où / comment |
+|---|---|---|
+| **Onboarding localisation** | L'alpha crée un potager avec climat/rusticité **saisis à la main** (défauts océanique/zone 8). La dérivation auto (GPS/carte → hémisphère/climat/rusticité) n'est pas faite. | Cf. mémoire « onboarding-location-derivation » ; brancher `geolocator` + dérivation, pré-remplir le formulaire potager. |
+| **Signing release réel** | L'APK alpha est signé avec la clé **debug** (suffisant pour sideload, **pas** pour le Play Store ni des mises à jour propres). | Générer un keystore, configurer `signingConfigs.release` dans `android/app/build.gradle.kts` (+ `key.properties` hors VCS). |
+| **Icône & splash de l'app** | Icône Flutter par défaut. | `flutter_launcher_icons` / `flutter_native_splash` (deps à valider) ou ressources manuelles. |
+| **Édition / suppression** (potager, zone, plantation, tâche) | L'alpha ne fait que **créer** et lire. Les notifiers ont déjà `modifier`/`supprimer`, mais pas d'UI (swipe, menus). | Brancher sur les actions existantes ; swipe selon `sens_swipe` (cf. §6 réglages). |
+| **Récolte / observation** depuis l'UI | Use cases présents (`CreerRecolte`, `CreerObservation`), pas de formulaire. | Mêmes patterns que les 3 formulaires de l'alpha. |
+| **Météo / alertes réelles** | cf. §2 (Accueil) — placeholders. | Brancher `meteoServiceProvider` une fois la localisation disponible. |
+| **iOS / desktop packaging** | Alpha = Android d'abord. | `flutter build ipa` / Linux/Windows/macOS plus tard. |
+| **CI/CD (build APK auto)** | Pas de pipeline. | GitHub Actions (cf. CLAUDE.md « à venir »). |
+
+---
+
+## 8. Comment utiliser ce registre
 
 - En reprenant un sujet, **chercher son entrée ici** : la colonne « Où revenir »
   pointe le fichier/fonction exact à modifier.
