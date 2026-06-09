@@ -1,0 +1,69 @@
+# 15 — Éléments différés (registre)
+
+> **But.** Recenser tout ce qui, pendant le développement de la couche
+> Presentation, **n'a pas pu être branché à de vraies données / fonctions** et a
+> été rendu comme placeholder explicite ou volontairement laissé de côté. Chaque
+> entrée indique **ce qui manque** pour le réaliser et **où** revenir le brancher.
+>
+> Règle suivie : on n'affiche jamais de fausses valeurs. Tant qu'une donnée n'a
+> pas sa source/son calcul, l'UI montre un placeholder « à venir » (ou un état
+> verrouillé), jamais un chiffre inventé.
+>
+> Convention : ✅ fait · 🔵 placeholder en place (à brancher) · ⚪ non commencé.
+> Mettre à jour ce fichier **en même temps** que le code qui résout une entrée.
+
+---
+
+## 1. Fondations (thème, icônes, navigation)
+
+| Élément | État | Ce qui manque pour le faire | Où revenir |
+|---|---|---|---|
+| **Phosphor Icons** | 🔵 Material en substitut | `phosphor_flutter` 2.1.0 ne compile pas sur Flutter 3.44.1 (étend `IconData`, devenu `final`). Pas de correctif amont. | Wrapper local (`.ttf` Phosphor MIT + `IconData const` maison) **ou** version compatible publiée. Voir [08 §7](08-design-system.md). Icônes à remplacer dans `lib/app/router.dart` (`_destinations`) et tous les écrans. |
+| **Dark mode** | 🔵 valeurs CAHIER, non revalidées | Les maquettes Claude Design ne couvrent que le light. | Maquetter le dark, puis revoir [08 §3](08-design-system.md) et `CouleursApp.*Sombre` dans `lib/app/theme/couleurs_app.dart`. |
+| **Polices embarquées** | ✅ | — | Manrope/Inter variables embarquées (`assets/fonts/`). |
+| **Navigation inter-écrans** | ⚪ | Les écrans existent mais ne se naviguent pas encore entre eux (pas de routes de détail). | Ajouter les sous-routes go_router (détail zone, détail tâche, fiche plante…) dans `lib/app/router.dart` au fil des écrans. |
+
+---
+
+## 2. Écran Accueil (`lib/presentation/screens/ecran_accueil.dart`)
+
+Données réelles déjà branchées : nom du potager actif, zones, **tâches du jour**,
+**niveau d'expérience** (→ divulgation progressive). Le reste :
+
+| Élément | État | Ce qui manque | Où revenir |
+|---|---|---|---|
+| **Carte météo + verdict d'arrosage** | 🔵 placeholder `_CarteMeteo` | Un *verdict* (« bon pour arroser », pluie à venir) calculé à partir de `AbstractMeteoService` + `calculer_besoin_arrosage`. Le service météo existe mais aucune logique de verdict UI. | Créer un petit calculateur de verdict (application) consommant `meteoServiceProvider` (localisation du potager actif) ; brancher dans `_CarteMeteo`. |
+| **Tuile « Alerte »** | 🔵 placeholder `_TuileStat` | Agrégat du nombre d'alertes météo actives. `detecter_alertes_meteo` / `evaluateur_alertes_meteo` existent mais pas exposés en provider d'état pour l'accueil. | Exposer un provider « alertes actives » et compter dans `_GrilleStats`. |
+| **Tuile « Récoltes de la saison »** | 🔵 placeholder (visible niveau Expert) | Un agrégat « nb de récoltes cette saison ». Pas de requête agrégée sur `AbstractRecolteRepository`. | Ajouter une lecture agrégée (récoltes de la saison en cours) et la brancher dans `AccueilNotifier` + `_GrilleStats`. |
+| **Niveaux d'expérience 4 → 3** | ✅ (décision) | La maquette a 4 paliers (Découverte/Apprenti/Jardinier/Expert), le domaine `NiveauExperience` en a 3 (debutant/intermediaire/expert). | Décision actée : domaine fait foi, stats au niveau **Expert**. À rouvrir seulement si on enrichit l'enum. |
+| **Actions d'en-tête** (cloche notifs, menu ⋮) | ⚪ | Écran notifications + menu contextuel. | À l'implémentation de ces écrans. |
+| **Navigation depuis les sections** (« voir les tâches », tuile zone…) | ⚪ | Routes de détail (cf. §1). | Brancher les `onTap` vers Calendrier / détail zone quand les routes existent. |
+
+---
+
+## 3. Écran Potager (`lib/presentation/screens/ecran_potager.dart`)
+
+Réalisé : **variante C** de la maquette (liste des zones), données réelles
+(potager actif, zones, cultures via catalogue, drapeau « tâche du jour »).
+
+| Élément | État | Ce qui manque | Où revenir |
+|---|---|---|---|
+| **Plan en grille** (variante A) | ⚪ | Vue « planches » carrées + légende. Purement présentationnel, faisable, mais choix produit (quelle variante par défaut ?) à trancher. | Nouvelle vue à partir des mêmes données `PotagerVue`. |
+| **Plan spatial** (variante B) | ⚪ | Positions/dimensions spatiales des zones. **Aucun champ de layout** (x/y/largeur/hauteur) sur `Parcelle`. | Étendre le modèle (domaine + drift) avec un layout de zone, puis la vue. Lourd — à cadrer. |
+| **Détail d'une zone** | ⚪ | Écran détail (dimensions, eau, expo, cultures détaillées). Données présentes sur `Parcelle`, mais pas de route ni d'écran. | Créer `EcranZoneDetail` + route ; brancher le `onTap` de `_LigneZone`. |
+| **Stade de croissance par culture** (Semis→Récolte) | ⚪ | Un **modèle de croissance** : aucune notion de stade dérivable aujourd'hui (il faudrait `dateMiseEnPlace` + durées de la fiche + courbe de stades). | Concevoir un calculateur de stade (application) à partir de `Plantation.dateMiseEnPlace` et des durées `FichePlante`. |
+| **Tâche « prochaine » par culture** | ⚪ | Les tâches sont liées à une **parcelle** (`CibleTache.parcelle`), pas à une plantation/culture. Pas de lien tâche↔culture. | Décider du rattachement (cible `plantation` ?) puis requête par culture. |
+| **Métadonnées de zone** (eau « 1×/jour », dimensions « 1,2 × 1,2 m ») | ⚪ | « Besoin en eau » et « dimensions » littérales de la maquette n'existent pas comme champs (`Parcelle` a une `surface` en m², pas L×l ; pas de fréquence d'arrosage de zone). | Soit dériver (arrosage via moteur), soit étendre le modèle si on veut les dimensions littérales. |
+| **Couleur de zone** | 🔵 dérivée par index | La maquette assigne une couleur par zone ; ici on l'attribue par position (`_couleursZones`), non persistée. | Si on veut une couleur choisie/stable par zone : champ sur `Parcelle` (domaine + drift). |
+| **FAB de création** (docs/09 §4) | ⚪ | Actions de création (potager/zone/plantation). | Brancher quand les écrans/forms de création existent. |
+
+---
+
+## 4. Comment utiliser ce registre
+
+- En reprenant un sujet, **chercher son entrée ici** : la colonne « Où revenir »
+  pointe le fichier/fonction exact à modifier.
+- Quand une entrée passe 🔵/⚪ → ✅, **mettre à jour la ligne** (ou la retirer si
+  totalement résolue) dans le même commit.
+- Les nouveaux placeholders introduits par les prochains écrans (Catalogue,
+  Calendrier, Plus) **s'ajoutent ici** au fur et à mesure.
