@@ -82,5 +82,51 @@
   "actionReessayer": "Réessayer",
   "@actionReessayer": {
     "description": "Action générique pour relancer une opération qui a échoué."
+  },
+  "potagerZones": "Zones",
+  "@potagerZones": {
+    "description": "Titre de la liste des zones du potager."
+  },
+  "potagerNbCultures": "{count, plural, =0{Aucune culture} =1{1 culture} other{{count} cultures}}",
+  "@potagerNbCultures": {
+    "description": "Nombre de cultures actives d'une zone.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "potagerZoneAJour": "À jour",
+  "@potagerZoneAJour": {
+    "description": "Étiquette d'une zone sans tâche du jour en attente."
+  },
+  "potagerTacheDuJour": "Tâche du jour",
+  "@potagerTacheDuJour": {
+    "description": "Étiquette d'une zone ayant une tâche à faire aujourd'hui."
+  },
+  "potagerSurfaceM2": "{surface} m²",
+  "@potagerSurfaceM2": {
+    "description": "Surface d'une zone, en mètres carrés.",
+    "placeholders": {
+      "surface": { "type": "String" }
+    }
+  },
+  "expositionPleinSoleil": "Plein soleil",
+  "@expositionPleinSoleil": {
+    "description": "Exposition d'une zone : plein soleil."
+  },
+  "expositionMiOmbre": "Mi-ombre",
+  "@expositionMiOmbre": {
+    "description": "Exposition d'une zone : mi-ombre."
+  },
+  "expositionOmbre": "Ombre",
+  "@expositionOmbre": {
+    "description": "Exposition d'une zone : ombre."
+  },
+  "potagerVide": "Aucun potager pour le moment.",
+  "@potagerVide": {
+    "description": "État vide : aucun potager actif n'existe encore."
+  },
+  "potagerErreurChargement": "Impossible de charger le potager.",
+  "@potagerErreurChargement": {
+    "description": "Message d'erreur de chargement de l'écran potager."
   }
 }
