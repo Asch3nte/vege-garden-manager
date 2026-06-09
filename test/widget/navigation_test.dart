@@ -5,19 +5,59 @@
 // Accueil tab, that the layout is responsive (bottom bar vs rail around the
 // 600px breakpoint), and that selecting a destination switches the screen.
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
+import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/main.dart';
 
+class _MockPotagers extends Mock implements AbstractPotagerRepository {}
+
+class _MockParcelles extends Mock implements AbstractParcelleRepository {}
+
+class _MockTaches extends Mock implements AbstractTacheRepository {}
+
+class _MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
 void main() {
-  // Pumps the app at a given logical size so we control which responsive branch
-  // (bottom NavigationBar < 600px, NavigationRail ≥ 600px) is exercised.
+  // The Accueil tab is a real ConsumerWidget reading the repositories, so the
+  // app needs a ProviderScope with empty-returning repos. In production the
+  // scope is supplied by Bootstrap; here we override it directly. Navigation
+  // chrome (the focus of these tests) is independent of the data.
   Future<void> pomperA(WidgetTester tester, Size taille) async {
     tester.view.physicalSize = taille;
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    await tester.pumpWidget(PotAGererApp());
+
+    final potagers = _MockPotagers();
+    final parcelles = _MockParcelles();
+    final taches = _MockTaches();
+    final preferences = _MockPreferences();
+    when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
+    when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(potagers),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
+          tacheRepositoryProvider.overrideWithValue(taches),
+          preferencesRepositoryProvider.overrideWithValue(preferences),
+        ],
+        child: PotAGererApp(),
+      ),
+    );
     await tester.pumpAndSettle();
   }
 

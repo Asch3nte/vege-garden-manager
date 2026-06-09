@@ -1,21 +1,506 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/theme/couleurs_app.dart';
+import '../../app/theme/dimensions_app.dart';
+import '../../app/theme/theme_app.dart';
+import '../../application/state/accueil_notifier.dart';
+import '../../application/state/accueil_vue.dart';
+import '../../domain/entities/tache.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
-import 'ecran_en_construction.dart';
 
-/// Tab 1 — **Accueil** (dashboard): weather, today's tasks, alerts, garden
-/// overview. Read-only, no creation actions (docs/09 §3).
+/// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
+/// level, weather & season stats. Read-only, no creation actions (docs/09 §3).
 ///
-/// Placeholder for now; to be implemented from the `Accueil.html` mock-up and
-/// wired to the existing application-layer providers.
-class EcranAccueil extends StatelessWidget {
+/// Reimplemented from the `accueil-final.jsx` mock-up (direction B « Tableau
+/// modulaire ») as Flutter widgets. Real data (active garden, zones, today's
+/// tasks, experience level) comes from [accueilProvider]; weather, alerts and
+/// season harvests are explicit placeholders until their reads/verdicts exist.
+class EcranAccueil extends ConsumerWidget {
   const EcranAccueil({super.key});
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final vue = ref.watch(accueilProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navAccueil)),
+      body: vue.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(accueilProvider)),
+        data: (data) => RefreshIndicator(
+          onRefresh: () async => ref.invalidate(accueilProvider),
+          child: _Contenu(vue: data),
+        ),
+      ),
+    );
+  }
+}
+
+/// Scrollable dashboard body for a loaded [AccueilVue].
+class _Contenu extends StatelessWidget {
+  final AccueilVue vue;
+
+  const _Contenu({required this.vue});
+
+  @override
   Widget build(BuildContext context) {
-    return EcranEnConstruction(
-      titre: AppLocalizations.of(context)!.navAccueil,
-      icone: Icons.home_outlined,
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        EspacementsApp.s4,
+        EspacementsApp.s4,
+        EspacementsApp.s4,
+        EspacementsApp.s6,
+      ),
+      children: [
+        _LigneNiveau(niveau: vue.niveau, nombreZones: vue.nombreZones),
+        const SizedBox(height: EspacementsApp.s4),
+        const _CarteMeteo(),
+        const SizedBox(height: EspacementsApp.s5),
+        _SectionTaches(taches: vue.tachesDuJour),
+        const SizedBox(height: EspacementsApp.s5),
+        _GrilleStats(statistiquesVisibles: vue.statistiquesVisibles),
+        const SizedBox(height: EspacementsApp.s5),
+        _SectionPotager(zones: vue.zones),
+      ],
+    );
+  }
+}
+
+/// Experience-level pill + progress + zone count.
+class _LigneNiveau extends StatelessWidget {
+  final NiveauExperience niveau;
+  final int nombreZones;
+
+  const _LigneNiveau({required this.niveau, required this.nombreZones});
+
+  /// Progress fraction shown in the pill, by level.
+  double get _progression => switch (niveau) {
+        NiveauExperience.debutant => 0.33,
+        NiveauExperience.intermediaire => 0.66,
+        NiveauExperience.expert => 1.0,
+      };
+
+  String _libelle(AppLocalizations l10n) => switch (niveau) {
+        NiveauExperience.debutant => l10n.niveauDebutant,
+        NiveauExperience.intermediaire => l10n.niveauIntermediaire,
+        NiveauExperience.expert => l10n.niveauExpert,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: EspacementsApp.s3,
+            vertical: EspacementsApp.s2,
+          ),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainer,
+            borderRadius: const BorderRadius.all(RayonsApp.full),
+            border: Border.all(color: theme.colorScheme.outline),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.verified, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
+              const SizedBox(width: EspacementsApp.s1),
+              Text(_libelle(l10n), style: theme.textTheme.labelSmall),
+              const SizedBox(width: EspacementsApp.s2),
+              SizedBox(
+                width: 42,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(RayonsApp.full),
+                  child: LinearProgressIndicator(
+                    value: _progression,
+                    minHeight: 5,
+                    backgroundColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.2),
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Spacer(),
+        Icon(Icons.grid_view, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+        const SizedBox(width: EspacementsApp.s1),
+        Text(
+          l10n.accueilNbZones(nombreZones),
+          style: theme.textTheme.labelSmall
+              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+}
+
+/// Weather card — placeholder until the meteo verdict is wired.
+class _CarteMeteo extends StatelessWidget {
+  const _CarteMeteo();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final accents = theme.extension<AccentsCarnet>()!;
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      padding: const EdgeInsets.all(EspacementsApp.s4),
+      decoration: BoxDecoration(
+        color: Color.alphaBlend(
+          accents.info.withValues(alpha: 0.14),
+          theme.colorScheme.surfaceContainer,
+        ),
+        borderRadius: const BorderRadius.all(RayonsApp.lg),
+        border: Border.all(color: accents.info.withValues(alpha: 0.30)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.cloud_outlined, size: TaillesIconesApp.xl, color: accents.info),
+          const SizedBox(width: EspacementsApp.s3),
+          Expanded(
+            child: Text(
+              l10n.accueilMeteoAVenir,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// "Tasks of the day" labelled section with a card list.
+class _SectionTaches extends StatelessWidget {
+  final List<Tache> taches;
+
+  const _SectionTaches({required this.taches});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final aFaire = taches.where((t) => !t.estFaite).length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _LabelSection(texte: l10n.accueilTachesDuJour, compteur: aFaire),
+        const SizedBox(height: EspacementsApp.s2),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s3),
+            child: taches.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s4),
+                    child: Text(
+                      l10n.accueilAucuneTache,
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                  )
+                : Column(
+                    children: [
+                      for (var i = 0; i < taches.length; i++) ...[
+                        if (i > 0) const Divider(height: 1),
+                        _LigneTache(tache: taches[i]),
+                      ],
+                    ],
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// One task row: check indicator + title (+ done styling).
+class _LigneTache extends StatelessWidget {
+  final Tache tache;
+
+  const _LigneTache({required this.tache});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final fait = tache.estFaite;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s3),
+      child: Row(
+        children: [
+          Icon(
+            fait ? Icons.check_circle : Icons.radio_button_unchecked,
+            size: TaillesIconesApp.lg,
+            color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+          ),
+          const SizedBox(width: EspacementsApp.s3),
+          Expanded(
+            child: Text(
+              tache.titre,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: fait ? theme.colorScheme.onSurfaceVariant : null,
+                decoration: fait ? TextDecoration.lineThrough : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Two-tile stats grid: alert (placeholder) + season harvests / locked tile.
+class _GrilleStats extends StatelessWidget {
+  final bool statistiquesVisibles;
+
+  const _GrilleStats({required this.statistiquesVisibles});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final accents = theme.extension<AccentsCarnet>()!;
+    final l10n = AppLocalizations.of(context)!;
+
+    // IntrinsicHeight so both tiles match the taller one, without forcing an
+    // unbounded height inside the scroll view (a stretched Row would).
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _TuileStat(
+              icone: Icons.warning_amber_rounded,
+              couleur: accents.chaud,
+              titre: l10n.accueilAlertesAVenir,
+            ),
+          ),
+          const SizedBox(width: EspacementsApp.s3),
+          Expanded(
+            child: statistiquesVisibles
+                ? _TuileStat(
+                    icone: Icons.shopping_basket_outlined,
+                    couleur: CouleursApp.decoAubergine,
+                    titre: l10n.accueilRecoltesAVenir,
+                  )
+                : _TuileVerrouillee(texte: l10n.accueilStatsVerrouillees),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A stat tile (icon + label).
+class _TuileStat extends StatelessWidget {
+  final IconData icone;
+  final Color couleur;
+  final String titre;
+
+  const _TuileStat({required this.icone, required this.couleur, required this.titre});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(EspacementsApp.s3),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer,
+        borderRadius: const BorderRadius.all(RayonsApp.lg),
+        border: Border.all(color: theme.colorScheme.outline),
+      ),
+      child: Row(
+        children: [
+          Icon(icone, size: TaillesIconesApp.md, color: couleur),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(
+              titre,
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Locked stat tile (progressive disclosure below expert level).
+class _TuileVerrouillee extends StatelessWidget {
+  final String texte;
+
+  const _TuileVerrouillee({required this.texte});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(EspacementsApp.s3),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest,
+        borderRadius: const BorderRadius.all(RayonsApp.lg),
+        border: Border.all(
+          color: CouleursApp.decoAubergine.withValues(alpha: 0.4),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.lock_outline, size: TaillesIconesApp.md, color: CouleursApp.decoAubergine),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(
+              texte,
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// "Garden overview" labelled section with one tile per zone.
+class _SectionPotager extends StatelessWidget {
+  final List<ZoneApercu> zones;
+
+  const _SectionPotager({required this.zones});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _LabelSection(texte: l10n.accueilApercuPotager),
+        const SizedBox(height: EspacementsApp.s2),
+        if (zones.isEmpty)
+          Text(
+            l10n.accueilAucuneZone,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          )
+        else
+          Row(
+            children: [
+              for (var i = 0; i < zones.length; i++) ...[
+                if (i > 0) const SizedBox(width: EspacementsApp.s2),
+                Expanded(child: _TuileZone(zone: zones[i])),
+              ],
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+/// One garden-zone tile (coloured header band + name).
+class _TuileZone extends StatelessWidget {
+  final ZoneApercu zone;
+
+  const _TuileZone({required this.zone});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [CouleursApp.decoVertMoyen, CouleursApp.accentPrimaireClair],
+            ),
+            borderRadius: const BorderRadius.all(RayonsApp.md),
+          ),
+        ),
+        const SizedBox(height: EspacementsApp.s1),
+        Text(
+          zone.nom,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.labelSmall
+              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+}
+
+/// Section label with an optional count badge.
+class _LabelSection extends StatelessWidget {
+  final String texte;
+  final int? compteur;
+
+  const _LabelSection({required this.texte, this.compteur});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Text(texte, style: theme.textTheme.titleLarge),
+        if (compteur != null) ...[
+          const SizedBox(width: EspacementsApp.s2),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s2, vertical: 2),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.14),
+              borderRadius: const BorderRadius.all(RayonsApp.full),
+            ),
+            child: Text(
+              '$compteur',
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: theme.colorScheme.primary),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Error state with a retry action.
+class _EtatErreur extends StatelessWidget {
+  final VoidCallback onReessayer;
+
+  const _EtatErreur({required this.onReessayer});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(EspacementsApp.s6),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
+            const SizedBox(height: EspacementsApp.s4),
+            Text(
+              l10n.accueilErreurChargement,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: EspacementsApp.s4),
+            FilledButton(onPressed: onReessayer, child: Text(l10n.actionReessayer)),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -23,5 +23,64 @@
   "navPlus": "Plus",
   "@navPlus": {
     "description": "Onglet 5 de la navigation principale : paramètres, à propos, divers."
+  },
+  "niveauDebutant": "Débutant",
+  "@niveauDebutant": {
+    "description": "Niveau d'expérience : débutant."
+  },
+  "niveauIntermediaire": "Intermédiaire",
+  "@niveauIntermediaire": {
+    "description": "Niveau d'expérience : intermédiaire."
+  },
+  "niveauExpert": "Expert",
+  "@niveauExpert": {
+    "description": "Niveau d'expérience : expert."
+  },
+  "accueilNbZones": "{count, plural, =0{Aucune zone} =1{1 zone} other{{count} zones}}",
+  "@accueilNbZones": {
+    "description": "Nombre de zones du potager actif, affiché sur l'accueil.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "accueilTachesDuJour": "Tâches du jour",
+  "@accueilTachesDuJour": {
+    "description": "Titre de la section des tâches du jour sur l'accueil."
+  },
+  "accueilAucuneTache": "Aucune tâche aujourd'hui.",
+  "@accueilAucuneTache": {
+    "description": "État vide de la liste des tâches du jour."
+  },
+  "accueilApercuPotager": "Aperçu du potager",
+  "@accueilApercuPotager": {
+    "description": "Titre de la section aperçu des zones du potager."
+  },
+  "accueilAucuneZone": "Aucune zone pour le moment.",
+  "@accueilAucuneZone": {
+    "description": "État vide de l'aperçu du potager (pas encore de zone)."
+  },
+  "accueilMeteoAVenir": "Météo et conseil d'arrosage à venir.",
+  "@accueilMeteoAVenir": {
+    "description": "Placeholder de la carte météo, pas encore branchée."
+  },
+  "accueilAlertesAVenir": "Alertes à venir",
+  "@accueilAlertesAVenir": {
+    "description": "Placeholder de la tuile d'alertes, pas encore branchée."
+  },
+  "accueilRecoltesAVenir": "Récoltes de la saison à venir",
+  "@accueilRecoltesAVenir": {
+    "description": "Placeholder de la tuile des récoltes de saison, pas encore branchée."
+  },
+  "accueilStatsVerrouillees": "Statistiques au niveau Expert",
+  "@accueilStatsVerrouillees": {
+    "description": "Tuile verrouillée : les stats de saison s'ouvrent au niveau Expert."
+  },
+  "accueilErreurChargement": "Impossible de charger le tableau de bord.",
+  "@accueilErreurChargement": {
+    "description": "Message d'erreur de chargement de l'accueil."
+  },
+  "actionReessayer": "Réessayer",
+  "@actionReessayer": {
+    "description": "Action générique pour relancer une opération qui a échoué."
   }
 }

@@ -49,6 +49,10 @@ void _enregistrerLicencesPolices() {
 /// Wires the « Carnet vivant » themes, the French localization delegates and the
 /// go_router navigation shell. The router is built once and held for the widget's
 /// lifetime (a [GoRouter] must not be rebuilt on every frame).
+///
+/// **Must be mounted under a `ProviderScope`** — screens are Riverpod consumers.
+/// In production [main] supplies it via `Bootstrap.scopeBuilder`; tests wrap it
+/// themselves (with overridden repositories).
 class PotAGererApp extends StatelessWidget {
   PotAGererApp({super.key});
 
