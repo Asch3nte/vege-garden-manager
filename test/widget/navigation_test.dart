@@ -102,4 +102,25 @@ void main() {
     // …and the Accueil app bar is no longer the visible one.
     expect(find.widgetWithText(AppBar, 'Accueil'), findsNothing);
   });
+
+  testWidgets('re-tapping the active Plus tab returns to the settings root',
+      (tester) async {
+    await pomperA(tester, const Size(390, 800));
+
+    // Open the Plus tab, then drill into the general sub-panel.
+    await tester.tap(find.text('Plus'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Préférences générales'));
+    await tester.pumpAndSettle();
+
+    // We are in the sub-panel: the root category list is no longer visible.
+    expect(find.widgetWithText(AppBar, 'Préférences générales'), findsOneWidget);
+    expect(find.text('Confidentialité & opt-outs'), findsNothing);
+
+    // Re-tap the already-active Plus tab → back to the settings root.
+    await tester.tap(find.text('Plus'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Confidentialité & opt-outs'), findsOneWidget);
+  });
 }

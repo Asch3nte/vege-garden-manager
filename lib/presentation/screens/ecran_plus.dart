@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/preferences_notifier.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
-import 'parametres/panneau_a_propos.dart';
-import 'parametres/panneau_confidentialite.dart';
-import 'parametres/panneau_general.dart';
-import 'parametres/panneau_notifications.dart';
 import 'parametres/widgets_parametres.dart';
 
 /// Tab 5 — **Plus** (`⋯`): settings root + secondary entries (docs/09 §7).
@@ -47,10 +45,8 @@ class _Racine extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    void ouvrir(Widget panneau) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => panneau));
-    }
-
+    // Sub-panels are go_router sub-routes of /plus, so re-tapping the Plus tab
+    // pops back to this root (docs/15 §6 — was an imperative push before).
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s4,
@@ -65,25 +61,25 @@ class _Racine extends StatelessWidget {
           icone: Icons.tune,
           titre: l10n.categGenerale,
           sousTitre: l10n.categGeneraleSub,
-          onTap: () => ouvrir(const PanneauGeneral()),
+          onTap: () => context.push(RoutesApp.plusGeneral),
         ),
         LigneCategorie(
           icone: Icons.privacy_tip_outlined,
           titre: l10n.categConfidentialite,
           sousTitre: l10n.categConfidentialiteSub,
-          onTap: () => ouvrir(const PanneauConfidentialite()),
+          onTap: () => context.push(RoutesApp.plusConfidentialite),
         ),
         LigneCategorie(
           icone: Icons.notifications_outlined,
           titre: l10n.categNotifications,
           sousTitre: l10n.categNotificationsSub,
-          onTap: () => ouvrir(const PanneauNotifications()),
+          onTap: () => context.push(RoutesApp.plusNotifications),
         ),
         LigneCategorie(
           icone: Icons.info_outline,
           titre: l10n.categApropos,
           sousTitre: l10n.categAproposSub,
-          onTap: () => ouvrir(const PanneauAPropos()),
+          onTap: () => context.push(RoutesApp.plusAPropos),
         ),
         const SizedBox(height: EspacementsApp.s5),
         _PiedLocal(),

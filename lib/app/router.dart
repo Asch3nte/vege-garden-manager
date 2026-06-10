@@ -7,6 +7,11 @@ import '../presentation/screens/ecran_calendrier.dart';
 import '../presentation/screens/ecran_catalogue.dart';
 import '../presentation/screens/ecran_plus.dart';
 import '../presentation/screens/ecran_potager.dart';
+import '../presentation/screens/ecran_zone_detail.dart';
+import '../presentation/screens/parametres/panneau_a_propos.dart';
+import '../presentation/screens/parametres/panneau_confidentialite.dart';
+import '../presentation/screens/parametres/panneau_general.dart';
+import '../presentation/screens/parametres/panneau_notifications.dart';
 import '../presentation/widgets/echafaudage_navigation.dart';
 
 /// Route paths of the five primary navigation branches.
@@ -20,6 +25,30 @@ abstract final class RoutesApp {
   static const String catalogue = '/catalogue';
   static const String calendrier = '/calendrier';
   static const String plus = '/plus';
+
+  /// Path segment of the zone-detail sub-route (relative to [potager] or to
+  /// [accueil] — the detail is reachable from both branches, so "back" returns
+  /// to the originating tab).
+  static const String zoneDetailSegment = 'zone/:id';
+
+  /// Absolute location of the zone detail, under the **Potager** branch.
+  static String zoneDetail(String id) => '$potager/zone/$id';
+
+  /// Absolute location of the zone detail, under the **Accueil** branch (used by
+  /// the dashboard tiles so the phone back button returns to the dashboard).
+  static String accueilZoneDetail(String id) => '$accueil/zone/$id';
+
+  // Settings sub-panels, as go_router sub-routes of [plus] (so re-tapping the
+  // Plus tab pops back to the settings root — imperative pushes would not).
+  static const String plusGeneralSegment = 'general';
+  static const String plusConfidentialiteSegment = 'confidentialite';
+  static const String plusNotificationsSegment = 'notifications';
+  static const String plusAProposSegment = 'apropos';
+
+  static const String plusGeneral = '$plus/$plusGeneralSegment';
+  static const String plusConfidentialite = '$plus/$plusConfidentialiteSegment';
+  static const String plusNotifications = '$plus/$plusNotificationsSegment';
+  static const String plusAPropos = '$plus/$plusAProposSegment';
 }
 
 /// The five primary destinations, in display order (docs/09 §3).
@@ -104,6 +133,16 @@ GoRouter creerRouteur() {
               GoRoute(
                 path: RoutesApp.accueil,
                 builder: (context, state) => const EcranAccueil(),
+                routes: [
+                  // Same detail screen as the Potager branch, registered here so
+                  // tapping a dashboard tile keeps "back" on the Accueil tab.
+                  GoRoute(
+                    path: RoutesApp.zoneDetailSegment,
+                    builder: (context, state) => EcranZoneDetail(
+                      zoneId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -112,6 +151,16 @@ GoRouter creerRouteur() {
               GoRoute(
                 path: RoutesApp.potager,
                 builder: (context, state) => const EcranPotager(),
+                routes: [
+                  // Zone detail, pushed on top of the Potager branch (keeps the
+                  // bottom bar / rail and the branch's navigation state).
+                  GoRoute(
+                    path: RoutesApp.zoneDetailSegment,
+                    builder: (context, state) => EcranZoneDetail(
+                      zoneId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -136,6 +185,24 @@ GoRouter creerRouteur() {
               GoRoute(
                 path: RoutesApp.plus,
                 builder: (context, state) => const EcranPlus(),
+                routes: [
+                  GoRoute(
+                    path: RoutesApp.plusGeneralSegment,
+                    builder: (context, state) => const PanneauGeneral(),
+                  ),
+                  GoRoute(
+                    path: RoutesApp.plusConfidentialiteSegment,
+                    builder: (context, state) => const PanneauConfidentialite(),
+                  ),
+                  GoRoute(
+                    path: RoutesApp.plusNotificationsSegment,
+                    builder: (context, state) => const PanneauNotifications(),
+                  ),
+                  GoRoute(
+                    path: RoutesApp.plusAProposSegment,
+                    builder: (context, state) => const PanneauAPropos(),
+                  ),
+                ],
               ),
             ],
           ),
