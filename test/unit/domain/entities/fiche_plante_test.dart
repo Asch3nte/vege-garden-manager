@@ -19,6 +19,7 @@ BesoinsCulture _besoins() => BesoinsCulture(
 
 FichePlante _fiche({
   String id = 'tomate',
+  String? parentId,
   Set<UsagePlante>? usages,
   Map<String, String>? noms,
   int espacementCm = 60,
@@ -30,6 +31,7 @@ FichePlante _fiche({
 }) =>
     FichePlante(
       id: id,
+      parentId: parentId,
       nomScientifique: 'Solanum lycopersicum',
       familleBotanique: 'Solanaceae',
       categorie: CategoriePlante.legume,
@@ -69,6 +71,29 @@ void main() {
       expect(() => _fiche(espacementCm: 0), throwsA(isA<AssertionError>()));
       expect(
         () => _fiche(dureeMin: 90, dureeMax: 70),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+  });
+
+  group('FichePlante — species/variety hierarchy (ADR-0005)', () {
+    test('a sheet without parentId is a mother sheet', () {
+      final f = _fiche();
+      expect(f.parentId, isNull);
+      expect(f.estMere, isTrue);
+      expect(f.estVariete, isFalse);
+    });
+
+    test('a sheet with parentId is a variety', () {
+      final f = _fiche(id: 'LEG-001-V001', parentId: 'LEG-001');
+      expect(f.parentId, 'LEG-001');
+      expect(f.estVariete, isTrue);
+      expect(f.estMere, isFalse);
+    });
+
+    test('a variety cannot be its own parent', () {
+      expect(
+        () => _fiche(id: 'LEG-001', parentId: 'LEG-001'),
         throwsA(isA<AssertionError>()),
       );
     });

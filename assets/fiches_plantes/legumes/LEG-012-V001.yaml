@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Épinard Géant d'Hiver. Hérite de LEG-012.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-012-V001
+parent_id: LEG-012
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Spinacia oleracea 'Géant d'Hiver'"
+
+i18n:
+  fr:
+    nom_commun: "Épinard Géant d'Hiver"
+    noms_alternatifs: [Épinard hivernal, Winter Giant Spinach]
+    description: >
+      Variété robuste à grandes feuilles épaisses, bullées, d'un vert sombre,
+      très résistante au froid (jusqu'à −10 °C). Production généreuse de
+      l'automne au printemps. Saveur fine et moins amère que les variétés d'été.
+      Idéale pour occuper le potager en basse saison.
+  en:
+    nom_commun: Giant Winter Spinach
+    description: >
+      Robust variety with large, thick, blistered, dark-green leaves, very frost
+      resistant (down to −10 °C). Generous production from autumn to spring.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, sac perforé", en: "Refrigerator, perforated bag" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 2 min, presser, congeler en portions", en: "Blanch 2 min, press, freeze in portions" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, sauté à l'ail, gratin dauphinois, soupe, en quiche]
+  en: [Raw salad, sautéed with garlic, potato gratin, soup, quiche]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89pinard
+contributeurs:
+  - "@potagerer"

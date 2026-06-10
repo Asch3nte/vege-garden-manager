@@ -18,19 +18,19 @@ const _validator = FichePlanteValidator();
 const _mapper = FichePlanteMapper();
 
 void main() {
-  group('Catalogue pipeline — golden file tomate.yaml', () {
+  group('Catalogue pipeline — golden file LEG-001.yaml', () {
     final contenu =
-        File('assets/fiches_plantes/legumes/tomate.yaml').readAsStringSync();
-    final map = _parser.parser(contenu, source: 'tomate.yaml');
+        File('assets/fiches_plantes/legumes/LEG-001.yaml').readAsStringSync();
+    final map = _parser.parser(contenu, source: 'LEG-001.yaml');
 
     test('the golden sheet passes validation', () {
-      expect(() => _validator.valider(map, source: 'tomate.yaml'),
+      expect(() => _validator.valider(map, source: 'LEG-001.yaml'),
           returnsNormally);
     });
 
     test('maps to a coherent FichePlante', () {
       final f = _mapper.versEntite(map);
-      expect(f.id, 'tomate');
+      expect(f.id, 'LEG-001');
       expect(f.categorie, CategoriePlante.legume);
       expect(f.sousType, SousTypeLegume.legumeFruit);
       expect(f.usages, {UsagePlante.alimentaire});
@@ -65,12 +65,12 @@ void main() {
       );
     });
 
-    test('maps associations by id', () {
+    test('maps associations by canonical mother id', () {
       final f = _mapper.versEntite(map);
-      expect(f.sAssocieBienAvec('basilic'), isTrue);
-      expect(f.sAssocieBienAvec('soucis'), isTrue);
-      expect(f.entreEnConflitAvec('fenouil'), isTrue);
-      expect(f.entreEnConflitAvec('pomme_de_terre'), isTrue);
+      expect(f.sAssocieBienAvec('ARO-001'), isTrue); // basilic → ARO-001
+      expect(f.sAssocieBienAvec('soucis'), isTrue); // no fiche yet, kept as-is
+      expect(f.entreEnConflitAvec('fenouil'), isTrue); // no fiche yet
+      expect(f.entreEnConflitAvec('LEG-020'), isTrue); // pomme de terre → LEG-020
       expect(f.sAssocieBienAvec('fenouil'), isFalse);
     });
   });
@@ -134,6 +134,103 @@ cycle:
       expect(
         () => _parser.parser('- just\n- a\n- list', source: 'x'),
         throwsA(isA<FichePlanteInvalideException>()),
+      );
+    });
+
+    test('rejects a variety whose id is not prefixed by its parent_id', () {
+      const yaml = '''
+id: LEG-002-V001
+parent_id: LEG-001
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final map = _parser.parser(yaml, source: 'x');
+      expect(
+        () => _validator.valider(map, source: 'x'),
+        throwsA(isA<FichePlanteInvalideException>()),
+      );
+    });
+
+    test('formatIdValide recognises the canonical ADR-0005 format', () {
+      expect(FichePlanteValidator.formatIdValide('LEG-001'), isTrue);
+      expect(FichePlanteValidator.formatIdValide('LEG-001-V001'), isTrue);
+      expect(FichePlanteValidator.formatIdValide('ARO-001'), isTrue);
+      expect(FichePlanteValidator.formatIdValide('carotte'), isFalse);
+      expect(FichePlanteValidator.formatIdValide('leg-001'), isFalse);
+      expect(FichePlanteValidator.formatIdValide('LEG-1'), isFalse);
+    });
+
+    test('the format check is off by default but rejects legacy ids when on',
+        () {
+      const yaml = '''
+id: carotte
+nom_scientifique: Daucus carota
+famille_botanique: Apiaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: Carotte
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol: [leger]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 8
+  duree_avant_recolte_jours: [90, 120]
+''';
+      final map = _parser.parser(yaml, source: 'x');
+      // Default validator tolerates the legacy id (migration window).
+      expect(() => _validator.valider(map, source: 'x'), returnsNormally);
+      // With enforcement on, the legacy id is rejected.
+      expect(
+        () => const FichePlanteValidator(validerFormatId: true)
+            .valider(map, source: 'x'),
+        throwsA(isA<FichePlanteInvalideException>()),
+      );
+    });
+
+    test('accepts a variety whose id is prefixed by its parent_id', () {
+      const yaml = '''
+id: LEG-001-V001
+parent_id: LEG-001
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final map = _parser.parser(yaml, source: 'x');
+      expect(
+        () => _validator.valider(map, source: 'x'),
+        returnsNormally,
       );
     });
   });

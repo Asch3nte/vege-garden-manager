@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Courgette Black Beauty. Hérite de LEG-011.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-011-V001
+parent_id: LEG-011
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Black Beauty'"
+
+i18n:
+  fr:
+    nom_commun: Courgette Black Beauty
+    noms_alternatifs: [Zucchini Black Beauty]
+    description: >
+      Variété américaine classique très productive, à fruits cylindriques d'un
+      vert sombre brillant, à récolter à 15–20 cm. Plant buissonnant compact,
+      idéal pour les petits espaces. Chair ferme et fine.
+  en:
+    nom_commun: Black Beauty Zucchini
+    description: >
+      Classic productive American variety with glossy dark-green cylindrical
+      fruits, harvested at 15–20 cm. Compact bushy plant, ideal for small
+      spaces.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 2 min avant congélation", en: "Blanch 2 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Poêlée, gratinée, farcie, crue en carpaccio, en ratatouille, tarte salée]
+  en: [Sautéed, gratin, stuffed, raw carpaccio, ratatouille, savory tart]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courgette
+contributeurs:
+  - "@potagerer"

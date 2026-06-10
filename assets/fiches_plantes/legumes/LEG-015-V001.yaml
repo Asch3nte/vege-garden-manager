@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Navet Boule d'Or. Hérite de LEG-015.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-015-V001
+parent_id: LEG-015
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica rapa 'Boule d'Or'"
+
+i18n:
+  fr:
+    nom_commun: "Navet Boule d'Or"
+    noms_alternatifs: [Navet jaune Boule d'Or]
+    description: >
+      Variété ancienne française à racine ronde d'un beau jaune doré, chair
+      jaune très fine et douce, moins piquante que les navets blancs. Saveur
+      légèrement sucrée, appréciée même par ceux qui n'aiment pas le navet
+      classique. Cycle court, très productive.
+  en:
+    nom_commun: "Boule d'Or Turnip"
+    description: >
+      Old French variety with round, golden-yellow roots, fine and mild flesh,
+      less pungent than white turnips. Slightly sweet flavor.
+
+conservation:
+  - methode: frais
+    duree_jours: 21
+    conditions_i18n: { fr: "Cave en sable humide ou réfrigérateur", en: "Cellar in damp sand or refrigerator" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 2 min avant congélation", en: "Blanch 2 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Pot-au-feu, gratin, purée, sauté au beurre, soupe, en quartiers rôtis]
+  en: [Pot-au-feu, gratin, purée, sautéed in butter, soup, roasted wedges]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Navet
+contributeurs:
+  - "@potagerer"

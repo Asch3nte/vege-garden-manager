@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Poireau.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-017
+version_fiche: 1
+categorie: legume
+sous_type: legume_tige
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone3
+nom_scientifique: Allium ampeloprasum
+famille_botanique: Amaryllidaceae
+
+i18n:
+  fr:
+    nom_commun: Poireau
+    description: >
+      Plante potagère de la famille des Amaryllidacées, cultivée pour ses
+      feuilles engainantes (le « blanc ») consommées comme légume.
+    conseils_culture: >
+      Semer en pépinière de mars à avril. Repiquer en rigole profonde à 15 cm
+      pour blanchir le fût. Buter progressivement au fil de la croissance.
+      Arroser régulièrement en été, puis arrêter en automne. Résiste en terre
+      tout l'hiver sans protection.
+    conseils_recolte: >
+      Récolter de novembre à mars selon les besoins. Laisser en terre comme
+      légume-garde-manger. Déterrer à la fourche sans blesser le fût.
+    erreurs_frequentes:
+      - Repiquage sans buter (fût court et verdâtre)
+      - Sol compact ou mal drainé (collet pourri)
+  en:
+    nom_commun: Leek
+    description: >
+      A cultivar of Allium ampeloprasum grown for its edible bundle of leaf
+      sheaths.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - lourd
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_optimale: 16
+  ensoleillement_min: mi_ombre
+  temperature_min_survie: -15
+  gele_fatal: false
+cycle:
+  type: bisannuelle
+  duree_germination_jours: [14, 21]
+  duree_avant_recolte_jours: [200, 270]
+  hauteur_adulte_cm: [40, 60]
+  espacement_cm: 15
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [6, 7]
+      recolte: [11, 3]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [6, 7]
+      recolte: [11, 3]
+    mediterraneen:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [10, 2]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [9, 10]
+      plantation: [12, 1]
+      recolte: [5, 9]
+associations:
+  beneficies:
+    - id: LEG-004
+      raison_i18n: { fr: "Éloignent mutuellement leurs mouches", en: "Mutually repel each other's flies" }
+    - id: LEG-014
+      raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
+  defavorables:
+    - id: LEG-013
+      raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
+    - id: LEG-018
+      raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
+rotation:
+  famille: amaryllidaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [amaryllidaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Poireau  # description
+contributeurs:
+  - "@potagerer"

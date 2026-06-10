@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Oignon Rouge de Florence. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V001
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Rossa di Firenze'"
+
+i18n:
+  fr:
+    nom_commun: Oignon Rouge de Florence
+    noms_alternatifs: [Cipolla Rossa di Firenze, Oignon doux de Florence]
+    description: >
+      Variété italienne ancienne à bulbe allongé légèrement fusiforme, d'un
+      rouge violet intense, chair rose-blanche douce et peu piquante. Excellente
+      crue. Saveur plus sucrée et subtile que les oignons jaunes classiques.
+      Très bonne conservation. Variété emblématique de la cuisine toscane.
+  en:
+    nom_commun: Red Florence Onion
+    description: >
+      Old Italian variety with slightly elongated, fusiform, intense red-violet
+      bulb, mild pink-white flesh. Excellent raw. Sweeter and more subtle than
+      standard yellow onions.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Tresses ou filets en lieu sec et aéré, < 20 °C", en: "Braids or nets in dry airy place, < 20 °C" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en tartine, dans les burgers, confit, en soupe à l'oignon, chutney]
+  en: [Raw in salads, on toast, in burgers, caramelized, French onion soup, chutney]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon
+contributeurs:
+  - "@potagerer"

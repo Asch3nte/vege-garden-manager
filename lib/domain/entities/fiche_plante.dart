@@ -1,8 +1,11 @@
 import '../enums/categorie_plante.dart';
 import '../enums/hemisphere.dart';
+import '../enums/niveau_besoin.dart';
 import '../enums/sous_type_legume.dart';
 import '../enums/type_climat.dart';
+import '../enums/type_parcelle.dart';
 import '../enums/usage_plante.dart';
+import '../enums/zone_rusticite.dart';
 import '../value_objects/besoins_culture.dart';
 import '../value_objects/periodes_culture.dart';
 
@@ -16,6 +19,9 @@ import '../value_objects/periodes_culture.dart';
 /// documented in English. See `docs/05-modele-de-domaine.md` §3.6.
 class FichePlante {
   final String _id;
+  // Parent species id when this sheet is a variety (cultivar); `null` on a
+  // mother sheet (species level). See ADR-0005.
+  final String? _parentId;
   final String _nomScientifique;
   final String _familleBotanique;
   final CategoriePlante _categorie;
@@ -33,8 +39,25 @@ class FichePlante {
   final int? _delaiRetourAnnees;
   final Map<String, String> _descriptionsLocalisees;
 
+  // Enrichissement §A — rusticité USDA tolérée par la plante
+  final ZoneRusticite? _rusticiteMin;
+  // Enrichissement §B — tolérance au gel
+  final double? _temperatureMinSurvie;
+  final bool _geleFatal;
+  // Enrichissement §C — niveau de difficulté (1 débutant → 3 expert)
+  final int? _difficulte;
+  // Enrichissement §D — compatibilité contenant / profondeur sol
+  final int? _profondeurSolMinCm;
+  final bool _compatibleHorsSol;
+  // Enrichissement §E — culture verticale (tuteur/treillis)
+  final bool _cultureVerticale;
+  // Enrichissement §H — dynamique azotée
+  final bool _fixeAzote;
+  final NiveauBesoin? _besoinAzote;
+
   FichePlante._(
     this._id,
+    this._parentId,
     this._nomScientifique,
     this._familleBotanique,
     this._categorie,
@@ -51,7 +74,19 @@ class FichePlante {
     this._rotationFamille,
     this._delaiRetourAnnees,
     this._descriptionsLocalisees,
+    this._rusticiteMin,
+    this._temperatureMinSurvie,
+    this._geleFatal,
+    this._difficulte,
+    this._profondeurSolMinCm,
+    this._compatibleHorsSol,
+    this._cultureVerticale,
+    this._fixeAzote,
+    this._besoinAzote,
   )   : assert(_id.isNotEmpty, 'id must not be empty'),
+        assert(_parentId == null || _parentId.isNotEmpty,
+            'parentId, when set, must not be empty'),
+        assert(_parentId != _id, 'a variety cannot be its own parent'),
         assert(_nomScientifique.isNotEmpty, 'nomScientifique must not be empty'),
         assert(_familleBotanique.isNotEmpty, 'familleBotanique must not be empty'),
         assert(_usages.isNotEmpty, 'a plant must have at least one usage'),
@@ -61,10 +96,14 @@ class FichePlante {
           _dureeAvantRecolteJoursMin > 0 &&
               _dureeAvantRecolteJoursMin <= _dureeAvantRecolteJoursMax,
           'duration must be positive with min <= max',
+        ),
+        assert(
+          _difficulte == null || (_difficulte >= 1 && _difficulte <= 3),
+          'difficulte must be 1, 2 or 3',
         );
 
   /// Builds a plant sheet. Collections are stored unmodifiable; periods default
-  /// to empty.
+  /// to empty. All enrichment fields (§A–H of doc 16) are optional.
   factory FichePlante({
     required String id,
     required String nomScientifique,
@@ -76,6 +115,7 @@ class FichePlante {
     required int espacementCm,
     required int dureeAvantRecolteJoursMin,
     required int dureeAvantRecolteJoursMax,
+    String? parentId,
     SousTypeLegume? sousType,
     Map<Hemisphere, Map<TypeClimat, PeriodesCulture>>? periodes,
     Set<String>? associationsBenefiques,
@@ -83,9 +123,25 @@ class FichePlante {
     String? rotationFamille,
     int? delaiRetourAnnees,
     Map<String, String>? descriptionsLocalisees,
+    // Enrichissement §A
+    ZoneRusticite? rusticiteMin,
+    // Enrichissement §B
+    double? temperatureMinSurvie,
+    bool geleFatal = false,
+    // Enrichissement §C
+    int? difficulte,
+    // Enrichissement §D
+    int? profondeurSolMinCm,
+    bool compatibleHorsSol = true,
+    // Enrichissement §E
+    bool cultureVerticale = false,
+    // Enrichissement §H
+    bool fixeAzote = false,
+    NiveauBesoin? besoinAzote,
   }) =>
       FichePlante._(
         id,
+        parentId,
         nomScientifique,
         familleBotanique,
         categorie,
@@ -102,6 +158,15 @@ class FichePlante {
         rotationFamille,
         delaiRetourAnnees,
         Map<String, String>.unmodifiable(descriptionsLocalisees ?? const {}),
+        rusticiteMin,
+        temperatureMinSurvie,
+        geleFatal,
+        difficulte,
+        profondeurSolMinCm,
+        compatibleHorsSol,
+        cultureVerticale,
+        fixeAzote,
+        besoinAzote,
       );
 
   static Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _figerPeriodes(
@@ -113,6 +178,16 @@ class FichePlante {
       });
 
   String get id => _id;
+
+  /// Parent species id when this sheet is a variety, else `null` (ADR-0005).
+  String? get parentId => _parentId;
+
+  /// Whether this sheet is a variety/cultivar (it inherits from a mother sheet).
+  bool get estVariete => _parentId != null;
+
+  /// Whether this sheet is a mother sheet (species level, no parent).
+  bool get estMere => _parentId == null;
+
   String get nomScientifique => _nomScientifique;
   String get familleBotanique => _familleBotanique;
   CategoriePlante get categorie => _categorie;
@@ -125,6 +200,28 @@ class FichePlante {
   int get dureeAvantRecolteJoursMax => _dureeAvantRecolteJoursMax;
   String? get rotationFamille => _rotationFamille;
   int? get delaiRetourAnnees => _delaiRetourAnnees;
+
+  /// Ids of the plants this one benefits from (unmodifiable).
+  Set<String> get associationsBenefiques => _associationsBenefiques;
+
+  /// Ids of the plants this one conflicts with (unmodifiable).
+  Set<String> get associationsNegatives => _associationsNegatives;
+
+  // Enrichissement §A
+  ZoneRusticite? get rusticiteMin => _rusticiteMin;
+  // Enrichissement §B
+  double? get temperatureMinSurvie => _temperatureMinSurvie;
+  bool get geleFatal => _geleFatal;
+  // Enrichissement §C
+  int? get difficulte => _difficulte;
+  // Enrichissement §D
+  int? get profondeurSolMinCm => _profondeurSolMinCm;
+  bool get compatibleHorsSol => _compatibleHorsSol;
+  // Enrichissement §E
+  bool get cultureVerticale => _cultureVerticale;
+  // Enrichissement §H
+  bool get fixeAzote => _fixeAzote;
+  NiveauBesoin? get besoinAzote => _besoinAzote;
 
   /// Common name for [locale], falling back to French (always present).
   String nomLocalise(String locale) =>
@@ -143,6 +240,16 @@ class FichePlante {
   /// [hemisphere] and [climat]. False when no period data is available.
   bool estPlantableEn(DateTime date, Hemisphere hemisphere, TypeClimat climat) =>
       periodesPour(hemisphere, climat)?.plantableEnMois(date.month) ?? false;
+
+  /// Whether the plant is compatible with [typeParcelle].
+  ///
+  /// Container types ([TypeParcelle.pot], [TypeParcelle.jardiniere]) are
+  /// rejected when [compatibleHorsSol] is `false`. All other parcelle types
+  /// are always accepted.
+  bool estCompatibleAvec(TypeParcelle typeParcelle) {
+    const contenants = {TypeParcelle.pot, TypeParcelle.jardiniere};
+    return compatibleHorsSol || !contenants.contains(typeParcelle);
+  }
 
   /// Whether this plant benefits from being grown near [planteId].
   bool sAssocieBienAvec(String planteId) =>

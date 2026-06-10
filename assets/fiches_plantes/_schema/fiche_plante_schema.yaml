@@ -11,7 +11,17 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Métadonnées techniques
-id: # (requis) unique, immuable, snake_case, minuscules, sans accents
+id: # (requis) unique, immuable — format canonique CAT3-NNN (espèce) ou
+    # CAT3-NNN-VNNN (variété), language-agnostic (ADR-0005). Voir le registre
+    # _schema/id_registry.yaml. Format hérité (en cours de migration) : snake_case.
+parent_id: # (requis sur une FICHE FILLE / variété ; absent sur une fiche mère)
+           # id de la fiche mère (espèce). La fille n'hérite que par fusion :
+           # elle ne déclare QUE les champs qui diffèrent de la mère. Son id doit
+           # être préfixé par parent_id (ex. LEG-001-V001 ⟶ parent LEG-001).
+           # Non surchargeables par une fille : categorie, sous_type,
+           # famille_botanique, nom_scientifique, usages, rotation, associations.
+varietes_connues: [] # (optionnel, sur une fiche mère) liste informative des ids
+                     # de fiches filles connues (ex. [LEG-001-V001, LEG-001-V002])
 version_fiche: # (requis) entier, incrémenté à chaque modification de la fiche
 categorie: # (requis) enum CategoriePlante : legume | aromatique | fruit | petit_fruit | fleur | cereale | engrais_vert
 sous_type: # (optionnel — seulement si categorie: legume) enum SousTypeLegume :
@@ -20,6 +30,12 @@ usages: [] # (requis, ≥ 1) enum UsagePlante (liste) : alimentaire | condimenta
                   # compagnonnage | repulsif | mellifere | pollinisateur | engrais_vert | couvre_sol |
                   # brise_vent | tuteur_vivant | ornementale | fourrage
 schema_version: # (requis) entier, version du présent schéma
+difficulte: # (optionnel) int 1–3 : 1=débutant, 2=intermédiaire, 3=expert (§C doc-16)
+
+# Rusticité tolérée par la plante (§A doc-16)
+rusticite:
+  zone_min: # (optionnel) ZoneRusticite USDA — limite froide supportée (ex: zone6)
+  zone_max: # (optionnel) ZoneRusticite — limite chaude (zones tropicales uniquement)
 
 # Identification botanique
 nom_scientifique: # (requis) ex: Solanum lycopersicum
@@ -38,13 +54,16 @@ i18n:
 
 # Besoins agronomiques (données structurées pour le moteur)
 besoins:
-  ensoleillement: # (requis) enum NiveauSoleil : plein_soleil | mi_ombre | ombre
+  ensoleillement: # (requis) enum NiveauSoleil : plein_soleil | mi_ombre | ombre — niveau préféré
+  ensoleillement_min: # (optionnel) NiveauSoleil — minimum toléré (§I doc-16 ; ex: mi_ombre pour la tomate)
   arrosage: # (requis) enum BesoinEau : faible | modere | eleve
   qualites_sol: [] # (requis) liste de QualiteSol : riche | pauvre | bien_draine | mal_draine | frais | sec | lourd | leger
   ph_min: # (requis) 0.0–14.0, <= ph_max
   ph_max: # (requis) 0.0–14.0
   temperature_min_germination: # (optionnel) °C
   temperature_optimale: # (optionnel) °C
+  temperature_min_survie: # (optionnel) °C — seuil de mort par gel (§B doc-16 ; distinct du seuil de germination)
+  gele_fatal: # (optionnel) bool — vrai si le moindre gel détruit la plante (défaut: false)
 
 # Cycle de culture
 cycle:
@@ -54,6 +73,9 @@ cycle:
   hauteur_adulte_cm: [] # (optionnel) [min, max]
   espacement_cm: # (requis) entier
   profondeur_semis_cm: # (optionnel)
+  profondeur_sol_min_cm: # (optionnel) entier — profondeur minimale de terre nécessaire (§D doc-16)
+  compatible_hors_sol: # (optionnel) bool — compatible pot/jardinière (défaut: true ; §D doc-16)
+  culture_verticale: # (optionnel) bool — supporte/profite d'un tuteur ou treillis (défaut: false ; §E doc-16)
 
 # Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12.
 # Clés de climat autorisées : tropical | subtropical | aride | semi_aride | mediterraneen |
@@ -82,6 +104,8 @@ rotation:
   delai_retour_annees: # (requis) entier
   precedents_favorables: [] # (optionnel)
   precedents_defavorables: [] # (optionnel)
+  fixe_azote: # (optionnel) bool — vrai pour les légumineuses (défaut: false ; §H doc-16)
+  besoin_azote: # (optionnel) NiveauBesoin : faible | modere | eleve (§H doc-16)
 
 # Post-récolte (optionnel)
 conservation:

@@ -4,6 +4,7 @@ import '../../domain/entities/fiche_plante.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/entities/plantation.dart';
 import '../../domain/enums/hemisphere.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
@@ -56,6 +57,7 @@ class RecommanderPlantes {
     required ZoneClimatique zoneClimatique,
     required Localisation localisation,
     DateTime? date,
+    NiveauExperience? niveauExperience,
   }) async {
     final maintenant = date ?? DateTime.now();
     final hemisphere = _hemisphereDe(localisation);
@@ -90,6 +92,10 @@ class RecommanderPlantes {
         planteIdsActifs: planteIdsActifs,
         rotationConflit: rotationConflit,
         rotationVerifiee: rotationVerifiee,
+        zoneRusticite: zoneClimatique.rusticite,
+        niveauExperience: niveauExperience,
+        typeParcelle: parcelle.type,
+        cultureVerticaleDisponible: parcelle.cultureVerticale,
       );
       if (reco != null) recommandations.add(reco);
     }

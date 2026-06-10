@@ -2,11 +2,13 @@ import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/hemisphere.dart';
+import '../../domain/enums/niveau_besoin.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/qualite_sol.dart';
 import '../../domain/enums/sous_type_legume.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/usage_plante.dart';
+import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/value_objects/besoins_culture.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../domain/value_objects/periodes_culture.dart';
@@ -23,9 +25,12 @@ class FichePlanteMapper {
     final besoins = y['besoins'] as Map;
     final cycle = y['cycle'] as Map;
     final duree = cycle['duree_avant_recolte_jours'] as List;
+    final rotation = y['rotation'] as Map?;
+    final rusticite = y['rusticite'] as Map?;
 
     return FichePlante(
       id: y['id'] as String,
+      parentId: y['parent_id'] as String?,
       nomScientifique: y['nom_scientifique'] as String,
       familleBotanique: y['famille_botanique'] as String,
       categorie: _enum(CategoriePlante.values, y['categorie'] as String),
@@ -45,6 +50,9 @@ class FichePlanteMapper {
             .toSet(),
         phMin: (besoins['ph_min'] as num).toDouble(),
         phMax: (besoins['ph_max'] as num).toDouble(),
+        soleilMin: besoins['ensoleillement_min'] == null
+            ? null
+            : _enum(NiveauSoleil.values, besoins['ensoleillement_min'] as String),
       ),
       espacementCm: cycle['espacement_cm'] as int,
       dureeAvantRecolteJoursMin: duree[0] as int,
@@ -52,8 +60,29 @@ class FichePlanteMapper {
       periodes: _periodes(y['periodes'] as Map?),
       associationsBenefiques: _idsAssociation(y, 'beneficies'),
       associationsNegatives: _idsAssociation(y, 'defavorables'),
-      rotationFamille: (y['rotation'] as Map?)?['famille'] as String?,
-      delaiRetourAnnees: (y['rotation'] as Map?)?['delai_retour_annees'] as int?,
+      rotationFamille: rotation?['famille'] as String?,
+      delaiRetourAnnees: rotation?['delai_retour_annees'] as int?,
+      // Enrichissement §A
+      rusticiteMin: rusticite?['zone_min'] == null
+          ? null
+          : _enum(ZoneRusticite.values, rusticite!['zone_min'] as String),
+      // Enrichissement §B
+      temperatureMinSurvie: besoins['temperature_min_survie'] == null
+          ? null
+          : (besoins['temperature_min_survie'] as num).toDouble(),
+      geleFatal: besoins['gele_fatal'] as bool? ?? false,
+      // Enrichissement §C
+      difficulte: y['difficulte'] as int?,
+      // Enrichissement §D
+      profondeurSolMinCm: cycle['profondeur_sol_min_cm'] as int?,
+      compatibleHorsSol: cycle['compatible_hors_sol'] as bool? ?? true,
+      // Enrichissement §E
+      cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
+      // Enrichissement §H
+      fixeAzote: rotation?['fixe_azote'] as bool? ?? false,
+      besoinAzote: rotation?['besoin_azote'] == null
+          ? null
+          : _enum(NiveauBesoin.values, rotation!['besoin_azote'] as String),
     );
   }
 

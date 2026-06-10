@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Betterave Chioggia. Hérite de LEG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-003-V001
+parent_id: LEG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris var. conditiva 'Chioggia'"
+
+i18n:
+  fr:
+    nom_commun: Betterave Chioggia
+    noms_alternatifs: [Betterave Cible, Candy Stripe Beet]
+    description: >
+      Variété italienne spectaculaire à chair zébrée de rouge et de blanc en
+      anneaux concentriques, à la saveur très douce et moins terreuse que les
+      variétés classiques. Moins de pigments que la betterave rouge standard :
+      ne tache pas lors de la découpe. Racine ronde de 6–8 cm.
+  en:
+    nom_commun: Chioggia Beet
+    description: >
+      Spectacular Italian variety with flesh striped in concentric red and white
+      rings, very mild and less earthy than standard beets. Minimal pigment
+      bleed.
+
+conservation:
+  - methode: frais
+    duree_jours: 30
+    conditions_i18n: { fr: "Cave en sable humide ou réfrigérateur", en: "Cellar in damp sand or refrigerator" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: lactofermentation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Crue râpée, cuite en salade, en carpaccio, en soupe borsch, marinée]
+  en: [Raw grated, cooked in salad, carpaccio, borscht soup, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potagère
+contributeurs:
+  - "@potagerer"

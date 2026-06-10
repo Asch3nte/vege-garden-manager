@@ -1,0 +1,106 @@
+# Fiche mère (espèce) — Poivron.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-019
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Capsicum annuum
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Poivron
+    noms_alternatifs: [Piment doux]
+    description: >
+      Variété de piment doux de la famille des Solanacées à gros fruits,
+      cultivée pour ses fruits consommés comme légumes, crus ou cuits.
+    conseils_culture: >
+      Démarrer en semis intérieur 8–10 semaines avant le repiquage. Repiquer
+      après tout risque de gel dans un sol réchauffé. Tuteurer si nécessaire
+      sous le poids des fruits. Arroser régulièrement mais sans excès.
+    conseils_recolte: >
+      Récolter vert pour libérer le plant, ou attendre la coloration rouge
+      complète pour une saveur maximale. Plus le fruit mûrit, plus il est sucré.
+    erreurs_frequentes:
+      - 'Plantation trop tôt en sol froid (choc thermique, plant chétif)'
+      - Stress hydrique (fruits déformés)
+      - Manque de soleil (mauvaise coloration)
+  en:
+    nom_commun: Bell pepper
+    description: >
+      Large, sweet-fruited cultivars of Capsicum annuum eaten as a vegetable,
+      raw or cooked.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 20
+  temperature_optimale: 24
+  temperature_min_survie: 10
+  gele_fatal: true
+cycle:
+  type: annuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [75, 100]
+  hauteur_adulte_cm: [60, 100]
+  espacement_cm: 50
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 35
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [11, 12]
+      recolte: [1, 4]
+associations:
+  beneficies:
+    - id: ARO-001
+      raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
+    - id: LEG-004
+      raison_i18n: { fr: "Ameublit le sol pour les racines voisines", en: "Loosens soil for nearby roots" }
+  defavorables:
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Poivron  # description
+contributeurs:
+  - "@potagerer"

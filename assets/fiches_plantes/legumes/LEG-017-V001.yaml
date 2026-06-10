@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Poireau Bleu de Solaise. Hérite de LEG-017.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-017-V001
+parent_id: LEG-017
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium ampeloprasum 'Bleu de Solaise'"
+
+i18n:
+  fr:
+    nom_commun: Poireau Bleu de Solaise
+    noms_alternatifs: [Poireau d'hiver de Solaise]
+    description: >
+      Variété lyonnaise ancienne d'une exceptionnelle résistance au froid
+      (jusqu'à −15 °C). Feuilles bleu-violet en hiver, très décoratives. Fût
+      court et épais, saveur fine et douce. Idéal pour les régions continentales
+      aux hivers rigoureux.
+  en:
+    nom_commun: Bleu de Solaise Leek
+    description: >
+      Old Lyon variety of exceptional frost resistance (down to −15 °C).
+      Blue-violet leaves in winter, very ornamental. Short, thick shaft, fine
+      and mild flavor.
+
+conservation:
+  - methode: frais
+    duree_jours: 14
+    conditions_i18n: { fr: "Réfrigérateur dans un sac perforé", en: "Refrigerator in a perforated bag" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Laver, découper, blanchir 2 min avant congélation", en: "Wash, slice, blanch 2 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Soupe, flamiche, quiche, fondue de poireau, gratin, pot-au-feu]
+  en: [Soup, flamiche, quiche, leek fondue, gratin, pot-au-feu]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poireau_cultiv%C3%A9
+contributeurs:
+  - "@potagerer"

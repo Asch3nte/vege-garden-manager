@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Chou-fleur De Bretagne. Hérite de LEG-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-008-V001
+parent_id: LEG-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. botrytis 'De Bretagne'"
+
+i18n:
+  fr:
+    nom_commun: Chou-fleur De Bretagne
+    noms_alternatifs: [Chou-fleur automnal de Bretagne]
+    description: >
+      Variété bretonne classique à grosse pomme blanche très dense et compacte
+      (1,5–2,5 kg), d'une blancheur remarquable et d'une saveur fine. Variété
+      d'automne très bien adaptée au climat oceanique. Résistante au vent et à
+      la pluie. La Bretagne produit 70 % des choux-fleurs français.
+  en:
+    nom_commun: Brittany Cauliflower
+    description: >
+      Classic Brittany variety with a very dense, compact, remarkably white head
+      (1.5–2.5 kg) and fine flavor. Autumn variety very well adapted to oceanic
+      climate. Resistant to wind and rain.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, dans un sac perforé", en: "Refrigerator, in a perforated bag" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Séparer en fleurettes, blanchir 3 min avant congélation", en: "Divide into florets, blanch 3 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, gratin, soupe, rôti au four, en pizza, en purée, cru en dip]
+  en: [Steamed, gratin, soup, roasted, on pizza, purée, raw as dip]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-fleur
+contributeurs:
+  - "@potagerer"

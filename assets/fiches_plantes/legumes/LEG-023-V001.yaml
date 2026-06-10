@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Artichaut Vert de Laon. Hérite de LEG-023.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-023-V001
+parent_id: LEG-023
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cynara scolymus 'Vert de Laon'"
+
+i18n:
+  fr:
+    nom_commun: Artichaut Vert de Laon
+    noms_alternatifs: [Artichaut Camus du Nord, Camus de Laon]
+    description: >
+      Variété française ancienne du nord, très rustique (résiste jusqu'à −15 °C
+      sous paillage), à gros capitules ronds et verts, charnus, à saveur fine et
+      légèrement sucrée. Plant vivace très vigoureux, productif pendant 3–5 ans.
+      L'une des rares variétés qui supporte les hivers froids.
+  en:
+    nom_commun: Vert de Laon Artichoke
+    description: >
+      Old northern French variety, very hardy (to −15 °C under mulch), with
+      large, round, green, fleshy, fine-flavored heads. Vigorous perennial
+      productive for 3–5 years. One of the few varieties that tolerates cold
+      winters.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tige dans l'eau comme une fleur coupée", en: "Refrigerator, stem in water like cut flowers" }
+  - methode: conserves
+    duree_mois: 12
+    conditions_i18n: { fr: "Cœurs à l'huile d'olive ou en bocaux", en: "Hearts in olive oil or jars" }
+utilisations_culinaires_i18n:
+  fr: [Cuit entier à l'eau ou vapeur, cœur à l'huile, frit, en tarte, en soupe]
+  en: [Whole boiled or steamed, heart in oil, fried, in tart, in soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Artichaut
+contributeurs:
+  - "@potagerer"

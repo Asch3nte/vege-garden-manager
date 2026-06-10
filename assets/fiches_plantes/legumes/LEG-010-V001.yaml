@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Courge Butternut Ponca. Hérite de LEG-010.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-010-V001
+parent_id: LEG-010
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita moschata 'Ponca'"
+
+i18n:
+  fr:
+    nom_commun: Courge Butternut Ponca
+    noms_alternatifs: [Butternut Ponca, Squash Ponca]
+    description: >
+      Variété de butternut améliorée, à fruits plus petits et plus uniformes que
+      les butternuts classiques (600 g–1 kg), peau beige lisse, chair orange
+      intense très sucrée et onctueuse. Mûrit plus tôt, excellent pour les
+      régions à été court. Très bonne conservation. Résistante aux maladies.
+  en:
+    nom_commun: Ponca Butternut Squash
+    description: >
+      Improved butternut variety with smaller, more uniform fruits (600 g–1 kg),
+      smooth beige skin, intensely sweet and creamy orange flesh. Ripens
+      earlier, excellent for regions with short summers.
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Lieu frais, sec, aéré, 12–15 °C", en: "Cool, dry, airy place, 12–15 °C" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Cuire et mixer en soupe, puis congeler en portions", en: "Cook and blend into soup, freeze in portions" }
+utilisations_culinaires_i18n:
+  fr: [Soupe, velouté, rôtie au four, en purée, farcie, en gratin, en curry]
+  en: [Soup, velvet soup, oven-roasted, purée, stuffed, gratin, curry]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courge_musqu%C3%A9e
+contributeurs:
+  - "@potagerer"

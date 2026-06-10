@@ -16,9 +16,11 @@ class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 void main() {
   late MockFiches fiches;
 
-  FichePlante fiche(String id, String nomFr, CategoriePlante cat) =>
+  FichePlante fiche(String id, String nomFr, CategoriePlante cat,
+          {String? parentId}) =>
       FichePlante(
         id: id,
+        parentId: parentId,
         nomScientifique: '$id sp',
         familleBotanique: 'Test',
         categorie: cat,
@@ -42,6 +44,8 @@ void main() {
     fiches = MockFiches();
     catalogue = [
       fiche('tomate', 'Tomate', CategoriePlante.legume),
+      fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+          parentId: 'tomate'),
       fiche('basilic', 'Basilic', CategoriePlante.aromatique),
       fiche('courgette', 'Courgette', CategoriePlante.legume),
       fiche('fraise', 'Fraise', CategoriePlante.petitFruit),
@@ -112,6 +116,33 @@ void main() {
     final vue = c.read(catalogueProvider).value!;
 
     expect(vue.sansResultat, isTrue);
-    expect(vue.total, 4, reason: 'total stays the full catalogue size');
+    expect(vue.total, 4, reason: 'total stays the species count');
+  });
+
+  test('groups varieties under their species; counts only species', () async {
+    final c = conteneur();
+    final vue = await c.read(catalogueProvider.future);
+
+    // Species only (variety excluded from the count and the network list).
+    expect(vue.total, 4);
+    expect(vue.toutesMeres.every((f) => f.estMere), isTrue);
+    expect(vue.toutesMeres.map((f) => f.id), isNot(contains('tomate-v1')));
+
+    final tomate = vue.groupes.firstWhere((g) => g.mere.id == 'tomate');
+    expect(tomate.varietes.map((f) => f.id), ['tomate-v1']);
+    expect(vue.groupes.firstWhere((g) => g.mere.id == 'basilic').aVarietes,
+        isFalse);
+  });
+
+  test('searching a variety name surfaces its species', () async {
+    final c = conteneur();
+    await c.read(catalogueProvider.future);
+
+    c.read(catalogueProvider.notifier).definirRequete('cerise');
+    final vue = c.read(catalogueProvider).value!;
+
+    expect(vue.groupes, hasLength(1));
+    expect(vue.groupes.single.mere.id, 'tomate');
+    expect(vue.groupes.single.varietes.map((f) => f.id), ['tomate-v1']);
   });
 }

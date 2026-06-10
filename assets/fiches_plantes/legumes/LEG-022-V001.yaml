@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Radis Cherry Belle. Hérite de LEG-022.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-022-V001
+parent_id: LEG-022
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Raphanus sativus 'Cherry Belle'"
+
+i18n:
+  fr:
+    nom_commun: Radis Cherry Belle
+    description: >
+      Variété de référence mondiale à petit radis rond parfaitement sphérique,
+      rouge vif, chair blanche croquante et douce, peu piquante. Cycle
+      ultra-court (20–25 jours). Idéal pour initier les enfants au jardinage et
+      pour les semis échelonnés tout au long de la saison fraîche.
+  en:
+    nom_commun: Cherry Belle Radish
+    description: >
+      World-reference variety with small, perfectly round, bright red radish,
+      crisp and mild white flesh, barely spicy. Ultra-short cycle (20–25 days).
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, fanes coupées, dans un sac humide", en: "Refrigerator, tops removed, in a damp bag" }
+utilisations_culinaires_i18n:
+  fr: [Cru au beurre et sel, en salade, dans les wraps, cru en dip]
+  en: [Raw with butter and salt, in salads, in wraps, raw as dip]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Radis
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,98 @@
+# Fiche mère (espèce) — Laitue.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-014
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Lactuca sativa
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Laitue
+    noms_alternatifs: [Salade]
+    description: >
+      Légume-feuille annuel de la famille des Astéracées, à cycle court, cultivé
+      pour ses feuilles tendres consommées en salade. Apprécie la fraîcheur.
+    conseils_culture: >
+      Semer ou repiquer en sol frais, arroser régulièrement pour éviter la
+      montaison. Échelonner les semis pour récolter en continu.
+    conseils_recolte: >
+      Récolter le matin, la pomme bien formée, avant la montée à graines.
+    erreurs_frequentes:
+      - "Manque d'eau ou forte chaleur (montaison prématurée)"
+      - Semis trop profond (lève mal)
+  en:
+    nom_commun: Lettuce
+    description: >
+      A short-cycle annual leaf vegetable of the Asteraceae family, mostly eaten
+      raw in salads.
+
+besoins:
+  ensoleillement: mi_ombre
+  arrosage: eleve
+  qualites_sol:
+    - frais
+    - riche
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_optimale: 16
+  ensoleillement_min: ombre
+  temperature_min_survie: -5
+  gele_fatal: false
+cycle:
+  type: annuelle
+  duree_germination_jours: [6, 12]
+  duree_avant_recolte_jours: [45, 70]
+  hauteur_adulte_cm: [15, 30]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      semis_exterieur: [3, 9]
+      plantation: [3, 9]
+      recolte: [5, 11]
+    continental:
+      semis_exterieur: [4, 8]
+      plantation: [4, 8]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [2, 10]
+      plantation: [2, 10]
+      recolte: [4, 12]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 3]
+      recolte: [11, 5]
+associations:
+  beneficies:
+    - id: LEG-004
+      raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
+    - id: LEG-001
+      raison_i18n: { fr: "Profite de l'ombre portée des tomates en été", en: "Benefits from tomato shade in summer" }
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 2
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Laitue_cultivée  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Chou Rouge Cabus. Hérite de LEG-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-007-V001
+parent_id: LEG-007
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: Brassica oleracea var. capitata f. rubra
+
+i18n:
+  fr:
+    nom_commun: Chou Rouge Cabus
+    noms_alternatifs: [Chou rouge pommé, Red Cabbage]
+    description: >
+      Variété de chou pommé à feuilles rouge violacé très serrées formant une
+      pomme dense et lourde (1–2 kg). Chair croquante, légèrement sucrée.
+      Excellente conservation en terre ou en cave. Riche en antioxydants
+      (anthocyanines). Résistante au froid jusqu'à −8 °C.
+  en:
+    nom_commun: Red Cabus Cabbage
+    description: >
+      Cabbage variety with tightly packed, purple-red leaves forming a dense,
+      heavy head (1–2 kg). Crisp, slightly sweet flesh. Excellent storage. Rich
+      in antioxidants (anthocyanins). Frost-resistant to −8 °C.
+
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Cave fraîche entre 0–5 °C, ou réfrigérateur", en: "Cool cellar 0–5 °C, or refrigerator" }
+  - methode: lactofermentation
+    duree_mois: 12
+    conditions_i18n: { fr: "Choucroute rouge au vinaigre ou en saumure", en: "Red sauerkraut with vinegar or brine" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade coleslaw, braisé aux pommes, choucroute rouge, en julienne]
+  en: [Raw coleslaw, braised with apples, red sauerkraut, julienne]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_rouge
+contributeurs:
+  - "@potagerer"

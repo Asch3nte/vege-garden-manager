@@ -17,4 +17,11 @@ enum RaisonReco {
 
   /// Crop rotation is respected (no recent same-family culture in this soil).
   rotationFavorable,
+
+  /// The plant's difficulty level matches the user's experience level.
+  niveauAdapte,
+
+  /// The plant benefits from (or requires) vertical support available in the
+  /// parcelle (trellis, stake…).
+  cultureVerticaleCompatible,
 }

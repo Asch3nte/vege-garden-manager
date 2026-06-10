@@ -1,0 +1,117 @@
+# Fiche mère (espèce) — Aubergine.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références horticoles.
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: LEG-002
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+usages:
+  - alimentaire
+schema_version: 1
+difficulte: 3
+
+rusticite:
+  zone_min: zone9
+
+nom_scientifique: Solanum melongena
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Aubergine
+    noms_alternatifs: [Mélongène, Bérengère]
+    description: >
+      Plante potagère annuelle de la famille des Solanacées, cultivée pour son
+      légume-fruit. Très exigeante en chaleur et en soleil, elle se conduit en
+      culture annuelle sous nos climats, avec un semis précoce à l'abri.
+    conseils_culture: >
+      Semer en intérieur 10–12 semaines avant le repiquage, à 22–26 °C.
+      Repiquer dans un sol chaud, riche et bien drainé, en plein soleil.
+      Tuteurer dès la nouaison, arroser régulièrement au pied et pailler.
+    conseils_recolte: >
+      Récolter quand le fruit est ferme et brillant ; un fruit terne et mou est
+      trop mûr et devient amer.
+    erreurs_frequentes:
+      - Plantation en sol froid (croissance bloquée)
+      - Manque de soleil (fruits peu colorés, amers)
+      - Récolte tardive (graines dures, chair spongieuse)
+  en:
+    nom_commun: Eggplant
+    noms_alternatifs: [Aubergine, Brinjal]
+    description: >
+      Warm-season annual vegetable of the Solanaceae family, grown worldwide for
+      its edible fruit. Heat- and sun-demanding, it is grown as an annual in
+      temperate climates with an early indoor sowing.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 22
+  temperature_optimale: 26
+  temperature_min_survie: 5
+  gele_fatal: true
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [70, 110]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 60
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 35
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [11, 12]
+      recolte: [1, 4]
+
+associations:
+  beneficies:
+    - id: ARO-001
+      raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
+    - id: capucine
+      raison_i18n: { fr: "Plante-piège à pucerons et doryphores", en: "Trap crop for aphids and beetles" }
+  defavorables:
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+    - id: LEG-020
+      raison_i18n: { fr: "Même famille Solanaceae, partage les maladies", en: "Same Solanaceae family, shares diseases" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org/species/2930617
+  - https://www.wikidata.org/wiki/Q7540
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

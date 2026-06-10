@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Brocoli Calabrese. Hérite de LEG-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-006-V001
+parent_id: LEG-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. italica 'Calabrese'"
+
+i18n:
+  fr:
+    nom_commun: Brocoli Calabrese
+    noms_alternatifs: [Brocoli vert calabrais, Calabrese Broccoli]
+    description: >
+      Variété italienne de référence à grande tête principale bleue-verte (15–20
+      cm), dense et compacte, puis nombreux jets secondaires après la coupe.
+      Chair très tendre et savoureuse, riche en vitamine C et K. Cycle plus
+      rapide que les autres brassicacées. Extrêmement productive grâce aux
+      pousses secondaires.
+  en:
+    nom_commun: Calabrese Broccoli
+    description: >
+      Italian reference variety with a large blue-green main head (15–20 cm),
+      dense and compact, then numerous secondary shoots after cutting. Very
+      tender and flavorful flesh, rich in vitamins C and K.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, dans un sac perforé", en: "Refrigerator, in a perforated bag" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Séparer en fleurettes, blanchir 3 min avant congélation", en: "Divide into florets, blanch 3 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, gratin, soupe, wok, pasta, rôti à l'huile, cru en dip]
+  en: [Steamed, gratin, soup, stir-fry, pasta, roasted in oil, raw as dip]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Brocoli
+contributeurs:
+  - "@potagerer"

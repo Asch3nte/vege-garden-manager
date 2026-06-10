@@ -1,0 +1,106 @@
+# Fiche mère (espèce) — Pomme de terre.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-020
+version_fiche: 1
+categorie: legume
+sous_type: legume_tubercule
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Solanum tuberosum
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Pomme de terre
+    noms_alternatifs: [Patate]
+    description: >
+      Plante de la famille des Solanacées cultivée pour ses tubercules
+      comestibles riches en amidon ; vivace par ses tubercules mais cultivée en
+      annuelle.
+    conseils_culture: >
+      Faire germer les plants-tubercules en caissettes 3–4 semaines avant la
+      plantation (pré-germination). Planter en sol meuble et bien travaillé.
+      Butter 2–3 fois au cours de la croissance pour éviter le verdissement.
+      Arroser régulièrement lors de la formation des tubercules.
+    conseils_recolte: >
+      Arracher quand les fanes commencent à jaunir. Laisser sécher les
+      tubercules 2 h à l'air avant de stocker. Éviter la lumière (verdissement).
+    erreurs_frequentes:
+      - Pas de buttage (tubercules verts et toxiques)
+      - 'Rotation insuffisante (mildiou, gale commune)'
+      - Sol compact (tubercules déformés)
+  en:
+    nom_commun: Potato
+    description: >
+      Grown for its starchy edible tubers (Solanum tuberosum); a perennial
+      cultivated as an annual.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - leger
+    - bien_draine
+    - riche
+  ph_min: 5.5
+  ph_max: 6.5
+  temperature_min_germination: 8
+  temperature_optimale: 18
+  ensoleillement_min: mi_ombre
+  temperature_min_survie: 0
+  gele_fatal: true
+cycle:
+  type: annuelle
+  duree_avant_recolte_jours: [80, 110]
+  hauteur_adulte_cm: [50, 80]
+  espacement_cm: 35
+  profondeur_semis_cm: 10
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 5]
+      recolte: [6, 9]
+    continental:
+      plantation: [4, 5]
+      recolte: [7, 9]
+    mediterraneen:
+      plantation: [2, 4]
+      recolte: [5, 8]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [12, 3]
+associations:
+  beneficies:
+    - id: LEG-013
+      raison_i18n: { fr: "Le haricot fixe l'azote, la pomme de terre protège les racines", en: "Bean fixes nitrogen, potato protects roots" }
+    - id: capucine
+      raison_i18n: { fr: "Repousse les doryphores", en: "Repels Colorado beetles" }
+  defavorables:
+    - id: LEG-001
+      raison_i18n: { fr: "Même famille solanaceae, partage le mildiou", en: "Same solanaceae family, shares blight" }
+    - id: LEG-009
+      raison_i18n: { fr: "Favorisent mutuellement le mildiou en conditions humides", en: "Mutually promote blight in humid conditions" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Pomme_de_terre  # description
+contributeurs:
+  - "@potagerer"

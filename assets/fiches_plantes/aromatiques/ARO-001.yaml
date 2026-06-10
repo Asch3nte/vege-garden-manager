@@ -1,0 +1,101 @@
+# Fiche mère (espèce) — Basilic.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: ARO-001
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - repulsif
+
+rusticite:
+  zone_min: zone10
+nom_scientifique: Ocimum basilicum
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Basilic
+    noms_alternatifs: [Basilic commun, Basilic doux]
+    description: >
+      Plante aromatique annuelle de la famille des Lamiacées, originaire des
+      régions tropicales, cultivée pour ses feuilles parfumées. En climat
+      tempéré, elle se cultive en annuelle.
+    conseils_culture: >
+      Planter après les dernières gelées, en plein soleil et sol riche. Pincer
+      régulièrement les sommités pour favoriser la ramification et retarder la
+      montée en fleurs.
+    conseils_recolte: >
+      Récolter les feuilles au fur et à mesure des besoins, de préférence le
+      matin. Cueillir avant la floraison pour préserver l'arôme.
+    erreurs_frequentes:
+      - Plantation trop précoce (très sensible au froid)
+      - "Manque d'eau en pleine chaleur (flétrissement rapide)"
+  en:
+    nom_commun: Basil
+    description: >
+      A culinary herb of the Lamiaceae family, native to the tropics, grown for
+      its fragrant leaves.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 15
+  temperature_optimale: 22
+  temperature_min_survie: 10
+  gele_fatal: true
+cycle:
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [40, 60]
+  hauteur_adulte_cm: [20, 50]
+  espacement_cm: 25
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 9]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [11, 12]
+      recolte: [12, 3]
+associations:
+  beneficies:
+    - id: LEG-001
+      raison_i18n: { fr: "Améliore le goût et repousse les pucerons", en: "Improves flavour, repels aphids" }
+    - id: LEG-019
+      raison_i18n: { fr: "Compagnonnage favorable, repousse les ravageurs", en: "Beneficial companion, repels pests" }
+  defavorables: []
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 2
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Basilic_commun  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,105 @@
+# Fiche mère (espèce) — Haricot.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-013
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Phaseolus vulgaris
+famille_botanique: Fabaceae
+
+i18n:
+  fr:
+    nom_commun: Haricot
+    noms_alternatifs: [Haricot commun]
+    description: >
+      Plante annuelle de la famille des Fabacées, cultivée pour ses gousses ou
+      ses graines riches en protéines ; fixe l'azote de l'air.
+    conseils_culture: >
+      Semer en place directement, jamais en motte (les racines ne supportent pas
+      la transplantation). Sol chaud (≥ 15 °C). Échelonner les semis toutes les
+      2–3 semaines pour une récolte continue. Ne pas arroser le feuillage.
+    conseils_recolte: >
+      Récolter tous les 2–3 jours quand les gousses atteignent 10–12 cm. Une
+      gousse trop mûre devient filandreuse et freine la production.
+    erreurs_frequentes:
+      - Semis en sol froid (pourriture des graines)
+      - Récolte trop tardive (gousses filandreuses)
+      - "Arrosage du feuillage (favorise l'anthracnose)"
+  en:
+    nom_commun: Common bean
+    description: >
+      An annual legume (Fabaceae) grown for its pods or protein-rich seeds; it
+      fixes atmospheric nitrogen.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: 5
+  gele_fatal: true
+cycle:
+  type: annuelle
+  duree_germination_jours: [8, 14]
+  duree_avant_recolte_jours: [55, 70]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 10
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [5, 7]
+      recolte: [7, 10]
+    continental:
+      semis_exterieur: [5, 7]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_exterieur: [4, 7]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [11, 1]
+      recolte: [1, 4]
+associations:
+  beneficies:
+    - id: LEG-004
+      raison_i18n: { fr: "Fixe l'azote, nourrit les carottes", en: "Fixes nitrogen, feeds carrots" }
+    - id: LEG-010
+      raison_i18n: { fr: "Trio des trois sœurs classique", en: "Classic three sisters trio" }
+    - id: soucis
+      raison_i18n: { fr: "Repousse les nématodes du sol", en: "Repels soil nematodes" }
+  defavorables:
+    - id: LEG-016
+      raison_i18n: { fr: "Les alliacées inhibent la croissance des légumineuses", en: "Alliums inhibit legume growth" }
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+rotation:
+  famille: fabaceae
+  delai_retour_annees: 3
+  precedents_favorables: [graminées, brassicaceae]
+  precedents_defavorables: [fabaceae]
+  fixe_azote: true
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Haricot_commun  # description
+contributeurs:
+  - "@potagerer"

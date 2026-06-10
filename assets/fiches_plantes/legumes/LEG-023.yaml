@@ -1,0 +1,100 @@
+# Fiche mère (espèce) — Artichaut.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-023
+version_fiche: 1
+categorie: legume
+sous_type: legume_fleur
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Cynara cardunculus
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Artichaut
+    noms_alternatifs: [Artichaut commun]
+    description: >
+      Plante vivace de la famille des Astéracées cultivée pour ses capitules
+      floraux (têtes) charnus, consommés comme légume avant floraison.
+    conseils_culture: >
+      Planter des éclats de pied au printemps. Sol profond, riche, bien drainé.
+      Pailler copieusement en automne pour protéger les souches du gel.
+      Supprimer les tiges florales secondaires pour concentrer la sève sur les
+      capitules principaux. Renouveler les pieds tous les 3–5 ans.
+    conseils_recolte: >
+      Récolter les capitules avant que les bractées s'ouvrent, encore serrées et
+      fermes. Couper à 10 cm de tige. La récolte principale a lieu en mai–juin,
+      avec parfois une seconde en automne.
+    erreurs_frequentes:
+      - Plantation sans paillage hivernal (gèle des souches)
+      - Sol trop pauvre (capitules petits)
+      - 'Récolte tardive (bractées ouvertes, cœur dur)'
+  en:
+    nom_commun: Artichoke
+    description: >
+      A perennial thistle (Asteraceae) cultivated for its edible flower heads.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_optimale: 18
+  temperature_min_survie: -10
+  gele_fatal: false
+cycle:
+  type: vivace
+  duree_avant_recolte_jours: [365, 400]
+  hauteur_adulte_cm: [100, 150]
+  espacement_cm: 80
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 5]
+      recolte: [5, 7]
+    continental:
+      plantation: [4, 5]
+      recolte: [5, 7]
+    mediterraneen:
+      plantation: [2, 4]
+      recolte: [4, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [11, 1]
+associations:
+  beneficies:
+    - id: LEG-014
+      raison_i18n: { fr: "Profite de l'ombre partielle des artichauts en été", en: "Benefits from partial artichoke shade in summer" }
+    - id: capucine
+      raison_i18n: { fr: "Attire les pollinisateurs, plante-piège", en: "Attracts pollinators, trap crop" }
+  defavorables:
+    - id: LEG-020
+      raison_i18n: { fr: "Concurrence racinaire pour l'espace et les nutriments", en: "Root competition for space and nutrients" }
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 5
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [asteraceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Artichaut  # description
+contributeurs:
+  - "@potagerer"

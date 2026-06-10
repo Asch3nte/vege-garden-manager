@@ -1,0 +1,49 @@
+# Fiche fille (variété) — Laitue Batavia Rouge Grenobloise. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V001
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa var. capitata 'Rouge Grenobloise'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Batavia Rouge Grenobloise
+    noms_alternatifs: [Grenobloise, Batavia rouge]
+    description: >
+      Variété batavia ancienne à feuilles très frisées, dorées à vert à la base
+      et rouge acajou sur les bords. Pomme peu serrée, feuilles croquantes et
+      savoureuses, très résistantes à la chaleur et à la montaison. L'une des
+      laitues d'été les plus appréciées des jardiniers. Bien adaptée aux régions
+      chaudes.
+    conseils_culture: >
+      Semer en place ou en terrine, repiquer à 30 cm. Résiste bien à la chaleur
+      et à la sécheresse modérée. Peut se récolter feuille à feuille sur la
+      durée (coupe-et-revient). Adapter les apports en eau pour éviter
+      complètement la sécheresse qui ferait monter à graines.
+    conseils_recolte: >
+      Récolter la pomme entière ou prélever feuille par feuille en laissant le
+      cœur pour prolonger la production.
+    erreurs_frequentes:
+      - Sol trop pauvre (feuilles petites et sans saveur)
+      - Stress hydrique prolongé (montaison)
+  en:
+    nom_commun: Rouge Grenobloise Batavia Lettuce
+    description: >
+      Old batavia variety with very curly leaves, golden-green at the base and
+      mahogany-red at the edges. Loosely packed head, crisp and flavorful
+      leaves, very resistant to heat and bolting.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, légèrement humidifiée dans un sac", en: "Refrigerator, slightly dampened in a bag" }
+utilisations_culinaires_i18n:
+  fr: [Salade verte, salade composée, dans les sandwichs, wraps, burger]
+  en: [Green salad, composed salad, in sandwiches, wraps, burger]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Céleri-rave.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-005
+version_fiche: 1
+categorie: legume
+sous_type: legume_racine
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone5
+nom_scientifique: Apium graveolens
+famille_botanique: Apiaceae
+
+i18n:
+  fr:
+    nom_commun: Céleri-rave
+    noms_alternatifs: [Céleri-rave]
+    description: >
+      Variété de céleri de la famille des Apiacées, cultivée pour son hypocotyle
+      renflé (boule) charnu et parfumé, consommé comme légume-racine.
+    conseils_culture: >
+      Semer en intérieur très tôt (février) : cycle très long. Repiquer après
+      les gelées dans un sol très riche et toujours humide — le céleri-rave ne
+      supporte pas la sécheresse. Enlever les feuilles latérales pour favoriser
+      le développement du bulbe. Ne pas enterrer le collet.
+    conseils_recolte: >
+      Récolter de septembre à décembre selon les besoins. Se conserve très bien
+      en terre sous paillis en régions douces.
+    erreurs_frequentes:
+      - "Manque d'eau constant (bulbe dur et creux)"
+      - Semis trop tardif (bulbe trop petit)
+      - Collet trop enterré (pourriture)
+  en:
+    nom_commun: Celeriac
+    description: >
+      A group of Apium graveolens cultivars grown for their edible bulb-like
+      hypocotyl.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 15
+  temperature_optimale: 18
+  temperature_min_survie: -5
+  gele_fatal: false
+cycle:
+  type: bisannuelle
+  duree_germination_jours: [14, 21]
+  duree_avant_recolte_jours: [180, 240]
+  hauteur_adulte_cm: [40, 60]
+  espacement_cm: 35
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [9, 12]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [9, 11]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [8, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [11, 12]
+      recolte: [3, 6]
+associations:
+  beneficies:
+    - id: LEG-017
+      raison_i18n: { fr: "Association classique, mêmes besoins en eau", en: "Classic companion, same water needs" }
+    - id: LEG-014
+      raison_i18n: { fr: "Bon usage de l'espace en début de culture", en: "Good space use at the start of the season" }
+  defavorables:
+    - id: persil
+      raison_i18n: { fr: "Même famille Apiaceae, mêmes maladies et ravageurs", en: "Same Apiaceae family, same diseases and pests" }
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [apiaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Céleri-rave  # description
+contributeurs:
+  - "@potagerer"

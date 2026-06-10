@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Potiron Rouge Vif d'Étampes. Hérite de LEG-021.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-021-V001
+parent_id: LEG-021
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita maxima 'Rouge Vif d'Étampes'"
+
+i18n:
+  fr:
+    nom_commun: "Potiron Rouge Vif d'Étampes"
+    noms_alternatifs: [Potiron de Cendrillon, Cinderella Pumpkin]
+    description: >
+      Variété française spectaculaire à gros fruits très aplatis et très
+      côtelés, d'un rouge orangé intense. Peut atteindre 10–20 kg. Chair jaune
+      orangée, légèrement sucrée. Très bonne conservation. Utilisée dans de
+      nombreux desserts et soupes.
+  en:
+    nom_commun: "Rouge Vif d'Étampes Pumpkin"
+    description: >
+      Spectacular French variety with large, very flat and deeply ribbed fruits
+      of intense orange-red. Can reach 10–20 kg. Slightly sweet yellow-orange
+      flesh.
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Lieu frais, sec, aéré — 10–15 °C", en: "Cool, dry, airy location — 10–15 °C" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Cuire et mixer avant congélation", en: "Cook and purée before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Soupe, velouté, gratin, tarte sucrée, farci, purée]
+  en: [Soup, velvet soup, gratin, sweet pie, stuffed, purée]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Potiron
+contributeurs:
+  - "@potagerer"

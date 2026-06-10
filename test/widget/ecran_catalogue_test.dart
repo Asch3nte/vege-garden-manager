@@ -47,9 +47,11 @@ void main() {
     String nomFr,
     CategoriePlante cat, {
     Set<String> bons = const {},
+    String? parentId,
   }) =>
       FichePlante(
         id: id,
+        parentId: parentId,
         nomScientifique: '$id sp',
         familleBotanique: 'Test',
         categorie: cat,
@@ -235,6 +237,43 @@ void main() {
     expect(find.text('Semis & récolte'), findsOneWidget);
     expect(find.text('Semis'), findsWidgets); // band label
     expect(find.textContaining('Hémisphère nord supposé'), findsWidgets);
+  });
+
+  testWidgets('a species expands to reveal its varieties', (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+      ],
+    );
+    await monter(tester);
+
+    // The variety is hidden until the species is expanded.
+    expect(find.text('Tomate Cerise'), findsNothing);
+
+    await tester.tap(find.byTooltip('1 variété'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tomate Cerise'), findsOneWidget);
+  });
+
+  testWidgets('the network view shows species only (varieties excluded)',
+      (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+      ],
+    );
+    await monter(tester);
+    await tester.tap(find.text('Réseau'));
+    await tester.pumpAndSettle();
+
+    // Only the species node 'T' is drawn; the variety 'Tomate Cerise' is not.
+    expect(find.text('T'), findsOneWidget);
+    expect(find.text('Tomate Cerise'), findsNothing);
   });
 
   testWidgets('switching to the network view shows the constellation',

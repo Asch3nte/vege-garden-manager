@@ -22,6 +22,15 @@ class FichePlanteCache {
   /// Sheet with [id], or `null` if absent.
   FichePlante? parId(String id) => _parId[id];
 
+  /// Mother sheets only — species level, varieties excluded (ADR-0005). The
+  /// list and network catalogue views build on this.
+  List<FichePlante> meres() =>
+      _parId.values.where((f) => f.estMere).toList();
+
+  /// Variety sheets whose parent species is [idMere].
+  List<FichePlante> varietesDe(String idMere) =>
+      _parId.values.where((f) => f.parentId == idMere).toList();
+
   /// Sheets of a given [categorie].
   List<FichePlante> parCategorie(CategoriePlante categorie) =>
       _parId.values.where((f) => f.categorie == categorie).toList();

@@ -1,0 +1,111 @@
+# Fiche mère (espèce) — Tomate.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-001
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Solanum lycopersicum
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Tomate
+    noms_alternatifs: [Pomme d'amour]
+    description: >
+      Plante annuelle de la famille des Solanacées, cultivée pour ses fruits
+      charnus consommés comme légumes-fruits, crus ou cuits. Gourmande en
+      chaleur, en soleil et en sol riche.
+    conseils_culture: >
+      Tuteurer dès la plantation. Arroser au pied, jamais sur le feuillage (le
+      mildiou se développe sur les feuilles humides). Pailler pour garder le sol
+      frais et espacer les arrosages.
+    conseils_recolte: >
+      Récolter à pleine maturité, quand le fruit est ferme et bien coloré.
+    erreurs_frequentes:
+      - Arrosage du feuillage (favorise le mildiou)
+      - Plantation trop précoce (sensible au gel)
+      - Manque de tuteurage (tiges cassantes sous le poids des fruits)
+  en:
+    nom_commun: Tomato
+    description: >
+      Annual plant of the Solanaceae family, grown for its fleshy fruit eaten as
+      a vegetable, raw or cooked.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  ensoleillement_min: mi_ombre
+  temperature_min_germination: 18
+  temperature_optimale: 22
+  temperature_min_survie: 5
+  gele_fatal: true
+cycle:
+  type: annuelle
+  duree_germination_jours: [6, 10]
+  duree_avant_recolte_jours: [70, 90]
+  hauteur_adulte_cm: [80, 200]
+  espacement_cm: 60
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: true
+  culture_verticale: true
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 4]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    mediterraneen:
+      semis_interieur: [1, 3]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 10]
+      plantation: [11, 12]
+      recolte: [1, 4]
+associations:
+  beneficies:
+    - id: ARO-001
+      raison_i18n: { fr: "Repousse les pucerons, améliore le goût", en: "Repels aphids, enhances flavor" }
+    - id: soucis
+      raison_i18n: { fr: "Repousse les nématodes du sol", en: "Repels soil nematodes" }
+    - id: capucine
+      raison_i18n: { fr: "Plante-piège à pucerons", en: "Aphid trap crop" }
+  defavorables:
+    - id: LEG-020
+      raison_i18n: { fr: "Même famille, partage le mildiou", en: "Same family, shares blight" }
+    - id: fenouil
+      raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Tomate  # description
+contributeurs:
+  - "@potagerer"

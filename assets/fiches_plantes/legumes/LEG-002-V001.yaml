@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Aubergine Violette de Florence. Hérite de LEG-002.
+# Ne déclare QUE ce qui diffère de la mère (héritage sparse, ADR-0005).
+# Spécification : docs/07-base-de-connaissances-yaml.md · Schéma : ../_schema/fiche_plante_schema.yaml
+
+id: LEG-002-V001
+parent_id: LEG-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: Solanum melongena 'Violette de Florence'
+
+i18n:
+  fr:
+    nom_commun: Aubergine Violette de Florence
+    noms_alternatifs: [Aubergine ronde de Florence, Florentine Eggplant]
+    description: >
+      Variété italienne ancienne à gros fruits ronds légèrement aplatis,
+      violets et striés de blanc à la base. Chair blanche très dense, peu
+      amère et peu semée. Excellente pour la parmigiana, les tranches grillées
+      et les plats mijotés. Plant vigoureux très productif.
+    conseils_recolte: >
+      Récolter quand le fruit est ferme et brillant, avant qu'il ne ternisse.
+      Une aubergine terne et molle est trop mûre et amère.
+  en:
+    nom_commun: Florence Eggplant
+    noms_alternatifs: [Florentine Purple Eggplant]
+    description: >
+      Old Italian variety with large, slightly flattened, round fruits, purple
+      streaked with white at the base. Dense, white, mildly bitter flesh.
+
+# Cette variété s'écarte de la mère sur quelques points de cycle uniquement.
+cycle:
+  duree_avant_recolte_jours: [75, 100]
+  hauteur_adulte_cm: [60, 100]
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Griller ou cuire en dés avant congélation", en: "Grill or cook in cubes before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Parmigiana, ratatouille, grillée, farcie, en caviar d'aubergine, en tranche panée]
+  en: [Parmigiana, ratatouille, grilled, stuffed, baba ganoush, breaded slices]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

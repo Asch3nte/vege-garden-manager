@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Pomme de Terre Charlotte. Hérite de LEG-020.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-020-V001
+parent_id: LEG-020
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum tuberosum 'Charlotte'"
+
+i18n:
+  fr:
+    nom_commun: Pomme de Terre Charlotte
+    noms_alternatifs: [Charlotte mi-saison]
+    description: >
+      Variété française de référence, mi-saison, à tubercules allongés à peau
+      jaune lisse et chair ferme, peu farineuse. Chair se tient très bien à la
+      cuisson, idéale pour les salades, vapeur et poêlées. Saveur fine et
+      légèrement beurrée. Résistante aux maladies courantes.
+  en:
+    nom_commun: Charlotte Potato
+    description: >
+      French reference mid-season variety with oblong tubers, smooth yellow skin
+      and firm, waxy flesh. Holds very well when cooked, ideal for salads,
+      steamed and pan-fried. Fine, slightly buttery flavor.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave sombre, fraîche (8–10 °C), aérée", en: "Dark, cool cellar (8–10 °C), airy" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, salade de pommes de terre, poêlée, gratinée, en soupe, écrasée]
+  en: [Steamed, potato salad, pan-fried, gratin, soup, smashed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pomme_de_terre
+contributeurs:
+  - "@potagerer"

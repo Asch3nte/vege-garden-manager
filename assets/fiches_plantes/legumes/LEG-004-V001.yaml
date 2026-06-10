@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Carotte Nantaise Améliorée. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V001
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Nantaise Améliorée'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Nantaise Améliorée
+    noms_alternatifs: [Nantaise 2]
+    description: >
+      Variété classique française semi-longue (15–18 cm), cylindrique, à cœur
+      très fin, très sucrée et croquante. L'une des carottes de jardin les plus
+      cultivées en France. Excellente crues comme cuites. Bonne conservation.
+    conseils_culture: >
+      Semer clair en ligne, sur sol profond et bien ameubli sans fumure fraîche.
+      Éclaircir à 5–7 cm entre plants dès que les premières feuilles
+      apparaissent. Biner pour éviter le croutage. Protéger contre la mouche de
+      la carotte avec un voile anti-insectes.
+    conseils_recolte: >
+      Récolter à partir de 3 mois de semis, quand le collet est bien formé.
+      Tirer délicatement ou utiliser une fourche-bêche en sol compacte.
+    erreurs_frequentes:
+      - 'Sol trop riche en azote (racines fourchues, trop de feuillage)'
+      - Semis trop dense non éclairci (racines grêles)
+      - Absence de protection contre la mouche de la carotte
+  en:
+    nom_commun: Nantes Improved Carrot
+    description: >
+      Classic French semi-long variety (15–18 cm), cylindrical, very fine core,
+      very sweet and crisp. One of the most widely grown garden carrots in
+      France.
+
+conservation:
+  - methode: frais
+    duree_jours: 21
+    conditions_i18n: { fr: "Réfrigérateur, sac perforé, ou sable humide en cave", en: "Refrigerator, perforated bag, or damp sand in cellar" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Éplucher et blanchir 3 min avant congélation", en: "Peel and blanch 3 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Crue, râpée en salade, en julienne, soupe, purée, glacée au beurre]
+  en: [Raw, grated salad, julienne, soup, purée, glazed in butter]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

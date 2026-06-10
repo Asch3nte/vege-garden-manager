@@ -1,0 +1,102 @@
+# Fiche mère (espèce) — Épinard.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-012
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone3
+nom_scientifique: Spinacia oleracea
+famille_botanique: Amaranthaceae
+
+i18n:
+  fr:
+    nom_commun: Épinard
+    description: >
+      Plante potagère annuelle de la famille des Amaranthacées, cultivée pour
+      ses feuilles tendres consommées comme légume, crues ou cuites.
+    conseils_culture: >
+      Semer en place de août à octobre pour une récolte automnale et hivernale.
+      Sol riche en azote mais bien drainé. Éviter les semis estivaux : la
+      chaleur et les jours longs provoquent la montaison rapide.
+    conseils_recolte: >
+      Cueillir les feuilles externes dès qu'elles sont bien formées, en laissant
+      le cœur intact pour une production continue. Éviter de récolter sous le
+      gel.
+    erreurs_frequentes:
+      - Semis en plein été (montaison immédiate)
+      - Sol acide (croissance chétive)
+      - "Manque d'azote (feuilles petites et pâles)"
+  en:
+    nom_commun: Spinach
+    description: >
+      A leafy green of the Amaranthaceae family eaten fresh or cooked.
+
+besoins:
+  ensoleillement: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.5
+  ph_max: 7.5
+  temperature_min_germination: 7
+  temperature_optimale: 15
+  ensoleillement_min: mi_ombre
+  temperature_min_survie: -15
+  gele_fatal: false
+cycle:
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [40, 60]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 15
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [8, 10]
+      recolte: [10, 4]
+    continental:
+      semis_exterieur: [8, 9]
+      recolte: [10, 4]
+    mediterraneen:
+      semis_exterieur: [9, 11]
+      recolte: [11, 4]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [2, 4]
+      recolte: [4, 10]
+associations:
+  beneficies:
+    - id: LEG-014
+      raison_i18n: { fr: "Mêmes besoins, bonne association de feuilles", en: "Same needs, good leaf vegetable companion" }
+    - id: LEG-004
+      raison_i18n: { fr: "Bon usage de l'espace en association", en: "Good companion for space use" }
+  defavorables:
+    - id: LEG-003
+      raison_i18n: { fr: "Même famille Amaranthaceae, mêmes maladies", en: "Same Amaranthaceae family, same diseases" }
+rotation:
+  famille: amaranthaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [amaranthaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Épinard  # description
+contributeurs:
+  - "@potagerer"

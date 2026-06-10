@@ -53,9 +53,10 @@ Future<void> _ajouterPlante(
 /// Tab 3 — **Catalogue**: knowledge base of plant sheets with search and a
 /// category filter (docs/09 §5).
 ///
-/// Reimplemented from the `catalogue.jsx` mock-up, **Fiches view**: search +
-/// category chips + plant cards + a detail bottom sheet. The « Réseau » graph
-/// view (companion constellation) is deferred — see docs/15.
+/// Two views (segmented toggle): **Fiches** (search + category chips + species
+/// cards, each expandable to its varieties — ADR-0005) and **Réseau** (companion
+/// constellation over the species). Both show species (mother sheets); varieties
+/// appear only when a species is expanded in the list.
 class EcranCatalogue extends ConsumerWidget {
   const EcranCatalogue({super.key});
 
@@ -128,7 +129,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
         ),
         Expanded(
           child: _reseau
-              ? VueReseauCatalogue(fiches: vue.toutes, onAjouter: ajouter)
+              ? VueReseauCatalogue(fiches: vue.toutesMeres, onAjouter: ajouter)
               : _VueFiches(vue: vue, onAjouter: ajouter),
         ),
       ],
@@ -180,7 +181,7 @@ class _VueFiches extends ConsumerWidget {
         Expanded(
           child: vue.sansResultat
               ? _EtatVide(message: l10n.catalogueAucunResultat)
-              : _Liste(fiches: vue.fiches, onAjouter: onAjouter),
+              : _Liste(groupes: vue.groupes, onAjouter: onAjouter),
         ),
       ],
     );
@@ -340,12 +341,12 @@ class _Chip extends StatelessWidget {
   }
 }
 
-/// Result list of plant cards.
+/// Result list of species cards (each expandable to its varieties).
 class _Liste extends StatelessWidget {
-  final List<FichePlante> fiches;
+  final List<GroupeFiche> groupes;
   final void Function(FichePlante) onAjouter;
 
-  const _Liste({required this.fiches, required this.onAjouter});
+  const _Liste({required this.groupes, required this.onAjouter});
 
   @override
   Widget build(BuildContext context) {
@@ -356,63 +357,174 @@ class _Liste extends StatelessWidget {
         EspacementsApp.s4,
         EspacementsApp.s6,
       ),
-      itemCount: fiches.length,
+      itemCount: groupes.length,
       separatorBuilder: (_, _) => const SizedBox(height: EspacementsApp.s2),
       itemBuilder: (context, i) =>
-          _CarteFiche(fiche: fiches[i], onAjouter: onAjouter),
+          _CarteGroupe(groupe: groupes[i], onAjouter: onAjouter),
     );
   }
 }
 
-/// One plant card: name, category, sun & water needs.
+/// A species card with an expand control revealing its varieties (ADR-0005).
+class _CarteGroupe extends StatefulWidget {
+  final GroupeFiche groupe;
+  final void Function(FichePlante) onAjouter;
+
+  const _CarteGroupe({required this.groupe, required this.onAjouter});
+
+  @override
+  State<_CarteGroupe> createState() => _CarteGroupeState();
+}
+
+class _CarteGroupeState extends State<_CarteGroupe> {
+  bool _ouvert = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final groupe = widget.groupe;
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          _CarteFiche(
+            fiche: groupe.mere,
+            onAjouter: widget.onAjouter,
+            nbVarietes: groupe.varietes.length,
+            ouvert: _ouvert,
+            onToggle: groupe.aVarietes
+                ? () => setState(() => _ouvert = !_ouvert)
+                : null,
+          ),
+          if (_ouvert)
+            for (final v in groupe.varietes)
+              _LigneVariete(fiche: v, onAjouter: widget.onAjouter),
+        ],
+      ),
+    );
+  }
+}
+
+/// One species row: name, category, sun & water needs; trailing chevron, or an
+/// expand toggle with the variety count when [onToggle] is set.
 class _CarteFiche extends StatelessWidget {
   final FichePlante fiche;
   final void Function(FichePlante) onAjouter;
+  final int nbVarietes;
+  final bool ouvert;
+  final VoidCallback? onToggle;
 
-  const _CarteFiche({required this.fiche, required this.onAjouter});
+  const _CarteFiche({
+    required this.fiche,
+    required this.onAjouter,
+    this.nbVarietes = 0,
+    this.ouvert = false,
+    this.onToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Card(
+    return InkWell(
+      onTap: () => afficherFichePlanteDetail(
+        context,
+        fiche,
+        onAjouter: () => onAjouter(fiche),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(EspacementsApp.s3),
+        child: Row(
+          children: [
+            Icon(Icons.eco_outlined, size: TaillesIconesApp.lg, color: theme.colorScheme.primary),
+            const SizedBox(width: EspacementsApp.s3),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(fiche.nomLocalise('fr'), style: theme.textTheme.titleLarge),
+                  const SizedBox(height: 2),
+                  Text(
+                    l10n.categorie(fiche.categorie),
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: EspacementsApp.s1),
+                  Wrap(
+                    spacing: EspacementsApp.s3,
+                    children: [
+                      _Meta(icone: Icons.wb_sunny_outlined, texte: l10n.exposition(fiche.besoins.soleil)),
+                      _Meta(icone: Icons.water_drop_outlined, texte: l10n.besoinEau(fiche.besoins.eau)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            if (onToggle != null)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(ouvert ? Icons.expand_less : Icons.expand_more),
+                    tooltip: l10n.catalogueNbVarietes(nbVarietes),
+                    onPressed: onToggle,
+                  ),
+                  Text(
+                    '$nbVarietes',
+                    style: theme.textTheme.labelSmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              )
+            else
+              Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// An indented variety row under its species, opening the variety's sheet.
+class _LigneVariete extends StatelessWidget {
+  final FichePlante fiche;
+  final void Function(FichePlante) onAjouter;
+
+  const _LigneVariete({required this.fiche, required this.onAjouter});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+        border: Border(top: BorderSide(color: theme.colorScheme.outlineVariant)),
+      ),
       child: InkWell(
-        borderRadius: RayonsApp.brLg,
         onTap: () => afficherFichePlanteDetail(
           context,
           fiche,
           onAjouter: () => onAjouter(fiche),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(EspacementsApp.s3),
+          padding: const EdgeInsets.fromLTRB(
+            EspacementsApp.s6,
+            EspacementsApp.s2,
+            EspacementsApp.s3,
+            EspacementsApp.s2,
+          ),
           child: Row(
             children: [
-              Icon(Icons.eco_outlined, size: TaillesIconesApp.lg, color: theme.colorScheme.primary),
+              Icon(Icons.spa_outlined,
+                  size: TaillesIconesApp.sm, color: theme.colorScheme.secondary),
               const SizedBox(width: EspacementsApp.s3),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(fiche.nomLocalise('fr'), style: theme.textTheme.titleLarge),
-                    const SizedBox(height: 2),
-                    Text(
-                      l10n.categorie(fiche.categorie),
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                    ),
-                    const SizedBox(height: EspacementsApp.s1),
-                    Wrap(
-                      spacing: EspacementsApp.s3,
-                      children: [
-                        _Meta(icone: Icons.wb_sunny_outlined, texte: l10n.exposition(fiche.besoins.soleil)),
-                        _Meta(icone: Icons.water_drop_outlined, texte: l10n.besoinEau(fiche.besoins.eau)),
-                      ],
-                    ),
-                  ],
-                ),
+                child: Text(fiche.nomLocalise('fr'),
+                    style: theme.textTheme.titleMedium),
               ),
-              Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+              Icon(Icons.chevron_right,
+                  size: TaillesIconesApp.md,
+                  color: theme.colorScheme.onSurfaceVariant),
             ],
           ),
         ),

@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Haricot vert Fin de Bagnols. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V001
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Fin de Bagnols'"
+
+i18n:
+  fr:
+    nom_commun: Haricot vert Fin de Bagnols
+    noms_alternatifs: [Haricot filet Bagnols]
+    description: >
+      Variété ancienne française à gousses très fines, longues (12–15 cm), sans
+      fil, tendres et savoureuses. Plant nain très productif, idéal pour les
+      petits potagers. L'une des variétés les plus appréciées des jardiniers.
+  en:
+    nom_commun: French Bean Fin de Bagnols
+    description: >
+      Old French heirloom variety with very thin, long (12–15 cm), stringless,
+      tender and flavorful pods. Highly productive dwarf bush plant.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 3 min avant congélation", en: "Blanch 3 min before freezing" }
+  - methode: conserves
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Vapeur, poêlé à l'ail, salade niçoise, en accompagnement, en conserve]
+  en: [Steamed, sautéed with garlic, niçoise salad, side dish, preserved]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Haricot_vert
+contributeurs:
+  - "@potagerer"

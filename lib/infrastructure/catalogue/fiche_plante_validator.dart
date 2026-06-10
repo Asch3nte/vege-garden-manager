@@ -6,7 +6,21 @@ import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
 /// Pipeline step 3 (see `docs/07-base-de-connaissances-yaml.md` §6). On the first
 /// problem it throws a [FichePlanteInvalideException] describing the issue.
 class FichePlanteValidator {
-  const FichePlanteValidator();
+  /// When `true`, [valider] also enforces the canonical ADR-0005 id format.
+  ///
+  /// Defaults to `false` during the migration window: the embedded sheets still
+  /// carry legacy `snake_case` ids until the rename (Lot 2 tooling executed in
+  /// Lot 3). Flip to `true` once every sheet uses the canonical format.
+  final bool validerFormatId;
+
+  const FichePlanteValidator({this.validerFormatId = false});
+
+  /// Canonical id pattern (ADR-0005): `CAT3-NNN` for a species,
+  /// `CAT3-NNN-VNNN` for a variety. Examples: `LEG-001`, `LEG-001-V001`.
+  static final RegExp _formatId = RegExp(r'^[A-Z]{3}-\d{3}(-V\d{3})?$');
+
+  /// Whether [id] matches the canonical ADR-0005 id format.
+  static bool formatIdValide(String id) => _formatId.hasMatch(id);
 
   void valider(Map<dynamic, dynamic> y, {required String source}) {
     void exiger(bool condition, String raison) {
@@ -16,6 +30,30 @@ class FichePlanteValidator {
     for (final cle in ['id', 'nom_scientifique', 'famille_botanique',
         'categorie', 'usages', 'i18n', 'besoins', 'cycle']) {
       exiger(y[cle] != null, 'missing field "$cle"');
+    }
+
+    // Canonical id format — only enforced once the catalogue is migrated.
+    if (validerFormatId) {
+      final id = y['id'];
+      exiger(
+        id is String && formatIdValide(id),
+        'id must match the canonical format CAT3-NNN[-VNNN] (e.g. LEG-001-V001)',
+      );
+    }
+
+    // Variety sheet (ADR-0005): a `parent_id` must be a non-empty string and the
+    // variety id must live in its mother's namespace (id prefixed by parent_id).
+    // Validation runs after inheritance resolution, so the inherited required
+    // fields above are already present. (Strict id format is enforced in Lot 2.)
+    final parentId = y['parent_id'];
+    if (parentId != null) {
+      exiger(parentId is String && parentId.isNotEmpty,
+          'parent_id must be a non-empty string');
+      final id = y['id'];
+      exiger(
+        id is String && id != parentId && id.startsWith(parentId as String),
+        'a variety id must be prefixed by its parent_id',
+      );
     }
 
     exiger(
@@ -53,5 +91,31 @@ class FichePlanteValidator {
           duree[0] <= duree[1],
       'cycle.duree_avant_recolte_jours must be [min, max] with 0 < min <= max',
     );
+
+    // Optional enrichment fields
+    final difficulte = y['difficulte'];
+    if (difficulte != null) {
+      exiger(
+        difficulte is int && difficulte >= 1 && difficulte <= 3,
+        'difficulte must be an integer in 1..3',
+      );
+    }
+
+    final rusticite = y['rusticite'] as Map?;
+    if (rusticite != null) {
+      final zoneMin = rusticite['zone_min'];
+      exiger(
+        zoneMin is String && zoneMin.startsWith('zone'),
+        'rusticite.zone_min must be a valid ZoneRusticite (e.g. zone6)',
+      );
+    }
+
+    final profondeur = cycle['profondeur_sol_min_cm'];
+    if (profondeur != null) {
+      exiger(
+        profondeur is int && profondeur > 0,
+        'cycle.profondeur_sol_min_cm must be a positive integer',
+      );
+    }
   }
 }

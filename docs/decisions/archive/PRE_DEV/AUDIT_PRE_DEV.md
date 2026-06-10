@@ -26,7 +26,7 @@
 
 - [Points forts à préserver](#points-forts-à-préserver)
 - [🔴 Incohérences critiques (C1–C6)](#-incohérences-critiques)
-- [🟠 Incohérences majeures (M1–M9)](#-incohérences-majeures)
+- [🟠 IncohérencM1–M9es majeures ()](#-incohérences-majeures)
 - [🟡 Incohérences mineures & pratiques (P1–P13)](#-incohérences-mineures--pratiques)
 - [💡 Suggestions d'amélioration](#-suggestions-damélioration)
 - [🎯 Plan d'action priorisé](#-plan-daction-priorisé)
@@ -303,7 +303,7 @@ Trancher : l'ajouter à la liste explicite, ou lui ajouter les colonnes de sync.
 |---|---|---|---|
 | 1 | ADR-0002 : trancher catégories, surface/position, i18n fiches | C1, C3, M2 | Décision |
 | 2 | Réconcilier tous les enums dans une matrice unique | C2, C6, M1, M3 | Doc |
-| 3 | Corriger entités Domain incomplètes | C4, C5, M4, M5 | Doc |
+| 3 | Corriger entités Domain incomplètes | C4, C5, M4, M5 | Doc |multi-platform
 | 4 | Lever l'ambiguïté observations V1/V1.1 et sync `fiches_perso` | M6, M9 | Décision |
 | 5 | Corrections mineures rapides | P1, P3, P5, P7, M7, M8 | Doc |
 | 6 | **Puis seulement** : `flutter create` + premiers VO/entités + tests | — | Code |

@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Tomate Cœur de Bœuf. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V001
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Cuor di Bue'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Cœur de Bœuf
+    noms_alternatifs: [Cuor di Bue, Tomate côtelée géante]
+    description: >
+      Variété ancienne italienne à gros fruits côtelés pouvant dépasser 500 g,
+      charnus et peu aqueux, à chair dense et sucrée. Idéale pour les salades,
+      les tomates farcies et les sauces corsées.
+    conseils_culture: >
+      Tuteurer solidement dès la plantation : les fruits sont lourds et la tige
+      doit supporter leur poids. Supprimer les gourmands pour favoriser de gros
+      fruits. Arroser régulièrement au pied pour éviter l'éclatement. Un
+      paillage épais est fortement recommandé.
+    conseils_recolte: >
+      Récolter quand le fruit est bien coloré et cède légèrement sous le doigt.
+      Ne pas attendre la sur-maturité : la peau fine se fissure facilement.
+    erreurs_frequentes:
+      - "Arrosage irrégulier (cause l'éclatement des fruits)"
+      - Absence de taille des gourmands (fruits trop petits)
+      - Plantation trop tôt (sensible au froid)
+  en:
+    nom_commun: Beefsteak Tomato
+    description: >
+      Old Italian heirloom variety with large ribbed fruits exceeding 500 g,
+      meaty and low in water, with dense and sweet flesh.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: sechage
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, farcie, en sauce, confite, séchée]
+  en: [Raw in salads, stuffed, in sauces, candied, dried]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate_cœur_de_bœuf
+contributeurs:
+  - "@potagerer"

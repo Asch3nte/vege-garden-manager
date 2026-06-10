@@ -39,25 +39,46 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     state = AsyncData(_projeter());
   }
 
-  /// Applies the current filters to the loaded catalogue and orders the result
-  /// by localized name.
+  /// Applies the current filters and groups the result by species (mother sheet
+  /// + its varieties), ordered by localized name.
+  ///
+  /// A species is shown when its category matches and either the query is empty,
+  /// the species itself matches, or one of its varieties matches. When only
+  /// varieties match, just those are expanded under the species; otherwise all
+  /// of them are.
   CatalogueVue _projeter() {
     final terme = _requete.trim().toLowerCase();
+    int parNom(FichePlante a, FichePlante b) =>
+        a.nomLocalise(_locale).compareTo(b.nomLocalise(_locale));
+    bool correspond(FichePlante f) =>
+        f.nomLocalise(_locale).toLowerCase().contains(terme) ||
+        f.id.toLowerCase().contains(terme);
 
-    final filtrees = _toutes.where((f) {
-      if (_categorie != null && f.categorie != _categorie) return false;
-      if (terme.isEmpty) return true;
-      return f.nomLocalise(_locale).toLowerCase().contains(terme) ||
-          f.id.toLowerCase().contains(terme);
-    }).toList()
-      ..sort((a, b) =>
-          a.nomLocalise(_locale).compareTo(b.nomLocalise(_locale)));
+    final meres = _toutes.where((f) => f.estMere).toList()..sort(parNom);
+    final varietesParParent = <String, List<FichePlante>>{};
+    for (final f in _toutes.where((f) => f.estVariete)) {
+      (varietesParParent[f.parentId!] ??= []).add(f);
+    }
+
+    final groupes = <GroupeFiche>[];
+    for (final mere in meres) {
+      if (_categorie != null && mere.categorie != _categorie) continue;
+      final varietes = [...?varietesParParent[mere.id]]..sort(parNom);
+      if (terme.isEmpty || correspond(mere)) {
+        groupes.add(GroupeFiche(mere: mere, varietes: varietes));
+      } else {
+        final filtrees = varietes.where(correspond).toList();
+        if (filtrees.isNotEmpty) {
+          groupes.add(GroupeFiche(mere: mere, varietes: filtrees));
+        }
+      }
+    }
 
     return CatalogueVue(
       requete: _requete,
       categorie: _categorie,
-      fiches: filtrees,
-      toutes: _toutes,
+      groupes: groupes,
+      toutesMeres: meres,
     );
   }
 }

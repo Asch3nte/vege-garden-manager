@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Poivron Corno di Toro. Hérite de LEG-019.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-019-V001
+parent_id: LEG-019
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum 'Corno di Toro'"
+
+i18n:
+  fr:
+    nom_commun: Poivron Corno di Toro
+    noms_alternatifs: [Piment Corne de taureau, Poivron corne rouge]
+    description: >
+      Variété italienne emblématique à fruits longs et effilés en forme de corne
+      (15–20 cm), rouge à maturité, très doux et sucré. Chair épaisse et
+      savoureuse, excellente crue ou grillée. Plant vigoureux très productif.
+  en:
+    nom_commun: Corno di Toro Pepper
+    description: >
+      Iconic Italian variety with long, tapered horn-shaped fruits (15–20 cm),
+      red when ripe, very sweet and mild. Thick, flavorful flesh, excellent raw
+      or grilled.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: sechage
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, grillé, farci, en antipasto, mariné à l'huile]
+  en: [Raw in salads, grilled, stuffed, antipasto, marinated in oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poivron
+contributeurs:
+  - "@potagerer"

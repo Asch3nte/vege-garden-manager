@@ -1,0 +1,104 @@
+# Fiche mère (espèce) — Betterave.
+# Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
+# Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
+id: LEG-003
+version_fiche: 1
+categorie: legume
+sous_type: legume_racine
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Beta vulgaris
+famille_botanique: Amaranthaceae
+
+i18n:
+  fr:
+    nom_commun: Betterave
+    noms_alternatifs: [Betterave potagère, Betterave rouge]
+    description: >
+      Plante potagère bisannuelle de la famille des Amaranthacées, cultivée
+      comme annuelle pour sa racine charnue consommée comme légume ; les jeunes
+      feuilles sont aussi comestibles.
+    conseils_culture: >
+      Semer en place, tremper les graines 24 h pour accélérer la germination.
+      Éclaircir à 10 cm. Sol meuble et sans cailloux. Arroser modérément ; la
+      sécheresse rend les racines fibreuses et moins savoureuses.
+    conseils_recolte: >
+      Récolter à 6–7 cm de diamètre pour une saveur optimale. Les grosses
+      betteraves deviennent creuses et ligneuses.
+    erreurs_frequentes:
+      - Sol compact ou caillouteux (racines déformées)
+      - Récolte trop tardive (fibrosité)
+      - Semis non éclairci (grappes de racines grêles)
+  en:
+    nom_commun: Beetroot
+    description: >
+      Root vegetable (Beta vulgaris), eaten raw, roasted, steamed or boiled; the
+      leaves are edible too.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - leger
+    - bien_draine
+    - riche
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 10
+  temperature_optimale: 18
+  ensoleillement_min: mi_ombre
+  temperature_min_survie: -10
+  gele_fatal: false
+cycle:
+  type: bisannuelle
+  duree_germination_jours: [10, 18]
+  duree_avant_recolte_jours: [55, 80]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 10
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 8]
+      recolte: [5, 11]
+    continental:
+      semis_exterieur: [4, 7]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [2, 8]
+      recolte: [4, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 2]
+      recolte: [11, 5]
+associations:
+  beneficies:
+    - id: LEG-014
+      raison_i18n: { fr: "Bon usage de l'espace, cycles complémentaires", en: "Good space use, complementary cycles" }
+    - id: ail
+      raison_i18n: { fr: "L'ail repousse certains ravageurs racinaires", en: "Garlic repels certain root pests" }
+  defavorables:
+    - id: LEG-013
+      raison_i18n: { fr: "La betterave inhibe la croissance des haricots", en: "Beet inhibits bean growth" }
+rotation:
+  famille: amaranthaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, cucurbitaceae]
+  precedents_defavorables: [amaranthaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Betterave_potagère  # description
+contributeurs:
+  - "@potagerer"

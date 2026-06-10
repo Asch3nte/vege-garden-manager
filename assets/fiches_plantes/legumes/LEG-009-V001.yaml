@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Concombre Marketmore. Hérite de LEG-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-009-V001
+parent_id: LEG-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis sativus 'Marketmore'"
+
+i18n:
+  fr:
+    nom_commun: Concombre Marketmore
+    noms_alternatifs: [Marketmore 76]
+    description: >
+      Variété américaine de référence, très productive, à fruits cylindriques
+      d'un vert sombre, 18–22 cm, à peau légèrement épineuse. Résistante au
+      mildiou et à l'angulosphère. Graines petites, peu amères. Idéale pour la
+      culture en plein air comme sous abri.
+  en:
+    nom_commun: Marketmore Cucumber
+    description: >
+      American reference variety, very productive, with dark-green cylindrical
+      fruits, 18–22 cm, slightly spiny skin. Resistant to mildew. Small,
+      slightly bitter seeds.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: lactofermentation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en raïta, mariné, cornichons, tzatziki]
+  en: [Raw in salads, raita, pickled, gherkins, tzatziki]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Concombre
+contributeurs:
+  - "@potagerer"

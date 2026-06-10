@@ -12,10 +12,12 @@ FichePlante _fiche(
   String id,
   CategoriePlante categorie,
   Set<UsagePlante> usages,
-  String nomFr,
-) =>
+  String nomFr, {
+  String? parentId,
+}) =>
     FichePlante(
       id: id,
+      parentId: parentId,
       nomScientifique: 'X x',
       familleBotanique: 'Xaceae',
       categorie: categorie,
@@ -55,6 +57,17 @@ void main() {
       expect(cache.rechercher('tom', 'fr'), [tomate]);
       expect(cache.rechercher('SOUCI', 'fr'), [souci]);
       expect(cache.rechercher('', 'fr'), hasLength(2));
+    });
+
+    test('separates mother sheets from their varieties (ADR-0005)', () {
+      final variete = _fiche('tomate_cdb', CategoriePlante.legume,
+          {UsagePlante.alimentaire}, 'Cœur de Bœuf',
+          parentId: 'tomate');
+      final c = FichePlanteCache([tomate, souci, variete]);
+
+      expect(c.meres().map((f) => f.id), unorderedEquals(['tomate', 'souci']));
+      expect(c.varietesDe('tomate'), [variete]);
+      expect(c.varietesDe('souci'), isEmpty);
     });
 
     test('last sheet wins on duplicate id', () {

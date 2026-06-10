@@ -359,9 +359,9 @@
   "@catalogueErreurChargement": {
     "description": "Message d'erreur de chargement du catalogue."
   },
-  "catalogueNbVarietes": "{count} variétés",
+  "catalogueNbVarietes": "{count, plural, =1{1 variété} other{{count} variétés}}",
   "@catalogueNbVarietes": {
-    "description": "Nombre de variétés d'une fiche (différé : non encore en base).",
+    "description": "Nombre de variétés (fiches filles) d'une espèce, sur sa carte du catalogue.",
     "placeholders": {
       "count": { "type": "int" }
     }

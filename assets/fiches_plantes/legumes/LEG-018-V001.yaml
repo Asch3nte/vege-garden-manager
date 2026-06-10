@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Pois Mange-tout Carouby de Maussane. Hérite de LEG-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-018-V001
+parent_id: LEG-018
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pisum sativum var. saccharatum 'Carouby de Maussane'"
+
+i18n:
+  fr:
+    nom_commun: Pois Mange-tout Carouby de Maussane
+    noms_alternatifs: [Carouby, Pois plate-côte]
+    description: >
+      Variété provençale ancienne à grosses gousses plates (10–12 cm), vert
+      clair, se mangeant entières avant que les grains ne se forment. Saveur
+      délicate et sucrée. Plant grimpant pouvant atteindre 1,5 m, très productif
+      et résistant. L'une des meilleures variétés de mangetout pour les
+      potagers.
+  en:
+    nom_commun: Carouby de Maussane Snow Pea
+    description: >
+      Old Provençal variety with large, flat pods (10–12 cm), eaten whole before
+      the peas form. Delicate, sweet flavor. Climbing plant up to 1.5 m, very
+      productive and resistant.
+
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Réfrigérateur, à consommer rapidement", en: "Refrigerator, consume quickly" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Blanchir 1 min avant congélation", en: "Blanch 1 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Cru, sauté à l'huile d'olive, à la vapeur, dans les woks, avec du riz]
+  en: [Raw, sautéed in olive oil, steamed, in stir-fries, with rice]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pois_mangetout
+contributeurs:
+  - "@potagerer"

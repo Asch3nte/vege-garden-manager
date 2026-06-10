@@ -1,0 +1,72 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Registre des IDs de fiches plantes — Pot'à Gérer
+# Spécification : docs/decisions/0005-fiche-mere-varietes-et-id.md
+#
+# Une ligne par fiche, ordre numérique par catégorie : `ID: Nom commun (fr)`.
+# Index humain lisible ET source de vérité du prochain numéro disponible.
+#
+# RÈGLES (ADR-0005) :
+#   • Format espèce  : [CAT3]-[NUM3]        ex. LEG-001
+#   • Format variété : [CAT3]-[NUM3]-V[NUM3] ex. LEG-001-V001
+#   • Numéros séquentiels par catégorie, attribués à l'ajout, IMMUABLES.
+#     Un numéro supprimé n'est JAMAIS réattribué.
+#   • Les variétés sont numérotées dans l'espace de leur espèce (V001, V002…).
+#
+# Codes catégorie : LEG=legume ARO=aromatique FRU=fruit PFR=petit_fruit
+#                   FLE=fleur CER=cereale ENG=engrais_vert
+# ─────────────────────────────────────────────────────────────────────────────
+
+legumes:
+  LEG-001: Tomate
+  LEG-001-V001: Tomate Cœur de Bœuf
+  LEG-002: Aubergine
+  LEG-002-V001: Aubergine Violette de Florence
+  LEG-003: Betterave
+  LEG-003-V001: Betterave Chioggia
+  LEG-004: Carotte
+  LEG-004-V001: Carotte Nantaise Améliorée
+  LEG-005: Céleri-rave
+  LEG-005-V001: Céleri-rave Brilliant
+  LEG-006: Chou brocoli
+  LEG-006-V001: Chou brocoli Calabrese
+  LEG-007: Chou cabus
+  LEG-007-V001: Chou cabus rouge
+  LEG-008: Chou-fleur
+  LEG-008-V001: Chou-fleur de Bretagne
+  LEG-009: Concombre
+  LEG-009-V001: Concombre Marketmore
+  LEG-010: Courge musquée
+  LEG-010-V001: Courge Butternut Ponca
+  LEG-011: Courgette
+  LEG-011-V001: Courgette Black Beauty
+  LEG-012: Épinard
+  LEG-012-V001: Épinard Géant d'Hiver
+  LEG-013: Haricot
+  LEG-013-V001: Haricot vert Fin de Bagnols
+  LEG-014: Laitue
+  LEG-014-V001: Laitue Batavia Rouge Grenobloise
+  LEG-015: Navet
+  LEG-015-V001: Navet Boule d'Or
+  LEG-016: Oignon
+  LEG-016-V001: Oignon Rouge de Florence
+  LEG-017: Poireau
+  LEG-017-V001: Poireau Bleu de Solaise
+  LEG-018: Pois
+  LEG-018-V001: Pois mangetout Carouby
+  LEG-019: Poivron
+  LEG-019-V001: Poivron Corno di Toro
+  LEG-020: Pomme de terre
+  LEG-020-V001: Pomme de terre Charlotte
+  LEG-021: Potimarron
+  LEG-021-V001: Potimarron Rouge Vif d'Étampes
+  LEG-022: Radis
+  LEG-022-V001: Radis Cherry Belle
+  LEG-023: Artichaut
+  LEG-023-V001: Artichaut Vert de Laon
+
+aromatiques:
+  ARO-001: Basilic
+
+# Réfs d'associations citées par les fiches mais sans fiche dédiée à ce jour
+# (laissées telles quelles ; à créer en contenu ultérieur) :
+#   capucine, fenouil, aneth, moutarde, soucis, persil, fraise, ail.
