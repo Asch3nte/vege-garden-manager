@@ -124,6 +124,28 @@ void main() {
     verify(() => taches.sauvegarder(tache)).called(1);
   });
 
+  testWidgets('the overflow menu deletes a task after confirmation',
+      (tester) async {
+    final tache = uneTache('t1', 'Arroser les tomates', DateTime(2026, 6, 8, 10));
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [tache]);
+    when(() => taches.supprimer(any())).thenAnswer((_) async {});
+
+    await monter(tester);
+
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Supprimer')); // menu item
+    await tester.pumpAndSettle();
+
+    // Confirmation dialog.
+    expect(find.text('Supprimer cette tâche ?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+    await tester.pumpAndSettle();
+
+    verify(() => taches.supprimer('t1')).called(1);
+  });
+
   testWidgets('empty window shows the empty state', (tester) async {
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);

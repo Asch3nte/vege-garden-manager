@@ -51,7 +51,7 @@ void main() {
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
   });
 
-  Future<void> monter(WidgetTester tester) async {
+  Future<void> monter(WidgetTester tester, {Tache? tacheInitiale}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -63,7 +63,7 @@ void main() {
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const FormulaireTache(),
+          home: FormulaireTache(tacheInitiale: tacheInitiale),
         ),
       ),
     );
@@ -86,6 +86,36 @@ void main() {
     expect(tache.cible, CibleTache.potager); // default target
     expect(tache.cibleId, 'pot-1');
     expect(tache.datePrevue, maintenant); // default date = today
+  });
+
+  testWidgets('edit mode pre-fills the form and persists the same id',
+      (tester) async {
+    final initiale = Tache(
+      id: 't-42',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.parcelle,
+      cibleId: 'z-1',
+      datePrevue: DateTime(2026, 6, 12),
+    );
+
+    await monter(tester, tacheInitiale: initiale);
+
+    // Pre-filled with the existing title and the edit title bar.
+    expect(find.text('Modifier la tâche'), findsOneWidget);
+    expect(find.widgetWithText(TextFormField, 'Arroser'), findsOneWidget);
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Arroser'), 'Arroser le matin');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.id, 't-42'); // same identity → updates, not a new task
+    expect(tache.titre, 'Arroser le matin');
+    expect(tache.cible, CibleTache.parcelle);
+    expect(tache.cibleId, 'z-1');
   });
 
   testWidgets('an empty title blocks saving', (tester) async {

@@ -193,6 +193,24 @@ void main() {
     verify(() => taches.sauvegarder(tache)).called(1);
   });
 
+  test('deleting a task removes it and reloads', () async {
+    final tache = uneTache('t1', DateTime(2026, 6, 8, 10));
+    var taches_ = [tache];
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => taches_);
+    when(() => taches.supprimer(any())).thenAnswer((_) async {
+      taches_ = [];
+    });
+
+    final c = conteneur();
+    await c.read(calendrierProvider.future);
+
+    await c.read(calendrierProvider.notifier).supprimer(tache);
+
+    verify(() => taches.supprimer('t1')).called(1);
+    expect(c.read(calendrierProvider).value!.vide, isTrue);
+  });
+
   test('empty window is flagged', () async {
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);

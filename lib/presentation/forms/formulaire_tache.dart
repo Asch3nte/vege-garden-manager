@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/providers/repository_providers.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/use_cases/creer_tache.dart';
 import '../../domain/entities/tache.dart';
@@ -11,11 +12,15 @@ import '../../domain/enums/type_tache.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
 
-/// Opens the "new task" form and returns the created [Tache] (or `null`).
-Future<Tache?> ouvrirFormulaireTache(BuildContext context) {
+/// Opens the task form and returns the saved [Tache] (or `null`). When
+/// [tacheInitiale] is provided, the form opens in **edit** mode (pre-filled).
+Future<Tache?> ouvrirFormulaireTache(
+  BuildContext context, {
+  Tache? tacheInitiale,
+}) {
   return Navigator.of(context).push<Tache>(
     MaterialPageRoute(
-      builder: (_) => const FormulaireTache(),
+      builder: (_) => FormulaireTache(tacheInitiale: tacheInitiale),
       fullscreenDialog: true,
     ),
   );
@@ -40,10 +45,13 @@ class _CibleOption {
   int get hashCode => Object.hash(cible, id);
 }
 
-/// Minimal task-creation form: title + gesture type + due date + target (the
-/// whole garden or a zone). Persists via [CreerTache].
+/// Minimal task form: title + gesture type + due date + target (the whole
+/// garden or a zone). Creates via [CreerTache], or edits [tacheInitiale].
 class FormulaireTache extends ConsumerStatefulWidget {
-  const FormulaireTache({super.key});
+  /// Task being edited (null = creation).
+  final Tache? tacheInitiale;
+
+  const FormulaireTache({super.key, this.tacheInitiale});
 
   @override
   ConsumerState<FormulaireTache> createState() => _FormulaireTacheState();
@@ -56,6 +64,19 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
   DateTime? _date;
   _CibleOption? _cible;
   bool _enregistrement = false;
+
+  bool get _edition => widget.tacheInitiale != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final t = widget.tacheInitiale;
+    if (t != null) {
+      _titre.text = t.titre;
+      _type = t.type;
+      _date = t.datePrevue;
+    }
+  }
 
   @override
   void dispose() {
@@ -88,13 +109,38 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate() || _cible == null) return;
     setState(() => _enregistrement = true);
-    final tache = await ref.read(creerTacheProvider).executer(
-          titre: _titre.text.trim(),
-          type: _type,
-          cible: _cible!.cible,
-          cibleId: _cible!.id,
-          datePrevue: _date ?? ref.read(horlogeProvider)(),
-        );
+    final datePrevue = _date ?? ref.read(horlogeProvider)();
+
+    final Tache tache;
+    final initial = widget.tacheInitiale;
+    if (initial != null) {
+      // Edit: rebuild with the same id, preserving the lifecycle fields (type
+      // and target are final on the entity).
+      tache = Tache(
+        id: initial.id,
+        titre: _titre.text.trim(),
+        type: _type,
+        cible: _cible!.cible,
+        cibleId: _cible!.id,
+        datePrevue: datePrevue,
+        etat: initial.etat,
+        priorite: initial.priorite,
+        description: initial.description,
+        dateRealisation: initial.dateRealisation,
+        dureeReelleMinutes: initial.dureeReelleMinutes,
+        rappelOrigineId: initial.rappelOrigineId,
+        notes: initial.notes,
+      );
+      await ref.read(tacheRepositoryProvider).sauvegarder(tache);
+    } else {
+      tache = await ref.read(creerTacheProvider).executer(
+            titre: _titre.text.trim(),
+            type: _type,
+            cible: _cible!.cible,
+            cibleId: _cible!.id,
+            datePrevue: datePrevue,
+          );
+    }
     if (mounted) Navigator.of(context).pop(tache);
   }
 
@@ -102,12 +148,22 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final cibles = _cibles(l10n);
-    _cible ??= cibles.isEmpty ? null : cibles.first;
+    if (_cible == null && cibles.isNotEmpty) {
+      final t = widget.tacheInitiale;
+      _cible = t == null
+          ? cibles.first
+          : cibles.firstWhere(
+              (c) => c.cible == t.cible && c.id == t.cibleId,
+              orElse: () => cibles.first,
+            );
+    }
     final dateLabel =
         _date == null ? l10n.formTacheDateAujourdhui : _formaterDate(_date!);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.formTacheTitre)),
+      appBar: AppBar(
+        title: Text(_edition ? l10n.formTacheTitreModifier : l10n.formTacheTitre),
+      ),
       body: cibles.isEmpty
           ? Center(
               child: Padding(

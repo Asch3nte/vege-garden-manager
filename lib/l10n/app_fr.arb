@@ -225,6 +225,14 @@
   "@actionSupprimer": {
     "description": "Action générique : supprimer."
   },
+  "actionModifier": "Modifier",
+  "@actionModifier": {
+    "description": "Action générique : modifier."
+  },
+  "actionsTache": "Actions sur la tâche",
+  "@actionsTache": {
+    "description": "Infobulle du menu d'actions (modifier / supprimer) d'une tâche."
+  },
   "formZoneTitreModifier": "Modifier la zone",
   "@formZoneTitreModifier": {
     "description": "Titre du formulaire de zone en mode édition."
@@ -452,6 +460,8 @@
   "@snackTacheCreee": { "description": "Confirmation après création d'une tâche." },
   "formTacheTitre": "Nouvelle tâche",
   "@formTacheTitre": { "description": "Titre du formulaire de création de tâche." },
+  "formTacheTitreModifier": "Modifier la tâche",
+  "@formTacheTitreModifier": { "description": "Titre du formulaire de tâche en mode édition." },
   "formTacheNom": "Intitulé",
   "@formTacheNom": { "description": "Champ : intitulé de la tâche." },
   "formTacheType": "Type de tâche",
@@ -913,5 +923,16 @@
   "snackZoneCree": "Zone créée.",
   "@snackZoneCree": { "description": "Confirmation de création d'une zone." },
   "snackPlantationCree": "Plantation ajoutée.",
-  "@snackPlantationCree": { "description": "Confirmation de création d'une plantation." }
+  "@snackPlantationCree": { "description": "Confirmation de création d'une plantation." },
+  "tacheSupprimerTitre": "Supprimer cette tâche ?",
+  "@tacheSupprimerTitre": { "description": "Titre de la confirmation de suppression d'une tâche." },
+  "tacheSupprimerMessage": "« {titre} » sera supprimée définitivement.",
+  "@tacheSupprimerMessage": {
+    "description": "Message de confirmation de suppression d'une tâche.",
+    "placeholders": { "titre": { "type": "String" } }
+  },
+  "snackTacheModifiee": "Tâche modifiée.",
+  "@snackTacheModifiee": { "description": "Confirmation après modification d'une tâche." },
+  "snackTacheSupprimee": "Tâche supprimée.",
+  "@snackTacheSupprimee": { "description": "Confirmation après suppression d'une tâche." }
 }

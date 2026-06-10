@@ -13,6 +13,7 @@ import '../../domain/enums/type_tache.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_tache.dart';
+import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
@@ -177,6 +178,8 @@ class _VueAgenda extends ConsumerWidget {
                       _GroupeJour(
                         groupe: groupe,
                         onCocher: notifier.cocher,
+                        onModifier: (t) => _modifierTache(context, ref, t),
+                        onSupprimer: (t) => _supprimerTache(context, ref, t),
                       ),
                   ],
                 ),
@@ -285,7 +288,12 @@ class _VueMoisState extends ConsumerState<_VueMois> {
           )
         else
           for (final tache in tachesSel) ...[
-            _CarteTache(tache: tache, onCocher: notifier.cocher),
+            _CarteTache(
+              tache: tache,
+              onCocher: notifier.cocher,
+              onModifier: (t) => _modifierTache(context, ref, t),
+              onSupprimer: (t) => _supprimerTache(context, ref, t),
+            ),
             const SizedBox(height: EspacementsApp.s2),
           ],
       ],
@@ -866,8 +874,15 @@ class _Resume extends StatelessWidget {
 class _GroupeJour extends StatelessWidget {
   final GroupeJour groupe;
   final ValueChanged<Tache> onCocher;
+  final ValueChanged<Tache> onModifier;
+  final ValueChanged<Tache> onSupprimer;
 
-  const _GroupeJour({required this.groupe, required this.onCocher});
+  const _GroupeJour({
+    required this.groupe,
+    required this.onCocher,
+    required this.onModifier,
+    required this.onSupprimer,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -886,7 +901,12 @@ class _GroupeJour extends StatelessWidget {
           ),
         ),
         for (final tache in groupe.taches) ...[
-          _CarteTache(tache: tache, onCocher: onCocher),
+          _CarteTache(
+            tache: tache,
+            onCocher: onCocher,
+            onModifier: onModifier,
+            onSupprimer: onSupprimer,
+          ),
           const SizedBox(height: EspacementsApp.s2),
         ],
       ],
@@ -898,8 +918,15 @@ class _GroupeJour extends StatelessWidget {
 class _CarteTache extends StatelessWidget {
   final Tache tache;
   final ValueChanged<Tache> onCocher;
+  final ValueChanged<Tache> onModifier;
+  final ValueChanged<Tache> onSupprimer;
 
-  const _CarteTache({required this.tache, required this.onCocher});
+  const _CarteTache({
+    required this.tache,
+    required this.onCocher,
+    required this.onModifier,
+    required this.onSupprimer,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -954,12 +981,66 @@ class _CarteTache extends StatelessWidget {
                 fait ? Icons.check_circle : Icons.radio_button_unchecked,
                 color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
               ),
+              PopupMenuButton<_ActionTache>(
+                tooltip: l10n.actionsTache,
+                onSelected: (action) => switch (action) {
+                  _ActionTache.modifier => onModifier(tache),
+                  _ActionTache.supprimer => onSupprimer(tache),
+                },
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    value: _ActionTache.modifier,
+                    child: Text(l10n.actionModifier),
+                  ),
+                  PopupMenuItem(
+                    value: _ActionTache.supprimer,
+                    child: Text(l10n.actionSupprimer),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+/// Per-task overflow actions in the calendar.
+enum _ActionTache { modifier, supprimer }
+
+/// Opens the task form pre-filled on [tache]; reloads the agenda on save.
+Future<void> _modifierTache(
+  BuildContext context,
+  WidgetRef ref,
+  Tache tache,
+) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final l10n = AppLocalizations.of(context)!;
+  final modifiee = await ouvrirFormulaireTache(context, tacheInitiale: tache);
+  if (modifiee == null) return;
+  ref.invalidate(calendrierProvider);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheModifiee)));
+}
+
+/// Asks for confirmation, then deletes [tache] and reloads the agenda.
+Future<void> _supprimerTache(
+  BuildContext context,
+  WidgetRef ref,
+  Tache tache,
+) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final l10n = AppLocalizations.of(context)!;
+  final confirme = await confirmerAction(
+    context,
+    titre: l10n.tacheSupprimerTitre,
+    message: l10n.tacheSupprimerMessage(tache.titre),
+    libelleConfirmer: l10n.actionSupprimer,
+    destructif: true,
+  );
+  if (!confirme) return;
+  await ref.read(calendrierProvider.notifier).supprimer(tache);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
 }
 
 class _EtatVide extends StatelessWidget {
