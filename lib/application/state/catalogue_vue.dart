@@ -12,24 +12,25 @@ class CatalogueVue {
   final String _requete;
   final CategoriePlante? _categorie;
   final List<FichePlante> _fiches;
-  final int _total;
+  final List<FichePlante> _toutes;
 
   CatalogueVue._(
     this._requete,
     this._categorie,
     List<FichePlante> fiches,
-    this._total,
-  ) : _fiches = List.unmodifiable(fiches);
+    List<FichePlante> toutes,
+  )   : _fiches = List.unmodifiable(fiches),
+        _toutes = List.unmodifiable(toutes);
 
-  /// Builds a catalogue view. [total] is the unfiltered catalogue size (shown
-  /// in the header); [fiches] is the filtered, ordered result.
+  /// Builds a catalogue view. [toutes] is the unfiltered catalogue (used for the
+  /// header count and the network view); [fiches] is the filtered, ordered result.
   factory CatalogueVue({
     required String requete,
     required CategoriePlante? categorie,
     required List<FichePlante> fiches,
-    required int total,
+    required List<FichePlante> toutes,
   }) =>
-      CatalogueVue._(requete, categorie, fiches, total);
+      CatalogueVue._(requete, categorie, fiches, toutes);
 
   /// Current free-text query (trimmed-or-not as typed).
   String get requete => _requete;
@@ -40,8 +41,11 @@ class CatalogueVue {
   /// Filtered plant sheets, in display order (immutable).
   List<FichePlante> get fiches => _fiches;
 
+  /// The whole catalogue, unfiltered (immutable) — drives the network view.
+  List<FichePlante> get toutes => _toutes;
+
   /// Total number of sheets in the catalogue (before filtering).
-  int get total => _total;
+  int get total => _toutes.length;
 
   /// Number of sheets after filtering.
   int get nombreResultats => _fiches.length;

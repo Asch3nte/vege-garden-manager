@@ -31,6 +31,7 @@ class FichePlante {
   final Set<String> _associationsNegatives;
   final String? _rotationFamille;
   final int? _delaiRetourAnnees;
+  final Map<String, String> _descriptionsLocalisees;
 
   FichePlante._(
     this._id,
@@ -49,6 +50,7 @@ class FichePlante {
     this._associationsNegatives,
     this._rotationFamille,
     this._delaiRetourAnnees,
+    this._descriptionsLocalisees,
   )   : assert(_id.isNotEmpty, 'id must not be empty'),
         assert(_nomScientifique.isNotEmpty, 'nomScientifique must not be empty'),
         assert(_familleBotanique.isNotEmpty, 'familleBotanique must not be empty'),
@@ -80,6 +82,7 @@ class FichePlante {
     Set<String>? associationsNegatives,
     String? rotationFamille,
     int? delaiRetourAnnees,
+    Map<String, String>? descriptionsLocalisees,
   }) =>
       FichePlante._(
         id,
@@ -98,6 +101,7 @@ class FichePlante {
         Set<String>.unmodifiable(associationsNegatives ?? const <String>{}),
         rotationFamille,
         delaiRetourAnnees,
+        Map<String, String>.unmodifiable(descriptionsLocalisees ?? const {}),
       );
 
   static Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _figerPeriodes(
@@ -125,6 +129,11 @@ class FichePlante {
   /// Common name for [locale], falling back to French (always present).
   String nomLocalise(String locale) =>
       _nomsLocalises[locale] ?? _nomsLocalises['fr']!;
+
+  /// Short description for [locale] (falls back to French), or `null` if the
+  /// sheet carries none.
+  String? descriptionLocalisee(String locale) =>
+      _descriptionsLocalisees[locale] ?? _descriptionsLocalisees['fr'];
 
   /// Cultivation windows for a (hemisphere, climate) pair, or `null` if unknown.
   PeriodesCulture? periodesPour(Hemisphere hemisphere, TypeClimat climat) =>

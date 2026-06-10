@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/horloge_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
+import '../../application/state/contexte_climat.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../l10n/app_localizations.dart';
+import 'calendrier_semis_recolte.dart';
 import 'libelles_enums.dart';
 
 /// Opens the detail of a plant sheet as a draggable modal bottom sheet.
@@ -14,10 +17,14 @@ import 'libelles_enums.dart';
 /// the loaded catalogue). The sowing/harvest month calendar of the mock-up is
 /// deferred — periods are indexed by hemisphere/climate, which a catalogue
 /// browse has no context for (see docs/15).
+/// When [onAjouter] is provided, a pinned "Ajouter au potager" CTA is shown; it
+/// closes the sheet and then runs the callback (which drives the add-a-plant
+/// flow). Without it, the sheet is read-only.
 Future<void> afficherFichePlanteDetail(
   BuildContext context,
-  FichePlante fiche,
-) {
+  FichePlante fiche, {
+  VoidCallback? onAjouter,
+}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -27,8 +34,11 @@ Future<void> afficherFichePlanteDetail(
       initialChildSize: 0.7,
       minChildSize: 0.4,
       maxChildSize: 0.95,
-      builder: (context, scrollController) =>
-          _FichePlanteDetail(fiche: fiche, scrollController: scrollController),
+      builder: (context, scrollController) => _FichePlanteDetail(
+        fiche: fiche,
+        scrollController: scrollController,
+        onAjouter: onAjouter,
+      ),
     ),
   );
 }
@@ -36,8 +46,13 @@ Future<void> afficherFichePlanteDetail(
 class _FichePlanteDetail extends ConsumerWidget {
   final FichePlante fiche;
   final ScrollController scrollController;
+  final VoidCallback? onAjouter;
 
-  const _FichePlanteDetail({required this.fiche, required this.scrollController});
+  const _FichePlanteDetail({
+    required this.fiche,
+    required this.scrollController,
+    this.onAjouter,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +67,7 @@ class _FichePlanteDetail extends ConsumerWidget {
     final bons = _noms(catalogue.where((f) => fiche.sAssocieBienAvec(f.id)));
     final aEviter = _noms(catalogue.where((f) => fiche.entreEnConflitAvec(f.id)));
 
-    return ListView(
+    final liste = ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s5,
@@ -88,12 +103,55 @@ class _FichePlanteDetail extends ConsumerWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
+        if (fiche.descriptionLocalisee('fr') != null) ...[
+          const SizedBox(height: EspacementsApp.s4),
+          Text(
+            fiche.descriptionLocalisee('fr')!,
+            style: theme.textTheme.bodyMedium,
+          ),
+        ],
         const SizedBox(height: EspacementsApp.s5),
         _Faits(fiche: fiche),
+        const SizedBox(height: EspacementsApp.s5),
+        Text(l10n.ficheCalendrierTitre, style: theme.textTheme.titleLarge),
+        const SizedBox(height: EspacementsApp.s3),
+        _SectionCalendrier(fiche: fiche),
         const SizedBox(height: EspacementsApp.s5),
         Text(l10n.ficheAssociations, style: theme.textTheme.titleLarge),
         const SizedBox(height: EspacementsApp.s3),
         _Associations(bons: bons, aEviter: aEviter),
+      ],
+    );
+
+    // Read-only sheet unless an add-to-garden action was supplied.
+    if (onAjouter == null) return liste;
+
+    return Column(
+      children: [
+        Expanded(child: liste),
+        SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              EspacementsApp.s5,
+              EspacementsApp.s2,
+              EspacementsApp.s5,
+              EspacementsApp.s4,
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () {
+                  // Close the sheet first, then run the flow on the page below.
+                  Navigator.of(context).pop();
+                  onAjouter!();
+                },
+                icon: const Icon(Icons.add),
+                label: Text(l10n.ficheAjouterAuPotager),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -216,6 +274,70 @@ class _Associations extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// Sowing/harvest calendar for the sheet, resolved for the active garden's
+/// climate context (hemisphere × climate). Falls back to a note when there is
+/// no garden, and flags an assumed hemisphere when the garden has no position.
+class _SectionCalendrier extends ConsumerWidget {
+  final FichePlante fiche;
+
+  const _SectionCalendrier({required this.fiche});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final contexte = ref.watch(contexteClimatProvider);
+
+    return contexte.when(
+      loading: () => const SizedBox(
+        height: 24,
+        child: Center(
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      ),
+      error: (_, _) => Text(
+        l10n.saisonNonRenseigne,
+        style: theme.textTheme.bodySmall
+            ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+      ),
+      data: (ctx) {
+        if (ctx == null) {
+          return Text(
+            l10n.ficheCalendrierSansContexte,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          );
+        }
+        final pc = fiche.periodesPour(ctx.hemisphere, ctx.climat);
+        final moisActuel = ref.read(horlogeProvider)().month;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CalendrierSemisRecolte(
+              semis: pc?.semisExterieur ?? pc?.semisInterieur,
+              plantation: pc?.plantation,
+              recolte: pc?.recolte,
+              moisActuel: moisActuel,
+            ),
+            if (ctx.hemisphereSuppose) ...[
+              const SizedBox(height: EspacementsApp.s2),
+              Text(
+                l10n.saisonHemisphereSuppose,
+                style: theme.textTheme.labelSmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }

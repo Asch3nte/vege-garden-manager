@@ -36,6 +36,7 @@ class FichePlanteMapper {
           .map((u) => _enum(UsagePlante.values, u as String))
           .toSet(),
       nomsLocalises: _nomsLocalises(y['i18n'] as Map),
+      descriptionsLocalisees: _descriptions(y['i18n'] as Map),
       besoins: BesoinsCulture(
         eau: _enum(BesoinEau.values, besoins['arrosage'] as String),
         soleil: _enum(NiveauSoleil.values, besoins['ensoleillement'] as String),
@@ -60,6 +61,14 @@ class FichePlanteMapper {
         for (final entry in i18n.entries)
           if ((entry.value as Map)['nom_commun'] != null)
             entry.key.toString(): (entry.value as Map)['nom_commun'] as String,
+      };
+
+  /// Localized descriptions (YAML block scalars), trimmed of trailing newlines.
+  Map<String, String> _descriptions(Map i18n) => {
+        for (final entry in i18n.entries)
+          if ((entry.value as Map)['description'] != null)
+            entry.key.toString():
+                ((entry.value as Map)['description'] as String).trim(),
       };
 
   Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _periodes(Map? periodes) {

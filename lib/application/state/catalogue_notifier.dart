@@ -57,7 +57,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
       requete: _requete,
       categorie: _categorie,
       fiches: filtrees,
-      total: _toutes.length,
+      toutes: _toutes,
     );
   }
 }
