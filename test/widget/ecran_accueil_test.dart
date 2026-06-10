@@ -26,9 +26,11 @@ import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_recolte_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
@@ -71,6 +73,10 @@ class MockPlantations extends Mock implements AbstractPlantationRepository {}
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
+class MockRecoltes extends Mock implements AbstractRecolteRepository {}
+
+class MockMeteo extends Mock implements AbstractMeteoService {}
+
 void main() {
   setUpAll(() => registerFallbackValue(_FakePotager()));
 
@@ -82,6 +88,8 @@ void main() {
   late MockPreferences preferences;
   late MockPlantations plantations;
   late MockFiches fiches;
+  late MockRecoltes recoltes;
+  late MockMeteo meteo;
 
   setUp(() {
     potagers = MockPotagers();
@@ -90,7 +98,10 @@ void main() {
     preferences = MockPreferences();
     plantations = MockPlantations();
     fiches = MockFiches();
+    recoltes = MockRecoltes();
+    meteo = MockMeteo();
     when(() => plantations.obtenirParParcelle(any())).thenAnswer((_) async => []);
+    when(() => recoltes.obtenirParPlantation(any())).thenAnswer((_) async => []);
 
     when(() => potagers.obtenirPotagerActif()).thenAnswer(
       (_) async => Potager(
@@ -127,6 +138,20 @@ void main() {
     );
   });
 
+  // All repositories the dashboard view-model reads (built per test for the
+  // mocks assigned in setUp).
+  base() => [
+        potagerRepositoryProvider.overrideWithValue(potagers),
+        parcelleRepositoryProvider.overrideWithValue(parcelles),
+        tacheRepositoryProvider.overrideWithValue(taches),
+        preferencesRepositoryProvider.overrideWithValue(preferences),
+        plantationRepositoryProvider.overrideWithValue(plantations),
+        recolteRepositoryProvider.overrideWithValue(recoltes),
+        meteoServiceProvider.overrideWithValue(meteo),
+        fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+        horlogeProvider.overrideWithValue(() => maintenant),
+      ];
+
   Future<void> monter(WidgetTester tester, NiveauExperience niveau) async {
     when(() => preferences.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(niveauExperience: niveau),
@@ -134,13 +159,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          potagerRepositoryProvider.overrideWithValue(potagers),
-          parcelleRepositoryProvider.overrideWithValue(parcelles),
-          tacheRepositoryProvider.overrideWithValue(taches),
-          preferencesRepositoryProvider.overrideWithValue(preferences),
-          horlogeProvider.overrideWithValue(() => maintenant),
-        ],
+        overrides: base(),
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -171,7 +190,8 @@ void main() {
   testWidgets('season stats unlock at expert level', (tester) async {
     await monter(tester, NiveauExperience.expert);
 
-    expect(find.text('Récoltes de la saison à venir'), findsOneWidget);
+    // No harvests recorded → the season tile shows its zero-count label.
+    expect(find.text('Aucune récolte cette saison'), findsOneWidget);
     expect(find.text('Statistiques au niveau Expert'), findsNothing);
   });
 
@@ -180,13 +200,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          potagerRepositoryProvider.overrideWithValue(potagers),
-          parcelleRepositoryProvider.overrideWithValue(parcelles),
-          tacheRepositoryProvider.overrideWithValue(taches),
-          preferencesRepositoryProvider.overrideWithValue(preferences),
-          horlogeProvider.overrideWithValue(() => maintenant),
-        ],
+        overrides: base(),
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -207,14 +221,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          potagerRepositoryProvider.overrideWithValue(potagers),
-          parcelleRepositoryProvider.overrideWithValue(parcelles),
-          tacheRepositoryProvider.overrideWithValue(taches),
-          preferencesRepositoryProvider.overrideWithValue(preferences),
-          horlogeProvider.overrideWithValue(() => maintenant),
-          meteoAccueilProvider.overrideWith(_FakeMeteo.new),
-        ],
+        overrides: [...base(), meteoAccueilProvider.overrideWith(_FakeMeteo.new)],
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -239,11 +246,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          potagerRepositoryProvider.overrideWithValue(potagers),
-          parcelleRepositoryProvider.overrideWithValue(parcelles),
-          tacheRepositoryProvider.overrideWithValue(taches),
-          preferencesRepositoryProvider.overrideWithValue(preferences),
-          horlogeProvider.overrideWithValue(() => maintenant),
+          ...base(),
           geolocalisationServiceProvider.overrideWithValue(geoloc),
           meteoAccueilProvider.overrideWith(_FakeMeteoIndispo.new),
         ],
@@ -293,15 +296,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          potagerRepositoryProvider.overrideWithValue(potagers),
-          parcelleRepositoryProvider.overrideWithValue(parcelles),
-          tacheRepositoryProvider.overrideWithValue(taches),
-          preferencesRepositoryProvider.overrideWithValue(preferences),
-          plantationRepositoryProvider.overrideWithValue(plantations),
-          fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
-          horlogeProvider.overrideWithValue(() => maintenant),
-        ],
+        overrides: base(),
         child: MaterialApp.router(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,

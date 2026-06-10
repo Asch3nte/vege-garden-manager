@@ -88,6 +88,16 @@
   "@accueilRecoltesAVenir": {
     "description": "Placeholder de la tuile des récoltes de saison, pas encore branchée."
   },
+  "accueilAlertes": "{count, plural, =0{Aucune alerte} =1{1 alerte météo} other{{count} alertes météo}}",
+  "@accueilAlertes": {
+    "description": "Tuile accueil : nombre d'alertes météo actives.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "accueilRecoltesSaison": "{count, plural, =0{Aucune récolte cette saison} =1{1 récolte cette saison} other{{count} récoltes cette saison}}",
+  "@accueilRecoltesSaison": {
+    "description": "Tuile accueil : nombre de récoltes de la saison en cours.",
+    "placeholders": { "count": { "type": "int" } }
+  },
   "accueilStatsVerrouillees": "Statistiques au niveau Expert",
   "@accueilStatsVerrouillees": {
     "description": "Tuile verrouillée : les stats de saison s'ouvrent au niveau Expert."

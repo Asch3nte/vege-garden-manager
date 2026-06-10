@@ -74,7 +74,11 @@ class _Contenu extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s5),
         _SectionTaches(taches: vue.tachesDuJour),
         const SizedBox(height: EspacementsApp.s5),
-        _GrilleStats(statistiquesVisibles: vue.statistiquesVisibles),
+        _GrilleStats(
+          nombreAlertes: vue.nombreAlertes,
+          nombreRecoltes: vue.nombreRecoltesSaison,
+          statistiquesVisibles: vue.statistiquesVisibles,
+        ),
         const SizedBox(height: EspacementsApp.s5),
         _SectionPotager(zones: vue.zones, onZoneTap: onZoneTap),
       ],
@@ -337,11 +341,17 @@ class _LigneTache extends StatelessWidget {
   }
 }
 
-/// Two-tile stats grid: alert (placeholder) + season harvests / locked tile.
+/// Two-tile stats grid: active weather alerts + season harvests / locked tile.
 class _GrilleStats extends StatelessWidget {
+  final int nombreAlertes;
+  final int nombreRecoltes;
   final bool statistiquesVisibles;
 
-  const _GrilleStats({required this.statistiquesVisibles});
+  const _GrilleStats({
+    required this.nombreAlertes,
+    required this.nombreRecoltes,
+    required this.statistiquesVisibles,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +369,7 @@ class _GrilleStats extends StatelessWidget {
             child: _TuileStat(
               icone: Icons.warning_amber_rounded,
               couleur: accents.chaud,
-              titre: l10n.accueilAlertesAVenir,
+              titre: l10n.accueilAlertes(nombreAlertes),
             ),
           ),
           const SizedBox(width: EspacementsApp.s3),
@@ -368,7 +378,7 @@ class _GrilleStats extends StatelessWidget {
                 ? _TuileStat(
                     icone: Icons.shopping_basket_outlined,
                     couleur: CouleursApp.decoAubergine,
-                    titre: l10n.accueilRecoltesAVenir,
+                    titre: l10n.accueilRecoltesSaison(nombreRecoltes),
                   )
                 : _TuileVerrouillee(texte: l10n.accueilStatsVerrouillees),
           ),

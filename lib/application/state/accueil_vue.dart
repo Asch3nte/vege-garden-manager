@@ -38,12 +38,16 @@ class AccueilVue {
   final NiveauExperience _niveau;
   final List<ZoneApercu> _zones;
   final List<Tache> _tachesDuJour;
+  final int _nombreAlertes;
+  final int _nombreRecoltesSaison;
 
   AccueilVue._(
     this._nomPotager,
     this._niveau,
     List<ZoneApercu> zones,
     List<Tache> tachesDuJour,
+    this._nombreAlertes,
+    this._nombreRecoltesSaison,
   )   : _zones = List.unmodifiable(zones),
         _tachesDuJour = List.unmodifiable(tachesDuJour);
 
@@ -53,8 +57,11 @@ class AccueilVue {
     required NiveauExperience niveau,
     required List<ZoneApercu> zones,
     required List<Tache> tachesDuJour,
+    int nombreAlertes = 0,
+    int nombreRecoltesSaison = 0,
   }) =>
-      AccueilVue._(nomPotager, niveau, zones, tachesDuJour);
+      AccueilVue._(nomPotager, niveau, zones, tachesDuJour, nombreAlertes,
+          nombreRecoltesSaison);
 
   /// Name of the active garden, or `null` when none exists yet (empty state).
   String? get nomPotager => _nomPotager;
@@ -73,6 +80,12 @@ class AccueilVue {
 
   /// Number of today's tasks still to do (not completed/cancelled).
   int get nombreTachesAFaire => _tachesDuJour.where((t) => !t.estFaite).length;
+
+  /// Number of active weather alerts for the garden (0 when no position/data).
+  int get nombreAlertes => _nombreAlertes;
+
+  /// Number of harvests recorded this season (current year).
+  int get nombreRecoltesSaison => _nombreRecoltesSaison;
 
   /// Whether the season-statistics tile is unlocked for this level.
   bool get statistiquesVisibles => _niveau == NiveauExperience.expert;

@@ -4,22 +4,31 @@ import 'package:riverpod/riverpod.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/accueil_notifier.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
+import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/entities/recolte.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
+import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
+import 'package:pot_a_gerer/domain/enums/unite_quantite.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_recolte_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
+import 'package:pot_a_gerer/domain/value_objects/quantite.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 
@@ -31,6 +40,12 @@ class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
+class MockPlantations extends Mock implements AbstractPlantationRepository {}
+
+class MockRecoltes extends Mock implements AbstractRecolteRepository {}
+
+class MockMeteo extends Mock implements AbstractMeteoService {}
+
 void main() {
   // Pinned "now" so the today-window is deterministic.
   final maintenant = DateTime(2026, 6, 9, 8, 24);
@@ -39,12 +54,20 @@ void main() {
   late MockParcelles parcelles;
   late MockTaches taches;
   late MockPreferences preferences;
+  late MockPlantations plantations;
+  late MockRecoltes recoltes;
+  late MockMeteo meteo;
 
   setUp(() {
     potagers = MockPotagers();
     parcelles = MockParcelles();
     taches = MockTaches();
     preferences = MockPreferences();
+    plantations = MockPlantations();
+    recoltes = MockRecoltes();
+    meteo = MockMeteo();
+    when(() => plantations.obtenirParParcelle(any())).thenAnswer((_) async => []);
+    when(() => recoltes.obtenirParPlantation(any())).thenAnswer((_) async => []);
   });
 
   Potager unPotager() => Potager(
@@ -77,13 +100,33 @@ void main() {
         dateRealisation: etat == EtatTache.terminee ? quand : null,
       );
 
-  /// Container with the four repos and the clock overridden.
+  Plantation unePlantation(String id, String parcelleId) => Plantation(
+        id: id,
+        planteId: 'tomate',
+        parcelleId: parcelleId,
+        dateMiseEnPlace: DateTime(2026, 4, 1),
+        methode: MethodeMiseEnPlace.semisDirect,
+        surfaceOccupee: Surface.enMetresCarres(0.5),
+        nombrePieds: 3,
+      );
+
+  Recolte uneRecolte(String id, String plantationId, DateTime date) => Recolte(
+        id: id,
+        plantationId: plantationId,
+        date: date,
+        quantite: const Quantite(1, UniteQuantite.kg),
+      );
+
+  /// Container with every repository the dashboard reads + the clock.
   ProviderContainer conteneur() {
     final c = ProviderContainer(overrides: [
       potagerRepositoryProvider.overrideWithValue(potagers),
       parcelleRepositoryProvider.overrideWithValue(parcelles),
       tacheRepositoryProvider.overrideWithValue(taches),
       preferencesRepositoryProvider.overrideWithValue(preferences),
+      plantationRepositoryProvider.overrideWithValue(plantations),
+      recolteRepositoryProvider.overrideWithValue(recoltes),
+      meteoServiceProvider.overrideWithValue(meteo),
       horlogeProvider.overrideWithValue(() => maintenant),
     ]);
     addTearDown(c.dispose);
@@ -171,6 +214,30 @@ void main() {
       final vue = await conteneur().read(accueilProvider.future);
       expect(vue.statistiquesVisibles, attendu, reason: niveau.name);
     }
+  });
+
+  test('counts this year\'s harvests; no alerts without a position', () async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager()); // no position
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [unePlantation('p-1', 'z-1')]);
+    when(() => recoltes.obtenirParPlantation('p-1')).thenAnswer(
+      (_) async => [
+        uneRecolte('r-1', 'p-1', DateTime(2026, 5, 20)), // this year
+        uneRecolte('r-2', 'p-1', DateTime(2025, 8, 10)), // last year (excluded)
+      ],
+    );
+
+    final vue = await conteneur().read(accueilProvider.future);
+
+    expect(vue.nombreRecoltesSaison, 1);
+    expect(vue.nombreAlertes, 0); // garden has no position → no alerts
   });
 
   test('no active garden → empty overview, null name', () async {
