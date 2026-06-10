@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../app/theme/couleurs_app.dart';
+import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/langue.dart';
@@ -154,6 +156,14 @@ extension LibellesEnums on AppLocalizations {
         TypeParcelle.autre => typeParcelleAutre,
       };
 
+  /// Label for the home weather watering verdict.
+  String verdictMeteo(VerdictMeteo v) => switch (v) {
+        VerdictMeteo.pluieAVenir => meteoVerdictPluie,
+        VerdictMeteo.solHumide => meteoVerdictSolHumide,
+        VerdictMeteo.arroserConseille => meteoVerdictArroser,
+        VerdictMeteo.clement => meteoVerdictClement,
+      };
+
   /// Label for a planting method.
   String methode(MethodeMiseEnPlace m) => switch (m) {
         MethodeMiseEnPlace.semisDirect => methodeSemisDirect,
@@ -185,6 +195,36 @@ IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.entretienEquipement => Icons.handyman_outlined,
       TypeTache.nettoyage => Icons.cleaning_services_outlined,
       TypeTache.autre => Icons.task_alt_outlined,
+    };
+
+/// Decorative dot colour for a task type (calendar month grid), echoing the
+/// per-gesture colours of the `calendrier.jsx` mock-up. Uses the static
+/// decorative palette so it is theme-independent.
+Color couleurTypeTache(TypeTache t) => switch (t) {
+      TypeTache.arrosage => CouleursApp.accentInfoClair,
+      TypeTache.semis => CouleursApp.decoVertMoyen,
+      TypeTache.repiquage => CouleursApp.accentPrimaireClair,
+      TypeTache.taille => CouleursApp.decoOcre,
+      TypeTache.tuteurage => CouleursApp.decoTerre,
+      TypeTache.observation => CouleursApp.attentionClair,
+      TypeTache.recolte => CouleursApp.decoAubergine,
+      TypeTache.desherbage => CouleursApp.decoVertProfond,
+      TypeTache.paillage => CouleursApp.decoTerre,
+      TypeTache.fertilisation => CouleursApp.decoVertMoyen,
+      TypeTache.traitementBio => CouleursApp.succesClair,
+      TypeTache.preparationSol => CouleursApp.decoTerre,
+      TypeTache.installationEquipement => CouleursApp.texteSecondaireClair,
+      TypeTache.entretienEquipement => CouleursApp.texteSecondaireClair,
+      TypeTache.nettoyage => CouleursApp.accentInfoClair,
+      TypeTache.autre => CouleursApp.texteSecondaireClair,
+    };
+
+/// Material icon for a weather watering verdict (home card).
+IconData iconeVerdictMeteo(VerdictMeteo v) => switch (v) {
+      VerdictMeteo.pluieAVenir => Icons.umbrella_outlined,
+      VerdictMeteo.solHumide => Icons.water_drop_outlined,
+      VerdictMeteo.arroserConseille => Icons.wb_sunny_outlined,
+      VerdictMeteo.clement => Icons.cloud_outlined,
     };
 
 /// Display order of categories in the catalogue filter chips and grouped list,

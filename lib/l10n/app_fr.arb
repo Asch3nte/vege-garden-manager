@@ -61,8 +61,25 @@
   },
   "accueilMeteoAVenir": "Météo et conseil d'arrosage à venir.",
   "@accueilMeteoAVenir": {
-    "description": "Placeholder de la carte météo, pas encore branchée."
+    "description": "Carte météo : état de chargement / indisponible."
   },
+  "meteoSansPosition": "Ajoute ta position au potager pour la météo et les conseils d'arrosage.",
+  "@meteoSansPosition": { "description": "Carte météo : aucune position connue sur le potager actif." },
+  "meteoTemperatures": "{min}° – {max}°",
+  "@meteoTemperatures": {
+    "description": "Plage de températures du jour (min – max).",
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
+  "meteoGel": "Risque de gel",
+  "@meteoGel": { "description": "Carte météo : avertissement de gel." },
+  "meteoVerdictPluie": "Pluie à venir — l'arrosage peut attendre.",
+  "@meteoVerdictPluie": { "description": "Verdict météo : pluie prévue." },
+  "meteoVerdictSolHumide": "Sol encore humide — pas besoin d'arroser.",
+  "@meteoVerdictSolHumide": { "description": "Verdict météo : pluie récente." },
+  "meteoVerdictArroser": "Chaud et sec — pense à arroser.",
+  "@meteoVerdictArroser": { "description": "Verdict météo : conditions sèches." },
+  "meteoVerdictClement": "Conditions clémentes pour le jardin.",
+  "@meteoVerdictClement": { "description": "Verdict météo : rien de notable." },
   "accueilAlertesAVenir": "Alertes à venir",
   "@accueilAlertesAVenir": {
     "description": "Placeholder de la tuile d'alertes, pas encore branchée."
@@ -129,9 +146,158 @@
   "@potagerErreurChargement": {
     "description": "Message d'erreur de chargement de l'écran potager."
   },
+  "zoneDetailCultures": "Cultures",
+  "@zoneDetailCultures": {
+    "description": "Titre de la section des cultures sur l'écran de détail d'une zone."
+  },
+  "zoneDetailIntrouvable": "Zone introuvable.",
+  "@zoneDetailIntrouvable": {
+    "description": "État affiché quand la zone demandée n'existe pas (ou plus)."
+  },
+  "zoneDetailAjouterPlante": "Ajouter une plante",
+  "@zoneDetailAjouterPlante": {
+    "description": "Bouton du détail de zone : ouvrir le catalogue pour ajouter une plante à cette zone."
+  },
+  "ficheAjouterAuPotager": "Ajouter au potager",
+  "@ficheAjouterAuPotager": {
+    "description": "CTA de la fiche plante : ajouter cette plante au potager."
+  },
+  "catalogueAjoutBanniere": "Ajout dans : {zone}",
+  "@catalogueAjoutBanniere": {
+    "description": "Bannière du catalogue indiquant la zone cible de l'ajout en cours.",
+    "placeholders": {
+      "zone": { "type": "String" }
+    }
+  },
+  "catalogueAjoutAnnuler": "Annuler l'ajout",
+  "@catalogueAjoutAnnuler": {
+    "description": "Action : annuler l'ajout de plante en cours (efface la zone cible)."
+  },
+  "selectionZoneTitre": "Choisir une zone",
+  "@selectionZoneTitre": {
+    "description": "Titre de l'écran de sélection d'une zone pour y ajouter une plante."
+  },
+  "selectionZoneInvite": "Touchez la zone où ajouter la plante.",
+  "@selectionZoneInvite": {
+    "description": "Invite en haut du sélecteur de zone."
+  },
+  "selectionZoneVide": "Crée d'abord une zone pour y ajouter une plante.",
+  "@selectionZoneVide": {
+    "description": "État vide du sélecteur de zone (aucune zone)."
+  },
+  "snackPlanteAjoutee": "{plante} ajoutée au potager.",
+  "@snackPlanteAjoutee": {
+    "description": "Confirmation après ajout d'une plante à une zone.",
+    "placeholders": {
+      "plante": { "type": "String" }
+    }
+  },
+  "actionSupprimer": "Supprimer",
+  "@actionSupprimer": {
+    "description": "Action générique : supprimer."
+  },
+  "formZoneTitreModifier": "Modifier la zone",
+  "@formZoneTitreModifier": {
+    "description": "Titre du formulaire de zone en mode édition."
+  },
+  "zoneModifier": "Modifier la zone",
+  "@zoneModifier": {
+    "description": "Action (détail de zone) : ouvrir l'édition de la zone."
+  },
+  "zoneSupprimer": "Supprimer la zone",
+  "@zoneSupprimer": {
+    "description": "Action (détail de zone) : supprimer la zone."
+  },
+  "zoneSupprimerTitre": "Supprimer cette zone ?",
+  "@zoneSupprimerTitre": {
+    "description": "Titre du dialogue de confirmation de suppression de zone."
+  },
+  "zoneSupprimerMessage": "{count, plural, =0{« {zone} » sera supprimée. L'historique est conservé.} =1{« {zone} » et sa plante seront supprimées. L'historique est conservé.} other{« {zone} » et ses {count} plantes seront supprimées. L'historique est conservé.}}",
+  "@zoneSupprimerMessage": {
+    "description": "Message de confirmation de suppression de zone (avec le nombre de plantes).",
+    "placeholders": {
+      "zone": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "snackZoneModifiee": "Zone modifiée.",
+  "@snackZoneModifiee": {
+    "description": "Confirmation après modification d'une zone."
+  },
+  "snackZoneSupprimee": "Zone supprimée.",
+  "@snackZoneSupprimee": {
+    "description": "Confirmation après suppression d'une zone."
+  },
+  "cultureActions": "Actions sur la plante",
+  "@cultureActions": {
+    "description": "Tooltip du menu d'actions d'une culture (détail de zone)."
+  },
+  "cultureArracher": "Arracher",
+  "@cultureArracher": {
+    "description": "Action : arracher une plante (statut terminal, garde l'historique)."
+  },
+  "planteSupprimerTitre": "Supprimer cette plante ?",
+  "@planteSupprimerTitre": {
+    "description": "Titre du dialogue de confirmation de suppression d'une plante."
+  },
+  "planteSupprimerMessage": "« {plante} » sera retirée du potager. Continuer ?",
+  "@planteSupprimerMessage": {
+    "description": "Message de confirmation de suppression d'une plante.",
+    "placeholders": {
+      "plante": { "type": "String" }
+    }
+  },
+  "snackPlanteArrachee": "{plante} arrachée.",
+  "@snackPlanteArrachee": {
+    "description": "Confirmation après arrachage d'une plante.",
+    "placeholders": {
+      "plante": { "type": "String" }
+    }
+  },
+  "snackPlanteSupprimee": "{plante} supprimée.",
+  "@snackPlanteSupprimee": {
+    "description": "Confirmation après suppression d'une plante.",
+    "placeholders": {
+      "plante": { "type": "String" }
+    }
+  },
   "catalogueNbPlantes": "{count, plural, =0{Aucune plante} =1{1 plante} other{{count} plantes}}",
   "@catalogueNbPlantes": {
     "description": "Nombre de plantes du catalogue, affiché en sous-titre.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "catalogueVueFiches": "Fiches",
+  "@catalogueVueFiches": {
+    "description": "Onglet du catalogue : vue en fiches (cartes)."
+  },
+  "catalogueVueReseau": "Réseau",
+  "@catalogueVueReseau": {
+    "description": "Onglet du catalogue : vue réseau (constellation d'associations)."
+  },
+  "reseauIndice": "Touchez une plante pour voir ses associations.",
+  "@reseauIndice": {
+    "description": "Indice affiché dans la vue réseau quand aucune plante n'est sélectionnée."
+  },
+  "reseauAfficherEviter": "Afficher les associations à éviter",
+  "@reseauAfficherEviter": {
+    "description": "Bascule de la vue réseau : afficher ou non les liens « à éviter »."
+  },
+  "reseauVoirFiche": "Voir la fiche",
+  "@reseauVoirFiche": {
+    "description": "Bouton du panneau réseau : ouvrir la fiche de la plante sélectionnée."
+  },
+  "reseauNbBons": "{count, plural, =0{Aucun bon compagnon} =1{1 bon compagnon} other{{count} bons compagnons}}",
+  "@reseauNbBons": {
+    "description": "Nombre de bons compagnons de la plante sélectionnée (vue réseau).",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "reseauNbEviter": "{count, plural, =0{aucune à éviter} =1{1 à éviter} other{{count} à éviter}}",
+  "@reseauNbEviter": {
+    "description": "Nombre d'associations à éviter de la plante sélectionnée (vue réseau).",
     "placeholders": {
       "count": { "type": "int" }
     }
@@ -206,6 +372,10 @@
       "max": { "type": "int" }
     }
   },
+  "ficheCalendrierTitre": "Semis & récolte",
+  "@ficheCalendrierTitre": { "description": "Titre de la section calendrier semis/récolte de la fiche." },
+  "ficheCalendrierSansContexte": "Crée un potager pour situer le calendrier de cette plante.",
+  "@ficheCalendrierSansContexte": { "description": "Note quand aucun potager actif n'existe (pas de contexte climat)." },
   "ficheAssociations": "Associations",
   "@ficheAssociations": { "description": "Titre de la section associations de la fiche." },
   "ficheBonsCompagnons": "Bons compagnons",
@@ -214,9 +384,9 @@
   "@ficheAEviter": { "description": "Sous-titre : plantes à ne pas associer." },
   "ficheAucuneAssociation": "Aucune association renseignée.",
   "@ficheAucuneAssociation": { "description": "État vide des associations." },
-  "calendrierPorteeSemaine": "Semaine",
+  "calendrierPorteeSemaine": "Cette semaine",
   "@calendrierPorteeSemaine": { "description": "Portée de l'agenda : 7 prochains jours." },
-  "calendrierPorteeMois": "Mois",
+  "calendrierPorteeMois": "Ce mois-ci",
   "@calendrierPorteeMois": { "description": "Portée de l'agenda : reste du mois." },
   "calendrierResume": "{count, plural, =0{Rien à faire} =1{1 tâche à faire} other{{count} tâches à faire}}",
   "@calendrierResume": {
@@ -237,6 +407,26 @@
   "@calendrierVide": { "description": "État vide de l'agenda." },
   "calendrierErreurChargement": "Impossible de charger le calendrier.",
   "@calendrierErreurChargement": { "description": "Erreur de chargement du calendrier." },
+  "calendrierVueAgenda": "Agenda",
+  "@calendrierVueAgenda": { "description": "Onglet du calendrier : vue agenda (liste par jour)." },
+  "calendrierVueMois": "Mois",
+  "@calendrierVueMois": { "description": "Onglet du calendrier : vue grille mensuelle." },
+  "calendrierVueSaison": "Saison",
+  "@calendrierVueSaison": { "description": "Onglet du calendrier : vue saisonnière (semis→récolte)." },
+  "saisonSansContexte": "Crée un potager et ajoute des plantes pour voir leur saison.",
+  "@saisonSansContexte": { "description": "État : aucun potager actif pour la vue Saison." },
+  "saisonVide": "Aucune plante en culture pour le moment.",
+  "@saisonVide": { "description": "État : aucune plante en culture pour la vue Saison." },
+  "saisonHemisphereSuppose": "Hémisphère nord supposé — renseigne ta position pour affiner.",
+  "@saisonHemisphereSuppose": { "description": "Avertissement : hémisphère supposé faute de position." },
+  "saisonNonRenseigne": "Calendrier non renseigné pour ce climat.",
+  "@saisonNonRenseigne": { "description": "Une plante sans périodes pour le couple hémisphère×climat." },
+  "saisonSemis": "Semis",
+  "@saisonSemis": { "description": "Bande de semis dans la vue Saison." },
+  "saisonPlantation": "Plantation",
+  "@saisonPlantation": { "description": "Bande de plantation dans la vue Saison." },
+  "saisonRecolte": "Récolte",
+  "@saisonRecolte": { "description": "Bande de récolte dans la vue Saison." },
   "jourAujourdhui": "Aujourd'hui",
   "@jourAujourdhui": { "description": "Libellé du jour courant dans l'agenda." },
   "jourDemain": "Demain",
@@ -364,6 +554,12 @@
   "@swipeInverse": { "description": "Sens de balayage : inversé." },
   "confidGeoloc": "Géolocalisation",
   "@confidGeoloc": { "description": "Opt-out : géolocalisation." },
+  "confidPosition": "Position du potager",
+  "@confidPosition": { "description": "Ligne de réglage : position du potager actif." },
+  "confidPositionAucune": "Aucune — touchez pour la définir",
+  "@confidPositionAucune": { "description": "Statut : pas de position définie." },
+  "confidPositionDefinie": "Position définie",
+  "@confidPositionDefinie": { "description": "Statut : position définie (sans nom de lieu)." },
   "geolocOff": "Désactivée — météo & zone climatique saisies à la main",
   "@geolocOff": { "description": "Géoloc désactivée (description)." },
   "geolocManuelle": "Ville saisie manuellement",
@@ -453,6 +649,32 @@
   "@formPotagerRusticite": { "description": "Champ : zone de rusticité." },
   "formPotagerRusticiteAide": "Si tu ne sais pas, laisse la valeur par défaut — modifiable plus tard.",
   "@formPotagerRusticiteAide": { "description": "Aide du champ rusticité." },
+  "formPotagerDetecter": "Détecter ma position",
+  "@formPotagerDetecter": { "description": "Bouton : capter la position GPS pour pré-remplir le climat." },
+  "formPotagerPositionDetectee": "Climat et rusticité pré-remplis depuis ta position — ajuste si besoin.",
+  "@formPotagerPositionDetectee": { "description": "Confirmation : position détectée, champs suggérés." },
+  "formPotagerPositionRefusee": "Autorisation de localisation refusée.",
+  "@formPotagerPositionRefusee": { "description": "Erreur : permission géoloc refusée." },
+  "formPotagerPositionErreur": "Position indisponible (vérifie le GPS et l'autorisation).",
+  "@formPotagerPositionErreur": { "description": "Erreur : impossible d'obtenir la position." },
+  "formPotagerChoisirRegion": "Choisir une région",
+  "@formPotagerChoisirRegion": { "description": "Bouton/titre : sélectionner une région approximative (sans GPS)." },
+  "captureLocalisationTitre": "Définir ma position",
+  "@captureLocalisationTitre": { "description": "Titre de la feuille de capture de position." },
+  "captureLocalisationOuRegion": "Ou choisis une région approximative",
+  "@captureLocalisationOuRegion": { "description": "Séparateur dans la feuille de capture : choix par région." },
+  "regionEuropeOuest": "Europe de l'Ouest",
+  "@regionEuropeOuest": { "description": "Région approximative." },
+  "regionMediterranee": "Bassin méditerranéen",
+  "@regionMediterranee": { "description": "Région approximative." },
+  "regionEuropeNord": "Europe du Nord",
+  "@regionEuropeNord": { "description": "Région approximative." },
+  "regionTropiques": "Zone tropicale",
+  "@regionTropiques": { "description": "Région approximative." },
+  "regionAmeriqueNord": "Amérique du Nord tempérée",
+  "@regionAmeriqueNord": { "description": "Région approximative." },
+  "regionHemisphereSud": "Hémisphère sud (tempéré)",
+  "@regionHemisphereSud": { "description": "Région approximative." },
   "formZoneTitre": "Nouvelle zone",
   "@formZoneTitre": { "description": "Titre du formulaire de création d'une zone." },
   "formZoneNom": "Nom de la zone",
