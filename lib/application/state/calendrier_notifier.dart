@@ -16,10 +16,15 @@ import 'calendrier_vue.dart';
 class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   PorteeAgenda _portee = PorteeAgenda.semaine;
 
+  /// First day of the month shown by the monthly grid (set on first build).
+  DateTime? _moisAffiche;
+
   @override
   Future<CalendrierVue> build() async {
     final taches = ref.watch(tacheRepositoryProvider);
     final maintenant = ref.watch(horlogeProvider);
+    final n = maintenant();
+    _moisAffiche ??= DateTime(n.year, n.month, 1);
     return _assembler(taches, maintenant);
   }
 
@@ -27,6 +32,27 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   Future<void> definirPortee(PorteeAgenda portee) async {
     if (portee == _portee) return;
     _portee = portee;
+    await _recharger();
+  }
+
+  /// Moves the monthly grid to the previous month and reloads.
+  Future<void> moisPrecedent() async {
+    final m = _moisAffiche!;
+    _moisAffiche = DateTime(m.year, m.month - 1, 1);
+    await _recharger();
+  }
+
+  /// Moves the monthly grid to the next month and reloads.
+  Future<void> moisSuivant() async {
+    final m = _moisAffiche!;
+    _moisAffiche = DateTime(m.year, m.month + 1, 1);
+    await _recharger();
+  }
+
+  /// Returns the monthly grid to the current month and reloads.
+  Future<void> revenirMoisActuel() async {
+    final n = ref.read(horlogeProvider)();
+    _moisAffiche = DateTime(n.year, n.month, 1);
     await _recharger();
   }
 
@@ -42,7 +68,8 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   Future<void> _recharger() async {
     final taches = ref.read(tacheRepositoryProvider);
     final maintenant = ref.read(horlogeProvider);
-    state = const AsyncValue.loading();
+    // Keep the current data visible during the reload (no loading flash), so the
+    // month grid and its day selection don't reset on a tick / month change.
     state = await AsyncValue.guard(() => _assembler(taches, maintenant));
   }
 
@@ -52,9 +79,19 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   ) async {
     final debut = _minuit(maintenant());
     final fin = _finFenetre(debut);
-
     final liste = await taches.obtenirEntreDates(debut, fin);
-    return CalendrierVue(portee: _portee, groupes: _grouperParJour(liste));
+
+    // Full displayed month for the grid (independent of the agenda window).
+    final moisDebut = _moisAffiche!;
+    final moisFin = DateTime(moisDebut.year, moisDebut.month + 1, 1);
+    final listeMois = await taches.obtenirEntreDates(moisDebut, moisFin);
+
+    return CalendrierVue(
+      portee: _portee,
+      groupes: _grouperParJour(liste),
+      moisAffiche: moisDebut,
+      groupesMois: _grouperParJour(listeMois),
+    );
   }
 
   /// Exclusive end of the window: +7 days (week) or first day of next month.

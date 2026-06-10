@@ -13,12 +13,31 @@ import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
+import 'package:pot_a_gerer/domain/value_objects/periode.dart';
+import 'package:pot_a_gerer/application/state/saison_notifier.dart';
+import 'package:pot_a_gerer/application/state/saison_vue.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_calendrier.dart';
 
 class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class _FakeTache extends Fake implements Tache {}
+
+/// A fixed season view so the Saison tab can render without the garden repos.
+class _FakeSaison extends SaisonNotifier {
+  @override
+  Future<SaisonVue> build() async => SaisonVue(
+        hemisphereSuppose: true,
+        lignes: [
+          LigneSaison(
+            nom: 'Tomate',
+            semis: const Periode(3, 5),
+            plantation: const Periode(4, 5),
+            recolte: const Periode(7, 9),
+          ),
+        ],
+      );
+}
 
 void main() {
   setUpAll(() => registerFallbackValue(_FakeTache()));
@@ -93,5 +112,59 @@ void main() {
     await monter(tester);
 
     expect(find.text('Rien de prévu — profitez du jardin.'), findsOneWidget);
+  });
+
+  testWidgets('the month view shows the grid and the selected day tasks',
+      (tester) async {
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async =>
+          [uneTache('t1', 'Arroser les tomates', DateTime(2026, 6, 8, 10))],
+    );
+
+    await monter(tester);
+
+    // Switch from Agenda to the month grid.
+    await tester.tap(find.text('Mois'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lun'), findsOneWidget); // weekday header
+    expect(find.text('Juin 2026'), findsOneWidget); // month title
+    // Today (8 June) is selected by default → its task is listed below.
+    expect(find.text('Arroser les tomates'), findsOneWidget);
+
+    // Selecting an empty day shows the empty state.
+    await tester.tap(find.text('15'));
+    await tester.pumpAndSettle();
+    expect(find.text('Arroser les tomates'), findsNothing);
+    expect(find.text('Rien de prévu — profitez du jardin.'), findsOneWidget);
+  });
+
+  testWidgets('the season view charts the cultivated plants', (tester) async {
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          tacheRepositoryProvider.overrideWithValue(taches),
+          horlogeProvider.overrideWithValue(() => maintenant),
+          saisonProvider.overrideWith(_FakeSaison.new),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const EcranCalendrier(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Saison'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tomate'), findsOneWidget);
+    expect(find.text('Semis'), findsWidgets); // band label + legend
+    expect(find.textContaining('Hémisphère nord supposé'), findsOneWidget);
   });
 }

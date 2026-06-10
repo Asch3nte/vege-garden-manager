@@ -94,9 +94,41 @@ void main() {
     final captured =
         verify(() => taches.obtenirEntreDates(captureAny(), captureAny()))
             .captured;
-    // Last verified call is the month one: [8 June, 1 July).
-    expect(captured[captured.length - 2], DateTime(2026, 6, 8));
-    expect(captured.last, DateTime(2026, 7, 1));
+    // Each assemble reads two windows (agenda + month grid); in month scope the
+    // agenda window itself runs [8 June, 1 July).
+    final paires = [
+      for (var i = 0; i < captured.length; i += 2)
+        (captured[i], captured[i + 1]),
+    ];
+    expect(paires, contains((DateTime(2026, 6, 8), DateTime(2026, 7, 1))));
+  });
+
+  test('exposes the displayed month and navigates between months', () async {
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    final c = conteneur();
+    final vue = await c.read(calendrierProvider.future);
+    expect(vue.moisAffiche, DateTime(2026, 6, 1));
+
+    await c.read(calendrierProvider.notifier).moisSuivant();
+    expect(c.read(calendrierProvider).value!.moisAffiche, DateTime(2026, 7, 1));
+
+    await c.read(calendrierProvider.notifier).moisPrecedent();
+    await c.read(calendrierProvider.notifier).moisPrecedent();
+    expect(c.read(calendrierProvider).value!.moisAffiche, DateTime(2026, 5, 1));
+
+    await c.read(calendrierProvider.notifier).revenirMoisActuel();
+    expect(c.read(calendrierProvider).value!.moisAffiche, DateTime(2026, 6, 1));
+  });
+
+  test('groupePourJour returns the displayed month tasks by day', () async {
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [uneTache('m', DateTime(2026, 6, 20, 9))]);
+
+    final vue = await conteneur().read(calendrierProvider.future);
+
+    expect(vue.groupePourJour(DateTime(2026, 6, 20)), isNotNull);
+    expect(vue.groupePourJour(DateTime(2026, 6, 21)), isNull);
   });
 
   test('ticking a task marks it done and persists it', () async {
