@@ -62,6 +62,7 @@ class EcranCalendrier extends ConsumerWidget {
         ],
       ),
       body: vue.when(
+        skipLoadingOnReload: true,
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(calendrierProvider)),
         data: (data) => _Contenu(vue: data),

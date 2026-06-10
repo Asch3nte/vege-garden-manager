@@ -63,6 +63,7 @@ class EcranPotager extends ConsumerWidget {
               label: Text(l10n.potagerCreerZone),
             ),
       body: vue.when(
+        skipLoadingOnReload: true,
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) =>
             _EtatErreur(onReessayer: () => ref.invalidate(potagerProvider)),

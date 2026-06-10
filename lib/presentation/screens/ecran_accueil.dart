@@ -35,6 +35,8 @@ class EcranAccueil extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navAccueil)),
       body: vue.when(
+        // Keep showing data while it reloads (e.g. on tab re-entry) — no flash.
+        skipLoadingOnReload: true,
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(accueilProvider)),
         data: (data) => RefreshIndicator(
@@ -44,6 +46,8 @@ class EcranAccueil extends ConsumerWidget {
             // Push within the Accueil branch so the phone back button returns
             // to the dashboard (not to the Potager plan).
             onZoneTap: (id) => context.push(RoutesApp.accueilZoneDetail(id)),
+            onToggleTache: (t) =>
+                ref.read(accueilProvider.notifier).basculerTache(t),
           ),
         ),
       ),
@@ -55,8 +59,13 @@ class EcranAccueil extends ConsumerWidget {
 class _Contenu extends StatelessWidget {
   final AccueilVue vue;
   final void Function(String zoneId) onZoneTap;
+  final void Function(Tache tache) onToggleTache;
 
-  const _Contenu({required this.vue, required this.onZoneTap});
+  const _Contenu({
+    required this.vue,
+    required this.onZoneTap,
+    required this.onToggleTache,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +81,7 @@ class _Contenu extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s4),
         const _CarteMeteo(),
         const SizedBox(height: EspacementsApp.s5),
-        _SectionTaches(taches: vue.tachesDuJour),
+        _SectionTaches(taches: vue.tachesDuJour, onToggle: onToggleTache),
         const SizedBox(height: EspacementsApp.s5),
         _GrilleStats(
           nombreAlertes: vue.nombreAlertes,
@@ -265,8 +274,9 @@ class _CarteMeteo extends ConsumerWidget {
 /// "Tasks of the day" labelled section with a card list.
 class _SectionTaches extends StatelessWidget {
   final List<Tache> taches;
+  final void Function(Tache tache) onToggle;
 
-  const _SectionTaches({required this.taches});
+  const _SectionTaches({required this.taches, required this.onToggle});
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +305,10 @@ class _SectionTaches extends StatelessWidget {
                     children: [
                       for (var i = 0; i < taches.length; i++) ...[
                         if (i > 0) const Divider(height: 1),
-                        _LigneTache(tache: taches[i]),
+                        _LigneTache(
+                          tache: taches[i],
+                          onToggle: () => onToggle(taches[i]),
+                        ),
                       ],
                     ],
                   ),
@@ -306,36 +319,40 @@ class _SectionTaches extends StatelessWidget {
   }
 }
 
-/// One task row: check indicator + title (+ done styling).
+/// One task row: tappable to toggle completion; check indicator + title.
 class _LigneTache extends StatelessWidget {
   final Tache tache;
+  final VoidCallback onToggle;
 
-  const _LigneTache({required this.tache});
+  const _LigneTache({required this.tache, required this.onToggle});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final fait = tache.estFaite;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s3),
-      child: Row(
-        children: [
-          Icon(
-            fait ? Icons.check_circle : Icons.radio_button_unchecked,
-            size: TaillesIconesApp.lg,
-            color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
-          ),
-          const SizedBox(width: EspacementsApp.s3),
-          Expanded(
-            child: Text(
-              tache.titre,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: fait ? theme.colorScheme.onSurfaceVariant : null,
-                decoration: fait ? TextDecoration.lineThrough : null,
+    return InkWell(
+      onTap: onToggle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s3),
+        child: Row(
+          children: [
+            Icon(
+              fait ? Icons.check_circle : Icons.radio_button_unchecked,
+              size: TaillesIconesApp.lg,
+              color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+            ),
+            const SizedBox(width: EspacementsApp.s3),
+            Expanded(
+              child: Text(
+                tache.titre,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: fait ? theme.colorScheme.onSurfaceVariant : null,
+                  decoration: fait ? TextDecoration.lineThrough : null,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

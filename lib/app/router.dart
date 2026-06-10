@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../application/state/accueil_notifier.dart';
+import '../application/state/calendrier_notifier.dart';
+import '../application/state/potager_notifier.dart';
 import '../l10n/app_localizations.dart';
 import '../presentation/screens/ecran_accueil.dart';
 import '../presentation/screens/ecran_calendrier.dart';
@@ -110,21 +114,42 @@ String _libellePlus(AppLocalizations l) => l.navPlus;
 /// Kept as a top-level factory (not a provider) for now: routing has no runtime
 /// dependencies yet. It moves behind a Riverpod provider once a route needs to
 /// react to app state (e.g. onboarding completion).
+/// Invalidates the time-sensitive view-model of the tab at [index] so it
+/// reloads on (re)entry — keeping the dashboard, the garden plan and the agenda
+/// in sync with edits made elsewhere. Catalogue (static) and Plus are left as-is.
+void _rafraichirBranche(WidgetRef ref, int index) {
+  switch (index) {
+    case 0:
+      ref.invalidate(accueilProvider);
+    case 1:
+      ref.invalidate(potagerProvider);
+    case 3:
+      ref.invalidate(calendrierProvider);
+  }
+}
+
 GoRouter creerRouteur() {
   return GoRouter(
     initialLocation: RoutesApp.accueil,
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          return EchafaudageNavigation(
-            indexActif: navigationShell.currentIndex,
-            destinations: _destinations,
-            onSelection: (index) => navigationShell.goBranch(
-              index,
-              // Re-tapping the active tab pops it back to its root.
-              initialLocation: index == navigationShell.currentIndex,
+          // Consumer so selecting a tab can refresh that tab's data (the
+          // dashboard/agenda must reflect changes made in other tabs).
+          return Consumer(
+            builder: (context, ref, _) => EchafaudageNavigation(
+              indexActif: navigationShell.currentIndex,
+              destinations: _destinations,
+              onSelection: (index) {
+                _rafraichirBranche(ref, index);
+                navigationShell.goBranch(
+                  index,
+                  // Re-tapping the active tab pops it back to its root.
+                  initialLocation: index == navigationShell.currentIndex,
+                );
+              },
+              child: navigationShell,
             ),
-            child: navigationShell,
           );
         },
         branches: [

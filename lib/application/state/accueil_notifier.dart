@@ -57,6 +57,18 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
     );
   }
 
+  /// Toggles [tache]'s completion (check ↔ uncheck), persists it and reloads
+  /// the dashboard so the change shows immediately.
+  Future<void> basculerTache(Tache tache) async {
+    if (tache.estFaite) {
+      tache.rouvrir();
+    } else {
+      tache.marquerFaite(ref.read(horlogeProvider)());
+    }
+    await ref.read(tacheRepositoryProvider).sauvegarder(tache);
+    ref.invalidateSelf();
+  }
+
   /// Today's tasks across the whole garden, ordered (undone first).
   Future<List<Tache>> _tachesDuJour(DateTime Function() maintenant) async {
     final debut = _debutDuJour(maintenant());

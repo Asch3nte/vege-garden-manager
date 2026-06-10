@@ -61,6 +61,8 @@ class _MockGeoloc extends Mock implements AbstractGeolocalisationService {}
 
 class _FakePotager extends Fake implements Potager {}
 
+class _FakeTache extends Fake implements Tache {}
+
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
@@ -78,7 +80,10 @@ class MockRecoltes extends Mock implements AbstractRecolteRepository {}
 class MockMeteo extends Mock implements AbstractMeteoService {}
 
 void main() {
-  setUpAll(() => registerFallbackValue(_FakePotager()));
+  setUpAll(() {
+    registerFallbackValue(_FakePotager());
+    registerFallbackValue(_FakeTache());
+  });
 
   final maintenant = DateTime(2026, 6, 9, 8, 24);
 
@@ -212,6 +217,19 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Réessayer'), findsOneWidget);
+  });
+
+  testWidgets('tapping a task on the dashboard toggles it', (tester) async {
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await monter(tester, NiveauExperience.intermediaire);
+
+    await tester.tap(find.text('Arroser les tomates'));
+    await tester.pumpAndSettle();
+
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.estFaite, isTrue); // toggled to done
   });
 
   testWidgets('the weather card shows the temperatures and the verdict',
