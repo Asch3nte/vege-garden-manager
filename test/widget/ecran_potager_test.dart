@@ -68,6 +68,8 @@ void main() {
         .thenAnswer((_) async => []);
     when(() => plantations.obtenirParParcelle(any()))
         .thenAnswer((_) async => []);
+    when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+    when(() => potagers.supprimer(any())).thenAnswer((_) async {});
   });
 
   Potager unPotager() => Potager(
@@ -252,6 +254,27 @@ void main() {
     // The detail shows its "Cultures" section header (absent from the plan).
     expect(find.text('Cultures'), findsOneWidget);
     expect(find.text('Tomate'), findsOneWidget);
+  });
+
+  testWidgets('the header menu deletes the garden after confirmation',
+      (tester) async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+
+    await monter(tester);
+
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Supprimer le potager'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Supprimer ce potager ?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+    await tester.pumpAndSettle();
+
+    verify(() => potagers.supprimer('pot-1')).called(1);
   });
 
   testWidgets('offers to create a garden when there is none', (tester) async {

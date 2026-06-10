@@ -45,6 +45,12 @@ class PotagersNotifier extends AsyncNotifier<List<Potager>> {
     await _recharger();
   }
 
+  /// Soft-deletes the garden [id] (cascade) and reloads the list.
+  Future<void> supprimer(String id) async {
+    await ref.read(potagerRepositoryProvider).supprimer(id);
+    await _recharger();
+  }
+
   /// Reloads the list from the repository, surfacing errors as an error state.
   Future<void> _recharger() async {
     state = const AsyncValue.loading();

@@ -13,4 +13,8 @@ abstract class AbstractPotagerRepository {
 
   /// Creates or updates [potager].
   Future<void> sauvegarder(Potager potager);
+
+  /// Soft-deletes the garden [id] and, in cascade, its zones, their plantations,
+  /// harvests and equipment (history preserved, rows filtered from reads).
+  Future<void> supprimer(String id);
 }

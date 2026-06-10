@@ -13,6 +13,7 @@ import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/permission_localisation.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_geolocalisation_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
@@ -142,6 +143,48 @@ void main() {
         verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
     expect(potager.zoneClimatique.type, TypeClimat.oceanique); // unchanged
     expect(potager.localisation.estDefinie, isFalse);
+  });
+
+  testWidgets('edit mode pre-fills and persists the garden in place',
+      (tester) async {
+    when(() => repo.obtenirTous()).thenAnswer((_) async => []);
+    final initial = Potager(
+      id: 'pot-1',
+      nom: 'Ancien nom',
+      zoneClimatique:
+          const ZoneClimatique(TypeClimat.mediterraneen, ZoneRusticite.zone9),
+      dateCreation: DateTime(2026, 1, 1),
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(repo),
+          geolocalisationServiceProvider.overrideWithValue(geoloc),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: FormulairePotager(potagerInitial: initial),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Modifier le potager'), findsOneWidget);
+    expect(find.text('Ancien nom'), findsOneWidget);
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Nom du potager'), 'Nouveau nom');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
+    expect(potager.id, 'pot-1'); // same identity (edit, not create)
+    expect(potager.nom, 'Nouveau nom');
+    expect(potager.zoneClimatique.type, TypeClimat.mediterraneen); // preserved
   });
 
   testWidgets('an empty name blocks saving', (tester) async {

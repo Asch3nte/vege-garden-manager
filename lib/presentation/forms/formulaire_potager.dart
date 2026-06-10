@@ -16,21 +16,31 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/libelles_enums.dart';
 
-/// Opens the "new garden" form as a full-screen route and returns the created
-/// [Potager] (or `null` if cancelled).
-Future<Potager?> ouvrirFormulairePotager(BuildContext context) {
+/// Opens the garden form as a full-screen route and returns the saved [Potager]
+/// (or `null` if cancelled). When [potagerInitial] is provided, the form opens
+/// in **edit** mode (pre-filled, persists changes).
+Future<Potager?> ouvrirFormulairePotager(
+  BuildContext context, {
+  Potager? potagerInitial,
+}) {
   return Navigator.of(context).push<Potager>(
-    MaterialPageRoute(builder: (_) => const FormulairePotager(), fullscreenDialog: true),
+    MaterialPageRoute(
+      builder: (_) => FormulairePotager(potagerInitial: potagerInitial),
+      fullscreenDialog: true,
+    ),
   );
 }
 
-/// Minimal garden-creation form: name + location type + climate + hardiness.
+/// Minimal garden form: name + location type + climate + hardiness (+ position).
 ///
 /// Climate and hardiness default to sensible values (oceanic / zone 8) so a
 /// first-time user can create a garden in seconds; both are editable later.
-/// Persists through [PotagersNotifier.creer] and pops the created entity.
+/// Creates via [PotagersNotifier.creer], or edits [potagerInitial] in place.
 class FormulairePotager extends ConsumerStatefulWidget {
-  const FormulairePotager({super.key});
+  /// Garden being edited (null = creation).
+  final Potager? potagerInitial;
+
+  const FormulairePotager({super.key, this.potagerInitial});
 
   @override
   ConsumerState<FormulairePotager> createState() => _FormulairePotagerState();
@@ -46,6 +56,21 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
   bool _suggere = false; // climate/hardiness were pre-filled from the position
   bool _detection = false;
   bool _enregistrement = false;
+
+  bool get _edition => widget.potagerInitial != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.potagerInitial;
+    if (p != null) {
+      _nom.text = p.nom;
+      _emplacement = p.emplacement;
+      _climat = p.zoneClimatique.type;
+      _rusticite = p.zoneClimatique.rusticite;
+      _position = p.localisation;
+    }
+  }
 
   @override
   void dispose() {
@@ -102,12 +127,28 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
     setState(() => _enregistrement = true);
-    final potager = await ref.read(potagersProvider.notifier).creer(
-          nom: _nom.text.trim(),
-          zoneClimatique: ZoneClimatique(_climat, _rusticite),
-          emplacement: _emplacement,
-          localisation: _position,
-        );
+    final notifier = ref.read(potagersProvider.notifier);
+    final zone = ZoneClimatique(_climat, _rusticite);
+
+    final Potager potager;
+    final initial = widget.potagerInitial;
+    if (initial != null) {
+      // Edit: mutate the existing entity in place, then persist.
+      initial
+        ..renommer(_nom.text.trim())
+        ..modifierEmplacement(_emplacement)
+        ..mettreAJourZoneClimatique(zone)
+        ..mettreAJourLocalisation(_position);
+      await notifier.modifier(initial);
+      potager = initial;
+    } else {
+      potager = await notifier.creer(
+        nom: _nom.text.trim(),
+        zoneClimatique: zone,
+        emplacement: _emplacement,
+        localisation: _position,
+      );
+    }
     if (mounted) Navigator.of(context).pop(potager);
   }
 
@@ -116,7 +157,9 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.formPotagerTitre)),
+      appBar: AppBar(
+        title: Text(_edition ? l10n.formPotagerTitreModifier : l10n.formPotagerTitre),
+      ),
       body: Form(
         key: _cleForm,
         child: ListView(

@@ -6,12 +6,18 @@ import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../app/theme/theme_app.dart';
+import '../../application/providers/repository_providers.dart';
+import '../../application/state/accueil_notifier.dart';
+import '../../application/state/contexte_climat.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
+import '../../application/state/potagers_notifier.dart';
+import '../../application/state/saison_notifier.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_potager.dart';
 import '../forms/formulaire_zone.dart';
+import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Stable decorative colours assigned to zones by position, so each zone keeps a
@@ -54,7 +60,29 @@ class EcranPotager extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navPotager)),
+      appBar: AppBar(
+        title: Text(l10n.navPotager),
+        actions: [
+          if (potagerId != null)
+            PopupMenuButton<_ActionPotager>(
+              onSelected: (a) => switch (a) {
+                _ActionPotager.modifier => _modifierPotager(context, ref),
+                _ActionPotager.supprimer => _supprimerPotager(
+                    context, ref, vue.value?.nomPotager ?? ''),
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: _ActionPotager.modifier,
+                  child: Text(l10n.potagerModifier),
+                ),
+                PopupMenuItem(
+                  value: _ActionPotager.supprimer,
+                  child: Text(l10n.potagerSupprimer),
+                ),
+              ],
+            ),
+        ],
+      ),
       floatingActionButton: potagerId == null
           ? null
           : FloatingActionButton.extended(
@@ -80,6 +108,52 @@ class EcranPotager extends ConsumerWidget {
 void _confirmer(WidgetRef ref, String message) {
   final messenger = ScaffoldMessenger.maybeOf(ref.context);
   messenger?.showSnackBar(SnackBar(content: Text(message)));
+}
+
+/// Garden-level actions in the Potager header menu.
+enum _ActionPotager { modifier, supprimer }
+
+/// Refreshes everything that depends on the active garden (plan, dashboard,
+/// season, climate context) after it changed or was deleted.
+void _rafraichirPotager(WidgetRef ref) {
+  ref.invalidate(potagerProvider);
+  ref.invalidate(accueilProvider);
+  ref.invalidate(saisonProvider);
+  ref.invalidate(contexteClimatProvider);
+}
+
+/// Opens the active garden in the edit form, then refreshes on save.
+Future<void> _modifierPotager(BuildContext context, WidgetRef ref) async {
+  final potager =
+      await ref.read(potagerRepositoryProvider).obtenirPotagerActif();
+  if (potager == null || !context.mounted) return;
+  final maj = await ouvrirFormulairePotager(context, potagerInitial: potager);
+  if (maj == null) return;
+  _rafraichirPotager(ref);
+}
+
+/// Confirms then soft-deletes the active garden (cascade), and refreshes.
+Future<void> _supprimerPotager(
+  BuildContext context,
+  WidgetRef ref,
+  String nom,
+) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final potager =
+      await ref.read(potagerRepositoryProvider).obtenirPotagerActif();
+  if (potager == null || !context.mounted) return;
+  final ok = await confirmerAction(
+    context,
+    titre: l10n.potagerSupprimerTitre,
+    message: l10n.potagerSupprimerMessage(nom),
+    libelleConfirmer: l10n.actionSupprimer,
+    destructif: true,
+  );
+  if (!ok) return;
+  await ref.read(potagersProvider.notifier).supprimer(potager.id);
+  _rafraichirPotager(ref);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.snackPotagerSupprime)));
 }
 
 /// Scrollable plan for a loaded [PotagerVue].

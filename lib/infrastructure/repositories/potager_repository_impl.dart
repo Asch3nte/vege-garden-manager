@@ -42,4 +42,43 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
         .into(_db.potagers)
         .insertOnConflictUpdate(_mapper.versCompanion(potager));
   }
+
+  @override
+  Future<void> supprimer(String id) async {
+    final maintenant = DateTime.now().toUtc().toIso8601String();
+    await _db.transaction(() async {
+      final parcelleIds = await (_db.selectOnly(_db.parcelles)
+            ..addColumns([_db.parcelles.id])
+            ..where(_db.parcelles.potagerId.equals(id)))
+          .map((r) => r.read(_db.parcelles.id)!)
+          .get();
+
+      if (parcelleIds.isNotEmpty) {
+        final plantationIds = await (_db.selectOnly(_db.plantations)
+              ..addColumns([_db.plantations.id])
+              ..where(_db.plantations.parcelleId.isIn(parcelleIds)))
+            .map((r) => r.read(_db.plantations.id)!)
+            .get();
+        if (plantationIds.isNotEmpty) {
+          await (_db.update(_db.recoltes)
+                ..where((t) =>
+                    t.plantationId.isIn(plantationIds) & t.deletedAt.isNull()))
+              .write(RecoltesCompanion(deletedAt: Value(maintenant)));
+        }
+        await (_db.update(_db.plantations)
+              ..where((t) =>
+                  t.parcelleId.isIn(parcelleIds) & t.deletedAt.isNull()))
+            .write(PlantationsCompanion(deletedAt: Value(maintenant)));
+        await (_db.update(_db.equipements)
+              ..where((t) =>
+                  t.parcelleId.isIn(parcelleIds) & t.deletedAt.isNull()))
+            .write(EquipementsCompanion(deletedAt: Value(maintenant)));
+      }
+      await (_db.update(_db.parcelles)
+            ..where((t) => t.potagerId.equals(id) & t.deletedAt.isNull()))
+          .write(ParcellesCompanion(deletedAt: Value(maintenant)));
+      await (_db.update(_db.potagers)..where((t) => t.id.equals(id)))
+          .write(PotagersCompanion(deletedAt: Value(maintenant)));
+    });
+  }
 }
