@@ -8,6 +8,7 @@ import '../application/state/potager_notifier.dart';
 import '../l10n/app_localizations.dart';
 import '../presentation/screens/ecran_accueil.dart';
 import '../presentation/screens/ecran_calendrier.dart';
+import '../presentation/screens/ecran_meteo_detail.dart';
 import '../presentation/screens/ecran_catalogue.dart';
 import '../presentation/screens/ecran_plus.dart';
 import '../presentation/screens/ecran_potager.dart';
@@ -41,6 +42,11 @@ abstract final class RoutesApp {
   /// Absolute location of the zone detail, under the **Accueil** branch (used by
   /// the dashboard tiles so the phone back button returns to the dashboard).
   static String accueilZoneDetail(String id) => '$accueil/zone/$id';
+
+  /// Hourly weather detail, under the **Accueil** branch (so re-tapping the
+  /// Accueil tab pops back to the dashboard).
+  static const String accueilMeteoSegment = 'meteo';
+  static const String accueilMeteo = '$accueil/$accueilMeteoSegment';
 
   // Settings sub-panels, as go_router sub-routes of [plus] (so re-tapping the
   // Plus tab pops back to the settings root — imperative pushes would not).
@@ -166,6 +172,12 @@ GoRouter creerRouteur() {
                     builder: (context, state) => EcranZoneDetail(
                       zoneId: state.pathParameters['id']!,
                     ),
+                  ),
+                  // Hourly weather detail (opened from the weather card) — a
+                  // sub-route so re-tapping Accueil pops back to the dashboard.
+                  GoRoute(
+                    path: RoutesApp.accueilMeteoSegment,
+                    builder: (context, state) => const EcranMeteoDetail(),
                   ),
                 ],
               ),

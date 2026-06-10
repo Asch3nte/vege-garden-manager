@@ -8,14 +8,10 @@ import '../../application/state/meteo_detail_notifier.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Opens the hourly weather detail (pushed full-screen).
-Future<void> ouvrirMeteoDetail(BuildContext context) {
-  return Navigator.of(context).push<void>(
-    MaterialPageRoute(builder: (_) => const EcranMeteoDetail()),
-  );
-}
-
 /// Hourly weather detail: a day selector + the selected day's hourly forecast.
+///
+/// Reached via the `/accueil/meteo` sub-route (from the dashboard weather card),
+/// so re-tapping the Accueil tab pops back to the dashboard.
 class EcranMeteoDetail extends ConsumerStatefulWidget {
   const EcranMeteoDetail({super.key});
 
