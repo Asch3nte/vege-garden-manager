@@ -7,6 +7,7 @@ import '../../domain/enums/type_releve_meteo.dart';
 import '../../domain/exceptions/meteo_indisponible_exception.dart';
 import '../../domain/value_objects/donnees_meteo.dart';
 import '../../domain/value_objects/localisation.dart';
+import '../../domain/value_objects/prevision_horaire.dart';
 import '../../domain/value_objects/prevision_meteo.dart';
 
 /// Thin HTTP client for the **Open-Meteo** forecast API
@@ -25,6 +26,10 @@ class OpenMeteoClient {
   static const _dailyVariables =
       'temperature_2m_max,temperature_2m_min,precipitation_sum,'
       'precipitation_probability_max,wind_speed_10m_max';
+
+  /// Open-Meteo hourly variables requested for the detail view.
+  static const _hourlyVariables =
+      'temperature_2m,precipitation,precipitation_probability';
 
   /// V1 frost threshold (°C) flagging [DonneesMeteo.risqueGel]; mirrors the
   /// engine's single source of truth ([SeuilsMeteo.gelC]).
@@ -86,6 +91,81 @@ class OpenMeteoClient {
         i < joursPasses ? TypeReleveMeteo.observe : TypeReleveMeteo.prevu,
       ),
     );
+  }
+
+  /// Hourly forecast at [loc] over the next [nbJours] days, ordered by hour.
+  ///
+  /// Throws [MeteoIndisponibleException] if [loc] has no coordinates, if
+  /// [nbJours] is not strictly positive, or on any network/parse error.
+  Future<List<PrevisionHoraire>> obtenirPrevisionsHoraires(
+    Localisation loc, {
+    int nbJours = 3,
+  }) async {
+    if (nbJours <= 0) {
+      throw MeteoIndisponibleException(
+        'Forecast horizon must be strictly positive (got $nbJours).',
+      );
+    }
+    final hourly = await _fetchHourly(loc, nbJours: nbJours);
+    final temps = hourly['time'] as List;
+    return List<PrevisionHoraire>.generate(
+      temps.length,
+      (i) => PrevisionHoraire(
+        heure: DateTime.parse((hourly['time'] as List)[i] as String),
+        temperature: _at(hourly, 'temperature_2m', i),
+        precipitationsMm: _at(hourly, 'precipitation', i),
+        // Open-Meteo reports probability as 0..100; the VO is 0..1.
+        probabilitePluie: (_at(hourly, 'precipitation_probability', i) / 100)
+            .clamp(0.0, 1.0),
+      ),
+    );
+  }
+
+  /// Performs the HTTP GET and returns the decoded `hourly` object.
+  Future<Map<String, dynamic>> _fetchHourly(
+    Localisation loc, {
+    required int nbJours,
+  }) async {
+    if (!loc.estDefinie) {
+      throw MeteoIndisponibleException(
+        'Cannot fetch weather: location is undefined (geolocation opt-out).',
+      );
+    }
+    final uri = Uri.https('api.open-meteo.com', '/v1/forecast', {
+      'latitude': '${loc.latitude}',
+      'longitude': '${loc.longitude}',
+      'hourly': _hourlyVariables,
+      'timezone': 'auto',
+      'forecast_days': '$nbJours',
+    });
+
+    final http.Response response;
+    try {
+      response = await _httpClient.get(uri).timeout(_timeout);
+    } catch (e) {
+      throw MeteoIndisponibleException(
+        'Open-Meteo request failed: $uri',
+        cause: e,
+      );
+    }
+    if (response.statusCode != 200) {
+      throw MeteoIndisponibleException(
+        'Open-Meteo returned HTTP ${response.statusCode} for $uri.',
+      );
+    }
+    try {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final hourly = body['hourly'] as Map<String, dynamic>;
+      if (hourly['time'] is! List) {
+        throw const FormatException('missing "hourly.time" array');
+      }
+      return hourly;
+    } catch (e) {
+      throw MeteoIndisponibleException(
+        'Could not parse Open-Meteo response from $uri.',
+        cause: e,
+      );
+    }
   }
 
   /// Performs the HTTP GET and returns the decoded `daily` object.

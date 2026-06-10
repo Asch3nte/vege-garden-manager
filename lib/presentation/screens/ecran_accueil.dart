@@ -16,6 +16,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/position_potager_actions.dart';
+import 'ecran_meteo_detail.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
 /// level, weather & season stats. Read-only, no creation actions (docs/09 §3).
@@ -191,14 +192,16 @@ class _CarteMeteo extends ConsumerWidget {
     final muted = theme.textTheme.bodySmall
         ?.copyWith(color: theme.colorScheme.onSurfaceVariant);
 
-    final (IconData icone, Widget contenu) = async.when(
+    final (IconData icone, Widget contenu, VoidCallback? onTap) = async.when(
       loading: () => (
         Icons.cloud_outlined,
         Text(l10n.accueilMeteoAVenir, style: muted),
+        null,
       ),
       error: (_, _) => (
         Icons.cloud_off_outlined,
         Text(l10n.accueilMeteoAVenir, style: muted),
+        null,
       ),
       data: (vue) {
         if (!vue.disponible) {
@@ -215,6 +218,7 @@ class _CarteMeteo extends ConsumerWidget {
                 ],
               ),
             ),
+            null,
           );
         }
         return (
@@ -246,11 +250,13 @@ class _CarteMeteo extends ConsumerWidget {
                 ),
             ],
           ),
+          // Position known → the card opens the hourly weather detail.
+          () => ouvrirMeteoDetail(context),
         );
       },
     );
 
-    return Container(
+    final carte = Container(
       padding: const EdgeInsets.all(EspacementsApp.s4),
       decoration: BoxDecoration(
         color: Color.alphaBlend(
@@ -265,8 +271,19 @@ class _CarteMeteo extends ConsumerWidget {
           Icon(icone, size: TaillesIconesApp.xl, color: accents.info),
           const SizedBox(width: EspacementsApp.s3),
           Expanded(child: contenu),
+          if (onTap != null)
+            Icon(Icons.chevron_right,
+                size: TaillesIconesApp.md,
+                color: theme.colorScheme.onSurfaceVariant),
         ],
       ),
+    );
+
+    if (onTap == null) return carte;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: RayonsApp.brLg,
+      child: carte,
     );
   }
 }

@@ -4,6 +4,7 @@ import '../../domain/exceptions/meteo_indisponible_exception.dart';
 import '../../domain/repositories/abstract_meteo_service.dart';
 import '../../domain/value_objects/donnees_meteo.dart';
 import '../../domain/value_objects/localisation.dart';
+import '../../domain/value_objects/prevision_horaire.dart';
 import '../../domain/value_objects/prevision_meteo.dart';
 import '../api/open_meteo_client.dart';
 import '../database/app_database.dart';
@@ -113,6 +114,15 @@ class MeteoServiceImpl implements AbstractMeteoService {
       }
       rethrow;
     }
+  }
+
+  @override
+  Future<List<PrevisionHoraire>> obtenirPrevisionsHoraires(
+    Localisation loc, {
+    int nbJours = 3,
+  }) {
+    // Not cached: the detail view is opened on demand and wants live hourly data.
+    return _client.obtenirPrevisionsHoraires(loc, nbJours: nbJours);
   }
 
   /// Window mode (`joursPasses > 0`): a single Open-Meteo call returns the past

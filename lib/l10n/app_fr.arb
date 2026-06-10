@@ -65,6 +65,25 @@
   },
   "meteoSansPosition": "Ajoute ta position au potager pour la météo et les conseils d'arrosage.",
   "@meteoSansPosition": { "description": "Carte météo : aucune position connue sur le potager actif." },
+  "meteoDetailTitre": "Météo détaillée",
+  "@meteoDetailTitre": { "description": "Titre de l'écran de détail météo horaire." },
+  "meteoDetailErreur": "Météo indisponible pour le moment.",
+  "@meteoDetailErreur": { "description": "Erreur de chargement du détail météo." },
+  "meteoHeure": "{h}h",
+  "@meteoHeure": {
+    "description": "Heure de la journée (ex. 14h).",
+    "placeholders": { "h": { "type": "int" } }
+  },
+  "meteoTemp": "{t}°",
+  "@meteoTemp": {
+    "description": "Température en degrés (ex. 21°).",
+    "placeholders": { "t": { "type": "int" } }
+  },
+  "meteoPrecipMm": "{mm} mm",
+  "@meteoPrecipMm": {
+    "description": "Précipitations en millimètres (ex. 1,2 mm).",
+    "placeholders": { "mm": { "type": "String" } }
+  },
   "meteoTemperatures": "{min}° – {max}°",
   "@meteoTemperatures": {
     "description": "Plage de températures du jour (min – max).",

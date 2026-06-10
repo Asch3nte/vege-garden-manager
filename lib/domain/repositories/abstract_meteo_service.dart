@@ -1,5 +1,6 @@
 import '../value_objects/donnees_meteo.dart';
 import '../value_objects/localisation.dart';
+import '../value_objects/prevision_horaire.dart';
 import '../value_objects/prevision_meteo.dart';
 
 /// Contract for fetching weather (implemented with Open-Meteo in the
@@ -22,5 +23,13 @@ abstract class AbstractMeteoService {
     Localisation loc,
     int nbJours, {
     int joursPasses = 0,
+  });
+
+  /// Hourly forecast at [loc] over the next [nbJours] days, ordered by hour
+  /// (for the weather detail view). Throws when [loc] has no coordinates or on
+  /// any network/parse error.
+  Future<List<PrevisionHoraire>> obtenirPrevisionsHoraires(
+    Localisation loc, {
+    int nbJours = 3,
   });
 }
