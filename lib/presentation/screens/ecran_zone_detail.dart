@@ -12,6 +12,7 @@ import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../l10n/app_localizations.dart';
+import '../forms/formulaire_observation.dart';
 import '../forms/formulaire_recolte.dart';
 import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
@@ -68,6 +69,7 @@ class EcranZoneDetail extends ConsumerWidget {
           onArracher: (c) => _arracher(context, ref, zone.id, c),
           onSupprimerPlante: (c) => _supprimerPlante(context, ref, zone.id, c),
           onRecolter: (c) => _recolter(context, ref, c),
+          onObserver: (c) => _observer(context, c),
         );
       },
     );
@@ -187,6 +189,19 @@ Future<void> _recolter(
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackRecolteCreee)));
 }
 
+/// Records an observation for a crop.
+Future<void> _observer(BuildContext context, CulturePotager culture) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final obs = await ouvrirFormulaireObservation(
+    context,
+    culture.plantationId,
+    plante: culture.nom,
+  );
+  if (obs == null) return;
+  messenger.showSnackBar(SnackBar(content: Text(l10n.snackObservationCreee)));
+}
+
 /// The loaded detail body for a resolved [zone].
 class _Detail extends StatelessWidget {
   final ZonePotager zone;
@@ -197,6 +212,7 @@ class _Detail extends StatelessWidget {
   final void Function(CulturePotager) onArracher;
   final void Function(CulturePotager) onSupprimerPlante;
   final void Function(CulturePotager) onRecolter;
+  final void Function(CulturePotager) onObserver;
 
   const _Detail({
     required this.zone,
@@ -207,6 +223,7 @@ class _Detail extends StatelessWidget {
     required this.onArracher,
     required this.onSupprimerPlante,
     required this.onRecolter,
+    required this.onObserver,
   });
 
   @override
@@ -308,6 +325,7 @@ class _Detail extends StatelessWidget {
                 culture: zone.cultures[i],
                 couleur: couleur,
                 onRecolter: () => onRecolter(zone.cultures[i]),
+                onObserver: () => onObserver(zone.cultures[i]),
                 onArracher: () => onArracher(zone.cultures[i]),
                 onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
               ),
@@ -346,6 +364,7 @@ class _LigneCulture extends StatelessWidget {
   final CulturePotager culture;
   final Color couleur;
   final VoidCallback onRecolter;
+  final VoidCallback onObserver;
   final VoidCallback onArracher;
   final VoidCallback onSupprimer;
 
@@ -353,6 +372,7 @@ class _LigneCulture extends StatelessWidget {
     required this.culture,
     required this.couleur,
     required this.onRecolter,
+    required this.onObserver,
     required this.onArracher,
     required this.onSupprimer,
   });
@@ -389,6 +409,7 @@ class _LigneCulture extends StatelessWidget {
             tooltip: l10n.cultureActions,
             onSelected: (action) => switch (action) {
               _ActionCulture.recolter => onRecolter(),
+              _ActionCulture.observer => onObserver(),
               _ActionCulture.arracher => onArracher(),
               _ActionCulture.supprimer => onSupprimer(),
             },
@@ -401,6 +422,17 @@ class _LigneCulture extends StatelessWidget {
                         size: TaillesIconesApp.sm),
                     const SizedBox(width: EspacementsApp.s2),
                     Text(l10n.cultureRecolter),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: _ActionCulture.observer,
+                child: Row(
+                  children: [
+                    const Icon(Icons.visibility_outlined,
+                        size: TaillesIconesApp.sm),
+                    const SizedBox(width: EspacementsApp.s2),
+                    Text(l10n.cultureObserver),
                   ],
                 ),
               ),
@@ -435,7 +467,7 @@ class _LigneCulture extends StatelessWidget {
 }
 
 /// Per-crop actions in the detail menu.
-enum _ActionCulture { recolter, arracher, supprimer }
+enum _ActionCulture { recolter, observer, arracher, supprimer }
 
 /// Small count badge.
 class _Badge extends StatelessWidget {

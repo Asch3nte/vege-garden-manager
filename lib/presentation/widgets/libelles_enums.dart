@@ -16,6 +16,7 @@ import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart' as prefs_theme;
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/type_emplacement.dart';
+import '../../domain/enums/type_observation.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/zone_rusticite.dart';
@@ -174,6 +175,19 @@ extension LibellesEnums on AppLocalizations {
         UniteQuantite.botte => uniteBotte,
         UniteQuantite.litre => uniteLitre,
         UniteQuantite.ml => uniteMl,
+      };
+
+  /// Label for an observation type.
+  String typeObservation(TypeObservation t) => switch (t) {
+        TypeObservation.maladie => obsMaladie,
+        TypeObservation.ravageur => obsRavageur,
+        TypeObservation.carence => obsCarence,
+        TypeObservation.meteo => obsMeteo,
+        TypeObservation.croissance => obsCroissance,
+        TypeObservation.floraison => obsFloraison,
+        TypeObservation.fructification => obsFructification,
+        TypeObservation.general => obsGeneral,
+        TypeObservation.autre => obsAutre,
       };
 
   /// Label for a harvest destination.
