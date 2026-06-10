@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/state/accueil_notifier.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../l10n/app_localizations.dart';
+import '../forms/formulaire_recolte.dart';
 import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/dialogue_confirmation.dart';
@@ -65,6 +67,7 @@ class EcranZoneDetail extends ConsumerWidget {
           onSupprimerZone: () => _supprimerZone(context, ref, potagerId, zone),
           onArracher: (c) => _arracher(context, ref, zone.id, c),
           onSupprimerPlante: (c) => _supprimerPlante(context, ref, zone.id, c),
+          onRecolter: (c) => _recolter(context, ref, c),
         );
       },
     );
@@ -166,6 +169,24 @@ Future<void> _supprimerPlante(
   );
 }
 
+/// Records a harvest for a crop, then refreshes the dashboard's season count.
+Future<void> _recolter(
+  BuildContext context,
+  WidgetRef ref,
+  CulturePotager culture,
+) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final recolte = await ouvrirFormulaireRecolte(
+    context,
+    culture.plantationId,
+    plante: culture.nom,
+  );
+  if (recolte == null) return;
+  ref.invalidate(accueilProvider);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.snackRecolteCreee)));
+}
+
 /// The loaded detail body for a resolved [zone].
 class _Detail extends StatelessWidget {
   final ZonePotager zone;
@@ -175,6 +196,7 @@ class _Detail extends StatelessWidget {
   final VoidCallback onSupprimerZone;
   final void Function(CulturePotager) onArracher;
   final void Function(CulturePotager) onSupprimerPlante;
+  final void Function(CulturePotager) onRecolter;
 
   const _Detail({
     required this.zone,
@@ -184,6 +206,7 @@ class _Detail extends StatelessWidget {
     required this.onSupprimerZone,
     required this.onArracher,
     required this.onSupprimerPlante,
+    required this.onRecolter,
   });
 
   @override
@@ -284,6 +307,7 @@ class _Detail extends StatelessWidget {
               _LigneCulture(
                 culture: zone.cultures[i],
                 couleur: couleur,
+                onRecolter: () => onRecolter(zone.cultures[i]),
                 onArracher: () => onArracher(zone.cultures[i]),
                 onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
               ),
@@ -321,12 +345,14 @@ class _Fait extends StatelessWidget {
 class _LigneCulture extends StatelessWidget {
   final CulturePotager culture;
   final Color couleur;
+  final VoidCallback onRecolter;
   final VoidCallback onArracher;
   final VoidCallback onSupprimer;
 
   const _LigneCulture({
     required this.culture,
     required this.couleur,
+    required this.onRecolter,
     required this.onArracher,
     required this.onSupprimer,
   });
@@ -362,10 +388,22 @@ class _LigneCulture extends StatelessWidget {
             icon: const Icon(Icons.more_vert),
             tooltip: l10n.cultureActions,
             onSelected: (action) => switch (action) {
+              _ActionCulture.recolter => onRecolter(),
               _ActionCulture.arracher => onArracher(),
               _ActionCulture.supprimer => onSupprimer(),
             },
             itemBuilder: (context) => [
+              PopupMenuItem(
+                value: _ActionCulture.recolter,
+                child: Row(
+                  children: [
+                    const Icon(Icons.shopping_basket_outlined,
+                        size: TaillesIconesApp.sm),
+                    const SizedBox(width: EspacementsApp.s2),
+                    Text(l10n.cultureRecolter),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 value: _ActionCulture.arracher,
                 child: Row(
@@ -397,7 +435,7 @@ class _LigneCulture extends StatelessWidget {
 }
 
 /// Per-crop actions in the detail menu.
-enum _ActionCulture { arracher, supprimer }
+enum _ActionCulture { recolter, arracher, supprimer }
 
 /// Small count badge.
 class _Badge extends StatelessWidget {

@@ -147,7 +147,8 @@ crédits). Le **thème de l'app suit la préférence** (`main.dart` → `ThemeMo
 | **Signing release réel** | L'APK alpha est signé avec la clé **debug** (suffisant pour sideload, **pas** pour le Play Store ni des mises à jour propres). | Générer un keystore, configurer `signingConfigs.release` dans `android/app/build.gradle.kts` (+ `key.properties` hors VCS). |
 | **Icône & splash de l'app** | Icône Flutter par défaut. | `flutter_launcher_icons` / `flutter_native_splash` (deps à valider) ou ressources manuelles. |
 | **Édition / suppression** (potager, ~~zone~~, ~~plantation~~, tâche) | **Zone** (modifier/supprimer) et **plantation** (arracher/supprimer) câblées depuis le détail de zone (menus + confirmation). Restent **potager** et **tâche** (édition/suppression), et le **swipe** (cf. §6 `sens_swipe`). | Mêmes patterns (notifiers `modifier`/`supprimer`) ; swipe à généraliser sur les listes. |
-| **Récolte / observation** depuis l'UI | Use cases présents (`CreerRecolte`, `CreerObservation`), pas de formulaire. | Mêmes patterns que les 3 formulaires de l'alpha. |
+| **Récolte** depuis l'UI | ✅ | `FormulaireRecolte` (date, quantité + unité, destination) via `CreerRecolte`, action **« Récolter »** du menu de culture (détail de zone) ; rafraîchit le compteur de récoltes de l'accueil. |
+| **Observation** depuis l'UI | ⚪ | Use case `CreerObservation` présent, pas de formulaire. | Même pattern (cible plantation/zone, type, titre). |
 | **Météo / alertes réelles** | cf. §2 (Accueil) — placeholders. | Brancher `meteoServiceProvider` une fois la localisation disponible. |
 | **iOS / desktop packaging** | Alpha = Android d'abord. | `flutter build ipa` / Linux/Windows/macOS plus tard. |
 | **CI/CD (build APK auto)** | Pas de pipeline. | GitHub Actions (cf. CLAUDE.md « à venir »). |

@@ -4,6 +4,8 @@ import '../../app/theme/couleurs_app.dart';
 import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/enums/destination_recolte.dart';
+import '../../domain/enums/unite_quantite.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
@@ -162,6 +164,26 @@ extension LibellesEnums on AppLocalizations {
         VerdictMeteo.solHumide => meteoVerdictSolHumide,
         VerdictMeteo.arroserConseille => meteoVerdictArroser,
         VerdictMeteo.clement => meteoVerdictClement,
+      };
+
+  /// Symbol for a quantity unit.
+  String unite(UniteQuantite u) => switch (u) {
+        UniteQuantite.g => uniteG,
+        UniteQuantite.kg => uniteKg,
+        UniteQuantite.piece => unitePiece,
+        UniteQuantite.botte => uniteBotte,
+        UniteQuantite.litre => uniteLitre,
+        UniteQuantite.ml => uniteMl,
+      };
+
+  /// Label for a harvest destination.
+  String destinationRecolte(DestinationRecolte d) => switch (d) {
+        DestinationRecolte.consommationFraiche => destinationFraiche,
+        DestinationRecolte.conservation => destinationConservation,
+        DestinationRecolte.don => destinationDon,
+        DestinationRecolte.semences => destinationSemences,
+        DestinationRecolte.compost => destinationCompost,
+        DestinationRecolte.autre => destinationAutre,
       };
 
   /// Label for a planting method.
