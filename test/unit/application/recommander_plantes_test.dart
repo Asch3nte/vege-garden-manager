@@ -34,9 +34,16 @@ void main() {
   final lyon =
       Localisation.manuelle(ville: 'Lyon', latitude: 45.75, longitude: 4.85);
 
-  FichePlante fiche(String id, String famille, Periode plantation) =>
+  FichePlante fiche(
+    String id,
+    String famille,
+    Periode plantation, {
+    String? parentId,
+    Set<String> conflits = const {},
+  }) =>
       FichePlante(
         id: id,
+        parentId: parentId,
         nomScientifique: '$id sp',
         familleBotanique: famille,
         categorie: CategoriePlante.legume,
@@ -51,6 +58,7 @@ void main() {
         espacementCm: 40,
         dureeAvantRecolteJoursMin: 60,
         dureeAvantRecolteJoursMax: 80,
+        associationsNegatives: conflits,
         periodes: {
           Hemisphere.nord: {
             TypeClimat.oceanique: PeriodesCulture(plantation: plantation),
@@ -170,6 +178,48 @@ void main() {
     expect(r.saisonNonVerifiee, isTrue);
     // chou (Jan-Feb) is no longer filtered out by season.
     expect(r.recommandations.map((e) => e.planteId), contains('chou'));
+  });
+
+  test('evaluates species only — varieties are never candidates (ADR-0005)',
+      () async {
+    final tomateCerise =
+        fiche('tomate-v1', 'Solanaceae', const Periode(5, 6), parentId: 'tomate');
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [...catalogue, tomateCerise]);
+
+    final ids = await recommander();
+    expect(ids, isNot(contains('tomate-v1')));
+    expect(ids, contains('tomate')); // its species is recommended instead
+  });
+
+  test('a planted variety blocks recommending its species (resolved to mother)',
+      () async {
+    final tomateCerise =
+        fiche('tomate-v1', 'Solanaceae', const Periode(5, 6), parentId: 'tomate');
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [...catalogue, tomateCerise]);
+    when(() => plantations.obtenirParParcelle('par1'))
+        .thenAnswer((_) async => [plantation('pl1', 'tomate-v1')]);
+
+    final ids = await recommander();
+    expect(ids, isNot(contains('tomate'))); // species already present as a variety
+    expect(ids, contains('salade'));
+  });
+
+  test('a companion conflict against a planted variety resolves to its species',
+      () async {
+    // 'ail' conflicts with the tomato species; a tomato *variety* is growing.
+    final ail = fiche('ail', 'Amaryllidaceae', const Periode(3, 9),
+        conflits: {'tomate'});
+    final tomateCerise =
+        fiche('tomate-v1', 'Solanaceae', const Periode(5, 6), parentId: 'tomate');
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [...catalogue, ail, tomateCerise]);
+    when(() => plantations.obtenirParParcelle('par1'))
+        .thenAnswer((_) async => [plantation('pl1', 'tomate-v1')]);
+
+    final ids = await recommander();
+    expect(ids, isNot(contains('ail'))); // conflict detected via parent resolution
   });
 
   test('results are ranked by descending score', () async {

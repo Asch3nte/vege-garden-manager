@@ -68,14 +68,20 @@ class RecommanderPlantes {
 
     final plantations = await _plantations.obtenirParParcelle(parcelle.id);
     final actives = plantations.where((p) => p.estActive()).toList();
-    final planteIdsActifs = actives.map((p) => p.planteId).toSet();
+    // Compare at the species level (ADR-0005): a planted variety resolves to its
+    // mother id, so presence and companion checks match the candidates (mothers)
+    // and their associations (declared by mother id).
+    final planteIdsActifs =
+        actives.map((p) => _mereDe(p.planteId, parId)).toSet();
     final surfaceLibre = _surfaceLibre(parcelle, actives);
     final qualitesSol = _sol.qualitesDe(parcelle.texture, parcelle.techniquesSol);
     final rotationVerifiee = !_typesSansRotation.contains(parcelle.type);
 
     final recommandations = <RecommandationPlante>[];
-    for (final candidate in catalogue) {
-      // Don't recommend a plant already growing here.
+    // The engine evaluates at the species level only: candidates are mother
+    // sheets; varieties are never recommended directly (ADR-0005).
+    for (final candidate in catalogue.where((f) => f.estMere)) {
+      // Don't recommend a species already growing here (any of its varieties).
       if (planteIdsActifs.contains(candidate.id)) continue;
 
       final rotationConflit = rotationVerifiee &&
@@ -146,6 +152,11 @@ class RecommanderPlantes {
 
   String _famille(FichePlante fiche) =>
       fiche.rotationFamille ?? fiche.familleBotanique;
+
+  /// Species (mother) id behind a plantation's [planteId]: the sheet's
+  /// `parentId` when a variety was planted, otherwise [planteId] itself.
+  String _mereDe(String planteId, Map<String, FichePlante> parId) =>
+      parId[planteId]?.parentId ?? planteId;
 }
 
 /// DI provider for [RecommanderPlantes]. Async because the catalogue repository
