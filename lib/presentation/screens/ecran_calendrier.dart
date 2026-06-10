@@ -9,8 +9,10 @@ import '../../application/state/calendrier_vue.dart';
 import '../../application/state/saison_notifier.dart';
 import '../../application/state/saison_vue.dart';
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/type_tache.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
+import '../forms/formulaire_tache.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
@@ -26,9 +28,39 @@ class EcranCalendrier extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(calendrierProvider);
+    final notifier = ref.read(calendrierProvider.notifier);
+
+    Future<void> creerTache() async {
+      final messenger = ScaffoldMessenger.of(context);
+      final tache = await ouvrirFormulaireTache(context);
+      if (tache == null) return;
+      ref.invalidate(calendrierProvider);
+      messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheCreee)));
+    }
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navCalendrier)),
+      appBar: AppBar(
+        title: Text(l10n.navCalendrier),
+        actions: [
+          PopupMenuButton<TypeTache?>(
+            icon: Icon(notifier.filtreType == null
+                ? Icons.filter_list
+                : Icons.filter_list_alt),
+            tooltip: l10n.calendrierFiltrer,
+            onSelected: notifier.definirFiltreType,
+            itemBuilder: (context) => [
+              PopupMenuItem(value: null, child: Text(l10n.calendrierFiltreTous)),
+              for (final t in TypeTache.values)
+                PopupMenuItem(value: t, child: Text(l10n.typeTache(t))),
+            ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: l10n.calendrierAjouterTache,
+            onPressed: creerTache,
+          ),
+        ],
+      ),
       body: vue.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(calendrierProvider)),

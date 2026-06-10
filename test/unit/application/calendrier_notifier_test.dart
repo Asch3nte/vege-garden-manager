@@ -131,6 +131,35 @@ void main() {
     expect(vue.groupePourJour(DateTime(2026, 6, 21)), isNull);
   });
 
+  test('filtering by type narrows both the agenda and the month', () async {
+    Tache typee(String id, TypeTache type) => Tache(
+          id: id,
+          titre: 'Tâche $id',
+          type: type,
+          cible: CibleTache.parcelle,
+          cibleId: 'z-1',
+          datePrevue: DateTime(2026, 6, 8, 10),
+        );
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        typee('arr', TypeTache.arrosage),
+        typee('tai', TypeTache.taille),
+      ],
+    );
+
+    final c = conteneur();
+    await c.read(calendrierProvider.future);
+
+    await c
+        .read(calendrierProvider.notifier)
+        .definirFiltreType(TypeTache.taille);
+
+    final vue = c.read(calendrierProvider).value!;
+    expect(vue.groupes.single.taches.map((t) => t.id), ['tai']);
+    expect(vue.groupePourJour(DateTime(2026, 6, 8))!.taches.map((t) => t.id),
+        ['tai']);
+  });
+
   test('ticking a task marks it done and persists it', () async {
     final tache = uneTache('t1', DateTime(2026, 6, 8, 10));
     when(() => taches.obtenirEntreDates(any(), any()))

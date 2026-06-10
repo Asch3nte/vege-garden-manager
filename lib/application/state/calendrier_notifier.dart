@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/type_tache.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
@@ -18,6 +19,12 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
 
   /// First day of the month shown by the monthly grid (set on first build).
   DateTime? _moisAffiche;
+
+  /// Active gesture filter (null = show every type), applied to both views.
+  TypeTache? _filtreType;
+
+  /// The currently selected gesture filter (null = all).
+  TypeTache? get filtreType => _filtreType;
 
   @override
   Future<CalendrierVue> build() async {
@@ -56,6 +63,13 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
     await _recharger();
   }
 
+  /// Filters both views to a single gesture type (null = show all) and reloads.
+  Future<void> definirFiltreType(TypeTache? type) async {
+    if (type == _filtreType) return;
+    _filtreType = type;
+    await _recharger();
+  }
+
   /// Marks [tache] done now and persists it, then reloads the agenda.
   Future<void> cocher(Tache tache) async {
     if (tache.estFaite) return;
@@ -79,12 +93,13 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   ) async {
     final debut = _minuit(maintenant());
     final fin = _finFenetre(debut);
-    final liste = await taches.obtenirEntreDates(debut, fin);
+    final liste = _filtrer(await taches.obtenirEntreDates(debut, fin));
 
     // Full displayed month for the grid (independent of the agenda window).
     final moisDebut = _moisAffiche!;
     final moisFin = DateTime(moisDebut.year, moisDebut.month + 1, 1);
-    final listeMois = await taches.obtenirEntreDates(moisDebut, moisFin);
+    final listeMois =
+        _filtrer(await taches.obtenirEntreDates(moisDebut, moisFin));
 
     return CalendrierVue(
       portee: _portee,
@@ -123,6 +138,11 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
         ),
     ];
   }
+
+  /// Applies the active gesture filter (no-op when none is set).
+  List<Tache> _filtrer(List<Tache> taches) => _filtreType == null
+      ? taches
+      : taches.where((t) => t.type == _filtreType).toList();
 
   /// Local midnight of [d].
   static DateTime _minuit(DateTime d) => DateTime(d.year, d.month, d.day);
