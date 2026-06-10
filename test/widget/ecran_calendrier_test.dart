@@ -11,6 +11,7 @@ import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
+import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
@@ -48,13 +49,16 @@ void main() {
 
   setUp(() => taches = MockTaches());
 
-  Tache uneTache(String id, String titre, DateTime quand) => Tache(
+  Tache uneTache(String id, String titre, DateTime quand, {bool faite = false}) =>
+      Tache(
         id: id,
         titre: titre,
         type: TypeTache.arrosage,
         cible: CibleTache.parcelle,
         cibleId: 'z-1',
         datePrevue: quand,
+        etat: faite ? EtatTache.terminee : EtatTache.aFaire,
+        dateRealisation: faite ? quand : null,
       );
 
   Future<void> monter(WidgetTester tester) async {
@@ -102,6 +106,21 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tache.estFaite, isTrue);
+    verify(() => taches.sauvegarder(tache)).called(1);
+  });
+
+  testWidgets('tapping a done task unchecks it (persisted)', (tester) async {
+    final tache = uneTache('t1', 'Arroser les tomates', DateTime(2026, 6, 8, 10),
+        faite: true);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [tache]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await monter(tester);
+    await tester.tap(find.text('Arroser les tomates'));
+    await tester.pumpAndSettle();
+
+    expect(tache.estFaite, isFalse);
     verify(() => taches.sauvegarder(tache)).called(1);
   });
 

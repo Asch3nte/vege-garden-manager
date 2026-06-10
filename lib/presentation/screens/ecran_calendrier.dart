@@ -909,8 +909,8 @@ class _CarteTache extends StatelessWidget {
     return Card(
       child: InkWell(
         borderRadius: RayonsApp.brLg,
-        // Done tasks can't be reopened (no domain transition — see docs/15).
-        onTap: fait ? null : () => onCocher(tache),
+        // Tapping toggles completion (check ↔ uncheck via Tache.rouvrir).
+        onTap: () => onCocher(tache),
         child: Padding(
           padding: const EdgeInsets.all(EspacementsApp.s3),
           child: Row(

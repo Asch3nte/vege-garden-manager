@@ -70,11 +70,13 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
     await _recharger();
   }
 
-  /// Marks [tache] done now and persists it, then reloads the agenda.
+  /// Toggles [tache]'s completion (check ↔ uncheck), persists it, then reloads.
   Future<void> cocher(Tache tache) async {
-    if (tache.estFaite) return;
-    final maintenant = ref.read(horlogeProvider);
-    tache.marquerFaite(maintenant());
+    if (tache.estFaite) {
+      tache.rouvrir();
+    } else {
+      tache.marquerFaite(ref.read(horlogeProvider)());
+    }
     await ref.read(tacheRepositoryProvider).sauvegarder(tache);
     await _recharger();
   }

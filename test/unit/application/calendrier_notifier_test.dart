@@ -176,18 +176,21 @@ void main() {
     verify(() => taches.sauvegarder(tache)).called(1);
   });
 
-  test('ticking an already-done task is a no-op', () async {
+  test('ticking a done task reopens it and persists it', () async {
     final tache =
         uneTache('t1', DateTime(2026, 6, 8, 10), etat: EtatTache.terminee);
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => [tache]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
     final c = conteneur();
     await c.read(calendrierProvider.future);
 
     await c.read(calendrierProvider.notifier).cocher(tache);
 
-    verifyNever(() => taches.sauvegarder(any()));
+    expect(tache.estFaite, isFalse);
+    expect(tache.dateRealisation, isNull);
+    verify(() => taches.sauvegarder(tache)).called(1);
   });
 
   test('empty window is flagged', () async {

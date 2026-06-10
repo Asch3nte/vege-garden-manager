@@ -118,6 +118,14 @@ class Tache {
     _dureeReelleMinutes = dureeMinutes;
   }
 
+  /// Reopens a completed task: back to "to-do" on the **same** planned date
+  /// (unlike [reporter], which reschedules). Clears the completion data.
+  void rouvrir() {
+    _etat = EtatTache.aFaire;
+    _dateRealisation = null;
+    _dureeReelleMinutes = null;
+  }
+
   /// Reschedules the task to [nouvelleDatePrevue], resetting it to to-do.
   void reporter(DateTime nouvelleDatePrevue) {
     _datePrevue = nouvelleDatePrevue;

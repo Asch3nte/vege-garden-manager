@@ -75,6 +75,17 @@ void main() {
       expect(t.dateRealisation, isNull);
     });
 
+    test('rouvrir reopens a completed task on the same date', () {
+      final t = _tache(); // planned on 2026-06-20
+      t.marquerFaite(DateTime(2026, 6, 21), dureeMinutes: 10);
+      t.rouvrir();
+      expect(t.estFaite, isFalse);
+      expect(t.etat, EtatTache.aFaire);
+      expect(t.datePrevue, DateTime(2026, 6, 20)); // unchanged
+      expect(t.dateRealisation, isNull);
+      expect(t.dureeReelleMinutes, isNull);
+    });
+
     test('annuler cancels the task', () {
       final t = _tache()..annuler();
       expect(t.etat, EtatTache.annulee);
