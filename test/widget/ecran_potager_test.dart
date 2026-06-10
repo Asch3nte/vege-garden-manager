@@ -1,12 +1,14 @@
-// Widget tests for the Potager zone-list screen.
+// Widget tests for the Potager plan screen (variant A: bed grid).
 //
-// Overrides the repositories + the catalogue so the screen renders a known
-// zone list, then checks the rendered rows, the task-today tag and the empty
-// state.
+// Overrides the repositories + the catalogue so the screen renders a known set
+// of zones, then checks the rendered beds, the task-today marker, the empty
+// state and that tapping a bed opens the zone detail.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
@@ -14,16 +16,20 @@ import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
+import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
+import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
-import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
+import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
@@ -31,10 +37,13 @@ import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_potager.dart';
+import 'package:pot_a_gerer/presentation/screens/ecran_zone_detail.dart';
 
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
+
+class MockPlantations extends Mock implements AbstractPlantationRepository {}
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
@@ -45,15 +54,19 @@ void main() {
 
   late MockPotagers potagers;
   late MockParcelles parcelles;
+  late MockPlantations plantations;
   late MockFiches fiches;
   late MockTaches taches;
 
   setUp(() {
     potagers = MockPotagers();
     parcelles = MockParcelles();
+    plantations = MockPlantations();
     fiches = MockFiches();
     taches = MockTaches();
     when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    when(() => plantations.obtenirParParcelle(any()))
         .thenAnswer((_) async => []);
   });
 
@@ -75,15 +88,18 @@ void main() {
         nombrePieds: 3,
       );
 
-  Parcelle uneParcelle(String id, String nom, List<Plantation> plantations) =>
+  Parcelle uneParcelle(
+    String id,
+    String nom, {
+    TypeParcelle type = TypeParcelle.bacSureleve,
+  }) =>
       Parcelle(
         id: id,
         nom: nom,
         potagerId: 'pot-1',
-        type: TypeParcelle.bacSureleve,
+        type: type,
         surface: Surface.enMetresCarres(2),
         exposition: NiveauSoleil.pleinSoleil,
-        plantations: plantations,
       );
 
   FichePlante uneFiche(String id, String nomFr) => FichePlante(
@@ -105,16 +121,30 @@ void main() {
         periodes: const {},
       );
 
+  Tache uneTacheParcelle(String parcelleId) => Tache(
+        id: 't-$parcelleId',
+        titre: 'Arroser',
+        type: TypeTache.arrosage,
+        cible: CibleTache.parcelle,
+        cibleId: parcelleId,
+        datePrevue: maintenant,
+      );
+
+  // Built lazily (per test) so it captures the mocks assigned in setUp.
+  overrides() => [
+        potagerRepositoryProvider.overrideWithValue(potagers),
+        parcelleRepositoryProvider.overrideWithValue(parcelles),
+        plantationRepositoryProvider.overrideWithValue(plantations),
+        tacheRepositoryProvider.overrideWithValue(taches),
+        fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+        horlogeProvider.overrideWithValue(() => maintenant),
+      ];
+
+  // Mounts the screen alone (no inter-screen navigation needed).
   Future<void> monter(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          potagerRepositoryProvider.overrideWithValue(potagers),
-          parcelleRepositoryProvider.overrideWithValue(parcelles),
-          tacheRepositoryProvider.overrideWithValue(taches),
-          fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
-          horlogeProvider.overrideWithValue(() => maintenant),
-        ],
+        overrides: overrides(),
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -126,15 +156,52 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('renders a row per zone with its crops', (tester) async {
+  // Mounts the screen inside a router carrying the zone-detail sub-route, so a
+  // bed tap can resolve `/potager/zone/:id`.
+  Future<void> monterAvecRouteur(WidgetTester tester) async {
+    final router = GoRouter(
+      initialLocation: RoutesApp.potager,
+      routes: [
+        GoRoute(
+          path: RoutesApp.potager,
+          builder: (context, state) => const EcranPotager(),
+          routes: [
+            GoRoute(
+              path: RoutesApp.zoneDetailSegment,
+              builder: (context, state) =>
+                  EcranZoneDetail(zoneId: state.pathParameters['id']!),
+            ),
+          ],
+        ),
+      ],
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: overrides(),
+        child: MaterialApp.router(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('renders a bed per zone with its crops', (tester) async {
     when(() => potagers.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
     when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
       (_) async => [
-        uneParcelle('z-1', 'Carré nord', [unePlantation('p-1', 'tomate')]),
-        uneParcelle('z-2', 'Serre', [unePlantation('p-2', 'aubergine')]),
+        uneParcelle('z-1', 'Carré nord'),
+        uneParcelle('z-2', 'Serre', type: TypeParcelle.serre),
       ],
     );
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [unePlantation('p-1', 'tomate')]);
+    when(() => plantations.obtenirParParcelle('z-2'))
+        .thenAnswer((_) async => [unePlantation('p-2', 'aubergine')]);
     when(() => fiches.obtenirParId('tomate'))
         .thenAnswer((_) async => uneFiche('tomate', 'Tomate'));
     when(() => fiches.obtenirParId('aubergine'))
@@ -148,17 +215,43 @@ void main() {
     expect(find.text('Aubergine'), findsOneWidget);
   });
 
-  testWidgets('shows the up-to-date tag when no task is due today',
+  testWidgets('marks a bed with a drop when a task is due today',
       (tester) async {
     when(() => potagers.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
-    when(() => parcelles.obtenirParPotager('pot-1'))
-        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord', [])]);
+    when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
+      (_) async => [
+        uneParcelle('z-1', 'Avec tâche'),
+        uneParcelle('z-2', 'Sans tâche'),
+      ],
+    );
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [uneTacheParcelle('z-1')]);
 
     await monter(tester);
 
-    expect(find.text('À jour'), findsOneWidget);
-    expect(find.text('Tâche du jour'), findsNothing);
+    expect(find.byKey(const Key('tache-z-1')), findsOneWidget);
+    expect(find.byKey(const Key('tache-z-2')), findsNothing);
+  });
+
+  testWidgets('tapping a bed opens the zone detail', (tester) async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [unePlantation('p-1', 'tomate')]);
+    when(() => fiches.obtenirParId('tomate'))
+        .thenAnswer((_) async => uneFiche('tomate', 'Tomate'));
+
+    await monterAvecRouteur(tester);
+
+    await tester.tap(find.text('Carré nord'));
+    await tester.pumpAndSettle();
+
+    // The detail shows its "Cultures" section header (absent from the plan).
+    expect(find.text('Cultures'), findsOneWidget);
+    expect(find.text('Tomate'), findsOneWidget);
   });
 
   testWidgets('offers to create a garden when there is none', (tester) async {

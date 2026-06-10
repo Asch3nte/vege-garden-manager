@@ -22,6 +22,7 @@ import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
@@ -32,6 +33,8 @@ class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
+class MockPlantations extends Mock implements AbstractPlantationRepository {}
+
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
 class MockTaches extends Mock implements AbstractTacheRepository {}
@@ -41,16 +44,21 @@ void main() {
 
   late MockPotagers potagers;
   late MockParcelles parcelles;
+  late MockPlantations plantations;
   late MockFiches fiches;
   late MockTaches taches;
 
   setUp(() {
     potagers = MockPotagers();
     parcelles = MockParcelles();
+    plantations = MockPlantations();
     fiches = MockFiches();
     taches = MockTaches();
     // Default: no task today.
     when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    // Default: a zone has no plantation unless a test stubs it.
+    when(() => plantations.obtenirParParcelle(any()))
         .thenAnswer((_) async => []);
   });
 
@@ -77,15 +85,13 @@ void main() {
             statut == StatutPlantation.enCours ? null : DateTime(2026, 6, 1),
       );
 
-  Parcelle uneParcelle(String id, String nom, List<Plantation> plantations) =>
-      Parcelle(
+  Parcelle uneParcelle(String id, String nom) => Parcelle(
         id: id,
         nom: nom,
         potagerId: 'pot-1',
         type: TypeParcelle.bacSureleve,
         surface: Surface.enMetresCarres(2),
         exposition: NiveauSoleil.pleinSoleil,
-        plantations: plantations,
       );
 
   FichePlante uneFiche(String id, String nomFr) => FichePlante(
@@ -120,6 +126,7 @@ void main() {
     final c = ProviderContainer(overrides: [
       potagerRepositoryProvider.overrideWithValue(potagers),
       parcelleRepositoryProvider.overrideWithValue(parcelles),
+      plantationRepositoryProvider.overrideWithValue(plantations),
       tacheRepositoryProvider.overrideWithValue(taches),
       fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
       horlogeProvider.overrideWithValue(() => maintenant),
@@ -132,12 +139,12 @@ void main() {
       () async {
     when(() => potagers.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
-    when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => plantations.obtenirParParcelle('z-1')).thenAnswer(
       (_) async => [
-        uneParcelle('z-1', 'Carré nord', [
-          unePlantation('p-1', 'tomate', StatutPlantation.enCours),
-          unePlantation('p-2', 'basilic', StatutPlantation.enCours),
-        ]),
+        unePlantation('p-1', 'tomate', StatutPlantation.enCours),
+        unePlantation('p-2', 'basilic', StatutPlantation.enCours),
       ],
     );
     when(() => fiches.obtenirParId('tomate'))
@@ -149,20 +156,42 @@ void main() {
 
     expect(vue.nomPotager, 'Mon potager');
     expect(vue.zones, hasLength(1));
-    expect(vue.zones.single.cultures, ['Tomate', 'Basilic']);
+    expect(vue.zones.single.cultures.map((c) => c.nom), ['Tomate', 'Basilic']);
+    expect(vue.zones.single.type, TypeParcelle.bacSureleve);
     expect(vue.zones.single.surfaceM2, 2);
     expect(vue.zones.single.exposition, NiveauSoleil.pleinSoleil);
+  });
+
+  test(
+      'crops come from the plantation repository, not the (shallow) parcelle '
+      'entity', () async {
+    // Regression: the Parcelle entity is hydrated shallowly, so its
+    // `plantations` field is always empty. A freshly created plantation lives
+    // only in the plantation repository and must still surface in the zone.
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => plantations.obtenirParParcelle('z-1')).thenAnswer(
+      (_) async => [unePlantation('p-1', 'tomate', StatutPlantation.enCours)],
+    );
+    when(() => fiches.obtenirParId('tomate'))
+        .thenAnswer((_) async => uneFiche('tomate', 'Tomate'));
+
+    final vue = await conteneur().read(potagerProvider.future);
+
+    expect(vue.zones.single.cultures.map((c) => c.nom), ['Tomate']);
   });
 
   test('terminal plantations are excluded from a zone\'s crops', () async {
     when(() => potagers.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
-    when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => plantations.obtenirParParcelle('z-1')).thenAnswer(
       (_) async => [
-        uneParcelle('z-1', 'Carré nord', [
-          unePlantation('p-1', 'tomate', StatutPlantation.enCours),
-          unePlantation('p-2', 'radis', StatutPlantation.recoltee),
-        ]),
+        unePlantation('p-1', 'tomate', StatutPlantation.enCours),
+        unePlantation('p-2', 'radis', StatutPlantation.recoltee),
       ],
     );
     when(() => fiches.obtenirParId('tomate'))
@@ -170,19 +199,19 @@ void main() {
 
     final vue = await conteneur().read(potagerProvider.future);
 
-    expect(vue.zones.single.cultures, ['Tomate']);
+    expect(vue.zones.single.cultures.map((c) => c.nom), ['Tomate']);
     verifyNever(() => fiches.obtenirParId('radis'));
   });
 
   test('a missing fiche degrades to a skipped crop, not an error', () async {
     when(() => potagers.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
-    when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => plantations.obtenirParParcelle('z-1')).thenAnswer(
       (_) async => [
-        uneParcelle('z-1', 'Carré nord', [
-          unePlantation('p-1', 'inconnu', StatutPlantation.enCours),
-          unePlantation('p-2', 'tomate', StatutPlantation.enCours),
-        ]),
+        unePlantation('p-1', 'inconnu', StatutPlantation.enCours),
+        unePlantation('p-2', 'tomate', StatutPlantation.enCours),
       ],
     );
     when(() => fiches.obtenirParId('inconnu')).thenAnswer((_) async => null);
@@ -191,7 +220,7 @@ void main() {
 
     final vue = await conteneur().read(potagerProvider.future);
 
-    expect(vue.zones.single.cultures, ['Tomate']);
+    expect(vue.zones.single.cultures.map((c) => c.nom), ['Tomate']);
   });
 
   test('flags zones that have a task due today', () async {
@@ -199,8 +228,8 @@ void main() {
         .thenAnswer((_) async => unPotager());
     when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
       (_) async => [
-        uneParcelle('z-1', 'Avec tâche', []),
-        uneParcelle('z-2', 'Sans tâche', []),
+        uneParcelle('z-1', 'Avec tâche'),
+        uneParcelle('z-2', 'Sans tâche'),
       ],
     );
     when(() => taches.obtenirEntreDates(any(), any()))

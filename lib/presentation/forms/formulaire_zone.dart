@@ -11,23 +11,41 @@ import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
 
-/// Opens the "new zone" form for [potagerId] and returns the created [Parcelle].
-Future<Parcelle?> ouvrirFormulaireZone(BuildContext context, String potagerId) {
+/// Opens the zone form for [potagerId] and returns the saved [Parcelle].
+///
+/// When [parcelleInitiale] is provided, the form opens in **edit** mode
+/// (pre-filled, persists changes); otherwise it creates a new zone.
+Future<Parcelle?> ouvrirFormulaireZone(
+  BuildContext context,
+  String potagerId, {
+  Parcelle? parcelleInitiale,
+}) {
   return Navigator.of(context).push<Parcelle>(
     MaterialPageRoute(
-      builder: (_) => FormulaireZone(potagerId: potagerId),
+      builder: (_) => FormulaireZone(
+        potagerId: potagerId,
+        parcelleInitiale: parcelleInitiale,
+      ),
       fullscreenDialog: true,
     ),
   );
 }
 
-/// Minimal zone-creation form: name + type + surface (m²) + sun exposure,
-/// scoped to a garden. Persists via the family-scoped [parcellesProvider].
+/// Minimal zone form: name + type + surface (m²) + sun exposure, scoped to a
+/// garden. Creates a zone, or edits [parcelleInitiale] when provided. Persists
+/// via the family-scoped [parcellesProvider].
 class FormulaireZone extends ConsumerStatefulWidget {
   /// Garden the zone belongs to.
   final String potagerId;
 
-  const FormulaireZone({super.key, required this.potagerId});
+  /// Zone being edited (null = creation).
+  final Parcelle? parcelleInitiale;
+
+  const FormulaireZone({
+    super.key,
+    required this.potagerId,
+    this.parcelleInitiale,
+  });
 
   @override
   ConsumerState<FormulaireZone> createState() => _FormulaireZoneState();
@@ -40,6 +58,20 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
   bool _enregistrement = false;
+
+  bool get _edition => widget.parcelleInitiale != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.parcelleInitiale;
+    if (p != null) {
+      _nom.text = p.nom;
+      _surface.text = _formaterSurface(p.surface.enMetresCarres);
+      _type = p.type;
+      _exposition = p.exposition;
+    }
+  }
 
   @override
   void dispose() {
@@ -54,23 +86,52 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
     final surface = Surface.enMetresCarres(
       double.parse(_surface.text.trim().replaceAll(',', '.')),
     );
-    final parcelle = await ref
-        .read(parcellesProvider(widget.potagerId).notifier)
-        .creer(
-          nom: _nom.text.trim(),
-          type: _type,
-          surface: surface,
-          exposition: _exposition,
-        );
+    final notifier = ref.read(parcellesProvider(widget.potagerId).notifier);
+
+    final Parcelle parcelle;
+    final initiale = widget.parcelleInitiale;
+    if (initiale != null) {
+      // Edit: rebuild with the same id, preserving the non-edited fields
+      // (type and surface are final on the entity).
+      parcelle = Parcelle(
+        id: initiale.id,
+        nom: _nom.text.trim(),
+        potagerId: initiale.potagerId,
+        type: _type,
+        surface: surface,
+        exposition: _exposition,
+        ordre: initiale.ordre,
+        texture: initiale.texture,
+        textureSource: initiale.textureSource,
+        ph: initiale.ph,
+        techniquesSol: initiale.techniquesSol,
+        cultureVerticale: initiale.cultureVerticale,
+        notes: initiale.notes,
+      );
+      await notifier.modifier(parcelle);
+    } else {
+      parcelle = await notifier.creer(
+        nom: _nom.text.trim(),
+        type: _type,
+        surface: surface,
+        exposition: _exposition,
+      );
+    }
     if (mounted) Navigator.of(context).pop(parcelle);
   }
+
+  static String _formaterSurface(double m2) => m2 == m2.roundToDouble()
+      ? m2.toStringAsFixed(0)
+      : m2.toStringAsFixed(1);
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.formZoneTitre)),
+      appBar: AppBar(
+        title: Text(_edition ? l10n.formZoneTitreModifier : l10n.formZoneTitre),
+      ),
       body: Form(
         key: _cleForm,
         child: ListView(

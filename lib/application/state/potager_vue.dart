@@ -1,38 +1,71 @@
 import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/type_parcelle.dart';
 
-/// One zone (parcelle) projected for the **Potager** zone list.
+/// One active crop of a zone, projected for the UI.
 ///
-/// Carries what the list row renders: name, surface, sun exposure, the names of
-/// the crops currently growing there and whether the zone needs attention. The
-/// crop names are resolved from the catalogue by [PotagerNotifier] (the
-/// plantation entity only stores a plant id).
+/// Carries the [plantationId] (so the zone detail can act on it — pull out,
+/// remove) alongside the catalogue-resolved display [nom].
+class CulturePotager {
+  final String plantationId;
+  final String nom;
+
+  const CulturePotager({required this.plantationId, required this.nom});
+
+  @override
+  bool operator ==(Object other) =>
+      other is CulturePotager &&
+      other.plantationId == plantationId &&
+      other.nom == nom;
+
+  @override
+  int get hashCode => Object.hash(plantationId, nom);
+}
+
+/// One zone (parcelle) projected for the **Potager** plan.
+///
+/// Carries what a plan bed renders: name, [type] (so a greenhouse can span the
+/// full width of the grid), surface, sun exposure, the names of the crops
+/// currently growing there and whether the zone needs attention. The crop names
+/// are resolved from the catalogue by [PotagerNotifier] (the plantation entity
+/// only stores a plant id).
 class ZonePotager {
   final String _id;
   final String _nom;
+  final TypeParcelle _type;
   final double _surfaceM2;
   final NiveauSoleil _exposition;
-  final List<String> _cultures;
+  final List<CulturePotager> _cultures;
   final bool _aTacheAujourdhui;
 
   ZonePotager._(
     this._id,
     this._nom,
+    this._type,
     this._surfaceM2,
     this._exposition,
-    List<String> cultures,
+    List<CulturePotager> cultures,
     this._aTacheAujourdhui,
   ) : _cultures = List.unmodifiable(cultures);
 
-  /// Creates a zone projection. [cultures] are display names, already localized.
+  /// Creates a zone projection. [cultures] are the active crops (id + name).
   factory ZonePotager({
     required String id,
     required String nom,
+    required TypeParcelle type,
     required double surfaceM2,
     required NiveauSoleil exposition,
-    required List<String> cultures,
+    required List<CulturePotager> cultures,
     bool aTacheAujourdhui = false,
   }) =>
-      ZonePotager._(id, nom, surfaceM2, exposition, cultures, aTacheAujourdhui);
+      ZonePotager._(
+        id,
+        nom,
+        type,
+        surfaceM2,
+        exposition,
+        cultures,
+        aTacheAujourdhui,
+      );
 
   /// Zone (parcelle) identifier.
   String get id => _id;
@@ -40,14 +73,17 @@ class ZonePotager {
   /// Display name.
   String get nom => _nom;
 
+  /// Physical structure of the zone (drives the full-width greenhouse bed).
+  TypeParcelle get type => _type;
+
   /// Surface in square metres.
   double get surfaceM2 => _surfaceM2;
 
   /// Sun exposure.
   NiveauSoleil get exposition => _exposition;
 
-  /// Localized names of the crops growing in this zone (immutable).
-  List<String> get cultures => _cultures;
+  /// Active crops growing in this zone (immutable).
+  List<CulturePotager> get cultures => _cultures;
 
   /// Whether the zone has a task due today (drives the attention marker).
   bool get aTacheAujourdhui => _aTacheAujourdhui;

@@ -6,6 +6,7 @@ import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
+import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../providers/horloge_provider.dart';
@@ -27,17 +28,19 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
   Future<PotagerVue> build() async {
     final potagers = ref.watch(potagerRepositoryProvider);
     final parcelles = ref.watch(parcelleRepositoryProvider);
+    final plantations = ref.watch(plantationRepositoryProvider);
     // The catalogue loads from YAML assets asynchronously.
     final fiches = await ref.watch(fichePlanteRepositoryProvider.future);
     final taches = ref.watch(tacheRepositoryProvider);
     final maintenant = ref.watch(horlogeProvider);
 
-    return _assembler(potagers, parcelles, fiches, taches, maintenant);
+    return _assembler(potagers, parcelles, plantations, fiches, taches, maintenant);
   }
 
   Future<PotagerVue> _assembler(
     AbstractPotagerRepository potagers,
     AbstractParcelleRepository parcelles,
+    AbstractPlantationRepository plantations,
     AbstractFichePlanteRepository fiches,
     AbstractTacheRepository taches,
     DateTime Function() maintenant,
@@ -56,9 +59,10 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
         ZonePotager(
           id: parcelle.id,
           nom: parcelle.nom,
+          type: parcelle.type,
           surfaceM2: parcelle.surface.enMetresCarres,
           exposition: parcelle.exposition,
-          cultures: await _culturesActives(parcelle, fiches),
+          cultures: await _culturesActives(parcelle, plantations, fiches),
           aTacheAujourdhui: parcellesAvecTache.contains(parcelle.id),
         ),
       );
@@ -67,18 +71,28 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     return PotagerVue(potagerId: potager.id, nomPotager: potager.nom, zones: zones);
   }
 
-  /// Localized names of the active crops of [parcelle], catalogue-resolved.
-  Future<List<String>> _culturesActives(
+  /// Active crops of [parcelle] (plantation id + catalogue-resolved name).
+  ///
+  /// Plantations are loaded from their own repository: the `Parcelle` entity is
+  /// hydrated shallowly (its `plantations` field is always empty), so reading it
+  /// would never surface a freshly created plantation.
+  Future<List<CulturePotager>> _culturesActives(
     Parcelle parcelle,
+    AbstractPlantationRepository plantations,
     AbstractFichePlanteRepository fiches,
   ) async {
-    final noms = <String>[];
-    for (final plantation in parcelle.plantations) {
+    final cultures = <CulturePotager>[];
+    for (final plantation in await plantations.obtenirParParcelle(parcelle.id)) {
       if (plantation.statut.estTerminal) continue;
       final fiche = await fiches.obtenirParId(plantation.planteId);
-      if (fiche != null) noms.add(fiche.nomLocalise(_locale));
+      if (fiche != null) {
+        cultures.add(CulturePotager(
+          plantationId: plantation.id,
+          nom: fiche.nomLocalise(_locale),
+        ));
+      }
     }
-    return noms;
+    return cultures;
   }
 
   /// Ids of the parcelles that have a task due today.

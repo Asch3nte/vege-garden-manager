@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../app/theme/theme_app.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
-import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/type_parcelle.dart';
 import '../../l10n/app_localizations.dart';
-import '../forms/formulaire_plantation.dart';
 import '../forms/formulaire_potager.dart';
 import '../forms/formulaire_zone.dart';
+import '../widgets/libelles_enums.dart';
 
 /// Stable decorative colours assigned to zones by position, so each zone keeps a
-/// consistent accent in the list (mirrors the per-zone colour of the mock-up).
+/// consistent accent across the plan (mirrors the per-zone colour of the mock-up).
 const List<Color> _couleursZones = [
   CouleursApp.decoVertProfond,
   CouleursApp.accentChaudClair,
@@ -23,13 +25,16 @@ const List<Color> _couleursZones = [
   CouleursApp.decoTerre,
 ];
 
-/// Tab 2 — **Potager**: the active garden's zones, each with its crops and a
-/// "task due today" marker (docs/09 §4).
+/// Decorative colour of the zone at [index] in the plan (stable, cyclic).
+Color couleurZone(int index) => _couleursZones[index % _couleursZones.length];
+
+/// Tab 2 — **Potager**: a top-down *plan* of the active garden, one bed per zone
+/// (docs/09 §4), reimplemented from the `potager.jsx` mock-up, **variant A**
+/// (`PotagerGrille`): a grid of beds with the greenhouse spanning the full width.
 ///
-/// Reimplemented from the `potager.jsx` mock-up, variant C (« Plan + liste »):
-/// the zone list. The spatial/grid plans and the rich per-crop zone detail
-/// (growth-stage bars, per-crop next task) are deferred — they need a growth
-/// model and per-crop task wiring that do not exist yet.
+/// Each bed shows the zone name, its crops and a drop marker when a task is due
+/// today. Tapping a bed opens the zone detail. The spatial plan (variant B) needs
+/// per-zone layout coordinates that the model does not carry yet (docs/15 §3).
 class EcranPotager extends ConsumerWidget {
   const EcranPotager({super.key});
 
@@ -76,7 +81,7 @@ void _confirmer(WidgetRef ref, String message) {
   messenger?.showSnackBar(SnackBar(content: Text(message)));
 }
 
-/// Scrollable zone list for a loaded [PotagerVue].
+/// Scrollable plan for a loaded [PotagerVue].
 class _Contenu extends ConsumerWidget {
   final PotagerVue vue;
 
@@ -126,108 +131,165 @@ class _Contenu extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: EspacementsApp.s3),
-        for (var i = 0; i < vue.zones.length; i++) ...[
-          if (i > 0) const SizedBox(height: EspacementsApp.s2),
-          _LigneZone(
-            zone: vue.zones[i],
-            couleur: _couleursZones[i % _couleursZones.length],
-            // Tapping a zone adds a plantation to it (no zone-detail screen yet).
-            onAjouterPlantation: () async {
-              final cree = await ouvrirFormulairePlantation(
-                context,
-                vue.zones[i].id,
-              );
-              if (cree != null) {
-                ref.invalidate(potagerProvider);
-                _confirmer(ref, l10n.snackPlantationCree);
-              }
-            },
+        PlanPotager(
+          zones: vue.zones,
+          onZoneTap: (id) => context.push(RoutesApp.zoneDetail(id)),
+        ),
+        const SizedBox(height: EspacementsApp.s4),
+        const _Legende(),
+      ],
+    );
+  }
+}
+
+/// The bed grid: greenhouse zones span the full width, the rest are laid out in
+/// two columns, preserving the zones' display order.
+///
+/// Reusable: the Potager screen taps through to the zone detail, while the zone
+/// picker (adding a plant) taps to pick a target — hence the [onZoneTap] hook.
+class PlanPotager extends StatelessWidget {
+  final List<ZonePotager> zones;
+  final void Function(String zoneId) onZoneTap;
+
+  const PlanPotager({required this.zones, required this.onZoneTap, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final lignes = <Widget>[];
+    // Pending non-greenhouse beds, flushed two-by-two into a row.
+    final paire = <Widget>[];
+
+    void viderPaire() {
+      if (paire.isEmpty) return;
+      lignes.add(
+        // IntrinsicHeight bounds the row's height so stretched beds share the
+        // tallest's height (the row lives in an unbounded ListView).
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(child: paire[0]),
+              const SizedBox(width: EspacementsApp.s2),
+              // Keep a single bed at half width by pairing it with empty space.
+              paire.length == 2 ? Expanded(child: paire[1]) : const Spacer(),
+            ],
           ),
+        ),
+      );
+      paire.clear();
+    }
+
+    for (var i = 0; i < zones.length; i++) {
+      final zone = zones[i];
+      final planche = _Planche(
+        zone: zone,
+        couleur: couleurZone(i),
+        onTap: () => onZoneTap(zone.id),
+      );
+      if (zones[i].type == TypeParcelle.serre) {
+        viderPaire();
+        lignes.add(planche);
+      } else {
+        paire.add(planche);
+        if (paire.length == 2) viderPaire();
+      }
+    }
+    viderPaire();
+
+    return Column(
+      children: [
+        for (var i = 0; i < lignes.length; i++) ...[
+          if (i > 0) const SizedBox(height: EspacementsApp.s2),
+          lignes[i],
         ],
       ],
     );
   }
 }
 
-/// One zone row: colour bar + name/crops + surface·exposure + task tag.
-/// Tapping it adds a plantation to the zone (via [onAjouterPlantation]).
-class _LigneZone extends StatelessWidget {
+/// One plan bed: tinted, colour-bordered card with the zone name, up to three
+/// crop chips and a drop marker when a task is due today. Tapping it opens the
+/// zone detail.
+class _Planche extends StatelessWidget {
   final ZonePotager zone;
   final Color couleur;
-  final VoidCallback onAjouterPlantation;
+  final VoidCallback onTap;
 
-  const _LigneZone({
+  const _Planche({
     required this.zone,
     required this.couleur,
-    required this.onAjouterPlantation,
+    required this.onTap,
   });
+
+  /// Crop chips shown on a bed before collapsing the rest into a "+N" chip.
+  static const int _maxPuces = 3;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
+    final puces = <Widget>[
+      for (final culture in zone.cultures.take(_maxPuces))
+        _PuceCulture(texte: culture.nom, couleur: couleur),
+      if (zone.cultures.length > _maxPuces)
+        _PuceCulture(
+          texte: '+${zone.cultures.length - _maxPuces}',
+          couleur: couleur,
+        ),
+    ];
+
     return Material(
-      color: theme.colorScheme.surfaceContainer,
+      color: couleur.withValues(alpha: 0.08),
       borderRadius: RayonsApp.brLg,
       child: InkWell(
         borderRadius: RayonsApp.brLg,
-        onTap: onAjouterPlantation,
+        onTap: onTap,
         child: Container(
+          constraints: const BoxConstraints(minHeight: 116),
           padding: const EdgeInsets.all(EspacementsApp.s3),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(RayonsApp.lg),
-            border: Border.all(color: theme.colorScheme.outline),
+            border: Border.all(color: couleur.withValues(alpha: 0.45)),
           ),
-          child: IntrinsicHeight(
-            child: Row(
-              children: [
-                Container(
-                  width: 5,
-                  decoration: BoxDecoration(
-                    color: couleur,
-                    borderRadius: const BorderRadius.all(RayonsApp.full),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      zone.nom,
+                      style: theme.textTheme.titleMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  if (zone.aTacheAujourdhui)
+                    _PastilleTache(key: Key('tache-${zone.id}')),
+                ],
+              ),
+              const SizedBox(height: EspacementsApp.s2),
+              if (puces.isEmpty)
+                Text(
+                  l10n.potagerNbCultures(0),
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                )
+              else
+                Wrap(
+                  spacing: EspacementsApp.s1,
+                  runSpacing: EspacementsApp.s1,
+                  children: puces,
                 ),
-                const SizedBox(width: EspacementsApp.s3),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(zone.nom, style: theme.textTheme.titleLarge),
-                      const SizedBox(height: 2),
-                      Text(
-                        zone.cultures.isEmpty
-                            ? l10n.potagerNbCultures(0)
-                            : zone.cultures.join(' · '),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${l10n.potagerSurfaceM2(_formaterSurface(zone.surfaceM2))}'
-                        ' · ${_libelleExposition(l10n, zone.exposition)}',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: EspacementsApp.s2),
-                _TagTache(aTacheAujourdhui: zone.aTacheAujourdhui),
-                const SizedBox(width: EspacementsApp.s1),
-                Icon(
-                  Icons.chevron_right,
-                  size: TaillesIconesApp.md,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
+              const SizedBox(height: EspacementsApp.s3),
+              Text(
+                '${l10n.potagerSurfaceM2(_formaterSurface(zone.surfaceM2))}'
+                ' · ${l10n.exposition(zone.exposition)}',
+                style: theme.textTheme.labelSmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+            ],
           ),
         ),
       ),
@@ -235,37 +297,75 @@ class _LigneZone extends StatelessWidget {
   }
 }
 
-/// Task status tag: "Tâche du jour" (warm) or "À jour" (primary).
-class _TagTache extends StatelessWidget {
-  final bool aTacheAujourdhui;
+/// A small crop chip rendered inside a bed.
+class _PuceCulture extends StatelessWidget {
+  final String texte;
+  final Color couleur;
 
-  const _TagTache({required this.aTacheAujourdhui});
+  const _PuceCulture({required this.texte, required this.couleur});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accents = theme.extension<AccentsCarnet>()!;
-    final l10n = AppLocalizations.of(context)!;
-    final couleur = aTacheAujourdhui
-        ? accents.chaud
-        : theme.colorScheme.primary;
-    final texte = aTacheAujourdhui
-        ? l10n.potagerTacheDuJour
-        : l10n.potagerZoneAJour;
-
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: EspacementsApp.s2,
         vertical: 2,
       ),
       decoration: BoxDecoration(
-        color: couleur.withValues(alpha: 0.14),
+        color: couleur.withValues(alpha: 0.16),
         borderRadius: const BorderRadius.all(RayonsApp.full),
       ),
       child: Text(
         texte,
         style: theme.textTheme.labelSmall?.copyWith(color: couleur),
       ),
+    );
+  }
+}
+
+/// Drop marker shown on a bed (and in the legend) for "a task is due today".
+class _PastilleTache extends StatelessWidget {
+  const _PastilleTache({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final accents = Theme.of(context).extension<AccentsCarnet>()!;
+    return Container(
+      padding: const EdgeInsets.all(EspacementsApp.s1),
+      decoration: BoxDecoration(
+        color: accents.chaud.withValues(alpha: 0.14),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        Icons.water_drop,
+        size: TaillesIconesApp.sm,
+        color: accents.chaud,
+      ),
+    );
+  }
+}
+
+/// Plan legend: only the markers the plan actually renders are explained — the
+/// zone colours are assigned by position (not by crop category), so a colour
+/// legend would be misleading (decision: show what exists, docs/15 §3).
+class _Legende extends StatelessWidget {
+  const _Legende();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    return Row(
+      children: [
+        const _PastilleTache(),
+        const SizedBox(width: EspacementsApp.s2),
+        Text(
+          l10n.potagerTacheDuJour,
+          style: theme.textTheme.labelSmall
+              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        ),
+      ],
     );
   }
 }
@@ -384,13 +484,4 @@ String _formaterSurface(double m2) {
   return m2 == m2.roundToDouble()
       ? m2.toStringAsFixed(0)
       : m2.toStringAsFixed(1);
-}
-
-/// French label for a sun exposure.
-String _libelleExposition(AppLocalizations l10n, NiveauSoleil exposition) {
-  return switch (exposition) {
-    NiveauSoleil.pleinSoleil => l10n.expositionPleinSoleil,
-    NiveauSoleil.miOmbre => l10n.expositionMiOmbre,
-    NiveauSoleil.ombre => l10n.expositionOmbre,
-  };
 }

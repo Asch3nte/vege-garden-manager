@@ -105,4 +105,39 @@ void main() {
     expect(find.text('Ce champ est obligatoire.'), findsOneWidget);
     verifyNever(() => plantations.sauvegarder(any()));
   });
+
+  testWidgets('a pre-selected plant is locked and persisted without picking',
+      (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          plantationRepositoryProvider.overrideWithValue(plantations),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: FormulairePlantation(
+            parcelleId: 'z-1',
+            planteInitiale: fiche('tomate', 'Tomate'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // The plant is shown locked (no dropdown to open), so saving works directly.
+    expect(find.byIcon(Icons.lock_outline), findsOneWidget);
+    expect(find.text('Tomate'), findsOneWidget);
+
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final plantation =
+        verify(() => plantations.sauvegarder(captureAny())).captured.single
+            as Plantation;
+    expect(plantation.planteId, 'tomate');
+    expect(plantation.parcelleId, 'z-1');
+  });
 }

@@ -14,13 +14,21 @@ import '../widgets/libelles_enums.dart';
 
 /// Opens the "new plantation" form for [parcelleId] and returns the created
 /// [Plantation].
+///
+/// When [planteInitiale] is provided (e.g. the user picked a plant from the
+/// catalogue), the plant is pre-selected and locked, so only the planting
+/// details remain to fill.
 Future<Plantation?> ouvrirFormulairePlantation(
   BuildContext context,
-  String parcelleId,
-) {
+  String parcelleId, {
+  FichePlante? planteInitiale,
+}) {
   return Navigator.of(context).push<Plantation>(
     MaterialPageRoute(
-      builder: (_) => FormulairePlantation(parcelleId: parcelleId),
+      builder: (_) => FormulairePlantation(
+        parcelleId: parcelleId,
+        planteInitiale: planteInitiale,
+      ),
       fullscreenDialog: true,
     ),
   );
@@ -28,11 +36,21 @@ Future<Plantation?> ouvrirFormulairePlantation(
 
 /// Minimal plantation-creation form: pick a plant from the catalogue, set the
 /// date, method, number of plants and occupied surface. Scoped to a zone.
+///
+/// If [planteInitiale] is set, the plant choice is fixed (shown read-only) — the
+/// caller already chose it from the catalogue.
 class FormulairePlantation extends ConsumerStatefulWidget {
   /// Zone the plantation belongs to.
   final String parcelleId;
 
-  const FormulairePlantation({super.key, required this.parcelleId});
+  /// Pre-selected, locked plant (null = let the user pick from a dropdown).
+  final FichePlante? planteInitiale;
+
+  const FormulairePlantation({
+    super.key,
+    required this.parcelleId,
+    this.planteInitiale,
+  });
 
   @override
   ConsumerState<FormulairePlantation> createState() =>
@@ -48,6 +66,12 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
   MethodeMiseEnPlace _methode = MethodeMiseEnPlace.semisDirect;
   bool _enregistrement = false;
   bool _planteManquante = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _plante = widget.planteInitiale;
+  }
 
   @override
   void dispose() {
@@ -97,24 +121,42 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
         child: ListView(
           padding: const EdgeInsets.all(EspacementsApp.s4),
           children: [
-            DropdownButtonFormField<FichePlante>(
-              initialValue: _plante,
-              isExpanded: true,
-              decoration: InputDecoration(
-                labelText: l10n.formPlantationPlante,
-                hintText: l10n.formPlantationPlanteChoisir,
-                errorText: _planteManquante ? l10n.champObligatoire : null,
-                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+            // Plant choice: locked when pre-selected from the catalogue,
+            // otherwise a dropdown over the catalogue.
+            if (widget.planteInitiale != null)
+              InputDecorator(
+                decoration: InputDecoration(
+                  labelText: l10n.formPlantationPlante,
+                  border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(widget.planteInitiale!.nomLocalise('fr')),
+                    ),
+                    const Icon(Icons.lock_outline, size: TaillesIconesApp.sm),
+                  ],
+                ),
+              )
+            else
+              DropdownButtonFormField<FichePlante>(
+                initialValue: _plante,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  labelText: l10n.formPlantationPlante,
+                  hintText: l10n.formPlantationPlanteChoisir,
+                  errorText: _planteManquante ? l10n.champObligatoire : null,
+                  border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                ),
+                items: [
+                  for (final f in fiches)
+                    DropdownMenuItem(value: f, child: Text(f.nomLocalise('fr'))),
+                ],
+                onChanged: (v) => setState(() {
+                  _plante = v;
+                  _planteManquante = false;
+                }),
               ),
-              items: [
-                for (final f in fiches)
-                  DropdownMenuItem(value: f, child: Text(f.nomLocalise('fr'))),
-              ],
-              onChanged: (v) => setState(() {
-                _plante = v;
-                _planteManquante = false;
-              }),
-            ),
             const SizedBox(height: EspacementsApp.s4),
             // Date row (label + value, tap to pick).
             InputDecorator(
