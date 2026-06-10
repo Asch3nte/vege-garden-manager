@@ -6,10 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_geolocalisation_service.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
@@ -21,14 +25,39 @@ import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
+import 'package:pot_a_gerer/application/state/meteo_accueil_notifier.dart';
+import 'package:pot_a_gerer/application/state/meteo_accueil_vue.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_accueil.dart';
+import 'package:pot_a_gerer/presentation/screens/ecran_zone_detail.dart';
+
+/// Fixed weather view so the card renders a known verdict.
+class _FakeMeteo extends MeteoAccueilNotifier {
+  @override
+  Future<MeteoAccueilVue> build() async => MeteoAccueilVue.disponible(
+        tempMin: 12,
+        tempMax: 24,
+        verdict: VerdictMeteo.pluieAVenir,
+      );
+}
+
+/// Weather unavailable → the card shows the "set a position" prompt.
+class _FakeMeteoIndispo extends MeteoAccueilNotifier {
+  @override
+  Future<MeteoAccueilVue> build() async => MeteoAccueilVue.indisponible();
+}
+
+class _MockGeoloc extends Mock implements AbstractGeolocalisationService {}
+
+class _FakePotager extends Fake implements Potager {}
 
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
@@ -38,19 +67,30 @@ class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
+class MockPlantations extends Mock implements AbstractPlantationRepository {}
+
+class MockFiches extends Mock implements AbstractFichePlanteRepository {}
+
 void main() {
+  setUpAll(() => registerFallbackValue(_FakePotager()));
+
   final maintenant = DateTime(2026, 6, 9, 8, 24);
 
   late MockPotagers potagers;
   late MockParcelles parcelles;
   late MockTaches taches;
   late MockPreferences preferences;
+  late MockPlantations plantations;
+  late MockFiches fiches;
 
   setUp(() {
     potagers = MockPotagers();
     parcelles = MockParcelles();
     taches = MockTaches();
     preferences = MockPreferences();
+    plantations = MockPlantations();
+    fiches = MockFiches();
+    when(() => plantations.obtenirParParcelle(any())).thenAnswer((_) async => []);
 
     when(() => potagers.obtenirPotagerActif()).thenAnswer(
       (_) async => Potager(
@@ -158,5 +198,130 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Réessayer'), findsOneWidget);
+  });
+
+  testWidgets('the weather card shows the temperatures and the verdict',
+      (tester) async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(potagers),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
+          tacheRepositoryProvider.overrideWithValue(taches),
+          preferencesRepositoryProvider.overrideWithValue(preferences),
+          horlogeProvider.overrideWithValue(() => maintenant),
+          meteoAccueilProvider.overrideWith(_FakeMeteo.new),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const EcranAccueil(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('12° – 24°'), findsOneWidget);
+    expect(find.text("Pluie à venir — l'arrosage peut attendre."), findsOneWidget);
+  });
+
+  testWidgets('the weather prompt sets the garden position', (tester) async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+    final geoloc = _MockGeoloc();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(potagers),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
+          tacheRepositoryProvider.overrideWithValue(taches),
+          preferencesRepositoryProvider.overrideWithValue(preferences),
+          horlogeProvider.overrideWithValue(() => maintenant),
+          geolocalisationServiceProvider.overrideWithValue(geoloc),
+          meteoAccueilProvider.overrideWith(_FakeMeteoIndispo.new),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const EcranAccueil(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // The card invites to set a position; tapping it opens the capture sheet.
+    await tester.tap(find.textContaining('Ajoute ta position'));
+    await tester.pumpAndSettle();
+
+    // Pick an approximate region → it is stored on the active garden.
+    await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;
+    expect(potager.localisation.estDefinie, isTrue);
+  });
+
+  testWidgets('tapping a zone tile opens its detail', (tester) async {
+    when(() => preferences.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(),
+    );
+    final router = GoRouter(
+      initialLocation: RoutesApp.accueil,
+      routes: [
+        GoRoute(
+          path: RoutesApp.accueil,
+          builder: (context, state) => const EcranAccueil(),
+          routes: [
+            GoRoute(
+              path: RoutesApp.zoneDetailSegment,
+              builder: (context, state) =>
+                  EcranZoneDetail(zoneId: state.pathParameters['id']!),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(potagers),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
+          tacheRepositoryProvider.overrideWithValue(taches),
+          preferencesRepositoryProvider.overrideWithValue(preferences),
+          plantationRepositoryProvider.overrideWithValue(plantations),
+          fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          horlogeProvider.overrideWithValue(() => maintenant),
+        ],
+        child: MaterialApp.router(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Carré nord'));
+    await tester.pumpAndSettle();
+
+    // The zone-detail screen is shown (its "Cultures" section header).
+    expect(find.widgetWithText(AppBar, 'Carré nord'), findsOneWidget);
+    expect(find.text('Cultures'), findsOneWidget);
+
+    // The phone's system back returns to the dashboard (not the Potager plan).
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('Aperçu du potager'), findsOneWidget);
   });
 }

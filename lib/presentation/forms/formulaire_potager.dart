@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/engine/derivateur_localisation.dart';
+import '../../application/providers/service_providers.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../domain/entities/potager.dart';
+import '../../domain/enums/permission_localisation.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/type_emplacement.dart';
 import '../../domain/enums/zone_rusticite.dart';
+import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/capture_localisation.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the "new garden" form as a full-screen route and returns the created
@@ -37,12 +42,61 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
   TypeEmplacement _emplacement = TypeEmplacement.jardin;
   TypeClimat _climat = TypeClimat.oceanique;
   ZoneRusticite _rusticite = ZoneRusticite.zone8;
+  Localisation _position = const Localisation.nonDefinie();
+  bool _suggere = false; // climate/hardiness were pre-filled from the position
+  bool _detection = false;
   bool _enregistrement = false;
 
   @override
   void dispose() {
     _nom.dispose();
     super.dispose();
+  }
+
+  /// Captures the device position (opt-in), then pre-fills climate & hardiness
+  /// from it (suggestions the user can still adjust). Hemisphere is implied by
+  /// the stored position, so the Saison/calendar contexts become precise.
+  Future<void> _detecterPosition() async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final service = ref.read(geolocalisationServiceProvider);
+
+    setState(() => _detection = true);
+    try {
+      final permission = await service.demanderPermission();
+      if (permission != PermissionLocalisation.accordee) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.formPotagerPositionRefusee)),
+        );
+        return;
+      }
+      _appliquerPosition(await service.positionActuelle());
+      // The inline caption confirms the suggestion; no snackbar needed here.
+    } catch (_) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.formPotagerPositionErreur)),
+      );
+    } finally {
+      if (mounted) setState(() => _detection = false);
+    }
+  }
+
+  /// Stores [position] and pre-fills climate & hardiness from its derivation.
+  void _appliquerPosition(Localisation position) {
+    final suggestion = const DerivateurLocalisation().deriver(position);
+    setState(() {
+      _position = position;
+      _climat = suggestion.climat;
+      _rusticite = suggestion.rusticite;
+      _suggere = true;
+    });
+  }
+
+  /// Lets the user pick an approximate world region (no-GPS fallback): each
+  /// region maps to representative coordinates, fed through the same derivation.
+  Future<void> _choisirRegion() async {
+    final choix = await choisirRegion(context);
+    if (choix != null) _appliquerPosition(choix);
   }
 
   Future<void> _enregistrer() async {
@@ -52,6 +106,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
           nom: _nom.text.trim(),
           zoneClimatique: ZoneClimatique(_climat, _rusticite),
           emplacement: _emplacement,
+          localisation: _position,
         );
     if (mounted) Navigator.of(context).pop(potager);
   }
@@ -91,6 +146,33 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
               ],
               onChanged: (v) => setState(() => _emplacement = v!),
             ),
+            const SizedBox(height: EspacementsApp.s4),
+            OutlinedButton.icon(
+              onPressed: _detection ? null : _detecterPosition,
+              icon: _detection
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.my_location),
+              label: Text(l10n.formPotagerDetecter),
+            ),
+            TextButton.icon(
+              onPressed: _detection ? null : _choisirRegion,
+              icon: const Icon(Icons.public_outlined),
+              label: Text(l10n.formPotagerChoisirRegion),
+            ),
+            if (_suggere)
+              Padding(
+                padding: const EdgeInsets.only(top: EspacementsApp.s2),
+                child: Text(
+                  l10n.formPotagerPositionDetectee,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              ),
             const SizedBox(height: EspacementsApp.s4),
             DropdownButtonFormField<TypeClimat>(
               initialValue: _climat,

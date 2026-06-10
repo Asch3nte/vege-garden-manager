@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../app/theme/theme_app.dart';
+import '../../application/providers/service_providers.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/accueil_vue.dart';
+import '../../application/state/meteo_accueil_notifier.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/capture_localisation.dart';
+import '../widgets/libelles_enums.dart';
+import '../widgets/position_potager_actions.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
 /// level, weather & season stats. Read-only, no creation actions (docs/09 §3).
@@ -32,7 +39,12 @@ class EcranAccueil extends ConsumerWidget {
         error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(accueilProvider)),
         data: (data) => RefreshIndicator(
           onRefresh: () async => ref.invalidate(accueilProvider),
-          child: _Contenu(vue: data),
+          child: _Contenu(
+            vue: data,
+            // Push within the Accueil branch so the phone back button returns
+            // to the dashboard (not to the Potager plan).
+            onZoneTap: (id) => context.push(RoutesApp.accueilZoneDetail(id)),
+          ),
         ),
       ),
     );
@@ -42,8 +54,9 @@ class EcranAccueil extends ConsumerWidget {
 /// Scrollable dashboard body for a loaded [AccueilVue].
 class _Contenu extends StatelessWidget {
   final AccueilVue vue;
+  final void Function(String zoneId) onZoneTap;
 
-  const _Contenu({required this.vue});
+  const _Contenu({required this.vue, required this.onZoneTap});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +76,7 @@ class _Contenu extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s5),
         _GrilleStats(statistiquesVisibles: vue.statistiquesVisibles),
         const SizedBox(height: EspacementsApp.s5),
-        _SectionPotager(zones: vue.zones),
+        _SectionPotager(zones: vue.zones, onZoneTap: onZoneTap),
       ],
     );
   }
@@ -141,15 +154,89 @@ class _LigneNiveau extends StatelessWidget {
   }
 }
 
-/// Weather card — placeholder until the meteo verdict is wired.
-class _CarteMeteo extends StatelessWidget {
+/// Captures a position (GPS or region) and stores it on the active garden.
+Future<void> _definirPosition(BuildContext context, WidgetRef ref) async {
+  final loc = await ouvrirCaptureLocalisation(
+    context,
+    ref.read(geolocalisationServiceProvider),
+  );
+  if (loc != null) await enregistrerPositionPotager(ref, loc);
+}
+
+/// Weather card: today's temperatures + a garden-level watering verdict for the
+/// active garden's position. Prompts to set a position when none is known.
+class _CarteMeteo extends ConsumerWidget {
   const _CarteMeteo();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final accents = theme.extension<AccentsCarnet>()!;
     final l10n = AppLocalizations.of(context)!;
+    final async = ref.watch(meteoAccueilProvider);
+
+    final muted = theme.textTheme.bodySmall
+        ?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+
+    final (IconData icone, Widget contenu) = async.when(
+      loading: () => (
+        Icons.cloud_outlined,
+        Text(l10n.accueilMeteoAVenir, style: muted),
+      ),
+      error: (_, _) => (
+        Icons.cloud_off_outlined,
+        Text(l10n.accueilMeteoAVenir, style: muted),
+      ),
+      data: (vue) {
+        if (!vue.disponible) {
+          return (
+            Icons.location_off_outlined,
+            InkWell(
+              onTap: () => _definirPosition(context, ref),
+              child: Row(
+                children: [
+                  Expanded(child: Text(l10n.meteoSansPosition, style: muted)),
+                  Icon(Icons.chevron_right,
+                      size: TaillesIconesApp.md,
+                      color: theme.colorScheme.onSurfaceVariant),
+                ],
+              ),
+            ),
+          );
+        }
+        return (
+          iconeVerdictMeteo(vue.verdict),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.meteoTemperatures(vue.tempMin.round(), vue.tempMax.round()),
+                style: theme.textTheme.titleMedium,
+              ),
+              Text(l10n.verdictMeteo(vue.verdict), style: muted),
+              if (vue.risqueGel)
+                Padding(
+                  padding: const EdgeInsets.only(top: EspacementsApp.s1),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.ac_unit,
+                          size: TaillesIconesApp.sm, color: accents.info),
+                      const SizedBox(width: EspacementsApp.s1),
+                      Text(
+                        l10n.meteoGel,
+                        style: theme.textTheme.labelSmall
+                            ?.copyWith(color: accents.info),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+
     return Container(
       padding: const EdgeInsets.all(EspacementsApp.s4),
       decoration: BoxDecoration(
@@ -162,15 +249,9 @@ class _CarteMeteo extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.cloud_outlined, size: TaillesIconesApp.xl, color: accents.info),
+          Icon(icone, size: TaillesIconesApp.xl, color: accents.info),
           const SizedBox(width: EspacementsApp.s3),
-          Expanded(
-            child: Text(
-              l10n.accueilMeteoAVenir,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-            ),
-          ),
+          Expanded(child: contenu),
         ],
       ),
     );
@@ -370,8 +451,9 @@ class _TuileVerrouillee extends StatelessWidget {
 /// "Garden overview" labelled section with one tile per zone.
 class _SectionPotager extends StatelessWidget {
   final List<ZoneApercu> zones;
+  final void Function(String zoneId) onZoneTap;
 
-  const _SectionPotager({required this.zones});
+  const _SectionPotager({required this.zones, required this.onZoneTap});
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +476,12 @@ class _SectionPotager extends StatelessWidget {
             children: [
               for (var i = 0; i < zones.length; i++) ...[
                 if (i > 0) const SizedBox(width: EspacementsApp.s2),
-                Expanded(child: _TuileZone(zone: zones[i])),
+                Expanded(
+                  child: _TuileZone(
+                    zone: zones[i],
+                    onTap: () => onZoneTap(zones[i].id),
+                  ),
+                ),
               ],
             ],
           ),
@@ -403,38 +490,43 @@ class _SectionPotager extends StatelessWidget {
   }
 }
 
-/// One garden-zone tile (coloured header band + name).
+/// One garden-zone tile (coloured header band + name); taps to the zone detail.
 class _TuileZone extends StatelessWidget {
   final ZoneApercu zone;
+  final VoidCallback onTap;
 
-  const _TuileZone({required this.zone});
+  const _TuileZone({required this.zone, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        Container(
-          height: 60,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [CouleursApp.decoVertMoyen, CouleursApp.accentPrimaireClair],
+    return InkWell(
+      borderRadius: RayonsApp.brMd,
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [CouleursApp.decoVertMoyen, CouleursApp.accentPrimaireClair],
+              ),
+              borderRadius: const BorderRadius.all(RayonsApp.md),
             ),
-            borderRadius: const BorderRadius.all(RayonsApp.md),
           ),
-        ),
-        const SizedBox(height: EspacementsApp.s1),
-        Text(
-          zone.nom,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.labelSmall
-              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-        ),
-      ],
+          const SizedBox(height: EspacementsApp.s1),
+          Text(
+            zone.nom,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
     );
   }
 }

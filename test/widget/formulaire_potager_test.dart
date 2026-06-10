@@ -8,14 +8,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
+import 'package:pot_a_gerer/domain/enums/permission_localisation.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_geolocalisation_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_potager.dart';
 
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
+
+class MockGeoloc extends Mock implements AbstractGeolocalisationService {}
 
 class _FakePotager extends Fake implements Potager {}
 
@@ -23,9 +29,11 @@ void main() {
   setUpAll(() => registerFallbackValue(_FakePotager()));
 
   late MockPotagers repo;
+  late MockGeoloc geoloc;
 
   setUp(() {
     repo = MockPotagers();
+    geoloc = MockGeoloc();
     when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
     when(() => repo.obtenirTous()).thenAnswer((_) async => []);
   });
@@ -33,7 +41,10 @@ void main() {
   Future<void> monter(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [potagerRepositoryProvider.overrideWithValue(repo)],
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(repo),
+          geolocalisationServiceProvider.overrideWithValue(geoloc),
+        ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -59,6 +70,78 @@ void main() {
     // Defaults: oceanic climate, hardiness zone 8.
     expect(potager.zoneClimatique.type, TypeClimat.oceanique);
     expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone8);
+  });
+
+  testWidgets('detecting the position pre-fills climate and stores it',
+      (tester) async {
+    when(() => geoloc.demanderPermission())
+        .thenAnswer((_) async => PermissionLocalisation.accordee);
+    when(() => geoloc.positionActuelle())
+        .thenAnswer((_) async => Localisation.gps(latitude: 5, longitude: 10));
+
+    await monter(tester);
+
+    await tester.enterText(find.byType(TextFormField).first, 'Potager tropical');
+    await tester.tap(find.text('Détecter ma position'));
+    await tester.pumpAndSettle();
+
+    // The suggestion caption is shown.
+    expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
+
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
+    // Latitude 5° → tropical / zone 11, and the position is stored.
+    expect(potager.zoneClimatique.type, TypeClimat.tropical);
+    expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone11);
+    expect(potager.localisation.estDefinie, isTrue);
+  });
+
+  testWidgets('picking a region pre-fills climate and stores the location',
+      (tester) async {
+    await monter(tester);
+
+    await tester.enterText(find.byType(TextFormField).first, 'Potager');
+    await tester.tap(find.text('Choisir une région'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
+
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
+    expect(potager.zoneClimatique.type, TypeClimat.tropical);
+    expect(potager.localisation.estDefinie, isTrue);
+  });
+
+  testWidgets('a refused permission keeps the manual defaults', (tester) async {
+    when(() => geoloc.demanderPermission())
+        .thenAnswer((_) async => PermissionLocalisation.refusee);
+
+    await monter(tester);
+
+    await tester.enterText(find.byType(TextFormField).first, 'Mon potager');
+    await tester.tap(find.text('Détecter ma position'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Autorisation de localisation refusée.'), findsOneWidget);
+
+    // Let the snackbar auto-dismiss so it no longer covers the save button.
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
+    expect(potager.zoneClimatique.type, TypeClimat.oceanique); // unchanged
+    expect(potager.localisation.estDefinie, isFalse);
   });
 
   testWidgets('an empty name blocks saving', (tester) async {
