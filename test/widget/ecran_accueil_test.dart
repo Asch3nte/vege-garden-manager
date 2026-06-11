@@ -291,16 +291,24 @@ void main() {
     expect(potager.localisation.estDefinie, isTrue);
   });
 
-  testWidgets('tapping a zone tile opens its detail', (tester) async {
+  testWidgets('tapping a zone tile opens its detail on the Potager branch',
+      (tester) async {
     when(() => preferences.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(),
     );
+    // The dashboard tile now targets the zone detail under the Potager branch
+    // (docs/15 §8 D #5); the cross-branch "back returns to the dashboard"
+    // behaviour belongs to the real shell and is covered in navigation_test.
     final router = GoRouter(
       initialLocation: RoutesApp.accueil,
       routes: [
         GoRoute(
           path: RoutesApp.accueil,
           builder: (context, state) => const EcranAccueil(),
+        ),
+        GoRoute(
+          path: RoutesApp.potager,
+          builder: (context, state) => const Scaffold(body: Text('Plan')),
           routes: [
             GoRoute(
               path: RoutesApp.zoneDetailSegment,
@@ -331,10 +339,5 @@ void main() {
     // The zone-detail screen is shown (its "Cultures" section header).
     expect(find.widgetWithText(AppBar, 'Carré nord'), findsOneWidget);
     expect(find.text('Cultures'), findsOneWidget);
-
-    // The phone's system back returns to the dashboard (not the Potager plan).
-    await tester.binding.handlePopRoute();
-    await tester.pumpAndSettle();
-    expect(find.text('Aperçu du potager'), findsOneWidget);
   });
 }

@@ -1,0 +1,121 @@
+# Fiche mère (espèce) — Cassis.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: PFR-004
+version_fiche: 1
+categorie: petit_fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - medicinale
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Ribes nigrum
+famille_botanique: Grossulariaceae
+
+i18n:
+  fr:
+    nom_commun: Cassis
+    noms_alternatifs: [Groseillier noir, Poirier noir, Blackcurrant]
+    description: >
+      Arbuste fruitier vivace de la famille des Grossulariacées, aux baies
+      noires très aromatiques et particulièrement riches en vitamine C
+      (5 fois plus que l'orange) et en anthocyanes aux propriétés
+      antioxydantes reconnues. Feuilles persistantes dégageant une odeur
+      caractéristique de cassis. Rustique (–25 °C), productif et peu
+      exigeant. Donne de superbes préparations alcoolisées (crème de cassis,
+      kir) et des confitures très parfumées.
+    conseils_culture: >
+      Planter à l'automne en sol riche, frais, légèrement acide. Tolérant
+      à la mi-ombre mais plus productif en plein soleil. Tailler chaque
+      hiver : supprimer les branches de plus de 4 ans. Le cassis est plus
+      vigoureux que le groseillier et exige plus d'azote. Pailler pour
+      garder l'humidité — sensible à la sécheresse prolongée.
+    conseils_recolte: >
+      Récolter les grappes entières en juillet-août quand tous les fruits
+      sont noirs et légèrement mous. Contrairement au groseillier, le cassis
+      peut rester sur l'arbuste quelques jours supplémentaires après
+      maturité sans se dégrader.
+    erreurs_frequentes:
+      - Sol trop calcaire ou trop sec (chlorose, fruits petits)
+      - Négliger la taille annuelle (vieillissement rapide, production divisée par 2)
+      - Confondre avec le groseillier (saveur, couleur et arôme très différents)
+  en:
+    nom_commun: Blackcurrant
+    noms_alternatifs: [Black currant, Cassis]
+    description: >
+      Deciduous fruiting shrub producing fragrant black berries exceptionally
+      rich in vitamin C and antioxidant anthocyanins. Hardy to –25 °C.
+      Basis of crème de cassis, kir, jams and health preparations.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_survie: -25
+  gele_fatal: false
+
+cycle:
+  type: vivace
+  duree_avant_recolte_jours: [365, 730]
+  hauteur_adulte_cm: [100, 150]
+  espacement_cm: 150
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [7, 8]
+    continental:
+      plantation: [3, 4]
+      recolte: [7, 8]
+    mediterraneen:
+      plantation: [10, 11]
+      recolte: [6, 7]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [1, 2]
+
+associations:
+  beneficies:
+    - id: LEG-016
+      raison_i18n: { fr: "Association favorable en sous-couvert du cassis", en: "Favourable companion planting under blackcurrant" }
+  defavorables: []
+
+rotation:
+  famille: grossulariaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, en grappes — se tient mieux que la fraise ou la framboise", en: "Refrigerator, in bunches — holds better than strawberry or raspberry" }
+  - methode: congelation
+    duree_mois: 12
+  - methode: conserves
+    duree_mois: 36
+    conditions_i18n: { fr: "Confiture, crème de cassis, gelée ou sirop", en: "Jam, crème de cassis, jelly or syrup" }
+utilisations_culinaires_i18n:
+  fr: [Crème de cassis (kir), confiture, sorbet, sirop, coulis, tarte, smoothie, liqueur]
+  en: [Crème de cassis (kir), jam, sorbet, syrup, coulis, tart, smoothie, liqueur]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cassis_(plante)
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

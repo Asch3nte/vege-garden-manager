@@ -73,6 +73,18 @@ void main() {
     expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone8);
   });
 
+  testWidgets('the climate field describes each option', (tester) async {
+    await monter(tester);
+
+    // Open the climate dropdown via its selected value (default oceanic).
+    await tester.tap(find.text('Océanique'));
+    await tester.pumpAndSettle();
+
+    // The oceanic option carries its helper description in the menu.
+    expect(find.text('Doux et humide, faibles écarts de température.'),
+        findsOneWidget);
+  });
+
   testWidgets('detecting the position pre-fills climate and stores it',
       (tester) async {
     when(() => geoloc.demanderPermission())

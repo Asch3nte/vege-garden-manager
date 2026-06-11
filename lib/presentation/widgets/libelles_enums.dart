@@ -12,6 +12,7 @@ import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/sens_swipe.dart';
+import '../../domain/enums/stade_croissance.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart' as prefs_theme;
 import '../../domain/enums/type_climat.dart';
@@ -144,9 +145,44 @@ extension LibellesEnums on AppLocalizations {
         TypeClimat.polaire => climatPolaire,
       };
 
+  /// Short helper describing a climate type (shown under each dropdown option).
+  String climatDescription(TypeClimat c) => switch (c) {
+        TypeClimat.tropical => climatTropicalDesc,
+        TypeClimat.subtropical => climatSubtropicalDesc,
+        TypeClimat.aride => climatArideDesc,
+        TypeClimat.semiAride => climatSemiArideDesc,
+        TypeClimat.mediterraneen => climatMediterraneenDesc,
+        TypeClimat.oceanique => climatOceaniqueDesc,
+        TypeClimat.continental => climatContinentalDesc,
+        TypeClimat.montagnard => climatMontagnardDesc,
+        TypeClimat.polaire => climatPolaireDesc,
+      };
+
   /// Label for a hardiness zone (USDA), e.g. "Zone 8".
   String rusticite(ZoneRusticite z) =>
       rusticiteZone(int.parse(z.name.replaceAll('zone', '')));
+
+  /// Short helper for a hardiness zone: its USDA average annual minimum
+  /// temperature range, in °C (shown under each dropdown option).
+  String rusticiteDescription(ZoneRusticite z) {
+    final n = int.parse(z.name.replaceAll('zone', ''));
+    final (int min, int max) = switch (n) {
+      1 => (-51, -45),
+      2 => (-45, -40),
+      3 => (-40, -34),
+      4 => (-34, -29),
+      5 => (-29, -23),
+      6 => (-23, -18),
+      7 => (-18, -12),
+      8 => (-12, -7),
+      9 => (-7, -1),
+      10 => (-1, 4),
+      11 => (4, 10),
+      12 => (10, 16),
+      _ => (16, 21), // zone 13
+    };
+    return rusticiteZoneDesc(min, max);
+  }
 
   /// Label for a parcelle (zone) type.
   String typeParcelle(TypeParcelle t) => switch (t) {
@@ -200,6 +236,14 @@ extension LibellesEnums on AppLocalizations {
         DestinationRecolte.autre => destinationAutre,
       };
 
+  /// Label for a growth stage.
+  String libelleStade(StadeCroissance s) => switch (s) {
+        StadeCroissance.levee => stadeLevee,
+        StadeCroissance.croissance => stadeCroissance,
+        StadeCroissance.maturation => stadeMaturation,
+        StadeCroissance.recolte => stadeRecolte,
+      };
+
   /// Label for a planting method.
   String methode(MethodeMiseEnPlace m) => switch (m) {
         MethodeMiseEnPlace.semisDirect => methodeSemisDirect,
@@ -208,6 +252,17 @@ extension LibellesEnums on AppLocalizations {
         MethodeMiseEnPlace.plantAchete => methodePlantAchete,
         MethodeMiseEnPlace.bouture => methodeBouture,
         MethodeMiseEnPlace.division => methodeDivision,
+      };
+
+  /// Short helper describing a planting method (shown under each dropdown
+  /// option) — the planting "type" the user picks when adding a plantation.
+  String methodeDescription(MethodeMiseEnPlace m) => switch (m) {
+        MethodeMiseEnPlace.semisDirect => methodeSemisDirectDesc,
+        MethodeMiseEnPlace.semisInterieur => methodeSemisInterieurDesc,
+        MethodeMiseEnPlace.repiquage => methodeRepiquageDesc,
+        MethodeMiseEnPlace.plantAchete => methodePlantAcheteDesc,
+        MethodeMiseEnPlace.bouture => methodeBoutureDesc,
+        MethodeMiseEnPlace.division => methodeDivisionDesc,
       };
 }
 

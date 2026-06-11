@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
@@ -66,6 +67,19 @@ void main() {
     expect(p.recoltes, isEmpty);
   });
 
+  test('obtenirParId returns the plantation, or null when absent/deleted',
+      () async {
+    await repo.sauvegarder(plantation(id: 'pl1'));
+
+    final found = await repo.obtenirParId('pl1');
+    expect(found, isNotNull);
+    expect(found!.id, 'pl1');
+    expect(await repo.obtenirParId('nope'), isNull);
+
+    await repo.supprimer('pl1');
+    expect(await repo.obtenirParId('pl1'), isNull); // soft-deleted excluded
+  });
+
   test('round-trips a terminated plantation with end date', () async {
     await repo.sauvegarder(plantation(
       statut: StatutPlantation.recoltee,
@@ -106,5 +120,78 @@ void main() {
     final rec = await (db.select(db.recoltes)..where((t) => t.id.equals('r1')))
         .getSingle();
     expect(rec.deletedAt, isNotNull);
+  });
+
+  test('supprimer cascades to its planning rows, sparing other plantations',
+      () async {
+    await repo.sauvegarder(plantation(id: 'pl1'));
+    await repo.sauvegarder(plantation(id: 'pl2'));
+
+    await db.into(db.taches).insert(TachesCompanion.insert(
+          id: 't1',
+          titre: 'Arroser',
+          type: 'arrosage',
+          datePrevue: now,
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          plantationId: const Value('pl1'),
+        ));
+    await db.into(db.taches).insert(TachesCompanion.insert(
+          id: 't_other',
+          titre: 'Arroser',
+          type: 'arrosage',
+          datePrevue: now,
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          plantationId: const Value('pl2'),
+        ));
+    await db.into(db.rappels).insert(RappelsCompanion.insert(
+          id: 'rap1',
+          titre: 'Rappel',
+          typeTacheGeneree: 'arrosage',
+          dateDebut: now,
+          typeRecurrence: 'ponctuel',
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          plantationId: const Value('pl1'),
+        ));
+    await db.into(db.observations).insert(ObservationsCompanion.insert(
+          id: 'obs1',
+          dateObservation: now,
+          type: 'general',
+          titre: 'Observation',
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          plantationId: const Value('pl1'),
+        ));
+
+    await repo.supprimer('pl1');
+
+    Future<String?> deletedAt(String table, String id) async {
+      switch (table) {
+        case 'tache':
+          return (await (db.select(db.taches)..where((t) => t.id.equals(id)))
+                  .getSingle())
+              .deletedAt;
+        case 'rappel':
+          return (await (db.select(db.rappels)..where((t) => t.id.equals(id)))
+                  .getSingle())
+              .deletedAt;
+        default:
+          return (await (db.select(db.observations)
+                      ..where((t) => t.id.equals(id)))
+                  .getSingle())
+              .deletedAt;
+      }
+    }
+
+    expect(await deletedAt('tache', 't1'), isNotNull);
+    expect(await deletedAt('rappel', 'rap1'), isNotNull);
+    expect(await deletedAt('observation', 'obs1'), isNotNull);
+    expect(await deletedAt('tache', 't_other'), isNull); // other plantation
   });
 }

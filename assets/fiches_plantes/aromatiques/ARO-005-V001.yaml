@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Menthe Verte. Hérite de ARO-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-005-V001
+parent_id: ARO-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Mentha spicata"
+
+i18n:
+  fr:
+    nom_commun: Menthe verte
+    noms_alternatifs: [Menthe douce, Menthe romaine, Spearmint]
+    description: >
+      Espèce distincte de la menthe poivrée (Mentha spicata), aux feuilles
+      vert vif à arôme doux, sans menthol, légèrement épicé et sucré. Moins
+      envahissante que la menthe poivrée mais rhizomateuse tout de même.
+      Idéale pour la cuisine (taboulé, thé à la menthe marocain, mojito) car
+      son arôme délicat supporte mieux la chaleur.
+    conseils_culture: >
+      Mêmes besoins que la menthe poivrée. À contenir si plantée en pleine
+      terre. Préfère légèrement plus de soleil que la menthe poivrée. Peut
+      passer l'hiver en zone 5 sans protection.
+    conseils_recolte: >
+      Récolter avant la floraison pour l'arôme le plus doux. Utilisable crue
+      — ses feuilles ne brûlent pas comme la menthe poivrée.
+    erreurs_frequentes:
+      - Confondre avec la menthe poivrée (arômes très différents à l'usage culinaire)
+  en:
+    nom_commun: Spearmint
+    noms_alternatifs: [Garden mint, Common mint]
+    description: >
+      Distinct species from peppermint (Mentha spicata), with a mild, sweet,
+      menthol-free flavour. Ideal for cooking as it withstands heat better.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+  - methode: sechage
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Thé à la menthe marocain, taboulé, mojito, sauce à la menthe, sirop, confiserie, salades de fruits]
+  en: [Moroccan mint tea, tabbouleh, mojito, mint sauce, syrup, confectionery, fruit salads]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Menthe_verte
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,126 @@
+# Fiche mère (espèce) — Framboisier.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: PFR-002
+version_fiche: 1
+categorie: petit_fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Rubus idaeus
+famille_botanique: Rosaceae
+
+i18n:
+  fr:
+    nom_commun: Framboisier
+    noms_alternatifs: [Framboisier commun, Ronce du Mont Ida]
+    description: >
+      Arbrisseau vivace de la famille des Rosacées aux tiges biennales
+      (cannes). Les cannes de la première année (primocanes) produisent des
+      feuilles, celles de la deuxième année (floricanes) portent les fleurs
+      et les fruits. Fruits rouges (ou jaunes selon la variété) de 2–4 g,
+      très aromatiques et fragiles. Deux types : variétés non-remontantes
+      (une récolte en juillet) et remontantes (juillet + automne).
+    conseils_culture: >
+      Planter en rang, espacer les cannes de 50–60 cm, les rangs de 1,5 m.
+      Tuteurer sur fil de fer tendus entre piquets. Arroser régulièrement en
+      été, pailler. Après la récolte : couper au ras du sol les cannes ayant
+      fructifié (floricanes). Laisser les nouvelles cannes vertes (primocanes)
+      qui produiront l'année suivante.
+    conseils_recolte: >
+      Récolter à pleine maturité (fruit rouge profond, légèrement souple) —
+      la framboise ne continue pas à mûrir après cueillette. Récolter tous
+      les 2–3 jours par temps chaud. Les fruits sont très fragiles : manipuler
+      délicatement, ne jamais superposer plus de 2–3 couches.
+    erreurs_frequentes:
+      - Ne pas tailler les vieilles cannes (enchevêtrement, perte de production)
+      - Oublier d'arroser en été (manque d'eau entraîne des fruits petits et secs)
+      - Plantation en sol calcaire (chlorose ferrique — préférer sol légèrement acide)
+  en:
+    nom_commun: Raspberry
+    noms_alternatifs: [Red raspberry, Common raspberry]
+    description: >
+      Hardy perennial shrub with biennial canes. Primocanes grow in year 1;
+      floricanes fruit in year 2. Very aromatic red (or yellow) fruits.
+      Summer-fruiting and autumn-fruiting (everbearing) varieties available.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+    - leger
+  ph_min: 5.5
+  ph_max: 6.5
+  temperature_min_survie: -25
+  gele_fatal: false
+
+cycle:
+  type: vivace
+  duree_avant_recolte_jours: [365, 730]
+  hauteur_adulte_cm: [120, 200]
+  espacement_cm: 60
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: true
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [7, 8]
+    continental:
+      plantation: [3, 4]
+      recolte: [7, 9]
+    mediterraneen:
+      plantation: [2, 3]
+      recolte: [6, 8]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [1, 3]
+
+associations:
+  beneficies:
+    - id: LEG-013
+      raison_i18n: { fr: "Les légumineuses enrichissent le sol en azote bénéfique aux framboisiers", en: "Legumes enrich soil with nitrogen beneficial to raspberries" }
+  defavorables:
+    - id: LEG-020
+      raison_i18n: { fr: "Partage des maladies fongiques (Verticillium) avec les Solanacées", en: "Shares fungal diseases (Verticillium) with Solanaceae" }
+
+rotation:
+  famille: rosaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses]
+  precedents_defavorables: [rosaceae, solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: frais
+    duree_jours: 2
+    conditions_i18n: { fr: "Réfrigérateur, non lavée, en couche simple — très fragile", en: "Refrigerator, unwashed, single layer — very fragile" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Sur plateau en couche simple, puis en sachet après congélation individuelle", en: "On tray in single layer, then in bag after individual freezing" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, coulis ou framboises au sucre", en: "Jam, coulis or sugared raspberries" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, confiture, coulis, tarte, charlotte, smoothie, sorbet, liqueur, vinaigre]
+  en: [Fresh, jam, coulis, tart, charlotte, smoothie, sorbet, liqueur, vinegar]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Framboisier
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

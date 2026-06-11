@@ -1,11 +1,20 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/entities/potager.dart';
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/type_tache.dart';
+import '../../domain/repositories/abstract_fiche_plante_repository.dart';
+import '../../domain/repositories/abstract_parcelle_repository.dart';
+import '../../domain/repositories/abstract_plantation_repository.dart';
+import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import 'calendrier_vue.dart';
+
+/// Locale used to resolve crop display names (French-first app).
+const String _locale = 'fr';
 
 /// Drives the **Calendrier** agenda: the tasks over the current window
 /// ([PorteeAgenda]), grouped by day, with the action to tick a task off.
@@ -29,10 +38,16 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   @override
   Future<CalendrierVue> build() async {
     final taches = ref.watch(tacheRepositoryProvider);
+    final parcelles = ref.watch(parcelleRepositoryProvider);
+    final plantations = ref.watch(plantationRepositoryProvider);
+    final potagers = ref.watch(potagerRepositoryProvider);
+    // The catalogue loads from YAML assets asynchronously.
+    final fiches = await ref.watch(fichePlanteRepositoryProvider.future);
     final maintenant = ref.watch(horlogeProvider);
     final n = maintenant();
     _moisAffiche ??= DateTime(n.year, n.month, 1);
-    return _assembler(taches, maintenant);
+    return _assembler(
+        taches, parcelles, plantations, potagers, fiches, maintenant);
   }
 
   /// Switches the window scope (week / month) and reloads.
@@ -89,14 +104,25 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
 
   Future<void> _recharger() async {
     final taches = ref.read(tacheRepositoryProvider);
+    final parcelles = ref.read(parcelleRepositoryProvider);
+    final plantations = ref.read(plantationRepositoryProvider);
+    final potagers = ref.read(potagerRepositoryProvider);
     final maintenant = ref.read(horlogeProvider);
     // Keep the current data visible during the reload (no loading flash), so the
     // month grid and its day selection don't reset on a tick / month change.
-    state = await AsyncValue.guard(() => _assembler(taches, maintenant));
+    state = await AsyncValue.guard(() async {
+      final fiches = await ref.read(fichePlanteRepositoryProvider.future);
+      return _assembler(
+          taches, parcelles, plantations, potagers, fiches, maintenant);
+    });
   }
 
   Future<CalendrierVue> _assembler(
     AbstractTacheRepository taches,
+    AbstractParcelleRepository parcelles,
+    AbstractPlantationRepository plantations,
+    AbstractPotagerRepository potagers,
+    AbstractFichePlanteRepository fiches,
     DateTime Function() maintenant,
   ) async {
     final debut = _minuit(maintenant());
@@ -109,12 +135,71 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
     final listeMois =
         _filtrer(await taches.obtenirEntreDates(moisDebut, moisFin));
 
+    final potagerActif = await potagers.obtenirPotagerActif();
+    final ciblesNoms = await _resoudreCibles(
+      [...liste, ...listeMois],
+      parcelles,
+      plantations,
+      fiches,
+      potagerActif,
+    );
+
     return CalendrierVue(
       portee: _portee,
       groupes: _grouperParJour(liste),
       moisAffiche: moisDebut,
       groupesMois: _grouperParJour(listeMois),
+      ciblesNoms: ciblesNoms,
     );
+  }
+
+  /// Resolves each task target to a display name, once per distinct
+  /// `'<cible>:<cibleId>'`. A target that no longer resolves (deleted, or
+  /// equipment which has no screen yet) is simply omitted — the card then shows
+  /// no target rather than an invented one.
+  Future<Map<String, String>> _resoudreCibles(
+    Iterable<Tache> taches,
+    AbstractParcelleRepository parcelles,
+    AbstractPlantationRepository plantations,
+    AbstractFichePlanteRepository fiches,
+    Potager? potagerActif,
+  ) async {
+    // Distinct targets first, so each is resolved a single time.
+    final distinctes = <String, Tache>{};
+    for (final t in taches) {
+      distinctes.putIfAbsent('${t.cible.name}:${t.cibleId}', () => t);
+    }
+
+    final noms = <String, String>{};
+    for (final entree in distinctes.entries) {
+      final nom = await _nomCible(
+          entree.value, parcelles, plantations, fiches, potagerActif);
+      if (nom != null) noms[entree.key] = nom;
+    }
+    return noms;
+  }
+
+  /// Display name of a single task's target, or `null` when unresolved.
+  Future<String?> _nomCible(
+    Tache tache,
+    AbstractParcelleRepository parcelles,
+    AbstractPlantationRepository plantations,
+    AbstractFichePlanteRepository fiches,
+    Potager? potagerActif,
+  ) async {
+    switch (tache.cible) {
+      case CibleTache.potager:
+        return potagerActif?.id == tache.cibleId ? potagerActif!.nom : null;
+      case CibleTache.parcelle:
+        return (await parcelles.obtenirParId(tache.cibleId))?.nom;
+      case CibleTache.plantation:
+        final plantation = await plantations.obtenirParId(tache.cibleId);
+        if (plantation == null) return null;
+        final fiche = await fiches.obtenirParId(plantation.planteId);
+        return fiche?.nomLocalise(_locale);
+      case CibleTache.equipement:
+        return null;
+    }
   }
 
   /// Exclusive end of the window: +7 days (week) or first day of next month.

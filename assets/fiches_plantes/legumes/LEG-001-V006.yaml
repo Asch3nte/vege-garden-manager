@@ -1,0 +1,62 @@
+# Fiche fille (variété) — Tomate Marmande. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V006
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Marmande'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Marmande
+    noms_alternatifs: [Marmande hâtive, Marmande VR, Tomate de Marmande]
+    description: >
+      Variété française emblématique originaire de Marmande (Lot-et-Garonne),
+      fruit aplati, côtelé, légèrement irrégulier (150–300 g), chair pleine,
+      consistante et très parfumée. Variété semi-déterminée à production
+      précoce et abondante, l'une des plus hâtives (55–65 jours). Capacité
+      remarquable à fructifier même par températures fraîches.
+    conseils_culture: >
+      Idéale pour les régions à étés courts ou les altitudes : sa précocité
+      et sa tolérance aux températures fraîches sont ses atouts principaux.
+      Sol bien travaillé, riche en compost. Espacement 60–70 cm. Certaines
+      sélections résistantes au Verticillium et Fusarium. Conduire à 2–3 tiges
+      pour équilibrer production et qualité. Tuteurage modéré suffisant.
+    conseils_recolte: >
+      Récolter dès 55–65 jours après plantation, quand le fruit est bien rouge,
+      légèrement souple au toucher. Sa précocité permet une première récolte
+      dès juillet en conditions océaniques.
+    erreurs_frequentes:
+      - Méconnaître sa précocité et la planter trop tard (production réduite en fin de saison)
+      - Sol trop riche en azote (favorise le feuillage au détriment des fruits)
+      - Négliger le tuteurage malgré le port semi-déterminé
+  en:
+    nom_commun: Marmande Tomato
+    description: >
+      Emblematic French heirloom from Marmande, flat and ribbed fruit
+      (150–300 g), full and fragrant flesh. Semi-determinate with early and
+      abundant production, one of the earliest varieties (55–65 days).
+
+cycle:
+  duree_avant_recolte_jours: [55, 65]
+  hauteur_adulte_cm: [80, 120]
+  espacement_cm: 65
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière directe", en: "Room temperature, away from direct light" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Farcie, en salade, sauce tomate, soupe, tian, crue à la provençale]
+  en: [Stuffed, in salads, tomato sauce, soup, tian, raw Provençal style]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate_Marmande
+  - https://jardinage.pagesjaunes.fr/astuce/voir/527347/tomate-marmande
+contributeurs:
+  - "@potagerer"

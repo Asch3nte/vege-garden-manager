@@ -10,6 +10,8 @@ import '../../application/state/parcelles_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
+import '../../application/state/prochaines_taches_zone_provider.dart';
+import '../../domain/entities/tache.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_observation.dart';
@@ -36,6 +38,10 @@ class EcranZoneDetail extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(potagerProvider);
+    // Next pending task per crop — secondary data: if it is not ready yet the
+    // crops still render immediately (empty map = no "next task" line shown).
+    final prochaines =
+        ref.watch(prochainesTachesZoneProvider(zoneId)).value ?? const {};
 
     return vue.when(
       loading: () => const Scaffold(
@@ -58,6 +64,7 @@ class EcranZoneDetail extends ConsumerWidget {
         return _Detail(
           zone: zone,
           couleur: couleurZone(index),
+          prochainesTaches: prochaines,
           onAjouterPlante: () {
             ref
                 .read(ajoutPlanteProvider.notifier)
@@ -206,6 +213,9 @@ Future<void> _observer(BuildContext context, CulturePotager culture) async {
 class _Detail extends StatelessWidget {
   final ZonePotager zone;
   final Color couleur;
+
+  /// Next pending task per plantation id (absent when a crop has none).
+  final Map<String, Tache> prochainesTaches;
   final VoidCallback onAjouterPlante;
   final VoidCallback onModifierZone;
   final VoidCallback onSupprimerZone;
@@ -217,6 +227,7 @@ class _Detail extends StatelessWidget {
   const _Detail({
     required this.zone,
     required this.couleur,
+    required this.prochainesTaches,
     required this.onAjouterPlante,
     required this.onModifierZone,
     required this.onSupprimerZone,
@@ -324,6 +335,7 @@ class _Detail extends StatelessWidget {
               _LigneCulture(
                 culture: zone.cultures[i],
                 couleur: couleur,
+                prochaineTache: prochainesTaches[zone.cultures[i].plantationId],
                 onRecolter: () => onRecolter(zone.cultures[i]),
                 onObserver: () => onObserver(zone.cultures[i]),
                 onArracher: () => onArracher(zone.cultures[i]),
@@ -363,6 +375,9 @@ class _Fait extends StatelessWidget {
 class _LigneCulture extends StatelessWidget {
   final CulturePotager culture;
   final Color couleur;
+
+  /// The crop's next pending task, or `null` when it has none.
+  final Tache? prochaineTache;
   final VoidCallback onRecolter;
   final VoidCallback onObserver;
   final VoidCallback onArracher;
@@ -371,6 +386,7 @@ class _LigneCulture extends StatelessWidget {
   const _LigneCulture({
     required this.culture,
     required this.couleur,
+    required this.prochaineTache,
     required this.onRecolter,
     required this.onObserver,
     required this.onArracher,
@@ -402,7 +418,53 @@ class _LigneCulture extends StatelessWidget {
           ),
           const SizedBox(width: EspacementsApp.s3),
           Expanded(
-            child: Text(culture.nom, style: theme.textTheme.titleMedium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(culture.nom, style: theme.textTheme.titleMedium),
+                if (culture.etat != null) ...[
+                  const SizedBox(height: EspacementsApp.s1),
+                  Text(
+                    l10n.libelleStade(culture.etat!.stade),
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: EspacementsApp.s1),
+                  ClipRRect(
+                    borderRadius: RayonsApp.brSm,
+                    child: LinearProgressIndicator(
+                      value: culture.etat!.progression,
+                      minHeight: 4,
+                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      color: couleur,
+                    ),
+                  ),
+                ],
+                if (prochaineTache != null) ...[
+                  const SizedBox(height: EspacementsApp.s2),
+                  Row(
+                    children: [
+                      Icon(
+                        iconeTypeTache(prochaineTache!.type),
+                        size: TaillesIconesApp.sm,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: EspacementsApp.s2),
+                      Expanded(
+                        child: Text(
+                          l10n.cultureProchaineTache(
+                            prochaineTache!.titre,
+                            _formaterDateCourte(prochaineTache!.datePrevue),
+                          ),
+                          style: theme.textTheme.bodySmall
+                              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
           ),
           PopupMenuButton<_ActionCulture>(
             icon: const Icon(Icons.more_vert),
@@ -502,3 +564,7 @@ String _formaterSurface(double m2) {
       ? m2.toStringAsFixed(0)
       : m2.toStringAsFixed(1);
 }
+
+/// Short `dd/MM` date for the next-task line (the year is rarely useful there).
+String _formaterDateCourte(DateTime d) =>
+    '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}';

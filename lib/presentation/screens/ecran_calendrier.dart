@@ -177,6 +177,7 @@ class _VueAgenda extends ConsumerWidget {
                     for (final groupe in vue.groupes)
                       _GroupeJour(
                         groupe: groupe,
+                        cibleLabelDe: vue.cibleNom,
                         onCocher: notifier.cocher,
                         onModifier: (t) => _modifierTache(context, ref, t),
                         onSupprimer: (t) => _supprimerTache(context, ref, t),
@@ -290,6 +291,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
           for (final tache in tachesSel) ...[
             _CarteTache(
               tache: tache,
+              cibleLabel: vue.cibleNom(tache),
               onCocher: notifier.cocher,
               onModifier: (t) => _modifierTache(context, ref, t),
               onSupprimer: (t) => _supprimerTache(context, ref, t),
@@ -873,12 +875,16 @@ class _Resume extends StatelessWidget {
 /// A day's header + its task cards.
 class _GroupeJour extends StatelessWidget {
   final GroupeJour groupe;
+
+  /// Resolves a task's target display name (zone / crop / garden).
+  final String? Function(Tache) cibleLabelDe;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
 
   const _GroupeJour({
     required this.groupe,
+    required this.cibleLabelDe,
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
@@ -903,6 +909,7 @@ class _GroupeJour extends StatelessWidget {
         for (final tache in groupe.taches) ...[
           _CarteTache(
             tache: tache,
+            cibleLabel: cibleLabelDe(tache),
             onCocher: onCocher,
             onModifier: onModifier,
             onSupprimer: onSupprimer,
@@ -917,12 +924,16 @@ class _GroupeJour extends StatelessWidget {
 /// One tickable task card: gesture icon + title + check.
 class _CarteTache extends StatelessWidget {
   final Tache tache;
+
+  /// Resolved name of the task's target (zone / crop / garden), or `null`.
+  final String? cibleLabel;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
 
   const _CarteTache({
     required this.tache,
+    required this.cibleLabel,
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
@@ -968,10 +979,34 @@ class _CarteTache extends StatelessWidget {
                         decoration: fait ? TextDecoration.lineThrough : null,
                       ),
                     ),
-                    Text(
-                      l10n.typeTache(tache.type),
-                      style: theme.textTheme.labelSmall
-                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    Row(
+                      children: [
+                        Text(
+                          l10n.typeTache(tache.type),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                        if (cibleLabel != null) ...[
+                          Text(
+                            ' · ',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant),
+                          ),
+                          Icon(
+                            Icons.place_outlined,
+                            size: TaillesIconesApp.sm,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          Flexible(
+                            child: Text(
+                              cibleLabel!,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ),

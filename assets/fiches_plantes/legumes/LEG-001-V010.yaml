@@ -1,0 +1,67 @@
+# Fiche fille (variété) — Tomate Roma. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V010
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Roma'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Roma
+    noms_alternatifs: [Tomate prune, Tomate italienne, Italian plum tomato]
+    description: >
+      Variété à port déterminé (plante compacte de 70–100 cm), produisant des
+      fruits ovoïdes dits « prunes » de 80–100 g, rouge vif, à chair épaisse
+      et ferme, très peu aqueuse et pauvre en graines. Production groupée en
+      fin d'été — idéale pour la mise en conserve. L'une des variétés de
+      référence de la cuisine italienne pour la sauce, la pizza et le
+      ketchup maison.
+    conseils_culture: >
+      Port déterminé : pas de suppression des gourmands nécessaire. Tuteurage
+      léger suffisant. Espacer à 50 cm. La production est groupée (toutes les
+      tomates mûrissent presque en même temps), ce qui facilite la récolte
+      de masse pour la conserve. Convient à la culture en pot (≥ 25 L).
+    conseils_recolte: >
+      Récolter en masse en une ou deux opérations quand la majorité des fruits
+      sont rouge vif et fermes. Laisser quelques jours mûrir en cave ou sur
+      plan de travail si certains fruits sont encore orangés.
+    erreurs_frequentes:
+      - Supprimer les gourmands comme sur une indéterminée (inutile, diminue le rendement)
+      - Attendre une deuxième vague de fruits (la plante s'arrête après la première floraison)
+      - Sol trop humide en cours de maturation (favorise la pourriture en production groupée)
+  en:
+    nom_commun: Roma tomato
+    description: >
+      Compact determinate variety (70–100 cm) producing oval 'plum' fruits
+      (80–100 g), red, thick-fleshed, very low in water and seeds. Fruits
+      ripen in one concentrated burst — ideal for mass canning and sauce.
+
+cycle:
+  type: annuelle
+  duree_avant_recolte_jours: [65, 75]
+  hauteur_adulte_cm: [70, 100]
+  espacement_cm: 50
+  culture_verticale: false
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Température ambiante ; fermeté excellente, longue conservation", en: "Room temperature; excellent firmness, long shelf life" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Bocaux stérilisés (coulis, pelées entières, sauce tomate)", en: "Sterilised jars (coulis, whole peeled, tomato sauce)" }
+  - methode: sechage
+    duree_mois: 18
+  - methode: congelation
+    duree_mois: 10
+utilisations_culinaires_i18n:
+  fr: [Sauce tomate, coulis, conserves pelées, ketchup maison, pizza, tomates séchées]
+  en: [Tomato sauce, coulis, canned peeled, homemade ketchup, pizza, sun-dried]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+  - https://www.gbif.org/species/2927834
+contributeurs:
+  - "@potagerer"

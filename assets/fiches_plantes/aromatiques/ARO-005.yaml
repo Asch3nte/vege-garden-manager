@@ -1,0 +1,124 @@
+# Fiche mère (espèce) — Menthe poivrée.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: ARO-005
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Mentha piperita
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Menthe poivrée
+    noms_alternatifs: [Menthe anglaise, Peppermint]
+    description: >
+      Hybride naturel vivace entre la menthe aquatique et la menthe verte
+      (Mentha × piperita), aux feuilles ovales vert foncé à reflets violacés,
+      dégageant un puissant arôme mentholé froid. Rhizomateuse et envahissante
+      si non contenue. Très facile à cultiver, tolère la mi-ombre et les sols
+      frais, voire humides. Propriétés digestives reconnues en phytothérapie.
+    conseils_culture: >
+      Planter en pot ou délimiter la zone de plantation avec une barrière
+      enfoncée à 30 cm pour maîtriser l'expansion des rhizomes. Préfère un
+      sol frais et légèrement ombragé. Arroser régulièrement. Couper les tiges
+      florales pour prolonger la production de feuilles. Diviser les touffes
+      tous les 2–3 ans.
+    conseils_recolte: >
+      Couper les tiges à 5 cm du sol dès qu'elles atteignent 20 cm. La repousse
+      est rapide. Récolter avant floraison pour un taux de menthol maximal.
+      On peut réaliser 2 à 3 coupes par saison.
+    erreurs_frequentes:
+      - Ne pas contenir les rhizomes (colonise toute la planche en une saison)
+      - Sol trop sec (feuilles petites et arôme réduit)
+      - Laisser fleurir sans tailler (la plante s'épuise et le menthol diminue)
+  en:
+    nom_commun: Peppermint
+    noms_alternatifs: [English mint]
+    description: >
+      Natural hybrid perennial (Mentha × piperita) with strongly menthol-scented
+      leaves. Rhizomatous and spreading — plant in containers or with a root
+      barrier. Easy to grow, tolerates semi-shade and moist soils.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 15
+  temperature_optimale: 18
+  temperature_min_survie: -20
+  gele_fatal: false
+
+cycle:
+  type: vivace
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [40, 90]
+  espacement_cm: 40
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 5]
+      recolte: [5, 10]
+    continental:
+      plantation: [4, 5]
+      recolte: [5, 10]
+    mediterraneen:
+      plantation: [3, 5]
+      recolte: [4, 11]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [11, 4]
+
+associations:
+  beneficies:
+    - id: LEG-001
+      raison_i18n: { fr: "Repousse les pucerons et acariens autour des tomates", en: "Repels aphids and mites around tomatoes" }
+    - id: LEG-007
+      raison_i18n: { fr: "Éloigne les papillons blancs des choux plantée en bordure", en: "Deters cabbage white butterflies when planted as a border" }
+  defavorables:
+    - id: ARO-001
+      raison_i18n: { fr: "Concurrence hydrique si plantée trop près — tenir à distance", en: "Water competition if planted too close — keep at distance" }
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Tiges dans un verre d'eau à température ambiante ou réfrigérateur (max 5 jours)", en: "Stems in a glass of water at room temperature or in fridge (max 5 days)" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Bouquets séchés à l'ombre, conservation d'un arôme correct", en: "Dried in bunches in the shade, reasonably good flavour preserved" }
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Tisane, mojito, sirop de menthe, taboulé, sauce menthe, sorbet, chocolat, confiserie]
+  en: [Herbal tea, mojito, mint syrup, tabbouleh, mint sauce, sorbet, chocolate, confectionery]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Menthe_poivrée
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,64 @@
+# Fiche fille (variété) — Framboisier Heritage. Hérite de PFR-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: PFR-002-V001
+parent_id: PFR-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Rubus idaeus 'Heritage'"
+
+i18n:
+  fr:
+    nom_commun: Framboisier Heritage
+    noms_alternatifs: [Heritage remontant, Heritage autumn-fruiting]
+    description: >
+      Variété américaine remontante (Cornell University, 1969) offrant deux
+      récoltes annuelles : une récolte estivale en juillet et une récolte
+      automnale de septembre à mi-octobre. Fruits rouge foncé, fermes, de
+      bonne taille (3–5 g), saveur légèrement acidulée et aromatique. Port
+      dressé, très productif. Résistante aux maladies et à la sécheresse.
+    conseils_culture: >
+      Même conduite que les framboisiers non-remontants mais taille différente :
+      pour optimiser la récolte automnale, couper toutes les cannes à ras du
+      sol en mars (taille sévère). On sacrifie la récolte estivale mais la
+      récolte d'automne est très abondante. Pour deux récoltes, laisser les
+      cannes de 2 ans et ne couper qu'après la récolte estivale.
+    conseils_recolte: >
+      Récolter la première vague en juillet (cannes de 2 ans), la deuxième
+      en septembre-octobre (extrémités des nouvelles cannes). La récolte
+      automnale est souvent plus sucrée.
+    erreurs_frequentes:
+      - Taille inadaptée (confondre les stratégies de taille remontant vs. non-remontant)
+  en:
+    nom_commun: Heritage raspberry
+    description: >
+      American everbearing variety (Cornell 1969) with two crops: summer
+      (July) and autumn (September–October). Dark red, firm, aromatic berries.
+      Upright habit, very productive and disease-resistant.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [7, 10]
+    continental:
+      plantation: [3, 4]
+      recolte: [7, 10]
+    mediterraneen:
+      plantation: [2, 3]
+      recolte: [6, 11]
+
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Légèrement plus ferme que la moyenne — 3 jours au réfrigérateur", en: "Slightly firmer than average — 3 days refrigerated" }
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crue, confiture, coulis, tarte, sorbet, liqueur, vinaigre framboises]
+  en: [Fresh, jam, coulis, tart, sorbet, liqueur, raspberry vinegar]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Framboisier
+contributeurs:
+  - "@potagerer"

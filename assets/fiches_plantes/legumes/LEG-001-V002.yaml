@@ -1,0 +1,64 @@
+# Fiche fille (variété) — Tomate Cerise. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V002
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum var. cerasiforme"
+
+i18n:
+  fr:
+    nom_commun: Tomate Cerise
+    noms_alternatifs: [Cherry tomato, Tomate groseille]
+    description: >
+      Variété à très petits fruits (10–30 g) en grappes abondantes, ronds ou
+      allongés, rouges, jaunes ou bicolores selon le cultivar. Chair sucrée,
+      peau fine, saveur fruitée plus prononcée que les grosses tomates. Très
+      productif et rustique, souvent plus tolérant aux aléas climatiques. Port
+      indéterminé vigoreux pouvant dépasser 2 m, ou déterminé/nain selon le
+      cultivar (adapté en pot).
+    conseils_culture: >
+      Excellent candidat pour la culture en pot ou en suspension. Le port
+      indéterminé nécessite un tuteurage solide et un pinçage régulier des
+      gourmands. Les cultivars nains (ex. Tumbling Tom) peuvent être cultivés
+      sans tuteur. Arroser régulièrement pour éviter l'éclatement des fruits,
+      fréquent en cas d'irrégularité hydrique.
+    conseils_recolte: >
+      Récolter les grappes entières ou fruit par fruit dès que la couleur est
+      uniforme. Les fruits se détachent facilement à maturité. Ne pas attendre
+      la sur-maturité : la peau fine éclate rapidement. Plusieurs récoltes par
+      semaine en pleine production.
+    erreurs_frequentes:
+      - Arrosage irrégulier (cause l'éclatement des fruits à peau fine)
+      - Oublier de pincer les gourmands (perte de productivité sur les variétés indéterminées)
+      - Surcharge de fruits sur un seul tuteur (branches cassantes)
+  en:
+    nom_commun: Cherry Tomato
+    description: >
+      Small-fruited tomato variety (10–30 g) producing abundant clusters of
+      round or elongated fruits. Very sweet, thin skin, intensely fruity flavour.
+      Vigorous indeterminate growth, or compact/dwarf in some cultivars.
+
+cycle:
+  hauteur_adulte_cm: [80, 220]
+  espacement_cm: 50
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, hors réfrigérateur pour préserver l'arôme", en: "Room temperature, not refrigerated to preserve flavour" }
+  - methode: congelation
+    duree_mois: 6
+    conditions_i18n: { fr: "Entières, lavées et séchées sur plateau avant mise en sachet", en: "Whole, washed and dried on tray before bagging" }
+  - methode: conserves
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crudités et salades, brochettes, pizza, tarte, confites au four, séchées, coulis]
+  en: [Crudités and salads, skewers, pizza, tarts, oven-confit, dried, coulis]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate_cerise
+  - https://www.gbif.org/species/2927834
+contributeurs:
+  - "@potagerer"

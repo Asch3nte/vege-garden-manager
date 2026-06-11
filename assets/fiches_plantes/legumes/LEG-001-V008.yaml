@@ -1,0 +1,63 @@
+# Fiche fille (variété) — Tomate Rose de Berne. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V008
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Rose de Berne'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Rose de Berne
+    noms_alternatifs: [Tomate rose suisse, Berner Rose]
+    description: >
+      Variété ancienne suisse (région de Berne) à fruits ronds légèrement
+      aplatis, parfois côtelés (150–250 g), couleur rose à rouge-rose. Chair
+      épaisse et charnue, très juteuse, peu acide, saveur douce et aromatique
+      particulièrement appréciée. Port indéterminé (150–200 cm). Bonne
+      résistance relative au mildiou pour une variété ancienne.
+    conseils_culture: >
+      Tolère bien les climats frais et humides, particulièrement adaptée aux
+      régions océaniques et montagnardes. Préférer la culture sous serre ou
+      sous protection en régions à étés froids. La peau fine est sensible à
+      l'éclatement lors d'arrosages irréguliers ou après de fortes pluies :
+      pailler et maintenir un arrosage constant. Tuteurage indispensable.
+    conseils_recolte: >
+      Récolter à mi-saison (65–80 jours après plantation), quand le fruit est
+      rose uniforme, légèrement souple. La peau fine se fissure facilement à
+      sur-maturité : mieux vaut récolter légèrement avant pleine maturité par
+      temps humide.
+    erreurs_frequentes:
+      - Arrosage irrégulier (éclatement fréquent, peau fine)
+      - Attendre une couleur rouge profonde (la variété reste rose-rouge à maturité)
+      - Pas de tuteurage (plants très vigoureux)
+  en:
+    nom_commun: Rose de Berne Tomato
+    description: >
+      Old Swiss heirloom from the Berne region, round slightly flattened
+      fruits (150–250 g), pink to pink-red. Thick and juicy flesh, low acid,
+      exceptionally sweet and aromatic flavour.
+
+cycle:
+  duree_avant_recolte_jours: [65, 80]
+  hauteur_adulte_cm: [150, 200]
+  espacement_cm: 70
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante ; peau fine, fragile", en: "Room temperature; thin, fragile skin" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, tranche sur tartine, sauce douce, velouté, jus de tomate]
+  en: [Raw in salads, sliced on toast, mild sauce, velouté soup, tomato juice]
+
+sources:
+  - https://jardinage.pagesjaunes.fr/astuce/voir/659543/tomate-rose-de-berne
+  - https://www.lamaisondubananier.com/potager-saisonnier/1274-tomate-rose-de-berne-.html
+contributeurs:
+  - "@potagerer"

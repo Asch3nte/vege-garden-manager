@@ -1,0 +1,131 @@
+# Fiche mère (espèce) — Fraisier.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: PFR-001
+version_fiche: 1
+categorie: petit_fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Fragaria × ananassa
+famille_botanique: Rosaceae
+
+i18n:
+  fr:
+    nom_commun: Fraisier
+    noms_alternatifs: [Fraisier cultivé, Fraisier hybride, Fraise des jardins]
+    description: >
+      Plante vivace rampante de la famille des Rosacées, cultivée pour ses
+      fruits rouges juteux (fraises). Hybride créé au XVIIIe siècle entre
+      Fragaria chiloensis (Amérique du Sud) et Fragaria virginiana (Amérique
+      du Nord). Extrêmement diversifiée : variétés non-remontantes (une récolte
+      en juin-juillet), remontantes (deux récoltes : juin et septembre-octobre)
+      et « perpetuelles » (récolte continue). Se multiplie naturellement par
+      stolons (tiges rampantes).
+    conseils_culture: >
+      Planter en sol riche, légèrement acide, bien drainé, en plein soleil.
+      Espacer de 30–40 cm. Pailler le sol au printemps pour garder les fruits
+      propres et l'humidité. Retirer les stolons si l'on souhaite maximiser la
+      production des plants existants. Renouveler les plants tous les 3–4 ans
+      (déclin de la productivité passé ce stade).
+    conseils_recolte: >
+      Récolter à pleine maturité : la fraise doit être uniformément rouge et
+      dégager son parfum caractéristique. Cueillir le matin, par temps sec.
+      La fraise ne continue pas à mûrir après la cueillette.
+    erreurs_frequentes:
+      - Sol trop calcaire (chlorose, plants chétifs)
+      - Ne pas renouveler les plants après 3–4 ans (chute de productivité)
+      - Récolter trop tôt (fruit blanc au cœur, sans saveur)
+  en:
+    nom_commun: Strawberry
+    noms_alternatifs: [Garden strawberry, Cultivated strawberry]
+    description: >
+      Perennial rosaceous plant cultivated for its red juicy fruits. 18th-century
+      hybrid between two American Fragaria species. Spreads by runners (stolons).
+      Varieties include June-bearing, everbearing, and day-neutral types.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+    - leger
+  ph_min: 5.5
+  ph_max: 6.5
+  temperature_min_germination: 18
+  temperature_optimale: 18
+  temperature_min_survie: -25
+  gele_fatal: false
+
+cycle:
+  type: vivace
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [15, 30]
+  espacement_cm: 35
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [5, 7]
+    continental:
+      plantation: [3, 4]
+      recolte: [6, 7]
+    mediterraneen:
+      plantation: [2, 3]
+      recolte: [4, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [11, 1]
+
+associations:
+  beneficies:
+    - id: LEG-016
+      raison_i18n: { fr: "L'oignon repousse les limaces et champignons autour des fraisiers", en: "Onion repels slugs and fungi around strawberries" }
+    - id: LEG-014
+      raison_i18n: { fr: "La laitue en sous-couvert conserve l'humidité du sol", en: "Lettuce as groundcover keeps soil moisture" }
+    - id: ARO-001
+      raison_i18n: { fr: "Le basilic améliore la saveur et repousse les parasites", en: "Basil improves flavour and repels pests" }
+  defavorables:
+    - id: LEG-006
+      raison_i18n: { fr: "Les choux concurrencent les fraisiers et partagent certains champignons", en: "Cabbages compete with strawberries and share some fungi" }
+
+rotation:
+  famille: rosaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, ail]
+  precedents_defavorables: [rosaceae, solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Réfrigérateur, non lavée — à consommer rapidement", en: "Refrigerator, unwashed — consume quickly" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Entières ou en tranches sur plateau, puis en sachet — garder le cœur parfumé", en: "Whole or sliced on tray, then in bag — preserves the fragrance" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, sirop, coulis ou fraises au sucre", en: "Jam, syrup, coulis or sugared strawberries" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, confiture, tarte, charlotte, smoothie, sorbet, coulis, sirop, salade de fruits]
+  en: [Fresh, jam, tart, charlotte, smoothie, sorbet, coulis, syrup, fruit salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Fraisier_cultivé
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

@@ -13,14 +13,30 @@ import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
+import 'package:pot_a_gerer/domain/entities/parcelle.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
+import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/application/state/saison_notifier.dart';
 import 'package:pot_a_gerer/application/state/saison_vue.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_calendrier.dart';
 
 class MockTaches extends Mock implements AbstractTacheRepository {}
+
+class MockParcelles extends Mock implements AbstractParcelleRepository {}
+
+class MockPlantations extends Mock implements AbstractPlantationRepository {}
+
+class MockPotagers extends Mock implements AbstractPotagerRepository {}
+
+class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
 class _FakeTache extends Fake implements Tache {}
 
@@ -46,8 +62,45 @@ void main() {
   final maintenant = DateTime(2026, 6, 8, 8, 24); // Monday 8 June 2026
 
   late MockTaches taches;
+  late MockParcelles parcelles;
+  late MockPlantations plantations;
+  late MockPotagers potagers;
+  late MockFiches fiches;
 
-  setUp(() => taches = MockTaches());
+  setUp(() {
+    taches = MockTaches();
+    parcelles = MockParcelles();
+    plantations = MockPlantations();
+    potagers = MockPotagers();
+    fiches = MockFiches();
+    when(() => plantations.obtenirParId(any())).thenAnswer((_) async => null);
+    when(() => fiches.obtenirParId(any())).thenAnswer((_) async => null);
+    when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
+    // The zone 'z-1' used by the sample tasks resolves to a named bed.
+    when(() => parcelles.obtenirParId('z-1')).thenAnswer(
+      (_) async => Parcelle(
+        id: 'z-1',
+        nom: 'Carré nord',
+        potagerId: 'pot-1',
+        type: TypeParcelle.bacSureleve,
+        surface: Surface.enMetresCarres(2),
+        exposition: NiveauSoleil.pleinSoleil,
+      ),
+    );
+    when(() => parcelles.obtenirParId(any(that: isNot('z-1'))))
+        .thenAnswer((_) async => null);
+  });
+
+  /// Repository overrides shared by every mounted scope so the calendar's
+  /// target-name resolution has its repos.
+  reposOverrides() => [
+        tacheRepositoryProvider.overrideWithValue(taches),
+        parcelleRepositoryProvider.overrideWithValue(parcelles),
+        plantationRepositoryProvider.overrideWithValue(plantations),
+        potagerRepositoryProvider.overrideWithValue(potagers),
+        fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+        horlogeProvider.overrideWithValue(() => maintenant),
+      ];
 
   Tache uneTache(String id, String titre, DateTime quand, {bool faite = false}) =>
       Tache(
@@ -64,10 +117,7 @@ void main() {
   Future<void> monter(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          tacheRepositoryProvider.overrideWithValue(taches),
-          horlogeProvider.overrideWithValue(() => maintenant),
-        ],
+        overrides: reposOverrides(),
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -93,6 +143,8 @@ void main() {
     expect(find.text('Demain'), findsOneWidget);
     expect(find.text('Arroser les tomates'), findsOneWidget);
     expect(find.text('Tuteurer les haricots'), findsOneWidget);
+    // Each card resolves its target (zone 'z-1') to its real name.
+    expect(find.text('Carré nord'), findsNWidgets(2));
   });
 
   testWidgets('tapping a task ticks it off (persisted)', (tester) async {
@@ -187,8 +239,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          tacheRepositoryProvider.overrideWithValue(taches),
-          horlogeProvider.overrideWithValue(() => maintenant),
+          ...reposOverrides(),
           saisonProvider.overrideWith(_FakeSaison.new),
         ],
         child: MaterialApp(

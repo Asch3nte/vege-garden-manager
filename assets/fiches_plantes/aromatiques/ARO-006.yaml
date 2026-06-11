@@ -1,0 +1,129 @@
+# Fiche mère (espèce) — Coriandre.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: ARO-006
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 2
+usages:
+  - condimentaire
+  - alimentaire
+
+rusticite:
+  zone_min: zone10
+
+nom_scientifique: Coriandrum sativum
+famille_botanique: Apiaceae
+
+i18n:
+  fr:
+    nom_commun: Coriandre
+    noms_alternatifs: [Coriandre cultivée, Persil arabe, Cilantro]
+    description: >
+      Plante herbacée annuelle de la famille des Apiacées, cultivée pour ses
+      feuilles aromatiques (usage frais) et ses graines séchées (usage comme
+      épice). Arôme puissant et caractéristique — apprécié en cuisine
+      asiatique, mexicaine et méditerranéenne. Tendance à monter en graines
+      (bolting) très rapidement par temps chaud, ce qui nécessite des semis
+      successifs. Les graines constituent une épice à part entière.
+    conseils_culture: >
+      Semer directement en place toutes les 3–4 semaines pour assurer une
+      production continue. Éviter de transplanter (pivotante, sensible au
+      repiquage). Arroser régulièrement pour retarder la montée en graines.
+      Préférer une exposition mi-ombragée en été chaud. Récolter graines et
+      feuilles sont deux utilisations distinctes.
+    conseils_recolte: >
+      Récolter les feuilles dès que la plante atteint 15–20 cm, avant la
+      montée en fleurs. Pour les graines, laisser monter à floraison et
+      récolter les ombelles quand les graines brunissent (juillet–août).
+      Faire sécher les ombelles têtes en bas sur papier.
+    erreurs_frequentes:
+      - Transplantation (racine pivotante — semer uniquement en place)
+      - Un seul semis (montée en graines rapide, production feuilles interrompue)
+      - Sol trop pauvre ou trop sec (montée en graines encore plus rapide)
+  en:
+    nom_commun: Coriander
+    noms_alternatifs: [Cilantro, Chinese parsley]
+    description: >
+      Annual herb of the Apiaceae family cultivated for its aromatic leaves
+      (fresh use) and dried seeds (spice). Prone to bolting in warm weather
+      — successive sowings ensure continuous leaf harvest.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - frais
+    - riche
+  ph_min: 6.2
+  ph_max: 6.8
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: 0
+  gele_fatal: true
+
+cycle:
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [30, 50]
+  hauteur_adulte_cm: [30, 70]
+  espacement_cm: 10
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 6]
+      recolte: [5, 11]
+    continental:
+      semis_exterieur: [4, 6]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [2, 5]
+      recolte: [4, 12]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 12]
+      recolte: [11, 4]
+
+associations:
+  beneficies:
+    - id: LEG-001
+      raison_i18n: { fr: "Attire les pollinisateurs à la floraison, utile en bordure de potager", en: "Attracts pollinators when flowering, useful as border plant" }
+    - id: LEG-014
+      raison_i18n: { fr: "Association favorable documentée en compagnonnage", en: "Documented favourable companion planting" }
+  defavorables: []
+
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses]
+  precedents_defavorables: [apiaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Tiges dans un verre d'eau au réfrigérateur, ou dans un linge humide", en: "Stems in water in the fridge, or in a damp cloth" }
+  - methode: congelation
+    duree_mois: 6
+    conditions_i18n: { fr: "Feuilles hachées congelées en bacs à glaçons", en: "Chopped leaves frozen in ice cube trays" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Graines séchées uniquement — les feuilles perdent leur arôme au séchage", en: "Seeds only — leaves lose their fragrance when dried" }
+utilisations_culinaires_i18n:
+  fr: [Guacamole, curry, coriandre fraîche (cuisine asiatique), tacos, salsa, houmous, épice (graines moulues)]
+  en: [Guacamole, curry, fresh herb (Asian cuisine), tacos, salsa, hummus, spice (ground seeds)]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Coriandre
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

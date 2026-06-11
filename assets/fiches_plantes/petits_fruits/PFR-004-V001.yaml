@@ -1,0 +1,52 @@
+# Fiche fille (variété) — Cassis Noir de Bourgogne. Hérite de PFR-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: PFR-004-V001
+parent_id: PFR-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Ribes nigrum 'Noir de Bourgogne'"
+
+i18n:
+  fr:
+    nom_commun: Cassis Noir de Bourgogne
+    noms_alternatifs: [Cassis de Bourgogne, Cassis Dijonnais]
+    description: >
+      Variété ancienne française de Bourgogne, à très haute teneur en
+      anthocyanes et en huiles essentielles. Fruits noirissimes, très
+      parfumés, légèrement plus petits que les variétés modernes mais d'une
+      concentration aromatique incomparable. Référence absolue pour la
+      production de crème de cassis de Dijon (IGP). Bonne résistance au
+      gel printanier. Arbuste vigoureux et productif.
+    conseils_culture: >
+      Variété traditionnelle bien adaptée aux hivers bourguignons. Moins
+      productive que certaines variétés modernes mais qualité aromatique
+      supérieure. Sol humifère préféré. Taille annuelle hivernale indispensable.
+    conseils_recolte: >
+      Attendre la pleine maturité (baies bien noires, légèrement molles) pour
+      un arôme et une teneur en anthocyanes maximaux. Récolte en grappes.
+    erreurs_frequentes:
+      - Récolter trop tôt (baies sans arôme si encore fermes)
+  en:
+    nom_commun: Noir de Bourgogne blackcurrant
+    description: >
+      Old French Burgundy variety with exceptionally aromatic, very dark
+      berries. Lower yield than modern varieties but unmatched flavour
+      concentration. Reference for traditional Dijon crème de cassis (IGP).
+
+conservation:
+  - methode: conserves
+    duree_mois: 36
+    conditions_i18n: { fr: "Crème de cassis artisanale (IGP Dijon) — arôme exceptionnel", en: "Artisanal crème de cassis (Dijon IGP) — exceptional flavour" }
+  - methode: frais
+    duree_jours: 5
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crème de cassis IGP, kir royal, confiture, sorbet, sirop artisanal, cassolette]
+  en: [IGP crème de cassis, kir royal, jam, sorbet, artisanal syrup, casserole sauce]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cassis_(plante)
+contributeurs:
+  - "@potagerer"

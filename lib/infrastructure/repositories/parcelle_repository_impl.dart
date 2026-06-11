@@ -4,12 +4,14 @@ import '../../domain/entities/parcelle.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../database/app_database.dart';
 import '../mappers/parcelle_mapper.dart';
+import 'suppression_cascade.dart';
 
 /// drift-backed implementation of [AbstractParcelleRepository].
 ///
 /// Reads filter out soft-deleted rows. [supprimer] is a **soft delete** with a
-/// **logical cascade**: the parcelle's plantations (and their harvests) and its
-/// equipments are soft-deleted in the same transaction.
+/// **logical cascade**: the parcelle's plantations (and their harvests), its
+/// equipments and the planning rows (tasks, reminders, observations) targeting
+/// the parcelle or any of those are soft-deleted in the same transaction.
 class ParcelleRepositoryImpl implements AbstractParcelleRepository {
   final AppDatabase _db;
   final ParcelleMapper _mapper = const ParcelleMapper();
@@ -49,6 +51,18 @@ class ParcelleRepositoryImpl implements AbstractParcelleRepository {
             ..where(_db.plantations.parcelleId.equals(id)))
           .map((r) => r.read(_db.plantations.id)!)
           .get();
+      final equipementIds = await (_db.selectOnly(_db.equipements)
+            ..addColumns([_db.equipements.id])
+            ..where(_db.equipements.parcelleId.equals(id)))
+          .map((r) => r.read(_db.equipements.id)!)
+          .get();
+
+      // Tasks/reminders/observations targeting this parcelle, its plantations or
+      // its equipements — so deleting a zone never orphans them.
+      await soustraireLignesDePlanification(_db, maintenant,
+          parcelleIds: [id],
+          plantationIds: plantationIds,
+          equipementIds: equipementIds);
 
       if (plantationIds.isNotEmpty) {
         await (_db.update(_db.recoltes)

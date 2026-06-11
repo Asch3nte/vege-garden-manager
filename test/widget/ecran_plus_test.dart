@@ -129,8 +129,8 @@ void main() {
     await tester.tap(find.text('Confidentialité & opt-outs'));
     await tester.pumpAndSettle();
 
-    // Default is "Désactivée"; tapping the row cycles to "Manuelle".
-    expect(find.text('Désactivée'), findsOneWidget);
+    // Default is "Aucune" (off); tapping the row cycles to "Région" (manual).
+    expect(find.text('Aucune'), findsOneWidget);
     await tester.tap(find.text('Géolocalisation'));
     await tester.pumpAndSettle();
 
@@ -177,6 +177,38 @@ void main() {
     final potager =
         verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;
     expect(potager.localisation.estDefinie, isTrue);
+  });
+
+  testWidgets('privacy panel edits the active garden climate', (tester) async {
+    when(() => potagers.obtenirPotagerActif()).thenAnswer(
+      (_) async => Potager(
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+      ),
+    );
+    when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+
+    await monter(tester);
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    // The climate row shows the current value (even with geoloc off).
+    expect(find.text('Océanique'), findsOneWidget);
+
+    // Tapping opens the descriptive picker; choosing another climate persists it.
+    await tester.tap(find.text('Climat'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Méditerranéen'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;
+    expect(potager.zoneClimatique.type, TypeClimat.mediterraneen);
+    expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone8); // preserved
   });
 
   testWidgets('notifications master gates the categories', (tester) async {

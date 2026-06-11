@@ -1,0 +1,58 @@
+# Fiche fille (variété) — Myrtille Bluecrop. Hérite de PFR-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: PFR-005-V001
+parent_id: PFR-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Vaccinium corymbosum 'Bluecrop'"
+
+i18n:
+  fr:
+    nom_commun: Myrtille Bluecrop
+    noms_alternatifs: [Bleuet Bluecrop, Bluecrop highbush]
+    description: >
+      Variété américaine de référence mondiale (Rutgers University, 1952),
+      la plus cultivée commercialement en France et en Europe. Gros fruits
+      (diamètre 15–20 mm), bleu ciel, légèrement acidulés, à la saveur
+      équilibrée et sucrée. Port buissonnant dressé de 1,5 à 2 m. Mi-saison
+      (août). Partiellement autofertile mais plus productive avec pollinisation
+      croisée (associer avec Duke, Patriot ou Bluejay). Résistante à la
+      sécheresse et aux maladies. Coloris automnaux spectaculaires (rouge-orangé).
+    conseils_culture: >
+      Sol très acide indispensable (pH 4,5–5,0). Associer avec au moins une
+      autre variété (Duke : précoce, Bluejay : tardive) pour des récoltes
+      étalées. La Bluecrop est la variété de référence pour les jardiniers
+      débutants avec la myrtille, grâce à sa robustesse.
+    conseils_recolte: >
+      Récolter 5 à 7 jours après le virage au bleu profond — attendre la
+      pleine maturité. La baie doit se détacher sans tirer. Plusieurs passages
+      nécessaires car les baies d'une même grappe ne mûrissent pas en même temps.
+    erreurs_frequentes:
+      - Planter seule sans une autre variété (production décevante)
+      - Récolter au virage (manque de sucre et de saveur)
+  en:
+    nom_commun: Bluecrop blueberry
+    description: >
+      World reference variety (Rutgers 1952), most widely cultivated in France.
+      Large (15–20 mm), pale blue, balanced sweet-tart berries. Upright bush
+      (1.5–2 m). Mid-season (August). Partially self-fertile but better
+      cross-pollinated. Robust, disease-resistant.
+
+cycle:
+  hauteur_adulte_cm: [150, 200]
+
+conservation:
+  - methode: frais
+    duree_jours: 14
+    conditions_i18n: { fr: "Réfrigérateur, non lavée — excellente conservation parmi les myrtilles", en: "Refrigerator, unwashed — excellent shelf life among blueberries" }
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crue, muffins, tarte, crumble, porridge, smoothie, confiture, sirop de myrtille]
+  en: [Fresh, muffins, tart, crumble, porridge, smoothie, jam, blueberry syrup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vaccinium_corymbosum
+contributeurs:
+  - "@potagerer"

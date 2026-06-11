@@ -208,7 +208,7 @@ class _Contenu extends ConsumerWidget {
         const SizedBox(height: EspacementsApp.s3),
         PlanPotager(
           zones: vue.zones,
-          onZoneTap: (id) => context.push(RoutesApp.zoneDetail(id)),
+          onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
         ),
         const SizedBox(height: EspacementsApp.s4),
         const _Legende(),

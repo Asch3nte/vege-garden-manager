@@ -1,0 +1,62 @@
+# Fiche fille (variété) — Tomate Montfavet. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V009
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Montfavet 63/5'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Montfavet
+    noms_alternatifs: [Montfavet 63/5, Montfavet F1]
+    description: >
+      Variété hybride française (obtention INRA Montfavet, Avignon, 1973) à
+      fruits ronds et lisses, calibre moyen (120 g), chair ferme, juteuse et
+      de bonne qualité gustative. Port indéterminé, très productif. Précocité
+      moyenne, bonne résistance à l'éclatement et aux maladies (Verticillium,
+      Fusarium). Variété de référence du maraîchage français des années 1970–1990.
+    conseils_culture: >
+      Sol humifère légèrement humide ; éviter les terrains trop riches en azote
+      (diminue la saveur). Espacement 80 cm en tous sens. Tuteurage et
+      pincement des gourmands pour optimiser le rendement. Arroser
+      régulièrement sans excès. Adaptation à la culture sous serre ou en plein
+      air selon le climat.
+    conseils_recolte: >
+      Récolter à calibre et couleur uniformes (rouge vif). La fermeté des fruits
+      permet une bonne conservation post-récolte et facilite le transport.
+      Production régulière tout au long de la saison.
+    erreurs_frequentes:
+      - Sol trop azoté (beaux plants, peu de fruits)
+      - Espacement insuffisant (réduction du rendement et de la ventilation)
+      - Confusion avec des variétés hybrides F1 modernes (la Montfavet originale est à pollinisation libre)
+  en:
+    nom_commun: Montfavet Tomato
+    description: >
+      French hybrid tomato (INRA Montfavet, Avignon, 1973) with round, smooth
+      fruits (120 g), firm and juicy flesh of good flavour. Indeterminate,
+      highly productive. Good crack resistance and disease tolerance.
+
+cycle:
+  duree_avant_recolte_jours: [70, 85]
+  hauteur_adulte_cm: [120, 180]
+  espacement_cm: 80
+
+conservation:
+  - methode: frais
+    duree_jours: 8
+    conditions_i18n: { fr: "Température ambiante ; bonne fermeté, tenue supérieure à la moyenne", en: "Room temperature; firm flesh, above-average shelf life" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Salade, sauce tomate, coulis, conserves, soupe, farcies]
+  en: [Salad, tomato sauce, coulis, canning, soup, stuffed]
+
+sources:
+  - https://www.jardipedia.com/tomate-montfavet-origine/
+  - https://www.graines-baumaux.fr/170275-tomate-f1-montfavet-63-5.html
+contributeurs:
+  - "@potagerer"

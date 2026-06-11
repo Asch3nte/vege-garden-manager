@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
@@ -100,5 +101,64 @@ void main() {
         .getSingle();
     expect(pl.deletedAt, isNotNull);
     expect(rec.deletedAt, isNotNull);
+  });
+
+  test('supprimer cascades to planning rows of the parcelle and its children',
+      () async {
+    await repo.sauvegarder(parcelle(id: 'par1'));
+    await repo.sauvegarder(parcelle(id: 'par2')); // control parcelle
+    await db.into(db.plantations).insert(PlantationsCompanion.insert(
+          id: 'pl1',
+          parcelleId: 'par1',
+          planteId: 'tomate',
+          dateMiseEnPlace: now,
+          methode: 'repiquage',
+          surfaceOccupeeValeur: 1,
+          nombrePieds: 2,
+          createdAt: now,
+          updatedAt: now,
+        ));
+    await db.into(db.equipements).insert(EquipementsCompanion.insert(
+          id: 'eq1',
+          nom: 'Tuteur',
+          potagerId: 'pot1',
+          type: 'tuteur',
+          dateInstallation: now,
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          parcelleId: const Value('par1'),
+        ));
+
+    Future<void> tache(String id, TachesCompanion cible) =>
+        db.into(db.taches).insert(TachesCompanion.insert(
+              id: id,
+              titre: 'Tâche',
+              type: 'arrosage',
+              datePrevue: now,
+              dateCreation: now,
+              createdAt: now,
+              updatedAt: now,
+              parcelleId: cible.parcelleId,
+              plantationId: cible.plantationId,
+              equipementId: cible.equipementId,
+            ));
+    await tache('t_par', const TachesCompanion(parcelleId: Value('par1')));
+    await tache('t_pla', const TachesCompanion(plantationId: Value('pl1')));
+    await tache('t_eq', const TachesCompanion(equipementId: Value('eq1')));
+    await tache('t_other', const TachesCompanion(parcelleId: Value('par2')));
+
+    await repo.supprimer('par1');
+
+    Future<String?> deletedAtTache(String id) async => (await (db.select(
+                db.taches)
+            ..where((t) => t.id.equals(id)))
+        .getSingle())
+        .deletedAt;
+
+    for (final id in ['t_par', 't_pla', 't_eq']) {
+      expect(await deletedAtTache(id), isNotNull, reason: 'tache $id');
+    }
+    expect(await deletedAtTache('t_other'), isNull); // other parcelle
   });
 }

@@ -1,0 +1,64 @@
+# Fiche fille (variété) — Tomate Tigerella. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V011
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Tigerella'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Tigerella
+    noms_alternatifs: [Mr Stripey, Tomate zébrée, Tomate rayée]
+    description: >
+      Variété anglaise caractéristique à fruits sphériques de 50 à 80 g,
+      ornés de zébrures jaune-orangé sur fond rouge vif. Chair sucrée et bien
+      acidulée, à l'arôme intense. Port indéterminé très productif, à récolte
+      précoce et échelonnée sur toute la saison. Très décorative dans l'assiette
+      comme au jardin.
+    conseils_culture: >
+      Tuteurer dès la plantation. Pincer les gourmands régulièrement pour
+      maintenir un port propre et favoriser la production. Les fruits ont
+      tendance à éclater si les arrosages sont irréguliers : maintenir une
+      humidité constante du sol, facilité par le paillage.
+    conseils_recolte: >
+      Récolter dès que les fruits présentent leurs rayures bien marquées et
+      cèdent légèrement sous le doigt. La variété étant très productive, il
+      est conseillé de récolter fréquemment pour éviter la surcharge et
+      l'éclatement.
+    erreurs_frequentes:
+      - Arrosage irrégulier (cause l'éclatement fréquent sur cette variété)
+      - Laisser trop de grappes (qualité gustative diminuée par surcharge)
+      - Récolte trop tardive (la peau fine se fissure facilement)
+  en:
+    nom_commun: Tigerella tomato
+    description: >
+      English variety with distinctive orange-yellow stripes on bright red
+      50–80 g fruits. Sweet and tangy flesh, intense flavour. Indeterminate
+      and very productive with early harvest season.
+
+cycle:
+  type: annuelle
+  duree_avant_recolte_jours: [60, 75]
+  hauteur_adulte_cm: [120, 180]
+  espacement_cm: 60
+  culture_verticale: true
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante ; peau fine, consommer rapidement", en: "Room temperature; thin skin, consume quickly" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Crue en salade (décorative), tranches en garniture, coulis, tapenade colorée]
+  en: [Raw in salads (decorative), as garnish, coulis, colourful tapenade]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+  - https://www.gbif.org/species/2927834
+contributeurs:
+  - "@potagerer"

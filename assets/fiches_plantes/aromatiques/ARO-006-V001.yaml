@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Coriandre Santos. Hérite de ARO-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-006-V001
+parent_id: ARO-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Coriandrum sativum 'Santos'"
+
+i18n:
+  fr:
+    nom_commun: Coriandre Santos
+    noms_alternatifs: [Coriandre Slowbolt, Coriandre à feuilles larges]
+    description: >
+      Variété sélectionnée pour sa montée en graines tardive (bolting lent),
+      permettant une production de feuilles prolongée de 2 à 3 semaines de
+      plus que les types courants. Feuilles larges, vert foncé brillant, arôme
+      intense. Référence des maraîchers et jardiniers des régions à étés chauds.
+    conseils_culture: >
+      Même culture que la coriandre commune. Particulièrement recommandée pour
+      les régions méditerranéennes ou les étés continentaux chauds où les
+      types ordinaires montent en graines en 3–4 semaines. En échelonnant les
+      semis de Santos toutes les 3–4 semaines, on assure une récolte presque
+      continue.
+    conseils_recolte: >
+      Récolter dès 20–25 cm avant l'apparition des premières ombelles florales.
+      La variété tolère quelques jours de plus avant de perdre ses arômes.
+    erreurs_frequentes:
+      - Confondre le bolting lent avec une absence totale de montée en graines (elle monte quand même)
+  en:
+    nom_commun: Santos coriander
+    noms_alternatifs: [Slow-bolt coriander, Santos cilantro]
+    description: >
+      Variety selected for slow bolting — extends leaf harvest by 2–3 weeks
+      compared to standard types. Wide dark-green leaves with intense flavour.
+      Ideal for warm summer climates.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Coriandre
+contributeurs:
+  - "@potagerer"

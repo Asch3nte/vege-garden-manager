@@ -43,9 +43,9 @@ class EcranAccueil extends ConsumerWidget {
           onRefresh: () async => ref.invalidate(accueilProvider),
           child: _Contenu(
             vue: data,
-            // Push within the Accueil branch so the phone back button returns
-            // to the dashboard (not to the Potager plan).
-            onZoneTap: (id) => context.push(RoutesApp.accueilZoneDetail(id)),
+            // Jump to the zone detail on the Potager tab (#5); the global back
+            // stack returns straight to the dashboard.
+            onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
             onToggleTache: (t) =>
                 ref.read(accueilProvider.notifier).basculerTache(t),
           ),
@@ -250,8 +250,8 @@ class _CarteMeteo extends ConsumerWidget {
             ],
           ),
           // Position known → the card opens the hourly weather detail (a sub-
-          // route, so re-tapping Accueil pops back to the dashboard).
-          () => context.push(RoutesApp.accueilMeteo),
+          // route of Accueil; the global back stack returns to the dashboard).
+          () => context.go(RoutesApp.accueilMeteo),
         );
       },
     );

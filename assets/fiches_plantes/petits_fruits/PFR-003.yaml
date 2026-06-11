@@ -1,0 +1,120 @@
+# Fiche mère (espèce) — Groseillier rouge.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: PFR-003
+version_fiche: 1
+categorie: petit_fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Ribes rubrum
+famille_botanique: Grossulariaceae
+
+i18n:
+  fr:
+    nom_commun: Groseillier rouge
+    noms_alternatifs: [Groseillier à grappes, Groseillier commun]
+    description: >
+      Arbuste fruitier vivace de la famille des Grossulariacées, produisant
+      des grappes de petites baies rouge vif acidulées à la fin du printemps.
+      Extrêmement rustique (–25 °C), peu exigeant, il tolère la mi-ombre
+      mieux que la plupart des fruitiers. Durée de vie d'un buisson : 15 à
+      25 ans avec une taille annuelle. Existe aussi en variété blanche
+      (Ribes rubrum var. albidum) et rose.
+    conseils_culture: >
+      Planter à l'automne de préférence, en sol humifère, frais, bien drainé.
+      Exposer en plein soleil ou mi-ombre légère. Tailler chaque année en
+      hiver : supprimer les branches de plus de 4 ans et les rameaux croisés.
+      Le groseillier est très résistant aux maladies et aux ravageurs.
+      Aucun traitement généralement nécessaire.
+    conseils_recolte: >
+      Récolter les grappes entières dès que les fruits sont uniformément
+      rouges et brillants (juillet). Utiliser un peigne ou une fourchette
+      pour égrener rapidement les grappes. Consommer ou transformer dans
+      les 5–7 jours.
+    erreurs_frequentes:
+      - Négliger la taille annuelle (vieillissement du buisson, production décroissante)
+      - Plantation en sol trop sec (buisson chétif, fruits petits et peu nombreux)
+      - Confusion avec le cassis (feuilles et fruits différents, arôme très distinct)
+  en:
+    nom_commun: Red currant
+    noms_alternatifs: [Redcurrant]
+    description: >
+      Hardy deciduous fruiting shrub producing clusters of tart red berries
+      in early summer. Extremely cold-hardy (–25 °C), low-maintenance and
+      tolerant of partial shade. Productive for 15–25 years with annual pruning.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_survie: -25
+  gele_fatal: false
+
+cycle:
+  type: vivace
+  duree_avant_recolte_jours: [365, 730]
+  hauteur_adulte_cm: [100, 150]
+  espacement_cm: 120
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [6, 8]
+    continental:
+      plantation: [3, 4]
+      recolte: [7, 8]
+    mediterraneen:
+      plantation: [10, 11]
+      recolte: [5, 7]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [12, 2]
+
+associations:
+  beneficies:
+    - id: LEG-016
+      raison_i18n: { fr: "L'oignon en pied de groseillier repousse les parasites du sol", en: "Onion at the base repels soil pests" }
+  defavorables: []
+
+rotation:
+  famille: grossulariaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: faible
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, en grappes non égrenées", en: "Refrigerator, in untouched bunches" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Grappes entières ou grains égrenés sur plateau, puis en sachet", en: "Whole bunches or individual berries on tray, then bagged" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Gelée, confiture, sirop ou jus de groseille", en: "Jelly, jam, syrup or redcurrant juice" }
+utilisations_culinaires_i18n:
+  fr: [Gelée, tarte, bavarois, coulis, jus, sirop, décoration pâtisserie, vinaigre]
+  en: [Jelly, tart, bavarois, coulis, juice, syrup, pastry decoration, vinegar]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Groseillier_à_grappes
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

@@ -14,6 +14,7 @@ import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
+import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the garden form as a full-screen route and returns the saved [Potager]
@@ -217,32 +218,23 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
                 ),
               ),
             const SizedBox(height: EspacementsApp.s4),
-            DropdownButtonFormField<TypeClimat>(
-              initialValue: _climat,
-              decoration: InputDecoration(
-                labelText: l10n.formPotagerClimat,
-                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
-              ),
-              items: [
-                for (final c in TypeClimat.values)
-                  DropdownMenuItem(value: c, child: Text(l10n.climat(c))),
-              ],
-              onChanged: (v) => setState(() => _climat = v!),
+            ChampDeroulantDecrit<TypeClimat>(
+              value: _climat,
+              options: TypeClimat.values,
+              libelle: l10n.climat,
+              description: l10n.climatDescription,
+              labelText: l10n.formPotagerClimat,
+              onChanged: (v) => setState(() => _climat = v),
             ),
             const SizedBox(height: EspacementsApp.s4),
-            DropdownButtonFormField<ZoneRusticite>(
-              initialValue: _rusticite,
-              decoration: InputDecoration(
-                labelText: l10n.formPotagerRusticite,
-                helperText: l10n.formPotagerRusticiteAide,
-                helperMaxLines: 2,
-                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
-              ),
-              items: [
-                for (final z in ZoneRusticite.values)
-                  DropdownMenuItem(value: z, child: Text(l10n.rusticite(z))),
-              ],
-              onChanged: (v) => setState(() => _rusticite = v!),
+            ChampDeroulantDecrit<ZoneRusticite>(
+              value: _rusticite,
+              options: ZoneRusticite.values,
+              libelle: l10n.rusticite,
+              description: l10n.rusticiteDescription,
+              labelText: l10n.formPotagerRusticite,
+              helperText: l10n.formPotagerRusticiteAide,
+              onChanged: (v) => setState(() => _rusticite = v),
             ),
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(

@@ -34,7 +34,9 @@ class _FakePotager extends PotagerNotifier {
             type: TypeParcelle.bacSureleve,
             surfaceM2: 2,
             exposition: NiveauSoleil.pleinSoleil,
-            cultures: const [],
+            cultures: const [
+              CulturePotager(plantationId: 'pl-9', nom: 'Tomate'),
+            ],
           ),
         ],
       );
@@ -116,6 +118,28 @@ void main() {
     expect(tache.titre, 'Arroser le matin');
     expect(tache.cible, CibleTache.parcelle);
     expect(tache.cibleId, 'z-1');
+  });
+
+  testWidgets('can target a specific crop (tâche↔plantation link)',
+      (tester) async {
+    await monter(tester);
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Intitulé'), 'Tuteurer la tomate');
+    // Open the target dropdown (showing the default "whole garden") and pick
+    // the crop, listed under its zone.
+    await tester.tap(find.text('Tout le potager'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Carré nord › Tomate').last);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.cible, CibleTache.plantation);
+    expect(tache.cibleId, 'pl-9');
   });
 
   testWidgets('an empty title blocks saving', (tester) async {

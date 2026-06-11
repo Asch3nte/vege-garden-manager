@@ -15,9 +15,12 @@ import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
+import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
+import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
+import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
@@ -49,7 +52,10 @@ class MockTaches extends Mock implements AbstractTacheRepository {}
 class _FakePlantation extends Fake implements Plantation {}
 
 void main() {
-  setUpAll(() => registerFallbackValue(_FakePlantation()));
+  setUpAll(() {
+    registerFallbackValue(_FakePlantation());
+    registerFallbackValue(CibleTache.plantation);
+  });
 
   final maintenant = DateTime(2026, 6, 9, 8, 24);
 
@@ -66,6 +72,8 @@ void main() {
     fiches = MockFiches();
     taches = MockTaches();
     when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.obtenirParCible(any(), any()))
         .thenAnswer((_) async => []);
     when(() => plantations.obtenirParParcelle(any()))
         .thenAnswer((_) async => []);
@@ -178,6 +186,53 @@ void main() {
     expect(find.text('Plein soleil'), findsOneWidget);
     expect(find.text('Cultures'), findsOneWidget);
     expect(find.text('Tomate'), findsOneWidget);
+    // Derived growth stage: sown 2026-04-01, clock 2026-06-09 (69 days) for a
+    // 60-day-min crop → past the harvest window.
+    expect(find.text('Récolte'), findsOneWidget);
+  });
+
+  testWidgets('shows the next pending task of a crop (tâche↔plantation link)',
+      (tester) async {
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [
+              Plantation(
+                id: 'p-1',
+                planteId: 'tomate',
+                parcelleId: 'z-1',
+                dateMiseEnPlace: DateTime(2026, 4, 1),
+                methode: MethodeMiseEnPlace.semisDirect,
+                surfaceOccupee: Surface.enMetresCarres(0.5),
+                nombrePieds: 3,
+              ),
+            ]);
+    when(() => fiches.obtenirParId('tomate'))
+        .thenAnswer((_) async => uneFiche('tomate', 'Tomate'));
+    // Two tasks target the crop; the earliest pending one wins. A done task is
+    // ignored even though it is earlier still.
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [
+              Tache(
+                id: 't-late',
+                titre: 'Tuteurer',
+                type: TypeTache.tuteurage,
+                cible: CibleTache.plantation,
+                cibleId: 'p-1',
+                datePrevue: DateTime(2026, 6, 20),
+              ),
+              Tache(
+                id: 't-next',
+                titre: 'Arroser',
+                type: TypeTache.arrosage,
+                cible: CibleTache.plantation,
+                cibleId: 'p-1',
+                datePrevue: DateTime(2026, 6, 12),
+              ),
+            ]);
+
+    await monter(tester, 'z-1');
+
+    expect(find.text('Prochaine : Arroser · 12/06'), findsOneWidget);
+    expect(find.textContaining('Tuteurer'), findsNothing);
   });
 
   testWidgets('shows a not-found message for an unknown zone', (tester) async {
