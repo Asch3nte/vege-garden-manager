@@ -179,6 +179,30 @@
   "@zoneDetailCultures": {
     "description": "Titre de la section des cultures sur l'écran de détail d'une zone."
   },
+  "stadeLevee": "Levée",
+  "@stadeLevee": {
+    "description": "Stade de croissance : la jeune pousse vient de lever (semis)."
+  },
+  "stadeCroissance": "Croissance",
+  "@stadeCroissance": {
+    "description": "Stade de croissance : phase végétative principale."
+  },
+  "stadeMaturation": "Maturation",
+  "@stadeMaturation": {
+    "description": "Stade de croissance : la culture approche de la récolte."
+  },
+  "stadeRecolte": "Récolte",
+  "@stadeRecolte": {
+    "description": "Stade de croissance : la culture est dans (ou au-delà de) la fenêtre de récolte estimée."
+  },
+  "cultureProchaineTache": "Prochaine : {titre} · {date}",
+  "@cultureProchaineTache": {
+    "description": "Détail de zone : prochaine tâche planifiée d'une culture (intitulé + date).",
+    "placeholders": {
+      "titre": { "type": "String" },
+      "date": { "type": "String" }
+    }
+  },
   "zoneDetailIntrouvable": "Zone introuvable.",
   "@zoneDetailIntrouvable": {
     "description": "État affiché quand la zone demandée n'existe pas (ou plus)."
@@ -339,6 +363,18 @@
       "count": { "type": "int" }
     }
   },
+  "reseauZoomAvant": "Zoomer",
+  "@reseauZoomAvant": {
+    "description": "Bouton de la vue réseau : agrandir (zoom avant)."
+  },
+  "reseauZoomArriere": "Dézoomer",
+  "@reseauZoomArriere": {
+    "description": "Bouton de la vue réseau : réduire (zoom arrière)."
+  },
+  "reseauRecentrer": "Recentrer",
+  "@reseauRecentrer": {
+    "description": "Bouton de la vue réseau : recentrer et réinitialiser le zoom."
+  },
   "catalogueRecherche": "Nom, sol, exposition…",
   "@catalogueRecherche": {
     "description": "Placeholder du champ de recherche du catalogue."
@@ -417,6 +453,14 @@
   "@ficheCalendrierTitre": { "description": "Titre de la section calendrier semis/récolte de la fiche." },
   "ficheCalendrierSansContexte": "Crée un potager pour situer le calendrier de cette plante.",
   "@ficheCalendrierSansContexte": { "description": "Note quand aucun potager actif n'existe (pas de contexte climat)." },
+  "ficheVarieteChoisir": "Choisir variété…",
+  "@ficheVarieteChoisir": { "description": "Sélecteur de variété sur la fiche d'espèce, quand aucune variété n'est encore choisie ; ouvre la liste des variétés." },
+  "ficheVarieteRecherche": "Rechercher une variété",
+  "@ficheVarieteRecherche": { "description": "Texte indicatif du champ de recherche du sélecteur de variété." },
+  "ficheVarieteAucune": "Aucune variété ne correspond.",
+  "@ficheVarieteAucune": { "description": "État vide du sélecteur de variété quand la recherche ne renvoie rien." },
+  "ficheRetourEspece": "Retour à l'espèce",
+  "@ficheRetourEspece": { "description": "Infobulle du bouton retour : revenir de la variété affichée à sa fiche d'espèce mère." },
   "ficheAssociations": "Associations",
   "@ficheAssociations": { "description": "Titre de la section associations de la fiche." },
   "ficheBonsCompagnons": "Bons compagnons",
@@ -697,15 +741,23 @@
   "@confidPositionAucune": { "description": "Statut : pas de position définie." },
   "confidPositionDefinie": "Position définie",
   "@confidPositionDefinie": { "description": "Statut : position définie (sans nom de lieu)." },
-  "geolocOff": "Désactivée — météo & zone climatique saisies à la main",
+  "confidPositionDesactivee": "Aucune — la géoloc est désactivée",
+  "@confidPositionDesactivee": { "description": "Statut position quand la géoloc est désactivée." },
+  "confidClimat": "Climat",
+  "@confidClimat": { "description": "Ligne de réglage : climat du potager actif." },
+  "confidRusticite": "Zone de rusticité",
+  "@confidRusticite": { "description": "Ligne de réglage : zone de rusticité du potager actif." },
+  "confidClimatSansPotager": "Crée un potager pour régler le climat et la rusticité.",
+  "@confidClimatSansPotager": { "description": "Invite quand aucun potager actif n'existe." },
+  "geolocOff": "Aucune position — météo indisponible, climat à régler à la main",
   "@geolocOff": { "description": "Géoloc désactivée (description)." },
-  "geolocManuelle": "Ville saisie manuellement",
+  "geolocManuelle": "Région approximative — météo activée, sans GPS",
   "@geolocManuelle": { "description": "Géoloc manuelle (description)." },
-  "geolocGps": "Position GPS de l'appareil",
+  "geolocGps": "Position GPS de l'appareil — météo précise",
   "@geolocGps": { "description": "Géoloc GPS (description)." },
-  "geolocLabelOff": "Désactivée",
+  "geolocLabelOff": "Aucune",
   "@geolocLabelOff": { "description": "Géoloc : étiquette désactivée." },
-  "geolocLabelManuelle": "Manuelle",
+  "geolocLabelManuelle": "Région",
   "@geolocLabelManuelle": { "description": "Géoloc : étiquette manuelle." },
   "geolocLabelGps": "GPS",
   "@geolocLabelGps": { "description": "Géoloc : étiquette GPS." },
@@ -830,8 +882,8 @@
   "@formPlantationPlanteChoisir": { "description": "Invite de sélection de la plante." },
   "formPlantationDate": "Date de mise en place",
   "@formPlantationDate": { "description": "Champ : date de plantation/semis." },
-  "formPlantationMethode": "Méthode",
-  "@formPlantationMethode": { "description": "Champ : méthode de mise en place." },
+  "formPlantationMethode": "Type de mise en place",
+  "@formPlantationMethode": { "description": "Champ : type de mise en place (renommé depuis « Méthode » pour éviter la confusion avec les méthodes de culture)." },
   "formPlantationPieds": "Nombre de pieds",
   "@formPlantationPieds": { "description": "Champ : nombre de pieds." },
   "formPlantationSurface": "Surface occupée (m²)",
@@ -868,10 +920,36 @@
   "@climatMontagnard": { "description": "Climat : montagnard." },
   "climatPolaire": "Polaire",
   "@climatPolaire": { "description": "Climat : polaire." },
+  "climatTropicalDesc": "Chaud et humide toute l'année, sans gel.",
+  "@climatTropicalDesc": { "description": "Aide : climat tropical." },
+  "climatSubtropicalDesc": "Étés chauds, hivers doux, gelées rares.",
+  "@climatSubtropicalDesc": { "description": "Aide : climat subtropical." },
+  "climatArideDesc": "Très sec, pluies rares, fortes amplitudes.",
+  "@climatArideDesc": { "description": "Aide : climat aride." },
+  "climatSemiArideDesc": "Sec, pluies limitées et saisonnières.",
+  "@climatSemiArideDesc": { "description": "Aide : climat semi-aride." },
+  "climatMediterraneenDesc": "Étés chauds et secs, hivers doux et humides.",
+  "@climatMediterraneenDesc": { "description": "Aide : climat méditerranéen." },
+  "climatOceaniqueDesc": "Doux et humide, faibles écarts de température.",
+  "@climatOceaniqueDesc": { "description": "Aide : climat océanique." },
+  "climatContinentalDesc": "Étés chauds, hivers froids, grands écarts.",
+  "@climatContinentalDesc": { "description": "Aide : climat continental." },
+  "climatMontagnardDesc": "Frais, hivers longs et neigeux en altitude.",
+  "@climatMontagnardDesc": { "description": "Aide : climat montagnard." },
+  "climatPolaireDesc": "Très froid, saison de culture très courte.",
+  "@climatPolaireDesc": { "description": "Aide : climat polaire." },
   "rusticiteZone": "Zone {n}",
   "@rusticiteZone": {
     "description": "Étiquette d'une zone de rusticité USDA.",
     "placeholders": { "n": { "type": "int" } }
+  },
+  "rusticiteZoneDesc": "Minimales hivernales de {min} à {max} °C.",
+  "@rusticiteZoneDesc": {
+    "description": "Aide d'une zone de rusticité USDA : plage de température minimale annuelle.",
+    "placeholders": {
+      "min": { "type": "int" },
+      "max": { "type": "int" }
+    }
   },
   "typeParcellePleineTerre": "Pleine terre",
   "@typeParcellePleineTerre": { "description": "Type de parcelle : pleine terre." },
@@ -899,6 +977,18 @@
   "@methodeBouture": { "description": "Méthode : bouture." },
   "methodeDivision": "Division",
   "@methodeDivision": { "description": "Méthode : division." },
+  "methodeSemisDirectDesc": "Semer la graine directement en place, au jardin.",
+  "@methodeSemisDirectDesc": { "description": "Aide : semis direct." },
+  "methodeSemisInterieurDesc": "Semer à l'abri (maison, serre) avant de repiquer.",
+  "@methodeSemisInterieurDesc": { "description": "Aide : semis intérieur." },
+  "methodeRepiquageDesc": "Replanter un jeune plant semé par tes soins.",
+  "@methodeRepiquageDesc": { "description": "Aide : repiquage." },
+  "methodePlantAcheteDesc": "Mettre en terre un plant acheté en jardinerie.",
+  "@methodePlantAcheteDesc": { "description": "Aide : plant acheté." },
+  "methodeBoutureDesc": "Faire raciner un fragment de tige prélevé sur un pied.",
+  "@methodeBoutureDesc": { "description": "Aide : bouture." },
+  "methodeDivisionDesc": "Séparer une touffe existante en plusieurs éclats.",
+  "@methodeDivisionDesc": { "description": "Aide : division." },
   "potagerVideCta": "Crée ton premier potager pour commencer.",
   "@potagerVideCta": { "description": "Invite de l'état vide du Potager (aucun potager)." },
   "potagerCreer": "Créer un potager",

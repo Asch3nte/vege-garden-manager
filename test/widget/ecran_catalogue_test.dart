@@ -233,6 +233,80 @@ void main() {
     expect(find.text('Ajouter au potager'), findsOneWidget);
   });
 
+  testWidgets("the detail sheet switches to one of the species' varieties",
+      (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+        fiche('basilic', 'Basilic', CategoriePlante.aromatique),
+      ],
+    );
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+
+    // The switcher line shows the species; the panel shows the species' sheet.
+    expect(find.text('Choisir variété…'), findsOneWidget);
+    expect(find.text('tomate sp'), findsOneWidget);
+
+    // The picker lists only this species' varieties — not other species
+    // (variety rows carry the scientific name; the background cards do not).
+    await tester.tap(find.text('Choisir variété…'));
+    await tester.pumpAndSettle();
+    expect(find.text('tomate-v1 sp'), findsOneWidget);
+    expect(find.text('basilic sp'), findsNothing);
+
+    // Choosing the variety re-renders the whole panel for it.
+    await tester.tap(find.text('Tomate Cerise').last);
+    await tester.pumpAndSettle();
+    expect(find.text('tomate-v1 sp'), findsOneWidget);
+
+    // The back button returns to the species sheet.
+    await tester.tap(find.byTooltip("Retour à l'espèce"));
+    await tester.pumpAndSettle();
+    expect(find.text('tomate sp'), findsOneWidget);
+    expect(find.text('tomate-v1 sp'), findsNothing);
+  });
+
+  testWidgets('the OS back returns from a variety to the species sheet',
+      (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+      ],
+    );
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choisir variété…'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tomate Cerise').last);
+    await tester.pumpAndSettle();
+    expect(find.text('tomate-v1 sp'), findsOneWidget);
+
+    // The OS back gesture returns to the species without closing the sheet.
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('tomate sp'), findsOneWidget);
+    expect(find.text('Ajouter au potager'), findsOneWidget);
+  });
+
+  testWidgets('a species with no varieties shows no variety switcher',
+      (tester) async {
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Choisir variété…'), findsNothing);
+  });
+
   testWidgets('shows the add banner for a pending target and clears it on close',
       (tester) async {
     await monter(tester, avecCible: true);
@@ -362,8 +436,9 @@ void main() {
     await tester.tap(find.text('T'));
     await tester.pumpAndSettle();
 
-    // The panel names the plant and counts its (one) good companion.
-    expect(find.text('Tomate'), findsOneWidget);
+    // The panel names the plant (also shown as a node label since #8a) and
+    // counts its (one) good companion (panel-only).
+    expect(find.text('Tomate'), findsWidgets);
     expect(find.textContaining('1 bon compagnon'), findsOneWidget);
   });
 

@@ -70,7 +70,8 @@ class EcranCatalogue extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.navCatalogue)),
       body: vue.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(catalogueProvider)),
+        error: (e, _) =>
+            _EtatErreur(onReessayer: () => ref.invalidate(catalogueProvider)),
         data: (data) => _Contenu(vue: data),
       ),
     );
@@ -130,7 +131,11 @@ class _ContenuState extends ConsumerState<_Contenu> {
         ),
         Expanded(
           child: _reseau
-              ? VueReseauCatalogue(fiches: vue.toutesMeres, onAjouter: ajouter)
+              ? VueReseauCatalogue(
+                  fiches: vue.toutesMeres,
+                  varietesDe: vue.varietesDe,
+                  onAjouter: ajouter,
+                )
               : _VueFiches(vue: vue, onAjouter: ajouter),
         ),
       ],
@@ -163,8 +168,9 @@ class _VueFiches extends ConsumerWidget {
           ),
           child: Text(
             l10n.catalogueNbPlantes(vue.total),
-            style: theme.textTheme.labelSmall
-                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
         Padding(
@@ -219,15 +225,18 @@ class _BanniereAjout extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.add_location_alt_outlined,
-                size: TaillesIconesApp.sm,
-                color: theme.colorScheme.onPrimaryContainer),
+            Icon(
+              Icons.add_location_alt_outlined,
+              size: TaillesIconesApp.sm,
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
             const SizedBox(width: EspacementsApp.s2),
             Expanded(
               child: Text(
                 l10n.catalogueAjoutBanniere(zoneNom),
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.onPrimaryContainer),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
               ),
             ),
             IconButton(
@@ -255,8 +264,9 @@ class _BarreRecherche extends StatefulWidget {
 }
 
 class _BarreRechercheState extends State<_BarreRecherche> {
-  late final TextEditingController _controleur =
-      TextEditingController(text: widget.valeur);
+  late final TextEditingController _controleur = TextEditingController(
+    text: widget.valeur,
+  );
 
   @override
   void dispose() {
@@ -477,34 +487,45 @@ class _CarteFiche extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return InkWell(
-      onTap: () => afficherFichePlanteDetail(
-        context,
-        fiche,
-        onAjouter: () => onAjouter(fiche),
-      ),
+      onTap: () =>
+          afficherFichePlanteDetail(context, fiche, onAjouter: onAjouter),
       child: Padding(
         padding: const EdgeInsets.all(EspacementsApp.s3),
         child: Row(
           children: [
-            Icon(Icons.eco_outlined, size: TaillesIconesApp.lg, color: theme.colorScheme.primary),
+            Icon(
+              Icons.eco_outlined,
+              size: TaillesIconesApp.lg,
+              color: theme.colorScheme.primary,
+            ),
             const SizedBox(width: EspacementsApp.s3),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(fiche.nomLocalise('fr'), style: theme.textTheme.titleLarge),
+                  Text(
+                    fiche.nomLocalise('fr'),
+                    style: theme.textTheme.titleLarge,
+                  ),
                   const SizedBox(height: 2),
                   Text(
                     l10n.categorie(fiche.categorie),
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: EspacementsApp.s1),
                   Wrap(
                     spacing: EspacementsApp.s3,
                     children: [
-                      _Meta(icone: Icons.wb_sunny_outlined, texte: l10n.exposition(fiche.besoins.soleil)),
-                      _Meta(icone: Icons.water_drop_outlined, texte: l10n.besoinEau(fiche.besoins.eau)),
+                      _Meta(
+                        icone: Icons.wb_sunny_outlined,
+                        texte: l10n.exposition(fiche.besoins.soleil),
+                      ),
+                      _Meta(
+                        icone: Icons.water_drop_outlined,
+                        texte: l10n.besoinEau(fiche.besoins.eau),
+                      ),
                     ],
                   ),
                 ],
@@ -521,13 +542,18 @@ class _CarteFiche extends StatelessWidget {
                   ),
                   Text(
                     '$nbVarietes',
-                    style: theme.textTheme.labelSmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               )
             else
-              Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.chevron_right,
+                size: TaillesIconesApp.md,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
       ),
@@ -548,14 +574,13 @@ class _LigneVariete extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        border: Border(top: BorderSide(color: theme.colorScheme.outlineVariant)),
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outlineVariant),
+        ),
       ),
       child: InkWell(
-        onTap: () => afficherFichePlanteDetail(
-          context,
-          fiche,
-          onAjouter: () => onAjouter(fiche),
-        ),
+        onTap: () =>
+            afficherFichePlanteDetail(context, fiche, onAjouter: onAjouter),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
             EspacementsApp.s6,
@@ -565,16 +590,23 @@ class _LigneVariete extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(Icons.spa_outlined,
-                  size: TaillesIconesApp.sm, color: theme.colorScheme.secondary),
+              Icon(
+                Icons.spa_outlined,
+                size: TaillesIconesApp.sm,
+                color: theme.colorScheme.secondary,
+              ),
               const SizedBox(width: EspacementsApp.s3),
               Expanded(
-                child: Text(fiche.nomLocalise('fr'),
-                    style: theme.textTheme.titleMedium),
+                child: Text(
+                  fiche.nomLocalise('fr'),
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
-              Icon(Icons.chevron_right,
-                  size: TaillesIconesApp.md,
-                  color: theme.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.chevron_right,
+                size: TaillesIconesApp.md,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),
@@ -595,12 +627,17 @@ class _Meta extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icone, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+        Icon(
+          icone,
+          size: TaillesIconesApp.sm,
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: EspacementsApp.s1),
         Text(
           texte,
-          style: theme.textTheme.labelSmall
-              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -621,13 +658,18 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off, size: TaillesIconesApp.xl2, color: theme.colorScheme.secondary),
+            Icon(
+              Icons.search_off,
+              size: TaillesIconesApp.xl2,
+              color: theme.colorScheme.secondary,
+            ),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -651,16 +693,24 @@ class _EtatErreur extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
+            Icon(
+              Icons.error_outline,
+              size: TaillesIconesApp.xl2,
+              color: theme.colorScheme.error,
+            ),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               l10n.catalogueErreurChargement,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: EspacementsApp.s4),
-            FilledButton(onPressed: onReessayer, child: Text(l10n.actionReessayer)),
+            FilledButton(
+              onPressed: onReessayer,
+              child: Text(l10n.actionReessayer),
+            ),
           ],
         ),
       ),

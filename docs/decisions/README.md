@@ -22,6 +22,8 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0003](archive/PRE_DEV/0003-reconciliation-enums.md) | Réconciliation des énumérations (parcelles, sol, climat, localisation) | Accepté |
 | [0004](archive/PRE_DEV/0004-entites-domain-et-perimetre.md) | Entités du Domain & périmètre (récolte, préférences, observations, sync) | Accepté |
 | [0005](0005-fiche-mere-varietes-et-id.md) | Hiérarchie espèce/variété et format des IDs de fiches plantes | Accepté |
+| [0006](0006-fiches-famille-botanique.md) | Fiches de famille botanique (type sœur, pas grand-mère) | Accepté |
+| [0007](0007-vue-reseau-exploratoire.md) | Vue Réseau du Catalogue : modèle de transformation explicite et découpage en lots | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.
