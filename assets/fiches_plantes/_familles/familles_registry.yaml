@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Registre des fiches de FAMILLE botanique — Pot'à Gérer
+# Spécification : docs/decisions/0006-fiches-famille-botanique.md (ADR-0006)
+#
+# Index humain lisible. Une ligne par famille : `id: Nom français (latin)`.
+# L'id EST le nom scientifique normalisé en slug (cf. FamilleBotanique.normaliserCle).
+# Une famille est GLOBALE : elle peut être pertinente pour plusieurs catégories
+# (le champ `categories:` de chaque fiche fait foi). Le regroupement ci-dessous
+# est purement indicatif (catégorie de rattachement principale).
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Familles à dominante légumière
+solanaceae: Solanacées (Solanaceae)
+brassicaceae: Brassicacées (Brassicaceae)
+cucurbitaceae: Cucurbitacées (Cucurbitaceae)
+fabaceae: Fabacées / Légumineuses (Fabaceae)
+apiaceae: Apiacées / Ombellifères (Apiaceae)
+amaryllidaceae: Amaryllidacées / Alliacées (Amaryllidaceae)
+asteraceae: Astéracées / Composées (Asteraceae)
+amaranthaceae: Amaranthacées / Chénopodiacées (Amaranthaceae)
+poaceae: Poacées / Graminées (Poaceae)
+polygonaceae: Polygonacées (Polygonaceae)
+caprifoliaceae: Caprifoliacées (Caprifoliaceae)
+asparagaceae: Asparagacées (Asparagaceae)
+malvaceae: Malvacées (Malvaceae)
+convolvulaceae: Convolvulacées (Convolvulaceae)
+
+# Familles à dominante aromatique
+lamiaceae: Lamiacées / Labiées (Lamiaceae)
+lauraceae: Lauracées (Lauraceae)
+verbenaceae: Verbénacées (Verbenaceae)
+tropaeolaceae: Tropaéolacées (Tropaeolaceae)
+zingiberaceae: Zingibéracées (Zingiberaceae)
+boraginaceae: Boraginacées (Boraginaceae)
+
+# Familles à dominante fruitière (arbres)
+rosaceae: Rosacées (Rosaceae)
+rutaceae: Rutacées (Rutaceae)
+moraceae: Moracées (Moraceae)
+juglandaceae: Juglandacées (Juglandaceae)
+betulaceae: Bétulacées (Betulaceae)
+oleaceae: Oléacées (Oleaceae)
+vitaceae: Vitacées (Vitaceae)
+actinidiaceae: Actinidiacées (Actinidiaceae)
+ebenaceae: Ébénacées (Ebenaceae)
+lythraceae: Lythracées (Lythraceae)
+fagaceae: Fagacées (Fagaceae)
+
+# Familles à dominante petits fruits
+grossulariaceae: Grossulariacées (Grossulariaceae)
+ericaceae: Éricacées (Ericaceae)
+elaeagnaceae: Éléagnacées (Elaeagnaceae)
+adoxaceae: Adoxacées (Adoxaceae)
+
+# Familles à dominante florale (compagnonnage / mellifères / ornementales)
+ranunculaceae: Renonculacées (Ranunculaceae)
+papaveraceae: Papavéracées (Papaveraceae)
+violaceae: Violacées (Violaceae)
+caryophyllaceae: Caryophyllacées (Caryophyllaceae)
+iridaceae: Iridacées (Iridaceae)
+liliaceae: Liliacées (Liliaceae)
+plantaginaceae: Plantaginacées (Plantaginaceae)
+geraniaceae: Géraniacées (Geraniaceae)
+
+# Familles à dominante engrais verts / autres
+linaceae: Linacées (Linaceae)

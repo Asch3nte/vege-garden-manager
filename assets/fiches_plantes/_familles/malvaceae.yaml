@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: malvaceae
+nom_scientifique: Malvaceae
+schema_version: 1
+categories: [legume, fleur]
+i18n:
+  fr:
+    nom_commun: Malvacées
+    description: >
+      Famille des mauves : le gombo (okra) côté potager, et de nombreuses
+      ornementales mellifères comme la rose trémière, la lavatère et l'hibiscus.
+      Fleurs souvent comestibles et appréciées des pollinisateurs.
+maladies_communes: [rouille_malvacees, oidium]
+ravageurs_communs: [puceron, aleurode]
+contributeurs:
+  - "@potagerer"

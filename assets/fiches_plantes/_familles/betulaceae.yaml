@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: betulaceae
+nom_scientifique: Betulaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Bétulacées
+    description: >
+      Famille du noisetier (Corylus), arbuste fruitier à coque rustique et
+      pollinisé par le vent en fin d'hiver, ainsi que du charme et du bouleau.
+      Le noisetier est aussi prisé en haie champêtre et pour le BRF.
+maladies_communes: [moniliose_noisette, oidium]
+ravageurs_communs: [balanin_noisette, puceron_noisetier]
+contributeurs:
+  - "@potagerer"

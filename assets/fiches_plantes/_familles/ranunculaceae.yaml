@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: ranunculaceae
+nom_scientifique: Ranunculaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Renonculacées
+    description: >
+      Famille ornementale de la nigelle, l'ancolie, la renoncule, la clématite
+      et l'hellébore (rose de Noël). Souvent mellifères et de floraison précoce,
+      mais la plupart sont toxiques par ingestion.
+maladies_communes: [oidium, rouille, pourriture_grise]
+ravageurs_communs: [puceron, limace]
+contributeurs:
+  - "@potagerer"

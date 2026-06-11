@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: papaveraceae
+nom_scientifique: Papaveraceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Papavéracées
+    description: >
+      Famille des pavots et coquelicots, dont l'eschscholzia (pavot de
+      Californie). Annuelles ou vivaces à floraison généreuse, souvent en
+      semis spontané, mellifères et faciles en sol pauvre et drainé.
+maladies_communes: [oidium, pourriture_grise]
+ravageurs_communs: [puceron]
+contributeurs:
+  - "@potagerer"

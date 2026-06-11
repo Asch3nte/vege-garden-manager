@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: juglandaceae
+nom_scientifique: Juglandaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Juglandacées
+    description: >
+      Famille des arbres à fruits à coque : noyer (Juglans) et pacanier. Grands
+      arbres dont le noyer libère de la juglone, substance inhibant la croissance
+      de nombreuses plantes à son pied (allélopathie).
+maladies_communes: [bacteriose_noyer, anthracnose]
+ravageurs_communs: [carpocapse, mouche_brou]
+contributeurs:
+  - "@potagerer"

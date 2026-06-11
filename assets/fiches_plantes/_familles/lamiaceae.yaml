@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: lamiaceae
+nom_scientifique: Lamiaceae
+schema_version: 1
+categories: [aromatique, fleur]
+i18n:
+  fr:
+    nom_commun: Lamiacées (Labiées)
+    description: >
+      Grande famille des aromatiques à tige carrée et huiles essentielles :
+      basilic, thym, menthe, romarin, sauge, origan, marjolaine, mélisse,
+      sarriette, et la lavande. Très mellifères et souvent répulsives.
+maladies_communes: [oidium, rouille, pourriture_racinaire]
+ravageurs_communs: [puceron, cicadelle, aleurode]
+contributeurs:
+  - "@potagerer"

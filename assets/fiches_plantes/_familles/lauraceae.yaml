@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: lauraceae
+nom_scientifique: Lauraceae
+schema_version: 1
+categories: [aromatique]
+i18n:
+  fr:
+    nom_commun: Lauracées
+    description: >
+      Famille de plantes ligneuses aromatiques : le laurier-sauce (Laurus
+      nobilis), condiment classique, ainsi que le cannelier et l'avocatier sous
+      climats plus chauds. Feuillage persistant riche en huiles essentielles.
+maladies_communes: [fumagine, oidium]
+ravageurs_communs: [cochenille, psylle_laurier]
+contributeurs:
+  - "@potagerer"

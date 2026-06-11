@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: lythraceae
+nom_scientifique: Lythraceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Lythracées
+    description: >
+      Famille du grenadier (Punica granatum), arbuste fruitier méditerranéen à
+      belle floraison rouge. Aime la chaleur et le plein soleil ; supporte mal
+      les hivers humides et froids hors climat doux.
+maladies_communes: [cercosporiose, pourriture_fruit]
+ravageurs_communs: [puceron, cochenille]
+contributeurs:
+  - "@potagerer"

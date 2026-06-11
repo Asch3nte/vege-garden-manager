@@ -1,0 +1,17 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: apiaceae
+nom_scientifique: Apiaceae
+schema_version: 1
+categories: [legume, aromatique]
+i18n:
+  fr:
+    nom_commun: Apiacées (Ombellifères)
+    description: >
+      Famille à fleurs en ombelles : carotte, céleri, panais, fenouil, mais
+      aussi persil, coriandre, aneth et cerfeuil. Leurs ombelles attirent de
+      nombreux auxiliaires (syrphes, parasitoïdes).
+maladies_communes: [alternariose, oidium, sclerotiniose]
+ravageurs_communs: [mouche_carotte, puceron]
+delai_retour_annees: 3
+contributeurs:
+  - "@potagerer"

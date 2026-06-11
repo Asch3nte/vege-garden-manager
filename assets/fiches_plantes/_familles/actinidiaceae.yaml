@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: actinidiaceae
+nom_scientifique: Actinidiaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Actinidiacées
+    description: >
+      Famille du kiwi (Actinidia), liane vigoureuse souvent dioïque (pieds mâle
+      et femelle nécessaires à la fructification). Demande un sol frais, non
+      calcaire, et un support solide ; certaines variétés sont très rustiques.
+maladies_communes: [bacteriose_psa, pourriture_racinaire]
+ravageurs_communs: [cochenille]
+contributeurs:
+  - "@potagerer"

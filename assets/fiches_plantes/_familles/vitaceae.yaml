@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: vitaceae
+nom_scientifique: Vitaceae
+schema_version: 1
+categories: [fruit, petit_fruit]
+i18n:
+  fr:
+    nom_commun: Vitacées
+    description: >
+      Famille de la vigne (Vitis vinifera), liane fruitière palissée produisant
+      le raisin de table ou de cuve. Conduite par la taille, elle est sensible
+      au mildiou et à l'oïdium par temps humide.
+maladies_communes: [mildiou, oidium, black_rot, botrytis]
+ravageurs_communs: [cochylis, eudemis, cochenille]
+contributeurs:
+  - "@potagerer"

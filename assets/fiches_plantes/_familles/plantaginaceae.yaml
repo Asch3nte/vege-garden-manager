@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: plantaginaceae
+nom_scientifique: Plantaginaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Plantaginacées
+    description: >
+      Famille (au sens APG, élargie) regroupant des ornementales à épis comme la
+      digitale, le muflier (gueule-de-loup) et la véronique. Très visitées par
+      les bourdons ; la digitale est toxique par ingestion.
+maladies_communes: [oidium, rouille_muflier, anthracnose]
+ravageurs_communs: [puceron, limace]
+contributeurs:
+  - "@potagerer"

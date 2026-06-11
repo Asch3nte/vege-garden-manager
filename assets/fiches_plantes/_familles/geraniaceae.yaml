@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: geraniaceae
+nom_scientifique: Geraniaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Géraniacées
+    description: >
+      Famille des géraniums vivaces (Geranium) et des pélargoniums (les
+      « géraniums » de balcon). Plantes florifères de longue durée ; certains
+      pélargoniums odorants sont réputés répulsifs vis-à-vis des moustiques.
+maladies_communes: [rouille_pelargonium, botrytis, oidium]
+ravageurs_communs: [puceron, aleurode, chenille_geranium]
+contributeurs:
+  - "@potagerer"

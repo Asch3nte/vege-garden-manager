@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: verbenaceae
+nom_scientifique: Verbenaceae
+schema_version: 1
+categories: [aromatique]
+i18n:
+  fr:
+    nom_commun: Verbénacées
+    description: >
+      Famille de la verveine, dont la verveine citronnelle (Aloysia citrodora)
+      au parfum citronné prisé en infusion. Plantes aromatiques souvent
+      mellifères, peu rustiques sous climats froids.
+maladies_communes: [oidium, rouille]
+ravageurs_communs: [puceron, aleurode]
+contributeurs:
+  - "@potagerer"

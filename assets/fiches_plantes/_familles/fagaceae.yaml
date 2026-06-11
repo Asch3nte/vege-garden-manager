@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: fagaceae
+nom_scientifique: Fagaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Fagacées
+    description: >
+      Famille du châtaignier (Castanea), grand arbre à fruits à coque (châtaignes)
+      des sols acides, ainsi que du chêne et du hêtre. Le châtaignier exige un sol
+      non calcaire et redoute l'asphyxie racinaire.
+maladies_communes: [chancre_chataignier, encre, pourriture_chataigne]
+ravageurs_communs: [carpocapse_chataigne, cynips, balanin]
+contributeurs:
+  - "@potagerer"

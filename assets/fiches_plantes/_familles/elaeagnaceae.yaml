@@ -1,0 +1,15 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: elaeagnaceae
+nom_scientifique: Elaeagnaceae
+schema_version: 1
+categories: [petit_fruit]
+i18n:
+  fr:
+    nom_commun: Éléagnacées
+    description: >
+      Famille de l'argousier (Hippophae) et des goumis. Arbustes rustiques
+      fixateurs d'azote (symbiose actinorhizienne avec Frankia), à petites baies
+      très riches en vitamine C ; souvent dioïques.
+ravageurs_communs: [mouche_argousier, puceron]
+contributeurs:
+  - "@potagerer"

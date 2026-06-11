@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: rutaceae
+nom_scientifique: Rutaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Rutacées
+    description: >
+      Famille des agrumes : citronnier, oranger, mandarinier, kumquat, ainsi que
+      des aromatiques comme la rue. Feuillage persistant riche en huiles
+      essentielles ; frileux, souvent cultivés en pot et hivernés au frais.
+maladies_communes: [fumagine, gommose, oidium]
+ravageurs_communs: [cochenille, mineuse_agrumes, puceron, aleurode]
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: grossulariaceae
+nom_scientifique: Grossulariaceae
+schema_version: 1
+categories: [petit_fruit]
+i18n:
+  fr:
+    nom_commun: Grossulariacées
+    description: >
+      Famille des Ribes : groseillier rouge et blanc, cassis et groseillier à
+      maquereau. Arbustes rustiques de mi-ombre, à baies en grappes, faciles à
+      cultiver et à bouturer.
+maladies_communes: [oidium_americain, rouille_vesiculeuse, anthracnose]
+ravageurs_communs: [puceron, tenthrede, sesie, cochenille]
+contributeurs:
+  - "@potagerer"

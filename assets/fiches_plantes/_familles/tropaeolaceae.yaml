@@ -1,0 +1,15 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: tropaeolaceae
+nom_scientifique: Tropaeolaceae
+schema_version: 1
+categories: [aromatique, fleur]
+i18n:
+  fr:
+    nom_commun: Tropaéolacées
+    description: >
+      Famille de la capucine (Tropaeolum), à fleurs et feuilles comestibles au
+      goût poivré. Plante-piège à pucerons très utilisée en compagnonnage, elle
+      détourne les ravageurs des cultures voisines.
+ravageurs_communs: [puceron_noir, altise, piéride]
+contributeurs:
+  - "@potagerer"

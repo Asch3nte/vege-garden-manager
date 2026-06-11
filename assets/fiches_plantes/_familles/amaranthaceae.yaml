@@ -1,0 +1,17 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: amaranthaceae
+nom_scientifique: Amaranthaceae
+schema_version: 1
+categories: [legume, cereale, fleur]
+i18n:
+  fr:
+    nom_commun: Amaranthacées (Chénopodiacées)
+    description: >
+      Famille intégrant les anciennes Chénopodiacées : épinard, betterave,
+      blette (poirée), ainsi que les pseudo-céréales quinoa et amarante.
+      Souvent tolérantes aux sols salins et peu exigeantes.
+maladies_communes: [mildiou, cercosporiose, rouille_blanche]
+ravageurs_communs: [pegomyie, puceron, altise]
+delai_retour_annees: 3
+contributeurs:
+  - "@potagerer"

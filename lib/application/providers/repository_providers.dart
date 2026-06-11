@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/repositories/abstract_equipement_repository.dart';
+import '../../domain/repositories/abstract_famille_botanique_repository.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_observation_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
@@ -11,9 +12,13 @@ import '../../domain/repositories/abstract_rappel_repository.dart';
 import '../../domain/repositories/abstract_recolte_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../../infrastructure/catalogue/catalogue_loader.dart';
+import '../../infrastructure/catalogue/famille_asset_source.dart';
+import '../../infrastructure/catalogue/famille_botanique_cache.dart';
+import '../../infrastructure/catalogue/familles_loader.dart';
 import '../../infrastructure/catalogue/fiche_asset_source.dart';
 import '../../infrastructure/catalogue/fiche_plante_cache.dart';
 import '../../infrastructure/repositories/equipement_repository_impl.dart';
+import '../../infrastructure/repositories/famille_botanique_repository_impl.dart';
 import '../../infrastructure/repositories/fiche_plante_repository_impl.dart';
 import '../../infrastructure/repositories/observation_repository_impl.dart';
 import '../../infrastructure/repositories/parcelle_repository_impl.dart';
@@ -83,5 +88,25 @@ final fichePlanteRepositoryProvider =
     FutureProvider<AbstractFichePlanteRepository>(
   (ref) async => FichePlanteRepositoryImpl(
     await ref.watch(fichePlanteCacheProvider.future),
+  ),
+);
+
+// --- Botanical families (YAML assets, loaded asynchronously) — ADR-0006 ------
+
+/// Pipeline that lists/reads/parses/validates the embedded YAML family sheets.
+final famillesLoaderProvider = Provider<FamillesLoader>(
+  (ref) => FamillesLoader(BundleFamilleAssetSource()),
+);
+
+/// The in-memory family cache, loaded once from the bundled assets.
+final familleBotaniqueCacheProvider = FutureProvider<FamilleBotaniqueCache>(
+  (ref) => ref.watch(famillesLoaderProvider).charger(),
+);
+
+/// The family repository. Async because it depends on the loaded cache.
+final familleBotaniqueRepositoryProvider =
+    FutureProvider<AbstractFamilleBotaniqueRepository>(
+  (ref) async => FamilleBotaniqueRepositoryImpl(
+    await ref.watch(familleBotaniqueCacheProvider.future),
   ),
 );

@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: rosaceae
+nom_scientifique: Rosaceae
+schema_version: 1
+categories: [fruit, petit_fruit]
+i18n:
+  fr:
+    nom_commun: Rosacées
+    description: >
+      Très grande famille fruitière : arbres à pépins et à noyaux (pommier,
+      poirier, cerisier, prunier, pêcher, abricotier) et petits fruits (fraisier,
+      framboisier, ronce). Sujette à la tavelure, la moniliose et le feu bactérien.
+maladies_communes: [tavelure, moniliose, feu_bacterien, oidium, rouille_grillage]
+ravageurs_communs: [carpocapse, puceron, hoplocampe]
+contributeurs:
+  - "@potagerer"

@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../providers/repository_providers.dart';
@@ -17,13 +18,20 @@ const String _locale = 'fr';
 /// every filter change.
 class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   List<FichePlante> _toutes = const [];
+  Map<String, FamilleBotanique> _famillesParId = const {};
   String _requete = '';
   CategoriePlante? _categorie;
+  String? _famille;
 
   @override
   Future<CatalogueVue> build() async {
-    final repo = ref.watch(fichePlanteRepositoryProvider.future);
-    _toutes = await (await repo).obtenirToutes();
+    final repo = await ref.watch(fichePlanteRepositoryProvider.future);
+    _toutes = await repo.obtenirToutes();
+    final repoFamilles =
+        await ref.watch(familleBotaniqueRepositoryProvider.future);
+    _famillesParId = {
+      for (final f in await repoFamilles.obtenirToutes()) f.id: f
+    };
     return _projeter();
   }
 
@@ -33,9 +41,18 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     state = AsyncData(_projeter());
   }
 
-  /// Sets the category filter (`null` = all categories) and re-filters.
+  /// Sets the category filter (`null` = all categories) and re-filters. Changing
+  /// category clears the family sub-filter, which is scoped to a category.
   void definirCategorie(CategoriePlante? categorie) {
     _categorie = categorie;
+    _famille = null;
+    state = AsyncData(_projeter());
+  }
+
+  /// Sets the family sub-filter (`null` = all families of the category) and
+  /// re-filters (ADR-0006).
+  void definirFamille(String? familleId) {
+    _famille = familleId;
     state = AsyncData(_projeter());
   }
 
@@ -53,6 +70,8 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     bool correspond(FichePlante f) =>
         f.nomLocalise(_locale).toLowerCase().contains(terme) ||
         f.id.toLowerCase().contains(terme);
+    String cleFamille(FichePlante f) =>
+        FamilleBotanique.normaliserCle(f.familleBotanique);
 
     final meres = _toutes.where((f) => f.estMere).toList()..sort(parNom);
     final varietesParParent = <String, List<FichePlante>>{};
@@ -63,6 +82,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     final groupes = <GroupeFiche>[];
     for (final mere in meres) {
       if (_categorie != null && mere.categorie != _categorie) continue;
+      if (_famille != null && cleFamille(mere) != _famille) continue;
       final varietes = [...?varietesParParent[mere.id]]..sort(parNom);
       if (terme.isEmpty || correspond(mere)) {
         groupes.add(GroupeFiche(mere: mere, varietes: varietes));
@@ -77,9 +97,28 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     return CatalogueVue(
       requete: _requete,
       categorie: _categorie,
+      familleSelectionnee: _famille,
+      familles: _famillesDeCategorie(meres),
       groupes: groupes,
       toutesMeres: meres,
     );
+  }
+
+  /// Family chips for the selected category: the botanical families present
+  /// among that category's species, resolved to their entity (for localized
+  /// names) and ordered by name. Empty when no category is selected (ADR-0006).
+  List<FamilleBotanique> _famillesDeCategorie(List<FichePlante> meres) {
+    if (_categorie == null) return const [];
+    final cles = <String>{
+      for (final m in meres)
+        if (m.categorie == _categorie)
+          FamilleBotanique.normaliserCle(m.familleBotanique),
+    };
+    final familles = [
+      for (final cle in cles)
+        if (_famillesParId[cle] != null) _famillesParId[cle]!,
+    ]..sort((a, b) => a.nomLocalise(_locale).compareTo(b.nomLocalise(_locale)));
+    return familles;
   }
 }
 

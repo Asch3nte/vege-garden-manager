@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: liliaceae
+nom_scientifique: Liliaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Liliacées
+    description: >
+      Famille (au sens APG, resserrée) des plantes à bulbe ornementales : tulipe,
+      lis et fritillaire. Floraisons printanières spectaculaires ; bulbes à
+      planter en automne, en sol drainé pour éviter la pourriture.
+maladies_communes: [feu_tulipe, pourriture_bulbe, botrytis]
+ravageurs_communs: [criocere_lis, puceron, mouche_narcisse]
+contributeurs:
+  - "@potagerer"

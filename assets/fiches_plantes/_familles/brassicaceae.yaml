@@ -1,0 +1,17 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: brassicaceae
+nom_scientifique: Brassicaceae
+schema_version: 1
+categories: [legume, aromatique, fleur, engrais_vert]
+i18n:
+  fr:
+    nom_commun: Brassicacées (Crucifères)
+    description: >
+      Vaste famille des choux et crucifères : chou, brocoli, chou-fleur, navet,
+      radis, roquette, moutarde. Plantes souvent gourmandes en azote, partageant
+      la sensibilité à la hernie du chou et aux altises.
+maladies_communes: [hernie_chou, mildiou, alternariose]
+ravageurs_communs: [altise, pieride, mouche_chou, puceron_cendre]
+delai_retour_annees: 4
+contributeurs:
+  - "@potagerer"

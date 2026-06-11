@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: violaceae
+nom_scientifique: Violaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Violacées
+    description: >
+      Famille de la violette et de la pensée (Viola). Petites plantes de
+      mi-ombre à fleurs comestibles, prisées en bordure et en potées. Floraison
+      souvent précoce, parfois remontante en climat doux.
+maladies_communes: [oidium, rouille_violette, taches_foliaires]
+ravageurs_communs: [puceron, araignee_rouge, limace]
+contributeurs:
+  - "@potagerer"

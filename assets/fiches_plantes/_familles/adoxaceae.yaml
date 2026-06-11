@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: adoxaceae
+nom_scientifique: Adoxaceae
+schema_version: 1
+categories: [petit_fruit]
+i18n:
+  fr:
+    nom_commun: Adoxacées
+    description: >
+      Famille du sureau noir (Sambucus nigra) et des viornes. Arbustes rustiques
+      et mellifères ; le sureau offre fleurs et baies comestibles (une fois
+      cuites) appréciées en sirops et gelées. Baies crues toxiques.
+maladies_communes: [oidium, taches_foliaires]
+ravageurs_communs: [puceron_sureau]
+contributeurs:
+  - "@potagerer"

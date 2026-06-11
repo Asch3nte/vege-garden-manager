@@ -12,7 +12,8 @@ abstract class FicheAssetSource {
 
 /// [FicheAssetSource] backed by the Flutter asset bundle (`rootBundle` by
 /// default). Lists `assets/fiches_plantes/<categorie>/*.yaml`, excluding the
-/// `_schema/` folder.
+/// `_schema/` and `_familles/` folders (the latter holds family sheets, a
+/// distinct entity loaded by the families pipeline — ADR-0006).
 class BundleFicheAssetSource implements FicheAssetSource {
   final AssetBundle _bundle;
 
@@ -26,7 +27,8 @@ class BundleFicheAssetSource implements FicheAssetSource {
         .where((p) =>
             p.startsWith('assets/fiches_plantes/') &&
             p.endsWith('.yaml') &&
-            !p.contains('/_schema/'))
+            !p.contains('/_schema/') &&
+            !p.contains('/_familles/'))
         .toList();
   }
 

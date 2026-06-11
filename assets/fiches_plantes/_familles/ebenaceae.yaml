@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: ebenaceae
+nom_scientifique: Ebenaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Ébénacées
+    description: >
+      Famille du plaqueminier (Diospyros), arbre produisant le kaki. Rustique et
+      peu sujet aux ravageurs, il offre des fruits décoratifs mûrissant tard en
+      automne, après la chute des feuilles.
+maladies_communes: [anthracnose, taches_foliaires]
+ravageurs_communs: [cochenille, mouche_fruits]
+contributeurs:
+  - "@potagerer"

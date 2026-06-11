@@ -7,6 +7,7 @@ import '../../app/theme/dimensions_app.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/catalogue_vue.dart';
 import '../../application/state/potager_notifier.dart';
+import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../l10n/app_localizations.dart';
@@ -177,6 +178,14 @@ class _VueFiches extends ConsumerWidget {
           courante: vue.categorie,
           onChoisir: notifier.definirCategorie,
         ),
+        if (vue.categorie != null && vue.familles.isNotEmpty) ...[
+          const SizedBox(height: EspacementsApp.s2),
+          _ChipsFamilles(
+            familles: vue.familles,
+            courante: vue.familleSelectionnee,
+            onChoisir: notifier.definirFamille,
+          ),
+        ],
         const SizedBox(height: EspacementsApp.s3),
         Expanded(
           child: vue.sansResultat
@@ -310,6 +319,47 @@ class _ChipsCategories extends StatelessWidget {
               libelle: l10n.categorie(c),
               selectionne: courante == c,
               onTap: () => onChoisir(c),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Second filter row: botanical families of the selected category ("Toutes" +
+/// each family present among that category's species — ADR-0006).
+class _ChipsFamilles extends StatelessWidget {
+  final List<FamilleBotanique> familles;
+  final String? courante;
+  final ValueChanged<String?> onChoisir;
+
+  const _ChipsFamilles({
+    required this.familles,
+    required this.courante,
+    required this.onChoisir,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return SizedBox(
+      height: 40,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s4),
+        children: [
+          _Chip(
+            libelle: l10n.catalogueToutesFamilles,
+            selectionne: courante == null,
+            onTap: () => onChoisir(null),
+          ),
+          for (final f in familles) ...[
+            const SizedBox(width: EspacementsApp.s2),
+            _Chip(
+              libelle: f.nomLocalise('fr'),
+              selectionne: courante == f.id,
+              onTap: () => onChoisir(f.id),
             ),
           ],
         ],

@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
@@ -17,6 +18,7 @@ import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
@@ -29,6 +31,8 @@ import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
+class MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
+
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 /// Pre-targets a zone so the catalogue renders its "adding to a zone" banner.
@@ -40,6 +44,7 @@ class _CibleFixe extends AjoutPlanteNotifier {
 
 void main() {
   late MockFiches fiches;
+  late MockFamilles familles;
   late MockPotagers potagers;
 
   FichePlante fiche(
@@ -48,12 +53,13 @@ void main() {
     CategoriePlante cat, {
     Set<String> bons = const {},
     String? parentId,
+    String famille = 'Test',
   }) =>
       FichePlante(
         id: id,
         parentId: parentId,
         nomScientifique: '$id sp',
-        familleBotanique: 'Test',
+        familleBotanique: famille,
         categorie: cat,
         usages: const {UsagePlante.alimentaire},
         nomsLocalises: {'fr': nomFr},
@@ -72,16 +78,48 @@ void main() {
 
   setUp(() {
     fiches = MockFiches();
+    familles = MockFamilles();
     potagers = MockPotagers();
     // No active garden → the sheet's calendar shows its "create a garden" note.
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
     when(() => fiches.obtenirToutes()).thenAnswer(
       (_) async => [
-        fiche('tomate', 'Tomate', CategoriePlante.legume, bons: {'basilic'}),
-        fiche('basilic', 'Basilic', CategoriePlante.aromatique),
-        fiche('fraise', 'Fraise', CategoriePlante.petitFruit),
+        fiche('tomate', 'Tomate', CategoriePlante.legume,
+            bons: {'basilic'}, famille: 'Solanaceae'),
+        fiche('courgette', 'Courgette', CategoriePlante.legume,
+            famille: 'Cucurbitaceae'),
+        fiche('basilic', 'Basilic', CategoriePlante.aromatique,
+            famille: 'Lamiaceae'),
+        fiche('fraise', 'Fraise', CategoriePlante.petitFruit,
+            famille: 'Rosaceae'),
       ],
     );
+    when(() => familles.obtenirToutes()).thenAnswer((_) async => [
+          FamilleBotanique(
+            id: 'solanaceae',
+            nomScientifique: 'Solanaceae',
+            categories: const {CategoriePlante.legume},
+            nomsLocalises: const {'fr': 'Solanacées'},
+          ),
+          FamilleBotanique(
+            id: 'cucurbitaceae',
+            nomScientifique: 'Cucurbitaceae',
+            categories: const {CategoriePlante.legume},
+            nomsLocalises: const {'fr': 'Cucurbitacées'},
+          ),
+          FamilleBotanique(
+            id: 'lamiaceae',
+            nomScientifique: 'Lamiaceae',
+            categories: const {CategoriePlante.aromatique},
+            nomsLocalises: const {'fr': 'Lamiacées'},
+          ),
+          FamilleBotanique(
+            id: 'rosaceae',
+            nomScientifique: 'Rosaceae',
+            categories: const {CategoriePlante.petitFruit},
+            nomsLocalises: const {'fr': 'Rosacées'},
+          ),
+        ]);
   });
 
   Future<void> monter(WidgetTester tester, {bool avecCible = false}) async {
@@ -89,6 +127,8 @@ void main() {
       ProviderScope(
         overrides: [
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          familleBotaniqueRepositoryProvider
+              .overrideWith((ref) async => familles),
           potagerRepositoryProvider.overrideWithValue(potagers),
           if (avecCible) ajoutPlanteProvider.overrideWith(_CibleFixe.new),
         ],
@@ -129,6 +169,29 @@ void main() {
 
     expect(find.text('Basilic'), findsOneWidget);
     expect(find.text('Tomate'), findsNothing);
+  });
+
+  testWidgets('a category reveals its family chips and they filter the list',
+      (tester) async {
+    await monter(tester);
+
+    // No family row under "Tout".
+    expect(find.widgetWithText(ChoiceChip, 'Solanacées'), findsNothing);
+
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Légumes'));
+    await tester.pumpAndSettle();
+
+    // The legume families appear as a second filter row.
+    expect(find.widgetWithText(ChoiceChip, 'Solanacées'), findsOneWidget);
+    expect(find.widgetWithText(ChoiceChip, 'Cucurbitacées'), findsOneWidget);
+    expect(find.text('Tomate'), findsOneWidget);
+    expect(find.text('Courgette'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Solanacées'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tomate'), findsOneWidget);
+    expect(find.text('Courgette'), findsNothing);
   });
 
   testWidgets('no match shows the empty state', (tester) async {

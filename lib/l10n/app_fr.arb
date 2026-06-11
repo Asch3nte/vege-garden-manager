@@ -351,6 +351,10 @@
   "@catalogueTout": {
     "description": "Filtre catégorie : toutes les catégories."
   },
+  "catalogueToutesFamilles": "Toutes",
+  "@catalogueToutesFamilles": {
+    "description": "Filtre famille botanique : toutes les familles de la catégorie."
+  },
   "catalogueAucunResultat": "Aucune plante ne correspond.",
   "@catalogueAucunResultat": {
     "description": "État vide de la recherche du catalogue."

@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: ericaceae
+nom_scientifique: Ericaceae
+schema_version: 1
+categories: [petit_fruit]
+i18n:
+  fr:
+    nom_commun: Éricacées
+    description: >
+      Famille des plantes de terre de bruyère : myrtille, airelle et canneberge
+      (Vaccinium). Exigent un sol acide, frais et drainé ; idéales en massif
+      dédié ou en bac sur substrat acidifié.
+maladies_communes: [pourriture_grise, phytophthora]
+ravageurs_communs: [drosophila_suzukii, puceron]
+contributeurs:
+  - "@potagerer"

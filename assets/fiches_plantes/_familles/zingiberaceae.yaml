@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: zingiberaceae
+nom_scientifique: Zingiberaceae
+schema_version: 1
+categories: [aromatique]
+i18n:
+  fr:
+    nom_commun: Zingibéracées
+    description: >
+      Famille tropicale des plantes à rhizome aromatique : gingembre, curcuma,
+      cardamome. Cultivées en pot sous nos climats, elles demandent chaleur,
+      humidité et un sol riche et drainé.
+maladies_communes: [pourriture_rhizome, fusariose]
+ravageurs_communs: [cochenille, tarsoneme]
+contributeurs:
+  - "@potagerer"

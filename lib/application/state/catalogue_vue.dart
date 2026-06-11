@@ -1,3 +1,4 @@
+import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
 
@@ -36,32 +37,50 @@ class GroupeFiche {
 class CatalogueVue {
   final String _requete;
   final CategoriePlante? _categorie;
+  final String? _familleSelectionnee;
+  final List<FamilleBotanique> _familles;
   final List<GroupeFiche> _groupes;
   final List<FichePlante> _toutesMeres;
 
   CatalogueVue._(
     this._requete,
     this._categorie,
+    this._familleSelectionnee,
+    List<FamilleBotanique> familles,
     List<GroupeFiche> groupes,
     List<FichePlante> toutesMeres,
-  )   : _groupes = List.unmodifiable(groupes),
+  )   : _familles = List.unmodifiable(familles),
+        _groupes = List.unmodifiable(groupes),
         _toutesMeres = List.unmodifiable(toutesMeres);
 
   /// Builds a catalogue view. [toutesMeres] is every species (unfiltered, drives
   /// the count and the network view); [groupes] is the filtered, ordered result.
+  /// [familles] are the family chips for the selected category (empty under
+  /// "Tout"); [familleSelectionnee] is the active family id, or `null`.
   factory CatalogueVue({
     required String requete,
     required CategoriePlante? categorie,
     required List<GroupeFiche> groupes,
     required List<FichePlante> toutesMeres,
+    String? familleSelectionnee,
+    List<FamilleBotanique> familles = const [],
   }) =>
-      CatalogueVue._(requete, categorie, groupes, toutesMeres);
+      CatalogueVue._(requete, categorie, familleSelectionnee, familles, groupes,
+          toutesMeres);
 
   /// Current free-text query (as typed).
   String get requete => _requete;
 
   /// Selected category filter, or `null` for "Tout".
   CategoriePlante? get categorie => _categorie;
+
+  /// Family chips to show under the selected category — the botanical families
+  /// present among that category's species, ordered by localized name (ADR-0006).
+  /// Empty when no category is selected.
+  List<FamilleBotanique> get familles => _familles;
+
+  /// Active family filter (a family id), or `null` for "Toutes les familles".
+  String? get familleSelectionnee => _familleSelectionnee;
 
   /// Filtered species groups, in display order (immutable).
   List<GroupeFiche> get groupes => _groupes;
@@ -82,6 +101,9 @@ class CatalogueVue {
   /// Whether the current filters yield no result (drives the empty state).
   bool get sansResultat => _groupes.isEmpty;
 
-  /// Whether any filter is active (query or category).
-  bool get filtreActif => _requete.trim().isNotEmpty || _categorie != null;
+  /// Whether any filter is active (query, category or family).
+  bool get filtreActif =>
+      _requete.trim().isNotEmpty ||
+      _categorie != null ||
+      _familleSelectionnee != null;
 }

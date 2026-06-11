@@ -1,0 +1,17 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: asteraceae
+nom_scientifique: Asteraceae
+schema_version: 1
+categories: [legume, aromatique, fleur, engrais_vert]
+i18n:
+  fr:
+    nom_commun: Astéracées (Composées)
+    description: >
+      L'une des plus vastes familles, à capitules floraux : laitue, chicorée,
+      artichaut, salsifis, mais aussi tournesol, souci, cosmos et l'estragon.
+      Nombreuses espèces mellifères et compagnes du potager.
+maladies_communes: [oidium, mildiou_laitue, rouille, sclerotiniose]
+ravageurs_communs: [puceron, mineuse, limace]
+delai_retour_annees: 3
+contributeurs:
+  - "@potagerer"

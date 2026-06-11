@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: moraceae
+nom_scientifique: Moraceae
+schema_version: 1
+categories: [fruit, petit_fruit]
+i18n:
+  fr:
+    nom_commun: Moracées
+    description: >
+      Famille du figuier et du mûrier (Morus). Arbres et arbustes à latex,
+      rustiques et peu exigeants, produisant des fruits charnus (figues, mûres
+      d'arbre) très appréciés et mellifères en fin de saison.
+maladies_communes: [chancre, rouille_figuier]
+ravageurs_communs: [cochenille, mouche_figue]
+contributeurs:
+  - "@potagerer"

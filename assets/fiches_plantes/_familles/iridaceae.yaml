@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: iridaceae
+nom_scientifique: Iridaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Iridacées
+    description: >
+      Famille ornementale à rhizomes ou bulbes : iris, glaïeul, crocus et
+      freesia. Floraisons graphiques échelonnées selon les genres ; le crocus de
+      printemps est l'une des premières ressources de nectar pour les abeilles.
+maladies_communes: [heterosporiose_iris, rouille_glaieul, pourriture_bulbe]
+ravageurs_communs: [thrips_glaieul, puceron, mouche_narcisse]
+contributeurs:
+  - "@potagerer"

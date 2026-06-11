@@ -1,0 +1,42 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Schéma de référence d'une fiche FAMILLE botanique — Pot'à Gérer
+# Décrit la structure de chaque fichier assets/fiches_plantes/_familles/<id>.yaml
+# Spécification : docs/decisions/0006-fiches-famille-botanique.md (ADR-0006)
+#
+# Une famille est un TYPE SŒUR de la fiche plante, PAS une fiche « grand-mère » :
+# elle n'a ni besoins, ni cycle, ni périodes. Elle sert (1) au filtrage du
+# catalogue et (2) au contenu éducatif propre à la famille.
+#
+# Légende : (requis) obligatoire · (optionnel) facultatif · enum: … valeurs permises
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: # (requis) nom scientifique normalisé en slug (minuscules, sans accent ni
+    # espace), ex. "solanaceae". Immuable. = nom du fichier. = clé de liaison
+    # depuis l'espèce (rotation.famille). Voir FamilleBotanique.normaliserCle.
+nom_scientifique: # (requis) nom latin de la famille, ex. "Solanaceae"
+schema_version: # (requis) entier, version du présent schéma
+
+# Catégories du projet où la famille est pertinente (≥ 1). Une famille peut
+# traverser plusieurs catégories (ex. Apiacées : legume ET aromatique).
+# enum CategoriePlante : legume | aromatique | fruit | petit_fruit | fleur | cereale | engrais_vert
+categories: [] # (requis, ≥ 1)
+
+# Contenu multilingue — 'fr' obligatoire, autres langues optionnelles (inline)
+i18n:
+  fr: # (requis)
+    nom_commun: # (requis) nom français de la famille, ex. "Solanacées"
+    description: # (requis) 1–2 phrases : ce qui caractérise la famille + exemples
+    # Champs éditoriaux (éducation, ADR-0006 Lot 4) — optionnels :
+    pourquoi_rotation: # (optionnel) pourquoi cette famille demande telle rotation
+    ennemis_communs_note: # (optionnel) pourquoi ces maladies/ravageurs partagés
+    associations_note: # (optionnel) pourquoi certaines associations fonctionnent
+  en: # (optionnel) même structure que 'fr'
+
+# Données structurées au niveau famille (optionnelles, réutilisables par le moteur)
+maladies_communes: [] # (optionnel) liste de slugs, ex. [mildiou, alternariose]
+ravageurs_communs: [] # (optionnel) liste de slugs, ex. [doryphore, altise]
+delai_retour_annees: # (optionnel) entier — défaut de rotation au niveau famille
+
+# Source & contribution
+sources: [] # (optionnel) URLs
+contributeurs: [] # (optionnel) ex: ["@github_username"]

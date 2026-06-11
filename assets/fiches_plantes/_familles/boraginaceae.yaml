@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: boraginaceae
+nom_scientifique: Boraginaceae
+schema_version: 1
+categories: [aromatique, fleur, engrais_vert]
+i18n:
+  fr:
+    nom_commun: Boraginacées
+    description: >
+      Famille très mellifère : bourrache et consoude (engrais et purins), myosotis
+      ornemental, et la phacélie (au sens APG, ex-Hydrophyllacées) — engrais vert
+      star, à floraison rapide qui attire abeilles et auxiliaires.
+maladies_communes: [oidium, rouille]
+ravageurs_communs: [puceron]
+contributeurs:
+  - "@potagerer"

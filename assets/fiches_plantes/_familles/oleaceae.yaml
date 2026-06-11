@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: oleaceae
+nom_scientifique: Oleaceae
+schema_version: 1
+categories: [fruit]
+i18n:
+  fr:
+    nom_commun: Oléacées
+    description: >
+      Famille de l'olivier (Olea europaea), arbre fruitier méditerranéen à
+      feuillage persistant, ainsi que du frêne et du lilas ornemental. L'olivier
+      supporte la sécheresse mais craint les fortes gelées.
+maladies_communes: [oeil_de_paon, fumagine, verticilliose]
+ravageurs_communs: [mouche_olive, cochenille, teigne_olivier]
+contributeurs:
+  - "@potagerer"

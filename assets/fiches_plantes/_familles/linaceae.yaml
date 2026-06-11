@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: linaceae
+nom_scientifique: Linaceae
+schema_version: 1
+categories: [engrais_vert, fleur]
+i18n:
+  fr:
+    nom_commun: Linacées
+    description: >
+      Famille du lin (Linum), cultivé pour la fibre, la graine oléagineuse ou
+      l'ornement (lin vivace bleu). En engrais vert et en mélange fleuri, il
+      pousse vite et attire les pollinisateurs.
+maladies_communes: [fusariose_lin, oidium, rouille_lin]
+ravageurs_communs: [altise_lin, thrips]
+contributeurs:
+  - "@potagerer"

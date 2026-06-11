@@ -22,6 +22,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 
 /// Minimal HTTP abstraction so sources can be unit-tested without the network.
 abstract class ClientHttp {
@@ -219,12 +220,20 @@ class FicheBrouillon {
   /// filled; agronomic blocks are TODO placeholders for human completion.
   String versYaml() {
     String bloc(String? v) => v ?? 'TODO';
+    // Normalized family key (ADR-0006): links the species to its family sheet.
+    final familleCle = familleBotanique == null
+        ? 'TODO'
+        : FamilleBotanique.normaliserCle(familleBotanique!);
     final descFr = descriptions['fr'];
     final descEn = descriptions['en'];
     final b = StringBuffer()
       ..writeln('# Fiche mère générée par tool/scrap_fiche.dart — À COMPLÉTER.')
       ..writeln('# Taxonomie/description sourcées ; agronomie à renseigner '
           '(généraliser depuis la variété + références).');
+    if (familleBotanique != null) {
+      b.writeln('# ℹ️ Vérifier qu\'une fiche famille "$familleCle" existe dans '
+          '_familles/ (sinon la créer — ADR-0006).');
+    }
     for (final a in avertissements) {
       b.writeln('# ⚠️ $a');
     }
@@ -262,8 +271,8 @@ class FicheBrouillon {
       ..writeln('  duree_avant_recolte_jours: [0, 0] # TODO')
       ..writeln('  espacement_cm: 0 # TODO')
       ..writeln('periodes: {} # TODO')
-      ..writeln('rotation: # TODO')
-      ..writeln('  famille: TODO')
+      ..writeln('rotation: # TODO compléter le délai de retour')
+      ..writeln('  famille: $familleCle # clé famille normalisée (ADR-0006)')
       ..writeln('  delai_retour_annees: 0 # TODO')
       ..writeln('')
       ..writeln('sources:');

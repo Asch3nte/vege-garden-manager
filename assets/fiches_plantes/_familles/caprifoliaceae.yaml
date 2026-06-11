@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: caprifoliaceae
+nom_scientifique: Caprifoliaceae
+schema_version: 1
+categories: [legume, petit_fruit]
+i18n:
+  fr:
+    nom_commun: Caprifoliacées
+    description: >
+      Famille (au sens APG, intégrant les anciennes Valérianacées) regroupant la
+      mâche (Valerianella), salade d'hiver rustique, et des arbustes à baies
+      comme le camérisier (baie de mai) et le chèvrefeuille.
+maladies_communes: [oidium, mildiou]
+ravageurs_communs: [puceron]
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,16 @@
+# Fiche famille (ADR-0006) — type sœur des fiches plantes (pas grand-mère).
+id: caryophyllaceae
+nom_scientifique: Caryophyllaceae
+schema_version: 1
+categories: [fleur]
+i18n:
+  fr:
+    nom_commun: Caryophyllacées
+    description: >
+      Famille de l'œillet (Dianthus), de la gypsophile et de la saponaire.
+      Plantes à tige noueuse et fleurs souvent parfumées, appréciées en massif
+      et en fleurs coupées ; nombreuses espèces de sol drainé et calcaire.
+maladies_communes: [rouille_oeillet, fusariose, pourriture_grise]
+ravageurs_communs: [puceron, thrips, tortricide_oeillet]
+contributeurs:
+  - "@potagerer"
