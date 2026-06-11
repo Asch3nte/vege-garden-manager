@@ -11,6 +11,8 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
@@ -24,6 +26,10 @@ class _MockParcelles extends Mock implements AbstractParcelleRepository {}
 class _MockTaches extends Mock implements AbstractTacheRepository {}
 
 class _MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
+class _MockFiches extends Mock implements AbstractFichePlanteRepository {}
+
+class _MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
 
 void main() {
   // The Accueil tab is a real ConsumerWidget reading the repositories, so the
@@ -40,12 +46,19 @@ void main() {
     final parcelles = _MockParcelles();
     final taches = _MockTaches();
     final preferences = _MockPreferences();
+    // Empty fiche/family repos so the Catalogue branch resolves instantly and
+    // deterministically — without these the real YAML loaders read hundreds of
+    // bundled assets, which does not settle reliably across repeated mounts.
+    final fiches = _MockFiches();
+    final familles = _MockFamilles();
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
     when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);
     when(() => preferences.charger())
         .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => fiches.obtenirToutes()).thenAnswer((_) async => []);
+    when(() => familles.obtenirToutes()).thenAnswer((_) async => []);
 
     await tester.pumpWidget(
       ProviderScope(
@@ -54,8 +67,11 @@ void main() {
           parcelleRepositoryProvider.overrideWithValue(parcelles),
           tacheRepositoryProvider.overrideWithValue(taches),
           preferencesRepositoryProvider.overrideWithValue(preferences),
+          fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          familleBotaniqueRepositoryProvider
+              .overrideWith((ref) async => familles),
         ],
-        child: PotAGererApp(),
+        child: const PotAGererApp(),
       ),
     );
     await tester.pumpAndSettle();
@@ -122,5 +138,71 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Confidentialité & opt-outs'), findsOneWidget);
+  });
+
+  testWidgets('tapping an inactive tab resets it to its root (docs/15 §8 #5/#6)',
+      (tester) async {
+    await pomperA(tester, const Size(390, 800));
+
+    // Drill into a Plus sub-panel…
+    await tester.tap(find.text('Plus'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Préférences générales'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Préférences générales'), findsOneWidget);
+
+    // …leave for another tab, then come back to Plus from the bar.
+    await tester.tap(find.text('Catalogue'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Plus'));
+    await tester.pumpAndSettle();
+
+    // The tab shows its root, not the previously-open sub-panel: a deep path is
+    // replayed via the back button, never restored by re-selecting the tab.
+    expect(find.text('Confidentialité & opt-outs'), findsOneWidget);
+    expect(find.widgetWithText(AppBar, 'Préférences générales'), findsNothing);
+  });
+
+  testWidgets('system back retraces a sub-route then the previous tab (#6)',
+      (tester) async {
+    await pomperA(tester, const Size(390, 800));
+
+    // Accueil → Plus → Plus/Général.
+    await tester.tap(find.text('Plus'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Préférences générales'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Préférences générales'), findsOneWidget);
+
+    // Back #1 → Plus root (the sub-route is popped).
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('Confidentialité & opt-outs'), findsOneWidget);
+    expect(find.widgetWithText(AppBar, 'Préférences générales'), findsNothing);
+
+    // Back #2 → the previous tab (Accueil), across branches.
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Accueil'), findsOneWidget);
+  });
+
+  testWidgets('system back retraces tab switches in order (#6)', (tester) async {
+    await pomperA(tester, const Size(390, 800));
+
+    // Accueil → Catalogue → Potager.
+    await tester.tap(find.text('Catalogue'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Potager'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Potager'), findsOneWidget);
+
+    // Back → Catalogue → Accueil, retracing each visited tab.
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Catalogue'), findsOneWidget);
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Accueil'), findsOneWidget);
   });
 }

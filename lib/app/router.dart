@@ -6,6 +6,7 @@ import '../application/state/accueil_notifier.dart';
 import '../application/state/calendrier_notifier.dart';
 import '../application/state/potager_notifier.dart';
 import '../l10n/app_localizations.dart';
+import 'historique_navigation.dart';
 import '../presentation/screens/ecran_accueil.dart';
 import '../presentation/screens/ecran_calendrier.dart';
 import '../presentation/screens/ecran_meteo_detail.dart';
@@ -31,17 +32,16 @@ abstract final class RoutesApp {
   static const String calendrier = '/calendrier';
   static const String plus = '/plus';
 
-  /// Path segment of the zone-detail sub-route (relative to [potager] or to
-  /// [accueil] — the detail is reachable from both branches, so "back" returns
-  /// to the originating tab).
+  /// Path segment of the zone-detail sub-route (under [potager]).
   static const String zoneDetailSegment = 'zone/:id';
 
   /// Absolute location of the zone detail, under the **Potager** branch.
+  ///
+  /// The dashboard tiles also target this location: tapping a zone there
+  /// switches to the Potager tab on that zone, and the global back stack
+  /// (see [pileNavigationProvider]) returns straight to the dashboard
+  /// (docs/15 §8 D #5).
   static String zoneDetail(String id) => '$potager/zone/$id';
-
-  /// Absolute location of the zone detail, under the **Accueil** branch (used by
-  /// the dashboard tiles so the phone back button returns to the dashboard).
-  static String accueilZoneDetail(String id) => '$accueil/zone/$id';
 
   /// Hourly weather detail, under the **Accueil** branch (so re-tapping the
   /// Accueil tab pops back to the dashboard).
@@ -109,17 +109,6 @@ String _libelleCatalogue(AppLocalizations l) => l.navCatalogue;
 String _libelleCalendrier(AppLocalizations l) => l.navCalendrier;
 String _libellePlus(AppLocalizations l) => l.navPlus;
 
-/// Builds the application [GoRouter].
-///
-/// Uses a [StatefulShellRoute.indexedStack] so each of the five tabs keeps its
-/// own navigation state and scroll position when switching between them — the
-/// dashboard, the multi-level Potager, etc. stay where the user left them. The
-/// shell renders the responsive [EchafaudageNavigation] chrome around the
-/// active branch.
-///
-/// Kept as a top-level factory (not a provider) for now: routing has no runtime
-/// dependencies yet. It moves behind a Riverpod provider once a route needs to
-/// react to app state (e.g. onboarding completion).
 /// Invalidates the time-sensitive view-model of the tab at [index] so it
 /// reloads on (re)entry — keeping the dashboard, the garden plan and the agenda
 /// in sync with edits made elsewhere. Catalogue (static) and Plus are left as-is.
@@ -134,28 +123,71 @@ void _rafraichirBranche(WidgetRef ref, int index) {
   }
 }
 
-GoRouter creerRouteur() {
-  return GoRouter(
+/// Maps an absolute [location] to the index of the branch that owns it, by
+/// matching the top-level path segment. Used to refresh the destination branch
+/// when the global back stack navigates there.
+int _indexBranche(String location) {
+  if (location.startsWith(RoutesApp.potager)) return 1;
+  if (location.startsWith(RoutesApp.catalogue)) return 2;
+  if (location.startsWith(RoutesApp.calendrier)) return 3;
+  if (location.startsWith(RoutesApp.plus)) return 4;
+  return 0; // Accueil (default / fallback).
+}
+
+/// The application [GoRouter], built once and cached for the app's lifetime.
+///
+/// Uses a [StatefulShellRoute.indexedStack] so each of the five tabs keeps the
+/// state of its **root** screen (dashboard scroll, catalogue search…) when
+/// switching between them. Native indexed-stack back, however, only pops within
+/// the active branch; to give a browser-like back that retraces every step
+/// across tabs (docs/15 §8 D #5/#6), the router feeds a single cross-branch
+/// history ([pileNavigationProvider]) from a listener on its
+/// [GoRouterDelegate], and the shell's `PopScope` drives the system back button
+/// from it. Tapping any tab resets that tab to its root (so a tab never
+/// restores a stale sub-route — the back button, not the tab, replays a deep
+/// path).
+///
+/// Lives behind a provider because routing now reacts to app state (the history
+/// notifier); the provider caches the single [GoRouter] instance.
+final routeurProvider = Provider<GoRouter>((ref) {
+  final routeur = GoRouter(
     initialLocation: RoutesApp.accueil,
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          // Consumer so selecting a tab can refresh that tab's data (the
-          // dashboard/agenda must reflect changes made in other tabs).
+          // Consumer so the shell can read the cross-branch history (back
+          // button) and refresh a tab's data when entered (the dashboard/agenda
+          // must reflect changes made elsewhere).
           return Consumer(
-            builder: (context, ref, _) => EchafaudageNavigation(
-              indexActif: navigationShell.currentIndex,
-              destinations: _destinations,
-              onSelection: (index) {
-                _rafraichirBranche(ref, index);
-                navigationShell.goBranch(
-                  index,
-                  // Re-tapping the active tab pops it back to its root.
-                  initialLocation: index == navigationShell.currentIndex,
-                );
-              },
-              child: navigationShell,
-            ),
+            builder: (context, ref, _) {
+              final pile = ref.watch(pileNavigationProvider);
+              final peutRevenir = pile.length > 1;
+              return PopScope(
+                // While there is a previous screen, intercept the system back
+                // button and replay the global history; at the first entry,
+                // let the OS pop the app.
+                canPop: !peutRevenir,
+                onPopInvokedWithResult: (didPop, _) {
+                  if (didPop) return;
+                  final precedent =
+                      ref.read(pileNavigationProvider.notifier).precedent;
+                  _rafraichirBranche(ref, _indexBranche(precedent));
+                  context.go(precedent);
+                },
+                child: EchafaudageNavigation(
+                  indexActif: navigationShell.currentIndex,
+                  destinations: _destinations,
+                  onSelection: (index) {
+                    _rafraichirBranche(ref, index);
+                    // Any tab tap returns to that tab's root (docs/15 §8 D
+                    // #5/#6): a deep sub-route is replayed via the back button,
+                    // never restored by re-selecting the tab.
+                    navigationShell.goBranch(index, initialLocation: true);
+                  },
+                  child: navigationShell,
+                ),
+              );
+            },
           );
         },
         branches: [
@@ -165,16 +197,10 @@ GoRouter creerRouteur() {
                 path: RoutesApp.accueil,
                 builder: (context, state) => const EcranAccueil(),
                 routes: [
-                  // Same detail screen as the Potager branch, registered here so
-                  // tapping a dashboard tile keeps "back" on the Accueil tab.
-                  GoRoute(
-                    path: RoutesApp.zoneDetailSegment,
-                    builder: (context, state) => EcranZoneDetail(
-                      zoneId: state.pathParameters['id']!,
-                    ),
-                  ),
-                  // Hourly weather detail (opened from the weather card) — a
-                  // sub-route so re-tapping Accueil pops back to the dashboard.
+                  // Hourly weather detail (opened from the weather card). The
+                  // zone detail is no longer registered here: a dashboard zone
+                  // tile now jumps to the Potager branch (#5), and the global
+                  // back stack returns to the dashboard.
                   GoRoute(
                     path: RoutesApp.accueilMeteoSegment,
                     builder: (context, state) => const EcranMeteoDetail(),
@@ -247,4 +273,20 @@ GoRouter creerRouteur() {
       ),
     ],
   );
-}
+
+  // Single source of truth for the cross-branch history: every location change
+  // reported by the delegate (tab switch, sub-route push, programmatic go) is
+  // folded into the back stack with browser semantics.
+  void ecouter() {
+    final location = routeur.routerDelegate.currentConfiguration.uri.toString();
+    ref.read(pileNavigationProvider.notifier).enregistrer(location);
+  }
+
+  routeur.routerDelegate.addListener(ecouter);
+  ref.onDispose(() {
+    routeur.routerDelegate.removeListener(ecouter);
+    routeur.dispose();
+  });
+
+  return routeur;
+});
