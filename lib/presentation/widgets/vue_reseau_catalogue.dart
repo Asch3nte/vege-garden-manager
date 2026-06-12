@@ -116,8 +116,11 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   // (#8b): cheap, and re-spreads labels that a manual zoom-out brought together.
   static const Duration _delaiReajustement = Duration(seconds: 1);
 
-  // Collapsed height of the network header (#10).
-  static const double _enteteMin = 140.0;
+  // BOX 2 (the draggable fiches sheet) sizes, as a fraction of the view height:
+  // resting (BOX 1 large) and max (capped at half the screen, so BOX 1 never
+  // shrinks below half — past the max the sheet scrolls internally).
+  static const double _feuilleMin = 0.32;
+  static const double _feuilleMax = 0.5;
 
   late final List<Offset> _positions;
   late final List<_Arete> _aretes;
@@ -150,14 +153,22 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   // Debounces the post-movement de-overlap recompute (#8b).
   Timer? _reajustement;
 
-  // Scrolls the page; its offset collapses the network header (#10).
-  final ScrollController _defilement = ScrollController();
+  // Debounces re-fitting the selection when BOX 1 is resized (sheet drag), so
+  // the framing/labels follow the new box size instead of the old one.
+  Timer? _recadrageTaille;
+
+  // Drives BOX 2 (the fiches sheet); its size shrinks BOX 1 (the network) and
+  // toggles the compact form (#10).
+  final DraggableScrollableController _feuille =
+      DraggableScrollableController();
+  double _tailleFeuille = _feuilleMin;
 
   @override
   void initState() {
     super.initState();
     _positions = _calculerPositions(widget.fiches.length);
     _aretes = _calculerAretes(widget.fiches);
+    _feuille.addListener(_surFeuille);
     _ctrl =
         AnimationController(
           vsync: this,
@@ -174,9 +185,28 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   @override
   void dispose() {
     _reajustement?.cancel();
-    _defilement.dispose();
+    _recadrageTaille?.cancel();
+    _feuille.removeListener(_surFeuille);
+    _feuille.dispose();
     _ctrl.dispose();
     super.dispose();
+  }
+
+  /// Tracks BOX 2's size so BOX 1 (the network) resizes to the space above it.
+  void _surFeuille() {
+    if (!mounted || !_feuille.isAttached) return;
+    setState(() => _tailleFeuille = _feuille.size);
+  }
+
+  /// After BOX 1 settles at a new size (debounced, each resize re-arms it),
+  /// re-fit the selection so its framing and labels match the new box. Without
+  /// a selection the baseline already re-fits from the live viewport.
+  void _planifierRecadrageTaille() {
+    if (_selection == null) return;
+    _recadrageTaille?.cancel();
+    _recadrageTaille = Timer(const Duration(milliseconds: 120), () {
+      if (mounted && _selection != null) _cadrerSelection();
+    });
   }
 
   /// (Re)arms the idle timer that recomputes the de-overlap once the user stops
@@ -542,106 +572,120 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   /// active selection's labels spread (#8b) at the baseline scale.
   void _recentrer() => _recadrer(_baseline(_viewport));
 
-  /// Whether the network header has collapsed far enough to switch the nodes
-  /// back to initials and drop the labels (#10).
-  static const double _seuilCompact = 0.55;
-
   @override
   Widget build(BuildContext context) {
-    // Expanded height of the network header; collapses to [_enteteMin] as the
-    // list below scrolls (#10).
-    final hauteurEcran = MediaQuery.sizeOf(context).height;
-    final enteteMax = (hauteurEcran * 0.52).clamp(280.0, 460.0);
-
     final selection = _selection;
     final mere = selection == null ? null : widget.fiches[selection];
     final varietes = (mere != null && mere.estMere)
         ? widget.varietesDe(mere.id)
         : const <FichePlante>[];
 
-    return CustomScrollView(
-      controller: _defilement,
-      // Drag on the network header → pan/zoom (its own gesture). Drag on the
-      // list below → scroll, which collapses the header (#7 vs #10).
-      slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: _EnteteReseau(
-            min: _enteteMin,
-            max: enteteMax,
-            constructeur: _construireCanvas,
-            seuilCompact: _seuilCompact,
-            // Recreated each build → the header reflects the current selection,
-            // transform and displacements.
-            signature: Object.hash(_selection, _transform, _afficherAEviter),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              EspacementsApp.s4,
-              EspacementsApp.s2,
-              EspacementsApp.s4,
-              0,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // BOX 1 (network) fills the space *above* BOX 2 (the sheet): it shrinks
+        // as the sheet grows, never overlapped. Both stay independent — pan/zoom
+        // lives on BOX 1, scroll/tap on BOX 2.
+        final hauteurBox1 = (constraints.maxHeight * (1 - _tailleFeuille))
+            .clamp(0.0, constraints.maxHeight);
+        return Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: hauteurBox1,
+              child: _construireCanvas(context),
             ),
-            child: Column(
-              children: [
-                _BarreAEviter(
-                  valeur: _afficherAEviter,
-                  onChanged: (v) {
-                    setState(() => _afficherAEviter = v);
-                    // The named set (links) changed → re-spread labels at the
-                    // current view so none overlap (#8b).
-                    if (_selection != null) {
-                      _recadrer(_transformActuel(_viewport));
-                    }
-                  },
-                ),
-                const SizedBox(height: EspacementsApp.s3),
-                _Panneau(
-                  fiche: mere,
-                  nbBons: selection == null
-                      ? 0
-                      : _compter(selection, bon: true),
-                  nbEviter: selection == null
-                      ? 0
-                      : _compter(selection, bon: false),
-                  onVoirFiche: mere == null ? null : () => _ouvrirFiche(mere),
-                ),
-              ],
+            DraggableScrollableSheet(
+              controller: _feuille,
+              initialChildSize: _feuilleMin,
+              minChildSize: _feuilleMin,
+              maxChildSize: _feuilleMax,
+              builder: (context, defilement) => _construireFeuille(
+                context,
+                defilement,
+                mere,
+                selection,
+                varietes,
+              ),
             ),
-          ),
-        ),
-        // Varieties of the selected species (#9).
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(
-            EspacementsApp.s4,
-            EspacementsApp.s3,
-            EspacementsApp.s4,
-            EspacementsApp.s4,
-          ),
-          sliver: SliverList.list(
-            children: [
-              for (final v in varietes)
-                _LigneVarieteReseau(fiche: v, onAjouter: widget.onAjouter),
-            ],
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
-  /// Builds the interactive constellation canvas (#7/#8). In [compact] mode the
-  /// nodes show their initial and the full-name labels are dropped (#10).
-  Widget _construireCanvas(BuildContext context, bool compact) {
+  /// BOX 2: the draggable fiches sheet — toggle + selected-species panel + its
+  /// varieties (#9). Swiping it up shrinks BOX 1 (#10); it scrolls internally
+  /// once fully expanded.
+  Widget _construireFeuille(
+    BuildContext context,
+    ScrollController defilement,
+    FichePlante? mere,
+    int? selection,
+    List<FichePlante> varietes,
+  ) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surface,
+      elevation: 8,
+      borderRadius: const BorderRadius.vertical(top: RayonsApp.lg),
+      clipBehavior: Clip.antiAlias,
+      child: ListView(
+        controller: defilement,
+        padding: const EdgeInsets.fromLTRB(
+          EspacementsApp.s4,
+          EspacementsApp.s2,
+          EspacementsApp.s4,
+          EspacementsApp.s4,
+        ),
+        children: [
+          // Grip handle, hinting the sheet can be dragged.
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: EspacementsApp.s2),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.outlineVariant,
+                borderRadius: const BorderRadius.all(Radius.circular(2)),
+              ),
+            ),
+          ),
+          _BarreAEviter(
+            valeur: _afficherAEviter,
+            onChanged: (v) {
+              setState(() => _afficherAEviter = v);
+              // The named set (links) changed → re-spread labels at the current
+              // view so none overlap (#8b).
+              if (_selection != null) {
+                _recadrer(_transformActuel(_viewport));
+              }
+            },
+          ),
+          const SizedBox(height: EspacementsApp.s3),
+          _Panneau(
+            fiche: mere,
+            nbBons: selection == null ? 0 : _compter(selection, bon: true),
+            nbEviter: selection == null ? 0 : _compter(selection, bon: false),
+            onVoirFiche: mere == null ? null : () => _ouvrirFiche(mere),
+          ),
+          if (varietes.isNotEmpty) const SizedBox(height: EspacementsApp.s3),
+          for (final v in varietes)
+            _LigneVarieteReseau(fiche: v, onAjouter: widget.onAjouter),
+        ],
+      ),
+    );
+  }
+
+  /// Builds the interactive constellation canvas (#7/#8). Behaves identically
+  /// whether BOX 1 is reduced or not: bubbles + full names + de-overlap.
+  Widget _construireCanvas(BuildContext context) {
     final theme = Theme.of(context);
     final voisins = _selection == null ? const <int>{} : _voisins(_selection!);
-    // Selected node + its links — drives the highlight and paint order.
+    // Selected node + its links — full-name labels and paint order (#8a).
     final surlignes = _selection == null
         ? const <int>{}
         : {_selection!, ...voisins};
-    // Nodes shown with their full name (#8a) — none while collapsed (#10).
-    final nommes = compact ? const <int>{} : surlignes;
+    final nommes = surlignes;
     // Paint dimmed (attenuated) nodes first and highlighted ones on top, so a
     // displaced node under an attenuated disc keeps its full opacity (#8b).
     final ordreNoeuds = [
@@ -653,8 +697,20 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        _viewport = Size(constraints.maxWidth, constraints.maxHeight);
+        final nouveauViewport = Size(
+          constraints.maxWidth,
+          constraints.maxHeight,
+        );
+        if (nouveauViewport != _viewport) {
+          _viewport = nouveauViewport;
+          // BOX 1 changed size → re-fit the selection for the new box.
+          _planifierRecadrageTaille();
+        }
+        // Live transform/displacements so pan/zoom/tap keep updating, and the
+        // framing/labels stay identical whether BOX 1 is reduced or not.
         final t = _transformActuel(_viewport);
+        final decalages = _decalages;
+        Offset posAffichee(int i) => _posAffichee(i);
 
         // The whole canvas pans/zooms; the gesture arena lets node taps and the
         // controls win their own taps, while drags pan/zoom.
@@ -669,7 +725,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                   size: _viewport,
                   painter: _PeintreAretes(
                     positions: _positions,
-                    decalages: _decalages,
+                    decalages: decalages,
                     aretes: _aretes,
                     selection: _selection,
                     afficherAEviter: _afficherAEviter,
@@ -680,8 +736,8 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                 ),
                 for (final i in ordreNoeuds)
                   Positioned(
-                    left: t.versEcran(_posAffichee(i)).dx - _rayonNoeud,
-                    top: t.versEcran(_posAffichee(i)).dy - _rayonNoeud,
+                    left: t.versEcran(posAffichee(i)).dx - _rayonNoeud,
+                    top: t.versEcran(posAffichee(i)).dy - _rayonNoeud,
                     child: _Noeud(
                       fiche: widget.fiches[i],
                       rayon: _rayonNoeud,
@@ -732,49 +788,6 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
   int _compter(int i, {required bool bon}) =>
       _aretes.where((a) => a.touche(i) && a.bon == bon).length;
-}
-
-/// Collapsing header hosting the interactive constellation (#10).
-///
-/// Shrinks from [max] to [min] as the list below scrolls; past [seuilCompact]
-/// of the travel it asks the canvas for the compact (initials, no labels) form.
-class _EnteteReseau extends SliverPersistentHeaderDelegate {
-  final double min;
-  final double max;
-  final double seuilCompact;
-  final Widget Function(BuildContext context, bool compact) constructeur;
-
-  /// Hash of the host state that affects the rendered canvas; drives
-  /// [shouldRebuild] so the header refreshes on selection/zoom changes.
-  final int signature;
-
-  _EnteteReseau({
-    required this.min,
-    required this.max,
-    required this.seuilCompact,
-    required this.constructeur,
-    required this.signature,
-  });
-
-  @override
-  double get minExtent => min;
-
-  @override
-  double get maxExtent => max;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlaps) {
-    final progression = max > min ? (shrinkOffset / (max - min)) : 0.0;
-    final compact = progression >= seuilCompact;
-    return SizedBox.expand(child: constructeur(context, compact));
-  }
-
-  @override
-  bool shouldRebuild(_EnteteReseau old) =>
-      old.min != min ||
-      old.max != max ||
-      old.seuilCompact != seuilCompact ||
-      old.signature != signature;
 }
 
 /// A variety row listed under the selected species in the network view (#9),

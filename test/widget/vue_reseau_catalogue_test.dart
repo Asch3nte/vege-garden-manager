@@ -467,6 +467,13 @@ void main() {
     await tester.tap(find.text('T')); // select the Tomate species
     await tester.pumpAndSettle();
 
+    // Expand BOX 2 (the fiches sheet) so every variety is laid out.
+    await tester.drag(
+      find.text('Afficher les associations à éviter'),
+      const Offset(0, -350),
+    );
+    await tester.pumpAndSettle();
+
     expect(find.text('Coeur de boeuf'), findsOneWidget);
     expect(find.text('Roma'), findsOneWidget);
 
@@ -476,11 +483,9 @@ void main() {
     expect(find.text('Ajouter au potager'), findsOneWidget);
   });
 
-  // --- #10 : the network header collapses on scroll --------------------------
+  // --- #10 : dragging BOX 2 up shrinks BOX 1 (capped at half the screen) ------
 
-  testWidgets('scrolling the list collapses the header and drops the labels', (
-    tester,
-  ) async {
+  testWidgets('expanding BOX 2 is capped at half the screen', (tester) async {
     final tomate = _fiche(
       'tomate',
       'Tomate',
@@ -502,15 +507,127 @@ void main() {
     await tester.tap(find.text('T'));
     await tester.pumpAndSettle();
 
-    // Expanded: the companion's full-name label is shown (#8a).
+    // The companion's full-name label is shown — and stays shown whether BOX 1
+    // is reduced or not (one uniform behaviour).
     expect(find.text('Basilic'), findsOneWidget);
 
-    // Scroll the list up (drag on the panel, below the network header) → the
-    // header collapses and the nodes drop back to initials (#10).
-    await tester.drag(find.text('Voir la fiche'), const Offset(0, -260));
+    // Drag BOX 2 up hard → it grows but is capped at half the screen, so its
+    // content stays in the lower half (its top below the middle).
+    await tester.drag(find.text('Voir la fiche'), const Offset(0, -400));
+    await tester.pumpAndSettle();
+    expect(find.text('Basilic'), findsOneWidget, reason: 'names stay visible');
+
+    final vue = tester.getRect(find.byType(VueReseauCatalogue));
+    final hautFeuille = tester
+        .getRect(find.text('Afficher les associations à éviter'))
+        .top;
+    expect(hautFeuille, greaterThanOrEqualTo(vue.top + vue.height * 0.45));
+  });
+
+  testWidgets('the reduced network keeps updating live (zoom)', (tester) async {
+    final tomate = _fiche(
+      'tomate',
+      'Tomate',
+      CategoriePlante.legume,
+      bons: {'basilic'},
+    );
+    final basilic = _fiche(
+      'basilic',
+      'Basilic',
+      CategoriePlante.aromatique,
+      bons: {'tomate'},
+    );
+
+    await tester.pomperEspece([tomate, basilic], const {});
+    await tester.tap(find.text('T'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Basilic'), findsNothing);
+    // Reduce BOX 1 (expand BOX 2).
+    await tester.drag(find.text('Voir la fiche'), const Offset(0, -400));
+    await tester.pumpAndSettle();
+
+    // Zooming in must move a node *now* (live), not only once BOX 2 is lowered.
+    // (find.text('T').first is the constellation node; the panel avatar also
+    // shows "T".)
+    final avant = tester.getCenter(find.text('T').first);
+    await tester.tap(find.byTooltip('Zoomer'));
+    await tester.pumpAndSettle();
+    final apres = tester.getCenter(find.text('T').first);
+    expect(
+      (apres - avant).distance,
+      greaterThan(2),
+      reason: 'the reduced network must repaint live',
+    );
+  });
+
+  testWidgets('resizing BOX 1 re-fits the selection to the new box size', (
+    tester,
+  ) async {
+    final tomate = _fiche(
+      'tomate',
+      'Tomate',
+      CategoriePlante.legume,
+      bons: {'basilic'},
+    );
+    final basilic = _fiche(
+      'basilic',
+      'Basilic',
+      CategoriePlante.aromatique,
+      bons: {'tomate'},
+    );
+
+    await tester.pomperEspece([tomate, basilic], const {});
+    await tester.tap(find.text('T'));
+    await tester.pumpAndSettle();
+    final avant = tester.getCenter(find.text('T').first);
+
+    // Shrink BOX 1 a bit (grow BOX 2, staying below the compact threshold so the
+    // node stays present) → the framing must follow the new box.
+    await tester.drag(
+      find.text('Afficher les associations à éviter'),
+      const Offset(0, -70),
+    );
+    await tester.pumpAndSettle();
+    // Let the debounced re-fit fire (it is timer-based, not frame-based).
+    await tester.pump(const Duration(milliseconds: 150));
+    await tester.pumpAndSettle();
+
+    final apres = tester.getCenter(find.text('T').first);
+    expect(
+      (apres - avant).distance,
+      greaterThan(5),
+      reason: 'the selection should be re-fitted to the resized box',
+    );
+  });
+
+  testWidgets('a heavily-connected selection still shows every name', (
+    tester,
+  ) async {
+    // One uniform behaviour: full names are always shown, even with many
+    // companions (off-screen is accepted; no special-casing/cap).
+    final hub = _fiche(
+      'laitue',
+      'Laitue',
+      CategoriePlante.legume,
+      bons: {for (var i = 0; i < 15; i++) 's$i'},
+    );
+    final spokes = [
+      for (var i = 0; i < 15; i++)
+        _fiche(
+          's$i',
+          'Compagnon numéro $i',
+          CategoriePlante.aromatique,
+          bons: {'laitue'},
+        ),
+    ];
+
+    await tester.pomperReseau(hub, spokes);
+    await tester.tap(find.text('L').first); // select Laitue
+    await tester.pumpAndSettle();
+
+    // Companion labels are rendered (uniform behaviour), not dropped.
+    expect(find.text('Compagnon numéro 0'), findsOneWidget);
+    expect(find.text('Compagnon numéro 14'), findsOneWidget);
   });
 }
 
