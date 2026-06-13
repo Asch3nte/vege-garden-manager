@@ -6,7 +6,10 @@ plugins {
 
 android {
     namespace = "com.potagerer.pot_a_gerer"
-    compileSdk = flutter.compileSdkVersion
+    // 36 (≥ Flutter's default 34): file_picker and its lifecycle dependency
+    // require consumers to compile against API 36+. Plugin modules are raised
+    // to 36 in the root build.gradle.kts; only compileSdk is bumped here.
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
