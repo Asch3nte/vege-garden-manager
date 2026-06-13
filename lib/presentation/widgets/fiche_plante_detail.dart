@@ -6,6 +6,7 @@ import '../../application/providers/horloge_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/contexte_climat.dart';
 import '../../domain/entities/fiche_plante.dart';
+import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
 import 'calendrier_semis_recolte.dart';
 import 'libelles_enums.dart';
@@ -77,19 +78,20 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
     final l10n = AppLocalizations.of(context)!;
 
     final vue = ref.watch(catalogueProvider).value;
-    final catalogue = vue?.fiches ?? const <FichePlante>[];
     // The species this sheet belongs to (itself when it is one), and that
     // species' varieties — the only ones offered by the switcher.
     final mere = vue?.mereDe(_fiche) ?? _fiche;
     final varietes = vue?.varietesDe(mere.id) ?? const <FichePlante>[];
     final surVariete = _fiche.id != mere.id;
 
-    // The entity exposes association *predicates* (not the id sets), so derive
-    // the companion names by scanning the loaded catalogue and asking the sheet
-    // about each candidate — respecting the entity's encapsulation.
-    final bons = _noms(catalogue.where((f) => _fiche.sAssocieBienAvec(f.id)));
-    final aEviter =
-        _noms(catalogue.where((f) => _fiche.entreEnConflitAvec(f.id)));
+    // Companions are resolved by the shared service over **every** species
+    // (not the filtered list), bidirectionally — so the names and counts here
+    // match the Réseau view exactly (ADR-0008).
+    const resolveur = ResolveurCompagnonnage();
+    final compagnons =
+        resolveur.resoudre(_fiche, vue?.toutesMeres ?? const <FichePlante>[]);
+    final bons = _noms(compagnons.bons);
+    final aEviter = _noms(compagnons.aEviter);
 
     final liste = ListView(
       controller: widget.scrollController,

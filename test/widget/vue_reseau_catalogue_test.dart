@@ -34,10 +34,11 @@ FichePlante _fiche(
   CategoriePlante cat, {
   Set<String> bons = const {},
   Set<String> mauvais = const {},
+  String famille = 'Test',
 }) => FichePlante(
   id: id,
   nomScientifique: '$id sp',
-  familleBotanique: 'Test',
+  familleBotanique: famille,
   categorie: cat,
   usages: const {UsagePlante.alimentaire},
   nomsLocalises: {'fr': nomFr},
@@ -56,7 +57,8 @@ FichePlante _fiche(
 );
 
 void main() {
-  // Distinct initials so a node can be tapped by its letter (T/C/B/F).
+  // Distinct initials so a node can be tapped by its letter (T/C/B/F), and
+  // distinct families so each sits in its own bubble (ADR-0008 grouping).
   final fiches = [
     _fiche(
       'tomate',
@@ -64,14 +66,27 @@ void main() {
       CategoriePlante.legume,
       bons: {'basilic'},
       mauvais: {'fenouil'},
+      famille: 'Solanaceae',
     ),
-    _fiche('courgette', 'Courgette', CategoriePlante.legume),
-    _fiche('basilic', 'Basilic', CategoriePlante.aromatique, bons: {'tomate'}),
+    _fiche(
+      'courgette',
+      'Courgette',
+      CategoriePlante.legume,
+      famille: 'Cucurbitaceae',
+    ),
+    _fiche(
+      'basilic',
+      'Basilic',
+      CategoriePlante.aromatique,
+      bons: {'tomate'},
+      famille: 'Lamiaceae',
+    ),
     _fiche(
       'fenouil',
       'Fenouil',
       CategoriePlante.aromatique,
       mauvais: {'tomate'},
+      famille: 'Apiaceae',
     ),
   ];
 
@@ -143,16 +158,189 @@ void main() {
     );
   });
 
+  testWidgets('searching by name selects and frames the matching species', (
+    tester,
+  ) async {
+    await pomper(tester);
+
+    // The search is collapsed to a magnifier; open it first (tweak #2).
+    await tester.tap(find.byIcon(Icons.search));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'tom');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+
+    // The match is selected → its panel shows the name + counts.
+    expect(find.text('Tomate'), findsWidgets);
+    expect(find.textContaining('bon compagnon'), findsOneWidget);
+  });
+
+  testWidgets('name search ignores accents and case', (tester) async {
+    await pomper(tester);
+
+    await tester.tap(find.byIcon(Icons.search));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'TÔMA');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tomate'), findsWidgets);
+  });
+
+  testWidgets('searching an unknown name shows a no-result hint', (
+    tester,
+  ) async {
+    await pomper(tester);
+
+    await tester.tap(find.byIcon(Icons.search));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'zzz');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Aucune plante trouvée'), findsOneWidget);
+  });
+
+  testWidgets('clearing the search drops the focus and collapses it', (
+    tester,
+  ) async {
+    await pomper(tester);
+
+    await tester.tap(find.byIcon(Icons.search));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'tom');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+    // Selected → the idle hint is gone.
+    expect(
+      find.text('Touchez une plante pour voir ses associations.'),
+      findsNothing,
+    );
+
+    // Clearing (the close icon) deselects (back to the global view) and
+    // collapses the field back to the magnifier (tweaks #2/#5).
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Touchez une plante pour voir ses associations.'),
+      findsOneWidget,
+    );
+    expect(find.byType(TextField), findsNothing);
+  });
+
+  testWidgets('the display menu opens and exposes the two toggles', (
+    tester,
+  ) async {
+    await pomper(tester);
+
+    // Collapsed → the zoom controls are hidden behind a single tune button.
+    expect(find.byTooltip('Zoomer'), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.tune));
+    await tester.pumpAndSettle();
+
+    // Opened → zoom controls plus the links and family-names toggles.
+    expect(find.byTooltip('Zoomer'), findsOneWidget);
+    expect(find.byIcon(Icons.polyline_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.label_outline), findsOneWidget);
+
+    // Toggling them does not throw.
+    await tester.tap(find.byIcon(Icons.polyline_outlined));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.label_outline));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('selecting a plant groups its links by family (constellation)', (
+    tester,
+  ) async {
+    await pomper(tester);
+
+    await tester.tap(find.text('T')); // select Tomate (Solanaceae)
+    await tester.pumpAndSettle();
+
+    // Its links appear as family-grouped nodes: the family name above and the
+    // species below. Basilic is Lamiaceae, Fenouil is Apiaceae.
+    expect(find.text('Lamiaceae'), findsOneWidget);
+    expect(find.text('Apiaceae'), findsOneWidget);
+    expect(find.text('Basilic'), findsWidgets);
+    expect(find.text('Fenouil'), findsWidgets);
+  });
+
+  testWidgets('the selected node merges into its own family group (#2)', (
+    tester,
+  ) async {
+    // Tomate and Pomme de terre are both Solanaceae and companions: selecting
+    // Tomate must fuse them under a single "Solanaceae" node listing both, with
+    // no separate selected-node disc.
+    final tomate = _fiche(
+      'tomate',
+      'Tomate',
+      CategoriePlante.legume,
+      bons: {'patate'},
+      famille: 'Solanaceae',
+    );
+    final patate = _fiche(
+      'patate',
+      'Pomme de terre',
+      CategoriePlante.legume,
+      bons: {'tomate'},
+      famille: 'Solanaceae',
+    );
+    final basilic = _fiche(
+      'basilic',
+      'Basilic',
+      CategoriePlante.aromatique,
+      bons: {'tomate'},
+      famille: 'Lamiaceae',
+    );
+
+    await tester.pomperReseau(tomate, [patate, basilic]);
+    await tester.tap(find.text('T')); // select Tomate (the hub initial)
+    await tester.pumpAndSettle();
+
+    // A single Solanaceae node lists both the selection and its same-family link.
+    expect(find.text('Solanaceae'), findsOneWidget);
+    expect(find.text('Tomate'), findsWidgets);
+    expect(find.text('Pomme de terre'), findsWidgets);
+    // A link of another family keeps its own group node.
+    expect(find.text('Lamiaceae'), findsOneWidget);
+    expect(find.text('Basilic'), findsWidgets);
+  });
+
+  // --- #3 : enlarged Voronoï hitbox (tap near a small node) ------------------
+
+  testWidgets('a tap just off a small node still selects it (#3)', (
+    tester,
+  ) async {
+    await pomper(tester);
+
+    // Tap a little to the side of the dezoomed "T" disc — off the disc but
+    // within the enlarged hitbox — and assert Tomate gets selected anyway.
+    final centre = tester.getCenter(find.text('T'));
+    await tester.tapAt(centre + const Offset(16, 0));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tomate'), findsWidgets);
+    expect(find.textContaining('bon compagnon'), findsOneWidget);
+    expect(
+      find.text('Touchez une plante pour voir ses associations.'),
+      findsNothing,
+    );
+  });
+
   testWidgets('re-tapping the selected node opens its detail sheet', (
     tester,
   ) async {
     await pomper(tester);
 
-    // First tap selects (now both the node and the panel avatar show "T").
+    // First tap selects Tomate.
     await tester.tap(find.text('T'));
     await tester.pumpAndSettle();
-    // Re-tap the node itself (first "T" in tree order is the constellation node).
-    await tester.tap(find.text('T').first);
+    // Since #2 the selection merges into its family group (no standalone disc);
+    // its tappable name label is the first "Tomate" in tree order (canvas before
+    // the panel). Re-tapping it opens the sheet.
+    await tester.tap(find.text('Tomate').first);
     await tester.pumpAndSettle();
 
     // The detail sheet is open — its "add to garden" CTA is shown.
@@ -186,12 +374,17 @@ void main() {
     final avant = tester.getCenter(find.text('T'));
     // Manual multi-step drag from an empty point on the left of the canvas
     // (past the side padding, far from the centred constellation, the top-right
-    // controls and the bottom panel) so the scale recognizer engages.
+    // controls and the bottom panel) so the scale recognizer engages. Since the
+    // canvas also has an onTapUp (Voronoï hit-testing, #3), the scale gesture now
+    // wins the arena only once the first move crosses the tap slop — that first
+    // segment is absorbed, so we drag a few steps and expect the *remaining*
+    // segments to pan every node.
     final rect = tester.getRect(find.byType(VueReseauCatalogue));
     final geste = await tester.startGesture(
       Offset(rect.left + 24, rect.center.dy),
     );
     await tester.pump();
+    await geste.moveBy(const Offset(25, 0));
     await geste.moveBy(const Offset(25, 0));
     await geste.moveBy(const Offset(25, 0));
     await tester.pump();
@@ -213,6 +406,10 @@ void main() {
     await pomper(tester);
 
     final baseline = tester.getCenter(find.text('T'));
+
+    // The zoom/recenter controls live in the collapsible display menu; open it.
+    await tester.tap(find.byIcon(Icons.tune));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Zoomer'));
     await tester.pumpAndSettle();
@@ -240,10 +437,9 @@ void main() {
   ) async {
     await pomper(tester);
 
-    // Basilic (good companion) and Fenouil (a "to avoid" link, shown by default)
-    // are linked to Tomate; Courgette is unrelated.
-    expect(find.text('Basilic'), findsNothing);
-
+    // In the global view, names show where they fit (tweak #6); selecting a node
+    // then restricts the labels to it and its links (Basilic/Fenouil are linked
+    // to Tomate, Courgette is unrelated).
     await tester.tap(find.text('T'));
     await tester.pumpAndSettle();
 
@@ -307,6 +503,34 @@ void main() {
     await tester.pumpAndSettle();
 
     _aucunChevauchement(tester, noms);
+  });
+
+  testWidgets('focus collapses same-family links into one grouped node', (
+    tester,
+  ) async {
+    final hub = _fiche(
+      'hub',
+      'Tomate cerise',
+      CategoriePlante.legume,
+      bons: {'s0', 's1'},
+      famille: 'Solanaceae',
+    );
+    // Both companions share the same family → one grouped node lists both.
+    final spokes = [
+      _fiche('s0', 'Capucine', CategoriePlante.fleur,
+          bons: {'hub'}, famille: 'Tropaeolaceae'),
+      _fiche('s1', 'Souci', CategoriePlante.fleur,
+          bons: {'hub'}, famille: 'Tropaeolaceae'),
+    ];
+
+    await tester.pomperReseau(hub, spokes);
+    await tester.tap(find.text('T')); // the hub initial
+    await tester.pumpAndSettle();
+
+    // The single family node shows the family once and lists both species.
+    expect(find.text('Tropaeolaceae'), findsOneWidget);
+    expect(find.text('Capucine'), findsWidgets);
+    expect(find.text('Souci'), findsWidgets);
   });
 
   testWidgets('the fit keeps every label within the canvas (no clipping)', (
@@ -418,6 +642,10 @@ void main() {
 
     await tester.pomperReseau(hub, spokes);
     await tester.tap(find.text('T'));
+    await tester.pumpAndSettle();
+
+    // Open the collapsible display menu to reach the zoom controls.
+    await tester.tap(find.byIcon(Icons.tune));
     await tester.pumpAndSettle();
 
     // Zooming out shrinks the on-screen gaps until the constant-size labels
@@ -547,12 +775,15 @@ void main() {
     await tester.pumpAndSettle();
 
     // Zooming in must move a node *now* (live), not only once BOX 2 is lowered.
-    // (find.text('T').first is the constellation node; the panel avatar also
-    // shows "T".)
-    final avant = tester.getCenter(find.text('T').first);
+    // Track the linked companion's label inside the focus group (a canvas node
+    // that moves with the zoom); since #2 the selection itself merges into its
+    // family group's disc, so "T" is no longer a standalone constellation node.
+    final avant = tester.getCenter(find.text('Basilic'));
+    await tester.tap(find.byIcon(Icons.tune));
+    await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Zoomer'));
     await tester.pumpAndSettle();
-    final apres = tester.getCenter(find.text('T').first);
+    final apres = tester.getCenter(find.text('Basilic'));
     expect(
       (apres - avant).distance,
       greaterThan(2),

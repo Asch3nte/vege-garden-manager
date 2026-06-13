@@ -16,6 +16,7 @@ import '../providers/ajout_plante_provider.dart';
 import '../screens/ecran_selection_zone.dart';
 import '../widgets/fiche_plante_detail.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/vue_associations.dart';
 import '../widgets/vue_reseau_catalogue.dart';
 
 /// Runs the "add a plant" flow for [fiche]: resolve the target zone (the pending
@@ -465,8 +466,9 @@ class _CarteGroupeState extends State<_CarteGroupe> {
 }
 
 /// One species row: name, category, sun & water needs; trailing chevron, or an
-/// expand toggle with the variety count when [onToggle] is set.
-class _CarteFiche extends StatelessWidget {
+/// expand toggle (arrow only — the variety count is dropped, #1) when [onToggle]
+/// is set.
+class _CarteFiche extends ConsumerWidget {
   final FichePlante fiche;
   final void Function(FichePlante) onAjouter;
   final int nbVarietes;
@@ -482,7 +484,7 @@ class _CarteFiche extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
@@ -531,22 +533,36 @@ class _CarteFiche extends StatelessWidget {
                 ],
               ),
             ),
+            // One-tap access to the detailed Associations view of this species.
+            IconButton(
+              icon: const Icon(Icons.hub_outlined),
+              tooltip: l10n.catalogueAssociations,
+              onPressed: () => afficherVueAssociations(
+                context,
+                fiche,
+                ref.read(catalogueProvider).value?.toutesMeres ??
+                    const <FichePlante>[],
+                onAjouter: onAjouter,
+              ),
+            ),
+            // The arrow only signals whether varieties exist (expandable) — the
+            // count is dropped so every card's right side stays compact.
+            // Both branches must take the *same* width: a default IconButton
+            // reserves a 48px touch target, which would steal ~24px from the meta
+            // Wrap on the left and push "Arrosage modéré" onto a second line only
+            // for expandable cards. The toggle is therefore stripped to the bare
+            // icon footprint (zero padding, no min constraints) so it matches the
+            // plain chevron → the meta stays on one line on every card.
             if (onToggle != null)
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(ouvert ? Icons.expand_less : Icons.expand_more),
-                    tooltip: l10n.catalogueNbVarietes(nbVarietes),
-                    onPressed: onToggle,
-                  ),
-                  Text(
-                    '$nbVarietes',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+              IconButton(
+                icon: Icon(ouvert ? Icons.expand_less : Icons.expand_more),
+                iconSize: TaillesIconesApp.md,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                visualDensity: VisualDensity.compact,
+                color: theme.colorScheme.onSurfaceVariant,
+                tooltip: l10n.catalogueNbVarietes(nbVarietes),
+                onPressed: onToggle,
               )
             else
               Icon(

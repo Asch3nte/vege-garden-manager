@@ -233,6 +233,18 @@ void main() {
     expect(find.text('Ajouter au potager'), findsOneWidget);
   });
 
+  testWidgets('a fiche card opens the detailed Associations view (ADR-0008)',
+      (tester) async {
+    await monter(tester);
+
+    // Each species card carries an Associations button (Fiches view).
+    await tester.tap(find.byTooltip('Associations').first);
+    await tester.pumpAndSettle();
+
+    // The full-screen Associations view opened (its close button).
+    expect(find.byIcon(Icons.close), findsOneWidget);
+  });
+
   testWidgets("the detail sheet switches to one of the species' varieties",
       (tester) async {
     when(() => fiches.obtenirToutes()).thenAnswer(
@@ -395,6 +407,33 @@ void main() {
     expect(find.text('Tomate Cerise'), findsOneWidget);
   });
 
+  testWidgets('the variety toggle stays as narrow as a plain chevron', (
+    tester,
+  ) async {
+    // Regression: a default IconButton reserves a 48px touch target, which on a
+    // species *with* varieties narrows the meta area and pushes "Arrosage
+    // modéré" onto a second line — but only there, so cards no longer line up.
+    // The toggle must keep the bare-icon footprint of the plain chevron.
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+        fiche('basilic', 'Basilic', CategoriePlante.aromatique),
+      ],
+    );
+    await monter(tester);
+
+    final toggle = tester.getSize(find.byTooltip('1 variété')).width;
+    final chevron =
+        tester.getSize(find.byIcon(Icons.chevron_right).first).width;
+    expect(
+      toggle,
+      lessThanOrEqualTo(chevron + 1),
+      reason: 'the expand toggle must be as compact as the plain chevron',
+    );
+  });
+
   testWidgets('the network view shows species only (varieties excluded)',
       (tester) async {
     when(() => fiches.obtenirToutes()).thenAnswer(
@@ -420,10 +459,12 @@ void main() {
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
 
-    // The hint is shown and the Fiches-only search field is gone.
+    // The hint is shown; the Fiches search box is replaced by the network's
+    // own name search — collapsed to a magnifier button (ADR-0008 Lot 5).
     expect(find.text('Touchez une plante pour voir ses associations.'),
         findsOneWidget);
-    expect(find.byType(TextField), findsNothing);
+    expect(find.text('Nom, sol, exposition…'), findsNothing);
+    expect(find.byIcon(Icons.search), findsOneWidget);
   });
 
   testWidgets('selecting a node reveals its associations', (tester) async {

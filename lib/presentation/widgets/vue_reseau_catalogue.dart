@@ -7,8 +7,11 @@ import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
 import 'fiche_plante_detail.dart';
+import 'reseau/halo_famille.dart';
+import 'reseau/layout_reseau_familles.dart';
 
 /// Decorative accent colour for a plant category (network nodes, mirrors the
 /// per-category colour of the `catalogue.jsx` mock-up).
@@ -65,8 +68,9 @@ class _TransformReseau {
   int get hashCode => Object.hash(echelle, offset);
 }
 
-/// **Réseau** view of the catalogue: a constellation of plants laid out on a
-/// Fermat spiral, with edges between companion (and "to avoid") plants.
+/// **Réseau** view of the catalogue: a constellation of plants clustered into
+/// non-overlapping family bubbles (ADR-0008), with edges between companion (and
+/// "to avoid") plants.
 ///
 /// Reimplemented from the `catalogue.jsx` `ReseauView`. Tapping a node selects
 /// it (highlighting its neighbours); tapping the selected node — or "Voir la
@@ -93,17 +97,32 @@ class VueReseauCatalogue extends StatefulWidget {
 
 class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     with SingleTickerProviderStateMixin {
-  // viewBox of the mock-up SVG; node positions are computed in these coords then
-  // scaled to the available width.
-  static const double _boiteL = 312;
-  static const double _boiteH = 360;
-  static const Offset _centre = Offset(156, 172);
-  static const double _rayonMax = 116;
+  // Node disc radius. Unlike ADR-0007 (constant pixel size), the disc now
+  // **scales with the zoom** between a floor and a cap [_rayonNoeud]: zoomed out
+  // the bubbles shrink (so the whole constellation fits), zoomed in they grow up
+  // to their full size (dev request). [_rayonNoeudVirtuel] is the virtual radius
+  // mapped through the scale; [_rayonNoeud] stays the on-screen maximum (and the
+  // value the label-spreading maths #8b reserves against).
   static const double _rayonNoeud = 19;
+  static const double _rayonNoeudVirtuel = 13;
+  static const double _rayonNoeudMin = 3;
+
+  // Max screen distance (px) from a node centre at which a tap that missed every
+  // disc still selects it (ADR-0008 Voronoï hit-testing): the shrunk discs
+  // (dezoom) keep a generous hitbox — bounded and never overlapping by
+  // construction (nearest-point assignment) — without changing the visual.
+  static const double _hitboxMax = 28;
+
+  /// On-screen node radius at transform [t]: virtual radius × scale, clamped
+  /// between the floor and the cap.
+  double _rayonEcran(_TransformReseau t) =>
+      (_rayonNoeudVirtuel * t.echelle).clamp(_rayonNoeudMin, _rayonNoeud);
 
   // Zoom bounds (absolute), the +/- button step, and the cap applied when
   // fitting a small selection so a lone node doesn't zoom in absurdly (#8a).
-  static const double _echelleMin = 0.4;
+  // The floor is low enough that the whole family-bubble constellation fits at
+  // the baseline (ADR-0008).
+  static const double _echelleMin = 0.15;
   static const double _echelleMax = 4.0;
   static const double _echelleAjustMax = 2.0;
   static const double _facteurZoom = 1.3;
@@ -123,10 +142,20 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   static const double _feuilleMax = 0.5;
 
   late final List<Offset> _positions;
+  // Family circles (centre + radius), packed without overlap (ADR-0008) — drive
+  // the blobby family halos and the baseline framing.
+  late final List<FoyerFamille> _foyers;
+  // Union of the family circles, in virtual coords — the baseline fits this.
+  late final Rect _bbox;
   late final List<_Arete> _aretes;
 
   int? _selection;
   bool _afficherAEviter = true;
+  // Collapsible display-controls menu (zoom + toggles), like the search button.
+  bool _menuControlesOuvert = false;
+  // Toggles from that menu: draw the edges, and the family halo labels.
+  bool _afficherLiens = true;
+  bool _afficherNomsFamille = true;
 
   // Current view transform; `null` means the baseline (fit + centered), which
   // also serves as the "recenter" target. Recomputed from the viewport so the
@@ -163,10 +192,21 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
       DraggableScrollableController();
   double _tailleFeuille = _feuilleMin;
 
+  // Free-text search by name (Lot 5): selects + frames the matching species.
+  // Collapsed to a magnifier button until opened.
+  final TextEditingController _ctrlRecherche = TextEditingController();
+  bool _rechercheOuverte = false;
+  bool _rechercheSansResultat = false;
+
   @override
   void initState() {
     super.initState();
-    _positions = _calculerPositions(widget.fiches.length);
+    final resultat = const LayoutReseauFamilles().calculer([
+      for (final f in widget.fiches) NoeudLayout(f.id, f.familleBotanique),
+    ]);
+    _positions = resultat.positions;
+    _foyers = resultat.foyers;
+    _bbox = _unionFoyers(resultat.foyers);
     _aretes = _calculerAretes(widget.fiches);
     _feuille.addListener(_surFeuille);
     _ctrl =
@@ -188,6 +228,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     _recadrageTaille?.cancel();
     _feuille.removeListener(_surFeuille);
     _feuille.dispose();
+    _ctrlRecherche.dispose();
     _ctrl.dispose();
     super.dispose();
   }
@@ -308,34 +349,35 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
       ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600) ??
       const TextStyle(fontWeight: FontWeight.w600);
 
-  /// Fermat spiral (golden-angle) positions inside the disk.
-  static List<Offset> _calculerPositions(int n) {
-    final ga = math.pi * (3 - math.sqrt(5));
-    return [
-      for (var i = 0; i < n; i++)
-        _centre +
-            Offset.fromDirection(
-              i * ga - math.pi / 2,
-              _rayonMax * math.sqrt((i + 0.5) / n),
-            ),
-    ];
+  /// Bounding box of all family circles (centre ± radius), in virtual coords.
+  static Rect _unionFoyers(List<FoyerFamille> foyers) {
+    if (foyers.isEmpty) return Rect.zero;
+    var minX = double.infinity, minY = double.infinity;
+    var maxX = -double.infinity, maxY = -double.infinity;
+    for (final f in foyers) {
+      minX = math.min(minX, f.centre.dx - f.rayon);
+      minY = math.min(minY, f.centre.dy - f.rayon);
+      maxX = math.max(maxX, f.centre.dx + f.rayon);
+      maxY = math.max(maxY, f.centre.dy + f.rayon);
+    }
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
-  /// Unique association edges over the whole catalogue (good takes precedence).
+  /// Unique association edges over the whole catalogue, using the shared
+  /// resolver so the polarity (and the resulting counts) match the detail sheet
+  /// exactly — bidirectional, good taking precedence (ADR-0008).
   static List<_Arete> _calculerAretes(List<FichePlante> fiches) {
+    const resolveur = ResolveurCompagnonnage();
     final aretes = <_Arete>[];
     for (var i = 0; i < fiches.length; i++) {
       for (var j = i + 1; j < fiches.length; j++) {
-        final bon =
-            fiches[i].sAssocieBienAvec(fiches[j].id) ||
-            fiches[j].sAssocieBienAvec(fiches[i].id);
-        final mauvais =
-            fiches[i].entreEnConflitAvec(fiches[j].id) ||
-            fiches[j].entreEnConflitAvec(fiches[i].id);
-        if (bon) {
-          aretes.add(_Arete(i, j, bon: true));
-        } else if (mauvais) {
-          aretes.add(_Arete(i, j, bon: false));
+        switch (resolveur.relationEntre(fiches[i], fiches[j])) {
+          case TypeCompagnonnage.bon:
+            aretes.add(_Arete(i, j, bon: true));
+          case TypeCompagnonnage.aEviter:
+            aretes.add(_Arete(i, j, bon: false));
+          case TypeCompagnonnage.aucune:
+            break;
         }
       }
     }
@@ -357,6 +399,132 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
       // none overlap (#8b), animating into view.
       _cadrerSelection();
     }
+  }
+
+  /// Voronoï-style canvas hit-testing (ADR-0008): a tap that missed every disc
+  /// selects the **nearest** node when within [_hitboxMax] screen pixels, so the
+  /// shrunk discs (dezoom) stay easy to hit. Precise taps landing on a disc (or
+  /// on a grouped name, control, search…) are handled by those widgets' own
+  /// recognizers, which win the gesture arena — this only catches taps in the
+  /// empty space around a node. The nearest-point assignment makes the hitboxes
+  /// non-overlapping and self-deforming by construction.
+  void _surTapCanvas(TapUpDetails d) {
+    if (widget.fiches.isEmpty) return;
+    final t = _transformActuel(_viewport);
+    int? plusProche;
+    var meilleure = double.infinity;
+    for (var i = 0; i < widget.fiches.length; i++) {
+      // Use the same on-screen centre the canvas renders: displaced in the
+      // global view (#8b), canonical in focus (grouped nodes ignore #8b).
+      final centre = t.versEcran(
+        _selection == null ? _posAffichee(i) : _positions[i],
+      );
+      final dist = (centre - d.localPosition).distance;
+      if (dist < meilleure) {
+        meilleure = dist;
+        plusProche = i;
+      }
+    }
+    if (plusProche != null && meilleure <= _hitboxMax) {
+      _toucherNoeud(plusProche);
+    }
+  }
+
+  /// Lowercases and strips diacritics (keeps spaces) for accent-insensitive
+  /// name search (Lot 5, ADR-0008).
+  static String _normaliser(String s) {
+    const accents = 'àâäáãåçèêëéìîïíòôöóõùûüú';
+    const sans = 'aaaaaaceeeeiiiiooooouuuu';
+    final buffer = StringBuffer();
+    for (final rune in s.toLowerCase().runes) {
+      final c = String.fromCharCode(rune);
+      final i = accents.indexOf(c);
+      buffer.write(i >= 0 ? sans[i] : c);
+    }
+    return buffer.toString();
+  }
+
+  /// Finds the first species whose name contains [requete] and selects + frames
+  /// it (like a tap); flags "no result" otherwise (Lot 5).
+  void _rechercher(String requete) {
+    final terme = _normaliser(requete.trim());
+    if (terme.isEmpty) {
+      setState(() => _rechercheSansResultat = false);
+      return;
+    }
+    final idx = widget.fiches.indexWhere(
+      (f) => _normaliser(f.nomLocalise('fr')).contains(terme),
+    );
+    if (idx < 0) {
+      setState(() => _rechercheSansResultat = true);
+      return;
+    }
+    setState(() {
+      _rechercheSansResultat = false;
+      _selection = idx;
+    });
+    _cadrerSelection();
+    FocusScope.of(context).unfocus();
+  }
+
+  /// Closes the search: clears the field, collapses it back to the magnifier,
+  /// and **drops the focus** (deselects + recenters) to return to the global
+  /// view (tweak #2/#5).
+  void _fermerRecherche() {
+    _ctrlRecherche.clear();
+    setState(() {
+      _rechercheOuverte = false;
+      _rechercheSansResultat = false;
+      _selection = null;
+    });
+    _recentrer();
+    FocusScope.of(context).unfocus();
+  }
+
+  /// In the **global** (unselected) view, the set of nodes whose constant-size
+  /// name label fits at transform [t] without overlapping any node disc or an
+  /// already-placed label (tweak #6) — greedy, deterministic by index order.
+  Set<int> _labelsQuiTiennent(_TransformReseau t, TextStyle style) {
+    final rayon = _rayonEcran(t);
+    final discs = [
+      for (var i = 0; i < widget.fiches.length; i++)
+        Rect.fromCircle(center: t.versEcran(_positions[i]), radius: rayon),
+    ];
+    final acceptes = <int>{};
+    final rects = <Rect>[];
+    for (var i = 0; i < widget.fiches.length; i++) {
+      final tp = TextPainter(
+        text: TextSpan(text: widget.fiches[i].nomLocalise('fr'), style: style),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      final centre = t.versEcran(_positions[i]);
+      final rect = Rect.fromLTWH(
+        centre.dx - (tp.width + 14) / 2,
+        centre.dy + rayon + 2,
+        tp.width + 14,
+        tp.height + 6,
+      );
+      var heurte = false;
+      for (final d in discs) {
+        if (rect.overlaps(d)) {
+          heurte = true;
+          break;
+        }
+      }
+      if (!heurte) {
+        for (final r in rects) {
+          if (rect.overlaps(r)) {
+            heurte = true;
+            break;
+          }
+        }
+      }
+      if (!heurte) {
+        acceptes.add(i);
+        rects.add(rect);
+      }
+    }
+    return acceptes;
   }
 
   /// Fit-to-view transform framing the **displaced** virtual positions of
@@ -520,17 +688,22 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   /// to [vue].
   _TransformReseau _transformActuel(Size vue) => _transform ?? _baseline(vue);
 
-  /// Baseline transform: the viewBox (312×360) scaled to fit [vue] and centered
-  /// — matching the pre-zoom layout and the "recenter" target.
-  static _TransformReseau _baseline(Size vue) {
-    if (vue.isEmpty) return const _TransformReseau(1, Offset.zero);
-    final echelle = math.min(vue.width / _boiteL, vue.height / _boiteH);
+  /// Baseline transform: the whole constellation (every family circle) scaled to
+  /// fit [vue] and centered — the pre-zoom layout and the "recenter" target.
+  _TransformReseau _baseline(Size vue) {
+    if (vue.isEmpty || _bbox.isEmpty) {
+      return const _TransformReseau(1, Offset.zero);
+    }
+    const marge = 10.0;
+    final echelle = math
+        .min(
+          (vue.width - 2 * marge) / _bbox.width,
+          (vue.height - 2 * marge) / _bbox.height,
+        )
+        .clamp(_echelleMin, _echelleMax);
     return _TransformReseau(
       echelle,
-      Offset(
-        (vue.width - _boiteL * echelle) / 2,
-        (vue.height - _boiteH * echelle) / 2,
-      ),
+      Offset(vue.width / 2, vue.height / 2) - _bbox.center * echelle,
     );
   }
 
@@ -685,7 +858,6 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     final surlignes = _selection == null
         ? const <int>{}
         : {_selection!, ...voisins};
-    final nommes = surlignes;
     // Paint dimmed (attenuated) nodes first and highlighted ones on top, so a
     // displaced node under an attenuated disc keeps its full opacity (#8b).
     final ordreNoeuds = [
@@ -712,64 +884,137 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
         final decalages = _decalages;
         Offset posAffichee(int i) => _posAffichee(i);
 
+        // Node disc radius at this zoom; attenuated nodes (in focus) halve it
+        // and fade more (tweak #3). Bubbles scale with zoom (dev request).
+        final rBase = _rayonEcran(t);
+        double rayonDe(int i) =>
+            (_selection != null &&
+                    _etatNoeud(i, voisins) == _EtatNoeud.attenue)
+                ? rBase / 2
+                : rBase;
+        // Which nodes show a full-name label: in focus, the focus set (#8a); in
+        // the global view, those whose label fits without overlap at this zoom
+        // (tweak #6).
+        final style = _styleEtiquette(context);
+        final nommes = _selection == null
+            ? _labelsQuiTiennent(t, style)
+            : const <int>{};
+
+        // Node + label layer. Global view: plain discs + the labels that fit
+        // (#6). Focus: same-family links collapse into one grouped node — family
+        // name above, species listed below, each tappable (dev request).
+        final List<Widget> coucheNoeuds;
+        if (_selection == null) {
+          coucheNoeuds = [
+            for (final i in ordreNoeuds)
+              Positioned(
+                left: t.versEcran(posAffichee(i)).dx - rayonDe(i),
+                top: t.versEcran(posAffichee(i)).dy - rayonDe(i),
+                child: _Noeud(
+                  fiche: widget.fiches[i],
+                  rayon: rayonDe(i),
+                  etat: _etatNoeud(i, voisins),
+                  onTap: () => _toucherNoeud(i),
+                ),
+              ),
+            for (final i in nommes)
+              Positioned(
+                left: t.versEcran(posAffichee(i)).dx,
+                top: t.versEcran(posAffichee(i)).dy + rBase + 2,
+                child: IgnorePointer(
+                  child: FractionalTranslation(
+                    translation: const Offset(-0.5, 0),
+                    child: _EtiquetteNoeud(
+                      nom: widget.fiches[i].nomLocalise('fr'),
+                      couleur: couleurCategorie(widget.fiches[i].categorie),
+                    ),
+                  ),
+                ),
+              ),
+          ];
+        } else {
+          coucheNoeuds = _coucheFocus(t, rBase, voisins);
+        }
+
         // The whole canvas pans/zooms; the gesture arena lets node taps and the
         // controls win their own taps, while drags pan/zoom.
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onScaleStart: _debutGeste,
           onScaleUpdate: _majGeste,
+          // A stationary tap on the empty canvas resolves to this recognizer
+          // (a drag/pinch goes to the scale one); it selects the nearest node
+          // within [_hitboxMax] (Voronoï hit-testing, #3).
+          onTapUp: _surTapCanvas,
           child: ClipRect(
             child: Stack(
               children: [
+                // Family halos sit under the edges and nodes (ADR-0008).
                 CustomPaint(
                   size: _viewport,
-                  painter: _PeintreAretes(
-                    positions: _positions,
-                    decalages: decalages,
-                    aretes: _aretes,
-                    selection: _selection,
-                    afficherAEviter: _afficherAEviter,
+                  painter: _PeintreFoyers(
+                    foyers: _foyers,
                     transform: t,
-                    couleurBon: theme.colorScheme.primary,
-                    couleurMauvais: theme.colorScheme.error,
+                    // Global view: every family labelled (unless the toggle is
+                    // off). In focus, halo labels are suppressed — the grouped
+                    // family nodes carry the family name instead (dev request).
+                    famillesAvecLabel: (_afficherNomsFamille && _selection == null)
+                        ? null
+                        : const <String>{},
+                    couleurFond: theme.colorScheme.surface,
                   ),
                 ),
-                for (final i in ordreNoeuds)
-                  Positioned(
-                    left: t.versEcran(posAffichee(i)).dx - _rayonNoeud,
-                    top: t.versEcran(posAffichee(i)).dy - _rayonNoeud,
-                    child: _Noeud(
-                      fiche: widget.fiches[i],
-                      rayon: _rayonNoeud,
-                      etat: _etatNoeud(i, voisins),
-                      onTap: () => _toucherNoeud(i),
+                if (_afficherLiens)
+                  CustomPaint(
+                    size: _viewport,
+                    painter: _PeintreAretes(
+                      positions: _positions,
+                      // In focus the grouped nodes sit at canonical positions, so
+                      // the edges follow them (no #8b displacement applied).
+                      decalages:
+                          _selection == null ? decalages : const <int, Offset>{},
+                      aretes: _aretes,
+                      selection: _selection,
+                      afficherAEviter: _afficherAEviter,
+                      transform: t,
+                      couleurBon: theme.colorScheme.primary,
+                      couleurMauvais: theme.colorScheme.error,
                     ),
                   ),
-                // Full-name labels under the selected node and its links (#8a).
-                // Centered on each node via a -50%-width shift, so the label
-                // width never offsets the node; constant on-screen size whatever
-                // the zoom. Ignores pointers so the node stays tappable/pannable.
-                for (final i in nommes)
-                  Positioned(
-                    left: t.versEcran(_posAffichee(i)).dx,
-                    top: t.versEcran(_posAffichee(i)).dy + _rayonNoeud + 2,
-                    child: IgnorePointer(
-                      child: FractionalTranslation(
-                        translation: const Offset(-0.5, 0),
-                        child: _EtiquetteNoeud(
-                          nom: widget.fiches[i].nomLocalise('fr'),
-                          couleur: couleurCategorie(widget.fiches[i].categorie),
-                        ),
-                      ),
-                    ),
+                ...coucheNoeuds,
+                Positioned(
+                  top: EspacementsApp.s2,
+                  left: EspacementsApp.s2,
+                  child: _BarreRecherche(
+                    controleur: _ctrlRecherche,
+                    ouverte: _rechercheOuverte,
+                    sansResultat: _rechercheSansResultat,
+                    onOuvrir: () => setState(() => _rechercheOuverte = true),
+                    onSoumettre: _rechercher,
+                    onEffacer: _fermerRecherche,
+                    onReplier: () =>
+                        setState(() => _rechercheOuverte = false),
                   ),
+                ),
                 Positioned(
                   top: EspacementsApp.s2,
                   right: EspacementsApp.s2,
                   child: _ControlesZoom(
+                    ouvert: _menuControlesOuvert,
+                    onOuvrir: () =>
+                        setState(() => _menuControlesOuvert = true),
+                    onFermer: () =>
+                        setState(() => _menuControlesOuvert = false),
                     onZoomAvant: () => _zoomer(_facteurZoom),
                     onZoomArriere: () => _zoomer(1 / _facteurZoom),
                     onRecentrer: _recentrer,
+                    afficherLiens: _afficherLiens,
+                    onToggleLiens: () =>
+                        setState(() => _afficherLiens = !_afficherLiens),
+                    afficherNoms: _afficherNomsFamille,
+                    onToggleNoms: () => setState(
+                      () => _afficherNomsFamille = !_afficherNomsFamille,
+                    ),
                   ),
                 ),
               ],
@@ -788,6 +1033,82 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
   int _compter(int i, {required bool bon}) =>
       _aretes.where((a) => a.touche(i) && a.bon == bon).length;
+
+  /// Whether node [i] is a good (true) or to-avoid (false) companion of the
+  /// selected node, or `null` if there is no edge / it is the selection itself —
+  /// drives the green/red label background in focus (tweak #1).
+  bool? _relationAvecSelection(int i) {
+    final sel = _selection;
+    if (sel == null || sel == i) return null;
+    for (final a in _aretes) {
+      if (a.touche(sel) && a.autre(sel) == i) return a.bon;
+    }
+    return null;
+  }
+
+  /// The focus node layer: faded context bubbles plus **one grouped node per
+  /// family among the selection and its links** (#2). The selected node now
+  /// merges **into** its own family group — listed first with a neutral label —
+  /// so a same-family companion sits beside it under a single family node (no
+  /// separate "selected node" disc). Each name is tappable (the selection →
+  /// opens its sheet, a link → re-focus on it); links are tinted green/red.
+  List<Widget> _coucheFocus(_TransformReseau t, double rBase, Set<int> voisins) {
+    final sel = _selection!;
+    // Group the selection together with its links, so same-family links fuse
+    // with it instead of with a standalone node (#2).
+    final groupes = <String, List<int>>{};
+    for (final i in {sel, ...voisins}) {
+      groupes.putIfAbsent(widget.fiches[i].familleBotanique, () => []).add(i);
+    }
+    // List the selection first inside its own family group (neutral relation).
+    for (final indices in groupes.values) {
+      indices.sort((a, b) => a == sel ? -1 : (b == sel ? 1 : 0));
+    }
+    final fams = groupes.keys.toList()..sort();
+    Offset ecran(int i) => t.versEcran(_positions[i]);
+
+    return [
+      // Faded context: non-link, non-selected bubbles (halved, dimmed).
+      for (var i = 0; i < widget.fiches.length; i++)
+        if (i != sel && !voisins.contains(i))
+          Positioned(
+            left: ecran(i).dx - rBase / 2,
+            top: ecran(i).dy - rBase / 2,
+            child: _Noeud(
+              fiche: widget.fiches[i],
+              rayon: rBase / 2,
+              etat: _EtatNoeud.attenue,
+              onTap: () => _toucherNoeud(i),
+            ),
+          ),
+      // One grouped node per family (including the selection's own family), at
+      // the centroid of its members.
+      for (final fam in fams)
+        () {
+          final indices = groupes[fam]!;
+          var somme = Offset.zero;
+          for (final i in indices) {
+            somme += _positions[i];
+          }
+          final p = t.versEcran(somme / indices.length.toDouble());
+          return Positioned(
+            left: p.dx,
+            top: p.dy - _rayonNoeud - 16,
+            child: FractionalTranslation(
+              translation: const Offset(-0.5, 0),
+              child: _GroupeFocusReseau(
+                famille: fam,
+                especes: [for (final i in indices) widget.fiches[i]],
+                relations: [for (final i in indices) _relationAvecSelection(i)],
+                indices: indices,
+                rayon: _rayonNoeud,
+                onTapIndex: _toucherNoeud,
+              ),
+            ),
+          );
+        }(),
+    ];
+  }
 }
 
 /// A variety row listed under the selected species in the network view (#9),
@@ -837,7 +1158,6 @@ class _LigneVarieteReseau extends StatelessWidget {
   }
 }
 
-/// Visual state of a node given the current selection.
 enum _EtatNoeud { normal, selectionne, lie, attenue }
 
 /// A single constellation node (category-coloured disc with the plant initial).
@@ -864,7 +1184,9 @@ class _Noeud extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Opacity(
-        opacity: attenue ? 0.30 : 1,
+        // Attenuated nodes (in focus) fade further so the focus reads clearly
+        // (tweak #3).
+        opacity: attenue ? 0.15 : 1,
         child: Container(
           width: rayon * 2,
           height: rayon * 2,
@@ -877,13 +1199,16 @@ class _Noeud extends StatelessWidget {
               width: selectionne ? 3 : 1.5,
             ),
           ),
-          child: Text(
-            fiche.nomLocalise('fr').characters.first.toUpperCase(),
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          // The initial only fits once the zoomed disc is big enough.
+          child: rayon < 10
+              ? null
+              : Text(
+                  fiche.nomLocalise('fr').characters.first.toUpperCase(),
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
         ),
       ),
     );
@@ -892,75 +1217,335 @@ class _Noeud extends StatelessWidget {
 
 /// Full-name label shown under a node when it is selected or linked (#8a).
 /// Kept at a constant on-screen size (it lives outside the zoom transform).
+///
+/// [relation] tints the background to show the relationship to the selection
+/// (tweak #1): green for a good companion, red for one to avoid, neutral when
+/// `null` (the selection itself, or the global view).
 class _EtiquetteNoeud extends StatelessWidget {
   final String nom;
   final Color couleur;
+  final bool? relation;
 
-  const _EtiquetteNoeud({required this.nom, required this.couleur});
+  const _EtiquetteNoeud({
+    required this.nom,
+    required this.couleur,
+    this.relation,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final scheme = Theme.of(context).textTheme;
+    final cs = Theme.of(context).colorScheme;
+    final (fond, texte) = switch (relation) {
+      true => (cs.primaryContainer, cs.onPrimaryContainer),
+      false => (cs.errorContainer, cs.onErrorContainer),
+      null => (cs.surfaceContainerHighest.withValues(alpha: 0.95), null),
+    };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(
-          alpha: 0.95,
-        ),
+        color: fond,
         borderRadius: const BorderRadius.all(RayonsApp.sm),
         border: Border.all(color: couleur.withValues(alpha: 0.85)),
       ),
       child: Text(
         nom,
-        style: theme.textTheme.labelSmall?.copyWith(
+        style: scheme.labelSmall?.copyWith(
           fontWeight: FontWeight.w600,
+          color: texte,
         ),
       ),
     );
   }
 }
 
-/// Overlaid zoom controls (#7): zoom in / out / recenter. Doubles the pinch
-/// gesture for desktop/mouse users.
+/// A grouped focus node in the constellation (dev request): when a plant is
+/// selected, the members of one family collapse here — the family name above, a
+/// disc (species count), and the species names below (each tappable; green/red
+/// per relationship to the selection, neutral for the selection itself). The
+/// selected species' own family group lists it first (#2).
+class _GroupeFocusReseau extends StatelessWidget {
+  final String famille;
+  final List<FichePlante> especes;
+  final List<bool?> relations;
+  final List<int> indices;
+  final double rayon;
+  final void Function(int) onTapIndex;
+
+  const _GroupeFocusReseau({
+    required this.famille,
+    required this.especes,
+    required this.relations,
+    required this.indices,
+    required this.rayon,
+    required this.onTapIndex,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final couleur = couleurFamille(famille);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Family name above the node.
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface.withValues(alpha: 0.85),
+            borderRadius: const BorderRadius.all(RayonsApp.sm),
+          ),
+          child: Text(
+            famille,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: couleur,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        const SizedBox(height: 2),
+        // The single disc (species count, or the initial when alone).
+        Container(
+          width: rayon * 2,
+          height: rayon * 2,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: couleur.withValues(alpha: 0.9),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 1.5),
+          ),
+          child: Text(
+            especes.length > 1
+                ? '${especes.length}'
+                : especes.first.nomLocalise('fr').characters.first.toUpperCase(),
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        const SizedBox(height: 2),
+        // The species list, each name tappable to re-focus on it.
+        for (var k = 0; k < especes.length; k++)
+          GestureDetector(
+            onTap: () => onTapIndex(indices[k]),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1),
+              child: _EtiquetteNoeud(
+                nom: especes[k].nomLocalise('fr'),
+                couleur: couleurCategorie(especes[k].categorie),
+                relation: relations[k],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Overlaid display controls (#7): collapsed to a single button; opening it
+/// reveals zoom in / out / recenter and the two toggles (links, family names).
+/// Tapping outside closes it (like the search). Doubles the pinch gesture.
 class _ControlesZoom extends StatelessWidget {
+  final bool ouvert;
+  final VoidCallback onOuvrir;
+  final VoidCallback onFermer;
   final VoidCallback onZoomAvant;
   final VoidCallback onZoomArriere;
   final VoidCallback onRecentrer;
+  final bool afficherLiens;
+  final VoidCallback onToggleLiens;
+  final bool afficherNoms;
+  final VoidCallback onToggleNoms;
 
   const _ControlesZoom({
+    required this.ouvert,
+    required this.onOuvrir,
+    required this.onFermer,
     required this.onZoomAvant,
     required this.onZoomArriere,
     required this.onRecentrer,
+    required this.afficherLiens,
+    required this.onToggleLiens,
+    required this.afficherNoms,
+    required this.onToggleNoms,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    return Material(
-      color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
-      borderRadius: const BorderRadius.all(RayonsApp.md),
-      elevation: 1,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: l10n.reseauZoomAvant,
-            onPressed: onZoomAvant,
-          ),
-          IconButton(
-            icon: const Icon(Icons.remove),
-            tooltip: l10n.reseauZoomArriere,
-            onPressed: onZoomArriere,
-          ),
-          IconButton(
-            icon: const Icon(Icons.center_focus_strong_outlined),
-            tooltip: l10n.reseauRecentrer,
-            onPressed: onRecentrer,
-          ),
-        ],
+
+    // Collapsed: a single "display settings" button.
+    if (!ouvert) {
+      return Material(
+        color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
+        borderRadius: const BorderRadius.all(RayonsApp.md),
+        elevation: 1,
+        child: IconButton(
+          icon: const Icon(Icons.tune),
+          tooltip: l10n.reseauReglages,
+          onPressed: onOuvrir,
+        ),
+      );
+    }
+
+    Color teinte(bool actif) =>
+        actif ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant;
+
+    return TapRegion(
+      onTapOutside: (_) => onFermer(),
+      child: Material(
+        color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
+        borderRadius: const BorderRadius.all(RayonsApp.md),
+        elevation: 1,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: l10n.reseauZoomAvant,
+              onPressed: onZoomAvant,
+            ),
+            IconButton(
+              icon: const Icon(Icons.remove),
+              tooltip: l10n.reseauZoomArriere,
+              onPressed: onZoomArriere,
+            ),
+            IconButton(
+              icon: const Icon(Icons.center_focus_strong_outlined),
+              tooltip: l10n.reseauRecentrer,
+              onPressed: onRecentrer,
+            ),
+            const Divider(height: 1, indent: 8, endIndent: 8),
+            IconButton(
+              icon: const Icon(Icons.polyline_outlined),
+              color: teinte(afficherLiens),
+              tooltip: l10n.reseauToggleLiens,
+              onPressed: onToggleLiens,
+            ),
+            IconButton(
+              icon: const Icon(Icons.label_outline),
+              color: teinte(afficherNoms),
+              tooltip: l10n.reseauToggleNomsFamille,
+              onPressed: onToggleNoms,
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+/// Overlaid name search (Lot 5): collapsed to a magnifier button (tweak #2);
+/// tapping it opens the text field. Finds a species by name, selecting + framing
+/// it on submit (accent/case-insensitive). Closing it returns to the global view.
+class _BarreRecherche extends StatelessWidget {
+  final TextEditingController controleur;
+  final bool ouverte;
+  final bool sansResultat;
+  final VoidCallback onOuvrir;
+  final ValueChanged<String> onSoumettre;
+  final VoidCallback onEffacer;
+  final VoidCallback onReplier;
+
+  const _BarreRecherche({
+    required this.controleur,
+    required this.ouverte,
+    required this.sansResultat,
+    required this.onOuvrir,
+    required this.onSoumettre,
+    required this.onEffacer,
+    required this.onReplier,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    // Collapsed: just a magnifier button (tweak #2).
+    if (!ouverte) {
+      return Material(
+        color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
+        borderRadius: const BorderRadius.all(RayonsApp.md),
+        elevation: 1,
+        child: IconButton(
+          icon: const Icon(Icons.search),
+          tooltip: l10n.reseauRechercher,
+          onPressed: onOuvrir,
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Material(
+          color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
+          borderRadius: const BorderRadius.all(RayonsApp.md),
+          elevation: 1,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 220),
+            child: TextField(
+              controller: controleur,
+              autofocus: true,
+              textInputAction: TextInputAction.search,
+              // Keep the text vertically centred in the pill (tweak #1).
+              textAlignVertical: TextAlignVertical.center,
+              onSubmitted: onSoumettre,
+              // Tapping outside an *empty* field collapses it back to the
+              // magnifier (without dropping a node selection); the close icon
+              // does the full reset.
+              onTapOutside: (_) {
+                FocusManager.instance.primaryFocus?.unfocus();
+                if (controleur.text.isEmpty) onReplier();
+              },
+              style: theme.textTheme.bodyMedium,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: l10n.reseauRechercher,
+                border: InputBorder.none,
+                prefixIcon: const Icon(Icons.search, size: TaillesIconesApp.sm),
+                prefixIconConstraints:
+                    const BoxConstraints(minWidth: 36, minHeight: 36),
+                // Always offers a close/clear that collapses + returns to global.
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.close, size: TaillesIconesApp.sm),
+                  tooltip: l10n.catalogueEffacer,
+                  onPressed: onEffacer,
+                ),
+                suffixIconConstraints:
+                    const BoxConstraints(minWidth: 36, minHeight: 36),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: EspacementsApp.s2,
+                  vertical: EspacementsApp.s2,
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (sansResultat)
+          Padding(
+            padding: const EdgeInsets.only(top: EspacementsApp.s1),
+            child: Material(
+              color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
+              borderRadius: const BorderRadius.all(RayonsApp.sm),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: EspacementsApp.s2,
+                  vertical: EspacementsApp.s1,
+                ),
+                child: Text(
+                  l10n.reseauAucunResultat,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -1067,11 +1652,87 @@ class _Panneau extends StatelessWidget {
               ],
             ),
           ),
-          TextButton(onPressed: onVoirFiche, child: Text(l10n.reseauVoirFiche)),
+          TextButton(
+            onPressed: onVoirFiche,
+            child: Text(l10n.reseauVoirFiche),
+          ),
         ],
       ),
     );
   }
+}
+
+/// Paints the family halos: a smooth, non-overlapping "blobby" disc per family
+/// (ADR-0008). The family name sits in a pill **just above** the halo so it does
+/// not collide with the bubbles inside (tweak #4). In focus, only the families
+/// in [famillesAvecLabel] keep their name; the others show just the halo (tweak
+/// #3). `null` means label every family (global view). Sits under edges/nodes.
+class _PeintreFoyers extends CustomPainter {
+  final List<FoyerFamille> foyers;
+  final _TransformReseau transform;
+  final Set<String>? famillesAvecLabel;
+  final Color couleurFond;
+
+  _PeintreFoyers({
+    required this.foyers,
+    required this.transform,
+    required this.famillesAvecLabel,
+    required this.couleurFond,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final foyer in foyers) {
+      final centre = transform.versEcran(foyer.centre);
+      final rayon = foyer.rayon * transform.echelle;
+      if (rayon < 4) continue; // too small to read at this zoom
+      final couleur = couleurFamille(foyer.famille);
+      final chemin = cheminBlobbyFamille(centre, rayon, foyer.famille);
+      canvas.drawPath(chemin, Paint()..color = couleur.withValues(alpha: 0.13));
+      canvas.drawPath(
+        chemin,
+        Paint()
+          ..color = couleur.withValues(alpha: 0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5,
+      );
+
+      final montrerLabel =
+          famillesAvecLabel == null || famillesAvecLabel!.contains(foyer.famille);
+      if (!montrerLabel) continue;
+
+      final tp = TextPainter(
+        text: TextSpan(
+          text: foyer.famille,
+          style: TextStyle(
+            color: couleur,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      // Pill just above the halo's top edge → clears the family's own bubbles
+      // (tweak #4), with a translucent backing for readability over anything.
+      final origine = Offset(centre.dx - tp.width / 2, centre.dy - rayon - tp.height - 4);
+      final pastille = Rect.fromLTWH(
+        origine.dx - 4,
+        origine.dy - 2,
+        tp.width + 8,
+        tp.height + 4,
+      );
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(pastille, const Radius.circular(4)),
+        Paint()..color = couleurFond.withValues(alpha: 0.72),
+      );
+      tp.paint(canvas, origine);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_PeintreFoyers old) =>
+      old.transform != transform ||
+      !identical(old.famillesAvecLabel, famillesAvecLabel);
 }
 
 /// Paints the association edges between nodes, dimming those unrelated to the

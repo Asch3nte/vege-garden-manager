@@ -375,9 +375,37 @@
   "@reseauRecentrer": {
     "description": "Bouton de la vue réseau : recentrer et réinitialiser le zoom."
   },
+  "reseauRechercher": "Rechercher une plante…",
+  "@reseauRechercher": {
+    "description": "Placeholder du champ de recherche par nom dans la vue réseau."
+  },
+  "reseauAucunResultat": "Aucune plante trouvée",
+  "@reseauAucunResultat": {
+    "description": "Message quand la recherche par nom de la vue réseau ne trouve rien."
+  },
+  "reseauFocusAucun": "Aucun compagnon à afficher",
+  "@reseauFocusAucun": {
+    "description": "État vide de la vue focus quand la plante n'a aucun compagnon connu."
+  },
+  "reseauReglages": "Réglages d'affichage",
+  "@reseauReglages": {
+    "description": "Bouton repliable de la vue réseau ouvrant les contrôles (zoom, liens, noms)."
+  },
+  "reseauToggleLiens": "Afficher les liens",
+  "@reseauToggleLiens": {
+    "description": "Bascule du menu réseau : afficher ou masquer les liens entre les plantes."
+  },
+  "reseauToggleNomsFamille": "Afficher les noms de famille",
+  "@reseauToggleNomsFamille": {
+    "description": "Bascule du menu réseau : afficher ou masquer les noms des familles (halos)."
+  },
   "catalogueRecherche": "Nom, sol, exposition…",
   "@catalogueRecherche": {
     "description": "Placeholder du champ de recherche du catalogue."
+  },
+  "catalogueAssociations": "Associations",
+  "@catalogueAssociations": {
+    "description": "Bouton d'une fiche du catalogue : ouvrir la vue détaillée des associations de la plante."
   },
   "catalogueEffacer": "Effacer",
   "@catalogueEffacer": {

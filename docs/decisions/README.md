@@ -24,6 +24,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0005](0005-fiche-mere-varietes-et-id.md) | Hiérarchie espèce/variété et format des IDs de fiches plantes | Accepté |
 | [0006](0006-fiches-famille-botanique.md) | Fiches de famille botanique (type sœur, pas grand-mère) | Accepté |
 | [0007](0007-vue-reseau-exploratoire.md) | Vue Réseau du Catalogue : modèle de transformation explicite et découpage en lots | Accepté |
+| [0008](0008-vue-reseau-familles-et-focus.md) | Vue Réseau du Catalogue : layout par familles, mode focus, et résolveur d'associations unifié | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.
