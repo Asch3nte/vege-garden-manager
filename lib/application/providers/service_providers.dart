@@ -4,11 +4,13 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/repositories/abstract_geolocalisation_service.dart';
 import '../../domain/repositories/abstract_meteo_service.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
+import '../../domain/repositories/abstract_reinitialisation_service.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
 import '../../infrastructure/api/open_meteo_client.dart';
 import '../../infrastructure/repositories/meteo_service_impl.dart';
 import '../../infrastructure/services/geolocalisation_service_impl.dart';
 import '../../infrastructure/services/notification_service_impl.dart';
+import '../../infrastructure/services/reinitialisation_service_impl.dart';
 import '../../infrastructure/services/sauvegarde_service_impl.dart';
 import 'database_providers.dart';
 
@@ -41,4 +43,9 @@ final geolocalisationServiceProvider =
 
 final sauvegardeServiceProvider = Provider<AbstractSauvegardeService>(
   (ref) => SauvegardeServiceImpl(ref.watch(appDatabaseProvider)),
+);
+
+final reinitialisationServiceProvider =
+    Provider<AbstractReinitialisationService>(
+  (ref) => ReinitialisationServiceImpl(ref.watch(appDatabaseProvider)),
 );
