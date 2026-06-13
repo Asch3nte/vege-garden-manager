@@ -39,6 +39,7 @@ class PreferencesMapper {
       notificationsParCategorie: notifs,
       nePasDerangerDebut: row.nePasDerangerDebut,
       nePasDerangerFin: row.nePasDerangerFin,
+      onboardingTermine: row.onboardingTermine,
     );
   }
 
@@ -60,6 +61,7 @@ class PreferencesMapper {
         notificationsParCategorie: Value(jsonEncode(p.notificationsParCategorie)),
         nePasDerangerDebut: Value(p.nePasDerangerDebut),
         nePasDerangerFin: Value(p.nePasDerangerFin),
+        onboardingTermine: Value(p.onboardingTermine),
         derniereModification:
             Value(DateTime.now().toUtc().toIso8601String()),
       );

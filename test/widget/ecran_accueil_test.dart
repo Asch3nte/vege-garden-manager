@@ -255,6 +255,12 @@ void main() {
   });
 
   testWidgets('the weather prompt sets the garden position', (tester) async {
+    // Wide surface so the map's region band fits without horizontal scrolling.
+    tester.view.physicalSize = const Size(1600, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     when(() => preferences.charger())
         .thenAnswer((_) async => PreferencesUtilisateur());
     when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
@@ -282,8 +288,13 @@ void main() {
     await tester.tap(find.textContaining('Ajoute ta position'));
     await tester.pumpAndSettle();
 
-    // Pick an approximate region → it is stored on the active garden.
+    // Sheet → open the world map → jump to a region preset → confirm. The
+    // chosen position is stored on the active garden.
+    await tester.tap(find.text('Choisir sur la carte'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
 
     final potager =

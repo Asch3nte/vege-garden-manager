@@ -143,6 +143,12 @@ void main() {
 
   testWidgets('privacy panel sets the garden position (manual mode)',
       (tester) async {
+    // Wide surface so the map's region band fits without horizontal scrolling.
+    tester.view.physicalSize = const Size(1600, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     when(() => repo.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(
         modeGeolocalisation: ModeGeolocalisation.manuelle,
@@ -168,10 +174,13 @@ void main() {
     expect(find.text('Position du potager'), findsOneWidget);
     expect(find.text('Aucune — touchez pour la définir'), findsOneWidget);
 
-    // Tapping it opens the region picker; choosing one stores the position.
+    // Tapping it opens the world map; jumping to a region and confirming
+    // stores the position.
     await tester.tap(find.text('Position du potager'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
 
     final potager =

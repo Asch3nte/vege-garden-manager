@@ -57,20 +57,20 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('persists a garden with the entered name and defaults',
-      (tester) async {
+  testWidgets('saving is blocked until a position is set', (tester) async {
     await monter(tester);
 
     await tester.enterText(find.byType(TextFormField).first, 'Mon potager');
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
 
-    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
-    final potager = captured.single as Potager;
-    expect(potager.nom, 'Mon potager');
-    // Defaults: oceanic climate, hardiness zone 8.
-    expect(potager.zoneClimatique.type, TypeClimat.oceanique);
-    expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone8);
+    // A garden must have a position (it derives hemisphere/climate); saving
+    // without one is blocked, with the requirement message.
+    expect(
+      find.text("Indiquez d'abord la position de votre potager (GPS ou carte)."),
+      findsOneWidget,
+    );
+    verifyNever(() => repo.sauvegarder(any()));
   });
 
   testWidgets('the climate field describes each option', (tester) async {
@@ -112,14 +112,24 @@ void main() {
     expect(potager.localisation.estDefinie, isTrue);
   });
 
-  testWidgets('picking a region pre-fills climate and stores the location',
-      (tester) async {
+  testWidgets('picking a point on the world map pre-fills climate and stores '
+      'the location', (tester) async {
+    // Wide surface so the region band's presets fit without horizontal scroll.
+    tester.view.physicalSize = const Size(1600, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await monter(tester);
 
     await tester.enterText(find.byType(TextFormField).first, 'Potager');
-    await tester.tap(find.text('Choisir une région'));
+    // Open the zoomable world map, jump to a region preset (drops the pin),
+    // then confirm.
+    await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
@@ -129,11 +139,13 @@ void main() {
 
     final potager =
         verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
+    // Tropical region (latitude 5°) → tropical climate, location stored.
     expect(potager.zoneClimatique.type, TypeClimat.tropical);
     expect(potager.localisation.estDefinie, isTrue);
   });
 
-  testWidgets('a refused permission keeps the manual defaults', (tester) async {
+  testWidgets('a refused permission leaves no position, so saving stays blocked',
+      (tester) async {
     when(() => geoloc.demanderPermission())
         .thenAnswer((_) async => PermissionLocalisation.refusee);
 
@@ -151,10 +163,12 @@ void main() {
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
 
-    final potager =
-        verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
-    expect(potager.zoneClimatique.type, TypeClimat.oceanique); // unchanged
-    expect(potager.localisation.estDefinie, isFalse);
+    // No position was captured → save is blocked (no silent default).
+    expect(
+      find.text("Indiquez d'abord la position de votre potager (GPS ou carte)."),
+      findsOneWidget,
+    );
+    verifyNever(() => repo.sauvegarder(any()));
   });
 
   testWidgets('edit mode pre-fills and persists the garden in place',
@@ -165,6 +179,8 @@ void main() {
       nom: 'Ancien nom',
       zoneClimatique:
           const ZoneClimatique(TypeClimat.mediterraneen, ZoneRusticite.zone9),
+      localisation:
+          Localisation.manuelle(ville: 'Nice', latitude: 43.7, longitude: 7.2),
       dateCreation: DateTime(2026, 1, 1),
     );
 

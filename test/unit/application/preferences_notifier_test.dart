@@ -79,6 +79,18 @@ void main() {
     expect(c.read(preferencesProvider).value!.syncLocaleActive, isTrue);
   });
 
+  test('terminerOnboarding marks the flag and persists it', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier).terminerOnboarding();
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.single as PreferencesUtilisateur).onboardingTermine,
+        isTrue);
+    expect(c.read(preferencesProvider).value!.onboardingTermine, isTrue);
+  });
+
   test('a notification category toggle updates only that key', () async {
     final c = conteneur();
     await c.read(preferencesProvider.future);

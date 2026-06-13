@@ -21,6 +21,13 @@ void main() {
     expect(p.niveauExperience, NiveauExperience.debutant);
     expect(p.theme, ThemeApp.auto);
     expect(p.modeGeolocalisation, ModeGeolocalisation.desactivee);
+    expect(p.onboardingTermine, isFalse);
+  });
+
+  test('save then load round-trips the onboarding flag', () async {
+    await repo.sauvegarder(
+        (await repo.charger()).copierAvec(onboardingTermine: true));
+    expect((await repo.charger()).onboardingTermine, isTrue);
   });
 
   test('save then load round-trips enums, do-not-disturb and notif map',

@@ -33,6 +33,7 @@ class PreferencesUtilisateur {
   final Map<String, bool> _notificationsParCategorie;
   final String? _nePasDerangerDebut;
   final String? _nePasDerangerFin;
+  final bool _onboardingTermine;
 
   PreferencesUtilisateur._(
     this._langue,
@@ -50,6 +51,7 @@ class PreferencesUtilisateur {
     this._notificationsParCategorie,
     this._nePasDerangerDebut,
     this._nePasDerangerFin,
+    this._onboardingTermine,
   ) : assert(
           (_nePasDerangerDebut == null) == (_nePasDerangerFin == null),
           'do-not-disturb bounds must be both set or both null',
@@ -73,6 +75,7 @@ class PreferencesUtilisateur {
     Map<String, bool> notificationsParCategorie = const {},
     String? nePasDerangerDebut,
     String? nePasDerangerFin,
+    bool onboardingTermine = false,
   }) =>
       PreferencesUtilisateur._(
         langue,
@@ -90,6 +93,7 @@ class PreferencesUtilisateur {
         Map.unmodifiable(notificationsParCategorie),
         nePasDerangerDebut,
         nePasDerangerFin,
+        onboardingTermine,
       );
 
   String get id => idSingleton;
@@ -117,6 +121,10 @@ class PreferencesUtilisateur {
   /// Whether a do-not-disturb window is configured.
   bool get nePasDerangerActif => _nePasDerangerDebut != null;
 
+  /// Whether the first-launch onboarding has been completed. While `false`, the
+  /// router gates the app on the onboarding flow (position, derived climate…).
+  bool get onboardingTermine => _onboardingTermine;
+
   /// Returns a copy with the given fields overridden (do-not-disturb is kept;
   /// use [avecNePasDeranger] / [sansNePasDeranger] to change it).
   PreferencesUtilisateur copierAvec({
@@ -133,6 +141,7 @@ class PreferencesUtilisateur {
     bool? aideContextuelleActive,
     bool? aideDocCompleteActive,
     Map<String, bool>? notificationsParCategorie,
+    bool? onboardingTermine,
   }) =>
       PreferencesUtilisateur(
         langue: langue ?? _langue,
@@ -155,6 +164,7 @@ class PreferencesUtilisateur {
             notificationsParCategorie ?? _notificationsParCategorie,
         nePasDerangerDebut: _nePasDerangerDebut,
         nePasDerangerFin: _nePasDerangerFin,
+        onboardingTermine: onboardingTermine ?? _onboardingTermine,
       );
 
   /// Returns a copy with a do-not-disturb window (`HH:MM` bounds).
@@ -181,6 +191,7 @@ class PreferencesUtilisateur {
         notificationsParCategorie: _notificationsParCategorie,
         nePasDerangerDebut: debut,
         nePasDerangerFin: fin,
+        onboardingTermine: _onboardingTermine,
       );
 
   @override
@@ -200,6 +211,7 @@ class PreferencesUtilisateur {
       other._aideDocCompleteActive == _aideDocCompleteActive &&
       other._nePasDerangerDebut == _nePasDerangerDebut &&
       other._nePasDerangerFin == _nePasDerangerFin &&
+      other._onboardingTermine == _onboardingTermine &&
       _memeMap(other._notificationsParCategorie, _notificationsParCategorie);
 
   @override
@@ -219,6 +231,7 @@ class PreferencesUtilisateur {
           _aideDocCompleteActive,
           _nePasDerangerDebut,
           _nePasDerangerFin,
+          _onboardingTermine,
         ),
         _notificationsParCategorie.entries
             .fold<int>(0, (h, e) => h ^ Object.hash(e.key, e.value)),

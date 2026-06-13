@@ -69,6 +69,10 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> definirCalendrierLunaire(bool actif) =>
       _modifier((p) => p.copierAvec(calendrierLunaireOptIn: actif));
 
+  /// Marks the first-launch onboarding as completed (lifts the router gate).
+  Future<void> terminerOnboarding() =>
+      _modifier((p) => p.copierAvec(onboardingTermine: true));
+
   /// Toggles one notification category on/off.
   Future<void> definirNotificationCategorie(String cle, bool actif) {
     return _modifier((p) {

@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../application/state/accueil_notifier.dart';
 import '../application/state/calendrier_notifier.dart';
 import '../application/state/potager_notifier.dart';
+import '../application/state/preferences_notifier.dart';
 import '../l10n/app_localizations.dart';
 import 'historique_navigation.dart';
 import '../presentation/screens/ecran_accueil.dart';
 import '../presentation/screens/ecran_calendrier.dart';
 import '../presentation/screens/ecran_meteo_detail.dart';
+import '../presentation/screens/ecran_onboarding.dart';
 import '../presentation/screens/ecran_catalogue.dart';
 import '../presentation/screens/ecran_plus.dart';
 import '../presentation/screens/ecran_potager.dart';
@@ -25,6 +27,11 @@ import '../presentation/widgets/echafaudage_navigation.dart';
 /// Centralised so screens can navigate by name without re-typing literals.
 abstract final class RoutesApp {
   const RoutesApp._();
+
+  /// First-launch onboarding, a top-level route **outside** the navigation
+  /// shell (no bottom bar / rail). Gated by the router [GoRouter.redirect] on
+  /// the onboarding-completion preference.
+  static const String onboarding = '/onboarding';
 
   static const String accueil = '/accueil';
   static const String potager = '/potager';
@@ -134,6 +141,48 @@ int _indexBranche(String location) {
   return 0; // Accueil (default / fallback).
 }
 
+/// Replays one step of the cross-branch history: navigates to the previous
+/// screen ([PileNavigation.precedent]) and refreshes its branch. Shared by the
+/// shell's back handler (branch roots) and every sub-route's [_RetourGlobal]
+/// (deep screens) so the system back button behaves identically everywhere.
+void _retourGlobal(BuildContext context, WidgetRef ref) {
+  final notifier = ref.read(pileNavigationProvider.notifier);
+  if (!notifier.peutRevenir) return;
+  final precedent = notifier.precedent;
+  _rafraichirBranche(ref, _indexBranche(precedent));
+  context.go(precedent);
+}
+
+/// Wraps a **sub-route** screen so the system back button replays the global
+/// cross-branch history instead of letting the branch Navigator pop to the
+/// branch root.
+///
+/// The shell-level `PopScope` is an *ancestor* of the branch Navigators, so for
+/// a deep screen (zone detail, weather detail, a settings panel) the branch
+/// Navigator pops the sub-route first and the shell handler never runs — back
+/// would land on the branch root rather than the screen the user came from
+/// (e.g. a dashboard → zone jump returning to the Potager root instead of the
+/// dashboard). This PopScope sits *inside* the sub-route page (deeper than the
+/// branch Navigator), so it wins and drives the same global history (docs/15
+/// §8 D #5/#6).
+class _RetourGlobal extends ConsumerWidget {
+  final Widget child;
+
+  const _RetourGlobal({required this.child});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final peutRevenir = ref.watch(pileNavigationProvider).length > 1;
+    return PopScope(
+      canPop: !peutRevenir,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _retourGlobal(context, ref);
+      },
+      child: child,
+    );
+  }
+}
+
 /// The application [GoRouter], built once and cached for the app's lifetime.
 ///
 /// Uses a [StatefulShellRoute.indexedStack] so each of the five tabs keeps the
@@ -149,10 +198,41 @@ int _indexBranche(String location) {
 ///
 /// Lives behind a provider because routing now reacts to app state (the history
 /// notifier); the provider caches the single [GoRouter] instance.
+/// A [Listenable] the router can refresh on demand: it exposes a public
+/// [rafraichir] because [ChangeNotifier.notifyListeners] is protected.
+class _RafraichisseurRoute extends ChangeNotifier {
+  void rafraichir() => notifyListeners();
+}
+
 final routeurProvider = Provider<GoRouter>((ref) {
+  // Re-runs [GoRouter.redirect] whenever the preferences change (notably once
+  // they finish loading, or when onboarding is completed) so the onboarding
+  // gate opens/closes without rebuilding the cached router.
+  final rafraichir = _RafraichisseurRoute();
+  ref.listen(preferencesProvider, (_, _) => rafraichir.rafraichir());
+  ref.onDispose(rafraichir.dispose);
+
   final routeur = GoRouter(
     initialLocation: RoutesApp.accueil,
+    refreshListenable: rafraichir,
+    // First-launch gate: until onboarding is completed, force the user onto
+    // the onboarding flow; once done, keep them out of it. While preferences
+    // are still loading (value null) we defer the decision — the refresh above
+    // re-evaluates as soon as they arrive.
+    redirect: (context, state) {
+      final prefs = ref.read(preferencesProvider).value;
+      if (prefs == null) return null;
+      final surOnboarding = state.matchedLocation == RoutesApp.onboarding;
+      if (!prefs.onboardingTermine) {
+        return surOnboarding ? null : RoutesApp.onboarding;
+      }
+      return surOnboarding ? RoutesApp.accueil : null;
+    },
     routes: [
+      GoRoute(
+        path: RoutesApp.onboarding,
+        builder: (context, state) => const EcranOnboarding(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           // Consumer so the shell can read the cross-branch history (back
@@ -168,11 +248,7 @@ final routeurProvider = Provider<GoRouter>((ref) {
                 // let the OS pop the app.
                 canPop: !peutRevenir,
                 onPopInvokedWithResult: (didPop, _) {
-                  if (didPop) return;
-                  final precedent =
-                      ref.read(pileNavigationProvider.notifier).precedent;
-                  _rafraichirBranche(ref, _indexBranche(precedent));
-                  context.go(precedent);
+                  if (!didPop) _retourGlobal(context, ref);
                 },
                 child: EchafaudageNavigation(
                   indexActif: navigationShell.currentIndex,
@@ -203,7 +279,8 @@ final routeurProvider = Provider<GoRouter>((ref) {
                   // back stack returns to the dashboard.
                   GoRoute(
                     path: RoutesApp.accueilMeteoSegment,
-                    builder: (context, state) => const EcranMeteoDetail(),
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: EcranMeteoDetail()),
                   ),
                 ],
               ),
@@ -219,8 +296,10 @@ final routeurProvider = Provider<GoRouter>((ref) {
                   // bottom bar / rail and the branch's navigation state).
                   GoRoute(
                     path: RoutesApp.zoneDetailSegment,
-                    builder: (context, state) => EcranZoneDetail(
-                      zoneId: state.pathParameters['id']!,
+                    builder: (context, state) => _RetourGlobal(
+                      child: EcranZoneDetail(
+                        zoneId: state.pathParameters['id']!,
+                      ),
                     ),
                   ),
                 ],
@@ -251,19 +330,23 @@ final routeurProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: RoutesApp.plusGeneralSegment,
-                    builder: (context, state) => const PanneauGeneral(),
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: PanneauGeneral()),
                   ),
                   GoRoute(
                     path: RoutesApp.plusConfidentialiteSegment,
-                    builder: (context, state) => const PanneauConfidentialite(),
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: PanneauConfidentialite()),
                   ),
                   GoRoute(
                     path: RoutesApp.plusNotificationsSegment,
-                    builder: (context, state) => const PanneauNotifications(),
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: PanneauNotifications()),
                   ),
                   GoRoute(
                     path: RoutesApp.plusAProposSegment,
-                    builder: (context, state) => const PanneauAPropos(),
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: PanneauAPropos()),
                   ),
                 ],
               ),
@@ -279,6 +362,9 @@ final routeurProvider = Provider<GoRouter>((ref) {
   // folded into the back stack with browser semantics.
   void ecouter() {
     final location = routeur.routerDelegate.currentConfiguration.uri.toString();
+    // The onboarding gate is not part of the browseable history: excluding it
+    // keeps the back stack clean (no "back into onboarding" once completed).
+    if (location == RoutesApp.onboarding) return;
     ref.read(pileNavigationProvider.notifier).enregistrer(location);
   }
 

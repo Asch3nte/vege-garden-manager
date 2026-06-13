@@ -1,0 +1,16 @@
+Fichier : carte_monde.jpg
+Usage   : carte du monde équirectangulaire (plate carrée) du sélecteur de
+          position d'onboarding (lib/presentation/widgets/selecteur_carte_monde.dart).
+
+Source  : NASA — « Blue Marble », projection équirectangulaire plein globe.
+          Wikimedia Commons, fichier « Equirectangular_projection_SW.jpg ».
+          https://commons.wikimedia.org/wiki/File:Equirectangular_projection_SW.jpg
+
+Licence : Domaine public (œuvre de la NASA). Aucune attribution requise ;
+          citée ici par transparence.
+
+Projection : plate carrée plein globe — l'axe horizontal couvre la longitude
+             [-180°, +180°] (gauche → droite), l'axe vertical la latitude
+             [+90°, -90°] (haut → bas). Indispensable au mapping linéaire
+             tap → (latitude, longitude) ; ne pas remplacer par une autre
+             projection sans adapter ProjectionEquirectangulaire.

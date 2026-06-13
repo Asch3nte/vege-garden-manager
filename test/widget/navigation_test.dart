@@ -55,8 +55,10 @@ void main() {
     when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);
+    // Onboarding already done, so the router gate stays open and these tests
+    // exercise the navigation shell rather than the first-launch flow.
     when(() => preferences.charger())
-        .thenAnswer((_) async => PreferencesUtilisateur());
+        .thenAnswer((_) async => PreferencesUtilisateur(onboardingTermine: true));
     when(() => fiches.obtenirToutes()).thenAnswer((_) async => []);
     when(() => familles.obtenirToutes()).thenAnswer((_) async => []);
 

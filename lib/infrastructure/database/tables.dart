@@ -424,6 +424,8 @@ class Preferences extends Table {
       text().withDefault(const Constant('{}'))(); // JSON
   TextColumn get nePasDerangerDebut => text().nullable()();
   TextColumn get nePasDerangerFin => text().nullable()();
+  BoolColumn get onboardingTermine =>
+      boolean().withDefault(const Constant(false))();
   IntColumn get schemaVersion => integer().withDefault(const Constant(1))();
   TextColumn get derniereModification => text()();
 

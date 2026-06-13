@@ -11,6 +11,7 @@ import '../../../domain/value_objects/localisation.dart';
 import '../../../domain/value_objects/zone_climatique.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/capture_localisation.dart';
+import '../../widgets/selecteur_carte_monde.dart';
 import '../../widgets/libelles_enums.dart';
 import '../../widgets/position_potager_actions.dart';
 import '../../widgets/selecteur_decrit.dart';
@@ -57,7 +58,7 @@ class PanneauConfidentialite extends ConsumerWidget {
       final Future<Localisation?> capture = switch (mode) {
         ModeGeolocalisation.gps =>
           capterGps(context, ref.read(geolocalisationServiceProvider)),
-        ModeGeolocalisation.manuelle => choisirRegion(context),
+        ModeGeolocalisation.manuelle => choisirSurCarteMonde(context),
         ModeGeolocalisation.desactivee => Future.value(null),
       };
       final loc = await capture;

@@ -29,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -41,6 +41,13 @@ class AppDatabase extends _$AppDatabase {
               derniereModification: DateTime.now().toUtc().toIso8601String(),
             ),
           );
+        },
+        onUpgrade: (m, from, to) async {
+          // v1 → v2: onboarding-completion flag (defaults to false, so existing
+          // installs are re-routed through the first-launch onboarding flow).
+          if (from < 2) {
+            await m.addColumn(preferences, preferences.onboardingTermine);
+          }
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');
