@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
@@ -372,7 +373,7 @@ class _Fait extends StatelessWidget {
 
 /// One crop row: coloured dot + localized name + an actions menu (pull out /
 /// remove).
-class _LigneCulture extends StatelessWidget {
+class _LigneCulture extends ConsumerWidget {
   final CulturePotager culture;
   final Color couleur;
 
@@ -394,9 +395,11 @@ class _LigneCulture extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    // Observations are an intermediate+ feature (ADR-0009).
+    final observationsDispo = ref.watch(accesNiveauProvider).observations;
     return Container(
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s3,
@@ -487,17 +490,18 @@ class _LigneCulture extends StatelessWidget {
                   ],
                 ),
               ),
-              PopupMenuItem(
-                value: _ActionCulture.observer,
-                child: Row(
-                  children: [
-                    const Icon(Icons.visibility_outlined,
-                        size: TaillesIconesApp.sm),
-                    const SizedBox(width: EspacementsApp.s2),
-                    Text(l10n.cultureObserver),
-                  ],
+              if (observationsDispo)
+                PopupMenuItem(
+                  value: _ActionCulture.observer,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.visibility_outlined,
+                          size: TaillesIconesApp.sm),
+                      const SizedBox(width: EspacementsApp.s2),
+                      Text(l10n.cultureObserver),
+                    ],
+                  ),
                 ),
-              ),
               PopupMenuItem(
                 value: _ActionCulture.arracher,
                 child: Row(

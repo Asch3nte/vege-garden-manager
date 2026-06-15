@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/calendrier_notifier.dart';
 import '../../application/state/calendrier_vue.dart';
 import '../../application/state/saison_notifier.dart';
@@ -87,6 +88,10 @@ class _ContenuState extends ConsumerState<_Contenu> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // The "Saison" view is an intermediate+ feature (ADR-0009): hidden for
+    // beginners, who fall back to Agenda if it was somehow selected.
+    final vueSaisonDispo = ref.watch(accesNiveauProvider).vueSaison;
+    final vue = (!vueSaisonDispo && _vue == _VueCal.saison) ? _VueCal.agenda : _vue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -109,19 +114,20 @@ class _ContenuState extends ConsumerState<_Contenu> {
                 icon: const Icon(Icons.calendar_month_outlined),
                 label: Text(l10n.calendrierVueMois),
               ),
-              ButtonSegment(
-                value: _VueCal.saison,
-                icon: const Icon(Icons.eco_outlined),
-                label: Text(l10n.calendrierVueSaison),
-              ),
+              if (vueSaisonDispo)
+                ButtonSegment(
+                  value: _VueCal.saison,
+                  icon: const Icon(Icons.eco_outlined),
+                  label: Text(l10n.calendrierVueSaison),
+                ),
             ],
-            selected: {_vue},
+            selected: {vue},
             onSelectionChanged: (s) => setState(() => _vue = s.first),
             showSelectedIcon: false,
           ),
         ),
         Expanded(
-          child: switch (_vue) {
+          child: switch (vue) {
             _VueCal.agenda => _VueAgenda(vue: widget.vue),
             _VueCal.mois => _VueMois(vue: widget.vue),
             _VueCal.saison => const _VueSaison(),

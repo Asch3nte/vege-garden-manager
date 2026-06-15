@@ -15,6 +15,7 @@ import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/enums/langue.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
@@ -221,9 +222,13 @@ void main() {
   });
 
   testWidgets('notifications master gates the categories', (tester) async {
-    // Start with the master switch off.
+    // Master off; intermediate level so the per-category toggles are shown
+    // (they are an intermediate+ feature — ADR-0009).
     when(() => repo.charger()).thenAnswer(
-      (_) async => PreferencesUtilisateur(notificationsGlobalesActives: false),
+      (_) async => PreferencesUtilisateur(
+        notificationsGlobalesActives: false,
+        niveauExperience: NiveauExperience.intermediaire,
+      ),
     );
     await monter(tester);
 
@@ -233,7 +238,19 @@ void main() {
     // Every category switch is disabled while the master is off.
     final switches = tester.widgetList<Switch>(find.byType(Switch)).toList();
     // First switch is the master (off, enabled); the rest are disabled.
+    expect(switches.length, greaterThan(1));
     expect(switches.first.onChanged, isNotNull);
     expect(switches.skip(1).every((s) => s.onChanged == null), isTrue);
+  });
+
+  testWidgets('a beginner sees only the master notifications switch (ADR-0009)',
+      (tester) async {
+    // Default level is débutant → per-category toggles are hidden.
+    await monter(tester);
+
+    await tester.tap(find.text('Notifications'));
+    await tester.pumpAndSettle();
+
+    expect(tester.widgetList<Switch>(find.byType(Switch)).length, 1);
   });
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
+import '../../../application/state/acces_niveau_provider.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/enums/mode_geolocalisation.dart';
 import '../../../domain/enums/type_climat.dart';
@@ -177,13 +178,15 @@ class PanneauConfidentialite extends ConsumerWidget {
               valeur: prefs.syncLocaleActive,
               onChanged: notifier.definirSyncLocale,
             ),
-            RangeeInterrupteur(
-              icone: Icons.nightlight_outlined,
-              label: l10n.confidLunaire,
-              sousTitre: l10n.confidLunaireSub,
-              valeur: prefs.calendrierLunaireOptIn,
-              onChanged: notifier.definirCalendrierLunaire,
-            ),
+            // Lunar calendar is an intermediate+ option (ADR-0009).
+            if (ref.watch(accesNiveauProvider).calendrierLunaire)
+              RangeeInterrupteur(
+                icone: Icons.nightlight_outlined,
+                label: l10n.confidLunaire,
+                sousTitre: l10n.confidLunaireSub,
+                valeur: prefs.calendrierLunaireOptIn,
+                onChanged: notifier.definirCalendrierLunaire,
+              ),
             // Community is V2: shown but disabled (off, non-interactive).
             RangeeInterrupteur(
               icone: Icons.groups_outlined,

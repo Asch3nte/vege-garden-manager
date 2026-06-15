@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../application/state/acces_niveau_provider.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/entities/preferences_utilisateur.dart';
 import '../../../l10n/app_localizations.dart';
@@ -38,6 +39,10 @@ class PanneauNotifications extends ConsumerWidget {
     }
 
     final master = prefs.notificationsGlobalesActives;
+    // Per-category toggles are an intermediate+ feature (ADR-0009): beginners
+    // keep just the master switch. Hidden categories stay at their default (on),
+    // so essential/safety notifications (e.g. critical weather) still fire.
+    final parCategorie = ref.watch(accesNiveauProvider).notificationsParCategorie;
 
     return PanneauParametres(
       titre: l10n.categNotifications,
@@ -53,21 +58,22 @@ class PanneauNotifications extends ConsumerWidget {
             ),
           ],
         ),
-        ZoneParametres(
-          titre: l10n.notifParCategorie,
-          enfants: [
-            for (final cat in _categories)
-              RangeeInterrupteur(
-                icone: cat.icone,
-                label: cat.label(l10n),
-                valeur: master && _estActive(prefs, cat.cle),
-                // Disabled while the master switch is off.
-                onChanged: master
-                    ? (v) => notifier.definirNotificationCategorie(cat.cle, v)
-                    : null,
-              ),
-          ],
-        ),
+        if (parCategorie)
+          ZoneParametres(
+            titre: l10n.notifParCategorie,
+            enfants: [
+              for (final cat in _categories)
+                RangeeInterrupteur(
+                  icone: cat.icone,
+                  label: cat.label(l10n),
+                  valeur: master && _estActive(prefs, cat.cle),
+                  // Disabled while the master switch is off.
+                  onChanged: master
+                      ? (v) => notifier.definirNotificationCategorie(cat.cle, v)
+                      : null,
+                ),
+            ],
+          ),
       ],
     );
   }

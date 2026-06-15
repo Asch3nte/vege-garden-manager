@@ -9,6 +9,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
+import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
@@ -241,6 +244,9 @@ void main() {
         overrides: [
           ...reposOverrides(),
           saisonProvider.overrideWith(_FakeSaison.new),
+          // Saison view is intermediate+ (ADR-0009).
+          accesNiveauProvider.overrideWithValue(
+              const AccesNiveau(NiveauExperience.intermediaire)),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
