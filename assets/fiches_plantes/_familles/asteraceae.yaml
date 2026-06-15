@@ -10,6 +10,12 @@ i18n:
       L'une des plus vastes familles, à capitules floraux : laitue, chicorée,
       artichaut, salsifis, mais aussi tournesol, souci, cosmos et l'estragon.
       Nombreuses espèces mellifères et compagnes du potager.
+    pourquoi_rotation: >
+      La sclérotiniose et le mildiou de la laitue persistent dans un sol frais : alternez sur 3 ans et aérez les plantations pour limiter l'humidité stagnante.
+    ennemis_communs_note: >
+      Pucerons et limaces s'attaquent aux salades ; les mineuses dessinent des galeries dans les feuilles, et le mildiou de la laitue se déclare par temps frais et humide.
+    associations_note: >
+      Souci et cosmos attirent pollinisateurs et auxiliaires, et le souci éloigne nématodes et pucerons : d'excellentes fleurs compagnes ; les laitues se glissent volontiers entre des légumes plus hauts.
 maladies_communes: [oidium, mildiou_laitue, rouille, sclerotiniose]
 ravageurs_communs: [puceron, mineuse, limace]
 delai_retour_annees: 3

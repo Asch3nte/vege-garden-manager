@@ -10,6 +10,12 @@ i18n:
       Vaste famille des choux et crucifères : chou, brocoli, chou-fleur, navet,
       radis, roquette, moutarde. Plantes souvent gourmandes en azote, partageant
       la sensibilité à la hernie du chou et aux altises.
+    pourquoi_rotation: >
+      Gourmandes en azote, les brassicacées laissent surtout derrière elles la hernie du chou, un champignon du sol qui persiste des années : attendez au moins 4 ans avant d'y replanter un chou, et chaulez les sols acides qui la favorisent.
+    ennemis_communs_note: >
+      Toute la famille partage l'altise (petits trous dans les jeunes feuilles), la piéride (chenilles vertes), la mouche du chou (racines) et le puceron cendré ; les regrouper concentre ces attaques.
+    associations_note: >
+      Les choux profitent du voisinage des légumineuses (azote) et des aromatiques répulsives, et du céleri ; évitez de les coller aux autres crucifères et aux fraisiers.
 maladies_communes: [hernie_chou, mildiou, alternariose]
 ravageurs_communs: [altise, pieride, mouche_chou, puceron_cendre]
 delai_retour_annees: 4

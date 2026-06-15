@@ -10,6 +10,12 @@ i18n:
       Famille des alliums (sous-famille Allioideae) : oignon, ail, échalote,
       poireau, ciboulette, et ornementales à bulbe comme le narcisse. Riches en
       composés soufrés répulsifs, souvent utilisées en compagnonnage.
+    pourquoi_rotation: >
+      La pourriture blanche persiste très longtemps dans le sol : ne replantez pas d'allium avant 4 ans au même endroit, et préférez un sol drainé pour limiter mildiou et pourritures de bulbe.
+    ennemis_communs_note: >
+      Mouche de l'oignon et teigne du poireau pondent sur les jeunes plants ; rouille et mildiou de l'oignon se déclarent par temps humide.
+    associations_note: >
+      Riches en composés soufrés, les alliacées repoussent la mouche de la carotte et de nombreux ravageurs : excellentes compagnes des carottes et des fraisiers, mais à tenir à l'écart des légumineuses.
 maladies_communes: [mildiou_oignon, rouille_poireau, pourriture_blanche]
 ravageurs_communs: [teigne_poireau, mouche_oignon, thrips]
 delai_retour_annees: 4

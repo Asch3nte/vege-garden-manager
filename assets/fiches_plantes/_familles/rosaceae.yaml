@@ -10,6 +10,12 @@ i18n:
       Très grande famille fruitière : arbres à pépins et à noyaux (pommier,
       poirier, cerisier, prunier, pêcher, abricotier) et petits fruits (fraisier,
       framboisier, ronce). Sujette à la tavelure, la moniliose et le feu bactérien.
+    pourquoi_rotation: >
+      Arbres et arbustes fruitiers restent en place des années : on ne « tourne » pas, mais on évite de replanter un fruitier à pépins ou à noyau là où l'un de la même famille vient d'être arraché (fatigue du sol).
+    ennemis_communs_note: >
+      Le carpocapse rend véreuses pommes et prunes, la moniliose pourrit les fruits sur l'arbre, la tavelure tache pommes et poires, et le feu bactérien dessèche les rameaux.
+    associations_note: >
+      Au pied des fruitiers, des plantes mellifères et aromatiques attirent pollinisateurs et auxiliaires ; la capucine sert de plante-piège à pucerons et l'ail éloigne certaines maladies.
 maladies_communes: [tavelure, moniliose, feu_bacterien, oidium, rouille_grillage]
 ravageurs_communs: [carpocapse, puceron, hoplocampe]
 contributeurs:

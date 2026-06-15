@@ -10,6 +10,12 @@ i18n:
       Famille des courges et concombres : courgette, potiron, potimarron,
       concombre, cornichon, melon et pastèque. Plantes coureuses gourmandes,
       sensibles à l'oïdium et aux excès d'humidité du feuillage.
+    pourquoi_rotation: >
+      Très gourmandes, les cucurbitacées épuisent le sol et entretiennent l'oïdium : espacez-les de 3 à 4 ans, offrez-leur un sol riche en compost et évitez de mouiller le feuillage.
+    ennemis_communs_note: >
+      L'oïdium (feutrage blanc des feuilles) touche toute la famille en fin d'été ; pucerons et aleurodes affaiblissent les jeunes plants et transmettent des viroses.
+    associations_note: >
+      Les courges couvrent le sol au pied du maïs et des haricots (la « milpa ») ; le voisinage d'aromatiques et de capucines, plante-piège à pucerons, les protège.
 maladies_communes: [oidium, mildiou, anthracnose]
 ravageurs_communs: [puceron, aleurode]
 delai_retour_annees: 4

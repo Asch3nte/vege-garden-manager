@@ -10,6 +10,12 @@ i18n:
       Famille intégrant les anciennes Chénopodiacées : épinard, betterave,
       blette (poirée), ainsi que les pseudo-céréales quinoa et amarante.
       Souvent tolérantes aux sols salins et peu exigeantes.
+    pourquoi_rotation: >
+      Betterave, épinard et blette partagent les mêmes ennemis du sol : respectez 3 ans de rotation, d'autant qu'elles sont peu exigeantes et tolèrent les sols un peu salins.
+    ennemis_communs_note: >
+      La pégomyie (mouche de la betterave) creuse des galeries claires dans les feuilles ; cercosporiose et mildiou tachent le feuillage, l'altise crible les jeunes plants.
+    associations_note: >
+      Épinards et blettes apprécient la mi-ombre des plantes plus hautes et font de bons couvre-sols intercalaires ; ils s'accommodent du voisinage des choux et des légumineuses.
 maladies_communes: [mildiou, cercosporiose, rouille_blanche]
 ravageurs_communs: [pegomyie, puceron, altise]
 delai_retour_annees: 3
