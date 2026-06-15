@@ -20,6 +20,7 @@ import '../presentation/screens/ecran_zone_detail.dart';
 import '../presentation/screens/parametres/panneau_a_propos.dart';
 import '../presentation/screens/parametres/panneau_confidentialite.dart';
 import '../presentation/screens/parametres/panneau_donnees.dart';
+import '../presentation/screens/parametres/panneau_niveaux.dart';
 import '../presentation/screens/parametres/panneau_general.dart';
 import '../presentation/screens/parametres/panneau_notifications.dart';
 import '../presentation/widgets/echafaudage_navigation.dart';
@@ -62,12 +63,14 @@ abstract final class RoutesApp {
   static const String plusGeneralSegment = 'general';
   static const String plusConfidentialiteSegment = 'confidentialite';
   static const String plusNotificationsSegment = 'notifications';
+  static const String plusNiveauxSegment = 'niveaux';
   static const String plusDonneesSegment = 'donnees';
   static const String plusAProposSegment = 'apropos';
 
   static const String plusGeneral = '$plus/$plusGeneralSegment';
   static const String plusConfidentialite = '$plus/$plusConfidentialiteSegment';
   static const String plusNotifications = '$plus/$plusNotificationsSegment';
+  static const String plusNiveaux = '$plus/$plusNiveauxSegment';
   static const String plusDonnees = '$plus/$plusDonneesSegment';
   static const String plusAPropos = '$plus/$plusAProposSegment';
 }
@@ -357,6 +360,11 @@ final routeurProvider = Provider<GoRouter>((ref) {
                     path: RoutesApp.plusNotificationsSegment,
                     builder: (context, state) =>
                         const _RetourGlobal(child: PanneauNotifications()),
+                  ),
+                  GoRoute(
+                    path: RoutesApp.plusNiveauxSegment,
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: PanneauNiveaux()),
                   ),
                   GoRoute(
                     path: RoutesApp.plusDonneesSegment,

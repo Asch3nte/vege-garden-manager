@@ -76,6 +76,12 @@ class _Racine extends StatelessWidget {
           onTap: () => context.go(RoutesApp.plusNotifications),
         ),
         LigneCategorie(
+          icone: Icons.school_outlined,
+          titre: l10n.categNiveaux,
+          sousTitre: l10n.categNiveauxSub,
+          onTap: () => context.go(RoutesApp.plusNiveaux),
+        ),
+        LigneCategorie(
           icone: Icons.save_outlined,
           titre: l10n.categDonnees,
           sousTitre: l10n.categDonneesSub,
