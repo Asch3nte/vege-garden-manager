@@ -26,6 +26,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0007](0007-vue-reseau-exploratoire.md) | Vue Réseau du Catalogue : modèle de transformation explicite et découpage en lots | Accepté |
 | [0008](0008-vue-reseau-familles-et-focus.md) | Vue Réseau du Catalogue : layout par familles, mode focus, et résolveur d'associations unifié | Accepté |
 | [0009](0009-paliers-experience-divulgation-progressive.md) | Paliers d'expérience et divulgation progressive (gating réversible, teaser, onboarding) | Accepté |
+| [0010](0010-associations-multi-mecanismes.md) | Modèle d'associations multi-mécanismes (permaculture) : taxonomie typée + dérivation | Proposé |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.
