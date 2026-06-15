@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/ph_sol.dart';
+import '../../domain/enums/technique_sol.dart';
+import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
@@ -57,6 +61,11 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
   final _surface = TextEditingController(text: '1');
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
+  // Soil fields (ADR-0009): techniques are intermediate+, texture/pH expert.
+  // Edited only when the level unlocks them; otherwise preserved as-is.
+  TextureSol? _texture;
+  PhSol? _ph;
+  final Set<TechniqueSol> _techniques = {};
   bool _enregistrement = false;
 
   bool get _edition => widget.parcelleInitiale != null;
@@ -70,6 +79,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
       _surface.text = _formaterSurface(p.surface.enMetresCarres);
       _type = p.type;
       _exposition = p.exposition;
+      _texture = p.texture;
+      _ph = p.ph;
+      _techniques.addAll(p.techniquesSol);
     }
   }
 
@@ -101,10 +113,10 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
         surface: surface,
         exposition: _exposition,
         ordre: initiale.ordre,
-        texture: initiale.texture,
+        texture: _texture,
         textureSource: initiale.textureSource,
-        ph: initiale.ph,
-        techniquesSol: initiale.techniquesSol,
+        ph: _ph,
+        techniquesSol: _techniques,
         cultureVerticale: initiale.cultureVerticale,
         notes: initiale.notes,
       );
@@ -115,6 +127,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
         type: _type,
         surface: surface,
         exposition: _exposition,
+        texture: _texture,
+        ph: _ph,
+        techniquesSol: _techniques,
       );
     }
     if (mounted) Navigator.of(context).pop(parcelle);
@@ -127,6 +142,10 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    // Soil controls are gated by the experience level (ADR-0009); hidden values
+    // are preserved (reversibility), never wiped.
+    final acces = ref.watch(accesNiveauProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -187,6 +206,67 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
               ],
               onChanged: (v) => setState(() => _exposition = v!),
             ),
+            // Soil techniques — intermediate+ (ADR-0009).
+            if (acces.techniquesSol) ...[
+              const SizedBox(height: EspacementsApp.s5),
+              Text(l10n.formZoneTechniquesTitre,
+                  style: theme.textTheme.titleMedium),
+              const SizedBox(height: EspacementsApp.s1),
+              Text(
+                l10n.formZoneTechniquesAide,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+              const SizedBox(height: EspacementsApp.s2),
+              Wrap(
+                spacing: EspacementsApp.s2,
+                runSpacing: EspacementsApp.s1,
+                children: [
+                  for (final t in TechniqueSol.values)
+                    FilterChip(
+                      label: Text(l10n.techniqueSol(t)),
+                      selected: _techniques.contains(t),
+                      onSelected: (sel) => setState(() =>
+                          sel ? _techniques.add(t) : _techniques.remove(t)),
+                    ),
+                ],
+              ),
+            ],
+            // Soil texture + pH — expert (ADR-0009).
+            if (acces.solTexturePh) ...[
+              const SizedBox(height: EspacementsApp.s4),
+              DropdownButtonFormField<TextureSol?>(
+                initialValue: _texture,
+                decoration: InputDecoration(
+                  labelText: l10n.formZoneTexture,
+                  border:
+                      const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                ),
+                items: [
+                  DropdownMenuItem(
+                      value: null, child: Text(l10n.formZoneNonRenseigne)),
+                  for (final t in TextureSol.values)
+                    DropdownMenuItem(value: t, child: Text(l10n.textureSol(t))),
+                ],
+                onChanged: (v) => setState(() => _texture = v),
+              ),
+              const SizedBox(height: EspacementsApp.s4),
+              DropdownButtonFormField<PhSol?>(
+                initialValue: _ph,
+                decoration: InputDecoration(
+                  labelText: l10n.formZonePh,
+                  border:
+                      const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                ),
+                items: [
+                  DropdownMenuItem(
+                      value: null, child: Text(l10n.formZoneNonRenseigne)),
+                  for (final p in PhSol.values)
+                    DropdownMenuItem(value: p, child: Text(l10n.phSol(p))),
+                ],
+                onChanged: (v) => setState(() => _ph = v),
+              ),
+            ],
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(
               onPressed: _enregistrement ? null : _enregistrer,

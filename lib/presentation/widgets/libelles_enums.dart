@@ -5,6 +5,9 @@ import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/destination_recolte.dart';
+import '../../domain/enums/ph_sol.dart';
+import '../../domain/enums/technique_sol.dart';
+import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/unite_quantite.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
@@ -200,6 +203,47 @@ extension LibellesEnums on AppLocalizations {
         TypeParcelle.serre => typeParcelleServe,
         TypeParcelle.butte => typeParcelleButte,
         TypeParcelle.autre => typeParcelleAutre,
+      };
+
+  /// Label for a soil texture (ADR-0009 — expert).
+  String textureSol(TextureSol t) => switch (t) {
+        TextureSol.argileux => textureArgileux,
+        TextureSol.sableux => textureSableux,
+        TextureSol.limoneux => textureLimoneux,
+        TextureSol.calcaire => textureCalcaire,
+        TextureSol.humifere => textureHumifere,
+        TextureSol.tourbeux => textureTourbeux,
+        TextureSol.caillouteux => textureCaillouteux,
+      };
+
+  /// Label for a soil pH (ADR-0009 — expert).
+  String phSol(PhSol p) => switch (p) {
+        PhSol.acide => phAcide,
+        PhSol.neutre => phNeutre,
+        PhSol.alcalin => phAlcalin,
+      };
+
+  /// Label for a soil technique (ADR-0009 — intermédiaire+).
+  String techniqueSol(TechniqueSol t) => switch (t) {
+        TechniqueSol.butteLasagne => techButteLasagne,
+        TechniqueSol.hugelkultur => techHugelkultur,
+        TechniqueSol.butteRonde => techButteRonde,
+        TechniqueSol.buttePermanente => techButtePermanente,
+        TechniqueSol.paillage => techPaillage,
+        TechniqueSol.brf => techBrf,
+        TechniqueSol.mulchVivant => techMulchVivant,
+        TechniqueSol.engraisVertCouvert => techEngraisVertCouvert,
+        TechniqueSol.paillageMineral => techPaillageMineral,
+        TechniqueSol.carton => techCarton,
+        TechniqueSol.noDig => techNoDig,
+        TechniqueSol.grelinette => techGrelinette,
+        TechniqueSol.mulchDeFoin => techMulchDeFoin,
+        TechniqueSol.compostageSurface => techCompostageSurface,
+        TechniqueSol.compostEnTrou => techCompostEnTrou,
+        TechniqueSol.mycorhization => techMycorhization,
+        TechniqueSol.bokashi => techBokashi,
+        TechniqueSol.swales => techSwales,
+        TechniqueSol.keylineDesign => techKeylineDesign,
       };
 
   /// Label for the home weather watering verdict.
