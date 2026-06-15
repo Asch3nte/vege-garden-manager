@@ -172,6 +172,39 @@ void main() {
     expect(saved.last.onboardingTermine, isTrue);
   });
 
+  testWidgets('choosing intermediate shows the per-category notifications '
+      'detail (ADR-0009)', (tester) async {
+    await monter(tester,
+        onboardingTermine: false, taille: const Size(1600, 1000));
+
+    await tester.tap(find.text('Commencer'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Suivant')); // → position
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choisir sur la carte'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Valider'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Suivant')); // climate → experience
+    await tester.pumpAndSettle();
+    // Pick Intermédiaire, then go to the garden + notifications steps.
+    await tester.tap(find.text('Intermédiaire'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Suivant')); // experience → garden
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Jardin');
+    await tester.pump();
+    await tester.tap(find.text('Suivant')); // garden → notifications
+    await tester.pumpAndSettle();
+
+    // Full notification detail (per-category toggles) is shown.
+    expect(find.text('Activer les notifications'), findsOneWidget);
+    expect(find.text('Arrosage'), findsOneWidget);
+    expect(find.text('Météo critique'), findsOneWidget);
+  });
+
   testWidgets('an already-onboarded launch skips straight to Accueil',
       (tester) async {
     await monter(tester, onboardingTermine: true);

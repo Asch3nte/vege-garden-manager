@@ -13,9 +13,11 @@ import '../../domain/enums/source_localisation.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/entities/parcelle.dart';
+import '../../domain/services/acces_niveau.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
+import 'parametres/panneau_notifications.dart' show categoriesNotifications;
 import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/capture_localisation.dart';
@@ -57,6 +59,8 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   ZoneRusticite _rusticite = ZoneRusticite.zone8;
   NiveauExperience _niveau = NiveauExperience.debutant;
   bool _notifications = true;
+  // Per-category notification choices (intermediate+); absent = default on.
+  final Map<String, bool> _notifsCategories = {};
   bool _enregistrement = false;
 
   /// Id of the first garden, once created lazily (null until then).
@@ -158,6 +162,9 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
             : ModeGeolocalisation.manuelle,
       );
       await prefs.definirNotificationsGlobales(_notifications);
+      for (final e in _notifsCategories.entries) {
+        await prefs.definirNotificationCategorie(e.key, e.value);
+      }
       // Refresh the data views so the (otherwise cached) dashboard/potager show
       // the freshly created garden — test feedback #5.
       invaliderVuesDonnees(ref);
@@ -436,6 +443,9 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   }
 
   Widget _etapeNotifications(AppLocalizations l10n) {
+    // Intermediate+ get the full per-category detail (like the settings panel);
+    // a beginner keeps just the master switch (ADR-0009).
+    final parCategorie = AccesNiveau(_niveau).notificationsParCategorie;
     return _Etape(
       icone: Icons.notifications_outlined,
       titre: l10n.onboardingNotifsTitre,
@@ -447,6 +457,20 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           value: _notifications,
           onChanged: (v) => setState(() => _notifications = v),
         ),
+        if (parCategorie) ...[
+          const Divider(),
+          for (final cat in categoriesNotifications)
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              secondary: Icon(cat.icone),
+              title: Text(cat.label(l10n)),
+              value: _notifications && (_notifsCategories[cat.cle] ?? true),
+              // Disabled while the master switch is off (the master wins).
+              onChanged: _notifications
+                  ? (v) => setState(() => _notifsCategories[cat.cle] = v)
+                  : null,
+            ),
+        ],
       ],
     );
   }

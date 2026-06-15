@@ -141,24 +141,27 @@ class _EcranCarteMondeState extends State<_EcranCarteMonde> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.carteMondeTitre),
-        actions: [
-          TextButton(
-            onPressed: _fraction == null ? null : _valider,
-            child: Text(l10n.carteMondeValider),
-          ),
-        ],
-      ),
-      body: Column(
+      appBar: AppBar(title: Text(l10n.carteMondeTitre)),
+      body: SafeArea(
+        child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(EspacementsApp.s4),
+            padding: const EdgeInsets.fromLTRB(EspacementsApp.s4,
+                EspacementsApp.s4, EspacementsApp.s4, EspacementsApp.s2),
             child: Text(
               l10n.carteMondeInstruction,
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
+          ),
+          // Region shortcuts at the top (above the map).
+          _BandeRegions(
+            onRegion: (lat, lon) {
+              final (fx, fy) =
+                  ProjectionEquirectangulaire.versFraction(lat, lon);
+              _allerVers(Offset(fx, fy));
+            },
+            regions: regionsLocalisation(l10n),
           ),
           // The interactive zone fills all the available vertical space: the
           // zoom/pan canvas spans the whole area (so zooming uses every pixel
@@ -220,15 +223,22 @@ class _EcranCarteMondeState extends State<_EcranCarteMonde> {
               },
             ),
           ),
-          _BandeRegions(
-            onRegion: (lat, lon) {
-              final (fx, fy) =
-                  ProjectionEquirectangulaire.versFraction(lat, lon);
-              _allerVers(Offset(fx, fy));
-            },
-            regions: regionsLocalisation(l10n),
+          // Confirm button, bottom-right — same look as the onboarding "Suivant"
+          // (FilledButton: grey when disabled, primary when a point is set).
+          Padding(
+            padding: const EdgeInsets.all(EspacementsApp.s4),
+            child: Row(
+              children: [
+                const Spacer(),
+                FilledButton(
+                  onPressed: _fraction == null ? null : _valider,
+                  child: Text(l10n.carteMondeValider),
+                ),
+              ],
+            ),
           ),
         ],
+      ),
       ),
     );
   }
