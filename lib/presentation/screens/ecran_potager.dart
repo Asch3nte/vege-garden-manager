@@ -17,6 +17,7 @@ import '../../domain/enums/type_parcelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_potager.dart';
 import '../forms/formulaire_zone.dart';
+import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 
@@ -95,10 +96,67 @@ class EcranPotager extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) =>
             _EtatErreur(onReessayer: () => ref.invalidate(potagerProvider)),
-        data: (data) => RefreshIndicator(
-          onRefresh: () async => ref.invalidate(potagerProvider),
-          child: _Contenu(vue: data),
-        ),
+        data: (data) {
+          // One-off post-onboarding hint: nudge the user to tap a zone to add
+          // plants (only meaningful once zones exist) — feedback #4.
+          final astuce = ref.watch(astucePotagerZonesProvider);
+          return Column(
+            children: [
+              if (astuce && data.zones.isNotEmpty)
+                _BandeauAstuce(
+                  message: l10n.astucePotagerZones,
+                  onFermer: () =>
+                      ref.read(astucePotagerZonesProvider.notifier).masquer(),
+                ),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async => ref.invalidate(potagerProvider),
+                  child: _Contenu(vue: data),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Dismissable post-onboarding hint banner shown above the garden plan.
+class _BandeauAstuce extends StatelessWidget {
+  final String message;
+  final VoidCallback onFermer;
+
+  const _BandeauAstuce({required this.message, required this.onFermer});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      color: theme.colorScheme.primaryContainer,
+      padding: const EdgeInsets.fromLTRB(
+          EspacementsApp.s4, EspacementsApp.s3, EspacementsApp.s2, EspacementsApp.s3),
+      child: Row(
+        children: [
+          Icon(Icons.lightbulb_outline,
+              size: TaillesIconesApp.md, color: theme.colorScheme.onPrimaryContainer),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(
+              message,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onPrimaryContainer),
+            ),
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Icon(Icons.close,
+                size: TaillesIconesApp.md, color: theme.colorScheme.onPrimaryContainer),
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+            onPressed: onFermer,
+          ),
+        ],
       ),
     );
   }

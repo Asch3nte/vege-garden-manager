@@ -229,7 +229,9 @@ final routeurProvider = Provider<GoRouter>((ref) {
       if (!prefs.onboardingTermine) {
         return surOnboarding ? null : RoutesApp.onboarding;
       }
-      return surOnboarding ? RoutesApp.accueil : null;
+      // Just completed onboarding → land on the Potager screen (which now shows
+      // the garden/zones just created) rather than the dashboard (feedback #4).
+      return surOnboarding ? RoutesApp.potager : null;
     },
     routes: [
       GoRoute(

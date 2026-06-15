@@ -108,13 +108,14 @@ void main() {
     await monter(tester,
         onboardingTermine: false, saved: saved, taille: const Size(1600, 800));
 
-    // Step 0 welcome → step 1 privacy → step 2 position.
+    // Welcome → privacy → position.
     await tester.tap(find.text('Commencer'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Suivant'));
     await tester.pumpAndSettle();
 
-    // Step 2: a position is required. Pick one on the world map.
+    // Position is required; picking one on the world map auto-advances to the
+    // climate step (no extra "Suivant" — feedback #1).
     await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
@@ -122,13 +123,13 @@ void main() {
     await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
 
-    // Step 2 → 3 climate → 4 garden.
+    // Climate → experience level → garden.
     await tester.tap(find.text('Suivant'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Suivant'));
     await tester.pumpAndSettle();
 
-    // Step 4: name the first garden, then → step 5 notifications → finish.
+    // Name the first garden, then → notifications → finish.
     await tester.enterText(find.byType(TextField), 'Mon potager');
     await tester.pump();
     await tester.tap(find.text('Suivant'));
@@ -136,8 +137,9 @@ void main() {
     await tester.tap(find.text('Terminer'));
     await tester.pumpAndSettle();
 
-    // The garden was created and the gate opened onto the shell (Accueil).
-    expect(find.widgetWithText(AppBar, 'Accueil'), findsOneWidget);
+    // The garden was created and the gate opened onto the Potager screen
+    // (feedback #4), not the dashboard.
+    expect(find.widgetWithText(AppBar, 'Potager'), findsOneWidget);
     expect(saved.last.onboardingTermine, isTrue);
   });
 

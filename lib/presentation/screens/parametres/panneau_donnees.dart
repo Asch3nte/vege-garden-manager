@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/providers/service_providers.dart';
-import '../../../application/state/potagers_notifier.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/enums/mode_import.dart';
 import '../../../domain/exceptions/sauvegarde_invalide_exception.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../services/gestionnaire_sauvegarde_fichier.dart';
 import '../../widgets/dialogue_confirmation.dart';
+import '../../widgets/invalidation_vues.dart';
 import 'widgets_parametres.dart';
 
 /// Settings category — **Sauvegarde & données**: export (share a JSON backup),
@@ -97,7 +97,7 @@ class PanneauDonnees extends ConsumerWidget {
       // The imported data (and possibly preferences) must replace the cached
       // state everywhere.
       ref.invalidate(preferencesProvider);
-      ref.invalidate(potagersProvider);
+      invaliderVuesDonnees(ref);
       messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportSucces)));
     } on SauvegardeInvalideException {
       messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportErreur)));
@@ -155,10 +155,11 @@ class PanneauDonnees extends ConsumerWidget {
     if (!second) return;
 
     await ref.read(reinitialisationServiceProvider).reinitialiserTout();
-    // Reload the first-run gate (preferences → onboarding) and the garden list;
-    // the router's refresh on preferences then redirects to the onboarding.
+    // Reload the first-run gate (preferences → onboarding) and every data view
+    // (so no stale garden/zones linger); the router's refresh on preferences
+    // then redirects to the onboarding.
     ref.invalidate(preferencesProvider);
-    ref.invalidate(potagersProvider);
+    invaliderVuesDonnees(ref);
   }
 }
 

@@ -87,6 +87,13 @@ extension LibellesEnums on AppLocalizations {
         NiveauExperience.expert => niveauExpert,
       };
 
+  /// One-line description of what an experience level unlocks (ADR-0009).
+  String niveauDescription(NiveauExperience n) => switch (n) {
+        NiveauExperience.debutant => niveauDebutantDesc,
+        NiveauExperience.intermediaire => niveauIntermediaireDesc,
+        NiveauExperience.expert => niveauExpertDesc,
+      };
+
   /// Short label for a geolocation mode (the chip value).
   String geolocLabel(ModeGeolocalisation m) => switch (m) {
         ModeGeolocalisation.desactivee => geolocLabelOff,
