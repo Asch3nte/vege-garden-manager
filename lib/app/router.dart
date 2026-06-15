@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../application/state/accueil_notifier.dart';
 import '../application/state/calendrier_notifier.dart';
 import '../application/state/potager_notifier.dart';
+import '../application/state/potagers_notifier.dart';
 import '../application/state/preferences_notifier.dart';
 import '../l10n/app_localizations.dart';
 import 'historique_navigation.dart';
@@ -213,6 +214,9 @@ final routeurProvider = Provider<GoRouter>((ref) {
   // gate opens/closes without rebuilding the cached router.
   final rafraichir = _RafraichisseurRoute();
   ref.listen(preferencesProvider, (_, _) => rafraichir.rafraichir());
+  // Also re-evaluate when the garden list loads/changes: the gate skips
+  // onboarding when user data already exists (see the redirect below).
+  ref.listen(potagersProvider, (_, _) => rafraichir.rafraichir());
   ref.onDispose(rafraichir.dispose);
 
   final routeur = GoRouter(
@@ -224,9 +228,15 @@ final routeurProvider = Provider<GoRouter>((ref) {
     // re-evaluates as soon as they arrive.
     redirect: (context, state) {
       final prefs = ref.read(preferencesProvider).value;
-      if (prefs == null) return null;
+      final potagers = ref.read(potagersProvider).value;
+      // Defer until both are loaded; the refresh above re-evaluates on arrival.
+      if (prefs == null || potagers == null) return null;
       final surOnboarding = state.matchedLocation == RoutesApp.onboarding;
-      if (!prefs.onboardingTermine) {
+      // Onboarding is a first-run flow: only when it hasn't been completed AND
+      // there is no user data yet. Pre-existing gardens (e.g. a database that
+      // predates the onboarding flag) skip it — never overwrite real data.
+      final doitOnboarder = !prefs.onboardingTermine && potagers.isEmpty;
+      if (doitOnboarder) {
         return surOnboarding ? null : RoutesApp.onboarding;
       }
       // Just completed onboarding → land on the Potager screen (which now shows

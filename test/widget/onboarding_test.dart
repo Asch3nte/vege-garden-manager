@@ -13,6 +13,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/enums/type_climat.dart';
+import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
@@ -49,6 +52,7 @@ void main() {
     WidgetTester tester, {
     required bool onboardingTermine,
     List<PreferencesUtilisateur>? saved,
+    List<Potager> potagersExistants = const [],
     Size taille = const Size(390, 800),
   }) async {
     tester.view.physicalSize = taille;
@@ -63,7 +67,8 @@ void main() {
     final fiches = _MockFiches();
     final familles = _MockFamilles();
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
-    when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+    when(() => potagers.obtenirTous())
+        .thenAnswer((_) async => potagersExistants);
     when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
     when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
     when(() => taches.obtenirEntreDates(any(), any()))
@@ -99,6 +104,24 @@ void main() {
     expect(find.text("Bienvenue dans Pot'à Gérer"), findsOneWidget);
     // The navigation shell (and its Accueil app bar) is not reachable yet.
     expect(find.widgetWithText(AppBar, 'Accueil'), findsNothing);
+  });
+
+  testWidgets('existing user data skips onboarding even if the flag is unset',
+      (tester) async {
+    // Legacy case: a database that predates the onboarding flag (false) but
+    // already holds a garden must NOT be sent through onboarding.
+    final potager = Potager(
+      id: 'p1',
+      nom: 'Jardin existant',
+      zoneClimatique:
+          const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+      dateCreation: DateTime(2026, 1, 1),
+    );
+    await monter(tester,
+        onboardingTermine: false, potagersExistants: [potager]);
+
+    expect(find.text("Bienvenue dans Pot'à Gérer"), findsNothing);
+    expect(find.widgetWithText(AppBar, 'Accueil'), findsOneWidget);
   });
 
   testWidgets('walking the whole flow creates the garden and lifts the gate',

@@ -11,6 +11,7 @@ import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/source_localisation.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/zone_rusticite.dart';
+import '../../domain/entities/parcelle.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
@@ -59,7 +60,9 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
 
   /// Id of the first garden, once created lazily (null until then).
   String? _potagerId;
-  int _zonesAjoutees = 0;
+
+  /// Zones added so far, shown as tiles on the garden step.
+  final List<Parcelle> _zones = [];
 
   @override
   void dispose() {
@@ -130,7 +133,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
     if (mounted) setState(() => _enregistrement = false);
     if (!mounted) return;
     final zone = await ouvrirFormulaireZone(context, id);
-    if (zone != null && mounted) setState(() => _zonesAjoutees++);
+    if (zone != null && mounted) setState(() => _zones.add(zone));
   }
 
   void _signalerErreur() {
@@ -394,6 +397,11 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
               ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: EspacementsApp.s3),
+        // Added zones, each shown as a rectangle (above the add button).
+        for (final zone in _zones) ...[
+          _RectangleZone(nom: zone.nom),
+          const SizedBox(height: EspacementsApp.s2),
+        ],
         OutlinedButton.icon(
           // Needs a garden name first (the zone attaches to the lazily-created
           // garden).
@@ -402,12 +410,6 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
               : _ajouterZone,
           icon: const Icon(Icons.add),
           label: Text(l10n.onboardingPotagerAjouterZone),
-        ),
-        const SizedBox(height: EspacementsApp.s2),
-        Text(
-          l10n.onboardingPotagerZonesCompte(_zonesAjoutees),
-          style: theme.textTheme.labelSmall
-              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
       ],
     );
@@ -495,6 +497,36 @@ class _CarteNiveau extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A rectangle showing one added zone's name (clearer than a running count).
+class _RectangleZone extends StatelessWidget {
+  final String nom;
+
+  const _RectangleZone({required this.nom});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+          horizontal: EspacementsApp.s4, vertical: EspacementsApp.s3),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer,
+        borderRadius: const BorderRadius.all(RayonsApp.md),
+        border: Border.all(color: theme.colorScheme.outline),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.grid_view_outlined,
+              size: TaillesIconesApp.md, color: theme.colorScheme.primary),
+          const SizedBox(width: EspacementsApp.s3),
+          Expanded(child: Text(nom, style: theme.textTheme.bodyMedium)),
+        ],
       ),
     );
   }
