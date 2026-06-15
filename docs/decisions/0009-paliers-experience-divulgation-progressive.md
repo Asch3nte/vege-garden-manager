@@ -87,19 +87,36 @@ agenda — reste **toujours disponible à tous les paliers**. On ne masque que d
 
 ---
 
-## Décision 4 — Mécanisme de montée de palier (« teaser »)
+## Décision 4 — Accompagnement des paliers : **mini-tuto** (palier courant) + **teaser** (palier suivant)
 
-Chaque palier **propose** une perk du palier suivant, **au bon moment et au bon
-endroit**, via des **cartes “aperçu de palier”** : un court texte + un CTA d'un
-tap vers le réglage de niveau. Exemple pour un débutant, en bas du Catalogue :
-*« 💡 Organisez vos associations visuellement — la Vue Réseau s'ouvre en niveau
-Intermédiaire »* + bouton « Passer en Intermédiaire ».
+Deux canaux **complémentaires**, partageant le même **modèle de contenu** que
+l'« Aide & lexique » (docs/15 §8 C4) : **feature → pourquoi → comment**.
 
+### 4a. Mini-tuto **par palier** (features du palier courant)
+À chaque palier correspond un **mini-tuto** qui **répertorie les features que ce
+palier débloque**, et pour chacune **pourquoi elle existe** et **comment
+l'utiliser**. Il est :
+- **présenté au moment où l'on atteint le palier** (choix à l'onboarding, ou
+  changement de niveau dans les réglages) — non bloquant, passable ;
+- **toujours re-consultable** ensuite (depuis l'« Aide & lexique » et/ou le
+  réglage de niveau), pour ne rien perdre ;
+- **cumulatif** : le tuto d'un palier suppose acquis ceux des paliers inférieurs
+  (le cœur n'est pas re-expliqué à chaque fois).
+
+Le contenu vit comme **données éditoriales** (une entrée par feature : palier,
+titre, *pourquoi*, *comment*), réutilisées par l'Aide & lexique et le teaser.
+
+### 4b. Teaser de **montée de palier** (perk du palier suivant)
+Chaque palier **propose** une perk du **palier suivant**, **au bon moment et au
+bon endroit**, via des **cartes “aperçu de palier”** : un court texte + un CTA
+d'un tap vers le réglage de niveau. Exemple pour un débutant, en bas du
+Catalogue : *« 💡 Organisez vos associations visuellement — la Vue Réseau s'ouvre
+en niveau Intermédiaire »* + bouton « Passer en Intermédiaire ».
 - **Dismissable** et non intrusif (jamais une modale bloquante).
-- Réutilise le **modèle de contenu d'« Aide & lexique »** (docs/15 §8 C4) :
-  terme/feature → explication → tip.
-- C'est le canal qui répond au besoin #3 (« donner envie + les moyens » de
-  progresser).
+- Le CTA peut **enchaîner sur le mini-tuto (4a)** du palier atteint.
+
+Ensemble, 4a + 4b répondent au besoin #3 (« donner envie **et** les moyens » de
+progresser) : le teaser donne *envie*, le mini-tuto donne les *moyens*.
 
 ---
 
@@ -152,7 +169,7 @@ suite). Tests écrits **en parallèle**.
 | **1 — Onboarding** | Affinements de l'onboarding issus du retour de test : auto-avance après position (#1), **étape niveau d'expérience** + descriptions (#2), ajout de **zones** dans l'étape potager (#3), atterrissage sur le panneau **Potager** + bulle d'aide (#4), **invalidation** des vues après reset/onboarding (#5). | — |
 | **2 — Socle + gating rapide** | Politique `AccesNiveau` (Décision 7) + gating des features **déjà câblées** : Vue Réseau, Vue Saison, Observations, stats tableau de bord, calendrier lunaire, granularité notifications. | Lot 1 |
 | **3 — Gating à câblage modèle** | Sol texture+pH (formulaire), `TechniqueSol`→`Parcelle`, équipements, multi-potager, besoins en eau grossier/détaillé, fiches perso, rotation avancée. | Lot 2 |
-| **4 — Teaser de montée de palier** | Cartes « aperçu de palier » + CTA, modèle de contenu commun avec Aide & lexique. | Lot 2 (+ docs/15 §8 C4) |
+| **4 — Mini-tutos par palier + teaser** | **4a** Mini-tuto par palier (features débloquées : pourquoi/comment), présenté à l'atteinte du palier et re-consultable ; contenu éditorial réutilisé. **4b** Teaser de montée de palier (cartes « aperçu » + CTA). Modèle de contenu commun avec Aide & lexique. | Lot 2 (+ docs/15 §8 C4) |
 
 ---
 
