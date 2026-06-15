@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/providers/repository_providers.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/contexte_climat.dart';
+import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
@@ -168,6 +170,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
         Text(l10n.ficheAssociations, style: theme.textTheme.titleLarge),
         const SizedBox(height: EspacementsApp.s3),
         _Associations(bons: bons, aEviter: aEviter),
+        _SectionFamille(fiche: _fiche),
       ],
     );
 
@@ -564,6 +567,97 @@ class _SectionCalendrier extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// Family-level educational section (ADR-0006 Lot 4): the plant's botanical
+/// family name + description, its rotation rationale, the diseases/pests it
+/// commonly shares (resolved to localized names via the bioaggressor reference,
+/// each with its description as a tooltip) and its association rationale.
+///
+/// Renders nothing when the family sheet is unknown; each editorial note is
+/// shown only when present (no invented content — docs/15 rule).
+class _SectionFamille extends ConsumerWidget {
+  final FichePlante fiche;
+
+  const _SectionFamille({required this.fiche});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    final famille = ref
+        .watch(familleBotaniqueCacheProvider)
+        .value
+        ?.parId(FamilleBotanique.normaliserCle(fiche.familleBotanique));
+    if (famille == null) return const SizedBox.shrink();
+
+    final bioCache = ref.watch(bioagresseurCacheProvider).value;
+    Widget puce(String slug) {
+      final bio = bioCache?.parId(slug);
+      final chip = Chip(label: Text(bio?.nomLocalise('fr') ?? slug));
+      final desc = bio?.descriptionLocalisee('fr');
+      return desc == null ? chip : Tooltip(message: desc, child: chip);
+    }
+
+    Widget sousTitre(String t) => Padding(
+          padding: const EdgeInsets.only(bottom: EspacementsApp.s2),
+          child: Text(t, style: theme.textTheme.bodySmall),
+        );
+
+    final desc = famille.descriptionLocalisee('fr');
+    final pourquoi = famille.pourquoiRotation('fr');
+    final ennemis = famille.ennemisCommunsNote('fr');
+    final assoc = famille.associationsNote('fr');
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: EspacementsApp.s5),
+        Text(l10n.ficheFamilleTitre(famille.nomLocalise('fr')),
+            style: theme.textTheme.titleLarge),
+        const SizedBox(height: EspacementsApp.s3),
+        if (desc != null)
+          Text(desc, style: theme.textTheme.bodyMedium),
+        if (pourquoi != null) ...[
+          const SizedBox(height: EspacementsApp.s4),
+          sousTitre(l10n.ficheFamilleRotation),
+          Text(pourquoi, style: theme.textTheme.bodySmall),
+        ],
+        if (famille.maladiesCommunes.isNotEmpty) ...[
+          const SizedBox(height: EspacementsApp.s4),
+          sousTitre(l10n.ficheFamilleMaladies),
+          Wrap(
+            spacing: EspacementsApp.s2,
+            runSpacing: EspacementsApp.s2,
+            children: [for (final s in famille.maladiesCommunes) puce(s)],
+          ),
+        ],
+        if (famille.ravageursCommuns.isNotEmpty) ...[
+          const SizedBox(height: EspacementsApp.s4),
+          sousTitre(l10n.ficheFamilleRavageurs),
+          Wrap(
+            spacing: EspacementsApp.s2,
+            runSpacing: EspacementsApp.s2,
+            children: [for (final s in famille.ravageursCommuns) puce(s)],
+          ),
+        ],
+        if (ennemis != null) ...[
+          const SizedBox(height: EspacementsApp.s2),
+          Text(
+            ennemis,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+        ],
+        if (assoc != null) ...[
+          const SizedBox(height: EspacementsApp.s4),
+          sousTitre(l10n.ficheFamilleAssociations),
+          Text(assoc, style: theme.textTheme.bodySmall),
+        ],
+      ],
     );
   }
 }

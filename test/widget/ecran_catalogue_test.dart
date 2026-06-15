@@ -9,6 +9,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
+import 'package:pot_a_gerer/domain/entities/bioagresseur.dart';
 import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -16,6 +17,7 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/type_bioagresseur.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
@@ -28,6 +30,8 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_cache.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/providers/ajout_plante_provider.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
@@ -103,6 +107,9 @@ void main() {
             nomScientifique: 'Solanaceae',
             categories: const {CategoriePlante.legume},
             nomsLocalises: const {'fr': 'Solanacées'},
+            pourquoiRotationLocalise: const {'fr': 'Rotation de 4 ans conseillée.'},
+            maladiesCommunes: const {'mildiou'},
+            ravageursCommuns: const {'doryphore'},
           ),
           FamilleBotanique(
             id: 'cucurbitaceae',
@@ -145,6 +152,19 @@ void main() {
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
+          // Family-level educational section (ADR-0006 Lot 4) reads the caches.
+          familleBotaniqueCacheProvider.overrideWith(
+              (ref) async => FamilleBotaniqueCache(await familles.obtenirToutes())),
+          bioagresseurCacheProvider.overrideWith((ref) async => BioagresseurCache([
+                Bioagresseur(
+                    id: 'mildiou',
+                    type: TypeBioagresseur.maladie,
+                    nomsLocalises: const {'fr': 'Mildiou'}),
+                Bioagresseur(
+                    id: 'doryphore',
+                    type: TypeBioagresseur.ravageur,
+                    nomsLocalises: const {'fr': 'Doryphore'}),
+              ])),
           potagerRepositoryProvider.overrideWithValue(potagers),
           accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
           if (avecCible) ajoutPlanteProvider.overrideWith(_CibleFixe.new),
@@ -238,6 +258,25 @@ void main() {
     expect(find.text('Bons compagnons'), findsOneWidget);
     // "Basilic" now also appears as a companion chip inside the sheet.
     expect(find.text('Basilic'), findsWidgets);
+  });
+
+  testWidgets('the detail sheet shows the family education section (ADR-0006 Lot 4)',
+      (tester) async {
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('Sa famille : Solanacées'),
+      200,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('Sa famille : Solanacées'), findsOneWidget);
+    expect(find.text('Rotation de 4 ans conseillée.'), findsOneWidget);
+    // Slugs resolved to localized bioaggressor names as chips.
+    expect(find.widgetWithText(Chip, 'Mildiou'), findsOneWidget);
+    expect(find.widgetWithText(Chip, 'Doryphore'), findsOneWidget);
   });
 
   testWidgets('the detail sheet offers to add the plant to the garden',
