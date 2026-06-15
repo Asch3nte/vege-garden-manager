@@ -212,7 +212,34 @@ crédits). Le **thème de l'app suit la préférence** (`main.dart` → `ThemeMo
 
 ---
 
-## 9. Comment utiliser ce registre
+## 9. Paliers d'expérience — features réservées (« build-then-gate », ADR-0009)
+
+> Issues du **recadrage du Lot 3** d'[ADR-0009](decisions/0009-paliers-experience-divulgation-progressive.md).
+> Ces features sont **réservées par la politique `AccesNiveau`** (prédicat déjà
+> prêt) mais n'ont **pas encore d'UI ni la donnée** : elles relèvent de
+> « **construire la feature, puis la gater** », pas d'un simple masquage. À leur
+> construction : **gater via `AccesNiveau`** et respecter les garde-fous (cœur
+> jamais bloqué ; réversible/non destructif — données conservées, contrôles
+> masqués). Le gating « features déjà câblées » (Vue Réseau, Vue Saison,
+> Observations, lunaire, granularité notifs, stats, **sol texture/pH/techniques**)
+> est, lui, **fait** (Lots 2–3).
+
+| Feature | Palier | Manque (à construire) | Où / prédicat |
+|---|---|---|---|
+| **Multi-potager** | inter+ | un **sélecteur de potager actif** (aucun `setActif`/`definirActif` sur `AbstractPotagerRepository` — un seul actif aujourd'hui) **+** une action **« Ajouter un potager »** (créer un 2ᵉ jardin). Voir aussi §8 **F2** (UI réglages multi-potager grisés). | `acces.multiPotager` ; `ecran_potager.dart` (menu en-tête) + repo (notion d'actif) |
+| **Équipements / outils** | inter+ | **toute l'UI** (liste + formulaire d'`Equipement`) — seuls existent l'entité, la table et les libellés. | `acces.equipements` |
+| **Fiches plantes perso** (contribution) | expert | **toute l'UI** (créer/éditer une fiche perso) — seule existe la table `fiches_plantes_personnelles`. | `acces.fichesPerso` |
+| **Rotation avancée** | expert | **UI de rotation** (précédents culturaux, délai de retour famille) — la donnée `rotation` existe sur la fiche, mais **aucun écran**. | `acces.rotationAvancee` |
+| **Besoins en eau détaillés** | expert | **donnée fiche manquante** : `BesoinsCulture` ne porte que le terme grossier (`BesoinEau` : beaucoup/moyen/peu), **pas** de fréquence/quantité. Enrichir les fiches d'abord, puis afficher le détail en **expert** (le terme grossier reste pour déb./inter.). | `acces.eauDetaillee` ; `fiche_plante_detail.dart` |
+
+> **Lot 4 d'ADR-0009 (à venir)** : **mini-tutos par palier** (features débloquées :
+> pourquoi/comment, présentés à l'atteinte du palier + re-consultables) **+
+> teaser** de montée de palier — modèle de contenu commun avec « Aide & lexique »
+> (§8 C4).
+
+---
+
+## 10. Comment utiliser ce registre
 
 - En reprenant un sujet, **chercher son entrée ici** : la colonne « Où revenir »
   pointe le fichier/fonction exact à modifier.
