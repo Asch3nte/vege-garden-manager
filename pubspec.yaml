@@ -99,6 +99,7 @@ flutter:
   assets:
     - assets/fiches_plantes/_schema/
     - assets/fiches_plantes/_familles/
+    - assets/fiches_plantes/_referentiels/
     - assets/fiches_plantes/legumes/
     - assets/fiches_plantes/aromatiques/
     - assets/fiches_plantes/fruits/

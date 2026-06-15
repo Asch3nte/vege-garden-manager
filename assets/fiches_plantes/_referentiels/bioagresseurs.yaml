@@ -1,0 +1,434 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Référentiel des BIOAGRESSEURS (maladies & ravageurs) — Pot'à Gérer
+# Spécification : docs/decisions/0006-fiches-famille-botanique.md (ADR-0006, Lot 4)
+# Schéma : assets/fiches_plantes/_referentiels/_schema_bioagresseurs.yaml
+#
+# Normalise les slugs employés par `maladies_communes` / `ravageurs_communs`
+# des fiches FAMILLE. Un slug absent d'ici est rejeté (intégrité référentielle).
+# `nom` (fr) est seedé ; `description` et `code_eppo` seront complétés
+# (tool/scrap_famille.dart → Wikidata/EPPO, puis relecture humaine).
+# ─────────────────────────────────────────────────────────────────────────────
+schema_version: 1
+bioagresseurs:
+  # ── Maladies ──
+  alternariose:
+    type: maladie
+    i18n:
+      fr: { nom: "Alternariose" }
+  anthracnose:
+    type: maladie
+    i18n:
+      fr: { nom: "Anthracnose" }
+  bacteriose_noyer:
+    type: maladie
+    i18n:
+      fr: { nom: "Bactériose du noyer" }
+  bacteriose_psa:
+    type: maladie
+    i18n:
+      fr: { nom: "Bactériose PSA (du kiwi)" }
+  black_rot:
+    type: maladie
+    i18n:
+      fr: { nom: "Black rot (pourriture noire)" }
+  botrytis:
+    type: maladie
+    i18n:
+      fr: { nom: "Botrytis (pourriture grise)" }
+  cercosporiose:
+    type: maladie
+    i18n:
+      fr: { nom: "Cercosporiose" }
+  chancre:
+    type: maladie
+    i18n:
+      fr: { nom: "Chancre" }
+  chancre_chataignier:
+    type: maladie
+    i18n:
+      fr: { nom: "Chancre du châtaignier" }
+  charbon:
+    type: maladie
+    i18n:
+      fr: { nom: "Charbon" }
+  encre:
+    type: maladie
+    i18n:
+      fr: { nom: "Maladie de l'encre" }
+  feu_bacterien:
+    type: maladie
+    i18n:
+      fr: { nom: "Feu bactérien" }
+  feu_tulipe:
+    type: maladie
+    i18n:
+      fr: { nom: "Feu de la tulipe" }
+  fumagine:
+    type: maladie
+    i18n:
+      fr: { nom: "Fumagine" }
+  fusariose:
+    type: maladie
+    i18n:
+      fr: { nom: "Fusariose" }
+  fusariose_lin:
+    type: maladie
+    i18n:
+      fr: { nom: "Fusariose du lin" }
+  gommose:
+    type: maladie
+    i18n:
+      fr: { nom: "Gommose" }
+  hernie_chou:
+    type: maladie
+    i18n:
+      fr: { nom: "Hernie du chou" }
+  heterosporiose_iris:
+    type: maladie
+    i18n:
+      fr: { nom: "Hétérosporiose de l'iris" }
+  mildiou:
+    type: maladie
+    i18n:
+      fr: { nom: "Mildiou" }
+  mildiou_laitue:
+    type: maladie
+    i18n:
+      fr: { nom: "Mildiou de la laitue" }
+  mildiou_oignon:
+    type: maladie
+    i18n:
+      fr: { nom: "Mildiou de l'oignon" }
+  moniliose:
+    type: maladie
+    i18n:
+      fr: { nom: "Moniliose" }
+  moniliose_noisette:
+    type: maladie
+    i18n:
+      fr: { nom: "Moniliose du noisetier" }
+  oeil_de_paon:
+    type: maladie
+    i18n:
+      fr: { nom: "Œil de paon" }
+  oidium:
+    type: maladie
+    i18n:
+      fr: { nom: "Oïdium" }
+  oidium_americain:
+    type: maladie
+    i18n:
+      fr: { nom: "Oïdium américain" }
+  phytophthora:
+    type: maladie
+    i18n:
+      fr: { nom: "Phytophthora" }
+  pourriture_blanche:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture blanche" }
+  pourriture_bulbe:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture des bulbes" }
+  pourriture_chataigne:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture de la châtaigne" }
+  pourriture_fruit:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture des fruits" }
+  pourriture_grise:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture grise" }
+  pourriture_racinaire:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture racinaire" }
+  pourriture_rhizome:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture des rhizomes" }
+  rouille:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille" }
+  rouille_asperge:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille de l'asperge" }
+  rouille_blanche:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille blanche" }
+  rouille_figuier:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du figuier" }
+  rouille_glaieul:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du glaïeul" }
+  rouille_grillage:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille grillagée" }
+  rouille_lin:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du lin" }
+  rouille_malvacees:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille des malvacées" }
+  rouille_muflier:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du muflier" }
+  rouille_oeillet:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille de l'œillet" }
+  rouille_pelargonium:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du pélargonium" }
+  rouille_poireau:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du poireau" }
+  rouille_vesiculeuse:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille vésiculeuse" }
+  rouille_violette:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille de la violette" }
+  sclerotiniose:
+    type: maladie
+    i18n:
+      fr: { nom: "Sclérotiniose" }
+  taches_foliaires:
+    type: maladie
+    i18n:
+      fr: { nom: "Taches foliaires" }
+  tavelure:
+    type: maladie
+    i18n:
+      fr: { nom: "Tavelure" }
+  verticilliose:
+    type: maladie
+    i18n:
+      fr: { nom: "Verticilliose" }
+  # ── Ravageurs ──
+  aleurode:
+    type: ravageur
+    i18n:
+      fr: { nom: "Aleurode (mouche blanche)" }
+  altise:
+    type: ravageur
+    i18n:
+      fr: { nom: "Altise" }
+  altise_lin:
+    type: ravageur
+    i18n:
+      fr: { nom: "Altise du lin" }
+  araignee_rouge:
+    type: ravageur
+    i18n:
+      fr: { nom: "Araignée rouge" }
+  balanin:
+    type: ravageur
+    i18n:
+      fr: { nom: "Balanin" }
+  balanin_noisette:
+    type: ravageur
+    i18n:
+      fr: { nom: "Balanin de la noisette" }
+  bruche:
+    type: ravageur
+    i18n:
+      fr: { nom: "Bruche" }
+  carpocapse:
+    type: ravageur
+    i18n:
+      fr: { nom: "Carpocapse" }
+  carpocapse_chataigne:
+    type: ravageur
+    i18n:
+      fr: { nom: "Carpocapse des châtaignes" }
+  charancon_patate:
+    type: ravageur
+    i18n:
+      fr: { nom: "Charançon de la patate douce" }
+  chenille_geranium:
+    type: ravageur
+    i18n:
+      fr: { nom: "Chenille du géranium" }
+  cicadelle:
+    type: ravageur
+    i18n:
+      fr: { nom: "Cicadelle" }
+  cochenille:
+    type: ravageur
+    i18n:
+      fr: { nom: "Cochenille" }
+  cochylis:
+    type: ravageur
+    i18n:
+      fr: { nom: "Cochylis" }
+  criocere_asperge:
+    type: ravageur
+    i18n:
+      fr: { nom: "Criocère de l'asperge" }
+  criocere_lis:
+    type: ravageur
+    i18n:
+      fr: { nom: "Criocère du lis" }
+  cynips:
+    type: ravageur
+    i18n:
+      fr: { nom: "Cynips du châtaignier" }
+  doryphore:
+    type: ravageur
+    i18n:
+      fr: { nom: "Doryphore" }
+  drosophila_suzukii:
+    type: ravageur
+    i18n:
+      fr: { nom: "Drosophile suzukii" }
+  eudemis:
+    type: ravageur
+    i18n:
+      fr: { nom: "Eudémis (ver de la grappe)" }
+  hoplocampe:
+    type: ravageur
+    i18n:
+      fr: { nom: "Hoplocampe" }
+  limace:
+    type: ravageur
+    i18n:
+      fr: { nom: "Limace" }
+  mineuse:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mineuse" }
+  mineuse_agrumes:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mineuse des agrumes" }
+  mouche_argousier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de l'argousier" }
+  mouche_brou:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche du brou" }
+  mouche_carotte:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de la carotte" }
+  mouche_chou:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche du chou" }
+  mouche_figue:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de la figue" }
+  mouche_fruits:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche des fruits" }
+  mouche_narcisse:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche du narcisse" }
+  mouche_oignon:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de l'oignon" }
+  mouche_olive:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de l'olive" }
+  pegomyie:
+    type: ravageur
+    i18n:
+      fr: { nom: "Pégomyie" }
+  pieride:
+    type: ravageur
+    i18n:
+      fr: { nom: "Piéride du chou" }
+  psylle_laurier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Psylle du laurier" }
+  puceron:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron" }
+  puceron_cendre:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron cendré" }
+  puceron_noir:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron noir" }
+  puceron_noisetier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron du noisetier" }
+  puceron_sureau:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron du sureau" }
+  pyrale:
+    type: ravageur
+    i18n:
+      fr: { nom: "Pyrale" }
+  sesie:
+    type: ravageur
+    i18n:
+      fr: { nom: "Sésie" }
+  sitone:
+    type: ravageur
+    i18n:
+      fr: { nom: "Sitone" }
+  tarsoneme:
+    type: ravageur
+    i18n:
+      fr: { nom: "Tarsonème" }
+  taupin:
+    type: ravageur
+    i18n:
+      fr: { nom: "Taupin (ver fil de fer)" }
+  teigne_olivier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Teigne de l'olivier" }
+  teigne_poireau:
+    type: ravageur
+    i18n:
+      fr: { nom: "Teigne du poireau" }
+  tenthrede:
+    type: ravageur
+    i18n:
+      fr: { nom: "Tenthrède" }
+  thrips:
+    type: ravageur
+    i18n:
+      fr: { nom: "Thrips" }
+  thrips_glaieul:
+    type: ravageur
+    i18n:
+      fr: { nom: "Thrips du glaïeul" }
+  tortricide_oeillet:
+    type: ravageur
+    i18n:
+      fr: { nom: "Tordeuse de l'œillet" }

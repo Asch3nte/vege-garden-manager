@@ -18,6 +18,9 @@ class FamilleBotanique {
   final Set<CategoriePlante> _categories;
   final Map<String, String> _nomsLocalises;
   final Map<String, String> _descriptionsLocalisees;
+  final Map<String, String> _pourquoiRotationLocalise;
+  final Map<String, String> _ennemisCommunsNoteLocalisee;
+  final Map<String, String> _associationsNoteLocalisee;
   final Set<String> _maladiesCommunes;
   final Set<String> _ravageursCommuns;
   final int? _delaiRetourAnnees;
@@ -28,6 +31,9 @@ class FamilleBotanique {
     this._categories,
     this._nomsLocalises,
     this._descriptionsLocalisees,
+    this._pourquoiRotationLocalise,
+    this._ennemisCommunsNoteLocalisee,
+    this._associationsNoteLocalisee,
     this._maladiesCommunes,
     this._ravageursCommuns,
     this._delaiRetourAnnees,
@@ -49,6 +55,9 @@ class FamilleBotanique {
     required Set<CategoriePlante> categories,
     required Map<String, String> nomsLocalises,
     Map<String, String>? descriptionsLocalisees,
+    Map<String, String>? pourquoiRotationLocalise,
+    Map<String, String>? ennemisCommunsNoteLocalisee,
+    Map<String, String>? associationsNoteLocalisee,
     Set<String>? maladiesCommunes,
     Set<String>? ravageursCommuns,
     int? delaiRetourAnnees,
@@ -60,6 +69,12 @@ class FamilleBotanique {
         Map<String, String>.unmodifiable(nomsLocalises),
         Map<String, String>.unmodifiable(
             descriptionsLocalisees ?? const <String, String>{}),
+        Map<String, String>.unmodifiable(
+            pourquoiRotationLocalise ?? const <String, String>{}),
+        Map<String, String>.unmodifiable(
+            ennemisCommunsNoteLocalisee ?? const <String, String>{}),
+        Map<String, String>.unmodifiable(
+            associationsNoteLocalisee ?? const <String, String>{}),
         Set<String>.unmodifiable(maladiesCommunes ?? const <String>{}),
         Set<String>.unmodifiable(ravageursCommuns ?? const <String>{}),
         delaiRetourAnnees,
@@ -111,6 +126,21 @@ class FamilleBotanique {
   /// sheet carries none.
   String? descriptionLocalisee(String locale) =>
       _descriptionsLocalisees[locale] ?? _descriptionsLocalisees['fr'];
+
+  /// Educational note explaining *why* this family demands its crop rotation
+  /// (ADR-0006 Lot 4) for [locale] (falls back to French), or `null` if absent.
+  String? pourquoiRotation(String locale) =>
+      _pourquoiRotationLocalise[locale] ?? _pourquoiRotationLocalise['fr'];
+
+  /// Educational note on the diseases/pests shared across the family for
+  /// [locale] (falls back to French), or `null` if absent.
+  String? ennemisCommunsNote(String locale) =>
+      _ennemisCommunsNoteLocalisee[locale] ?? _ennemisCommunsNoteLocalisee['fr'];
+
+  /// Educational note on why some associations work at the family level for
+  /// [locale] (falls back to French), or `null` if absent.
+  String? associationsNote(String locale) =>
+      _associationsNoteLocalisee[locale] ?? _associationsNoteLocalisee['fr'];
 
   /// Whether this family is relevant to [categorie] (drives the catalogue
   /// family filter row).

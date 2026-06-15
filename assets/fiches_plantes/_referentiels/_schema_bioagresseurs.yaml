@@ -1,0 +1,30 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Schéma de référence du RÉFÉRENTIEL des bioagresseurs — Pot'à Gérer
+# Décrit la structure de assets/fiches_plantes/_referentiels/bioagresseurs.yaml
+# Spécification : docs/decisions/0006-fiches-famille-botanique.md (ADR-0006, Lot 4)
+#
+# Un « bioagresseur » est une maladie ou un ravageur partagé au niveau d'une
+# FAMILLE botanique. Ce référentiel NORMALISE les slugs employés par les champs
+# `maladies_communes` / `ravageurs_communs` des fiches famille : un slug absent
+# d'ici est rejeté (intégrité référentielle, comme rotation.famille).
+#
+# Légende : (requis) obligatoire · (optionnel) facultatif · enum: … valeurs permises
+# ─────────────────────────────────────────────────────────────────────────────
+
+schema_version: # (requis) entier, version du présent schéma
+
+# Map slug → entrée. Le slug (la clé) est normalisé : minuscules, sans accent ni
+# espace (séparateur « _ »). C'est la clé de liaison depuis les fiches famille.
+bioagresseurs:
+  <slug>:
+    type: # (requis) enum TypeBioagresseur : maladie | ravageur
+    code_eppo: # (optionnel) code EPPO stable en cross-référence, ex. "PHYTIN"
+    i18n:
+      fr: # (requis)
+        nom: # (requis) nom commun français, ex. "Mildiou"
+        description: # (optionnel) 1–2 phrases : symptômes/cycle clés
+      en: # (optionnel) même structure que 'fr'
+
+# Source & contribution (au niveau du fichier)
+# sources: []        # (optionnel) URLs
+# contributeurs: []  # (optionnel) ex: ["@github_username"]

@@ -8,8 +8,8 @@ import 'fiche_asset_source.dart';
 /// Lets the catalogue pipeline run outside a Flutter context — in pure-Dart
 /// scripts (`bin/`) and in tooling — where `rootBundle` is unavailable. Reads
 /// the same `assets/fiches_plantes/<categorie>/*.yaml` tree that
-/// [BundleFicheAssetSource] exposes at runtime, excluding the `_schema/` and
-/// `_familles/` folders.
+/// [BundleFicheAssetSource] exposes at runtime, excluding the `_schema/`,
+/// `_familles/` and `_referentiels/` folders.
 class FilesystemFicheAssetSource implements FicheAssetSource {
   /// Root of the plant-sheet tree (defaults to the repo's `assets/` location).
   final Directory _racine;
@@ -27,7 +27,8 @@ class FilesystemFicheAssetSource implements FicheAssetSource {
         .where((p) =>
             p.endsWith('.yaml') &&
             !p.contains('/_schema/') &&
-            !p.contains('/_familles/'))
+            !p.contains('/_familles/') &&
+            !p.contains('/_referentiels/'))
         .toList();
   }
 

@@ -30,6 +30,18 @@ void main() {
     expect(chemins.any((p) => p.endsWith('familles_registry.yaml')), isFalse);
   });
 
+  test('seeded families expose their editorial notes (ADR-0006 Lot 4)',
+      () async {
+    final cache = await FamillesLoader(FilesystemFamilleAssetSource()).charger();
+    for (final id in const ['fabaceae', 'solanaceae']) {
+      final f = cache.parId(id);
+      expect(f, isNotNull, reason: 'missing family "$id"');
+      expect(f!.pourquoiRotation('fr'), isNotNull, reason: '$id.pourquoiRotation');
+      expect(f.ennemisCommunsNote('fr'), isNotNull, reason: '$id.ennemis');
+      expect(f.associationsNote('fr'), isNotNull, reason: '$id.associations');
+    }
+  });
+
   test('every species points to an existing, coherent family', () async {
     final familles = await FamillesLoader(FilesystemFamilleAssetSource()).charger();
     final especes =
