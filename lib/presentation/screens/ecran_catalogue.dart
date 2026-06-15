@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/catalogue_vue.dart';
 import '../../application/state/potager_notifier.dart';
@@ -96,6 +97,10 @@ class _ContenuState extends ConsumerState<_Contenu> {
     final l10n = AppLocalizations.of(context)!;
     final vue = widget.vue;
     final cibleAjout = ref.watch(ajoutPlanteProvider);
+    // The "Réseau" association view is an intermediate+ feature (ADR-0009):
+    // hidden for beginners, who keep the Fiches view only.
+    final vueReseauDispo = ref.watch(accesNiveauProvider).vueReseau;
+    final reseauActif = vueReseauDispo && _reseau;
     void ajouter(FichePlante fiche) => _ajouterPlante(context, ref, fiche);
 
     return Column(
@@ -106,32 +111,33 @@ class _ContenuState extends ConsumerState<_Contenu> {
             zoneNom: cibleAjout.zoneNom,
             onAnnuler: () => ref.read(ajoutPlanteProvider.notifier).effacer(),
           ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            EspacementsApp.s4,
-            EspacementsApp.s3,
-            EspacementsApp.s4,
-            EspacementsApp.s2,
+        if (vueReseauDispo)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              EspacementsApp.s4,
+              EspacementsApp.s3,
+              EspacementsApp.s4,
+              EspacementsApp.s2,
+            ),
+            child: SegmentedButton<bool>(
+              segments: [
+                ButtonSegment(
+                  value: false,
+                  icon: const Icon(Icons.grid_view_outlined),
+                  label: Text(l10n.catalogueVueFiches),
+                ),
+                ButtonSegment(
+                  value: true,
+                  icon: const Icon(Icons.hub_outlined),
+                  label: Text(l10n.catalogueVueReseau),
+                ),
+              ],
+              selected: {_reseau},
+              onSelectionChanged: (s) => setState(() => _reseau = s.first),
+            ),
           ),
-          child: SegmentedButton<bool>(
-            segments: [
-              ButtonSegment(
-                value: false,
-                icon: const Icon(Icons.grid_view_outlined),
-                label: Text(l10n.catalogueVueFiches),
-              ),
-              ButtonSegment(
-                value: true,
-                icon: const Icon(Icons.hub_outlined),
-                label: Text(l10n.catalogueVueReseau),
-              ),
-            ],
-            selected: {_reseau},
-            onSelectionChanged: (s) => setState(() => _reseau = s.first),
-          ),
-        ),
         Expanded(
-          child: _reseau
+          child: reseauActif
               ? VueReseauCatalogue(
                   fiches: vue.toutesMeres,
                   varietesDe: vue.varietesDe,

@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
 import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -20,7 +21,9 @@ import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
@@ -122,7 +125,13 @@ void main() {
         ]);
   });
 
-  Future<void> monter(WidgetTester tester, {bool avecCible = false}) async {
+  Future<void> monter(
+    WidgetTester tester, {
+    bool avecCible = false,
+    // Intermediate by default so the Réseau view (intermediate+, ADR-0009) is
+    // available — matching these tests' assumptions before gating.
+    NiveauExperience niveau = NiveauExperience.intermediaire,
+  }) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -130,6 +139,7 @@ void main() {
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
           potagerRepositoryProvider.overrideWithValue(potagers),
+          accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
           if (avecCible) ajoutPlanteProvider.overrideWith(_CibleFixe.new),
         ],
         child: MaterialApp(
@@ -450,6 +460,15 @@ void main() {
     // Only the species node 'T' is drawn; the variety 'Tomate Cerise' is not.
     expect(find.text('T'), findsOneWidget);
     expect(find.text('Tomate Cerise'), findsNothing);
+  });
+
+  testWidgets('the Réseau view is hidden for beginners (ADR-0009)',
+      (tester) async {
+    await monter(tester, niveau: NiveauExperience.debutant);
+
+    // No Fiches/Réseau toggle for a beginner — only the Fiches list.
+    expect(find.text('Réseau'), findsNothing);
+    expect(find.text('Tomate'), findsOneWidget);
   });
 
   testWidgets('switching to the network view shows the constellation',
