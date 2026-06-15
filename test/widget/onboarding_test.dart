@@ -66,10 +66,16 @@ void main() {
     final preferences = _MockPreferences();
     final fiches = _MockFiches();
     final familles = _MockFamilles();
+    // Stateful so a garden created mid-onboarding actually shows up in
+    // obtenirTous() — this is what would (wrongly) trip the data-gate and bounce
+    // the user out of onboarding if the redirect regressed.
+    final jardins = <Potager>[...potagersExistants];
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
     when(() => potagers.obtenirTous())
-        .thenAnswer((_) async => potagersExistants);
-    when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
+        .thenAnswer((_) async => List.of(jardins));
+    when(() => potagers.sauvegarder(any())).thenAnswer((invocation) async {
+      jardins.add(invocation.positionalArguments.first as Potager);
+    });
     when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);

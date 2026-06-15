@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/derivateur_localisation.dart';
 import '../../application/providers/service_providers.dart';
@@ -396,12 +397,31 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           style: theme.textTheme.bodySmall
               ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
+        // Added zones — a 2-column grid of cards (Potager-like, but a separate
+        // widget) shown above the add button, which is pushed down to make room.
+        if (_zones.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: EspacementsApp.s3),
+            child: LayoutBuilder(
+              builder: (context, contraintes) {
+                final largeur =
+                    (contraintes.maxWidth - EspacementsApp.s2) / 2;
+                return Wrap(
+                  spacing: EspacementsApp.s2,
+                  runSpacing: EspacementsApp.s2,
+                  children: [
+                    for (final (i, zone) in _zones.indexed)
+                      SizedBox(
+                        width: largeur,
+                        child: _CarteZone(
+                            nom: zone.nom, couleur: _couleurZone(i)),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ),
         const SizedBox(height: EspacementsApp.s3),
-        // Added zones, each shown as a rectangle (above the add button).
-        for (final zone in _zones) ...[
-          _RectangleZone(nom: zone.nom),
-          const SizedBox(height: EspacementsApp.s2),
-        ],
         OutlinedButton.icon(
           // Needs a garden name first (the zone attaches to the lazily-created
           // garden).
@@ -502,30 +522,54 @@ class _CarteNiveau extends StatelessWidget {
   }
 }
 
-/// A rectangle showing one added zone's name (clearer than a running count).
-class _RectangleZone extends StatelessWidget {
-  final String nom;
+/// Decorative per-zone accent palette (mirrors the Potager plan's look without
+/// reusing that screen, which is meant to evolve visually).
+const List<Color> _paletteZones = [
+  CouleursApp.decoVertProfond,
+  CouleursApp.accentChaudClair,
+  CouleursApp.decoAubergine,
+  CouleursApp.decoVertMoyen,
+  CouleursApp.decoBordeaux,
+  CouleursApp.decoTerre,
+];
 
-  const _RectangleZone({required this.nom});
+Color _couleurZone(int index) => _paletteZones[index % _paletteZones.length];
+
+/// A zone card for the onboarding garden step: a coloured rectangle with the
+/// zone's name — visually like the Potager plan's beds, but a separate widget.
+class _CarteZone extends StatelessWidget {
+  final String nom;
+  final Color couleur;
+
+  const _CarteZone({required this.nom, required this.couleur});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          horizontal: EspacementsApp.s4, vertical: EspacementsApp.s3),
+      height: 64,
+      padding: const EdgeInsets.all(EspacementsApp.s3),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainer,
-        borderRadius: const BorderRadius.all(RayonsApp.md),
-        border: Border.all(color: theme.colorScheme.outline),
+        color: couleur.withValues(alpha: 0.08),
+        borderRadius: const BorderRadius.all(RayonsApp.lg),
+        border: Border.all(color: couleur.withValues(alpha: 0.45)),
       ),
       child: Row(
         children: [
-          Icon(Icons.grid_view_outlined,
-              size: TaillesIconesApp.md, color: theme.colorScheme.primary),
-          const SizedBox(width: EspacementsApp.s3),
-          Expanded(child: Text(nom, style: theme.textTheme.bodyMedium)),
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(color: couleur, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(
+              nom,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.titleMedium,
+            ),
+          ),
         ],
       ),
     );

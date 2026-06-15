@@ -235,16 +235,19 @@ final routeurProvider = Provider<GoRouter>((ref) {
       // Defer until both are loaded; the refresh above re-evaluates on arrival.
       if (prefs == null || potagers == null) return null;
       final surOnboarding = state.matchedLocation == RoutesApp.onboarding;
-      // Onboarding is a first-run flow: only when it hasn't been completed AND
-      // there is no user data yet. Pre-existing gardens (e.g. a database that
-      // predates the onboarding flag) skip it — never overwrite real data.
-      final doitOnboarder = !prefs.onboardingTermine && potagers.isEmpty;
-      if (doitOnboarder) {
-        return surOnboarding ? null : RoutesApp.onboarding;
+      // Already on the onboarding flow: stay until it is **completed**. The
+      // onboarding creates its garden lazily (to attach zones), so a freshly
+      // created garden must NOT bounce the user out mid-flow — only
+      // `onboardingTermine` lifts the gate, then we land on Potager (feedback #4).
+      if (surOnboarding) {
+        return prefs.onboardingTermine ? RoutesApp.potager : null;
       }
-      // Just completed onboarding → land on the Potager screen (which now shows
-      // the garden/zones just created) rather than the dashboard (feedback #4).
-      return surOnboarding ? RoutesApp.potager : null;
+      // Not on onboarding: it is a first-run flow — enter it only when it hasn't
+      // been completed AND there is no user data yet. Pre-existing gardens (e.g.
+      // a database that predates the onboarding flag) skip it — never overwrite
+      // real data.
+      final doitOnboarder = !prefs.onboardingTermine && potagers.isEmpty;
+      return doitOnboarder ? RoutesApp.onboarding : null;
     },
     routes: [
       GoRoute(
