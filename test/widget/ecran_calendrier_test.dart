@@ -120,7 +120,13 @@ void main() {
   Future<void> monter(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: reposOverrides(),
+        overrides: [
+          ...reposOverrides(),
+          // Intermediate so the level-up teaser (shown to beginners) doesn't
+          // take space; these tests exercise the calendar views, not the teaser.
+          accesNiveauProvider.overrideWithValue(
+              const AccesNiveau(NiveauExperience.intermediaire)),
+        ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,

@@ -10,11 +10,13 @@ import '../../application/state/calendrier_vue.dart';
 import '../../application/state/saison_notifier.dart';
 import '../../application/state/saison_vue.dart';
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/carte_teaser_palier.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
@@ -84,6 +86,7 @@ class _Contenu extends ConsumerStatefulWidget {
 
 class _ContenuState extends ConsumerState<_Contenu> {
   _VueCal _vue = _VueCal.agenda;
+  bool _teaserFerme = false;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +136,14 @@ class _ContenuState extends ConsumerState<_Contenu> {
             _VueCal.saison => const _VueSaison(),
           },
         ),
+        // Level-up teaser for the locked Saison view (ADR-0009 §4b).
+        if (!vueSaisonDispo && !_teaserFerme)
+          CarteTeaserPalier(
+            icone: Icons.eco_outlined,
+            feature: l10n.tutoVueSaisonTitre,
+            niveauRequis: NiveauExperience.intermediaire,
+            onFermer: () => setState(() => _teaserFerme = true),
+          ),
       ],
     );
   }

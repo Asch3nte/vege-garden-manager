@@ -132,6 +132,13 @@ void main() {
     // available — matching these tests' assumptions before gating.
     NiveauExperience niveau = NiveauExperience.intermediaire,
   }) async {
+    // Tall surface so the plant list stays fully laid out even when a level-up
+    // teaser occupies the bottom (shown to beginners).
+    tester.view.physicalSize = const Size(900, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -469,6 +476,18 @@ void main() {
     // No Fiches/Réseau toggle for a beginner — only the Fiches list.
     expect(find.text('Réseau'), findsNothing);
     expect(find.text('Tomate'), findsOneWidget);
+  });
+
+  testWidgets('a beginner sees a dismissable level-up teaser (ADR-0009 §4b)',
+      (tester) async {
+    await monter(tester, niveau: NiveauExperience.debutant);
+
+    expect(find.text('En savoir plus'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Masquer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('En savoir plus'), findsNothing);
   });
 
   testWidgets('switching to the network view shows the constellation',

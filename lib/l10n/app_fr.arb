@@ -1267,5 +1267,15 @@
   "tutoStatsPourquoi": "Suivre vos récoltes de la saison d'un coup d'œil.",
   "@tutoStatsPourquoi": { "description": "Mini-tuto." },
   "tutoStatsComment": "Tableau de bord (Accueil), tuile « Récoltes de la saison ».",
-  "@tutoStatsComment": { "description": "Mini-tuto." }
+  "@tutoStatsComment": { "description": "Mini-tuto." },
+  "teaserPalierTexte": "{feature} s'ouvre en niveau {niveau}.",
+  "@teaserPalierTexte": { "description": "Texte du teaser de montée de palier.", "placeholders": { "feature": { "type": "String" }, "niveau": { "type": "String" } } },
+  "teaserPalierAction": "En savoir plus",
+  "@teaserPalierAction": { "description": "CTA du teaser → guide des niveaux." },
+  "teaserFermer": "Masquer",
+  "@teaserFermer": { "description": "Fermer le teaser (tooltip)." },
+  "generalNiveauChangeSnack": "Niveau mis à jour.",
+  "@generalNiveauChangeSnack": { "description": "Confirmation après un changement de niveau." },
+  "generalNiveauChangeAction": "Découvrir",
+  "@generalNiveauChangeAction": { "description": "Action du snackbar → guide des niveaux." }
 }

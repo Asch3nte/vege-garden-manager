@@ -11,10 +11,12 @@ import '../../application/state/potager_notifier.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_plantation.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../screens/ecran_selection_zone.dart';
+import '../widgets/carte_teaser_palier.dart';
 import '../widgets/fiche_plante_detail.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/vue_associations.dart';
@@ -91,6 +93,7 @@ class _Contenu extends ConsumerStatefulWidget {
 
 class _ContenuState extends ConsumerState<_Contenu> {
   bool _reseau = false;
+  bool _teaserFerme = false;
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +148,14 @@ class _ContenuState extends ConsumerState<_Contenu> {
                 )
               : _VueFiches(vue: vue, onAjouter: ajouter),
         ),
+        // Level-up teaser for the locked Réseau view (ADR-0009 §4b).
+        if (!vueReseauDispo && !_teaserFerme)
+          CarteTeaserPalier(
+            icone: Icons.hub_outlined,
+            feature: l10n.tutoVueReseauTitre,
+            niveauRequis: NiveauExperience.intermediaire,
+            onFermer: () => setState(() => _teaserFerme = true),
+          ),
       ],
     );
   }
