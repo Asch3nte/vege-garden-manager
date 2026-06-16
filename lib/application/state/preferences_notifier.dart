@@ -1,12 +1,15 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/preferences_utilisateur.dart';
+import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
+import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart';
+import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../providers/repository_providers.dart';
 
 /// Exposes the user [PreferencesUtilisateur] and the actions that mutate it.
@@ -81,6 +84,21 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
       return p.copierAvec(notificationsParCategorie: map);
     });
   }
+
+  /// Sets the weight of one association effect family (ADR-0011, expert).
+  Future<void> definirPoidsAssociation(
+    FamilleEffetAssociation famille,
+    PoidsAssociation poids,
+  ) =>
+      _modifier((p) => p.copierAvec(
+            ponderationAssociations:
+                p.ponderationAssociations.avec(famille, poids),
+          ));
+
+  /// Resets the association weighting profile to the neutral default.
+  Future<void> reinitialiserPonderationAssociations() => _modifier(
+      (p) => p.copierAvec(
+          ponderationAssociations: ProfilPonderationAssociations.defaut()));
 }
 
 /// The user-preferences provider.

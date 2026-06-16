@@ -6,6 +6,7 @@ import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
+import '../../application/state/preferences_notifier.dart';
 import '../../application/state/catalogue_vue.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../domain/entities/famille_botanique.dart';
@@ -560,8 +561,11 @@ class _CarteFiche extends ConsumerWidget {
                 ref.read(catalogueProvider).value?.toutesMeres ??
                     const <FichePlante>[],
                 onAjouter: onAjouter,
-                // Derived suggestions (ADR-0010) appear from intermédiaire+.
+                // Derived suggestions (ADR-0010) appear from intermédiaire+,
+                // ranked by the user's weighting profile (ADR-0011).
                 acces: ref.read(accesNiveauProvider),
+                profil:
+                    ref.read(preferencesProvider).value?.ponderationAssociations,
               ),
             ),
             // The arrow only signals whether varieties exist (expandable) — the

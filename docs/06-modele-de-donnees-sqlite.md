@@ -495,3 +495,17 @@ Potager ──▶ Parcelle ──▶ Plantation ──▶ Recolte
 Gérées par **drift** (versionnées). Chaque évolution de schéma incrémente la
 version drift ; `parametres.app.db_version` et `preferences.schema_version`
 tracent l'état applicatif.
+
+> ⚠️ **Discipline de migration (obligatoire).** Tout ajout/changement de colonne
+> drift doit s'accompagner, dans `lib/infrastructure/database/app_database.dart`,
+> de **deux** changements : (1) bumper `schemaVersion` ; (2) ajouter l'étape
+> correspondante dans `onUpgrade` (ex. `m.addColumn(...)`). Sinon : *fonctionne en
+> install neuve* (la table est créée avec la colonne via `onCreate`) mais
+> **plante sur une install existante** (la colonne manque → `no such column`).
+> Symptôme typique : seuls les écrans qui lisent la table touchée tombent en
+> erreur (vécu sur ADR-0011 : Accueil/Plus lisant `preferences`, v2→v3).
+>
+> **Garde-fou à outiller (différé)** : activer les *migration tests* de drift
+> (export des schémas via `drift_dev schema dump` + `verify`/`stepByStep`), pour
+> qu'un schéma modifié sans migration **casse la CI** au lieu d'un appareil. Tant
+> que ce n'est pas en place, la discipline ci-dessus est manuelle.

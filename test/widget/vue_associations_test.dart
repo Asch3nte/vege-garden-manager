@@ -15,24 +15,30 @@ import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
+import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
+import 'package:pot_a_gerer/domain/value_objects/profil_ponderation_associations.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_associations.dart';
 
 FichePlante _fiche(
   String id, {
   String famille = 'Test',
+  Set<UsagePlante> usages = const {UsagePlante.alimentaire},
   List<AssociationBenefique> benefiques = const [],
   List<AssociationConflit> negatives = const [],
   bool fixeAzote = false,
   NiveauBesoin? besoinAzote,
+  bool cultureVerticale = false,
+  int? hauteurMax,
 }) =>
     FichePlante(
       id: id,
       nomScientifique: '$id sp',
       familleBotanique: famille,
       categorie: CategoriePlante.legume,
-      usages: const {UsagePlante.alimentaire},
+      usages: usages,
       nomsLocalises: {'fr': id},
       besoins: BesoinsCulture(
         eau: BesoinEau.modere,
@@ -43,6 +49,8 @@ FichePlante _fiche(
       espacementCm: 40,
       dureeAvantRecolteJoursMin: 60,
       dureeAvantRecolteJoursMax: 80,
+      cultureVerticale: cultureVerticale,
+      hauteurAdulteCmMax: hauteurMax,
       fixeAzote: fixeAzote,
       besoinAzote: besoinAzote,
       associationsBenefiques: benefiques,
@@ -55,6 +63,7 @@ void main() {
     FichePlante centre,
     List<FichePlante> catalogue, {
     AccesNiveau? acces,
+    ProfilPonderationAssociations? profil,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -65,7 +74,7 @@ void main() {
             body: Center(
               child: ElevatedButton(
                 onPressed: () => afficherVueAssociations(context, centre,
-                    catalogue, acces: acces),
+                    catalogue, acces: acces, profil: profil),
                 child: const Text('ouvrir'),
               ),
             ),
@@ -139,6 +148,51 @@ void main() {
       expect(find.text('mais'), findsOneWidget);
       expect(find.text("Fixe l'azote"), findsOneWidget);
       expect(find.text('Suggéré · confiance élevée'), findsOneWidget);
+    });
+  });
+
+  group('scoring & declutter (ADR-0011)', () {
+    const intermediaire = AccesNiveau(NiveauExperience.intermediaire);
+
+    // mais (living stake, tall) + haricot (climber) → tuteurStructurel (gainDePlace).
+    final mais = _fiche('mais',
+        usages: {UsagePlante.alimentaire, UsagePlante.tuteurVivant},
+        hauteurMax: 200);
+    final haricot = _fiche('haricot', cultureVerticale: true);
+
+    testWidgets('default profile keeps a gainDePlace suggestion',
+        (tester) async {
+      await ouvrir(tester, mais, [mais, haricot], acces: intermediaire);
+      expect(find.text('Tuteur naturel'), findsOneWidget);
+    });
+
+    testWidgets('an ignored family drops its derived suggestions',
+        (tester) async {
+      await ouvrir(tester, mais, [mais, haricot],
+          acces: intermediaire,
+          profil: ProfilPonderationAssociations.defaut().avec(
+              FamilleEffetAssociation.gainDePlace, PoidsAssociation.ignore));
+      expect(find.text('Tuteur naturel'), findsNothing);
+    });
+
+    testWidgets('caps derived suggestions per side behind "voir plus"',
+        (tester) async {
+      // One fixer centre + 7 heavy feeders → 7 derived benefits, capped at 5.
+      final haricot = _fiche('haricot', famille: 'Fabaceae', fixeAzote: true);
+      final gourmandes = [
+        for (var i = 0; i < 7; i++)
+          _fiche('g$i', famille: 'Poaceae', besoinAzote: NiveauBesoin.eleve),
+      ];
+
+      await ouvrir(tester, haricot, [haricot, ...gourmandes],
+          acces: intermediaire);
+
+      // 7 - 5 = 2 hidden → the toggle offers to reveal them.
+      expect(find.text('Voir 2 suggestions de plus'), findsOneWidget);
+
+      await tester.tap(find.text('Voir 2 suggestions de plus'));
+      await tester.pumpAndSettle();
+      expect(find.text('Voir moins'), findsOneWidget);
     });
   });
 }

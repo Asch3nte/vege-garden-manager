@@ -5,7 +5,9 @@ import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/destination_recolte.dart';
+import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/ph_sol.dart';
+import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/unite_quantite.dart';
@@ -329,6 +331,24 @@ extension LibellesEnums on AppLocalizations {
         NiveauConfiance.faible => confianceFaible,
         NiveauConfiance.moyen => confianceMoyen,
         NiveauConfiance.eleve => confianceEleve,
+      };
+
+  /// Label for an association effect family (ADR-0011).
+  String familleEffet(FamilleEffetAssociation f) => switch (f) {
+        FamilleEffetAssociation.gainDePlace => familleEffetGainDePlace,
+        FamilleEffetAssociation.protectionRavageurs =>
+          familleEffetProtectionRavageurs,
+        FamilleEffetAssociation.fertilite => familleEffetFertilite,
+        FamilleEffetAssociation.pollinisation => familleEffetPollinisation,
+        FamilleEffetAssociation.couvertureAbri => familleEffetCouvertureAbri,
+      };
+
+  /// Label for an association weight level (ADR-0011).
+  String poids(PoidsAssociation p) => switch (p) {
+        PoidsAssociation.ignore => poidsIgnore,
+        PoidsAssociation.faible => poidsFaible,
+        PoidsAssociation.normal => poidsNormal,
+        PoidsAssociation.fort => poidsFort,
       };
 
   /// Label for a planting method.

@@ -69,6 +69,10 @@ class AccesNiveau {
   /// term (a lot / moderate / little).
   bool get eauDetaillee => _expert;
 
+  /// Tuning the association weighting profile (ADR-0011). Everyone benefits from
+  /// the default weights; only an expert edits them.
+  bool get ponderationAssociations => _expert;
+
   /// The next tier to suggest in a "level-up" teaser, or `null` at the top.
   NiveauExperience? get palierSuivant => switch (_niveau) {
         NiveauExperience.debutant => NiveauExperience.intermediaire,

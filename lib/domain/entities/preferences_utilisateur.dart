@@ -4,6 +4,7 @@ import '../enums/niveau_experience.dart';
 import '../enums/sens_swipe.dart';
 import '../enums/systeme_unites.dart';
 import '../enums/theme_app.dart';
+import '../value_objects/profil_ponderation_associations.dart';
 
 /// User settings (language, theme, units, opt-outs, notifications…).
 ///
@@ -34,6 +35,7 @@ class PreferencesUtilisateur {
   final String? _nePasDerangerDebut;
   final String? _nePasDerangerFin;
   final bool _onboardingTermine;
+  final ProfilPonderationAssociations _ponderationAssociations;
 
   PreferencesUtilisateur._(
     this._langue,
@@ -52,6 +54,7 @@ class PreferencesUtilisateur {
     this._nePasDerangerDebut,
     this._nePasDerangerFin,
     this._onboardingTermine,
+    this._ponderationAssociations,
   ) : assert(
           (_nePasDerangerDebut == null) == (_nePasDerangerFin == null),
           'do-not-disturb bounds must be both set or both null',
@@ -76,6 +79,7 @@ class PreferencesUtilisateur {
     String? nePasDerangerDebut,
     String? nePasDerangerFin,
     bool onboardingTermine = false,
+    ProfilPonderationAssociations? ponderationAssociations,
   }) =>
       PreferencesUtilisateur._(
         langue,
@@ -94,6 +98,7 @@ class PreferencesUtilisateur {
         nePasDerangerDebut,
         nePasDerangerFin,
         onboardingTermine,
+        ponderationAssociations ?? ProfilPonderationAssociations.defaut(),
       );
 
   String get id => idSingleton;
@@ -125,6 +130,11 @@ class PreferencesUtilisateur {
   /// router gates the app on the onboarding flow (position, derived climate…).
   bool get onboardingTermine => _onboardingTermine;
 
+  /// The association weighting profile (ADR-0011). Defaults to the neutral
+  /// profile; only an expert overrides it.
+  ProfilPonderationAssociations get ponderationAssociations =>
+      _ponderationAssociations;
+
   /// Returns a copy with the given fields overridden (do-not-disturb is kept;
   /// use [avecNePasDeranger] / [sansNePasDeranger] to change it).
   PreferencesUtilisateur copierAvec({
@@ -142,6 +152,7 @@ class PreferencesUtilisateur {
     bool? aideDocCompleteActive,
     Map<String, bool>? notificationsParCategorie,
     bool? onboardingTermine,
+    ProfilPonderationAssociations? ponderationAssociations,
   }) =>
       PreferencesUtilisateur(
         langue: langue ?? _langue,
@@ -165,6 +176,8 @@ class PreferencesUtilisateur {
         nePasDerangerDebut: _nePasDerangerDebut,
         nePasDerangerFin: _nePasDerangerFin,
         onboardingTermine: onboardingTermine ?? _onboardingTermine,
+        ponderationAssociations:
+            ponderationAssociations ?? _ponderationAssociations,
       );
 
   /// Returns a copy with a do-not-disturb window (`HH:MM` bounds).
@@ -192,6 +205,7 @@ class PreferencesUtilisateur {
         nePasDerangerDebut: debut,
         nePasDerangerFin: fin,
         onboardingTermine: _onboardingTermine,
+        ponderationAssociations: _ponderationAssociations,
       );
 
   @override
@@ -212,6 +226,7 @@ class PreferencesUtilisateur {
       other._nePasDerangerDebut == _nePasDerangerDebut &&
       other._nePasDerangerFin == _nePasDerangerFin &&
       other._onboardingTermine == _onboardingTermine &&
+      other._ponderationAssociations == _ponderationAssociations &&
       _memeMap(other._notificationsParCategorie, _notificationsParCategorie);
 
   @override
@@ -235,6 +250,7 @@ class PreferencesUtilisateur {
         ),
         _notificationsParCategorie.entries
             .fold<int>(0, (h, e) => h ^ Object.hash(e.key, e.value)),
+        _ponderationAssociations,
       );
 
   static bool _memeMap(Map<String, bool> a, Map<String, bool> b) {

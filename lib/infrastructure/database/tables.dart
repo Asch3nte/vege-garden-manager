@@ -422,6 +422,9 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(true))();
   TextColumn get notificationsParCategorie =>
       text().withDefault(const Constant('{}'))(); // JSON
+  // ADR-0011 — association weighting profile, JSON {familleEffet: poids}.
+  TextColumn get ponderationAssociations =>
+      text().withDefault(const Constant('{}'))(); // JSON
   TextColumn get nePasDerangerDebut => text().nullable()();
   TextColumn get nePasDerangerFin => text().nullable()();
   BoolColumn get onboardingTermine =>

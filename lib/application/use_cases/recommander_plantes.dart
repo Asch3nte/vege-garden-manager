@@ -16,9 +16,10 @@ import '../../domain/value_objects/zone_climatique.dart';
 import '../engine/derivation_sol.dart';
 import '../engine/evaluateur_recommandations.dart';
 import '../engine/moteur_derivation_associations.dart';
+import '../engine/scoreur_associations.dart';
 import '../engine/suggestion_association.dart';
 import '../providers/repository_providers.dart';
-import '../../domain/enums/niveau_confiance.dart';
+import '../../domain/value_objects/profil_ponderation_associations.dart';
 
 /// Engine use case: recommend plants to grow in a parcelle.
 ///
@@ -38,6 +39,7 @@ class RecommanderPlantes {
   final EvaluateurRecommandations _evaluateur;
   final DerivationSol _sol;
   final MoteurDerivationAssociations _associations;
+  final ScoreurAssociations _scoreur;
 
   RecommanderPlantes(
     this._fiches,
@@ -45,7 +47,13 @@ class RecommanderPlantes {
     this._evaluateur, {
     this._sol = const DerivationSol(),
     this._associations = const MoteurDerivationAssociations(),
+    this._scoreur = const ScoreurAssociations(),
   });
+
+  /// Minimum derived-association score to grant the reco bonus: a medium-
+  /// confidence benefit at default weight (a valued family lets lower-confidence
+  /// ones in; an `ignore`d family scores 0 and never qualifies).
+  static const double _seuilBonusDerive = ScoreurAssociations.facteurMoyen;
 
   /// Default return delay (years) when a plant sheet states none.
   static const int delaiRetourDefautAnnees = 3;
@@ -63,8 +71,10 @@ class RecommanderPlantes {
     required Localisation localisation,
     DateTime? date,
     NiveauExperience? niveauExperience,
+    ProfilPonderationAssociations? profil,
   }) async {
     final maintenant = date ?? DateTime.now();
+    final profilEff = profil ?? ProfilPonderationAssociations.defaut();
     final hemisphere = _hemisphereDe(localisation);
     final climat = zoneClimatique.type;
 
@@ -100,7 +110,8 @@ class RecommanderPlantes {
       // (no family resolver here → repulsion/trap are left out).
       final deriveBenefice =
           !planteIdsActifs.any(candidate.sAssocieBienAvec) &&
-              actifsFiches.any((actif) => _benefDerive(candidate, actif));
+              actifsFiches
+                  .any((actif) => _benefDerive(candidate, actif, profilEff));
 
       final reco = _evaluateur.evaluer(
         candidate: candidate,
@@ -166,12 +177,18 @@ class RecommanderPlantes {
     return false;
   }
 
-  /// Whether a confident (≥ moyen), trait-based beneficial association is
-  /// derived between [candidate] and an active [actif] (either direction).
-  bool _benefDerive(FichePlante candidate, FichePlante actif) {
+  /// Whether a trait-based beneficial association scoring at least
+  /// [_seuilBonusDerive] under [profil] is derived between [candidate] and an
+  /// active [actif] (either direction). Weighting the families thus shapes the
+  /// reco bonus (ADR-0011).
+  bool _benefDerive(
+    FichePlante candidate,
+    FichePlante actif,
+    ProfilPonderationAssociations profil,
+  ) {
     bool fort(SuggestionAssociation s) =>
         s is SuggestionBenefique &&
-        s.confiance.index >= NiveauConfiance.moyen.index;
+        _scoreur.score(s, profil) >= _seuilBonusDerive;
     return _associations.deriver(candidate, actif).any(fort) ||
         _associations.deriver(actif, candidate).any(fort);
   }

@@ -459,6 +459,69 @@
   "@confianceEleve": {
     "description": "Niveau de confiance élevé d'une suggestion d'association dérivée."
   },
+  "assocVoirPlus": "{count, plural, =1{Voir 1 suggestion de plus} other{Voir {count} suggestions de plus}}",
+  "@assocVoirPlus": {
+    "description": "Bouton dépliant les suggestions d'associations dérivées masquées (ADR-0011).",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "assocVoirMoins": "Voir moins",
+  "@assocVoirMoins": {
+    "description": "Bouton repliant les suggestions d'associations dérivées."
+  },
+  "categPonderation": "Pondération des associations",
+  "@categPonderation": {
+    "description": "Titre de la catégorie/écran de réglage des poids d'associations (ADR-0011, expert)."
+  },
+  "categPonderationSub": "Ajuster l'importance de chaque type d'effet",
+  "@categPonderationSub": {
+    "description": "Sous-titre de la catégorie de réglage des poids d'associations."
+  },
+  "ponderationNote": "Le potager n'est pas une science exacte : ajustez l'importance de chaque effet selon ce qui marche chez vous. « Ignorer » masque complètement un type d'association.",
+  "@ponderationNote": {
+    "description": "Note explicative en tête de l'écran de pondération des associations."
+  },
+  "ponderationReinitialiser": "Réinitialiser les poids",
+  "@ponderationReinitialiser": {
+    "description": "Bouton remettant les poids d'associations à leur valeur par défaut."
+  },
+  "familleEffetGainDePlace": "Gain de place",
+  "@familleEffetGainDePlace": {
+    "description": "Famille d'effet d'association : structure / étagement / succession."
+  },
+  "familleEffetProtectionRavageurs": "Protection (ravageurs)",
+  "@familleEffetProtectionRavageurs": {
+    "description": "Famille d'effet d'association : répulsion / piège / brouillage."
+  },
+  "familleEffetFertilite": "Fertilité du sol",
+  "@familleEffetFertilite": {
+    "description": "Famille d'effet d'association : fixation d'azote."
+  },
+  "familleEffetPollinisation": "Pollinisation",
+  "@familleEffetPollinisation": {
+    "description": "Famille d'effet d'association : attraction des pollinisateurs."
+  },
+  "familleEffetCouvertureAbri": "Couverture & abri",
+  "@familleEffetCouvertureAbri": {
+    "description": "Famille d'effet d'association : couvre-sol / brise-vent."
+  },
+  "poidsIgnore": "Ignorer",
+  "@poidsIgnore": {
+    "description": "Poids d'association : ignoré (×0, masqué)."
+  },
+  "poidsFaible": "Faible",
+  "@poidsFaible": {
+    "description": "Poids d'association : faible (×0.5)."
+  },
+  "poidsNormal": "Normal",
+  "@poidsNormal": {
+    "description": "Poids d'association : normal (×1)."
+  },
+  "poidsFort": "Fort",
+  "@poidsFort": {
+    "description": "Poids d'association : fort (×1.5)."
+  },
   "reseauReglages": "Réglages d'affichage",
   "@reseauReglages": {
     "description": "Bouton repliable de la vue réseau ouvrant les contrôles (zoom, liens, noms)."

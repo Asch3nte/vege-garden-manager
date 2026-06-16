@@ -1,7 +1,9 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
+import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/enums/theme_app.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/preferences_repository_impl.dart';
@@ -48,6 +50,30 @@ void main() {
     expect(relu.nePasDerangerDebut, '22:00');
     expect(relu.nePasDerangerFin, '07:00');
     expect(relu.notificationsParCategorie, {'arrosage': false, 'semis': true});
+  });
+
+  test('charger returns the default weighting profile (ADR-0011)', () async {
+    expect((await repo.charger()).ponderationAssociations.estDefaut, isTrue);
+  });
+
+  test('save then load round-trips the association weighting profile', () async {
+    final modifie = (await repo.charger()).copierAvec(
+      ponderationAssociations: (await repo.charger())
+          .ponderationAssociations
+          .avec(FamilleEffetAssociation.protectionRavageurs,
+              PoidsAssociation.ignore)
+          .avec(FamilleEffetAssociation.gainDePlace, PoidsAssociation.fort),
+    );
+
+    await repo.sauvegarder(modifie);
+    final relu = await repo.charger();
+
+    expect(relu.ponderationAssociations.poids(
+        FamilleEffetAssociation.protectionRavageurs), PoidsAssociation.ignore);
+    expect(relu.ponderationAssociations.poids(
+        FamilleEffetAssociation.gainDePlace), PoidsAssociation.fort);
+    expect(relu.ponderationAssociations.poids(
+        FamilleEffetAssociation.fertilite), PoidsAssociation.normal);
   });
 
   test('reinitialiser restores the defaults', () async {

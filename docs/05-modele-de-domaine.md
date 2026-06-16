@@ -268,6 +268,16 @@ Le `ResolveurCompagnonnage` (§7) expose le mécanisme/raison d'une paire via
 centre primant), et `CompagnonsResolus` porte par compagnon un
 `CompagnonAvecRaison` (fiche + association typée).
 
+### 4.9 `ProfilPonderationAssociations` *(ADR-0011)*
+Profil de pondération des associations : map `FamilleEffetAssociation →
+PoidsAssociation`. `defaut()` (tout `normal`, appliqué à tous), `poids(famille)`
+(repli `normal`), `multiplicateur(famille)`, `avec(famille, valeur)` (copie pour
+le réglage expert), `estDefaut`. Égalité par poids par famille. Consommé par le
+calculateur pur `ScoreurAssociations` (`application/engine/`) :
+`score(bénéfice) = multiplicateur(familleDe(mécanisme)) × facteurConfiance` ; les
+conflits ne sont pas pondérés (ordonnés par confiance). `familleDe(mécanisme)`
+(dans `famille_effet_association.dart`) est la source unique du mapping.
+
 ## 5. Énumérations principales
 
 ```dart
@@ -287,6 +297,10 @@ enum TypeConflitAssociation { memeFamilleRavageurs, competitionLumiere,
                               competitionAzote, allelopathie }
 enum ChargeTuteur { legere, moyenne, lourde } // poids d'une grimpante sur son support (ADR-0010 Lot 2)
 enum NiveauConfiance { faible, moyen, eleve } // confiance d'une association dérivée (ADR-0010 Lot 3)
+// Pondération des associations (ADR-0011) — familles d'effets + poids ajustable (expert)
+enum FamilleEffetAssociation { gainDePlace, protectionRavageurs, fertilite,
+                               pollinisation, couvertureAbri }
+enum PoidsAssociation { ignore, faible, normal, fort } // ×0 / ×0.5 / ×1 / ×1.5
 
 // — Parcelle / sol —
 enum TypeParcelle { pleineTerre, bacSureleve, jardiniere, pot, serre, butte, autre } // structure seule

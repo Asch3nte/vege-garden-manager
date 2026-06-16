@@ -9,8 +9,10 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_besoin.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/enums/raison_reco.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
@@ -20,6 +22,7 @@ import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
+import 'package:pot_a_gerer/domain/value_objects/profil_ponderation_associations.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
@@ -165,6 +168,30 @@ void main() {
     );
     final reco = r.recommandations.firstWhere((e) => e.planteId == 'mais');
     expect(reco.raisons, contains(RaisonReco.associationDeriveeFavorable));
+  });
+
+  test('ignoring an effect family drops its derived reco bonus (ADR-0011)',
+      () async {
+    final haricot = fiche('haricot', 'Fabaceae', const Periode(5, 6),
+        fixeAzote: true);
+    final mais = fiche('mais', 'Poaceae', const Periode(5, 6),
+        besoinAzote: NiveauBesoin.eleve);
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [haricot, mais]);
+    when(() => plantations.obtenirParParcelle('par1'))
+        .thenAnswer((_) async => [plantation('pl1', 'haricot')]);
+
+    // fixationAzote is in the "fertilité" family → ignore it.
+    final r = await useCase.executer(
+      parcelle: parcelle(),
+      zoneClimatique: zone,
+      localisation: lyon,
+      date: juin,
+      profil: ProfilPonderationAssociations.defaut()
+          .avec(FamilleEffetAssociation.fertilite, PoidsAssociation.ignore),
+    );
+    final reco = r.recommandations.firstWhere((e) => e.planteId == 'mais');
+    expect(reco.raisons, isNot(contains(RaisonReco.associationDeriveeFavorable)));
   });
 
   test('does not recommend a plant already growing in the parcelle', () async {

@@ -6,6 +6,7 @@ import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/preferences_notifier.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
+import '../../domain/services/acces_niveau.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
 import 'parametres/widgets_parametres.dart';
@@ -81,6 +82,14 @@ class _Racine extends StatelessWidget {
           sousTitre: l10n.categNiveauxSub,
           onTap: () => context.go(RoutesApp.plusNiveaux),
         ),
+        // Association weighting — expert only (ADR-0011/0009).
+        if (AccesNiveau(prefs.niveauExperience).ponderationAssociations)
+          LigneCategorie(
+            icone: Icons.tune_outlined,
+            titre: l10n.categPonderation,
+            sousTitre: l10n.categPonderationSub,
+            onTap: () => context.go(RoutesApp.plusPonderation),
+          ),
         LigneCategorie(
           icone: Icons.save_outlined,
           titre: l10n.categDonnees,

@@ -29,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -42,11 +42,18 @@ class AppDatabase extends _$AppDatabase {
             ),
           );
         },
+        // ⚠️ Any new/changed column MUST bump `schemaVersion` above AND add a
+        // step here, else existing installs miss the column (docs/06 §5).
         onUpgrade: (m, from, to) async {
           // v1 → v2: onboarding-completion flag (defaults to false, so existing
           // installs are re-routed through the first-launch onboarding flow).
           if (from < 2) {
             await m.addColumn(preferences, preferences.onboardingTermine);
+          }
+          // v2 → v3: association weighting profile (ADR-0011); defaults to '{}'
+          // (= the neutral profile), so existing installs keep working.
+          if (from < 3) {
+            await m.addColumn(preferences, preferences.ponderationAssociations);
           }
         },
         beforeOpen: (details) async {

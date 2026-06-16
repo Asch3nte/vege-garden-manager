@@ -18,6 +18,7 @@ void main() {
       expect(debutant.solTexturePh, isFalse);
       expect(debutant.statsTableauBord, isFalse);
       expect(debutant.eauDetaillee, isFalse);
+      expect(debutant.ponderationAssociations, isFalse);
     });
   });
 
@@ -36,6 +37,7 @@ void main() {
       expect(intermediaire.rotationAvancee, isFalse);
       expect(intermediaire.fichesPerso, isFalse);
       expect(intermediaire.eauDetaillee, isFalse);
+      expect(intermediaire.ponderationAssociations, isFalse);
     });
   });
 
@@ -46,6 +48,7 @@ void main() {
       expect(expert.rotationAvancee, isTrue);
       expect(expert.fichesPerso, isTrue);
       expect(expert.eauDetaillee, isTrue);
+      expect(expert.ponderationAssociations, isTrue);
       expect(expert.vueReseau, isTrue);
     });
   });

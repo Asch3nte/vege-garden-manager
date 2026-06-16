@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/moteur_derivation_associations.dart';
+import '../../application/engine/scoreur_associations.dart';
 import '../../application/engine/suggestion_association.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/services/acces_niveau.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
+import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../../l10n/app_localizations.dart';
 import 'fiche_plante_detail.dart';
 import 'libelles_enums.dart';
@@ -26,6 +28,10 @@ import 'vue_reseau_catalogue.dart' show couleurCategorie;
 /// Derived suggestions (ADR-0010) are added only when [acces] grants the network
 /// view (intermédiaire+); [familles] lets the family-dependent rules fire
 /// (repulsion / trap), and may be `null` for trait-based suggestions only.
+/// Suggestions are **scored & ranked** by [profil] (ADR-0011): a family weighted
+/// `ignore` is dropped, and only the top suggestions per side are shown (the rest
+/// behind a "voir plus"). Curated associations always rank first and are never
+/// pruned.
 Future<void> afficherVueAssociations(
   BuildContext context,
   FichePlante centre,
@@ -33,17 +39,19 @@ Future<void> afficherVueAssociations(
   void Function(FichePlante)? onAjouter,
   AccesNiveau? acces,
   ResolveurFamille? familles,
+  ProfilPonderationAssociations? profil,
 }) {
   final l10n = AppLocalizations.of(context)!;
   final locale = Localizations.localeOf(context).languageCode;
   const resolveur = ResolveurCompagnonnage();
   final comp = resolveur.resoudre(centre, catalogue);
 
-  // Curated companions: typed mechanism + editorial reason (Lot 1).
+  // Curated companions (Lot 1): always shown → ranked first via an infinite score.
   final bons = <_NoeudAssoc>[
     for (final c in comp.bonsDetailles)
       _NoeudAssoc(
         fiche: c.fiche,
+        score: double.infinity,
         mecanisme: c.association.mecanisme == null
             ? null
             : l10n.mecanismeBenefice(c.association.mecanisme!),
@@ -54,17 +62,26 @@ Future<void> afficherVueAssociations(
     for (final c in comp.aEviterDetailles)
       _NoeudAssoc(
         fiche: c.fiche,
+        score: double.infinity,
         mecanisme: c.association.mecanisme == null
             ? null
             : l10n.mecanismeConflit(c.association.mecanisme!),
         raison: c.association.raison(locale),
       ),
   ];
+  final nbBonsCurated = bons.length;
+  final nbEviterCurated = aEviter.length;
 
-  // Derived suggestions (Lot 3/4), gated by experience level (ADR-0009).
+  // Derived suggestions (Lot 3/4), gated by experience level (ADR-0009),
+  // scored & weighted by the profile (ADR-0011).
   if (acces?.vueReseau ?? false) {
-    _ajouterSuggestions(centre, catalogue, l10n, bons, aEviter, familles);
+    _ajouterSuggestions(centre, catalogue, l10n, bons, aEviter, familles,
+        profil ?? ProfilPonderationAssociations.defaut());
   }
+
+  // Rank each side by score (curated first, then derived descending).
+  bons.sort((a, b) => b.score.compareTo(a.score));
+  aEviter.sort((a, b) => b.score.compareTo(a.score));
 
   return showDialog<void>(
     context: context,
@@ -72,14 +89,17 @@ Future<void> afficherVueAssociations(
       centre: centre,
       bons: bons,
       aEviter: aEviter,
+      nbBonsCurated: nbBonsCurated,
+      nbEviterCurated: nbEviterCurated,
       onAjouter: onAjouter,
     ),
   );
 }
 
-/// Appends the engine's derived suggestions to [bons]/[aEviter], one node per
-/// (target, sense) keeping the highest confidence, skipping targets already
-/// shown as a curated companion on the same side (curated precedence).
+/// Appends the engine's derived suggestions to [bons]/[aEviter], scored by
+/// [profil] (ADR-0011): one node per (target, sense) keeping the best score,
+/// dropping families weighted `ignore`, and skipping targets already shown as a
+/// curated companion on the same side (curated precedence).
 void _ajouterSuggestions(
   FichePlante centre,
   List<FichePlante> catalogue,
@@ -87,8 +107,10 @@ void _ajouterSuggestions(
   List<_NoeudAssoc> bons,
   List<_NoeudAssoc> aEviter,
   ResolveurFamille? familles,
+  ProfilPonderationAssociations profil,
 ) {
   const moteur = MoteurDerivationAssociations();
+  const scoreur = ScoreurAssociations();
   final parId = {for (final f in catalogue) f.id: f};
   final dejaBons = {for (final n in bons) n.fiche.id};
   final dejaEviter = {for (final n in aEviter) n.fiche.id};
@@ -96,15 +118,16 @@ void _ajouterSuggestions(
   final meilleurBenef = <String, SuggestionBenefique>{};
   final meilleurConflit = <String, SuggestionConflit>{};
   for (final s in moteur.suggestionsNouvelles(centre, catalogue, familles: familles)) {
+    if (!scoreur.estRetenue(s, profil)) continue; // drops `ignore`d families
     switch (s) {
       case SuggestionBenefique():
         final e = meilleurBenef[s.cibleId];
-        if (e == null || s.confiance.index > e.confiance.index) {
+        if (e == null || scoreur.score(s, profil) > scoreur.score(e, profil)) {
           meilleurBenef[s.cibleId] = s;
         }
       case SuggestionConflit():
         final e = meilleurConflit[s.cibleId];
-        if (e == null || s.confiance.index > e.confiance.index) {
+        if (e == null || scoreur.score(s, profil) > scoreur.score(e, profil)) {
           meilleurConflit[s.cibleId] = s;
         }
     }
@@ -115,6 +138,7 @@ void _ajouterSuggestions(
     if (f == null || dejaBons.contains(f.id)) continue;
     bons.add(_NoeudAssoc(
       fiche: f,
+      score: scoreur.score(s, profil),
       mecanisme: l10n.mecanismeBenefice(s.mecanisme),
       suggere: true,
       confiance: l10n.confiance(s.confiance),
@@ -125,6 +149,7 @@ void _ajouterSuggestions(
     if (f == null || dejaEviter.contains(f.id)) continue;
     aEviter.add(_NoeudAssoc(
       fiche: f,
+      score: scoreur.score(s, profil),
       mecanisme: l10n.mecanismeConflit(s.mecanisme),
       suggere: true,
       confiance: l10n.confiance(s.confiance),
@@ -132,10 +157,12 @@ void _ajouterSuggestions(
   }
 }
 
-/// A view-level node: a companion with its already-localised mechanism/reason
-/// and, for a derived one, the "suggested" flag and confidence label.
+/// A view-level node: a companion with its already-localised mechanism/reason,
+/// its [score] (curated = infinite), and, for a derived one, the "suggested"
+/// flag and confidence label.
 class _NoeudAssoc {
   final FichePlante fiche;
+  final double score;
   final String? mecanisme;
   final String? raison;
   final bool suggere;
@@ -143,6 +170,7 @@ class _NoeudAssoc {
 
   const _NoeudAssoc({
     required this.fiche,
+    this.score = 0,
     this.mecanisme,
     this.raison,
     this.suggere = false,
@@ -150,34 +178,70 @@ class _NoeudAssoc {
   });
 }
 
-class _VueAssociations extends StatelessWidget {
+class _VueAssociations extends StatefulWidget {
   final FichePlante centre;
   final List<_NoeudAssoc> bons;
   final List<_NoeudAssoc> aEviter;
+  final int nbBonsCurated;
+  final int nbEviterCurated;
   final void Function(FichePlante)? onAjouter;
 
   const _VueAssociations({
     required this.centre,
     required this.bons,
     required this.aEviter,
+    required this.nbBonsCurated,
+    required this.nbEviterCurated,
     required this.onAjouter,
   });
+
+  /// Max derived suggestions shown per side before "voir plus".
+  static const int maxDerivesParCote = 5;
+
+  @override
+  State<_VueAssociations> createState() => _VueAssociationsState();
+}
+
+class _VueAssociationsState extends State<_VueAssociations> {
+  bool _tousAffiches = false;
+
+  /// The side capped at curated + N derived, unless expanded.
+  List<_NoeudAssoc> _affiches(List<_NoeudAssoc> cote, int nbCurated) {
+    if (_tousAffiches) return cote;
+    final max = nbCurated + _VueAssociations.maxDerivesParCote;
+    return cote.length <= max ? cote : cote.sublist(0, max);
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final vide = bons.isEmpty && aEviter.isEmpty;
+    final vide = widget.bons.isEmpty && widget.aEviter.isEmpty;
+    final bons = _affiches(widget.bons, widget.nbBonsCurated);
+    final aEviter = _affiches(widget.aEviter, widget.nbEviterCurated);
+    final caches = (widget.bons.length - bons.length) +
+        (widget.aEviter.length - aEviter.length);
+
     return Dialog.fullscreen(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(centre.nomLocalise('fr')),
+          title: Text(widget.centre.nomLocalise('fr')),
           leading: IconButton(
             icon: const Icon(Icons.close),
             tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: (caches > 0 || _tousAffiches)
+            ? _BoutonVoirPlus(
+                caches: caches,
+                tousAffiches: _tousAffiches,
+                onPressed: () =>
+                    setState(() => _tousAffiches = !_tousAffiches),
+              )
+            : null,
         body: vide
             ? Center(
                 child: Padding(
@@ -198,15 +262,40 @@ class _VueAssociations extends StatelessWidget {
                 child: LayoutBuilder(
                   builder: (context, c) => _Constellation(
                     taille: Size(c.maxWidth, c.maxHeight),
-                    centre: centre,
+                    centre: widget.centre,
                     bons: bons,
                     aEviter: aEviter,
                     onTapNoeud: (f) =>
-                        afficherFichePlanteDetail(context, f, onAjouter: onAjouter),
+                        afficherFichePlanteDetail(context, f,
+                            onAjouter: widget.onAjouter),
                   ),
                 ),
               ),
       ),
+    );
+  }
+}
+
+/// Floating toggle to reveal / hide the lower-scored derived suggestions
+/// (ADR-0011 declutter).
+class _BoutonVoirPlus extends StatelessWidget {
+  final int caches;
+  final bool tousAffiches;
+  final VoidCallback onPressed;
+
+  const _BoutonVoirPlus({
+    required this.caches,
+    required this.tousAffiches,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return FloatingActionButton.extended(
+      onPressed: onPressed,
+      icon: Icon(tousAffiches ? Icons.expand_less : Icons.expand_more),
+      label: Text(tousAffiches ? l10n.assocVoirMoins : l10n.assocVoirPlus(caches)),
     );
   }
 }

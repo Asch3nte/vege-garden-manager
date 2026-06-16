@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import '../../domain/entities/preferences_utilisateur.dart';
+import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
+import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart';
+import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../database/app_database.dart';
 
 /// Maps the preferences singleton between the domain entity and its drift row.
@@ -40,8 +43,37 @@ class PreferencesMapper {
       nePasDerangerDebut: row.nePasDerangerDebut,
       nePasDerangerFin: row.nePasDerangerFin,
       onboardingTermine: row.onboardingTermine,
+      ponderationAssociations:
+          _decoderPonderation(row.ponderationAssociations),
     );
   }
+
+  /// Decodes the weighting profile from its JSON map `{famille: poids}`. Unknown
+  /// family/weight names are skipped (forward-compatible); an empty map yields
+  /// the neutral default.
+  static ProfilPonderationAssociations _decoderPonderation(String json) {
+    final brut = jsonDecode(json) as Map;
+    final poids = <FamilleEffetAssociation, PoidsAssociation>{};
+    for (final entry in brut.entries) {
+      final famille = _parNom(FamilleEffetAssociation.values, entry.key);
+      final valeur = _parNom(PoidsAssociation.values, entry.value);
+      if (famille != null && valeur != null) poids[famille] = valeur;
+    }
+    return ProfilPonderationAssociations(poids);
+  }
+
+  /// Enum value whose `name` equals [nom], or `null` (skip-unknown).
+  static T? _parNom<T extends Enum>(List<T> valeurs, Object? nom) {
+    for (final v in valeurs) {
+      if (v.name == nom) return v;
+    }
+    return null;
+  }
+
+  static String _encoderPonderation(ProfilPonderationAssociations p) =>
+      jsonEncode({
+        for (final f in FamilleEffetAssociation.values) f.name: p.poids(f).name,
+      });
 
   PreferencesCompanion versCompanion(PreferencesUtilisateur p) =>
       PreferencesCompanion(
@@ -59,6 +91,8 @@ class PreferencesMapper {
         aideContextuelleActive: Value(p.aideContextuelleActive),
         aideDocCompleteActive: Value(p.aideDocCompleteActive),
         notificationsParCategorie: Value(jsonEncode(p.notificationsParCategorie)),
+        ponderationAssociations:
+            Value(_encoderPonderation(p.ponderationAssociations)),
         nePasDerangerDebut: Value(p.nePasDerangerDebut),
         nePasDerangerFin: Value(p.nePasDerangerFin),
         onboardingTermine: Value(p.onboardingTermine),
