@@ -26,6 +26,7 @@ import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
@@ -80,7 +81,9 @@ void main() {
         dureeAvantRecolteJoursMin: 60,
         dureeAvantRecolteJoursMax: 80,
         periodes: const {},
-        associationsBenefiques: bons,
+        associationsBenefiques: [
+          for (final id in bons) AssociationBenefique(cibleId: id),
+        ],
       );
 
   setUp(() {

@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_asset_source.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseurs_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/catalogue_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/filesystem_fiche_asset_source.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_repulsifs.dart';
 
 /// Guards the real embedded catalogue: every shipped sheet must parse, validate
 /// and map cleanly, and every association ref must resolve. Runs against
@@ -38,12 +41,27 @@ void main() {
 
     final mortes = <String>{};
     for (final f in cache.toutes()) {
-      for (final ref in {...f.associationsBenefiques, ...f.associationsNegatives}) {
+      for (final ref in [
+        ...f.associationsBenefiques.map((a) => a.cibleId),
+        ...f.associationsNegatives.map((a) => a.cibleId),
+      ]) {
         if (!ids.contains(ref) && !_refsSansFiche.contains(ref)) {
           mortes.add('${f.id} → $ref');
         }
       }
     }
     expect(mortes, isEmpty, reason: 'dead association refs: $mortes');
+  });
+
+  test('every repulsif_contre / piege_a slug resolves to a bioaggressor',
+      () async {
+    final cache = await CatalogueLoader(FilesystemFicheAssetSource()).charger();
+    final reference =
+        await BioagresseursLoader(FilesystemBioagresseurAssetSource()).charger();
+
+    final problemes = const VerificateurIntegriteRepulsifs()
+        .verifier(cache.toutes(), reference);
+
+    expect(problemes, isEmpty, reason: problemes.join('\n'));
   });
 }

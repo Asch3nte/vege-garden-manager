@@ -1,6 +1,6 @@
 # ADR-0010 — Modèle d'associations multi-mécanismes (permaculture)
 
-- **Statut** : Proposé
+- **Statut** : Accepté — **Lots 1 à 4 livrés** (2026-06-16)
 - **Date** : 2026-06-15
 - **Contexte** : la vocation de Pot'à Gérer est de promouvoir des cultures
   **naturelles et permacoles**. Or, aujourd'hui, les associations de plantes se
@@ -78,8 +78,15 @@ exploitable par le moteur, plutôt que par du texte libre. Une raison libre
 
 **A. Couche curatée (typée).** On enrichit `associations.beneficies/defavorables`
 d'un champ `type:` (le mécanisme) et on **charge enfin la raison** dans le
-domaine. Le couple (paire → mécanisme [+ raison]) devient une **value object**
-`AssociationCompagnonnage`. C'est la source d'autorité, sous contrôle éditorial.
+domaine. Le couple (paire → mécanisme [+ raison]) devient une **value object**.
+C'est la source d'autorité, sous contrôle éditorial.
+
+> **Choix d'implémentation (Lot 1).** Plutôt qu'un VO générique unique, on a
+> retenu **deux classes distinctes** — `AssociationBenefique` (mécanisme
+> `TypeBeneficeAssociation?`) et `AssociationConflit` (mécanisme
+> `TypeConflitAssociation?`) — pour garder les deux enums de mécanismes séparés
+> au typage. Chacune porte `cibleId` + mécanisme optionnel + `raison(locale)`.
+> Cf. `docs/05` §4.8.
 
 > ⮑ Débloque immédiatement **[ADR-0008](0008-vue-reseau-familles-et-focus.md)
 > Lot « Raisons »** et `docs/15` §8 #11 : la « raison » affichée devient un
@@ -134,10 +141,10 @@ Chaque lot laisse l'app verte (`flutter analyze` + suite). Tests en parallèle.
 
 | Lot | Périmètre | Dépendance |
 |---|---|---|
-| **1 — Modèle typé + raisons chargées** | enums `TypeBeneficeAssociation` / `TypeConflitAssociation` ; VO `AssociationCompagnonnage` (id + type + raison) ; charger `raison_i18n`+`type` dans `FichePlante` ; `ResolveurCompagnonnage` expose le type ; exposition Vue Réseau/Associations (raisons). | ADR-0008 |
-| **2 — Champs ciblés** | `repulsif_contre` / `piege_a` (slugs `Bioagresseur`) + intégrité référentielle ; `charge_tuteur` (optionnel). | ADR-0006 Lot 4a ✅ |
-| **3 — Moteur de dérivation** | règles pures (`application/engine/`) → suggestions typées + confiance + raison auto ; tests par règle. | Lots 1–2 |
-| **4 — Intégration reco/placement + UI** | suggestions dans le moteur de recommandation et l'aide au placement ; rendu UI (gardé par palier). | Lot 3, ADR-0009 |
+| **1 — Modèle typé + raisons chargées + UI** ✅ | enums `TypeBeneficeAssociation` / `TypeConflitAssociation` ; VO `AssociationBenefique` / `AssociationConflit` (cible + type + raison) ; `FichePlante` charge `type`+`raison_i18n` ; `ResolveurCompagnonnage` expose mécanisme + raison (`beneficeEntre`/`conflitEntre`, `CompagnonAvecRaison`) ; **vue Associations affiche la puce mécanisme typé + la raison éditoriale** (libellés ARB `assocMeca*`). | ADR-0008 |
+| **2 — Champs ciblés** ✅ | `repulsif_contre` / `piege_a` (slugs `Bioagresseur`, `Set<String>` sur `FichePlante` + prédicats `repousse`/`piege`) + **intégrité référentielle** (`VerificateurIntegriteRepulsifs` : couverture + cohérence `piege_a`⟹ravageur, gardé par `catalogue_reel_test`) ; enum `ChargeTuteur` + champ `charge_tuteur` (sous `cycle`). Validateur + schéma à jour. | ADR-0006 Lot 4a ✅ |
+| **3 — Moteur de dérivation** ✅ | `MoteurDerivationAssociations` (pur, `application/engine/`) → `SuggestionAssociation` scellée (`SuggestionBenefique`/`SuggestionConflit`) + `NiveauConfiance` ; règles bénéfices (fixation azote, pollinisateurs, tuteur, étagement, succession, couvre-sol, brise-vent, brouillage, répulsion/piège via `ResolveurFamille`) et conflits (même famille, concurrence lumière/azote) ; `suggestionsNouvelles` applique la **précédence curatée** ; tests par règle. | Lots 1–2 |
+| **4 — Intégration reco/placement + UI** ✅ | reco : bonus d'association **dérivée** dans `EvaluateurRecommandations` (curatée 1.0 > dérivée 0.8 > rien 0.5, `RaisonReco.associationDeriveeFavorable`), calculé par `RecommanderPlantes` (≥ moyen, traits seuls) ; UI : la **vue Associations** affiche les suggestions dérivées (puce mécanisme + badge « Suggéré » + confiance), **gardées par palier** (intermédiaire+, `AccesNiveau.vueReseau`). | Lot 3, ADR-0009 |
 
 ---
 

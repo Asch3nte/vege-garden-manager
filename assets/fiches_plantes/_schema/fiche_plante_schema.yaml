@@ -76,6 +76,8 @@ cycle:
   profondeur_sol_min_cm: # (optionnel) entier — profondeur minimale de terre nécessaire (§D doc-16)
   compatible_hors_sol: # (optionnel) bool — compatible pot/jardinière (défaut: true ; §D doc-16)
   culture_verticale: # (optionnel) bool — supporte/profite d'un tuteur ou treillis (défaut: false ; §E doc-16)
+  charge_tuteur: # (optionnel) enum ChargeTuteur : legere | moyenne | lourde — poids de la grimpante
+                 # sur son support, pour la règle « grimpante adaptée au tuteur » (ADR-0010 Lot 2)
 
 # Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12.
 # Clés de climat autorisées : tropical | subtropical | aride | semi_aride | mediterraneen |
@@ -92,12 +94,21 @@ periodes:
   hemisphere_sud: {} # (optionnel) même structure
 
 # Associations & rotation — références par 'id' de fiche, jamais par nom
+# Associations typées (ADR-0010) : 'type' (optionnel) qualifie le mécanisme.
+#   benefices  → TypeBeneficeAssociation : tuteur_structurel | etagement_lumiere |
+#                repulsion_ravageur | brouillage_olfactif | attraction_pollinisateurs |
+#                plante_piege | fixation_azote | couvre_sol | brise_vent | succession_temporelle
+#   defavorables → TypeConflitAssociation : meme_famille_ravageurs | competition_lumiere |
+#                competition_azote | allelopathie
+# 'type' omis = paire « brute » (compte comme avant, sans mécanisme).
 associations:
-  beneficies: # (optionnel) liste de { id, raison_i18n: { fr, en } }
+  beneficies: # (optionnel) liste de { id, type?, raison_i18n: { fr, en } }
     - id:
+      type:                       # (optionnel) mécanisme TypeBeneficeAssociation
       raison_i18n: { fr:, en: }
-  defavorables: # (optionnel) idem
+  defavorables: # (optionnel) idem avec type ∈ TypeConflitAssociation
     - id:
+      type:                       # (optionnel) mécanisme TypeConflitAssociation
       raison_i18n: { fr:, en: }
 rotation:
   famille: # (requis) ex: solanaceae
@@ -106,6 +117,11 @@ rotation:
   precedents_defavorables: [] # (optionnel)
   fixe_azote: # (optionnel) bool — vrai pour les légumineuses (défaut: false ; §H doc-16)
   besoin_azote: # (optionnel) NiveauBesoin : faible | modere | eleve (§H doc-16)
+
+# Défense ciblée (optionnel, ADR-0010 Lot 2) — slugs du référentiel Bioagresseur
+# (_referentiels/bioagresseurs.yaml). Intégrité vérifiée par VerificateurIntegriteRepulsifs.
+repulsif_contre: [] # (optionnel) bioagresseurs (maladie OU ravageur) que la plante repousse
+piege_a: []         # (optionnel) ravageurs que la plante piège (plante-appât) — doivent être de type ravageur
 
 # Post-récolte (optionnel)
 conservation:

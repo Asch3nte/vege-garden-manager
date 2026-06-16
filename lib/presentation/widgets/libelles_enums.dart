@@ -12,13 +12,16 @@ import '../../domain/enums/unite_quantite.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
+import '../../domain/enums/niveau_confiance.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../domain/enums/stade_croissance.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart' as prefs_theme;
+import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_climat.dart';
+import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/enums/type_emplacement.dart';
 import '../../domain/enums/type_observation.dart';
 import '../../domain/enums/type_parcelle.dart';
@@ -293,6 +296,39 @@ extension LibellesEnums on AppLocalizations {
         StadeCroissance.croissance => stadeCroissance,
         StadeCroissance.maturation => stadeMaturation,
         StadeCroissance.recolte => stadeRecolte,
+      };
+
+  /// Label for a beneficial-association mechanism (ADR-0010).
+  String mecanismeBenefice(TypeBeneficeAssociation m) => switch (m) {
+        TypeBeneficeAssociation.tuteurStructurel => assocMecaTuteurStructurel,
+        TypeBeneficeAssociation.etagementLumiere => assocMecaEtagementLumiere,
+        TypeBeneficeAssociation.repulsionRavageur => assocMecaRepulsionRavageur,
+        TypeBeneficeAssociation.brouillageOlfactif =>
+          assocMecaBrouillageOlfactif,
+        TypeBeneficeAssociation.attractionPollinisateurs =>
+          assocMecaAttractionPollinisateurs,
+        TypeBeneficeAssociation.plantePiege => assocMecaPlantePiege,
+        TypeBeneficeAssociation.fixationAzote => assocMecaFixationAzote,
+        TypeBeneficeAssociation.couvreSol => assocMecaCouvreSol,
+        TypeBeneficeAssociation.briseVent => assocMecaBriseVent,
+        TypeBeneficeAssociation.successionTemporelle =>
+          assocMecaSuccessionTemporelle,
+      };
+
+  /// Label for a conflicting-association mechanism (ADR-0010).
+  String mecanismeConflit(TypeConflitAssociation m) => switch (m) {
+        TypeConflitAssociation.memeFamilleRavageurs =>
+          assocMecaMemeFamilleRavageurs,
+        TypeConflitAssociation.competitionLumiere => assocMecaCompetitionLumiere,
+        TypeConflitAssociation.competitionAzote => assocMecaCompetitionAzote,
+        TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
+      };
+
+  /// Label for a derived-suggestion confidence level (ADR-0010).
+  String confiance(NiveauConfiance c) => switch (c) {
+        NiveauConfiance.faible => confianceFaible,
+        NiveauConfiance.moyen => confianceMoyen,
+        NiveauConfiance.eleve => confianceEleve,
       };
 
   /// Label for a planting method.

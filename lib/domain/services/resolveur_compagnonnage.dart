@@ -1,4 +1,6 @@
 import '../entities/fiche_plante.dart';
+import '../value_objects/association_benefique.dart';
+import '../value_objects/association_conflit.dart';
 
 /// The kind of companion-planting relationship between two plant sheets
 /// (ADR-0008).
@@ -13,29 +15,63 @@ enum TypeCompagnonnage {
   aucune,
 }
 
+/// A resolved companion paired with the typed [association] that links it to the
+/// centre sheet — its mechanism and localised reason (ADR-0010). Used by views
+/// to *explain* the relationship, not only list it.
+///
+/// [association] is always present: a companion only appears because some sheet
+/// declared the relation. Its `mecanisme`/reason may still be unspecified for a
+/// legacy curated pair.
+class CompagnonAvecRaison<A> {
+  final FichePlante _fiche;
+  final A _association;
+
+  CompagnonAvecRaison(this._fiche, this._association);
+
+  /// The companion plant.
+  FichePlante get fiche => _fiche;
+
+  /// The typed association (an [AssociationBenefique] or [AssociationConflit])
+  /// behind the relationship.
+  A get association => _association;
+}
+
 /// A sheet's companions within a catalogue, split by relationship kind.
 ///
 /// Both lists are immutable. The numbers and the names a view shows derive from
 /// the same object, so the Réseau and the detail sheet can never drift apart
-/// (ADR-0008).
+/// (ADR-0008). Each companion carries its typed association so a view can show
+/// *why* (ADR-0010); [bons]/[aEviter] expose the bare sheets for callers that
+/// only need the names.
 class CompagnonsResolus {
-  final List<FichePlante> _bons;
-  final List<FichePlante> _aEviter;
+  final List<CompagnonAvecRaison<AssociationBenefique>> _bons;
+  final List<CompagnonAvecRaison<AssociationConflit>> _aEviter;
+  final List<FichePlante> _bonsFiches;
+  final List<FichePlante> _aEviterFiches;
 
-  CompagnonsResolus._(this._bons, this._aEviter);
+  CompagnonsResolus._(this._bons, this._aEviter)
+      : _bonsFiches = List.unmodifiable(_bons.map((c) => c.fiche)),
+        _aEviterFiches = List.unmodifiable(_aEviter.map((c) => c.fiche));
 
   /// Builds the result; both lists are stored unmodifiable.
   factory CompagnonsResolus({
-    required List<FichePlante> bons,
-    required List<FichePlante> aEviter,
+    required List<CompagnonAvecRaison<AssociationBenefique>> bons,
+    required List<CompagnonAvecRaison<AssociationConflit>> aEviter,
   }) =>
       CompagnonsResolus._(List.unmodifiable(bons), List.unmodifiable(aEviter));
 
-  /// Good companions (immutable, may be empty).
-  List<FichePlante> get bons => _bons;
+  /// Good companions with their typed association (immutable, may be empty).
+  List<CompagnonAvecRaison<AssociationBenefique>> get bonsDetailles => _bons;
 
-  /// Companions to avoid (immutable, may be empty).
-  List<FichePlante> get aEviter => _aEviter;
+  /// Companions to avoid with their typed association (immutable, may be empty).
+  List<CompagnonAvecRaison<AssociationConflit>> get aEviterDetailles =>
+      _aEviter;
+
+  /// Good companions, sheets only (immutable, may be empty).
+  List<FichePlante> get bons => _bonsFiches;
+
+  /// Companions to avoid, sheets only (immutable, may be empty).
+  List<FichePlante> get aEviter => _aEviterFiches;
 
   /// Number of good companions.
   int get nbBons => _bons.length;
@@ -70,6 +106,18 @@ class ResolveurCompagnonnage {
   bool sontAEviter(FichePlante a, FichePlante b) =>
       a.entreEnConflitAvec(b.id) || b.entreEnConflitAvec(a.id);
 
+  /// The beneficial association linking [a] and [b], preferring [a]'s own
+  /// declaration and falling back to [b]'s (the relation is bidirectional, but
+  /// source data is often filled on one side only). `null` when neither side
+  /// declares a benefit.
+  AssociationBenefique? beneficeEntre(FichePlante a, FichePlante b) =>
+      a.associationBenefiqueAvec(b.id) ?? b.associationBenefiqueAvec(a.id);
+
+  /// The conflicting association linking [a] and [b], with the same precedence
+  /// as [beneficeEntre]. `null` when neither side declares a conflict.
+  AssociationConflit? conflitEntre(FichePlante a, FichePlante b) =>
+      a.associationConflitAvec(b.id) ?? b.associationConflitAvec(a.id);
+
   /// The relationship between [a] and [b]: [TypeCompagnonnage.bon] wins over
   /// [TypeCompagnonnage.aEviter] (precedence); [TypeCompagnonnage.aucune] when
   /// neither sheet declares anything, and always for a sheet with itself.
@@ -87,14 +135,15 @@ class ResolveurCompagnonnage {
     FichePlante fiche,
     Iterable<FichePlante> catalogue,
   ) {
-    final bons = <FichePlante>[];
-    final aEviter = <FichePlante>[];
+    final bons = <CompagnonAvecRaison<AssociationBenefique>>[];
+    final aEviter = <CompagnonAvecRaison<AssociationConflit>>[];
     for (final autre in catalogue) {
       switch (relationEntre(fiche, autre)) {
         case TypeCompagnonnage.bon:
-          bons.add(autre);
+          // Non-null: a `bon` relation means a benefit was declared on a side.
+          bons.add(CompagnonAvecRaison(autre, beneficeEntre(fiche, autre)!));
         case TypeCompagnonnage.aEviter:
-          aEviter.add(autre);
+          aEviter.add(CompagnonAvecRaison(autre, conflitEntre(fiche, autre)!));
         case TypeCompagnonnage.aucune:
           break;
       }

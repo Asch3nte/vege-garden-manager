@@ -15,7 +15,10 @@ import '../../domain/value_objects/surface.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../engine/derivation_sol.dart';
 import '../engine/evaluateur_recommandations.dart';
+import '../engine/moteur_derivation_associations.dart';
+import '../engine/suggestion_association.dart';
 import '../providers/repository_providers.dart';
+import '../../domain/enums/niveau_confiance.dart';
 
 /// Engine use case: recommend plants to grow in a parcelle.
 ///
@@ -34,12 +37,14 @@ class RecommanderPlantes {
   final AbstractPlantationRepository _plantations;
   final EvaluateurRecommandations _evaluateur;
   final DerivationSol _sol;
+  final MoteurDerivationAssociations _associations;
 
   RecommanderPlantes(
     this._fiches,
     this._plantations,
     this._evaluateur, {
     this._sol = const DerivationSol(),
+    this._associations = const MoteurDerivationAssociations(),
   });
 
   /// Default return delay (years) when a plant sheet states none.
@@ -73,6 +78,9 @@ class RecommanderPlantes {
     // and their associations (declared by mother id).
     final planteIdsActifs =
         actives.map((p) => _mereDe(p.planteId, parId)).toSet();
+    // Mother sheets of the active plants, for trait-based derived associations.
+    final actifsFiches =
+        planteIdsActifs.map((id) => parId[id]).whereType<FichePlante>().toList();
     final surfaceLibre = _surfaceLibre(parcelle, actives);
     final qualitesSol = _sol.qualitesDe(parcelle.texture, parcelle.techniquesSol);
     final rotationVerifiee = !_typesSansRotation.contains(parcelle.type);
@@ -86,6 +94,13 @@ class RecommanderPlantes {
 
       final rotationConflit = rotationVerifiee &&
           _rotationConflit(candidate, plantations, parId, maintenant);
+
+      // Derived beneficial association (ADR-0010): only when no curated good pair
+      // already covers it, and only on a reasonably confident, trait-based rule
+      // (no family resolver here → repulsion/trap are left out).
+      final deriveBenefice =
+          !planteIdsActifs.any(candidate.sAssocieBienAvec) &&
+              actifsFiches.any((actif) => _benefDerive(candidate, actif));
 
       final reco = _evaluateur.evaluer(
         candidate: candidate,
@@ -102,6 +117,7 @@ class RecommanderPlantes {
         niveauExperience: niveauExperience,
         typeParcelle: parcelle.type,
         cultureVerticaleDisponible: parcelle.cultureVerticale,
+        associationDeriveeFavorable: deriveBenefice,
       );
       if (reco != null) recommandations.add(reco);
     }
@@ -148,6 +164,16 @@ class RecommanderPlantes {
       if (reference.isAfter(seuil)) return true; // grown too recently
     }
     return false;
+  }
+
+  /// Whether a confident (≥ moyen), trait-based beneficial association is
+  /// derived between [candidate] and an active [actif] (either direction).
+  bool _benefDerive(FichePlante candidate, FichePlante actif) {
+    bool fort(SuggestionAssociation s) =>
+        s is SuggestionBenefique &&
+        s.confiance.index >= NiveauConfiance.moyen.index;
+    return _associations.deriver(candidate, actif).any(fort) ||
+        _associations.deriver(actif, candidate).any(fort);
   }
 
   String _famille(FichePlante fiche) =>

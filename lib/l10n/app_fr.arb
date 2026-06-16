@@ -387,6 +387,78 @@
   "@reseauFocusAucun": {
     "description": "État vide de la vue focus quand la plante n'a aucun compagnon connu."
   },
+  "assocMecaTuteurStructurel": "Tuteur naturel",
+  "@assocMecaTuteurStructurel": {
+    "description": "Mécanisme d'association bénéfique (ADR-0010) : une plante sert de support à une grimpante."
+  },
+  "assocMecaEtagementLumiere": "Étagement / ombre",
+  "@assocMecaEtagementLumiere": {
+    "description": "Mécanisme d'association bénéfique : étager la végétation, ombrer les plantes qui le tolèrent."
+  },
+  "assocMecaRepulsionRavageur": "Éloigne un ravageur",
+  "@assocMecaRepulsionRavageur": {
+    "description": "Mécanisme d'association bénéfique : plante répulsive qui éloigne un ravageur du voisin sensible."
+  },
+  "assocMecaBrouillageOlfactif": "Brouillage olfactif",
+  "@assocMecaBrouillageOlfactif": {
+    "description": "Mécanisme d'association bénéfique : mélange d'odeurs qui désoriente les ravageurs."
+  },
+  "assocMecaAttractionPollinisateurs": "Attire les pollinisateurs",
+  "@assocMecaAttractionPollinisateurs": {
+    "description": "Mécanisme d'association bénéfique : attire les pollinisateurs au profit d'une plante entomophile."
+  },
+  "assocMecaPlantePiege": "Plante-piège",
+  "@assocMecaPlantePiege": {
+    "description": "Mécanisme d'association bénéfique : détourne un ravageur sur une plante-appât."
+  },
+  "assocMecaFixationAzote": "Fixe l'azote",
+  "@assocMecaFixationAzote": {
+    "description": "Mécanisme d'association bénéfique : une légumineuse enrichit le sol pour une plante gourmande."
+  },
+  "assocMecaCouvreSol": "Couvre-sol",
+  "@assocMecaCouvreSol": {
+    "description": "Mécanisme d'association bénéfique : couvre le sol (adventices, humidité)."
+  },
+  "assocMecaBriseVent": "Brise-vent",
+  "@assocMecaBriseVent": {
+    "description": "Mécanisme d'association bénéfique : protège du vent."
+  },
+  "assocMecaSuccessionTemporelle": "Succession dans le temps",
+  "@assocMecaSuccessionTemporelle": {
+    "description": "Mécanisme d'association bénéfique : cycle court et cycle long sur la même place."
+  },
+  "assocMecaMemeFamilleRavageurs": "Même famille (ravageurs partagés)",
+  "@assocMecaMemeFamilleRavageurs": {
+    "description": "Mécanisme d'association défavorable (ADR-0010) : même famille botanique, donc ravageurs et maladies partagés."
+  },
+  "assocMecaCompetitionLumiere": "Concurrence pour la lumière",
+  "@assocMecaCompetitionLumiere": {
+    "description": "Mécanisme d'association défavorable : deux plantes hautes en plein soleil se font de l'ombre."
+  },
+  "assocMecaCompetitionAzote": "Concurrence pour l'azote",
+  "@assocMecaCompetitionAzote": {
+    "description": "Mécanisme d'association défavorable : deux plantes gourmandes en azote se concurrencent."
+  },
+  "assocMecaAllelopathie": "Allélopathie",
+  "@assocMecaAllelopathie": {
+    "description": "Mécanisme d'association défavorable : une plante inhibe chimiquement la croissance de l'autre."
+  },
+  "assocSuggere": "Suggéré",
+  "@assocSuggere": {
+    "description": "Badge d'une association dérivée (suggérée par le moteur, ADR-0010), distincte d'une association curatée."
+  },
+  "confianceFaible": "confiance faible",
+  "@confianceFaible": {
+    "description": "Niveau de confiance faible d'une suggestion d'association dérivée."
+  },
+  "confianceMoyen": "confiance moyenne",
+  "@confianceMoyen": {
+    "description": "Niveau de confiance moyen d'une suggestion d'association dérivée."
+  },
+  "confianceEleve": "confiance élevée",
+  "@confianceEleve": {
+    "description": "Niveau de confiance élevé d'une suggestion d'association dérivée."
+  },
   "reseauReglages": "Réglages d'affichage",
   "@reseauReglages": {
     "description": "Bouton repliable de la vue réseau ouvrant les contrôles (zoom, liens, noms)."

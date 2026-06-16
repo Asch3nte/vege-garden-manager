@@ -1,4 +1,5 @@
 import '../enums/categorie_plante.dart';
+import '../enums/charge_tuteur.dart';
 import '../enums/hemisphere.dart';
 import '../enums/niveau_besoin.dart';
 import '../enums/sous_type_legume.dart';
@@ -6,6 +7,8 @@ import '../enums/type_climat.dart';
 import '../enums/type_parcelle.dart';
 import '../enums/usage_plante.dart';
 import '../enums/zone_rusticite.dart';
+import '../value_objects/association_benefique.dart';
+import '../value_objects/association_conflit.dart';
 import '../value_objects/besoins_culture.dart';
 import '../value_objects/periodes_culture.dart';
 
@@ -33,8 +36,8 @@ class FichePlante {
   final int _dureeAvantRecolteJoursMin;
   final int _dureeAvantRecolteJoursMax;
   final Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _periodes;
-  final Set<String> _associationsBenefiques;
-  final Set<String> _associationsNegatives;
+  final List<AssociationBenefique> _associationsBenefiques;
+  final List<AssociationConflit> _associationsNegatives;
   final String? _rotationFamille;
   final int? _delaiRetourAnnees;
   final Map<String, String> _descriptionsLocalisees;
@@ -51,9 +54,18 @@ class FichePlante {
   final bool _compatibleHorsSol;
   // Enrichissement §E — culture verticale (tuteur/treillis)
   final bool _cultureVerticale;
+  // Enrichissement §F — hauteur adulte (cm), bornes basse/haute (optionnel)
+  final int? _hauteurAdulteCmMin;
+  final int? _hauteurAdulteCmMax;
   // Enrichissement §H — dynamique azotée
   final bool _fixeAzote;
   final NiveauBesoin? _besoinAzote;
+  // Enrichissement ADR-0010 Lot 2 — défense ciblée & charge sur tuteur
+  // Slugs Bioagresseur que la plante repousse / piège (intégrité référentielle
+  // vérifiée par VerificateurIntegriteRepulsifs, comme rotation.famille).
+  final Set<String> _repulsifContre;
+  final Set<String> _piegeA;
+  final ChargeTuteur? _chargeTuteur;
 
   FichePlante._(
     this._id,
@@ -81,8 +93,13 @@ class FichePlante {
     this._profondeurSolMinCm,
     this._compatibleHorsSol,
     this._cultureVerticale,
+    this._hauteurAdulteCmMin,
+    this._hauteurAdulteCmMax,
     this._fixeAzote,
     this._besoinAzote,
+    this._repulsifContre,
+    this._piegeA,
+    this._chargeTuteur,
   )   : assert(_id.isNotEmpty, 'id must not be empty'),
         assert(_parentId == null || _parentId.isNotEmpty,
             'parentId, when set, must not be empty'),
@@ -118,8 +135,8 @@ class FichePlante {
     String? parentId,
     SousTypeLegume? sousType,
     Map<Hemisphere, Map<TypeClimat, PeriodesCulture>>? periodes,
-    Set<String>? associationsBenefiques,
-    Set<String>? associationsNegatives,
+    List<AssociationBenefique>? associationsBenefiques,
+    List<AssociationConflit>? associationsNegatives,
     String? rotationFamille,
     int? delaiRetourAnnees,
     Map<String, String>? descriptionsLocalisees,
@@ -135,9 +152,16 @@ class FichePlante {
     bool compatibleHorsSol = true,
     // Enrichissement §E
     bool cultureVerticale = false,
+    // Enrichissement §F
+    int? hauteurAdulteCmMin,
+    int? hauteurAdulteCmMax,
     // Enrichissement §H
     bool fixeAzote = false,
     NiveauBesoin? besoinAzote,
+    // Enrichissement ADR-0010 Lot 2
+    Set<String>? repulsifContre,
+    Set<String>? piegeA,
+    ChargeTuteur? chargeTuteur,
   }) =>
       FichePlante._(
         id,
@@ -153,8 +177,10 @@ class FichePlante {
         dureeAvantRecolteJoursMin,
         dureeAvantRecolteJoursMax,
         _figerPeriodes(periodes ?? const {}),
-        Set<String>.unmodifiable(associationsBenefiques ?? const <String>{}),
-        Set<String>.unmodifiable(associationsNegatives ?? const <String>{}),
+        List<AssociationBenefique>.unmodifiable(
+            associationsBenefiques ?? const <AssociationBenefique>[]),
+        List<AssociationConflit>.unmodifiable(
+            associationsNegatives ?? const <AssociationConflit>[]),
         rotationFamille,
         delaiRetourAnnees,
         Map<String, String>.unmodifiable(descriptionsLocalisees ?? const {}),
@@ -165,8 +191,13 @@ class FichePlante {
         profondeurSolMinCm,
         compatibleHorsSol,
         cultureVerticale,
+        hauteurAdulteCmMin,
+        hauteurAdulteCmMax,
         fixeAzote,
         besoinAzote,
+        Set<String>.unmodifiable(repulsifContre ?? const <String>{}),
+        Set<String>.unmodifiable(piegeA ?? const <String>{}),
+        chargeTuteur,
       );
 
   static Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _figerPeriodes(
@@ -201,11 +232,13 @@ class FichePlante {
   String? get rotationFamille => _rotationFamille;
   int? get delaiRetourAnnees => _delaiRetourAnnees;
 
-  /// Ids of the plants this one benefits from (unmodifiable).
-  Set<String> get associationsBenefiques => _associationsBenefiques;
+  /// Typed beneficial associations of this plant — each pairs a target id with
+  /// an optional mechanism and localised reason (unmodifiable, ADR-0010).
+  List<AssociationBenefique> get associationsBenefiques =>
+      _associationsBenefiques;
 
-  /// Ids of the plants this one conflicts with (unmodifiable).
-  Set<String> get associationsNegatives => _associationsNegatives;
+  /// Typed conflicting associations of this plant (unmodifiable, ADR-0010).
+  List<AssociationConflit> get associationsNegatives => _associationsNegatives;
 
   // Enrichissement §A
   ZoneRusticite? get rusticiteMin => _rusticiteMin;
@@ -219,9 +252,23 @@ class FichePlante {
   bool get compatibleHorsSol => _compatibleHorsSol;
   // Enrichissement §E
   bool get cultureVerticale => _cultureVerticale;
+  // Enrichissement §F — hauteur adulte (cm)
+  int? get hauteurAdulteCmMin => _hauteurAdulteCmMin;
+  int? get hauteurAdulteCmMax => _hauteurAdulteCmMax;
   // Enrichissement §H
   bool get fixeAzote => _fixeAzote;
   NiveauBesoin? get besoinAzote => _besoinAzote;
+
+  // Enrichissement ADR-0010 Lot 2
+  /// Bioaggressor slugs this plant **repels** from its neighbours (unmodifiable).
+  Set<String> get repulsifContre => _repulsifContre;
+
+  /// Bioaggressor slugs this plant **traps** as a decoy (unmodifiable).
+  Set<String> get piegeA => _piegeA;
+
+  /// How heavy this plant is for a support when grown as a climber, or `null`
+  /// when unspecified (the engine then approximates it).
+  ChargeTuteur? get chargeTuteur => _chargeTuteur;
 
   /// Common name for [locale], falling back to French (always present).
   String nomLocalise(String locale) =>
@@ -253,14 +300,39 @@ class FichePlante {
 
   /// Whether this plant benefits from being grown near [planteId].
   bool sAssocieBienAvec(String planteId) =>
-      _associationsBenefiques.contains(planteId);
+      _associationsBenefiques.any((a) => a.cibleId == planteId);
 
   /// Whether this plant conflicts with [planteId].
   bool entreEnConflitAvec(String planteId) =>
-      _associationsNegatives.contains(planteId);
+      _associationsNegatives.any((a) => a.cibleId == planteId);
+
+  /// The beneficial association this plant declares towards [planteId], or
+  /// `null` when none is declared (ADR-0010). Lets callers read the mechanism
+  /// and reason behind a "good companion" relation.
+  AssociationBenefique? associationBenefiqueAvec(String planteId) {
+    for (final a in _associationsBenefiques) {
+      if (a.cibleId == planteId) return a;
+    }
+    return null;
+  }
+
+  /// The conflicting association this plant declares towards [planteId], or
+  /// `null` when none is declared (ADR-0010).
+  AssociationConflit? associationConflitAvec(String planteId) {
+    for (final a in _associationsNegatives) {
+      if (a.cibleId == planteId) return a;
+    }
+    return null;
+  }
 
   /// Whether the plant has the given functional [usage].
   bool aUsage(UsagePlante usage) => _usages.contains(usage);
+
+  /// Whether the plant repels the bioaggressor [slug] (ADR-0010 Lot 2).
+  bool repousse(String slug) => _repulsifContre.contains(slug);
+
+  /// Whether the plant traps the bioaggressor [slug] as a decoy (ADR-0010 Lot 2).
+  bool piege(String slug) => _piegeA.contains(slug);
 
   @override
   bool operator ==(Object other) => other is FichePlante && other._id == _id;

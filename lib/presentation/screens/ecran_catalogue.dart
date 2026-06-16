@@ -560,6 +560,8 @@ class _CarteFiche extends ConsumerWidget {
                 ref.read(catalogueProvider).value?.toutesMeres ??
                     const <FichePlante>[],
                 onAjouter: onAjouter,
+                // Derived suggestions (ADR-0010) appear from intermédiaire+.
+                acces: ref.read(accesNiveauProvider),
               ),
             ),
             // The arrow only signals whether varieties exist (expandable) — the

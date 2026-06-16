@@ -2,10 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
+import 'package:pot_a_gerer/domain/enums/charge_tuteur.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
@@ -28,6 +31,9 @@ FichePlante _fiche({
   Map<Hemisphere, Map<TypeClimat, PeriodesCulture>>? periodes,
   Set<String>? benefiques,
   Set<String>? negatives,
+  Set<String>? repulsifContre,
+  Set<String>? piegeA,
+  ChargeTuteur? chargeTuteur,
 }) =>
     FichePlante(
       id: id,
@@ -42,8 +48,15 @@ FichePlante _fiche({
       dureeAvantRecolteJoursMin: dureeMin,
       dureeAvantRecolteJoursMax: dureeMax,
       periodes: periodes,
-      associationsBenefiques: benefiques,
-      associationsNegatives: negatives,
+      associationsBenefiques: benefiques == null
+          ? null
+          : [for (final id in benefiques) AssociationBenefique(cibleId: id)],
+      associationsNegatives: negatives == null
+          ? null
+          : [for (final id in negatives) AssociationConflit(cibleId: id)],
+      repulsifContre: repulsifContre,
+      piegeA: piegeA,
+      chargeTuteur: chargeTuteur,
     );
 
 void main() {
@@ -164,6 +177,29 @@ void main() {
       final f = _fiche(usages: {UsagePlante.alimentaire, UsagePlante.compagnonnage});
       expect(f.aUsage(UsagePlante.compagnonnage), isTrue);
       expect(f.aUsage(UsagePlante.medicinale), isFalse);
+    });
+  });
+
+  group('FichePlante — défense ciblée & charge tuteur (ADR-0010 Lot 2)', () {
+    test('exposes repels / traps slugs and the support load', () {
+      final f = _fiche(
+        repulsifContre: {'nematode'},
+        piegeA: {'puceron'},
+        chargeTuteur: ChargeTuteur.legere,
+      );
+      expect(f.repousse('nematode'), isTrue);
+      expect(f.repousse('puceron'), isFalse);
+      expect(f.piege('puceron'), isTrue);
+      expect(f.chargeTuteur, ChargeTuteur.legere);
+    });
+
+    test('defaults: empty sets, null load, immutable sets', () {
+      final f = _fiche();
+      expect(f.repulsifContre, isEmpty);
+      expect(f.piegeA, isEmpty);
+      expect(f.chargeTuteur, isNull);
+      expect(() => f.repulsifContre.add('x'), throwsUnsupportedError);
+      expect(() => f.piegeA.add('x'), throwsUnsupportedError);
     });
   });
 

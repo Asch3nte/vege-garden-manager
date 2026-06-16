@@ -9,7 +9,9 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_besoin.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/raison_reco.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
@@ -17,6 +19,7 @@ import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
@@ -40,6 +43,8 @@ void main() {
     Periode plantation, {
     String? parentId,
     Set<String> conflits = const {},
+    bool fixeAzote = false,
+    NiveauBesoin? besoinAzote,
   }) =>
       FichePlante(
         id: id,
@@ -58,7 +63,11 @@ void main() {
         espacementCm: 40,
         dureeAvantRecolteJoursMin: 60,
         dureeAvantRecolteJoursMax: 80,
-        associationsNegatives: conflits,
+        fixeAzote: fixeAzote,
+        besoinAzote: besoinAzote,
+        associationsNegatives: [
+          for (final id in conflits) AssociationConflit(cibleId: id),
+        ],
         periodes: {
           Hemisphere.nord: {
             TypeClimat.oceanique: PeriodesCulture(plantation: plantation),
@@ -133,6 +142,29 @@ void main() {
     final ids = await recommander();
     expect(ids, containsAll(['tomate', 'salade']));
     expect(ids, isNot(contains('chou'))); // plantable Jan-Feb only
+  });
+
+  test('derives a beneficial association reason from active plants (ADR-0010)',
+      () async {
+    // An active nitrogen-fixer (haricot) in the parcelle; the greedy candidate
+    // (mais, besoin_azote eleve) should be flagged with a derived association.
+    final haricot = fiche('haricot', 'Fabaceae', const Periode(5, 6),
+        fixeAzote: true);
+    final mais = fiche('mais', 'Poaceae', const Periode(5, 6),
+        besoinAzote: NiveauBesoin.eleve);
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [haricot, mais]);
+    when(() => plantations.obtenirParParcelle('par1'))
+        .thenAnswer((_) async => [plantation('pl1', 'haricot')]);
+
+    final r = await useCase.executer(
+      parcelle: parcelle(),
+      zoneClimatique: zone,
+      localisation: lyon,
+      date: juin,
+    );
+    final reco = r.recommandations.firstWhere((e) => e.planteId == 'mais');
+    expect(reco.raisons, contains(RaisonReco.associationDeriveeFavorable));
   });
 
   test('does not recommend a plant already growing in the parcelle', () async {

@@ -17,6 +17,8 @@ import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_reseau_catalogue.dart';
@@ -52,8 +54,12 @@ FichePlante _fiche(
   dureeAvantRecolteJoursMin: 60,
   dureeAvantRecolteJoursMax: 80,
   periodes: const {},
-  associationsBenefiques: bons,
-  associationsNegatives: mauvais,
+  associationsBenefiques: [
+    for (final id in bons) AssociationBenefique(cibleId: id),
+  ],
+  associationsNegatives: [
+    for (final id in mauvais) AssociationConflit(cibleId: id),
+  ],
 );
 
 void main() {

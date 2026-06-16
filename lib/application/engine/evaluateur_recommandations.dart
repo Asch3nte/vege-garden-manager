@@ -29,8 +29,10 @@ import '../../domain/value_objects/surface.dart';
 /// 7. Container §D: plant incompatible with pot/planter type.
 ///
 /// ## Soft score
-/// Exposition (40%), soil quality (40%), beneficial companion (20%). Bonus
-/// reasons (no weight change): [RaisonReco.cultureVerticaleCompatible].
+/// Exposition (40%), soil quality (40%), beneficial companion (20%). The
+/// companion sub-score is 1.0 for a **curated** good association already in the
+/// parcelle, 0.8 for a **derived** one (ADR-0010, no curated pair), else 0.5.
+/// Bonus reasons (no weight change): [RaisonReco.cultureVerticaleCompatible].
 ///
 /// See `docs/16-enrichissement-fiches-plantes.md` for the enrichment rationale.
 class EvaluateurRecommandations {
@@ -79,6 +81,7 @@ class EvaluateurRecommandations {
     NiveauExperience? niveauExperience,
     TypeParcelle? typeParcelle,
     bool cultureVerticaleDisponible = false,
+    bool associationDeriveeFavorable = false,
   }) {
     final saisonVerifiable = hemisphere != null && climat != null;
 
@@ -123,7 +126,14 @@ class EvaluateurRecommandations {
     final scoreSol = _scoreSol(candidate.besoins.qualitesSol, qualitesSol);
     final associationBenefique =
         planteIdsActifs.any(candidate.sAssocieBienAvec);
-    final scoreAssociation = associationBenefique ? 1.0 : 0.5;
+    // Curated good association wins; a derived one (ADR-0010) is a softer bonus.
+    final associationDerivee =
+        !associationBenefique && associationDeriveeFavorable;
+    final scoreAssociation = associationBenefique
+        ? 1.0
+        : associationDerivee
+            ? 0.8
+            : 0.5;
 
     final score = (_poidsExposition * scoreExposition +
             _poidsSol * scoreSol +
@@ -139,6 +149,7 @@ class EvaluateurRecommandations {
       if (scoreExposition >= 0.5) RaisonReco.expositionAdaptee,
       if (scoreSol >= 0.5) RaisonReco.solAdapte,
       if (associationBenefique) RaisonReco.bonneAssociation,
+      if (associationDerivee) RaisonReco.associationDeriveeFavorable,
       if (rotationVerifiee && !rotationConflit) RaisonReco.rotationFavorable,
       if (niveauExperience != null && candidate.difficulte != null &&
           candidate.difficulte! <= _difficulteMax(niveauExperience))

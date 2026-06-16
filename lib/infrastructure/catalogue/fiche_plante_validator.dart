@@ -1,3 +1,6 @@
+import '../../domain/enums/charge_tuteur.dart';
+import '../../domain/enums/type_benefice_association.dart';
+import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
 
 /// Validates the structure and coherence of a parsed plant-sheet map before it
@@ -110,6 +113,19 @@ class FichePlanteValidator {
       );
     }
 
+    final hauteur = cycle['hauteur_adulte_cm'];
+    if (hauteur != null) {
+      exiger(
+        hauteur is List &&
+            hauteur.length == 2 &&
+            hauteur[0] is int &&
+            hauteur[1] is int &&
+            (hauteur[0] as int) > 0 &&
+            (hauteur[0] as int) <= (hauteur[1] as int),
+        'cycle.hauteur_adulte_cm must be [min, max] with 0 < min <= max',
+      );
+    }
+
     final profondeur = cycle['profondeur_sol_min_cm'];
     if (profondeur != null) {
       exiger(
@@ -117,5 +133,80 @@ class FichePlanteValidator {
         'cycle.profondeur_sol_min_cm must be a positive integer',
       );
     }
+
+    // Targeted defence (optional, ADR-0010 Lot 2): lists of bioaggressor slugs.
+    // (Referential resolution is checked by VerificateurIntegriteRepulsifs.)
+    for (final cle in ['repulsif_contre', 'piege_a']) {
+      final liste = y[cle];
+      if (liste != null) {
+        exiger(liste is List, '$cle must be a list of slugs');
+        for (final slug in liste as List) {
+          exiger(slug is String && slug.isNotEmpty,
+              '$cle entries must be non-empty strings');
+        }
+      }
+    }
+    final chargeTuteur = cycle['charge_tuteur'];
+    if (chargeTuteur != null) {
+      final valides = ChargeTuteur.values.map((e) => e.name).toSet();
+      exiger(
+        chargeTuteur is String && valides.contains(_versCamel(chargeTuteur)),
+        'cycle.charge_tuteur "$chargeTuteur" must be one of legere|moyenne|lourde',
+      );
+    }
+
+    // Associations (optional, ADR-0010): each entry needs a non-empty id; the
+    // `type` mechanism, when present, must be a known enum value and the
+    // `raison_i18n`, when present, must be a map.
+    final associations = y['associations'] as Map?;
+    if (associations != null) {
+      _validerAssociations(associations, 'beneficies',
+          TypeBeneficeAssociation.values.map((e) => e.name).toSet(), exiger);
+      _validerAssociations(associations, 'defavorables',
+          TypeConflitAssociation.values.map((e) => e.name).toSet(), exiger);
+    }
+  }
+
+  /// Validates one associations section (`beneficies` / `defavorables`) against
+  /// the [mecanismesValides] enum names (camelCase). [exiger] reports failures.
+  void _validerAssociations(
+    Map associations,
+    String section,
+    Set<String> mecanismesValides,
+    void Function(bool, String) exiger,
+  ) {
+    final liste = associations[section];
+    if (liste == null) return;
+    exiger(liste is List, 'associations.$section must be a list');
+    for (final entree in liste as List) {
+      exiger(
+        entree is Map &&
+            entree['id'] is String &&
+            (entree['id'] as String).isNotEmpty,
+        'associations.$section[].id must be a non-empty string',
+      );
+      final type = (entree as Map)['type'];
+      if (type != null) {
+        exiger(
+          type is String && mecanismesValides.contains(_versCamel(type)),
+          'associations.$section[].type "$type" is not a known mechanism',
+        );
+      }
+      final raison = entree['raison_i18n'];
+      if (raison != null) {
+        exiger(raison is Map,
+            'associations.$section[].raison_i18n must be a map');
+      }
+    }
+  }
+
+  /// Converts a snake_case YAML token to camelCase to match an enum name.
+  static String _versCamel(String snake) {
+    final parts = snake.split('_');
+    return parts.first +
+        parts
+            .skip(1)
+            .map((p) => p.isEmpty ? '' : p[0].toUpperCase() + p.substring(1))
+            .join();
   }
 }

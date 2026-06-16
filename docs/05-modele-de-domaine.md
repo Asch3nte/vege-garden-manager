@@ -161,11 +161,21 @@ Champs : `id`, `nomScientifique`, `familleBotanique`, `categorie`
 `nomsLocalises` (`Map<String,String>`), `textesLocalises`
 (`Map<String, TexteFiche>` par locale : description, conseils…),
 `periodes` (`Map<Hemisphere, Map<TypeClimat, PeriodesCulture>>`),
-`associationsBenefiques/Negatives` (IDs + raisons localisées),
+`associationsBenefiques` (`List<AssociationBenefique>`) /
+`associationsNegatives` (`List<AssociationConflit>`) — associations **typées**
+(cible + mécanisme + raison localisée, ADR-0010, cf. §4.8),
 `besoins` (`BesoinsCulture`), `espacementCm` (int), `dureeAvantRecolteJours`
 (intervalle min/max), `conservation`, `rotation`.
+Défense ciblée (ADR-0010 Lot 2) : `repulsifContre` / `piegeA`
+(`Set<String>` de slugs `Bioagresseur` repoussés / piégés), `chargeTuteur`
+(`ChargeTuteur?` — poids de la grimpante sur son support) et `hauteurAdulteCmMin`
+/ `hauteurAdulteCmMax` (`int?`, §F — alimentent les règles d'étagement /
+tuteurage / concurrence lumière du moteur de dérivation).
 Méthodes : `nomLocalise(locale)`, `estPlantableEn(date, hemisphere, climat)`,
-`sAssocieBienAvec(id)`, `entreEnConflitAvec(id)`, `aUsage(UsagePlante)`.
+`sAssocieBienAvec(id)`, `entreEnConflitAvec(id)`,
+`associationBenefiqueAvec(id)` / `associationConflitAvec(id)` (renvoient le VO
+typé pour exposer mécanisme + raison), `repousse(slug)` / `piege(slug)`,
+`aUsage(UsagePlante)`.
 
 > `espacementCm` (distance linéaire entre pieds) remplace l'ancien
 > `espaceRequisParPied` (aire) — aligné sur le YAML. La surface occupée par une
@@ -241,6 +251,23 @@ Impact d'un équipement : modificateurs eau/soleil/température, protections
 Fabriques prédéfinies `EffetEquipement.pourType(TypeEquipement)` (ex. oya →
 `modificateurBesoinEau: 0.4` ; voile d'hivernage → `+3°C`, `protectionGel`).
 
+### 4.8 `AssociationBenefique` / `AssociationConflit` *(ADR-0010)*
+Compagnonnage **typé** : chaque association porte la `cibleId` (id de la plante
+associée), un **mécanisme** optionnel (`TypeBeneficeAssociation?` /
+`TypeConflitAssociation?`, cf. §5) et une **raison libre localisée**
+(`raison(locale)`, repli sur le français). Deux classes distinctes (et non un VO
+générique) pour garder les deux enums de mécanismes séparés au typage.
+
+- `mecanisme == null` = paire « brute » (legacy/curatée non qualifiée) : la
+  relation compte comme avant, sans mécanisme ni raison.
+- Chargées depuis le YAML (`associations.beneficies[]` / `defavorables[]`,
+  champs `type` + `raison_i18n`). Égalité de valeur sur (cible, mécanisme, raison).
+
+Le `ResolveurCompagnonnage` (§7) expose le mécanisme/raison d'une paire via
+`beneficeEntre(a, b)` / `conflitEntre(a, b)` (bidirectionnels, la déclaration du
+centre primant), et `CompagnonsResolus` porte par compagnon un
+`CompagnonAvecRaison` (fiche + association typée).
+
 ## 5. Énumérations principales
 
 ```dart
@@ -252,6 +279,14 @@ enum UsagePlante { alimentaire, condimentaire, medicinale, compagnonnage, repuls
                    mellifere, pollinisateur, engraisVert, couvreSol, briseVent,
                    tuteurVivant, ornementale, fourrage } // multi-valué (≥ 1)
 enum Hemisphere { nord, sud }
+// Mécanismes d'association typés (ADR-0010) — qualifient les paires de compagnonnage
+enum TypeBeneficeAssociation { tuteurStructurel, etagementLumiere, repulsionRavageur,
+                               brouillageOlfactif, attractionPollinisateurs, plantePiege,
+                               fixationAzote, couvreSol, briseVent, successionTemporelle }
+enum TypeConflitAssociation { memeFamilleRavageurs, competitionLumiere,
+                              competitionAzote, allelopathie }
+enum ChargeTuteur { legere, moyenne, lourde } // poids d'une grimpante sur son support (ADR-0010 Lot 2)
+enum NiveauConfiance { faible, moyen, eleve } // confiance d'une association dérivée (ADR-0010 Lot 3)
 
 // — Parcelle / sol —
 enum TypeParcelle { pleineTerre, bacSureleve, jardiniere, pot, serre, butte, autre } // structure seule
