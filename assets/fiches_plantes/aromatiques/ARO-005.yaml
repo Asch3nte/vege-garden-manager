@@ -90,8 +90,10 @@ periodes:
 associations:
   beneficies:
     - id: LEG-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les pucerons et acariens autour des tomates", en: "Repels aphids and mites around tomatoes" }
     - id: LEG-007
+      type: repulsion_ravageur
       raison_i18n: { fr: "Éloigne les papillons blancs des choux plantée en bordure", en: "Deters cabbage white butterflies when planted as a border" }
   defavorables:
     - id: ARO-001

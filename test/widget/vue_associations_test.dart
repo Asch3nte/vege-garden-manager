@@ -2,6 +2,7 @@
 // typed mechanism label and, when present, the editorial reason — and a bare
 // pair shows neither (nothing invented).
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
@@ -20,6 +21,7 @@ import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/profil_ponderation_associations.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
+import 'package:pot_a_gerer/presentation/widgets/fiche_plante_detail.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_associations.dart';
 
 FichePlante _fiche(
@@ -86,9 +88,8 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('shows the typed mechanism and the editorial reason', (
-    tester,
-  ) async {
+  testWidgets('shows the typed mechanism; the reason is not in the view '
+      '(moved to the sheet, ADR-0012)', (tester) async {
     final centre = _fiche('centre', benefiques: [
       AssociationBenefique(
         cibleId: 'compagnon',
@@ -106,11 +107,47 @@ void main() {
 
     await ouvrir(tester, centre, [centre, compagnon, ennemi]);
 
-    // Benefit: mechanism label + reason are both shown.
+    // Mechanism chips are shown in the constellation…
     expect(find.text('Attire les pollinisateurs'), findsOneWidget);
-    expect(find.text('Attire les abeilles'), findsOneWidget);
-    // Conflict: mechanism label shown (no reason declared).
-    expect(find.text('Même famille (ravageurs partagés)'), findsOneWidget);
+    expect(find.text('Même famille'), findsOneWidget);
+    // …but the long editorial reason is NOT (it goes to the sheet banner).
+    expect(find.text('Attire les abeilles'), findsNothing);
+  });
+
+  testWidgets('the opened sheet shows the full reason in a banner (ADR-0012)',
+      (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => afficherFichePlanteDetail(
+                    context,
+                    _fiche('tomate'),
+                    contexte: const ContexteAssociation(
+                      bon: true,
+                      mecanisme: "Fixe l'azote",
+                      raison: 'Enrichit le sol pour la tomate',
+                    ),
+                  ),
+                  child: const Text('ouvrir'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('ouvrir'));
+    await tester.pumpAndSettle();
+
+    // Banner: mechanism title + full (untruncated) editorial reason.
+    expect(find.text("Fixe l'azote"), findsOneWidget);
+    expect(find.text('Enrichit le sol pour la tomate'), findsOneWidget);
   });
 
   testWidgets('a bare pair shows the name only — no mechanism, no reason', (
@@ -138,7 +175,7 @@ void main() {
       await ouvrir(tester, haricot, [haricot, mais],
           acces: const AccesNiveau(NiveauExperience.debutant));
       expect(find.text("Fixe l'azote"), findsNothing);
-      expect(find.text('Suggéré · confiance élevée'), findsNothing);
+      expect(find.text('Suggéré · élevée'), findsNothing);
     });
 
     testWidgets('intermédiaire sees the derived suggestion with confidence',
@@ -147,7 +184,42 @@ void main() {
           acces: const AccesNiveau(NiveauExperience.intermediaire));
       expect(find.text('mais'), findsOneWidget);
       expect(find.text("Fixe l'azote"), findsOneWidget);
-      expect(find.text('Suggéré · confiance élevée'), findsOneWidget);
+      expect(find.text('Suggéré · élevée'), findsOneWidget);
+    });
+  });
+
+  group('filtre par direction (ADR-0012)', () {
+    // centre déclare → donne (vers planteDonne) ; planteRecoit déclare centre → reçoit.
+    final centre = _fiche('centre', benefiques: [
+      AssociationBenefique(cibleId: 'planteDonne'),
+    ]);
+    final planteDonne = _fiche('planteDonne');
+    final planteRecoit = _fiche('planteRecoit',
+        benefiques: [AssociationBenefique(cibleId: 'centre')]);
+    final catalogue = [centre, planteDonne, planteRecoit];
+
+    testWidgets('« Tout » montre les deux directions', (tester) async {
+      await ouvrir(tester, centre, catalogue);
+      expect(find.text('planteDonne'), findsOneWidget);
+      expect(find.text('planteRecoit'), findsOneWidget);
+    });
+
+    testWidgets('« Reçoit » ne garde que les associations reçues',
+        (tester) async {
+      await ouvrir(tester, centre, catalogue);
+      await tester.tap(find.text('Reçoit'));
+      await tester.pumpAndSettle();
+      expect(find.text('planteRecoit'), findsOneWidget);
+      expect(find.text('planteDonne'), findsNothing);
+    });
+
+    testWidgets('« Donne » ne garde que les associations données',
+        (tester) async {
+      await ouvrir(tester, centre, catalogue);
+      await tester.tap(find.text('Donne'));
+      await tester.pumpAndSettle();
+      expect(find.text('planteDonne'), findsOneWidget);
+      expect(find.text('planteRecoit'), findsNothing);
     });
   });
 

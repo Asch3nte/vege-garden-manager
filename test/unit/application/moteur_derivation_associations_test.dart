@@ -9,6 +9,7 @@ import 'package:pot_a_gerer/domain/enums/charge_tuteur.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_besoin.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_confiance.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/sens_association.dart';
 import 'package:pot_a_gerer/domain/enums/sous_type_legume.dart';
 import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_conflit_association.dart';
@@ -235,6 +236,39 @@ void main() {
       final a = _f('a', besoinAzote: NiveauBesoin.eleve, fixeAzote: true);
       final s = moteur.suggestionsNouvelles(a, [a]);
       expect(s, isEmpty);
+    });
+  });
+
+  group('sens — direction dérivée (ADR-0012)', () {
+    // Distinct families everywhere, so no spurious memeFamille conflict.
+    SuggestionBenefique benefVers(List<SuggestionAssociation> s, String id) =>
+        s.whereType<SuggestionBenefique>().firstWhere((x) => x.cibleId == id);
+    SuggestionConflit conflitVers(List<SuggestionAssociation> s, String id) =>
+        s.whereType<SuggestionConflit>().firstWhere((x) => x.cibleId == id);
+
+    test('asymétrique: le centre qui fixe l azote DONNE', () {
+      final haricot = _f('haricot', famille: 'Fabaceae', fixeAzote: true);
+      final mais =
+          _f('mais', famille: 'Poaceae', besoinAzote: NiveauBesoin.eleve);
+      final s = moteur.suggestionsNouvelles(haricot, [haricot, mais]);
+      expect(benefVers(s, 'mais').sens, SensAssociation.donne);
+    });
+
+    test('asymétrique: le centre gourmand REÇOIT', () {
+      final haricot = _f('haricot', famille: 'Fabaceae', fixeAzote: true);
+      final mais =
+          _f('mais', famille: 'Poaceae', besoinAzote: NiveauBesoin.eleve);
+      final s = moteur.suggestionsNouvelles(mais, [mais, haricot]);
+      expect(benefVers(s, 'haricot').sens, SensAssociation.recoit);
+    });
+
+    test('symétrique: concurrence azote des deux côtés = MUTUEL', () {
+      final chou =
+          _f('chou', famille: 'Brassicaceae', besoinAzote: NiveauBesoin.eleve);
+      final courge = _f('courge',
+          famille: 'Cucurbitaceae', besoinAzote: NiveauBesoin.eleve);
+      final s = moteur.suggestionsNouvelles(chou, [chou, courge]);
+      expect(conflitVers(s, 'courge').sens, SensAssociation.mutuel);
     });
   });
 }

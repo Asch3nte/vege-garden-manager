@@ -32,6 +32,7 @@ Future<void> afficherFichePlanteDetail(
   BuildContext context,
   FichePlante fiche, {
   void Function(FichePlante)? onAjouter,
+  ContexteAssociation? contexte,
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -46,20 +47,51 @@ Future<void> afficherFichePlanteDetail(
         fiche: fiche,
         scrollController: scrollController,
         onAjouter: onAjouter,
+        contexte: contexte,
       ),
     ),
   );
+}
+
+/// Why this sheet was opened from the Associations view (ADR-0012): the relation
+/// with the centre plant, shown as a coloured banner at the top of the sheet so
+/// the full editorial reason is never truncated in the constellation.
+class ContexteAssociation {
+  /// Good companion (green) vs to-avoid (red).
+  final bool bon;
+
+  /// Localised mechanism / family label, or `null`.
+  final String? mecanisme;
+
+  /// Full localised editorial reason, or `null`.
+  final String? raison;
+
+  /// Whether the relation is a derived suggestion.
+  final bool suggere;
+
+  /// Localised confidence (derived only), or `null`.
+  final String? confiance;
+
+  const ContexteAssociation({
+    required this.bon,
+    this.mecanisme,
+    this.raison,
+    this.suggere = false,
+    this.confiance,
+  });
 }
 
 class _FichePlanteDetail extends ConsumerStatefulWidget {
   final FichePlante fiche;
   final ScrollController scrollController;
   final void Function(FichePlante)? onAjouter;
+  final ContexteAssociation? contexte;
 
   const _FichePlanteDetail({
     required this.fiche,
     required this.scrollController,
     this.onAjouter,
+    this.contexte,
   });
 
   @override
@@ -104,6 +136,11 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
         EspacementsApp.s6,
       ),
       children: [
+        // Association banner (ADR-0012) — only on the originally tapped sheet.
+        if (widget.contexte != null && _fiche.id == widget.fiche.id) ...[
+          _BandeauAssociation(contexte: widget.contexte!),
+          const SizedBox(height: EspacementsApp.s4),
+        ],
         Row(
           children: [
             // On a variety, a back button returns to the species sheet.
@@ -658,6 +695,72 @@ class _SectionFamille extends ConsumerWidget {
           Text(assoc, style: theme.textTheme.bodySmall),
         ],
       ],
+    );
+  }
+}
+
+
+/// Coloured header explaining the association that led here (ADR-0012): the
+/// mechanism/family, the full editorial reason (never truncated), and, for a
+/// derived relation, a "suggested + confidence" note. Green for a good
+/// companion, red (error) for a to-avoid.
+class _BandeauAssociation extends StatelessWidget {
+  final ContexteAssociation contexte;
+
+  const _BandeauAssociation({required this.contexte});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final couleur =
+        contexte.bon ? theme.colorScheme.primary : theme.colorScheme.error;
+    final titre = contexte.mecanisme ??
+        (contexte.bon ? l10n.ficheAssocBon : l10n.ficheAssocEviter);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(EspacementsApp.s3),
+      decoration: BoxDecoration(
+        color: couleur.withValues(alpha: 0.10),
+        borderRadius: const BorderRadius.all(RayonsApp.md),
+        border: Border.all(color: couleur.withValues(alpha: 0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(contexte.bon ? Icons.favorite_outline : Icons.block,
+                  size: TaillesIconesApp.sm, color: couleur),
+              const SizedBox(width: EspacementsApp.s2),
+              Expanded(
+                child: Text(
+                  titre,
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(color: couleur, fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+          if (contexte.suggere) ...[
+            const SizedBox(height: EspacementsApp.s1),
+            Text(
+              contexte.confiance == null
+                  ? l10n.assocSuggere
+                  : '${l10n.assocSuggere} · ${contexte.confiance}',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: couleur.withValues(alpha: 0.9),
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+          if (contexte.raison != null) ...[
+            const SizedBox(height: EspacementsApp.s2),
+            Text(contexte.raison!, style: theme.textTheme.bodyMedium),
+          ],
+        ],
+      ),
     );
   }
 }

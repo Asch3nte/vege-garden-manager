@@ -2,6 +2,14 @@
 
 - **Statut** : Accepté — **Lots 1 à 4 livrés** (2026-06-16)
 - **Date** : 2026-06-15
+
+> ⚠️ **Révisions ultérieures** (traçabilité / rétropédalage) :
+> - **[ADR-0012](0012-associations-directionnelles-refonte-vue.md)** (2026-06-16) révise la **restitution** (pas le modèle de fond) :
+>   - le champ YAML `type:` passe de *un mécanisme* à *un mécanisme **ou une liste*** (VO en `Set`) ;
+>   - dans la **vue Associations**, le libellé affiché devient la **famille d'effet** (le mécanisme précis passe sur la fiche) ;
+>   - la **`raison_i18n`** n'est plus rendue dans la constellation : elle passe en **bandeau sur la fiche** ouverte (exigence « zéro texte tronqué ») ;
+>   - la résolution reste bidirectionnelle pour le classement bon/à-éviter, mais la vue **conserve désormais le sens** (donne/reçoit/mutuel).
+>   - *Pour revenir en arrière* : ré-afficher `raison_i18n`+mécanisme dans `vue_associations.dart` et repasser `type` en valeur simple suffit (la donnée curatée est inchangée).
 - **Contexte** : la vocation de Pot'à Gérer est de promouvoir des cultures
   **naturelles et permacoles**. Or, aujourd'hui, les associations de plantes se
   réduisent à deux listes d'`id` (« bénéfiques » / « négatives ») exposées par

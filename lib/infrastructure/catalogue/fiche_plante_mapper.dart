@@ -153,9 +153,7 @@ class FichePlanteMapper {
       for (final e in liste)
         AssociationBenefique(
           cibleId: e['id'] as String,
-          mecanisme: e['type'] == null
-              ? null
-              : _enum(TypeBeneficeAssociation.values, e['type'] as String),
+          mecanismes: _typesAssociation(e['type'], TypeBeneficeAssociation.values),
           raisonI18n: _raisonI18n(e['raison_i18n'] as Map?),
         ),
     ];
@@ -169,12 +167,18 @@ class FichePlanteMapper {
       for (final e in liste)
         AssociationConflit(
           cibleId: e['id'] as String,
-          mecanisme: e['type'] == null
-              ? null
-              : _enum(TypeConflitAssociation.values, e['type'] as String),
+          mecanismes: _typesAssociation(e['type'], TypeConflitAssociation.values),
           raisonI18n: _raisonI18n(e['raison_i18n'] as Map?),
         ),
     ];
+  }
+
+  /// Parses an association `type:` that is **a single token or a list** of
+  /// tokens (ADR-0012) into a set of enum values (empty when absent).
+  Set<T> _typesAssociation<T extends Enum>(Object? type, List<T> valeurs) {
+    if (type == null) return const {};
+    final tokens = type is Iterable ? type : [type];
+    return {for (final t in tokens) _enum(valeurs, t as String)};
   }
 
   Iterable<Map> _sectionAssociations(Map y, String section) {

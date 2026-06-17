@@ -84,15 +84,18 @@ periodes:
 associations:
   beneficies:
     - id: LEG-013
+      type: fixation_azote
       raison_i18n: { fr: "Fixe l'azote, enrichit le sol", en: "Fixes nitrogen, enriches soil" }
     - id: aneth
       raison_i18n: { fr: "Attire les insectes auxiliaires, améliore la saveur", en: "Attracts beneficial insects, improves flavor" }
     - id: capucine
+      type: plante_piege
       raison_i18n: { fr: "Plante-piège à pucerons", en: "Aphid trap crop" }
   defavorables:
     - id: LEG-020
       raison_i18n: { fr: "Favorisent mutuellement le mildiou", en: "Mutually promote mildew" }
     - id: fenouil
+      type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:
   famille: cucurbitaceae

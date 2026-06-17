@@ -84,11 +84,13 @@ periodes:
 associations:
   beneficies:
     - id: ARO-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
     - id: LEG-004
       raison_i18n: { fr: "Ameublit le sol pour les racines voisines", en: "Loosens soil for nearby roots" }
   defavorables:
     - id: fenouil
+      type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:
   famille: solanaceae

@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../app/theme/dimensions_app.dart';
@@ -7,12 +5,14 @@ import '../../application/engine/moteur_derivation_associations.dart';
 import '../../application/engine/scoreur_associations.dart';
 import '../../application/engine/suggestion_association.dart';
 import '../../domain/entities/fiche_plante.dart';
+import '../../domain/enums/sens_association.dart';
 import '../../domain/services/acces_niveau.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../../l10n/app_localizations.dart';
 import 'fiche_plante_detail.dart';
 import 'libelles_enums.dart';
+import 'reseau/layout_vue_associations.dart';
 import 'vue_reseau_catalogue.dart' show couleurCategorie;
 
 /// Opens the **Associations** view of [centre]: a dedicated, detailed ego graph
@@ -56,6 +56,8 @@ Future<void> afficherVueAssociations(
             ? null
             : l10n.mecanismeBenefice(c.association.mecanisme!),
         raison: c.association.raison(locale),
+        sens: c.sens,
+        bon: true,
       ),
   ];
   final aEviter = <_NoeudAssoc>[
@@ -67,11 +69,10 @@ Future<void> afficherVueAssociations(
             ? null
             : l10n.mecanismeConflit(c.association.mecanisme!),
         raison: c.association.raison(locale),
+        sens: c.sens,
+        bon: false,
       ),
   ];
-  final nbBonsCurated = bons.length;
-  final nbEviterCurated = aEviter.length;
-
   // Derived suggestions (Lot 3/4), gated by experience level (ADR-0009),
   // scored & weighted by the profile (ADR-0011).
   if (acces?.vueReseau ?? false) {
@@ -89,8 +90,6 @@ Future<void> afficherVueAssociations(
       centre: centre,
       bons: bons,
       aEviter: aEviter,
-      nbBonsCurated: nbBonsCurated,
-      nbEviterCurated: nbEviterCurated,
       onAjouter: onAjouter,
     ),
   );
@@ -142,6 +141,8 @@ void _ajouterSuggestions(
       mecanisme: l10n.mecanismeBenefice(s.mecanisme),
       suggere: true,
       confiance: l10n.confiance(s.confiance),
+      sens: s.sens,
+      bon: true,
     ));
   }
   for (final s in meilleurConflit.values) {
@@ -153,6 +154,8 @@ void _ajouterSuggestions(
       mecanisme: l10n.mecanismeConflit(s.mecanisme),
       suggere: true,
       confiance: l10n.confiance(s.confiance),
+      sens: s.sens,
+      bon: false,
     ));
   }
 }
@@ -168,6 +171,12 @@ class _NoeudAssoc {
   final bool suggere;
   final String? confiance;
 
+  /// Direction seen from the centre (ADR-0012); `null` for the centre itself.
+  final SensAssociation? sens;
+
+  /// Good companion (true) vs to-avoid (false); `null` for the centre itself.
+  final bool? bon;
+
   const _NoeudAssoc({
     required this.fiche,
     this.score = 0,
@@ -175,6 +184,8 @@ class _NoeudAssoc {
     this.raison,
     this.suggere = false,
     this.confiance,
+    this.sens,
+    this.bon,
   });
 }
 
@@ -182,16 +193,12 @@ class _VueAssociations extends StatefulWidget {
   final FichePlante centre;
   final List<_NoeudAssoc> bons;
   final List<_NoeudAssoc> aEviter;
-  final int nbBonsCurated;
-  final int nbEviterCurated;
   final void Function(FichePlante)? onAjouter;
 
   const _VueAssociations({
     required this.centre,
     required this.bons,
     required this.aEviter,
-    required this.nbBonsCurated,
-    required this.nbEviterCurated,
     required this.onAjouter,
   });
 
@@ -205,9 +212,16 @@ class _VueAssociations extends StatefulWidget {
 class _VueAssociationsState extends State<_VueAssociations> {
   bool _tousAffiches = false;
 
-  /// The side capped at curated + N derived, unless expanded.
-  List<_NoeudAssoc> _affiches(List<_NoeudAssoc> cote, int nbCurated) {
+  /// Direction filter (ADR-0012); `null` = all directions.
+  SensAssociation? _filtre;
+
+  List<_NoeudAssoc> _filtrer(List<_NoeudAssoc> cote) =>
+      _filtre == null ? cote : cote.where((n) => n.sens == _filtre).toList();
+
+  /// The side capped at curated (infinite score) + N derived, unless expanded.
+  List<_NoeudAssoc> _affiches(List<_NoeudAssoc> cote) {
     if (_tousAffiches) return cote;
+    final nbCurated = cote.where((n) => n.score.isInfinite).length;
     final max = nbCurated + _VueAssociations.maxDerivesParCote;
     return cote.length <= max ? cote : cote.sublist(0, max);
   }
@@ -217,10 +231,13 @@ class _VueAssociationsState extends State<_VueAssociations> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final vide = widget.bons.isEmpty && widget.aEviter.isEmpty;
-    final bons = _affiches(widget.bons, widget.nbBonsCurated);
-    final aEviter = _affiches(widget.aEviter, widget.nbEviterCurated);
-    final caches = (widget.bons.length - bons.length) +
-        (widget.aEviter.length - aEviter.length);
+    final bonsF = _filtrer(widget.bons);
+    final eviterF = _filtrer(widget.aEviter);
+    final bons = _affiches(bonsF);
+    final aEviter = _affiches(eviterF);
+    final caches =
+        (bonsF.length - bons.length) + (eviterF.length - aEviter.length);
+    final videAffiche = bons.isEmpty && aEviter.isEmpty;
 
     return Dialog.fullscreen(
       child: Scaffold(
@@ -231,6 +248,12 @@ class _VueAssociationsState extends State<_VueAssociations> {
             tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
             onPressed: () => Navigator.of(context).pop(),
           ),
+          bottom: vide
+              ? null
+              : _BarreFiltreSens(
+                  filtre: _filtre,
+                  onChoisir: (s) => setState(() => _filtre = s),
+                ),
         ),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.centerFloat,
@@ -242,7 +265,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
                     setState(() => _tousAffiches = !_tousAffiches),
               )
             : null,
-        body: vide
+        body: videAffiche
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.all(EspacementsApp.s5),
@@ -256,18 +279,31 @@ class _VueAssociationsState extends State<_VueAssociations> {
                 ),
               )
             : InteractiveViewer(
-                minScale: 0.5,
-                maxScale: 3,
-                boundaryMargin: const EdgeInsets.all(80),
+                // Generous pan/zoom so an overflowing constellation is reachable
+                // (ADR-0012): zoom far out, pan well beyond the viewport.
+                minScale: 0.2,
+                maxScale: 4,
+                boundaryMargin: const EdgeInsets.all(2000),
                 child: LayoutBuilder(
                   builder: (context, c) => _Constellation(
                     taille: Size(c.maxWidth, c.maxHeight),
                     centre: widget.centre,
                     bons: bons,
                     aEviter: aEviter,
-                    onTapNoeud: (f) =>
-                        afficherFichePlanteDetail(context, f,
-                            onAjouter: widget.onAjouter),
+                    onTapNoeud: (n) => afficherFichePlanteDetail(
+                      context,
+                      n.fiche,
+                      onAjouter: widget.onAjouter,
+                      contexte: n.bon == null
+                          ? null
+                          : ContexteAssociation(
+                              bon: n.bon!,
+                              mecanisme: n.mecanisme,
+                              raison: n.raison,
+                              suggere: n.suggere,
+                              confiance: n.confiance,
+                            ),
+                    ),
                   ),
                 ),
               ),
@@ -300,6 +336,44 @@ class _BoutonVoirPlus extends StatelessWidget {
   }
 }
 
+/// AppBar filter by association direction (ADR-0012): Tout / Donne / Reçoit /
+/// Mutuel.
+class _BarreFiltreSens extends StatelessWidget implements PreferredSizeWidget {
+  final SensAssociation? filtre;
+  final void Function(SensAssociation?) onChoisir;
+
+  const _BarreFiltreSens({required this.filtre, required this.onChoisir});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(48);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    Widget puce(String label, SensAssociation? s) => Padding(
+          padding: const EdgeInsets.only(right: EspacementsApp.s2),
+          child: ChoiceChip(
+            label: Text(label),
+            selected: filtre == s,
+            onSelected: (_) => onChoisir(s),
+          ),
+        );
+    return SizedBox(
+      height: 48,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s4),
+        children: [
+          puce(l10n.filtreTout, null),
+          puce(l10n.sensDonne, SensAssociation.donne),
+          puce(l10n.sensRecoit, SensAssociation.recoit),
+          puce(l10n.sensMutuel, SensAssociation.mutuel),
+        ],
+      ),
+    );
+  }
+}
+
 /// The radial ego layout: edges from the centre to each companion, one node per
 /// species, and a colour-coded legend per side.
 class _Constellation extends StatelessWidget {
@@ -307,7 +381,7 @@ class _Constellation extends StatelessWidget {
   final FichePlante centre;
   final List<_NoeudAssoc> bons;
   final List<_NoeudAssoc> aEviter;
-  final void Function(FichePlante) onTapNoeud;
+  final void Function(_NoeudAssoc) onTapNoeud;
 
   const _Constellation({
     required this.taille,
@@ -320,28 +394,26 @@ class _Constellation extends StatelessWidget {
   static const double _rayonCentre = 26;
   static const double _rayonCompagnon = 16;
   static const double _largeurNoeud = 120;
-
-  /// [n] points evenly spread on the arc from [a0] to [a1] at radius [r].
-  static List<Offset> _arc(int n, Offset c, double r, double a0, double a1) {
-    if (n == 0) return const [];
-    if (n == 1) return [c + Offset.fromDirection((a0 + a1) / 2, r)];
-    return [
-      for (var k = 0; k < n; k++)
-        c + Offset.fromDirection(a0 + (a1 - a0) * k / (n - 1), r),
-    ];
-  }
+  static const double _hauteurNoeud = 96;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final c = Offset(taille.width / 2, taille.height / 2);
-    final r = math.min(taille.width, taille.height) * 0.34;
-    // Good on the left half, to-avoid on the right half.
-    final posBons =
-        _arc(bons.length, c, r, math.pi * 100 / 180, math.pi * 260 / 180);
-    final posEviter =
-        _arc(aEviter.length, c, r, -math.pi * 70 / 180, math.pi * 70 / 180);
+
+    // No-overlap ego layout (ADR-0012): centre stays centred; the graph may
+    // overflow the viewport — InteractiveViewer (zoom-out / pan) reaches it.
+    final res = const LayoutVueAssociations().calculer(
+      nbBons: bons.length,
+      nbAEviter: aEviter.length,
+      tailleNoeud: const Size(_largeurNoeud, _hauteurNoeud),
+      zone: taille,
+    );
+    final c = res.centre;
+    final posBons = res.bons;
+    final posEviter = res.aEviter;
+    final canvasL = taille.width;
+    final canvasH = taille.height;
 
     Widget noeud(_NoeudAssoc n, Offset p, double rayon, Color? accent) =>
         Positioned(
@@ -351,24 +423,33 @@ class _Constellation extends StatelessWidget {
           child: _Noeud(
             noeud: n,
             rayon: rayon,
-            onTap: () => onTapNoeud(n.fiche),
+            onTap: () => onTapNoeud(n),
             accent: accent,
           ),
         );
 
     return SizedBox(
-      width: taille.width,
-      height: taille.height,
+      width: canvasL,
+      height: canvasH,
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           CustomPaint(
-            size: taille,
+            size: Size(canvasL, canvasH),
             painter: _Peintre(
               centre: c,
-              bons: posBons,
-              eviter: posEviter,
+              bons: [
+                for (var k = 0; k < bons.length; k++)
+                  (pos: posBons[k], sens: bons[k].sens),
+              ],
+              eviter: [
+                for (var k = 0; k < aEviter.length; k++)
+                  (pos: posEviter[k], sens: aEviter[k].sens),
+              ],
               couleurBon: theme.colorScheme.primary,
               couleurEviter: theme.colorScheme.error,
+              rayonCentre: _rayonCentre,
+              rayonNoeud: _rayonCompagnon,
             ),
           ),
           for (var k = 0; k < bons.length; k++)
@@ -461,9 +542,10 @@ class _Noeud extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelSmall,
           ),
-          // (ADR-0010) The typed mechanism (when known) and, below it, the
-          // editorial reason when the catalogue carries one. A derived node adds
-          // a "suggested" badge with its confidence. Nothing is invented.
+          // (ADR-0012) The view shows only the short typed mechanism (when
+          // known) and, for a derived node, a "suggested + confidence" tag. The
+          // full editorial reason is moved to a banner on the tapped sheet, so
+          // nothing is ever truncated here.
           if (noeud.mecanisme != null) ...[
             const SizedBox(height: 3),
             _PuceMecanisme(libelle: noeud.mecanisme!, accent: accent),
@@ -475,24 +557,11 @@ class _Noeud extends StatelessWidget {
                   ? l10n.assocSuggere
                   : '${l10n.assocSuggere} · ${noeud.confiance}',
               textAlign: TextAlign.center,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: (accent ?? theme.colorScheme.primary)
                     .withValues(alpha: 0.9),
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-          if (noeud.raison != null) ...[
-            const SizedBox(height: 2),
-            Text(
-              noeud.raison!,
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -570,13 +639,21 @@ class _Entete extends StatelessWidget {
   }
 }
 
-/// Paints the edges: a coloured line from the centre to each companion.
+/// An edge to draw: the companion [pos] and the relation [sens] (ADR-0012).
+typedef _Arete = ({Offset pos, SensAssociation? sens});
+
+/// Paints the edges from the centre to each companion, **with a direction
+/// arrow** (ADR-0012): a head at the companion end for *donne*, at the centre
+/// end for *recoit*, at both for *mutuel*. Endpoints are trimmed to the bubble
+/// radii so heads sit on the bubble border.
 class _Peintre extends CustomPainter {
   final Offset centre;
-  final List<Offset> bons;
-  final List<Offset> eviter;
+  final List<_Arete> bons;
+  final List<_Arete> eviter;
   final Color couleurBon;
   final Color couleurEviter;
+  final double rayonCentre;
+  final double rayonNoeud;
 
   _Peintre({
     required this.centre,
@@ -584,22 +661,44 @@ class _Peintre extends CustomPainter {
     required this.eviter,
     required this.couleurBon,
     required this.couleurEviter,
+    required this.rayonCentre,
+    required this.rayonNoeud,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    void trait(List<Offset> pts, Color couleur) {
+    void trait(List<_Arete> aretes, Color couleur) {
       final p = Paint()
-        ..color = couleur.withValues(alpha: 0.5)
+        ..color = couleur.withValues(alpha: 0.55)
         ..strokeWidth = 2
         ..style = PaintingStyle.stroke;
-      for (final pt in pts) {
-        canvas.drawLine(centre, pt, p);
+      for (final a in aretes) {
+        final vecteur = a.pos - centre;
+        final dist = vecteur.distance;
+        if (dist < rayonCentre + rayonNoeud + 1) continue;
+        final dir = vecteur / dist;
+        final debut = centre + dir * rayonCentre;
+        final fin = a.pos - dir * rayonNoeud;
+        canvas.drawLine(debut, fin, p);
+        final sens = a.sens ?? SensAssociation.donne;
+        if (sens != SensAssociation.recoit) _tete(canvas, debut, fin, p);
+        if (sens != SensAssociation.donne) _tete(canvas, fin, debut, p);
       }
     }
 
     trait(bons, couleurBon);
     trait(eviter, couleurEviter);
+  }
+
+  /// Draws an arrowhead at [vers], pointing along [depuis] → [vers].
+  void _tete(Canvas canvas, Offset depuis, Offset vers, Paint p) {
+    const longueur = 8.0;
+    const ouverture = 0.5; // radians
+    final angle = (vers - depuis).direction;
+    canvas.drawLine(
+        vers, vers - Offset.fromDirection(angle - ouverture, longueur), p);
+    canvas.drawLine(
+        vers, vers - Offset.fromDirection(angle + ouverture, longueur), p);
   }
 
   @override

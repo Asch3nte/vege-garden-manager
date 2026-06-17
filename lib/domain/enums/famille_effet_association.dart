@@ -41,3 +41,9 @@ FamilleEffetAssociation familleDe(TypeBeneficeAssociation mecanisme) =>
       TypeBeneficeAssociation.briseVent =>
         FamilleEffetAssociation.couvertureAbri,
     };
+
+/// The set of effect families covered by [mecanismes] (ADR-0012) — used to label
+/// an association by family rather than by each precise mechanism.
+Set<FamilleEffetAssociation> famillesDe(
+        Iterable<TypeBeneficeAssociation> mecanismes) =>
+    {for (final m in mecanismes) familleDe(m)};

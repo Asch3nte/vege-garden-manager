@@ -132,7 +132,70 @@ associations:
       final assoc = f.associationBenefiqueAvec('LEG-003')!;
       expect(f.sAssocieBienAvec('LEG-003'), isTrue);
       expect(assoc.mecanisme, isNull);
+      expect(assoc.mecanismes, isEmpty);
       expect(assoc.raison('fr'), isNull);
+    });
+
+    test('a type given as a list loads several mechanisms (ADR-0012)', () {
+      const yamlListe = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+associations:
+  beneficies:
+    - id: LEG-009
+      type: [brouillage_olfactif, repulsion_ravageur]
+''';
+      final m = _parser.parser(yamlListe, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'), returnsNormally);
+      final assoc = _mapper.versEntite(m).associationBenefiqueAvec('LEG-009')!;
+      expect(assoc.mecanismes, {
+        TypeBeneficeAssociation.brouillageOlfactif,
+        TypeBeneficeAssociation.repulsionRavageur,
+      });
+    });
+
+    test('rejects an unknown mechanism inside a type list', () {
+      const mauvais = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+associations:
+  beneficies:
+    - id: LEG-009
+      type: [fixation_azote, mecanisme_bidon]
+''';
+      final m = _parser.parser(mauvais, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'),
+          throwsA(isA<FichePlanteInvalideException>()));
     });
   });
 

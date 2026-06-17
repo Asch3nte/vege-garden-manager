@@ -94,6 +94,7 @@ periodes:
 associations:
   beneficies:
     - id: LEG-001
+      type: attraction_pollinisateurs
       raison_i18n: { fr: "Attire les pollinisateurs à la floraison, utile en bordure de potager", en: "Attracts pollinators when flowering, useful as border plant" }
     - id: LEG-014
       raison_i18n: { fr: "Association favorable documentée en compagnonnage", en: "Documented favourable companion planting" }

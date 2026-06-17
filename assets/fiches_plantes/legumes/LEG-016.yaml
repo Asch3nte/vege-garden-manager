@@ -84,13 +84,16 @@ periodes:
 associations:
   beneficies:
     - id: LEG-004
+      type: repulsion_ravageur
       raison_i18n: { fr: "Éloignent mutuellement leurs mouches", en: "Mutually repel each other's flies" }
     - id: LEG-014
       raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
   defavorables:
     - id: LEG-013
+      type: allelopathie
       raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
     - id: LEG-018
+      type: allelopathie
       raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
 rotation:
   famille: amaryllidaceae

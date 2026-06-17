@@ -251,12 +251,15 @@ Impact d'un équipement : modificateurs eau/soleil/température, protections
 Fabriques prédéfinies `EffetEquipement.pourType(TypeEquipement)` (ex. oya →
 `modificateurBesoinEau: 0.4` ; voile d'hivernage → `+3°C`, `protectionGel`).
 
-### 4.8 `AssociationBenefique` / `AssociationConflit` *(ADR-0010)*
+### 4.8 `AssociationBenefique` / `AssociationConflit` *(ADR-0010, ADR-0012)*
 Compagnonnage **typé** : chaque association porte la `cibleId` (id de la plante
-associée), un **mécanisme** optionnel (`TypeBeneficeAssociation?` /
-`TypeConflitAssociation?`, cf. §5) et une **raison libre localisée**
-(`raison(locale)`, repli sur le français). Deux classes distinctes (et non un VO
-générique) pour garder les deux enums de mécanismes séparés au typage.
+associée), un **ensemble de mécanismes** `mecanismes` (`Set<TypeBeneficeAssociation>`
+/ `Set<TypeConflitAssociation>`, cf. §5 ; ADR-0012 — une paire peut en cumuler
+plusieurs ; getter de compat `mecanisme` = le premier) et une **raison libre
+localisée** (`raison(locale)`, repli sur le français). Deux classes distinctes
+(et non un VO générique) pour garder les deux enums de mécanismes séparés au
+typage. `famillesDe(mecanismes)` (cf. `famille_effet_association.dart`) donne la
+ou les familles d'effet pour l'affichage par famille (ADR-0011/0012).
 
 - `mecanisme == null` = paire « brute » (legacy/curatée non qualifiée) : la
   relation compte comme avant, sans mécanisme ni raison.
@@ -301,6 +304,7 @@ enum NiveauConfiance { faible, moyen, eleve } // confiance d'une association dé
 enum FamilleEffetAssociation { gainDePlace, protectionRavageurs, fertilite,
                                pollinisation, couvertureAbri }
 enum PoidsAssociation { ignore, faible, normal, fort } // ×0 / ×0.5 / ×1 / ×1.5
+enum SensAssociation { donne, recoit, mutuel } // direction d'une association vue du centre (ADR-0012)
 
 // — Parcelle / sol —
 enum TypeParcelle { pleineTerre, bacSureleve, jardiniere, pot, serre, butte, autre } // structure seule

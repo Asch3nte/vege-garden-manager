@@ -94,8 +94,10 @@ periodes:
 associations:
   beneficies:
     - id: LEG-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les insectes nuisibles, améliore la croissance", en: "Repels pests, improves growth" }
     - id: LEG-004
+      type: repulsion_ravageur
       raison_i18n: { fr: "Compagnonnage classique, repousse la mouche de la carotte", en: "Classic companion, repels carrot fly" }
     - id: LEG-017
       raison_i18n: { fr: "Association favorable documentée en compagnonnage", en: "Documented favourable companion planting" }

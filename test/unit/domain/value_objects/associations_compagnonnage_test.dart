@@ -1,10 +1,82 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_conflit_association.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 
 void main() {
+  group('multi-mécanismes & familles (ADR-0012)', () {
+    test('une paire peut porter plusieurs mécanismes', () {
+      final a = AssociationBenefique(cibleId: 'x', mecanismes: {
+        TypeBeneficeAssociation.brouillageOlfactif,
+        TypeBeneficeAssociation.repulsionRavageur,
+      });
+      expect(a.mecanismes, hasLength(2));
+      expect(a.aMecanisme, isTrue);
+      // Convenience `mecanisme` returns the first (ADR-0010 compat).
+      expect(a.mecanisme, isNotNull);
+    });
+
+    test('mecanisme simple = ensemble singleton', () {
+      final a = AssociationBenefique(
+          cibleId: 'x', mecanisme: TypeBeneficeAssociation.fixationAzote);
+      expect(a.mecanismes, {TypeBeneficeAssociation.fixationAzote});
+      expect(a.mecanisme, TypeBeneficeAssociation.fixationAzote);
+    });
+
+    test('égalité indépendante de l ordre des mécanismes', () {
+      final a = AssociationBenefique(cibleId: 'x', mecanismes: {
+        TypeBeneficeAssociation.couvreSol,
+        TypeBeneficeAssociation.briseVent,
+      });
+      final b = AssociationBenefique(cibleId: 'x', mecanismes: {
+        TypeBeneficeAssociation.briseVent,
+        TypeBeneficeAssociation.couvreSol,
+      });
+      expect(a, b);
+      expect(a.hashCode, b.hashCode);
+    });
+
+    test('refuse mecanisme ET mecanismes ensemble', () {
+      expect(
+        () => AssociationBenefique(
+          cibleId: 'x',
+          mecanisme: TypeBeneficeAssociation.couvreSol,
+          mecanismes: {TypeBeneficeAssociation.briseVent},
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
+    test('AssociationConflit gère aussi plusieurs mécanismes', () {
+      final c = AssociationConflit(cibleId: 'x', mecanismes: {
+        TypeConflitAssociation.memeFamilleRavageurs,
+        TypeConflitAssociation.competitionAzote,
+      });
+      expect(c.mecanismes, hasLength(2));
+    });
+
+    test('famillesDe regroupe les mécanismes par famille', () {
+      // brouillage + répulsion partagent la famille Protection → une famille.
+      expect(
+        famillesDe({
+          TypeBeneficeAssociation.brouillageOlfactif,
+          TypeBeneficeAssociation.repulsionRavageur,
+        }),
+        {FamilleEffetAssociation.protectionRavageurs},
+      );
+      // fixation (fertilité) + tuteur (gain de place) → deux familles.
+      expect(
+        famillesDe({
+          TypeBeneficeAssociation.fixationAzote,
+          TypeBeneficeAssociation.tuteurStructurel,
+        }),
+        {FamilleEffetAssociation.fertilite, FamilleEffetAssociation.gainDePlace},
+      );
+    });
+  });
+
   group('AssociationBenefique (ADR-0010)', () {
     test('exposes target, mechanism and localised reason', () {
       final a = AssociationBenefique(

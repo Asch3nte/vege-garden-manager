@@ -95,6 +95,7 @@ periodes:
 
 # Associations & rotation — références par 'id' de fiche, jamais par nom
 # Associations typées (ADR-0010) : 'type' (optionnel) qualifie le mécanisme.
+# 'type' accepte UN token OU une LISTE de tokens (ADR-0012), ex. type: [brouillage_olfactif, repulsion_ravageur].
 #   benefices  → TypeBeneficeAssociation : tuteur_structurel | etagement_lumiere |
 #                repulsion_ravageur | brouillage_olfactif | attraction_pollinisateurs |
 #                plante_piege | fixation_azote | couvre_sol | brise_vent | succession_temporelle

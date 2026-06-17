@@ -84,13 +84,16 @@ periodes:
 associations:
   beneficies:
     - id: LEG-014
+      type: etagement_lumiere
       raison_i18n: { fr: "Bon usage de l'espace sous les choux-fleurs", en: "Good use of space under cauliflowers" }
     - id: LEG-005
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse la piéride du chou", en: "Repels cabbage white butterfly" }
   defavorables:
     - id: fraise
       raison_i18n: { fr: "Favorisent mutuellement les maladies du sol", en: "Mutually promote soil diseases" }
     - id: moutarde
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille brassicaceae, mêmes ravageurs", en: "Same brassicaceae family, same pests" }
 rotation:
   famille: brassicaceae

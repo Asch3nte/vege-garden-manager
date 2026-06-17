@@ -96,17 +96,22 @@ periodes:
 associations:
   beneficies:
     - id: LEG-004
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse la mouche de la carotte (Psila rosae)", en: "Repels carrot fly (Psila rosae)" }
     - id: LEG-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Éloigne les pucerons et améliore la saveur", en: "Deters aphids and improves flavour" }
     - id: LEG-014
       raison_i18n: { fr: "Association favorable, compagnonnage documenté", en: "Favourable association, documented companion planting" }
     - id: LEG-009
+      type: [repulsion_ravageur, etagement_lumiere]
       raison_i18n: { fr: "Repousse les parasites du sol autour des concombres", en: "Repels soil parasites around cucumbers" }
   defavorables:
     - id: LEG-013
+      type: allelopathie
       raison_i18n: { fr: "Les alliacées inhibent la croissance des légumineuses", en: "Alliums inhibit legume growth" }
     - id: LEG-018
+      type: allelopathie
       raison_i18n: { fr: "Même famille — inhibition croisée avec les pois", en: "Allium family inhibits pea growth" }
 
 rotation:

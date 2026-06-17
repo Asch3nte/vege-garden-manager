@@ -185,12 +185,17 @@ class FichePlanteValidator {
             (entree['id'] as String).isNotEmpty,
         'associations.$section[].id must be a non-empty string',
       );
+      // `type` may be a single token or a list of tokens (ADR-0012); each must
+      // be a known mechanism.
       final type = (entree as Map)['type'];
       if (type != null) {
-        exiger(
-          type is String && mecanismesValides.contains(_versCamel(type)),
-          'associations.$section[].type "$type" is not a known mechanism',
-        );
+        final tokens = type is List ? type : [type];
+        for (final t in tokens) {
+          exiger(
+            t is String && mecanismesValides.contains(_versCamel(t)),
+            'associations.$section[].type "$t" is not a known mechanism',
+          );
+        }
       }
       final raison = entree['raison_i18n'];
       if (raison != null) {

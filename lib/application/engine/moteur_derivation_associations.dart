@@ -7,6 +7,7 @@ import '../../domain/enums/charge_tuteur.dart';
 import '../../domain/enums/niveau_besoin.dart';
 import '../../domain/enums/niveau_confiance.dart';
 import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/sens_association.dart';
 import '../../domain/enums/sous_type_legume.dart';
 import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_conflit_association.dart';
@@ -138,7 +139,9 @@ class MoteurDerivationAssociations {
       final curatedBenef = centre.sAssocieBienAvec(autre.id);
       final curatedConflit = centre.entreEnConflitAvec(autre.id);
 
-      // Keep the best per (sense, mechanism); drop the sense that is curated.
+      // Keep one per mechanism, combining the two directions into a sens
+      // (donne + recoit → mutuel) and keeping the highest confidence; drop the
+      // sense that is curated.
       final meilleures = <String, SuggestionAssociation>{};
       for (final s in brutes) {
         if (s is SuggestionBenefique && curatedBenef) continue;
@@ -148,10 +151,8 @@ class MoteurDerivationAssociations {
           SuggestionConflit(:final mecanisme) => 'c_${mecanisme.name}',
         };
         final existante = meilleures[cle];
-        if (existante == null ||
-            s.confiance.index > existante.confiance.index) {
-          meilleures[cle] = s;
-        }
+        meilleures[cle] =
+            existante == null ? s : _fusionner(existante, s);
       }
       out.addAll(meilleures.values);
     }
@@ -172,6 +173,8 @@ class MoteurDerivationAssociations {
           FichePlante b, TypeConflitAssociation m, NiveauConfiance c) =>
       SuggestionConflit(cibleId: b.id, mecanisme: m, confiance: c);
 
+  /// Relabels a `deriver(autre, centre)` suggestion onto [cibleId] and flips its
+  /// direction to [SensAssociation.recoit] (the centre *receives* the service).
   SuggestionAssociation _relabel(SuggestionAssociation s, String cibleId) =>
       switch (s) {
         SuggestionBenefique(:final mecanisme, :final confiance, :final slug) =>
@@ -179,14 +182,43 @@ class MoteurDerivationAssociations {
               cibleId: cibleId,
               mecanisme: mecanisme,
               confiance: confiance,
+              sens: SensAssociation.recoit,
               slug: slug),
         SuggestionConflit(:final mecanisme, :final confiance, :final slug) =>
           SuggestionConflit(
               cibleId: cibleId,
               mecanisme: mecanisme,
               confiance: confiance,
+              sens: SensAssociation.recoit,
               slug: slug),
       };
+
+  /// Merges two suggestions for the same (target, mechanism): combines their
+  /// directions (donne + recoit → mutuel) and keeps the higher-confidence one's
+  /// fields.
+  SuggestionAssociation _fusionner(
+    SuggestionAssociation a,
+    SuggestionAssociation b,
+  ) {
+    final sens = a.sens.combiner(b.sens);
+    final meilleure = b.confiance.index > a.confiance.index ? b : a;
+    return switch (meilleure) {
+      SuggestionBenefique(:final cibleId, :final mecanisme, :final confiance, :final slug) =>
+        SuggestionBenefique(
+            cibleId: cibleId,
+            mecanisme: mecanisme,
+            confiance: confiance,
+            sens: sens,
+            slug: slug),
+      SuggestionConflit(:final cibleId, :final mecanisme, :final confiance, :final slug) =>
+        SuggestionConflit(
+            cibleId: cibleId,
+            mecanisme: mecanisme,
+            confiance: confiance,
+            sens: sens,
+            slug: slug),
+    };
+  }
 
   bool _haute(FichePlante f) =>
       f.hauteurAdulteCmMax != null && f.hauteurAdulteCmMax! >= seuilHauteCm;

@@ -91,6 +91,7 @@ periodes:
 associations:
   beneficies:
     - id: LEG-013
+      type: fixation_azote
       raison_i18n: { fr: "Les légumineuses enrichissent le sol en azote bénéfique aux framboisiers", en: "Legumes enrich soil with nitrogen beneficial to raspberries" }
   defavorables:
     - id: LEG-020

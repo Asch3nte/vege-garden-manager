@@ -87,11 +87,13 @@ periodes:
 associations:
   beneficies:
     - id: LEG-014
+      type: etagement_lumiere
       raison_i18n: { fr: "Profite de l'espace sous les brocolis", en: "Uses space under broccoli" }
     - id: aneth
       raison_i18n: { fr: "Attire les insectes auxiliaires contre les chenilles", en: "Attracts beneficial insects against caterpillars" }
   defavorables:
     - id: moutarde
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, mêmes maladies et ravageurs", en: "Same family, same diseases and pests" }
 rotation:
   famille: brassicaceae

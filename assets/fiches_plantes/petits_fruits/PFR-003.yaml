@@ -89,6 +89,7 @@ periodes:
 associations:
   beneficies:
     - id: LEG-016
+      type: repulsion_ravageur
       raison_i18n: { fr: "L'oignon en pied de groseillier repousse les parasites du sol", en: "Onion at the base repels soil pests" }
   defavorables: []
 

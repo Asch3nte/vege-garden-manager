@@ -80,11 +80,13 @@ periodes:
 associations:
   beneficies:
     - id: LEG-014
+      type: succession_temporelle
       raison_i18n: { fr: "Cycle court complémentaire, optimise l'espace", en: "Complementary short cycle, optimizes space" }
     - id: LEG-004
       raison_i18n: { fr: "Le radis ameublit le sol pour les carottes", en: "Radish loosens soil for carrots" }
   defavorables:
     - id: moutarde
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille Brassicaceae, mêmes ravageurs", en: "Same Brassicaceae family, same pests" }
 rotation:
   famille: brassicaceae

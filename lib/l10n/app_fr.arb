@@ -427,15 +427,15 @@
   "@assocMecaSuccessionTemporelle": {
     "description": "Mécanisme d'association bénéfique : cycle court et cycle long sur la même place."
   },
-  "assocMecaMemeFamilleRavageurs": "Même famille (ravageurs partagés)",
+  "assocMecaMemeFamilleRavageurs": "Même famille",
   "@assocMecaMemeFamilleRavageurs": {
     "description": "Mécanisme d'association défavorable (ADR-0010) : même famille botanique, donc ravageurs et maladies partagés."
   },
-  "assocMecaCompetitionLumiere": "Concurrence pour la lumière",
+  "assocMecaCompetitionLumiere": "Concurrence lumière",
   "@assocMecaCompetitionLumiere": {
     "description": "Mécanisme d'association défavorable : deux plantes hautes en plein soleil se font de l'ombre."
   },
-  "assocMecaCompetitionAzote": "Concurrence pour l'azote",
+  "assocMecaCompetitionAzote": "Concurrence azote",
   "@assocMecaCompetitionAzote": {
     "description": "Mécanisme d'association défavorable : deux plantes gourmandes en azote se concurrencent."
   },
@@ -447,17 +447,17 @@
   "@assocSuggere": {
     "description": "Badge d'une association dérivée (suggérée par le moteur, ADR-0010), distincte d'une association curatée."
   },
-  "confianceFaible": "confiance faible",
+  "confianceFaible": "faible",
   "@confianceFaible": {
-    "description": "Niveau de confiance faible d'une suggestion d'association dérivée."
+    "description": "Niveau de confiance faible d'une suggestion (affiché après « Suggéré · »)."
   },
-  "confianceMoyen": "confiance moyenne",
+  "confianceMoyen": "moyenne",
   "@confianceMoyen": {
-    "description": "Niveau de confiance moyen d'une suggestion d'association dérivée."
+    "description": "Niveau de confiance moyen d'une suggestion (affiché après « Suggéré · »)."
   },
-  "confianceEleve": "confiance élevée",
+  "confianceEleve": "élevée",
   "@confianceEleve": {
-    "description": "Niveau de confiance élevé d'une suggestion d'association dérivée."
+    "description": "Niveau de confiance élevé d'une suggestion (affiché après « Suggéré · »)."
   },
   "assocVoirPlus": "{count, plural, =1{Voir 1 suggestion de plus} other{Voir {count} suggestions de plus}}",
   "@assocVoirPlus": {
@@ -469,6 +469,30 @@
   "assocVoirMoins": "Voir moins",
   "@assocVoirMoins": {
     "description": "Bouton repliant les suggestions d'associations dérivées."
+  },
+  "filtreTout": "Tout",
+  "@filtreTout": {
+    "description": "Filtre de direction (vue Associations) : afficher toutes les directions."
+  },
+  "sensDonne": "Donne",
+  "@sensDonne": {
+    "description": "Filtre/direction : la plante centrale rend service à l'autre (centre → X)."
+  },
+  "sensRecoit": "Reçoit",
+  "@sensRecoit": {
+    "description": "Filtre/direction : l'autre plante rend service au centre (X → centre)."
+  },
+  "sensMutuel": "Mutuel",
+  "@sensMutuel": {
+    "description": "Filtre/direction : association réciproque (↔)."
+  },
+  "ficheAssocBon": "Bon compagnon",
+  "@ficheAssocBon": {
+    "description": "Titre par défaut du bandeau d'association (bénéfique) en tête de fiche."
+  },
+  "ficheAssocEviter": "À éviter",
+  "@ficheAssocEviter": {
+    "description": "Titre par défaut du bandeau d'association (défavorable) en tête de fiche."
   },
   "categPonderation": "Pondération des associations",
   "@categPonderation": {

@@ -2,6 +2,10 @@
 
 - **Statut** : Accepté — **Lots 1 à 4 livrés** (2026-06-16)
 - **Date** : 2026-06-16
+
+> ⚠️ **Révisions ultérieures** (traçabilité / rétropédalage) :
+> - **[ADR-0012](0012-associations-directionnelles-refonte-vue.md)** (2026-06-16) **étend** le rôle des *familles d'effet* : en plus de servir d'unité de pondération (ici), elles deviennent le **libellé affiché** dans la vue Associations (à la place du mécanisme précis). Le tri par score, le top-N et le « voir plus » de cet ADR sont **conservés** ; s'y ajoutent le sens (donne/reçoit/mutuel) et un filtre par direction.
+>   - *Pour revenir en arrière* : réafficher le mécanisme précis comme libellé dans `vue_associations.dart` (le modèle de scoring est inchangé).
 - **Contexte** : le moteur de dérivation d'[ADR-0010](0010-associations-multi-mecanismes.md)
   (Lot 3) dérive **volontairement large** — une même plante peut matcher de
   nombreux mécanismes, dans les deux sens, pour de nombreuses voisines. Résultat :

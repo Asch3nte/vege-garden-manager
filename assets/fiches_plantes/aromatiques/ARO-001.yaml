@@ -83,8 +83,10 @@ periodes:
 associations:
   beneficies:
     - id: LEG-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Améliore le goût et repousse les pucerons", en: "Improves flavour, repels aphids" }
     - id: LEG-019
+      type: repulsion_ravageur
       raison_i18n: { fr: "Compagnonnage favorable, repousse les ravageurs", en: "Beneficial companion, repels pests" }
   defavorables: []
 rotation:

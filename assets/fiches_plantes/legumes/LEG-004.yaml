@@ -78,11 +78,13 @@ periodes:
 associations:
   beneficies:
     - id: LEG-017
+      type: repulsion_ravageur
       raison_i18n: { fr: "Éloignent mutuellement leurs mouches", en: "Mutually repel each other's flies" }
     - id: LEG-014
       raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
   defavorables:
     - id: aneth
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, attire les mêmes ravageurs", en: "Same family, attracts the same pests" }
 rotation:
   famille: apiaceae

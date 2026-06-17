@@ -92,10 +92,13 @@ periodes:
 associations:
   beneficies:
     - id: LEG-016
+      type: repulsion_ravageur
       raison_i18n: { fr: "L'oignon repousse les limaces et champignons autour des fraisiers", en: "Onion repels slugs and fungi around strawberries" }
     - id: LEG-014
+      type: couvre_sol
       raison_i18n: { fr: "La laitue en sous-couvert conserve l'humidité du sol", en: "Lettuce as groundcover keeps soil moisture" }
     - id: ARO-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Le basilic améliore la saveur et repousse les parasites", en: "Basil improves flavour and repels pests" }
   defavorables:
     - id: LEG-006

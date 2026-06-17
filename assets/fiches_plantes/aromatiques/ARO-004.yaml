@@ -96,10 +96,12 @@ periodes:
 associations:
   beneficies:
     - id: LEG-006
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les papillons blancs des choux, améliore la vigueur", en: "Repels cabbage white butterflies, improves vigour" }
     - id: LEG-007
       raison_i18n: { fr: "Compagnonnage favorable avec les crucifères", en: "Favourable companion planting with brassicas" }
     - id: LEG-011
+      type: repulsion_ravageur
       raison_i18n: { fr: "Éloigne les pucerons des cucurbitacées", en: "Deters aphids from cucurbits" }
     - id: LEG-022
       raison_i18n: { fr: "Association favorable documentée au jardin", en: "Documented favourable garden association" }

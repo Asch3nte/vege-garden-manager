@@ -85,6 +85,7 @@ associations:
       raison_i18n: { fr: "Bon usage de l'espace en association", en: "Good companion for space use" }
   defavorables:
     - id: LEG-003
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille Amaranthaceae, mêmes maladies", en: "Same Amaranthaceae family, same diseases" }
 rotation:
   famille: amaranthaceae

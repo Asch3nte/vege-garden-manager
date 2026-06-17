@@ -1,4 +1,5 @@
 import '../entities/fiche_plante.dart';
+import '../enums/sens_association.dart';
 import '../value_objects/association_benefique.dart';
 import '../value_objects/association_conflit.dart';
 
@@ -25,8 +26,9 @@ enum TypeCompagnonnage {
 class CompagnonAvecRaison<A> {
   final FichePlante _fiche;
   final A _association;
+  final SensAssociation _sens;
 
-  CompagnonAvecRaison(this._fiche, this._association);
+  CompagnonAvecRaison(this._fiche, this._association, this._sens);
 
   /// The companion plant.
   FichePlante get fiche => _fiche;
@@ -34,6 +36,9 @@ class CompagnonAvecRaison<A> {
   /// The typed association (an [AssociationBenefique] or [AssociationConflit])
   /// behind the relationship.
   A get association => _association;
+
+  /// Direction seen from the centre (donne / recoit / mutuel, ADR-0012).
+  SensAssociation get sens => _sens;
 }
 
 /// A sheet's companions within a catalogue, split by relationship kind.
@@ -118,6 +123,27 @@ class ResolveurCompagnonnage {
   AssociationConflit? conflitEntre(FichePlante a, FichePlante b) =>
       a.associationConflitAvec(b.id) ?? b.associationConflitAvec(a.id);
 
+  /// Direction of the **beneficial** relation seen from [centre] (ADR-0012):
+  /// [SensAssociation.donne] when only [centre]'s sheet declares it,
+  /// [SensAssociation.recoit] when only [autre]'s does, [SensAssociation.mutuel]
+  /// when both. `null` when no benefit is declared either way.
+  SensAssociation? sensBenefice(FichePlante centre, FichePlante autre) =>
+      _sens(centre.associationBenefiqueAvec(autre.id) != null,
+          autre.associationBenefiqueAvec(centre.id) != null);
+
+  /// Direction of the **conflicting** relation seen from [centre] (ADR-0012),
+  /// with the same rule as [sensBenefice].
+  SensAssociation? sensConflit(FichePlante centre, FichePlante autre) =>
+      _sens(centre.associationConflitAvec(autre.id) != null,
+          autre.associationConflitAvec(centre.id) != null);
+
+  static SensAssociation? _sens(bool centreDeclare, bool autreDeclare) {
+    if (centreDeclare && autreDeclare) return SensAssociation.mutuel;
+    if (centreDeclare) return SensAssociation.donne;
+    if (autreDeclare) return SensAssociation.recoit;
+    return null;
+  }
+
   /// The relationship between [a] and [b]: [TypeCompagnonnage.bon] wins over
   /// [TypeCompagnonnage.aEviter] (precedence); [TypeCompagnonnage.aucune] when
   /// neither sheet declares anything, and always for a sheet with itself.
@@ -141,9 +167,11 @@ class ResolveurCompagnonnage {
       switch (relationEntre(fiche, autre)) {
         case TypeCompagnonnage.bon:
           // Non-null: a `bon` relation means a benefit was declared on a side.
-          bons.add(CompagnonAvecRaison(autre, beneficeEntre(fiche, autre)!));
+          bons.add(CompagnonAvecRaison(autre, beneficeEntre(fiche, autre)!,
+              sensBenefice(fiche, autre)!));
         case TypeCompagnonnage.aEviter:
-          aEviter.add(CompagnonAvecRaison(autre, conflitEntre(fiche, autre)!));
+          aEviter.add(CompagnonAvecRaison(autre, conflitEntre(fiche, autre)!,
+              sensConflit(fiche, autre)!));
         case TypeCompagnonnage.aucune:
           break;
       }

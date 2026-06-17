@@ -4,6 +4,7 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/enums/sens_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_conflit_association.dart';
 import 'package:pot_a_gerer/domain/services/resolveur_compagnonnage.dart';
@@ -150,6 +151,46 @@ void main() {
       final res = resolveur.resoudre(uneFiche('A'), [uneFiche('B')]);
       expect(() => res.bons.add(uneFiche('X')), throwsUnsupportedError);
       expect(() => res.aEviter.add(uneFiche('X')), throwsUnsupportedError);
+    });
+  });
+
+  group('sens — direction curatée (ADR-0012)', () {
+    test('donne quand seul le centre déclare la paire', () {
+      final a = uneFiche('A', benefiques: {'B'});
+      final b = uneFiche('B');
+      expect(resolveur.sensBenefice(a, b), SensAssociation.donne);
+      expect(resolveur.resoudre(a, [a, b]).bonsDetailles.single.sens,
+          SensAssociation.donne);
+    });
+
+    test('recoit quand seule l autre plante déclare la paire', () {
+      final a = uneFiche('A');
+      final b = uneFiche('B', benefiques: {'A'});
+      expect(resolveur.sensBenefice(a, b), SensAssociation.recoit);
+      expect(resolveur.resoudre(a, [a, b]).bonsDetailles.single.sens,
+          SensAssociation.recoit);
+    });
+
+    test('mutuel quand les deux déclarent', () {
+      final a = uneFiche('A', benefiques: {'B'});
+      final b = uneFiche('B', benefiques: {'A'});
+      expect(resolveur.sensBenefice(a, b), SensAssociation.mutuel);
+    });
+
+    test('sens du conflit suit la même règle', () {
+      final a = uneFiche('A', negatives: {'B'});
+      final b = uneFiche('B');
+      expect(resolveur.sensConflit(a, b), SensAssociation.donne);
+      expect(resolveur.resoudre(a, [a, b]).aEviterDetailles.single.sens,
+          SensAssociation.donne);
+      expect(resolveur.sensConflit(b, a), SensAssociation.recoit);
+    });
+
+    test('null sans relation', () {
+      final a = uneFiche('A');
+      final b = uneFiche('B');
+      expect(resolveur.sensBenefice(a, b), isNull);
+      expect(resolveur.sensConflit(a, b), isNull);
     });
   });
 
