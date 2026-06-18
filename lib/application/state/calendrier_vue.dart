@@ -38,6 +38,7 @@ class CalendrierVue {
   final int _faites;
   final DateTime _moisAffiche;
   final List<GroupeJour> _groupesMois;
+  final Map<String, String> _ciblesNoms;
 
   CalendrierVue._(
     this._portee,
@@ -46,16 +47,20 @@ class CalendrierVue {
     this._faites,
     this._moisAffiche,
     List<GroupeJour> groupesMois,
+    Map<String, String> ciblesNoms,
   )   : _groupes = List.unmodifiable(groupes),
-        _groupesMois = List.unmodifiable(groupesMois);
+        _groupesMois = List.unmodifiable(groupesMois),
+        _ciblesNoms = Map.unmodifiable(ciblesNoms);
 
   /// Builds the calendar view from its agenda [groupes] and the displayed
-  /// month's [groupesMois]; agenda counts are derived.
+  /// month's [groupesMois]; agenda counts are derived. [ciblesNoms] maps each
+  /// task target (`'<cible>:<cibleId>'`) to its resolved display name.
   factory CalendrierVue({
     required PorteeAgenda portee,
     required List<GroupeJour> groupes,
     required DateTime moisAffiche,
     required List<GroupeJour> groupesMois,
+    Map<String, String> ciblesNoms = const {},
   }) {
     var total = 0;
     var faites = 0;
@@ -70,8 +75,14 @@ class CalendrierVue {
       faites,
       moisAffiche,
       groupesMois,
+      ciblesNoms,
     );
   }
+
+  /// Resolved display name of a [tache]'s target (the garden, a zone or a crop),
+  /// or `null` when it cannot be resolved (equipment, or a deleted target).
+  String? cibleNom(Tache tache) =>
+      _ciblesNoms['${tache.cible.name}:${tache.cibleId}'];
 
   /// Current window scope.
   PorteeAgenda get portee => _portee;

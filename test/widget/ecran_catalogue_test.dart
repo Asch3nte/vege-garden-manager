@@ -8,6 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
+import 'package:pot_a_gerer/domain/entities/bioagresseur.dart';
 import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -15,16 +17,22 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/type_bioagresseur.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_cache.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/providers/ajout_plante_provider.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
@@ -73,7 +81,9 @@ void main() {
         dureeAvantRecolteJoursMin: 60,
         dureeAvantRecolteJoursMax: 80,
         periodes: const {},
-        associationsBenefiques: bons,
+        associationsBenefiques: [
+          for (final id in bons) AssociationBenefique(cibleId: id),
+        ],
       );
 
   setUp(() {
@@ -100,6 +110,9 @@ void main() {
             nomScientifique: 'Solanaceae',
             categories: const {CategoriePlante.legume},
             nomsLocalises: const {'fr': 'Solanacées'},
+            pourquoiRotationLocalise: const {'fr': 'Rotation de 4 ans conseillée.'},
+            maladiesCommunes: const {'mildiou'},
+            ravageursCommuns: const {'doryphore'},
           ),
           FamilleBotanique(
             id: 'cucurbitaceae',
@@ -122,14 +135,41 @@ void main() {
         ]);
   });
 
-  Future<void> monter(WidgetTester tester, {bool avecCible = false}) async {
+  Future<void> monter(
+    WidgetTester tester, {
+    bool avecCible = false,
+    // Intermediate by default so the Réseau view (intermediate+, ADR-0009) is
+    // available — matching these tests' assumptions before gating.
+    NiveauExperience niveau = NiveauExperience.intermediaire,
+  }) async {
+    // Tall surface so the plant list stays fully laid out even when a level-up
+    // teaser occupies the bottom (shown to beginners).
+    tester.view.physicalSize = const Size(900, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
+          // Family-level educational section (ADR-0006 Lot 4) reads the caches.
+          familleBotaniqueCacheProvider.overrideWith(
+              (ref) async => FamilleBotaniqueCache(await familles.obtenirToutes())),
+          bioagresseurCacheProvider.overrideWith((ref) async => BioagresseurCache([
+                Bioagresseur(
+                    id: 'mildiou',
+                    type: TypeBioagresseur.maladie,
+                    nomsLocalises: const {'fr': 'Mildiou'}),
+                Bioagresseur(
+                    id: 'doryphore',
+                    type: TypeBioagresseur.ravageur,
+                    nomsLocalises: const {'fr': 'Doryphore'}),
+              ])),
           potagerRepositoryProvider.overrideWithValue(potagers),
+          accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
           if (avecCible) ajoutPlanteProvider.overrideWith(_CibleFixe.new),
         ],
         child: MaterialApp(
@@ -223,6 +263,25 @@ void main() {
     expect(find.text('Basilic'), findsWidgets);
   });
 
+  testWidgets('the detail sheet shows the family education section (ADR-0006 Lot 4)',
+      (tester) async {
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('Sa famille : Solanacées'),
+      200,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('Sa famille : Solanacées'), findsOneWidget);
+    expect(find.text('Rotation de 4 ans conseillée.'), findsOneWidget);
+    // Slugs resolved to localized bioaggressor names as chips.
+    expect(find.widgetWithText(Chip, 'Mildiou'), findsOneWidget);
+    expect(find.widgetWithText(Chip, 'Doryphore'), findsOneWidget);
+  });
+
   testWidgets('the detail sheet offers to add the plant to the garden',
       (tester) async {
     await monter(tester);
@@ -231,6 +290,92 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Ajouter au potager'), findsOneWidget);
+  });
+
+  testWidgets('a fiche card opens the detailed Associations view (ADR-0008)',
+      (tester) async {
+    await monter(tester);
+
+    // Each species card carries an Associations button (Fiches view).
+    await tester.tap(find.byTooltip('Associations').first);
+    await tester.pumpAndSettle();
+
+    // The full-screen Associations view opened (its close button).
+    expect(find.byIcon(Icons.close), findsOneWidget);
+  });
+
+  testWidgets("the detail sheet switches to one of the species' varieties",
+      (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+        fiche('basilic', 'Basilic', CategoriePlante.aromatique),
+      ],
+    );
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+
+    // The switcher line shows the species; the panel shows the species' sheet.
+    expect(find.text('Choisir variété…'), findsOneWidget);
+    expect(find.text('tomate sp'), findsOneWidget);
+
+    // The picker lists only this species' varieties — not other species
+    // (variety rows carry the scientific name; the background cards do not).
+    await tester.tap(find.text('Choisir variété…'));
+    await tester.pumpAndSettle();
+    expect(find.text('tomate-v1 sp'), findsOneWidget);
+    expect(find.text('basilic sp'), findsNothing);
+
+    // Choosing the variety re-renders the whole panel for it.
+    await tester.tap(find.text('Tomate Cerise').last);
+    await tester.pumpAndSettle();
+    expect(find.text('tomate-v1 sp'), findsOneWidget);
+
+    // The back button returns to the species sheet.
+    await tester.tap(find.byTooltip("Retour à l'espèce"));
+    await tester.pumpAndSettle();
+    expect(find.text('tomate sp'), findsOneWidget);
+    expect(find.text('tomate-v1 sp'), findsNothing);
+  });
+
+  testWidgets('the OS back returns from a variety to the species sheet',
+      (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+      ],
+    );
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choisir variété…'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tomate Cerise').last);
+    await tester.pumpAndSettle();
+    expect(find.text('tomate-v1 sp'), findsOneWidget);
+
+    // The OS back gesture returns to the species without closing the sheet.
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('tomate sp'), findsOneWidget);
+    expect(find.text('Ajouter au potager'), findsOneWidget);
+  });
+
+  testWidgets('a species with no varieties shows no variety switcher',
+      (tester) async {
+    await monter(tester);
+
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Choisir variété…'), findsNothing);
   });
 
   testWidgets('shows the add banner for a pending target and clears it on close',
@@ -321,6 +466,33 @@ void main() {
     expect(find.text('Tomate Cerise'), findsOneWidget);
   });
 
+  testWidgets('the variety toggle stays as narrow as a plain chevron', (
+    tester,
+  ) async {
+    // Regression: a default IconButton reserves a 48px touch target, which on a
+    // species *with* varieties narrows the meta area and pushes "Arrosage
+    // modéré" onto a second line — but only there, so cards no longer line up.
+    // The toggle must keep the bare-icon footprint of the plain chevron.
+    when(() => fiches.obtenirToutes()).thenAnswer(
+      (_) async => [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+        fiche('basilic', 'Basilic', CategoriePlante.aromatique),
+      ],
+    );
+    await monter(tester);
+
+    final toggle = tester.getSize(find.byTooltip('1 variété')).width;
+    final chevron =
+        tester.getSize(find.byIcon(Icons.chevron_right).first).width;
+    expect(
+      toggle,
+      lessThanOrEqualTo(chevron + 1),
+      reason: 'the expand toggle must be as compact as the plain chevron',
+    );
+  });
+
   testWidgets('the network view shows species only (varieties excluded)',
       (tester) async {
     when(() => fiches.obtenirToutes()).thenAnswer(
@@ -339,6 +511,27 @@ void main() {
     expect(find.text('Tomate Cerise'), findsNothing);
   });
 
+  testWidgets('the Réseau view is hidden for beginners (ADR-0009)',
+      (tester) async {
+    await monter(tester, niveau: NiveauExperience.debutant);
+
+    // No Fiches/Réseau toggle for a beginner — only the Fiches list.
+    expect(find.text('Réseau'), findsNothing);
+    expect(find.text('Tomate'), findsOneWidget);
+  });
+
+  testWidgets('a beginner sees a dismissable level-up teaser (ADR-0009 §4b)',
+      (tester) async {
+    await monter(tester, niveau: NiveauExperience.debutant);
+
+    expect(find.text('En savoir plus'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Masquer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('En savoir plus'), findsNothing);
+  });
+
   testWidgets('switching to the network view shows the constellation',
       (tester) async {
     await monter(tester);
@@ -346,10 +539,12 @@ void main() {
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
 
-    // The hint is shown and the Fiches-only search field is gone.
+    // The hint is shown; the Fiches search box is replaced by the network's
+    // own name search — collapsed to a magnifier button (ADR-0008 Lot 5).
     expect(find.text('Touchez une plante pour voir ses associations.'),
         findsOneWidget);
-    expect(find.byType(TextField), findsNothing);
+    expect(find.text('Nom, sol, exposition…'), findsNothing);
+    expect(find.byIcon(Icons.search), findsOneWidget);
   });
 
   testWidgets('selecting a node reveals its associations', (tester) async {
@@ -362,8 +557,9 @@ void main() {
     await tester.tap(find.text('T'));
     await tester.pumpAndSettle();
 
-    // The panel names the plant and counts its (one) good companion.
-    expect(find.text('Tomate'), findsOneWidget);
+    // The panel names the plant (also shown as a node label since #8a) and
+    // counts its (one) good companion (panel-only).
+    expect(find.text('Tomate'), findsWidgets);
     expect(find.textContaining('1 bon compagnon'), findsOneWidget);
   });
 

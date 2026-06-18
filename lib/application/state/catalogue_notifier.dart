@@ -74,8 +74,10 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
         FamilleBotanique.normaliserCle(f.familleBotanique);
 
     final meres = _toutes.where((f) => f.estMere).toList()..sort(parNom);
+    final toutesVarietes = _toutes.where((f) => f.estVariete).toList()
+      ..sort(parNom);
     final varietesParParent = <String, List<FichePlante>>{};
-    for (final f in _toutes.where((f) => f.estVariete)) {
+    for (final f in toutesVarietes) {
       (varietesParParent[f.parentId!] ??= []).add(f);
     }
 
@@ -101,6 +103,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
       familles: _famillesDeCategorie(meres),
       groupes: groupes,
       toutesMeres: meres,
+      toutesVarietes: toutesVarietes,
     );
   }
 

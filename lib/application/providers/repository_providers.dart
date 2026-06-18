@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/repositories/abstract_bioagresseur_repository.dart';
 import '../../domain/repositories/abstract_equipement_repository.dart';
 import '../../domain/repositories/abstract_famille_botanique_repository.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
@@ -11,12 +12,16 @@ import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_rappel_repository.dart';
 import '../../domain/repositories/abstract_recolte_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
+import '../../infrastructure/catalogue/bioagresseur_asset_source.dart';
+import '../../infrastructure/catalogue/bioagresseur_cache.dart';
+import '../../infrastructure/catalogue/bioagresseurs_loader.dart';
 import '../../infrastructure/catalogue/catalogue_loader.dart';
 import '../../infrastructure/catalogue/famille_asset_source.dart';
 import '../../infrastructure/catalogue/famille_botanique_cache.dart';
 import '../../infrastructure/catalogue/familles_loader.dart';
 import '../../infrastructure/catalogue/fiche_asset_source.dart';
 import '../../infrastructure/catalogue/fiche_plante_cache.dart';
+import '../../infrastructure/repositories/bioagresseur_repository_impl.dart';
 import '../../infrastructure/repositories/equipement_repository_impl.dart';
 import '../../infrastructure/repositories/famille_botanique_repository_impl.dart';
 import '../../infrastructure/repositories/fiche_plante_repository_impl.dart';
@@ -108,5 +113,24 @@ final familleBotaniqueRepositoryProvider =
     FutureProvider<AbstractFamilleBotaniqueRepository>(
   (ref) async => FamilleBotaniqueRepositoryImpl(
     await ref.watch(familleBotaniqueCacheProvider.future),
+  ),
+);
+
+/// Pipeline that reads/parses/validates the embedded bioaggressor reference
+/// (diseases & pests shared at family level, ADR-0006 Lot 4).
+final bioagresseursLoaderProvider = Provider<BioagresseursLoader>(
+  (ref) => BioagresseursLoader(BundleBioagresseurAssetSource()),
+);
+
+/// The in-memory bioaggressor cache, loaded once from the bundled reference.
+final bioagresseurCacheProvider = FutureProvider<BioagresseurCache>(
+  (ref) => ref.watch(bioagresseursLoaderProvider).charger(),
+);
+
+/// The bioaggressor repository. Async because it depends on the loaded cache.
+final bioagresseurRepositoryProvider =
+    FutureProvider<AbstractBioagresseurRepository>(
+  (ref) async => BioagresseurRepositoryImpl(
+    await ref.watch(bioagresseurCacheProvider.future),
   ),
 );

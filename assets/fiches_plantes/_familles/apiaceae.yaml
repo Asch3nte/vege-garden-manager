@@ -10,6 +10,12 @@ i18n:
       Famille à fleurs en ombelles : carotte, céleri, panais, fenouil, mais
       aussi persil, coriandre, aneth et cerfeuil. Leurs ombelles attirent de
       nombreux auxiliaires (syrphes, parasitoïdes).
+    pourquoi_rotation: >
+      Sensibles à la mouche de la carotte et aux pourritures du collet, les apiacées demandent au moins 3 ans de rotation et un sol meuble sans fumure fraîche, qui ferait fourcher les racines.
+    ennemis_communs_note: >
+      La mouche de la carotte (galeries dans les racines) est l'ennemie commune ; alternariose et oïdium marquent le feuillage en fin de saison.
+    associations_note: >
+      Carottes et alliacées se protègent mutuellement par brouillage olfactif (mouche de la carotte contre mouche de l'oignon) ; les ombelles d'aneth et de coriandre attirent les auxiliaires.
 maladies_communes: [alternariose, oidium, sclerotiniose]
 ravageurs_communs: [mouche_carotte, puceron]
 delai_retour_annees: 3

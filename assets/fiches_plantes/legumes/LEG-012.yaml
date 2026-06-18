@@ -53,6 +53,7 @@ besoins:
   temperature_min_survie: -15
   gele_fatal: false
 cycle:
+  enracinement: superficiel
   type: annuelle
   duree_germination_jours: [7, 14]
   duree_avant_recolte_jours: [40, 60]
@@ -85,6 +86,7 @@ associations:
       raison_i18n: { fr: "Bon usage de l'espace en association", en: "Good companion for space use" }
   defavorables:
     - id: LEG-003
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille Amaranthaceae, mêmes maladies", en: "Same Amaranthaceae family, same diseases" }
 rotation:
   famille: amaranthaceae

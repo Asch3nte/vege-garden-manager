@@ -56,6 +56,7 @@ besoins:
   temperature_min_survie: -10
   gele_fatal: false
 cycle:
+  enracinement: moyen
   type: annuelle
   duree_germination_jours: [5, 10]
   duree_avant_recolte_jours: [70, 100]
@@ -87,11 +88,14 @@ periodes:
 associations:
   beneficies:
     - id: LEG-014
+      type: etagement_lumiere
       raison_i18n: { fr: "Profite de l'espace sous les brocolis", en: "Uses space under broccoli" }
     - id: aneth
+      type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires contre les chenilles", en: "Attracts beneficial insects against caterpillars" }
   defavorables:
     - id: moutarde
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, mêmes maladies et ravageurs", en: "Same family, same diseases and pests" }
 rotation:
   famille: brassicaceae

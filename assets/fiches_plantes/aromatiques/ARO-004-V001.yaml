@@ -1,0 +1,55 @@
+# Fiche fille (variété) — Thym Citron. Hérite de ARO-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-004-V001
+parent_id: ARO-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Thymus × citriodorus"
+
+i18n:
+  fr:
+    nom_commun: Thym citron
+    noms_alternatifs: [Thym citronnelle, Lemon thyme]
+    description: >
+      Hybride naturel entre Thymus vulgaris et Thymus pulegioides, aux feuilles
+      vert pâle parfois panachées, dégageant un puissant arôme citronné (citral,
+      géraniol). Légèrement moins rustique que le thym commun (–12 °C). Fleurs
+      blanc rosé très mellifères. Exceptionnel pour les poissons, volailles,
+      desserts et infusions.
+    conseils_culture: >
+      Mêmes besoins que le thym commun. Légèrement moins tolérant au froid
+      intense : protéger en zone 6 avec un paillage hivernal. Tailler après
+      floraison. Éviter les sols lourds et humides.
+    conseils_recolte: >
+      Cueillir les rameaux verts avant floraison pour un arôme citronné
+      maximal. Les feuilles fraîches sont bien plus parfumées que les séchées.
+    erreurs_frequentes:
+      - Sol détrempé en hiver (plus sensible à la pourriture que le thym commun)
+  en:
+    nom_commun: Lemon thyme
+    description: >
+      Natural hybrid with pale green leaves and a powerful lemon scent (citral,
+      geraniol). Slightly less hardy than common thyme. Excellent for fish,
+      poultry, desserts and herbal teas.
+
+rusticite:
+  zone_min: zone6
+
+besoins:
+  temperature_min_survie: -12
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Arôme citronné bien conservé au séchage à basse température (< 35 °C)", en: "Lemon scent well preserved when dried at low temperature (< 35 °C)" }
+utilisations_culinaires_i18n:
+  fr: [Poisson, poulet rôti, desserts aux fruits, tisane citronnée, huile parfumée, cake]
+  en: [Fish, roast chicken, fruit desserts, lemon herbal tea, infused oil, cake]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Thym_citron
+contributeurs:
+  - "@potagerer"

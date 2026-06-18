@@ -15,6 +15,7 @@ import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/enums/langue.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
@@ -129,8 +130,8 @@ void main() {
     await tester.tap(find.text('Confidentialité & opt-outs'));
     await tester.pumpAndSettle();
 
-    // Default is "Désactivée"; tapping the row cycles to "Manuelle".
-    expect(find.text('Désactivée'), findsOneWidget);
+    // Default is "Aucune" (off); tapping the row cycles to "Région" (manual).
+    expect(find.text('Aucune'), findsOneWidget);
     await tester.tap(find.text('Géolocalisation'));
     await tester.pumpAndSettle();
 
@@ -143,6 +144,12 @@ void main() {
 
   testWidgets('privacy panel sets the garden position (manual mode)',
       (tester) async {
+    // Wide surface so the map's region band fits without horizontal scrolling.
+    tester.view.physicalSize = const Size(1600, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     when(() => repo.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(
         modeGeolocalisation: ModeGeolocalisation.manuelle,
@@ -168,10 +175,13 @@ void main() {
     expect(find.text('Position du potager'), findsOneWidget);
     expect(find.text('Aucune — touchez pour la définir'), findsOneWidget);
 
-    // Tapping it opens the region picker; choosing one stores the position.
+    // Tapping it opens the world map; jumping to a region and confirming
+    // stores the position.
     await tester.tap(find.text('Position du potager'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
 
     final potager =
@@ -179,10 +189,46 @@ void main() {
     expect(potager.localisation.estDefinie, isTrue);
   });
 
+  testWidgets('privacy panel edits the active garden climate', (tester) async {
+    when(() => potagers.obtenirPotagerActif()).thenAnswer(
+      (_) async => Potager(
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+      ),
+    );
+    when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+
+    await monter(tester);
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    // The climate row shows the current value (even with geoloc off).
+    expect(find.text('Océanique'), findsOneWidget);
+
+    // Tapping opens the descriptive picker; choosing another climate persists it.
+    await tester.tap(find.text('Climat'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Méditerranéen'));
+    await tester.pumpAndSettle();
+
+    final potager =
+        verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;
+    expect(potager.zoneClimatique.type, TypeClimat.mediterraneen);
+    expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone8); // preserved
+  });
+
   testWidgets('notifications master gates the categories', (tester) async {
-    // Start with the master switch off.
+    // Master off; intermediate level so the per-category toggles are shown
+    // (they are an intermediate+ feature — ADR-0009).
     when(() => repo.charger()).thenAnswer(
-      (_) async => PreferencesUtilisateur(notificationsGlobalesActives: false),
+      (_) async => PreferencesUtilisateur(
+        notificationsGlobalesActives: false,
+        niveauExperience: NiveauExperience.intermediaire,
+      ),
     );
     await monter(tester);
 
@@ -192,7 +238,19 @@ void main() {
     // Every category switch is disabled while the master is off.
     final switches = tester.widgetList<Switch>(find.byType(Switch)).toList();
     // First switch is the master (off, enabled); the rest are disabled.
+    expect(switches.length, greaterThan(1));
     expect(switches.first.onChanged, isNotNull);
     expect(switches.skip(1).every((s) => s.onChanged == null), isTrue);
+  });
+
+  testWidgets('a beginner sees only the master notifications switch (ADR-0009)',
+      (tester) async {
+    // Default level is débutant → per-category toggles are hidden.
+    await monter(tester);
+
+    await tester.tap(find.text('Notifications'));
+    await tester.pumpAndSettle();
+
+    expect(tester.widgetList<Switch>(find.byType(Switch)).length, 1);
   });
 }

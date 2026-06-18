@@ -1,0 +1,64 @@
+# Fiche fille (variété) — Fraisier Gariguette. Hérite de PFR-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: PFR-001-V001
+parent_id: PFR-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Fragaria × ananassa 'Gariguette'"
+
+i18n:
+  fr:
+    nom_commun: Fraisier Gariguette
+    noms_alternatifs: [Gariguette INRA, Gariguette 1977]
+    description: >
+      Variété française de référence, créée par l'INRA en 1977 (croisement
+      Belrubi × Favette). Fruits allongés, coniques, rouge orangé brillant,
+      de 15 à 25 g. Chair ferme, peu colorée intérieurement, à l'arôme intense
+      et sucré légèrement acidulé. Variété non-remontante précoce : récolte
+      concentrée en mai-juin. Emblème de la gastronomie française.
+    conseils_culture: >
+      Plantation en automne (septembre-octobre) pour une récolte dès mai.
+      Sol riche et bien drainé, légèrement acide. Éviter les sols calcaires.
+      Paillage impératif pour protéger les fruits de la terre et conserver
+      l'humidité. Renouveler les plants tous les 3 ans.
+    conseils_recolte: >
+      Récolter à pleine maturité (rouge vif uniforme). La Gariguette a une
+      peau fine — manipuler avec soin et consommer rapidement après récolte.
+      Récolte quotidienne conseillée en pleine production.
+    erreurs_frequentes:
+      - Plantation tardive au printemps (récolte la première année quasi nulle)
+      - Garder les stolons (épuisent la plante au détriment des fruits)
+  en:
+    nom_commun: Gariguette strawberry
+    description: >
+      French reference variety (INRA 1977). Elongated, bright orange-red fruits
+      (15–25 g) with intense sweet-tart aroma. Early non-remontant variety,
+      harvest concentrated in May–June. Icon of French gastronomy.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [5, 6]
+    continental:
+      plantation: [3, 4]
+      recolte: [5, 7]
+    mediterraneen:
+      plantation: [2, 3]
+      recolte: [4, 6]
+
+conservation:
+  - methode: frais
+    duree_jours: 2
+    conditions_i18n: { fr: "Très fragile — consommer le jour même de préférence, max 2 jours au réfrigérateur", en: "Very fragile — best consumed same day, 2 days maximum in fridge" }
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Crue nature, tarte aux fraises, charlotte, fraises à la crème, confiture, coulis]
+  en: [Fresh, strawberry tart, charlotte, strawberries with cream, jam, coulis]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Gariguette
+contributeurs:
+  - "@potagerer"

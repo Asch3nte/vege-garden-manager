@@ -1,0 +1,528 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Référentiel des BIOAGRESSEURS (maladies & ravageurs) — Pot'à Gérer
+# Spécification : docs/decisions/0006-fiches-famille-botanique.md (ADR-0006, Lot 4)
+# Schéma : assets/fiches_plantes/_referentiels/_schema_bioagresseurs.yaml
+#
+# Normalise les slugs employés par `maladies_communes` / `ravageurs_communs`
+# des fiches FAMILLE. Un slug absent d'ici est rejeté (intégrité référentielle).
+# `nom` (fr) est seedé ; `description` et `code_eppo` seront complétés
+# (tool/scrap_famille.dart → Wikidata/EPPO, puis relecture humaine).
+# ─────────────────────────────────────────────────────────────────────────────
+schema_version: 1
+bioagresseurs:
+  # ── Maladies ──
+  alternariose:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Alternariose"
+        description: "Champignon provoquant des taches brunes concentriques sur feuilles et fruits, surtout par temps chaud et humide."
+  anthracnose:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Anthracnose"
+        description: "Maladie cryptogamique formant des taches brunes déprimées sur feuilles, tiges et fruits par temps humide."
+  bacteriose_noyer:
+    type: maladie
+    i18n:
+      fr: { nom: "Bactériose du noyer" }
+  bacteriose_psa:
+    type: maladie
+    i18n:
+      fr: { nom: "Bactériose PSA (du kiwi)" }
+  black_rot:
+    type: maladie
+    i18n:
+      fr: { nom: "Black rot (pourriture noire)" }
+  botrytis:
+    type: maladie
+    i18n:
+      fr: { nom: "Botrytis (pourriture grise)" }
+  cercosporiose:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Cercosporiose"
+        description: "Champignon causant de petites taches grises à bord foncé sur le feuillage, en fin de saison."
+  chancre:
+    type: maladie
+    i18n:
+      fr: { nom: "Chancre" }
+  chancre_chataignier:
+    type: maladie
+    i18n:
+      fr: { nom: "Chancre du châtaignier" }
+  charbon:
+    type: maladie
+    i18n:
+      fr: { nom: "Charbon" }
+  encre:
+    type: maladie
+    i18n:
+      fr: { nom: "Maladie de l'encre" }
+  feu_bacterien:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Feu bactérien"
+        description: "Bactérie qui dessèche brutalement fleurs et rameaux, comme brûlés, sur les fruitiers à pépins."
+  feu_tulipe:
+    type: maladie
+    i18n:
+      fr: { nom: "Feu de la tulipe" }
+  fumagine:
+    type: maladie
+    i18n:
+      fr: { nom: "Fumagine" }
+  fusariose:
+    type: maladie
+    i18n:
+      fr: { nom: "Fusariose" }
+  fusariose_lin:
+    type: maladie
+    i18n:
+      fr: { nom: "Fusariose du lin" }
+  gommose:
+    type: maladie
+    i18n:
+      fr: { nom: "Gommose" }
+  hernie_chou:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Hernie du chou"
+        description: "Champignon du sol déformant les racines des crucifères en galles ; persiste des années, favorisé par les sols acides."
+  heterosporiose_iris:
+    type: maladie
+    i18n:
+      fr: { nom: "Hétérosporiose de l'iris" }
+  mildiou:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Mildiou"
+        description: "Maladie cryptogamique formant des taches huileuses puis un feutrage, explosant par temps doux et humide."
+  mildiou_laitue:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Mildiou de la laitue"
+        description: "Mildiou de la laitue : taches jaunes sur le dessus, duvet blanc dessous, par temps frais et humide."
+  mildiou_oignon:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Mildiou de l'oignon"
+        description: "Mildiou des alliacées : taches pâles et feutrage gris sur les feuilles, en conditions humides."
+  moniliose:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Moniliose"
+        description: "Champignon pourrissant les fruits à noyau et à pépins, qui se momifient sur l'arbre."
+  moniliose_noisette:
+    type: maladie
+    i18n:
+      fr: { nom: "Moniliose du noisetier" }
+  oeil_de_paon:
+    type: maladie
+    i18n:
+      fr: { nom: "Œil de paon" }
+  oidium:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Oïdium"
+        description: "Maladie cryptogamique formant un feutrage blanc poudreux sur le feuillage, par temps chaud et sec."
+  oidium_americain:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Oïdium américain"
+        description: "Oïdium du groseillier blanchissant jeunes pousses et fruits, qui brunissent ensuite."
+  phytophthora:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Phytophthora"
+        description: "Champignon du sol pourrissant le collet et les racines en sol gorgé d'eau."
+  pourriture_blanche:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Pourriture blanche"
+        description: "Champignon du sol pourrissant les bulbes d'alliacées ; persiste très longtemps en terre."
+  pourriture_bulbe:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture des bulbes" }
+  pourriture_chataigne:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture de la châtaigne" }
+  pourriture_fruit:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture des fruits" }
+  pourriture_grise:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Pourriture grise"
+        description: "Botrytis gris-cendré gâtant fleurs, fruits et tissus tendres par temps humide."
+  pourriture_racinaire:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Pourriture racinaire"
+        description: "Pourriture des racines et du collet en sol trop humide et mal drainé."
+  pourriture_rhizome:
+    type: maladie
+    i18n:
+      fr: { nom: "Pourriture des rhizomes" }
+  rouille:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Rouille"
+        description: "Champignon formant des pustules orangées à brunes sous les feuilles."
+  rouille_asperge:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille de l'asperge" }
+  rouille_blanche:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Rouille blanche"
+        description: "Maladie formant des pustules blanches sous les feuilles des amaranthacées et crucifères."
+  rouille_figuier:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du figuier" }
+  rouille_glaieul:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du glaïeul" }
+  rouille_grillage:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Rouille grillagée"
+        description: "Rouille du poirier (hôte alterne le genévrier) marquant les feuilles de taches orangées."
+  rouille_lin:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du lin" }
+  rouille_malvacees:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille des malvacées" }
+  rouille_muflier:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du muflier" }
+  rouille_oeillet:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille de l'œillet" }
+  rouille_pelargonium:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille du pélargonium" }
+  rouille_poireau:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Rouille du poireau"
+        description: "Rouille des alliacées : pustules orangées sur les feuilles de poireau et d'ail."
+  rouille_vesiculeuse:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Rouille vésiculeuse"
+        description: "Rouille du groseillier (hôte alterne le pin) formant des pustules orangées."
+  rouille_violette:
+    type: maladie
+    i18n:
+      fr: { nom: "Rouille de la violette" }
+  sclerotiniose:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Sclérotiniose"
+        description: "Champignon du sol provoquant un pourrissement aqueux et un feutrage blanc cotonneux."
+  taches_foliaires:
+    type: maladie
+    i18n:
+      fr: { nom: "Taches foliaires" }
+  tavelure:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Tavelure"
+        description: "Champignon tachant de brun-olive feuilles et fruits du pommier et du poirier, par printemps humide."
+  verticilliose:
+    type: maladie
+    i18n:
+      fr:
+        nom: "Verticilliose"
+        description: "Champignon du sol obstruant les vaisseaux, causant flétrissement et jaunissement unilatéral."
+  # ── Ravageurs ──
+  aleurode:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Aleurode (mouche blanche)"
+        description: "Petite mouche blanche dont les colonies pompent la sève sous les feuilles et produisent du miellat."
+  altise:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Altise"
+        description: "Petit coléoptère sauteur criblant de trous les jeunes feuilles de crucifères."
+  altise_lin:
+    type: ravageur
+    i18n:
+      fr: { nom: "Altise du lin" }
+  araignee_rouge:
+    type: ravageur
+    i18n:
+      fr: { nom: "Araignée rouge" }
+  balanin:
+    type: ravageur
+    i18n:
+      fr: { nom: "Balanin" }
+  balanin_noisette:
+    type: ravageur
+    i18n:
+      fr: { nom: "Balanin de la noisette" }
+  bruche:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Bruche"
+        description: "Coléoptère dont la larve se développe dans les graines de légumineuses (pois, haricots, fèves)."
+  carpocapse:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Carpocapse"
+        description: "Papillon dont la chenille (le ver) creuse pommes, poires, prunes et noix."
+  carpocapse_chataigne:
+    type: ravageur
+    i18n:
+      fr: { nom: "Carpocapse des châtaignes" }
+  charancon_patate:
+    type: ravageur
+    i18n:
+      fr: { nom: "Charançon de la patate douce" }
+  chenille_geranium:
+    type: ravageur
+    i18n:
+      fr: { nom: "Chenille du géranium" }
+  cicadelle:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Cicadelle"
+        description: "Petit insecte sauteur piquant le feuillage, provoquant décolorations et transmission de maladies."
+  cochenille:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Cochenille"
+        description: "Insecte fixe à carapace ou farineux suçant la sève des tiges et rameaux, avec miellat et fumagine."
+  cochylis:
+    type: ravageur
+    i18n:
+      fr: { nom: "Cochylis" }
+  criocere_asperge:
+    type: ravageur
+    i18n:
+      fr: { nom: "Criocère de l'asperge" }
+  criocere_lis:
+    type: ravageur
+    i18n:
+      fr: { nom: "Criocère du lis" }
+  cynips:
+    type: ravageur
+    i18n:
+      fr: { nom: "Cynips du châtaignier" }
+  doryphore:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Doryphore"
+        description: "Coléoptère rayé dont adultes et larves dévorent le feuillage des solanacées (pomme de terre)."
+  drosophila_suzukii:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Drosophile suzukii"
+        description: "Mouche dont la femelle pond dans les fruits mûrs intacts (petits fruits, cerises)."
+  eudemis:
+    type: ravageur
+    i18n:
+      fr: { nom: "Eudémis (ver de la grappe)" }
+  hoplocampe:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Hoplocampe"
+        description: "Petit hyménoptère dont la larve creuse les jeunes fruits du pommier ou du prunier."
+  limace:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Limace"
+        description: "Mollusque dévorant plantules et feuilles tendres, surtout la nuit et par temps humide."
+  mineuse:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Mineuse"
+        description: "Larve creusant des galeries claires (mines) dans l'épaisseur des feuilles."
+  mineuse_agrumes:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mineuse des agrumes" }
+  mouche_argousier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de l'argousier" }
+  mouche_brou:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche du brou" }
+  mouche_carotte:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Mouche de la carotte"
+        description: "Mouche dont la larve creuse des galeries rouille dans les racines de carotte et apparentées."
+  mouche_chou:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Mouche du chou"
+        description: "Mouche dont la larve dévore les racines des crucifères, faisant flétrir le plant."
+  mouche_figue:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de la figue" }
+  mouche_fruits:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche des fruits" }
+  mouche_narcisse:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche du narcisse" }
+  mouche_oignon:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Mouche de l'oignon"
+        description: "Mouche dont la larve creuse les bulbes d'oignon et de poireau, provoquant le pourrissement."
+  mouche_olive:
+    type: ravageur
+    i18n:
+      fr: { nom: "Mouche de l'olive" }
+  pegomyie:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Pégomyie"
+        description: "Mouche de la betterave dont la larve mine les feuilles en larges plages claires (épinard, blette)."
+  pieride:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Piéride du chou"
+        description: "Papillon blanc dont les chenilles vertes dévorent les feuilles de choux."
+  psylle_laurier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Psylle du laurier" }
+  puceron:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Puceron"
+        description: "Petit insecte suceur de sève formant des colonies, vecteur de viroses, avec miellat et fumagine."
+  puceron_cendre:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Puceron cendré"
+        description: "Puceron gris cendré gaufrant et recroquevillant les feuilles de choux."
+  puceron_noir:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Puceron noir"
+        description: "Puceron noir colonisant fèves, haricots et jeunes pousses."
+  puceron_noisetier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron du noisetier" }
+  puceron_sureau:
+    type: ravageur
+    i18n:
+      fr: { nom: "Puceron du sureau" }
+  pyrale:
+    type: ravageur
+    i18n:
+      fr: { nom: "Pyrale" }
+  sesie:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Sésie"
+        description: "Papillon dont la chenille creuse les rameaux et le bois des groseilliers et arbustes."
+  sitone:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Sitone"
+        description: "Charançon découpant des encoches en U sur le bord des feuilles de légumineuses."
+  tarsoneme:
+    type: ravageur
+    i18n:
+      fr: { nom: "Tarsonème" }
+  taupin:
+    type: ravageur
+    i18n:
+      fr: { nom: "Taupin (ver fil de fer)" }
+  teigne_olivier:
+    type: ravageur
+    i18n:
+      fr: { nom: "Teigne de l'olivier" }
+  teigne_poireau:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Teigne du poireau"
+        description: "Papillon dont la chenille mine les feuilles et le fût du poireau et de l'oignon."
+  tenthrede:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Tenthrède"
+        description: "Fausse-chenille défoliant rapidement groseilliers et autres arbustes."
+  thrips:
+    type: ravageur
+    i18n:
+      fr:
+        nom: "Thrips"
+        description: "Minuscule insecte râpant le feuillage, laissant des plages argentées et des ponctuations noires."
+  thrips_glaieul:
+    type: ravageur
+    i18n:
+      fr: { nom: "Thrips du glaïeul" }
+  tortricide_oeillet:
+    type: ravageur
+    i18n:
+      fr: { nom: "Tordeuse de l'œillet" }

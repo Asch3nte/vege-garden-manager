@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -77,5 +78,122 @@ void main() {
     await repo.sauvegarder(potager(id: 'b', date: DateTime.utc(2026, 5, 1)));
     await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));
     expect((await repo.obtenirPotagerActif())!.id, 'a');
+  });
+
+  test('supprimer cascades to the whole hierarchy and its planning rows',
+      () async {
+    final now = DateTime.utc(2026, 6, 1).toIso8601String();
+    await repo.sauvegarder(potager(id: 'p1'));
+    await repo.sauvegarder(potager(id: 'p2')); // control, must survive
+
+    await db.into(db.parcelles).insert(ParcellesCompanion.insert(
+          id: 'pa1',
+          nom: 'Planche',
+          potagerId: 'p1',
+          type: 'pleineTerre',
+          surfaceValeur: 1,
+          surfaceUnite: 'm2',
+          exposition: 'pleinSoleil',
+          positionOrdre: 0,
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+        ));
+    await db.into(db.plantations).insert(PlantationsCompanion.insert(
+          id: 'pl1',
+          parcelleId: 'pa1',
+          planteId: 'LEG-001',
+          dateMiseEnPlace: now,
+          methode: 'semisDirect',
+          surfaceOccupeeValeur: 1,
+          nombrePieds: 1,
+          createdAt: now,
+          updatedAt: now,
+        ));
+    // Potager-level equipement (parcelleId null) — must still be caught.
+    await db.into(db.equipements).insert(EquipementsCompanion.insert(
+          id: 'eq1',
+          nom: 'Oya',
+          potagerId: 'p1',
+          type: 'oya',
+          dateInstallation: now,
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+        ));
+
+    // One task per kind of target, plus a reminder and an observation.
+    Future<void> tache(String id, TachesCompanion cible) =>
+        db.into(db.taches).insert(TachesCompanion.insert(
+              id: id,
+              titre: 'Tâche',
+              type: 'arrosage',
+              datePrevue: now,
+              dateCreation: now,
+              createdAt: now,
+              updatedAt: now,
+              potagerId: cible.potagerId,
+              parcelleId: cible.parcelleId,
+              plantationId: cible.plantationId,
+              equipementId: cible.equipementId,
+            ));
+    await tache('t_pot', const TachesCompanion(potagerId: Value('p1')));
+    await tache('t_par', const TachesCompanion(parcelleId: Value('pa1')));
+    await tache('t_pla', const TachesCompanion(plantationId: Value('pl1')));
+    await tache('t_eq', const TachesCompanion(equipementId: Value('eq1')));
+    await tache('t_other', const TachesCompanion(potagerId: Value('p2')));
+
+    await db.into(db.rappels).insert(RappelsCompanion.insert(
+          id: 'r1',
+          titre: 'Rappel',
+          typeTacheGeneree: 'arrosage',
+          dateDebut: now,
+          typeRecurrence: 'ponctuel',
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          plantationId: const Value('pl1'),
+        ));
+    await db.into(db.observations).insert(ObservationsCompanion.insert(
+          id: 'o1',
+          dateObservation: now,
+          type: 'general',
+          titre: 'Observation',
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          parcelleId: const Value('pa1'),
+        ));
+
+    await repo.supprimer('p1');
+
+    Future<String?> deletedAtTache(String id) async => (await (db.select(
+                db.taches)
+            ..where((t) => t.id.equals(id)))
+        .getSingle())
+        .deletedAt;
+
+    // The whole p1 hierarchy and its planning rows are soft-deleted.
+    for (final id in ['t_pot', 't_par', 't_pla', 't_eq']) {
+      expect(await deletedAtTache(id), isNotNull, reason: 'tache $id');
+    }
+    expect(
+        (await (db.select(db.rappels)..where((t) => t.id.equals('r1')))
+                .getSingle())
+            .deletedAt,
+        isNotNull);
+    expect(
+        (await (db.select(db.observations)..where((t) => t.id.equals('o1')))
+                .getSingle())
+            .deletedAt,
+        isNotNull);
+    expect(
+        (await (db.select(db.equipements)..where((t) => t.id.equals('eq1')))
+                .getSingle())
+            .deletedAt,
+        isNotNull);
+
+    // A task targeting another potager is untouched.
+    expect(await deletedAtTache('t_other'), isNull);
   });
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../app/router.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/enums/langue.dart';
 import '../../../domain/enums/niveau_experience.dart';
@@ -89,7 +91,17 @@ class PanneauGeneral extends ConsumerWidget {
                   for (final v in NiveauExperience.values)
                     (v, l10n.niveauExperience(v)),
                 ],
-                onChanged: notifier.definirNiveau,
+                // Reaching a level nudges the user to the guide (ADR-0009 §4b).
+                onChanged: (n) {
+                  notifier.definirNiveau(n);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(l10n.generalNiveauChangeSnack),
+                    action: SnackBarAction(
+                      label: l10n.generalNiveauChangeAction,
+                      onPressed: () => context.go(RoutesApp.plusNiveaux),
+                    ),
+                  ));
+                },
               ),
             ),
           ],

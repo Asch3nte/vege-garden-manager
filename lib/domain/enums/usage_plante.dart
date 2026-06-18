@@ -9,6 +9,11 @@ enum UsagePlante {
   repulsif,
   mellifere,
   pollinisateur,
+
+  /// Attracts beneficial insects — predators/parasitoids that regulate a
+  /// neighbour's pests (ADR-0014, e.g. dill, fennel). Distinct from
+  /// [pollinisateur] (pollination).
+  attireAuxiliaires,
   engraisVert,
   couvreSol,
   briseVent,

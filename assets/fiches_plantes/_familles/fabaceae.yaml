@@ -10,6 +10,19 @@ i18n:
       Légumineuses fixatrices d'azote (symbiose avec des bactéries Rhizobium) :
       haricot, pois, fève, lentille, mais aussi trèfle, luzerne et vesce comme
       engrais verts. Précieuses en rotation pour enrichir le sol en azote.
+    pourquoi_rotation: >
+      En captant l'azote de l'air, les légumineuses laissent un sol enrichi :
+      placez-les en tête de rotation, devant les plantes gourmandes (choux,
+      courges, maïs). Évitez de les faire suivre d'autres légumineuses avant
+      3 ans pour limiter sclérotiniose et nématodes.
+    ennemis_communs_note: >
+      Pucerons noirs, bruches (qui pondent dans les gousses) et sitones
+      (encoches en U sur le bord des feuilles) touchent la plupart des
+      légumineuses ; rouille et anthracnose s'installent par temps humide.
+    associations_note: >
+      Grâce à l'azote qu'elles fixent, les légumineuses sont de bonnes voisines
+      des plantes gourmandes (maïs et courge — la « milpa ») ; on les tient en
+      revanche à l'écart de l'ail et de l'oignon, qui leur conviennent mal.
 maladies_communes: [rouille, anthracnose, sclerotiniose]
 ravageurs_communs: [puceron_noir, bruche, sitone]
 delai_retour_annees: 3

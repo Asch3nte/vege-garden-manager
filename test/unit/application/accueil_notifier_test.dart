@@ -21,6 +21,7 @@ import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/unite_quantite.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
@@ -45,6 +46,12 @@ class MockPlantations extends Mock implements AbstractPlantationRepository {}
 class MockRecoltes extends Mock implements AbstractRecolteRepository {}
 
 class MockMeteo extends Mock implements AbstractMeteoService {}
+
+/// No-op stub: watering task generation is tested separately.
+class _StubGenererTachesArrosage implements GenererTachesArrosage {
+  @override
+  Future<void> executer() async {}
+}
 
 void main() {
   // Pinned "now" so the today-window is deterministic.
@@ -128,6 +135,8 @@ void main() {
       recolteRepositoryProvider.overrideWithValue(recoltes),
       meteoServiceProvider.overrideWithValue(meteo),
       horlogeProvider.overrideWithValue(() => maintenant),
+      genererTachesArrosageProvider
+          .overrideWith((ref) async => _StubGenererTachesArrosage()),
     ]);
     addTearDown(c.dispose);
     return c;

@@ -5,12 +5,18 @@ import 'package:go_router/go_router.dart';
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
+import '../../application/state/prochaines_taches_zone_provider.dart';
+import '../../domain/entities/tache.dart';
 import '../../domain/enums/statut_plantation.dart';
+import '../../domain/enums/urgence_arrosage.dart';
+import '../../domain/value_objects/conseil_arrosage.dart';
+import '../providers/conseil_arrosage_plantation_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_observation.dart';
 import '../forms/formulaire_recolte.dart';
@@ -36,6 +42,10 @@ class EcranZoneDetail extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(potagerProvider);
+    // Next pending task per crop — secondary data: if it is not ready yet the
+    // crops still render immediately (empty map = no "next task" line shown).
+    final prochaines =
+        ref.watch(prochainesTachesZoneProvider(zoneId)).value ?? const {};
 
     return vue.when(
       loading: () => const Scaffold(
@@ -58,6 +68,7 @@ class EcranZoneDetail extends ConsumerWidget {
         return _Detail(
           zone: zone,
           couleur: couleurZone(index),
+          prochainesTaches: prochaines,
           onAjouterPlante: () {
             ref
                 .read(ajoutPlanteProvider.notifier)
@@ -206,6 +217,9 @@ Future<void> _observer(BuildContext context, CulturePotager culture) async {
 class _Detail extends StatelessWidget {
   final ZonePotager zone;
   final Color couleur;
+
+  /// Next pending task per plantation id (absent when a crop has none).
+  final Map<String, Tache> prochainesTaches;
   final VoidCallback onAjouterPlante;
   final VoidCallback onModifierZone;
   final VoidCallback onSupprimerZone;
@@ -217,6 +231,7 @@ class _Detail extends StatelessWidget {
   const _Detail({
     required this.zone,
     required this.couleur,
+    required this.prochainesTaches,
     required this.onAjouterPlante,
     required this.onModifierZone,
     required this.onSupprimerZone,
@@ -324,6 +339,7 @@ class _Detail extends StatelessWidget {
               _LigneCulture(
                 culture: zone.cultures[i],
                 couleur: couleur,
+                prochaineTache: prochainesTaches[zone.cultures[i].plantationId],
                 onRecolter: () => onRecolter(zone.cultures[i]),
                 onObserver: () => onObserver(zone.cultures[i]),
                 onArracher: () => onArracher(zone.cultures[i]),
@@ -360,9 +376,12 @@ class _Fait extends StatelessWidget {
 
 /// One crop row: coloured dot + localized name + an actions menu (pull out /
 /// remove).
-class _LigneCulture extends StatelessWidget {
+class _LigneCulture extends ConsumerWidget {
   final CulturePotager culture;
   final Color couleur;
+
+  /// The crop's next pending task, or `null` when it has none.
+  final Tache? prochaineTache;
   final VoidCallback onRecolter;
   final VoidCallback onObserver;
   final VoidCallback onArracher;
@@ -371,6 +390,7 @@ class _LigneCulture extends StatelessWidget {
   const _LigneCulture({
     required this.culture,
     required this.couleur,
+    required this.prochaineTache,
     required this.onRecolter,
     required this.onObserver,
     required this.onArracher,
@@ -378,9 +398,15 @@ class _LigneCulture extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    // Observations are an intermediate+ feature (ADR-0009).
+    final observationsDispo = ref.watch(accesNiveauProvider).observations;
+    // Watering advice (ADR-0015) — silent on load/error (.value = null).
+    final conseil = ref
+        .watch(conseilArrosagePlantationProvider(culture.plantationId))
+        .value;
     return Container(
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s3,
@@ -402,7 +428,55 @@ class _LigneCulture extends StatelessWidget {
           ),
           const SizedBox(width: EspacementsApp.s3),
           Expanded(
-            child: Text(culture.nom, style: theme.textTheme.titleMedium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(culture.nom, style: theme.textTheme.titleMedium),
+                if (culture.etat != null) ...[
+                  const SizedBox(height: EspacementsApp.s1),
+                  Text(
+                    l10n.libelleStade(culture.etat!.stade),
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: EspacementsApp.s1),
+                  ClipRRect(
+                    borderRadius: RayonsApp.brSm,
+                    child: LinearProgressIndicator(
+                      value: culture.etat!.progression,
+                      minHeight: 4,
+                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      color: couleur,
+                    ),
+                  ),
+                ],
+                if (prochaineTache != null) ...[
+                  const SizedBox(height: EspacementsApp.s2),
+                  Row(
+                    children: [
+                      Icon(
+                        iconeTypeTache(prochaineTache!.type),
+                        size: TaillesIconesApp.sm,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: EspacementsApp.s2),
+                      Expanded(
+                        child: Text(
+                          l10n.cultureProchaineTache(
+                            prochaineTache!.titre,
+                            _formaterDateCourte(prochaineTache!.datePrevue),
+                          ),
+                          style: theme.textTheme.bodySmall
+                              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+                if (conseil != null)
+                  _LigneConseilArrosage(conseil: conseil, theme: theme, l10n: l10n),
+              ],
+            ),
           ),
           PopupMenuButton<_ActionCulture>(
             icon: const Icon(Icons.more_vert),
@@ -425,17 +499,18 @@ class _LigneCulture extends StatelessWidget {
                   ],
                 ),
               ),
-              PopupMenuItem(
-                value: _ActionCulture.observer,
-                child: Row(
-                  children: [
-                    const Icon(Icons.visibility_outlined,
-                        size: TaillesIconesApp.sm),
-                    const SizedBox(width: EspacementsApp.s2),
-                    Text(l10n.cultureObserver),
-                  ],
+              if (observationsDispo)
+                PopupMenuItem(
+                  value: _ActionCulture.observer,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.visibility_outlined,
+                          size: TaillesIconesApp.sm),
+                      const SizedBox(width: EspacementsApp.s2),
+                      Text(l10n.cultureObserver),
+                    ],
+                  ),
                 ),
-              ),
               PopupMenuItem(
                 value: _ActionCulture.arracher,
                 child: Row(
@@ -496,9 +571,69 @@ class _Badge extends StatelessWidget {
   }
 }
 
+/// Compact watering advice row (icon + label), shown inside [_LigneCulture].
+///
+/// Only rendered for actionable states (`arroserMaintenant`, `bientot`,
+/// `pasNecessaire` + `pluiePrevue`). Silent otherwise (null conseil = no row).
+class _LigneConseilArrosage extends StatelessWidget {
+  final ConseilArrosage conseil;
+  final ThemeData theme;
+  final AppLocalizations l10n;
+
+  const _LigneConseilArrosage({
+    required this.conseil,
+    required this.theme,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final (icone, couleur, libelle) = switch (conseil.urgence) {
+      UrgenceArrosage.arroserMaintenant => (
+          Icons.water_drop,
+          theme.colorScheme.error,
+          l10n.conseilArroserMaintenant,
+        ),
+      UrgenceArrosage.bientot => (
+          Icons.water_drop_outlined,
+          theme.colorScheme.tertiary,
+          l10n.conseilArroserBientot(conseil.joursAvantArrosage ?? 2),
+        ),
+      UrgenceArrosage.pasNecessaire when conseil.pluiePrevue => (
+          Icons.water_outlined,
+          theme.colorScheme.primary,
+          l10n.conseilPluieAVenir,
+        ),
+      _ => (null, null, null),
+    };
+
+    if (libelle == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: EspacementsApp.s2),
+      child: Row(
+        children: [
+          Icon(icone, size: TaillesIconesApp.sm, color: couleur),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(
+              libelle,
+              style: theme.textTheme.bodySmall?.copyWith(color: couleur),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Formats a surface in m² without trailing ".0" for whole values.
 String _formaterSurface(double m2) {
   return m2 == m2.roundToDouble()
       ? m2.toStringAsFixed(0)
       : m2.toStringAsFixed(1);
 }
+
+/// Short `dd/MM` date for the next-task line (the year is rarely useful there).
+String _formaterDateCourte(DateTime d) =>
+    '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}';

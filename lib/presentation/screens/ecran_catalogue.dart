@@ -4,18 +4,23 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
+import '../../application/state/preferences_notifier.dart';
 import '../../application/state/catalogue_vue.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_plantation.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../screens/ecran_selection_zone.dart';
+import '../widgets/carte_teaser_palier.dart';
 import '../widgets/fiche_plante_detail.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/vue_associations.dart';
 import '../widgets/vue_reseau_catalogue.dart';
 
 /// Runs the "add a plant" flow for [fiche]: resolve the target zone (the pending
@@ -70,7 +75,8 @@ class EcranCatalogue extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.navCatalogue)),
       body: vue.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => _EtatErreur(onReessayer: () => ref.invalidate(catalogueProvider)),
+        error: (e, _) =>
+            _EtatErreur(onReessayer: () => ref.invalidate(catalogueProvider)),
         data: (data) => _Contenu(vue: data),
       ),
     );
@@ -88,12 +94,17 @@ class _Contenu extends ConsumerStatefulWidget {
 
 class _ContenuState extends ConsumerState<_Contenu> {
   bool _reseau = false;
+  bool _teaserFerme = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final vue = widget.vue;
     final cibleAjout = ref.watch(ajoutPlanteProvider);
+    // The "Réseau" association view is an intermediate+ feature (ADR-0009):
+    // hidden for beginners, who keep the Fiches view only.
+    final vueReseauDispo = ref.watch(accesNiveauProvider).vueReseau;
+    final reseauActif = vueReseauDispo && _reseau;
     void ajouter(FichePlante fiche) => _ajouterPlante(context, ref, fiche);
 
     return Column(
@@ -104,35 +115,48 @@ class _ContenuState extends ConsumerState<_Contenu> {
             zoneNom: cibleAjout.zoneNom,
             onAnnuler: () => ref.read(ajoutPlanteProvider.notifier).effacer(),
           ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            EspacementsApp.s4,
-            EspacementsApp.s3,
-            EspacementsApp.s4,
-            EspacementsApp.s2,
+        if (vueReseauDispo)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              EspacementsApp.s4,
+              EspacementsApp.s3,
+              EspacementsApp.s4,
+              EspacementsApp.s2,
+            ),
+            child: SegmentedButton<bool>(
+              segments: [
+                ButtonSegment(
+                  value: false,
+                  icon: const Icon(Icons.grid_view_outlined),
+                  label: Text(l10n.catalogueVueFiches),
+                ),
+                ButtonSegment(
+                  value: true,
+                  icon: const Icon(Icons.hub_outlined),
+                  label: Text(l10n.catalogueVueReseau),
+                ),
+              ],
+              selected: {_reseau},
+              onSelectionChanged: (s) => setState(() => _reseau = s.first),
+            ),
           ),
-          child: SegmentedButton<bool>(
-            segments: [
-              ButtonSegment(
-                value: false,
-                icon: const Icon(Icons.grid_view_outlined),
-                label: Text(l10n.catalogueVueFiches),
-              ),
-              ButtonSegment(
-                value: true,
-                icon: const Icon(Icons.hub_outlined),
-                label: Text(l10n.catalogueVueReseau),
-              ),
-            ],
-            selected: {_reseau},
-            onSelectionChanged: (s) => setState(() => _reseau = s.first),
-          ),
-        ),
         Expanded(
-          child: _reseau
-              ? VueReseauCatalogue(fiches: vue.toutesMeres, onAjouter: ajouter)
+          child: reseauActif
+              ? VueReseauCatalogue(
+                  fiches: vue.toutesMeres,
+                  varietesDe: vue.varietesDe,
+                  onAjouter: ajouter,
+                )
               : _VueFiches(vue: vue, onAjouter: ajouter),
         ),
+        // Level-up teaser for the locked Réseau view (ADR-0009 §4b).
+        if (!vueReseauDispo && !_teaserFerme)
+          CarteTeaserPalier(
+            icone: Icons.hub_outlined,
+            feature: l10n.tutoVueReseauTitre,
+            niveauRequis: NiveauExperience.intermediaire,
+            onFermer: () => setState(() => _teaserFerme = true),
+          ),
       ],
     );
   }
@@ -163,8 +187,9 @@ class _VueFiches extends ConsumerWidget {
           ),
           child: Text(
             l10n.catalogueNbPlantes(vue.total),
-            style: theme.textTheme.labelSmall
-                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
         Padding(
@@ -219,15 +244,18 @@ class _BanniereAjout extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.add_location_alt_outlined,
-                size: TaillesIconesApp.sm,
-                color: theme.colorScheme.onPrimaryContainer),
+            Icon(
+              Icons.add_location_alt_outlined,
+              size: TaillesIconesApp.sm,
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
             const SizedBox(width: EspacementsApp.s2),
             Expanded(
               child: Text(
                 l10n.catalogueAjoutBanniere(zoneNom),
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.onPrimaryContainer),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
               ),
             ),
             IconButton(
@@ -255,8 +283,9 @@ class _BarreRecherche extends StatefulWidget {
 }
 
 class _BarreRechercheState extends State<_BarreRecherche> {
-  late final TextEditingController _controleur =
-      TextEditingController(text: widget.valeur);
+  late final TextEditingController _controleur = TextEditingController(
+    text: widget.valeur,
+  );
 
   @override
   void dispose() {
@@ -455,8 +484,9 @@ class _CarteGroupeState extends State<_CarteGroupe> {
 }
 
 /// One species row: name, category, sun & water needs; trailing chevron, or an
-/// expand toggle with the variety count when [onToggle] is set.
-class _CarteFiche extends StatelessWidget {
+/// expand toggle (arrow only — the variety count is dropped, #1) when [onToggle]
+/// is set.
+class _CarteFiche extends ConsumerWidget {
   final FichePlante fiche;
   final void Function(FichePlante) onAjouter;
   final int nbVarietes;
@@ -472,62 +502,100 @@ class _CarteFiche extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return InkWell(
-      onTap: () => afficherFichePlanteDetail(
-        context,
-        fiche,
-        onAjouter: () => onAjouter(fiche),
-      ),
+      onTap: () =>
+          afficherFichePlanteDetail(context, fiche, onAjouter: onAjouter),
       child: Padding(
         padding: const EdgeInsets.all(EspacementsApp.s3),
         child: Row(
           children: [
-            Icon(Icons.eco_outlined, size: TaillesIconesApp.lg, color: theme.colorScheme.primary),
+            Icon(
+              Icons.eco_outlined,
+              size: TaillesIconesApp.lg,
+              color: theme.colorScheme.primary,
+            ),
             const SizedBox(width: EspacementsApp.s3),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(fiche.nomLocalise('fr'), style: theme.textTheme.titleLarge),
+                  Text(
+                    fiche.nomLocalise('fr'),
+                    style: theme.textTheme.titleLarge,
+                  ),
                   const SizedBox(height: 2),
                   Text(
                     l10n.categorie(fiche.categorie),
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: EspacementsApp.s1),
                   Wrap(
                     spacing: EspacementsApp.s3,
                     children: [
-                      _Meta(icone: Icons.wb_sunny_outlined, texte: l10n.exposition(fiche.besoins.soleil)),
-                      _Meta(icone: Icons.water_drop_outlined, texte: l10n.besoinEau(fiche.besoins.eau)),
+                      _Meta(
+                        icone: Icons.wb_sunny_outlined,
+                        texte: l10n.exposition(fiche.besoins.soleil),
+                      ),
+                      _Meta(
+                        icone: Icons.water_drop_outlined,
+                        texte: l10n.besoinEau(fiche.besoins.eau),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
+            // One-tap access to the detailed Associations view of this species.
+            IconButton(
+              icon: const Icon(Icons.hub_outlined),
+              tooltip: l10n.catalogueAssociations,
+              onPressed: () => afficherVueAssociations(
+                context,
+                fiche,
+                ref.read(catalogueProvider).value?.toutesMeres ??
+                    const <FichePlante>[],
+                onAjouter: onAjouter,
+                // Derived suggestions (ADR-0010) appear from intermédiaire+,
+                // ranked by the user's weighting profile (ADR-0011).
+                acces: ref.read(accesNiveauProvider),
+                profil:
+                    ref.read(preferencesProvider).value?.ponderationAssociations,
+                // Tapping the preferences banner jumps to the weighting page.
+                onOuvrirPreferences: () =>
+                    context.go(RoutesApp.plusPonderation),
+              ),
+            ),
+            // The arrow only signals whether varieties exist (expandable) — the
+            // count is dropped so every card's right side stays compact.
+            // Both branches must take the *same* width: a default IconButton
+            // reserves a 48px touch target, which would steal ~24px from the meta
+            // Wrap on the left and push "Arrosage modéré" onto a second line only
+            // for expandable cards. The toggle is therefore stripped to the bare
+            // icon footprint (zero padding, no min constraints) so it matches the
+            // plain chevron → the meta stays on one line on every card.
             if (onToggle != null)
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(ouvert ? Icons.expand_less : Icons.expand_more),
-                    tooltip: l10n.catalogueNbVarietes(nbVarietes),
-                    onPressed: onToggle,
-                  ),
-                  Text(
-                    '$nbVarietes',
-                    style: theme.textTheme.labelSmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                ],
+              IconButton(
+                icon: Icon(ouvert ? Icons.expand_less : Icons.expand_more),
+                iconSize: TaillesIconesApp.md,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                visualDensity: VisualDensity.compact,
+                color: theme.colorScheme.onSurfaceVariant,
+                tooltip: l10n.catalogueNbVarietes(nbVarietes),
+                onPressed: onToggle,
               )
             else
-              Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.chevron_right,
+                size: TaillesIconesApp.md,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
       ),
@@ -548,14 +616,13 @@ class _LigneVariete extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        border: Border(top: BorderSide(color: theme.colorScheme.outlineVariant)),
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outlineVariant),
+        ),
       ),
       child: InkWell(
-        onTap: () => afficherFichePlanteDetail(
-          context,
-          fiche,
-          onAjouter: () => onAjouter(fiche),
-        ),
+        onTap: () =>
+            afficherFichePlanteDetail(context, fiche, onAjouter: onAjouter),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
             EspacementsApp.s6,
@@ -565,16 +632,23 @@ class _LigneVariete extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(Icons.spa_outlined,
-                  size: TaillesIconesApp.sm, color: theme.colorScheme.secondary),
+              Icon(
+                Icons.spa_outlined,
+                size: TaillesIconesApp.sm,
+                color: theme.colorScheme.secondary,
+              ),
               const SizedBox(width: EspacementsApp.s3),
               Expanded(
-                child: Text(fiche.nomLocalise('fr'),
-                    style: theme.textTheme.titleMedium),
+                child: Text(
+                  fiche.nomLocalise('fr'),
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
-              Icon(Icons.chevron_right,
-                  size: TaillesIconesApp.md,
-                  color: theme.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.chevron_right,
+                size: TaillesIconesApp.md,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),
@@ -595,12 +669,17 @@ class _Meta extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icone, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+        Icon(
+          icone,
+          size: TaillesIconesApp.sm,
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: EspacementsApp.s1),
         Text(
           texte,
-          style: theme.textTheme.labelSmall
-              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -621,13 +700,18 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off, size: TaillesIconesApp.xl2, color: theme.colorScheme.secondary),
+            Icon(
+              Icons.search_off,
+              size: TaillesIconesApp.xl2,
+              color: theme.colorScheme.secondary,
+            ),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -651,16 +735,24 @@ class _EtatErreur extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
+            Icon(
+              Icons.error_outline,
+              size: TaillesIconesApp.xl2,
+              color: theme.colorScheme.error,
+            ),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               l10n.catalogueErreurChargement,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: EspacementsApp.s4),
-            FilledButton(onPressed: onReessayer, child: Text(l10n.actionReessayer)),
+            FilledButton(
+              onPressed: onReessayer,
+              child: Text(l10n.actionReessayer),
+            ),
           ],
         ),
       ),

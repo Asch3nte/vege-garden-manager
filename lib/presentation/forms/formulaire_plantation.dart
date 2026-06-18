@@ -10,6 +10,7 @@ import '../../domain/entities/plantation.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the "new plantation" form for [parcelleId] and returns the created
@@ -176,17 +177,13 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
               ),
             ),
             const SizedBox(height: EspacementsApp.s4),
-            DropdownButtonFormField<MethodeMiseEnPlace>(
-              initialValue: _methode,
-              decoration: InputDecoration(
-                labelText: l10n.formPlantationMethode,
-                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
-              ),
-              items: [
-                for (final m in MethodeMiseEnPlace.values)
-                  DropdownMenuItem(value: m, child: Text(l10n.methode(m))),
-              ],
-              onChanged: (v) => setState(() => _methode = v!),
+            ChampDeroulantDecrit<MethodeMiseEnPlace>(
+              value: _methode,
+              options: MethodeMiseEnPlace.values,
+              libelle: l10n.methode,
+              description: l10n.methodeDescription,
+              labelText: l10n.formPlantationMethode,
+              onChanged: (v) => setState(() => _methode = v),
             ),
             const SizedBox(height: EspacementsApp.s4),
             TextFormField(

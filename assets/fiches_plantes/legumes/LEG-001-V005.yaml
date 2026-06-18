@@ -1,0 +1,66 @@
+# Fiche fille (variété) — Tomate Andine Cornue. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V005
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Andine Cornue'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Andine Cornue
+    noms_alternatifs: [Cornue des Andes, Tomate corne, Andine cornue]
+    description: >
+      Variété ancienne d'origine andine à fruits allongés et pointus (15–18 cm,
+      80–120 g), en forme de corne ou de piment. Chair très ferme, dense, peu
+      aqueuse et peu pépineuse, saveur sucrée et parfumée. Idéale pour les
+      sauces, coulis et conserves grâce à sa faible teneur en eau. Port
+      indéterminé (150–200 cm), productif (3–6 kg par plant).
+    conseils_culture: >
+      Variété tardive : prévoir un semis précoce (janvier–février sous abri
+      chauffé) pour maximiser la saison. Son système racinaire profond lui
+      confère une bonne résistance à la sécheresse mais un arrosage régulier
+      améliore le calibre. Sensible au mildiou en conditions humides ; préférer
+      la culture sous abri dans les régions à étés frais. Tuteurer fermement
+      (plants vigoureux).
+    conseils_recolte: >
+      Récolter à partir de mi-juillet dans les régions chaudes, mi-août
+      ailleurs, quand les fruits sont rouge vif et fermes. La récolte s'étale
+      jusqu'aux gelées. Les fruits se conservent mieux que la moyenne et peuvent
+      rester sur pied jusqu'à complète maturité sans s'abîmer.
+    erreurs_frequentes:
+      - Semis trop tardif (variété à cycle long, maturation insuffisante en régions fraîches)
+      - Nécrose apicale par arrosage irrégulier ou carence en calcium
+      - Confusion avec un piment lors de la récolte (forme trompeuse)
+  en:
+    nom_commun: Andean Horn Tomato
+    description: >
+      Old Andean heirloom with elongated, pointed fruits (15–18 cm, 80–120 g)
+      shaped like a horn or chilli. Very firm, dry flesh, few seeds, sweet and
+      fragrant flavour. Excellent for sauces and canning.
+
+cycle:
+  duree_avant_recolte_jours: [85, 110]
+  hauteur_adulte_cm: [150, 200]
+  espacement_cm: 70
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Température ambiante ; chair ferme, bonne tenue", en: "Room temperature; firm flesh holds well" }
+  - methode: conserves
+    duree_mois: 18
+  - methode: sechage
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Sauce tomate épaisse, coulis, conserves, farcie (forme idéale), séchée, tapenade]
+  en: [Thick tomato sauce, coulis, canning, stuffed (ideal shape), dried, tapenade]
+
+sources:
+  - https://jardinage.pagesjaunes.fr/astuce/voir/463609/andine-cornue
+  - https://www.jardiner-malin.fr/fiche/tomate-andine-cornue.html
+contributeurs:
+  - "@potagerer"

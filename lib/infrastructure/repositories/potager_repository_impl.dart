@@ -4,6 +4,7 @@ import '../../domain/entities/potager.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../database/app_database.dart';
 import '../mappers/potager_mapper.dart';
+import 'suppression_cascade.dart';
 
 /// drift-backed implementation of [AbstractPotagerRepository].
 ///
@@ -47,33 +48,51 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
   Future<void> supprimer(String id) async {
     final maintenant = DateTime.now().toUtc().toIso8601String();
     await _db.transaction(() async {
+      // Gather the dependent hierarchy ids first, so the order of the
+      // soft-delete statements below is irrelevant to correctness.
       final parcelleIds = await (_db.selectOnly(_db.parcelles)
             ..addColumns([_db.parcelles.id])
             ..where(_db.parcelles.potagerId.equals(id)))
           .map((r) => r.read(_db.parcelles.id)!)
           .get();
 
-      if (parcelleIds.isNotEmpty) {
-        final plantationIds = await (_db.selectOnly(_db.plantations)
-              ..addColumns([_db.plantations.id])
-              ..where(_db.plantations.parcelleId.isIn(parcelleIds)))
-            .map((r) => r.read(_db.plantations.id)!)
-            .get();
-        if (plantationIds.isNotEmpty) {
-          await (_db.update(_db.recoltes)
-                ..where((t) =>
-                    t.plantationId.isIn(plantationIds) & t.deletedAt.isNull()))
-              .write(RecoltesCompanion(deletedAt: Value(maintenant)));
-        }
+      final plantationIds = parcelleIds.isEmpty
+          ? const <String>[]
+          : await (_db.selectOnly(_db.plantations)
+                ..addColumns([_db.plantations.id])
+                ..where(_db.plantations.parcelleId.isIn(parcelleIds)))
+              .map((r) => r.read(_db.plantations.id)!)
+              .get();
+
+      // Equipements belong to the potager (parcelle is optional), so scope by
+      // potagerId — this also catches potager-level equipements (parcelle null).
+      final equipementIds = await (_db.selectOnly(_db.equipements)
+            ..addColumns([_db.equipements.id])
+            ..where(_db.equipements.potagerId.equals(id)))
+          .map((r) => r.read(_db.equipements.id)!)
+          .get();
+
+      // Tasks/reminders/observations pointing at this potager or any element of
+      // its hierarchy, so deleting a potager never orphans them.
+      await soustraireLignesDePlanification(_db, maintenant,
+          potagerId: id,
+          parcelleIds: parcelleIds,
+          plantationIds: plantationIds,
+          equipementIds: equipementIds);
+
+      if (plantationIds.isNotEmpty) {
+        await (_db.update(_db.recoltes)
+              ..where((t) =>
+                  t.plantationId.isIn(plantationIds) & t.deletedAt.isNull()))
+            .write(RecoltesCompanion(deletedAt: Value(maintenant)));
         await (_db.update(_db.plantations)
               ..where((t) =>
                   t.parcelleId.isIn(parcelleIds) & t.deletedAt.isNull()))
             .write(PlantationsCompanion(deletedAt: Value(maintenant)));
-        await (_db.update(_db.equipements)
-              ..where((t) =>
-                  t.parcelleId.isIn(parcelleIds) & t.deletedAt.isNull()))
-            .write(EquipementsCompanion(deletedAt: Value(maintenant)));
       }
+      await (_db.update(_db.equipements)
+            ..where((t) => t.potagerId.equals(id) & t.deletedAt.isNull()))
+          .write(EquipementsCompanion(deletedAt: Value(maintenant)));
       await (_db.update(_db.parcelles)
             ..where((t) => t.potagerId.equals(id) & t.deletedAt.isNull()))
           .write(ParcellesCompanion(deletedAt: Value(maintenant)));

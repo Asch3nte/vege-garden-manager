@@ -60,6 +60,7 @@ besoins:
   gele_fatal: true
 
 cycle:
+  enracinement: moyen
   type: annuelle
   duree_germination_jours: [10, 18]
   duree_avant_recolte_jours: [70, 110]
@@ -93,13 +94,17 @@ periodes:
 associations:
   beneficies:
     - id: ARO-001
+      type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
     - id: capucine
+      type: plante_piege
       raison_i18n: { fr: "Plante-piège à pucerons et doryphores", en: "Trap crop for aphids and beetles" }
   defavorables:
     - id: fenouil
+      type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
     - id: LEG-020
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille Solanaceae, partage les maladies", en: "Same Solanaceae family, shares diseases" }
 rotation:
   famille: solanaceae

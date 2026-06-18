@@ -1,5 +1,6 @@
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
+import '../../domain/services/acces_niveau.dart';
 
 /// One garden zone, reduced to what the Accueil overview tiles display.
 ///
@@ -87,8 +88,9 @@ class AccueilVue {
   /// Number of harvests recorded this season (current year).
   int get nombreRecoltesSaison => _nombreRecoltesSaison;
 
-  /// Whether the season-statistics tile is unlocked for this level.
-  bool get statistiquesVisibles => _niveau == NiveauExperience.expert;
+  /// Whether the season-statistics tile is unlocked for this level (routed
+  /// through the single-source-of-truth policy — ADR-0009).
+  bool get statistiquesVisibles => AccesNiveau(_niveau).statsTableauBord;
 
   /// Whether the active garden has no zones yet (drives the empty state).
   bool get potagerVide => _nomPotager == null || _zones.isEmpty;

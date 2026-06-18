@@ -1,0 +1,61 @@
+# Fiche fille (variété) — Groseillier Jonkheer Van Tets. Hérite de PFR-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: PFR-003-V001
+parent_id: PFR-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Ribes rubrum 'Jonkheer Van Tets'"
+
+i18n:
+  fr:
+    nom_commun: Groseillier Jonkheer Van Tets
+    noms_alternatifs: [Jonkheer, Van Tets]
+    description: >
+      Variété néerlandaise de référence (sélectionnée en 1941), précoce et
+      très productive. Grappes longues portant de grosses baies rouge vif
+      à chair tendre, légèrement acidulée. L'une des premières à mûrir
+      (fin juin à début juillet selon le climat). Port dressé et vigoureux,
+      facile à palissader. Excellente résistance aux maladies et aux pucerons.
+    conseils_culture: >
+      Conduite en gobelet ou en espalier. Variété vigoureuse — espacer à
+      1,5 m. La précocité expose les fruits aux gelées tardives en zone
+      continentale : prévoir un voile de protection si nécessaire.
+    conseils_recolte: >
+      Récolter les grappes entières dès que les fruits sont rouge brillant
+      (fin juin). La précocité impose une vigilance : surveiller la
+      maturation régulièrement.
+    erreurs_frequentes:
+      - Exposer aux gelées tardives sans protection (variété précoce)
+  en:
+    nom_commun: Jonkheer Van Tets redcurrant
+    description: >
+      Dutch reference variety (1941), early and very productive. Long bunches
+      of large, bright-red, tender and slightly tart berries. Among the first
+      to ripen (late June). Upright, vigorous and disease-resistant.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [6, 7]
+    continental:
+      plantation: [3, 4]
+      recolte: [6, 7]
+    mediterraneen:
+      plantation: [10, 11]
+      recolte: [5, 6]
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Gelée, tarte, coulis, décoration pâtisserie, sirop de groseille]
+  en: [Jelly, tart, coulis, pastry decoration, redcurrant syrup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Groseillier_à_grappes
+contributeurs:
+  - "@potagerer"

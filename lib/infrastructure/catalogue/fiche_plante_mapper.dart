@@ -1,14 +1,21 @@
 import '../../domain/entities/fiche_plante.dart';
+import '../../domain/enums/tolerance_secheresse.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/enums/charge_tuteur.dart';
+import '../../domain/enums/enracinement_plante.dart';
 import '../../domain/enums/hemisphere.dart';
 import '../../domain/enums/niveau_besoin.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/qualite_sol.dart';
 import '../../domain/enums/sous_type_legume.dart';
+import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_climat.dart';
+import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/enums/usage_plante.dart';
 import '../../domain/enums/zone_rusticite.dart';
+import '../../domain/value_objects/association_benefique.dart';
+import '../../domain/value_objects/association_conflit.dart';
 import '../../domain/value_objects/besoins_culture.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../domain/value_objects/periodes_culture.dart';
@@ -58,8 +65,8 @@ class FichePlanteMapper {
       dureeAvantRecolteJoursMin: duree[0] as int,
       dureeAvantRecolteJoursMax: duree[1] as int,
       periodes: _periodes(y['periodes'] as Map?),
-      associationsBenefiques: _idsAssociation(y, 'beneficies'),
-      associationsNegatives: _idsAssociation(y, 'defavorables'),
+      associationsBenefiques: _benefices(y),
+      associationsNegatives: _conflits(y),
       rotationFamille: rotation?['famille'] as String?,
       delaiRetourAnnees: rotation?['delai_retour_annees'] as int?,
       // Enrichissement §A
@@ -78,13 +85,41 @@ class FichePlanteMapper {
       compatibleHorsSol: cycle['compatible_hors_sol'] as bool? ?? true,
       // Enrichissement §E
       cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
+      // Enrichissement §F — hauteur adulte [min, max]
+      hauteurAdulteCmMin: (cycle['hauteur_adulte_cm'] as List?)?[0] as int?,
+      hauteurAdulteCmMax: (cycle['hauteur_adulte_cm'] as List?)?[1] as int?,
       // Enrichissement §H
       fixeAzote: rotation?['fixe_azote'] as bool? ?? false,
       besoinAzote: rotation?['besoin_azote'] == null
           ? null
           : _enum(NiveauBesoin.values, rotation!['besoin_azote'] as String),
+      // Enrichissement ADR-0010 Lot 2
+      repulsifContre: _slugs(y['repulsif_contre']),
+      piegeA: _slugs(y['piege_a']),
+      chargeTuteur: cycle['charge_tuteur'] == null
+          ? null
+          : _enum(ChargeTuteur.values, cycle['charge_tuteur'] as String),
+      // Enrichissement ADR-0014 — système racinaire
+      enracinement: cycle['enracinement'] == null
+          ? null
+          : _enum(EnracinementPlante.values, cycle['enracinement'] as String),
+      // Enrichissement ADR-0015 Lot 4
+      temperatureMaxTolerance: besoins['temperature_max_tolerance'] == null
+          ? null
+          : (besoins['temperature_max_tolerance'] as num).toDouble(),
+      toleranceSecheresse: besoins['tolerance_secheresse'] == null
+          ? null
+          : _enum(
+              ToleranceSecheresse.values,
+              besoins['tolerance_secheresse'] as String),
     );
   }
+
+  /// A list of bioaggressor slugs (`repulsif_contre` / `piege_a`) as a set,
+  /// empty when absent.
+  Set<String> _slugs(Object? liste) => liste == null
+      ? const {}
+      : (liste as Iterable).map((e) => e as String).toSet();
 
   Map<String, String> _nomsLocalises(Map i18n) => {
         for (final entry in i18n.entries)
@@ -125,13 +160,56 @@ class FichePlanteMapper {
   Periode? _periode(Object? liste) =>
       liste == null ? null : Periode((liste as List)[0] as int, liste[1] as int);
 
-  Set<String> _idsAssociation(Map y, String section) {
+  /// Beneficial associations (`associations.beneficies[]`) as typed value
+  /// objects, carrying the optional `type` mechanism and the localised reason.
+  List<AssociationBenefique> _benefices(Map y) {
+    final liste = _sectionAssociations(y, 'beneficies');
+    return [
+      for (final e in liste)
+        AssociationBenefique(
+          cibleId: e['id'] as String,
+          mecanismes: _typesAssociation(e['type'], TypeBeneficeAssociation.values),
+          raisonI18n: _raisonI18n(e['raison_i18n'] as Map?),
+        ),
+    ];
+  }
+
+  /// Conflicting associations (`associations.defavorables[]`) as typed value
+  /// objects.
+  List<AssociationConflit> _conflits(Map y) {
+    final liste = _sectionAssociations(y, 'defavorables');
+    return [
+      for (final e in liste)
+        AssociationConflit(
+          cibleId: e['id'] as String,
+          mecanismes: _typesAssociation(e['type'], TypeConflitAssociation.values),
+          raisonI18n: _raisonI18n(e['raison_i18n'] as Map?),
+        ),
+    ];
+  }
+
+  /// Parses an association `type:` that is **a single token or a list** of
+  /// tokens (ADR-0012) into a set of enum values (empty when absent).
+  Set<T> _typesAssociation<T extends Enum>(Object? type, List<T> valeurs) {
+    if (type == null) return const {};
+    final tokens = type is Iterable ? type : [type];
+    return {for (final t in tokens) _enum(valeurs, t as String)};
+  }
+
+  Iterable<Map> _sectionAssociations(Map y, String section) {
     final associations = y['associations'] as Map?;
     final liste = associations?[section] as Iterable?;
-    return liste == null
-        ? const {}
-        : liste.map((e) => (e as Map)['id'] as String).toSet();
+    return liste == null ? const <Map>[] : liste.cast<Map>();
   }
+
+  /// Localised reason map (`{fr:, en:}`), dropping null entries.
+  Map<String, String> _raisonI18n(Map? m) => m == null
+      ? const {}
+      : {
+          for (final entry in m.entries)
+            if (entry.value != null)
+              entry.key.toString(): entry.value as String,
+        };
 
   /// Resolves an enum value from a snake_case YAML token (e.g. `petit_fruit` →
   /// `CategoriePlante.petitFruit`).

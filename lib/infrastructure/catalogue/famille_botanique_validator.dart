@@ -50,6 +50,23 @@ class FamilleBotaniqueValidator {
     exiger(fr['nom_commun'] != null, 'i18n.fr.nom_commun is mandatory');
     exiger(fr['description'] != null, 'i18n.fr.description is mandatory');
 
+    // Optional educational notes (ADR-0006 Lot 4), per locale: when present
+    // they must be strings (the mapper reads them as such).
+    for (final entry in i18n.entries) {
+      final loc = entry.value;
+      if (loc is! Map) continue;
+      for (final cle in const [
+        'pourquoi_rotation',
+        'ennemis_communs_note',
+        'associations_note',
+      ]) {
+        final v = loc[cle];
+        if (v != null) {
+          exiger(v is String, 'i18n.${entry.key}.$cle must be a string');
+        }
+      }
+    }
+
     final delai = y['delai_retour_annees'];
     if (delai != null) {
       exiger(delai is int && delai > 0,

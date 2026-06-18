@@ -41,6 +41,7 @@ class CatalogueVue {
   final List<FamilleBotanique> _familles;
   final List<GroupeFiche> _groupes;
   final List<FichePlante> _toutesMeres;
+  final List<FichePlante> _toutesVarietes;
 
   CatalogueVue._(
     this._requete,
@@ -49,24 +50,29 @@ class CatalogueVue {
     List<FamilleBotanique> familles,
     List<GroupeFiche> groupes,
     List<FichePlante> toutesMeres,
+    List<FichePlante> toutesVarietes,
   )   : _familles = List.unmodifiable(familles),
         _groupes = List.unmodifiable(groupes),
-        _toutesMeres = List.unmodifiable(toutesMeres);
+        _toutesMeres = List.unmodifiable(toutesMeres),
+        _toutesVarietes = List.unmodifiable(toutesVarietes);
 
   /// Builds a catalogue view. [toutesMeres] is every species (unfiltered, drives
   /// the count and the network view); [groupes] is the filtered, ordered result.
-  /// [familles] are the family chips for the selected category (empty under
-  /// "Tout"); [familleSelectionnee] is the active family id, or `null`.
+  /// [toutesVarietes] is every variety sheet, unfiltered (drives the in-sheet
+  /// variety switcher). [familles] are the family chips for the selected
+  /// category (empty under "Tout"); [familleSelectionnee] is the active family
+  /// id, or `null`.
   factory CatalogueVue({
     required String requete,
     required CategoriePlante? categorie,
     required List<GroupeFiche> groupes,
     required List<FichePlante> toutesMeres,
+    List<FichePlante> toutesVarietes = const [],
     String? familleSelectionnee,
     List<FamilleBotanique> familles = const [],
   }) =>
       CatalogueVue._(requete, categorie, familleSelectionnee, familles, groupes,
-          toutesMeres);
+          toutesMeres, toutesVarietes);
 
   /// Current free-text query (as typed).
   String get requete => _requete;
@@ -91,6 +97,23 @@ class CatalogueVue {
 
   /// Every species (mother sheets only), unfiltered — drives the network view.
   List<FichePlante> get toutesMeres => _toutesMeres;
+
+  /// The varieties of the species [mereId], unfiltered and ordered by localized
+  /// name — drives the in-sheet variety switcher (immutable, may be empty).
+  List<FichePlante> varietesDe(String mereId) => List.unmodifiable([
+        for (final v in _toutesVarietes)
+          if (v.parentId == mereId) v,
+      ]);
+
+  /// The species (mother sheet) of [fiche]: itself when it is a species, else
+  /// the mother it descends from, or `null` if the mother is unknown.
+  FichePlante? mereDe(FichePlante fiche) {
+    if (fiche.estMere) return fiche;
+    for (final m in _toutesMeres) {
+      if (m.id == fiche.parentId) return m;
+    }
+    return null;
+  }
 
   /// Total number of species in the catalogue (before filtering).
   int get total => _toutesMeres.length;

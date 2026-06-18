@@ -1,0 +1,135 @@
+# Fiche mère (espèce) — Thym.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: ARO-004
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Thymus vulgaris
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Thym
+    noms_alternatifs: [Thym commun, Thym ordinaire, Farigoule]
+    description: >
+      Sous-arbuste vivace méditerranéen de la famille des Lamiacées, cultivé
+      depuis l'Antiquité pour ses propriétés aromatiques et médicinales. Feuilles
+      ovales, vert grisâtre, recouvertes d'huiles essentielles (thymol, carvacrol).
+      Très rustique une fois établi, il supporte la sécheresse, le calcaire et
+      le froid jusqu'à –15 °C. Ses petites fleurs mauves en juin-juillet sont
+      extrêmement mellifères.
+    conseils_culture: >
+      Planter en sol bien drainé, pauvre à modéré, au plein soleil. Éviter les
+      terres lourdes et humides qui font pourrir le collet. Le thym tolère
+      parfaitement la sécheresse une fois enraciné. Tailler après la floraison
+      pour éviter le boisement excessif et maintenir un port compact. Peut
+      passer 5 à 10 ans au même endroit sans problème.
+    conseils_recolte: >
+      Cueillir les rameaux verts en matinée après la rosée, avant floraison
+      pour un arôme maximal. Ne pas couper dans le bois mort. Une taille annuelle
+      d'un tiers du volume après floraison suffit à maintenir la plante productive.
+    erreurs_frequentes:
+      - Sol trop riche (favorise la croissance végétative au détriment des arômes)
+      - Sol mal drainé ou trop arrosé (pourriture du collet et des racines)
+      - Taille trop sévère dans le bois mort (la plante ne repousse pas sur bois)
+  en:
+    nom_commun: Thyme
+    noms_alternatifs: [Common thyme, Garden thyme]
+    description: >
+      Hardy Mediterranean sub-shrub from the Lamiaceae family, cultivated since
+      antiquity for its culinary and medicinal uses. Very drought-tolerant once
+      established. Extremely attractive to bees when in flower.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - sec
+    - pauvre
+  ph_min: 6.5
+  ph_max: 8.0
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -15
+  gele_fatal: false
+
+cycle:
+  enracinement: moyen
+  type: vivace
+  duree_germination_jours: [10, 20]
+  duree_avant_recolte_jours: [90, 180]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 30
+  profondeur_semis_cm: 0.3
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [5, 10]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [5, 10]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [4, 11]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [10, 4]
+
+associations:
+  beneficies:
+    - id: LEG-006
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Repousse les papillons blancs des choux, améliore la vigueur", en: "Repels cabbage white butterflies, improves vigour" }
+    - id: LEG-007
+      raison_i18n: { fr: "Compagnonnage favorable avec les crucifères", en: "Favourable companion planting with brassicas" }
+    - id: LEG-011
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne les pucerons des cucurbitacées", en: "Deters aphids from cucurbits" }
+    - id: LEG-022
+      raison_i18n: { fr: "Association favorable documentée au jardin", en: "Documented favourable garden association" }
+  defavorables: []
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 2
+  fixe_azote: false
+  besoin_azote: faible
+
+conservation:
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Bouquets séchés à l'ombre, à l'abri de l'humidité — arôme excellent après séchage", en: "Dried in bunches in the shade, away from moisture — excellent flavour after drying" }
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Tige dans un peu d'eau, à température ambiante ou au réfrigérateur", en: "Stem in a little water at room temperature or refrigerated" }
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Bouquet garni, rôtis, grillades, marinades, tisane, pizza, thym miel, tajine, huile parfumée]
+  en: [Bouquet garni, roasts, grills, marinades, herbal tea, pizza, thyme honey, tagine, infused oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Thym_commun
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

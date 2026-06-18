@@ -4,16 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/calendrier_notifier.dart';
 import '../../application/state/calendrier_vue.dart';
 import '../../application/state/saison_notifier.dart';
 import '../../application/state/saison_vue.dart';
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/carte_teaser_palier.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
@@ -83,10 +86,15 @@ class _Contenu extends ConsumerStatefulWidget {
 
 class _ContenuState extends ConsumerState<_Contenu> {
   _VueCal _vue = _VueCal.agenda;
+  bool _teaserFerme = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // The "Saison" view is an intermediate+ feature (ADR-0009): hidden for
+    // beginners, who fall back to Agenda if it was somehow selected.
+    final vueSaisonDispo = ref.watch(accesNiveauProvider).vueSaison;
+    final vue = (!vueSaisonDispo && _vue == _VueCal.saison) ? _VueCal.agenda : _vue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -109,24 +117,33 @@ class _ContenuState extends ConsumerState<_Contenu> {
                 icon: const Icon(Icons.calendar_month_outlined),
                 label: Text(l10n.calendrierVueMois),
               ),
-              ButtonSegment(
-                value: _VueCal.saison,
-                icon: const Icon(Icons.eco_outlined),
-                label: Text(l10n.calendrierVueSaison),
-              ),
+              if (vueSaisonDispo)
+                ButtonSegment(
+                  value: _VueCal.saison,
+                  icon: const Icon(Icons.eco_outlined),
+                  label: Text(l10n.calendrierVueSaison),
+                ),
             ],
-            selected: {_vue},
+            selected: {vue},
             onSelectionChanged: (s) => setState(() => _vue = s.first),
             showSelectedIcon: false,
           ),
         ),
         Expanded(
-          child: switch (_vue) {
+          child: switch (vue) {
             _VueCal.agenda => _VueAgenda(vue: widget.vue),
             _VueCal.mois => _VueMois(vue: widget.vue),
             _VueCal.saison => const _VueSaison(),
           },
         ),
+        // Level-up teaser for the locked Saison view (ADR-0009 §4b).
+        if (!vueSaisonDispo && !_teaserFerme)
+          CarteTeaserPalier(
+            icone: Icons.eco_outlined,
+            feature: l10n.tutoVueSaisonTitre,
+            niveauRequis: NiveauExperience.intermediaire,
+            onFermer: () => setState(() => _teaserFerme = true),
+          ),
       ],
     );
   }
@@ -177,6 +194,7 @@ class _VueAgenda extends ConsumerWidget {
                     for (final groupe in vue.groupes)
                       _GroupeJour(
                         groupe: groupe,
+                        cibleLabelDe: vue.cibleNom,
                         onCocher: notifier.cocher,
                         onModifier: (t) => _modifierTache(context, ref, t),
                         onSupprimer: (t) => _supprimerTache(context, ref, t),
@@ -290,6 +308,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
           for (final tache in tachesSel) ...[
             _CarteTache(
               tache: tache,
+              cibleLabel: vue.cibleNom(tache),
               onCocher: notifier.cocher,
               onModifier: (t) => _modifierTache(context, ref, t),
               onSupprimer: (t) => _supprimerTache(context, ref, t),
@@ -873,12 +892,16 @@ class _Resume extends StatelessWidget {
 /// A day's header + its task cards.
 class _GroupeJour extends StatelessWidget {
   final GroupeJour groupe;
+
+  /// Resolves a task's target display name (zone / crop / garden).
+  final String? Function(Tache) cibleLabelDe;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
 
   const _GroupeJour({
     required this.groupe,
+    required this.cibleLabelDe,
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
@@ -903,6 +926,7 @@ class _GroupeJour extends StatelessWidget {
         for (final tache in groupe.taches) ...[
           _CarteTache(
             tache: tache,
+            cibleLabel: cibleLabelDe(tache),
             onCocher: onCocher,
             onModifier: onModifier,
             onSupprimer: onSupprimer,
@@ -917,12 +941,16 @@ class _GroupeJour extends StatelessWidget {
 /// One tickable task card: gesture icon + title + check.
 class _CarteTache extends StatelessWidget {
   final Tache tache;
+
+  /// Resolved name of the task's target (zone / crop / garden), or `null`.
+  final String? cibleLabel;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
 
   const _CarteTache({
     required this.tache,
+    required this.cibleLabel,
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
@@ -968,10 +996,34 @@ class _CarteTache extends StatelessWidget {
                         decoration: fait ? TextDecoration.lineThrough : null,
                       ),
                     ),
-                    Text(
-                      l10n.typeTache(tache.type),
-                      style: theme.textTheme.labelSmall
-                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    Row(
+                      children: [
+                        Text(
+                          l10n.typeTache(tache.type),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                        if (cibleLabel != null) ...[
+                          Text(
+                            ' · ',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant),
+                          ),
+                          Icon(
+                            Icons.place_outlined,
+                            size: TaillesIconesApp.sm,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          Flexible(
+                            child: Text(
+                              cibleLabel!,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ),

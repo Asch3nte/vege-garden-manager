@@ -1,0 +1,63 @@
+# Fiche fille (variété) — Tomate Ananas. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V007
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Pineapple'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Ananas
+    noms_alternatifs: [Yellow Pineapple, Pineapple Tomato, Tomate bicolore jaune-rouge]
+    description: >
+      Variété américaine ancienne (Kentucky) à très gros fruits (250–600 g),
+      ronds et légèrement aplatis, peau jaune striée de rouge. Chair jaune
+      striée de rouge en son cœur, dense, ferme et charnue, saveur douce,
+      fruitée et juteuse avec des notes rappelant l'ananas. Port indéterminé
+      vigoureux (120–200 cm).
+    conseils_culture: >
+      Variété très gourmande en chaleur : préférer une culture sous serre ou
+      en région méridionale. Semis précoce (février–mars) indispensable pour
+      un cycle suffisant. Les fruits lourds nécessitent un tuteurage solide ;
+      déconseillé en culture en bac (racines insuffisantes pour soutenir les
+      fruits). Sol riche, drainé, arrosage régulier mais pas excessif.
+    conseils_recolte: >
+      Récolter 4–5 mois après le semis, quand la peau jaune est bien colorée
+      et le fruit cède légèrement sous le doigt. La couleur jaune ne doit pas
+      être confondue avec une maturité insuffisante. Récolte successive sur
+      plusieurs semaines.
+    erreurs_frequentes:
+      - Semis tardif (cycle long, risque de gel avant maturité complète)
+      - Culture en bac (fruits trop lourds pour les contenants)
+      - Attendre une couleur rouge (la variété reste jaune à maturité)
+  en:
+    nom_commun: Pineapple Tomato
+    description: >
+      Old American heirloom (Kentucky) with very large fruit (250–600 g),
+      yellow skin streaked with red, yellow flesh with red marbling at the
+      core. Sweet, fruity, juicy flavour reminiscent of pineapple.
+
+cycle:
+  duree_avant_recolte_jours: [80, 100]
+  hauteur_adulte_cm: [120, 200]
+  espacement_cm: 80
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante ; peau fine, manipulation délicate", en: "Room temperature; thin skin, handle with care" }
+  - methode: conserves
+    duree_mois: 10
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Crue en salade de couleur, carpaccio, gazpacho jaune, sauce douce, tartare de légumes]
+  en: [Raw in colourful salads, carpaccio, yellow gazpacho, mild sauce, vegetable tartare]
+
+sources:
+  - https://www.gerbeaud.com/jardin/fiches/tomate-ananas,2249.html
+  - https://tomodori.com/fichephoto.php?nom=Ananas
+contributeurs:
+  - "@potagerer"

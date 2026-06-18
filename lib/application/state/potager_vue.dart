@@ -1,24 +1,33 @@
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/value_objects/etat_croissance.dart';
 
 /// One active crop of a zone, projected for the UI.
 ///
 /// Carries the [plantationId] (so the zone detail can act on it — pull out,
-/// remove) alongside the catalogue-resolved display [nom].
+/// remove) alongside the catalogue-resolved display [nom] and, when derivable,
+/// its current growth state ([etat], computed by the engine from the planting
+/// date and the fiche). [etat] is `null` only when no fiche backs the crop.
 class CulturePotager {
   final String plantationId;
   final String nom;
+  final EtatCroissance? etat;
 
-  const CulturePotager({required this.plantationId, required this.nom});
+  const CulturePotager({
+    required this.plantationId,
+    required this.nom,
+    this.etat,
+  });
 
   @override
   bool operator ==(Object other) =>
       other is CulturePotager &&
       other.plantationId == plantationId &&
-      other.nom == nom;
+      other.nom == nom &&
+      other.etat == etat;
 
   @override
-  int get hashCode => Object.hash(plantationId, nom);
+  int get hashCode => Object.hash(plantationId, nom, etat);
 }
 
 /// One zone (parcelle) projected for the **Potager** plan.

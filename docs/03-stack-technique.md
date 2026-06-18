@@ -26,9 +26,16 @@
 
 ## 2. APIs externes autorisées
 
-- ✅ **Open-Meteo** uniquement (gratuit, sans compte, sans clé API).
+- ✅ **Open-Meteo** (gratuit, sans compte, sans clé API).
   - *Archive API* : données observées passées.
   - *Forecast API* : prévisions (jusqu'à 16 jours).
+- ✅ **Nominatim / OpenStreetMap** (gratuit, sans compte, sans clé API) — validé
+  avec le dev 2026-06-18 dans [ADR-0016](decisions/0016-refonte-ecran-meteo.md).
+  - *Reverse Geocoding API* : coordonnées → nom de localité.
+  - Isolation derrière `AbstractGeocodageService` (domaine) /
+    `NominatimClient` + `GeocodageServiceImpl` (infra).
+  - Conformité politique OSM : `User-Agent` applicatif, ≤ 1 req/s, données non
+    redistribuées en masse.
 - ❌ Aucune autre API externe sans **validation explicite**.
 
 ## 3. Synchronisation inter-appareils

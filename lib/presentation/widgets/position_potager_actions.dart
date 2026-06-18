@@ -8,6 +8,7 @@ import '../../application/state/potagers_notifier.dart';
 import '../../application/state/saison_notifier.dart';
 import '../../domain/entities/potager.dart';
 import '../../domain/value_objects/localisation.dart';
+import '../../domain/value_objects/zone_climatique.dart';
 
 /// The active garden, exposed so the UI can read its current position.
 final potagerActifProvider = FutureProvider<Potager?>((ref) async =>
@@ -20,6 +21,19 @@ Future<void> enregistrerPositionPotager(WidgetRef ref, Localisation loc) async {
       await ref.read(potagerRepositoryProvider).obtenirPotagerActif();
   if (potager == null) return;
   potager.mettreAJourLocalisation(loc);
+  await ref.read(potagersProvider.notifier).modifier(potager);
+  _invalider(ref);
+}
+
+/// Stores [zone] (climate + hardiness) on the active garden and refreshes the
+/// climate-dependent views. Used by the settings panel to let the user adjust
+/// climate/hardiness directly, independently of any position.
+Future<void> enregistrerZoneClimatiquePotager(
+    WidgetRef ref, ZoneClimatique zone) async {
+  final potager =
+      await ref.read(potagerRepositoryProvider).obtenirPotagerActif();
+  if (potager == null) return;
+  potager.mettreAJourZoneClimatique(zone);
   await ref.read(potagersProvider.notifier).modifier(potager);
   _invalider(ref);
 }

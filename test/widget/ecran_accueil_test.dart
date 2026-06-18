@@ -37,6 +37,7 @@ import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_notifier.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_vue.dart';
+import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_accueil.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_zone_detail.dart';
@@ -78,6 +79,11 @@ class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 class MockRecoltes extends Mock implements AbstractRecolteRepository {}
 
 class MockMeteo extends Mock implements AbstractMeteoService {}
+
+class _StubGenererTachesArrosage implements GenererTachesArrosage {
+  @override
+  Future<void> executer() async {}
+}
 
 void main() {
   setUpAll(() {
@@ -155,6 +161,8 @@ void main() {
         meteoServiceProvider.overrideWithValue(meteo),
         fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
         horlogeProvider.overrideWithValue(() => maintenant),
+        genererTachesArrosageProvider
+            .overrideWith((ref) async => _StubGenererTachesArrosage()),
       ];
 
   Future<void> monter(WidgetTester tester, NiveauExperience niveau) async {
@@ -255,6 +263,12 @@ void main() {
   });
 
   testWidgets('the weather prompt sets the garden position', (tester) async {
+    // Wide surface so the map's region band fits without horizontal scrolling.
+    tester.view.physicalSize = const Size(1600, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     when(() => preferences.charger())
         .thenAnswer((_) async => PreferencesUtilisateur());
     when(() => potagers.sauvegarder(any())).thenAnswer((_) async {});
@@ -282,8 +296,13 @@ void main() {
     await tester.tap(find.textContaining('Ajoute ta position'));
     await tester.pumpAndSettle();
 
-    // Pick an approximate region → it is stored on the active garden.
+    // Sheet → open the world map → jump to a region preset → confirm. The
+    // chosen position is stored on the active garden.
+    await tester.tap(find.text('Choisir sur la carte'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
 
     final potager =
@@ -291,16 +310,24 @@ void main() {
     expect(potager.localisation.estDefinie, isTrue);
   });
 
-  testWidgets('tapping a zone tile opens its detail', (tester) async {
+  testWidgets('tapping a zone tile opens its detail on the Potager branch',
+      (tester) async {
     when(() => preferences.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(),
     );
+    // The dashboard tile now targets the zone detail under the Potager branch
+    // (docs/15 §8 D #5); the cross-branch "back returns to the dashboard"
+    // behaviour belongs to the real shell and is covered in navigation_test.
     final router = GoRouter(
       initialLocation: RoutesApp.accueil,
       routes: [
         GoRoute(
           path: RoutesApp.accueil,
           builder: (context, state) => const EcranAccueil(),
+        ),
+        GoRoute(
+          path: RoutesApp.potager,
+          builder: (context, state) => const Scaffold(body: Text('Plan')),
           routes: [
             GoRoute(
               path: RoutesApp.zoneDetailSegment,
@@ -331,10 +358,5 @@ void main() {
     // The zone-detail screen is shown (its "Cultures" section header).
     expect(find.widgetWithText(AppBar, 'Carré nord'), findsOneWidget);
     expect(find.text('Cultures'), findsOneWidget);
-
-    // The phone's system back returns to the dashboard (not the Potager plan).
-    await tester.binding.handlePopRoute();
-    await tester.pumpAndSettle();
-    expect(find.text('Aperçu du potager'), findsOneWidget);
   });
 }

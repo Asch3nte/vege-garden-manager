@@ -15,6 +15,8 @@ import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
@@ -81,8 +83,12 @@ void main() {
               TypeClimat.oceanique: PeriodesCulture(plantation: plantation),
             },
           },
-          associationsBenefiques: benefiques,
-          associationsNegatives: negatives,
+          associationsBenefiques: [
+            for (final id in benefiques) AssociationBenefique(cibleId: id),
+          ],
+          associationsNegatives: [
+            for (final id in negatives) AssociationConflit(cibleId: id),
+          ],
         );
 
     RecommandationPlante? evaluer(
@@ -93,6 +99,7 @@ void main() {
       Set<String> actifs = const {},
       bool rotationConflit = false,
       bool rotationVerifiee = true,
+      bool associationDeriveeFavorable = false,
       Hemisphere? hemisphere = Hemisphere.nord,
       TypeClimat? climat = TypeClimat.oceanique,
     }) =>
@@ -107,6 +114,7 @@ void main() {
           planteIdsActifs: actifs,
           rotationConflit: rotationConflit,
           rotationVerifiee: rotationVerifiee,
+          associationDeriveeFavorable: associationDeriveeFavorable,
         );
 
     test('excludes a plant not plantable this season', () {
@@ -152,6 +160,27 @@ void main() {
             RaisonReco.rotationFavorable,
           ]));
       expect(r.score, greaterThan(0.8));
+    });
+
+    test('a derived association (ADR-0010) is a softer bonus than curated', () {
+      final base = evaluer(fiche());
+      final derive = evaluer(fiche(), associationDeriveeFavorable: true);
+      final curated = evaluer(fiche(benefiques: {'basilic'}), actifs: {'basilic'});
+      // none (0.5) < derived (0.8) < curated (1.0) on the association sub-score.
+      expect(derive!.score, greaterThan(base!.score));
+      expect(curated!.score, greaterThan(derive.score));
+      expect(derive.raisons, contains(RaisonReco.associationDeriveeFavorable));
+      expect(derive.raisons, isNot(contains(RaisonReco.bonneAssociation)));
+    });
+
+    test('a curated association overrides the derived flag (no derived reason)', () {
+      final r = evaluer(
+        fiche(benefiques: {'basilic'}),
+        actifs: {'basilic'},
+        associationDeriveeFavorable: true,
+      );
+      expect(r!.raisons, contains(RaisonReco.bonneAssociation));
+      expect(r.raisons, isNot(contains(RaisonReco.associationDeriveeFavorable)));
     });
 
     test('a sun mismatch lowers the score and drops the reason', () {

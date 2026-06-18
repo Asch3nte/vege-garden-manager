@@ -4,7 +4,9 @@ import 'package:riverpod/riverpod.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/preferences_notifier.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
 import 'package:pot_a_gerer/domain/enums/langue.dart';
+import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/theme_app.dart';
@@ -79,6 +81,18 @@ void main() {
     expect(c.read(preferencesProvider).value!.syncLocaleActive, isTrue);
   });
 
+  test('terminerOnboarding marks the flag and persists it', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier).terminerOnboarding();
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.single as PreferencesUtilisateur).onboardingTermine,
+        isTrue);
+    expect(c.read(preferencesProvider).value!.onboardingTermine, isTrue);
+  });
+
   test('a notification category toggle updates only that key', () async {
     final c = conteneur();
     await c.read(preferencesProvider.future);
@@ -88,5 +102,34 @@ void main() {
 
     final map = c.read(preferencesProvider).value!.notificationsParCategorie;
     expect(map['arrosage'], isFalse);
+  });
+
+  test('setting an association weight updates only that family (ADR-0011)',
+      () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier).definirPoidsAssociation(
+        FamilleEffetAssociation.protectionRavageurs, PoidsAssociation.ignore);
+
+    final profil = c.read(preferencesProvider).value!.ponderationAssociations;
+    expect(profil.poids(FamilleEffetAssociation.protectionRavageurs),
+        PoidsAssociation.ignore);
+    expect(profil.poids(FamilleEffetAssociation.fertilite),
+        PoidsAssociation.normal);
+  });
+
+  test('reinitialiserPonderationAssociations restores the neutral profile',
+      () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+    final notifier = c.read(preferencesProvider.notifier);
+
+    await notifier.definirPoidsAssociation(
+        FamilleEffetAssociation.gainDePlace, PoidsAssociation.fort);
+    await notifier.reinitialiserPonderationAssociations();
+
+    expect(c.read(preferencesProvider).value!.ponderationAssociations.estDefaut,
+        isTrue);
   });
 }

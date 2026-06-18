@@ -96,6 +96,21 @@ void main() {
     expect(plantation.nombrePieds, 1);
   });
 
+  testWidgets('the planting-type field is renamed and describes each option',
+      (tester) async {
+    await monter(tester);
+
+    // Renamed away from the confusing "Méthode".
+    expect(find.text('Type de mise en place'), findsOneWidget);
+    expect(find.text('Méthode'), findsNothing);
+
+    // Opening it (via its selected value) reveals a description per option.
+    await tester.tap(find.text('Semis direct'));
+    await tester.pumpAndSettle();
+    expect(find.text('Semer la graine directement en place, au jardin.'),
+        findsOneWidget);
+  });
+
   testWidgets('not choosing a plant blocks saving', (tester) async {
     await monter(tester);
 

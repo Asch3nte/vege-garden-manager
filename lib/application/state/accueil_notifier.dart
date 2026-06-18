@@ -7,6 +7,7 @@ import '../../domain/enums/statut_plantation.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/detecter_alertes_meteo.dart';
+import '../use_cases/generer_taches_arrosage.dart';
 import 'accueil_vue.dart';
 
 /// Assembles the **Accueil** dashboard view-model from the repositories.
@@ -45,6 +46,11 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
     for (final parcelle in parcelles) {
       toutesPlantations.addAll(await plantationsRepo.obtenirParParcelle(parcelle.id));
     }
+
+    // Generate watering tasks before querying today's tasks so they appear immediately.
+    // ref.read() — one-shot action, must not create a reactive dependency.
+    final generateur = await ref.read(genererTachesArrosageProvider.future);
+    await generateur.executer();
 
     return AccueilVue(
       nomPotager: potager.nom,

@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'app/bootstrap.dart';
 import 'app/router.dart';
@@ -22,7 +21,7 @@ Future<void> main() async {
 
   final resultat = await const Bootstrap().initialiser();
 
-  runApp(resultat.scopeBuilder(PotAGererApp()));
+  runApp(resultat.scopeBuilder(const PotAGererApp()));
 }
 
 /// Registers the SIL OFL 1.1 licences of the embedded Manrope & Inter fonts in
@@ -50,8 +49,9 @@ void _enregistrerLicencesPolices() {
 /// Root widget of Pot'à Gérer.
 ///
 /// Wires the « Carnet vivant » themes, the French localization delegates and the
-/// go_router navigation shell. The router is built once and held for the widget's
-/// lifetime (a [GoRouter] must not be rebuilt on every frame).
+/// go_router navigation shell. The router comes from `routeurProvider`, which
+/// caches a single instance for the app's lifetime (it must not be rebuilt on
+/// every frame).
 ///
 /// **Must be mounted under a `ProviderScope`** — screens are Riverpod consumers.
 /// In production [main] supplies it via `Bootstrap.scopeBuilder`; tests wrap it
@@ -60,13 +60,14 @@ void _enregistrerLicencesPolices() {
 /// The active [ThemeMode] follows the user's theme preference; until the
 /// preferences load (or if they fail), it falls back to `ThemeMode.system`.
 class PotAGererApp extends ConsumerWidget {
-  PotAGererApp({super.key});
-
-  final GoRouter _routeur = creerRouteur();
+  const PotAGererApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themePref = ref.watch(preferencesProvider).value?.theme;
+    // Cached for the app's lifetime by the provider (a GoRouter must not be
+    // rebuilt every frame).
+    final routeur = ref.watch(routeurProvider);
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
@@ -76,7 +77,7 @@ class PotAGererApp extends ConsumerWidget {
       themeMode: _modeTheme(themePref),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: _routeur,
+      routerConfig: routeur,
     );
   }
 

@@ -25,11 +25,13 @@ class OpenMeteoClient {
   /// Open-Meteo daily variables requested for every call.
   static const _dailyVariables =
       'temperature_2m_max,temperature_2m_min,precipitation_sum,'
-      'precipitation_probability_max,wind_speed_10m_max';
+      'precipitation_probability_max,wind_speed_10m_max,'
+      'et0_fao_evapotranspiration,weather_code';
 
-  /// Open-Meteo hourly variables requested for the detail view.
+  /// Open-Meteo hourly variables requested for the detail view (ADR-0016 Lot 2).
   static const _hourlyVariables =
-      'temperature_2m,precipitation,precipitation_probability';
+      'temperature_2m,precipitation,precipitation_probability,'
+      'weather_code,wind_speed_10m';
 
   /// V1 frost threshold (°C) flagging [DonneesMeteo.risqueGel]; mirrors the
   /// engine's single source of truth ([SeuilsMeteo.gelC]).
@@ -117,6 +119,8 @@ class OpenMeteoClient {
         // Open-Meteo reports probability as 0..100; the VO is 0..1.
         probabilitePluie: (_at(hourly, 'precipitation_probability', i) / 100)
             .clamp(0.0, 1.0),
+        weathercode: _atInt(hourly, 'weather_code', i),
+        ventKmh: _at(hourly, 'wind_speed_10m', i),
       ),
     );
   }
@@ -229,6 +233,8 @@ class OpenMeteoClient {
       ventVitesseMax: _at(daily, 'wind_speed_10m_max', i),
       risqueGel: tempMin <= seuilGelC,
       risqueCanicule: tempMax >= seuilCaniculeC,
+      evapotranspirationMm:
+          _atNullable(daily, 'et0_fao_evapotranspiration', i),
     );
   }
 
@@ -245,15 +251,85 @@ class OpenMeteoClient {
       // Open-Meteo reports probability as a 0..100 percentage; the DTO is 0..1.
       probabilitePluie: _at(daily, 'precipitation_probability_max', i) / 100,
       type: type,
+      evapotranspirationMm:
+          _atNullable(daily, 'et0_fao_evapotranspiration', i),
+      weathercode: _atInt(daily, 'weather_code', i),
     );
   }
 
-  /// Reads index [i] of daily variable [key] as a double; absent/null → 0.
+  /// Returns the ground elevation (metres) at [loc] from the Open-Meteo
+  /// response metadata, or `null` on any failure (undefined location, network
+  /// error, parse error). Never throws. (ADR-0016 Lot 2)
+  Future<double?> obtenirElevation(Localisation loc) async {
+    if (!loc.estDefinie) return null;
+    try {
+      final body = await _fetchMeta(loc);
+      final v = body['elevation'];
+      return v is num ? v.toDouble() : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Minimal forecast request (1 day, 1 variable) used only to capture the
+  /// root-level metadata (elevation, timezone) returned by Open-Meteo on every
+  /// call. Throws [MeteoIndisponibleException] on network or parse failure.
+  Future<Map<String, dynamic>> _fetchMeta(Localisation loc) async {
+    final uri = Uri.https('api.open-meteo.com', '/v1/forecast', {
+      'latitude': '${loc.latitude}',
+      'longitude': '${loc.longitude}',
+      'hourly': 'temperature_2m',
+      'forecast_days': '1',
+      'timezone': 'auto',
+    });
+
+    final http.Response response;
+    try {
+      response = await _httpClient.get(uri).timeout(_timeout);
+    } catch (e) {
+      throw MeteoIndisponibleException(
+        'Open-Meteo metadata request failed: $uri',
+        cause: e,
+      );
+    }
+    if (response.statusCode != 200) {
+      throw MeteoIndisponibleException(
+        'Open-Meteo returned HTTP ${response.statusCode} for $uri.',
+      );
+    }
+    try {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      throw MeteoIndisponibleException(
+        'Could not parse Open-Meteo metadata from $uri.',
+        cause: e,
+      );
+    }
+  }
+
+  /// Reads index [i] of variable [key] as a double; absent/null → 0.
   double _at(Map<String, dynamic> daily, String key, int i) {
     final values = daily[key];
     if (values is! List || i >= values.length) return 0;
     final v = values[i];
     return v is num ? v.toDouble() : 0;
+  }
+
+  /// Reads index [i] of variable [key] as an int; absent/null → 0.
+  int _atInt(Map<String, dynamic> data, String key, int i) {
+    final values = data[key];
+    if (values is! List || i >= values.length) return 0;
+    final v = values[i];
+    return v is num ? v.toInt() : 0;
+  }
+
+  /// Reads index [i] of daily variable [key] as a nullable double; missing or
+  /// null in the API response → `null` (no fallback to 0).
+  double? _atNullable(Map<String, dynamic> daily, String key, int i) {
+    final values = daily[key];
+    if (values is! List || i >= values.length) return null;
+    final v = values[i];
+    return v is num ? v.toDouble() : null;
   }
 
   /// Releases the underlying [http.Client]. Call when the client is no longer

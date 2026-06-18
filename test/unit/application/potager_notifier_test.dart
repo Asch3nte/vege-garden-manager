@@ -60,6 +60,7 @@ void main() {
     // Default: a zone has no plantation unless a test stubs it.
     when(() => plantations.obtenirParParcelle(any()))
         .thenAnswer((_) async => []);
+    when(() => plantations.obtenirParId(any())).thenAnswer((_) async => null);
   });
 
   Potager unPotager() => Potager(
@@ -234,6 +235,39 @@ void main() {
     );
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => [uneTacheParcelle('z-1')]);
+
+    final vue = await conteneur().read(potagerProvider.future);
+
+    expect(vue.zones[0].aTacheAujourdhui, isTrue);
+    expect(vue.zones[1].aTacheAujourdhui, isFalse);
+  });
+
+  test('plantation-level watering task lights the parent zone badge', () async {
+    final plantation = unePlantation('p-1', 'tomate', StatutPlantation.enCours);
+    final tachePlantation = Tache(
+      id: 'ta-p1',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: maintenant,
+    );
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
+      (_) async => [
+        uneParcelle('z-1', 'Avec tâche plantation'),
+        uneParcelle('z-2', 'Sans tâche'),
+      ],
+    );
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [plantation]);
+    when(() => fiches.obtenirParId('tomate'))
+        .thenAnswer((_) async => uneFiche('tomate', 'Tomate'));
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [tachePlantation]);
+    when(() => plantations.obtenirParId('p-1'))
+        .thenAnswer((_) async => plantation);
 
     final vue = await conteneur().read(potagerProvider.future);
 

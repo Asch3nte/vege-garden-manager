@@ -6,6 +6,7 @@ import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/preferences_notifier.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
+import '../../domain/services/acces_niveau.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
 import 'parametres/widgets_parametres.dart';
@@ -61,25 +62,45 @@ class _Racine extends StatelessWidget {
           icone: Icons.tune,
           titre: l10n.categGenerale,
           sousTitre: l10n.categGeneraleSub,
-          onTap: () => context.push(RoutesApp.plusGeneral),
+          onTap: () => context.go(RoutesApp.plusGeneral),
         ),
         LigneCategorie(
           icone: Icons.privacy_tip_outlined,
           titre: l10n.categConfidentialite,
           sousTitre: l10n.categConfidentialiteSub,
-          onTap: () => context.push(RoutesApp.plusConfidentialite),
+          onTap: () => context.go(RoutesApp.plusConfidentialite),
         ),
         LigneCategorie(
           icone: Icons.notifications_outlined,
           titre: l10n.categNotifications,
           sousTitre: l10n.categNotificationsSub,
-          onTap: () => context.push(RoutesApp.plusNotifications),
+          onTap: () => context.go(RoutesApp.plusNotifications),
+        ),
+        LigneCategorie(
+          icone: Icons.school_outlined,
+          titre: l10n.categNiveaux,
+          sousTitre: l10n.categNiveauxSub,
+          onTap: () => context.go(RoutesApp.plusNiveaux),
+        ),
+        // Association weighting — expert only (ADR-0011/0009).
+        if (AccesNiveau(prefs.niveauExperience).ponderationAssociations)
+          LigneCategorie(
+            icone: Icons.tune_outlined,
+            titre: l10n.categPonderation,
+            sousTitre: l10n.categPonderationSub,
+            onTap: () => context.go(RoutesApp.plusPonderation),
+          ),
+        LigneCategorie(
+          icone: Icons.save_outlined,
+          titre: l10n.categDonnees,
+          sousTitre: l10n.categDonneesSub,
+          onTap: () => context.go(RoutesApp.plusDonnees),
         ),
         LigneCategorie(
           icone: Icons.info_outline,
           titre: l10n.categApropos,
           sousTitre: l10n.categAproposSub,
-          onTap: () => context.push(RoutesApp.plusAPropos),
+          onTap: () => context.go(RoutesApp.plusAPropos),
         ),
         const SizedBox(height: EspacementsApp.s5),
         _PiedLocal(),

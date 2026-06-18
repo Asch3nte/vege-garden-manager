@@ -10,6 +10,12 @@ i18n:
       Famille des Ribes : groseillier rouge et blanc, cassis et groseillier à
       maquereau. Arbustes rustiques de mi-ombre, à baies en grappes, faciles à
       cultiver et à bouturer.
+    pourquoi_rotation: >
+      Arbustes pérennes, groseilliers et cassissiers gardent leur place ; à la replantation, changez d'emplacement pour éviter l'oïdium américain et les ravageurs déjà installés.
+    ennemis_communs_note: >
+      La tenthrède peut défolier un buisson en quelques jours, la sésie creuse les rameaux, pucerons et cochenilles affaiblissent l'arbuste, et l'oïdium américain blanchit jeunes pousses et fruits.
+    associations_note: >
+      Tolérant la mi-ombre, le groseillier se plaît sous des arbres clairsemés ; les plantes aromatiques voisines aident à éloigner ses ravageurs.
 maladies_communes: [oidium_americain, rouille_vesiculeuse, anthracnose]
 ravageurs_communs: [puceron, tenthrede, sesie, cochenille]
 contributeurs:

@@ -19,6 +19,16 @@
 legumes:
   LEG-001: Tomate
   LEG-001-V001: Tomate Cœur de Bœuf
+  LEG-001-V002: Tomate Cerise
+  LEG-001-V003: Tomate San Marzano
+  LEG-001-V004: Tomate Noire de Crimée
+  LEG-001-V005: Tomate Andine Cornue
+  LEG-001-V006: Tomate Marmande
+  LEG-001-V007: Tomate Ananas
+  LEG-001-V008: Tomate Rose de Berne
+  LEG-001-V009: Tomate Montfavet
+  LEG-001-V010: Tomate Roma
+  LEG-001-V011: Tomate Tigerella
   LEG-002: Aubergine
   LEG-002-V001: Aubergine Violette de Florence
   LEG-003: Betterave
@@ -66,7 +76,29 @@ legumes:
 
 aromatiques:
   ARO-001: Basilic
+  ARO-002: Persil
+  ARO-002-V001: Persil Frisé
+  ARO-003: Ciboulette
+  ARO-003-V001: Ciboulette ail (Allium tuberosum)
+  ARO-004: Thym
+  ARO-004-V001: Thym Citron
+  ARO-005: Menthe poivrée
+  ARO-005-V001: Menthe Verte
+  ARO-006: Coriandre
+  ARO-006-V001: Coriandre Santos
+
+petits_fruits:
+  PFR-001: Fraisier
+  PFR-001-V001: Fraisier Gariguette
+  PFR-002: Framboisier
+  PFR-002-V001: Framboisier Heritage
+  PFR-003: Groseillier rouge
+  PFR-003-V001: Groseillier Jonkheer Van Tets
+  PFR-004: Cassis
+  PFR-004-V001: Cassis Noir de Bourgogne
+  PFR-005: Myrtille
+  PFR-005-V001: Myrtille Bluecrop
 
 # Réfs d'associations citées par les fiches mais sans fiche dédiée à ce jour
 # (laissées telles quelles ; à créer en contenu ultérieur) :
-#   capucine, fenouil, aneth, moutarde, soucis, persil, fraise, ail.
+#   capucine, fenouil, aneth, moutarde, soucis, ail.

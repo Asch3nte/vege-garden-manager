@@ -13,7 +13,8 @@ import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
-import '../widgets/capture_localisation.dart';
+import '../widgets/selecteur_carte_monde.dart';
+import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the garden form as a full-screen route and returns the saved [Potager]
@@ -56,6 +57,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
   bool _suggere = false; // climate/hardiness were pre-filled from the position
   bool _detection = false;
   bool _enregistrement = false;
+  bool _positionManquante = false; // save attempted without a position
 
   bool get _edition => widget.potagerInitial != null;
 
@@ -114,18 +116,25 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
       _climat = suggestion.climat;
       _rusticite = suggestion.rusticite;
       _suggere = true;
+      _positionManquante = false;
     });
   }
 
-  /// Lets the user pick an approximate world region (no-GPS fallback): each
-  /// region maps to representative coordinates, fed through the same derivation.
-  Future<void> _choisirRegion() async {
-    final choix = await choisirRegion(context);
+  /// Lets the user pick a position on the zoomable world map (no-GPS fallback),
+  /// fed through the same climate/hardiness derivation.
+  Future<void> _choisirSurCarte() async {
+    final choix = await choisirSurCarteMonde(context);
     if (choix != null) _appliquerPosition(choix);
   }
 
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
+    // A garden must have a position (it derives hemisphere/climate/sowing
+    // windows); no silent "north" default — see the onboarding requirement.
+    if (!_position.estDefinie) {
+      setState(() => _positionManquante = true);
+      return;
+    }
     setState(() => _enregistrement = true);
     final notifier = ref.read(potagersProvider.notifier);
     final zone = ZoneClimatique(_climat, _rusticite);
@@ -202,9 +211,9 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
               label: Text(l10n.formPotagerDetecter),
             ),
             TextButton.icon(
-              onPressed: _detection ? null : _choisirRegion,
+              onPressed: _detection ? null : _choisirSurCarte,
               icon: const Icon(Icons.public_outlined),
-              label: Text(l10n.formPotagerChoisirRegion),
+              label: Text(l10n.captureCarteChoisir),
             ),
             if (_suggere)
               Padding(
@@ -216,33 +225,33 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
                       ),
                 ),
               ),
-            const SizedBox(height: EspacementsApp.s4),
-            DropdownButtonFormField<TypeClimat>(
-              initialValue: _climat,
-              decoration: InputDecoration(
-                labelText: l10n.formPotagerClimat,
-                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+            if (_positionManquante)
+              Padding(
+                padding: const EdgeInsets.only(top: EspacementsApp.s2),
+                child: Text(
+                  l10n.formPotagerPositionRequise,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                ),
               ),
-              items: [
-                for (final c in TypeClimat.values)
-                  DropdownMenuItem(value: c, child: Text(l10n.climat(c))),
-              ],
-              onChanged: (v) => setState(() => _climat = v!),
+            const SizedBox(height: EspacementsApp.s4),
+            ChampDeroulantDecrit<TypeClimat>(
+              value: _climat,
+              options: TypeClimat.values,
+              libelle: l10n.climat,
+              description: l10n.climatDescription,
+              labelText: l10n.formPotagerClimat,
+              onChanged: (v) => setState(() => _climat = v),
             ),
             const SizedBox(height: EspacementsApp.s4),
-            DropdownButtonFormField<ZoneRusticite>(
-              initialValue: _rusticite,
-              decoration: InputDecoration(
-                labelText: l10n.formPotagerRusticite,
-                helperText: l10n.formPotagerRusticiteAide,
-                helperMaxLines: 2,
-                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
-              ),
-              items: [
-                for (final z in ZoneRusticite.values)
-                  DropdownMenuItem(value: z, child: Text(l10n.rusticite(z))),
-              ],
-              onChanged: (v) => setState(() => _rusticite = v!),
+            ChampDeroulantDecrit<ZoneRusticite>(
+              value: _rusticite,
+              options: ZoneRusticite.values,
+              libelle: l10n.rusticite,
+              description: l10n.rusticiteDescription,
+              labelText: l10n.formPotagerRusticite,
+              onChanged: (v) => setState(() => _rusticite = v),
             ),
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(

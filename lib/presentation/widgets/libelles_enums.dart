@@ -5,16 +5,27 @@ import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/destination_recolte.dart';
+import '../../domain/enums/enracinement_plante.dart';
+import '../../domain/enums/famille_effet_association.dart';
+import '../../domain/enums/famille_effet_conflit.dart';
+import '../../domain/enums/ph_sol.dart';
+import '../../domain/enums/poids_association.dart';
+import '../../domain/enums/technique_sol.dart';
+import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/unite_quantite.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
+import '../../domain/enums/niveau_confiance.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/sens_swipe.dart';
+import '../../domain/enums/stade_croissance.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart' as prefs_theme;
+import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_climat.dart';
+import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/enums/type_emplacement.dart';
 import '../../domain/enums/type_observation.dart';
 import '../../domain/enums/type_parcelle.dart';
@@ -86,6 +97,13 @@ extension LibellesEnums on AppLocalizations {
         NiveauExperience.expert => niveauExpert,
       };
 
+  /// One-line description of what an experience level unlocks (ADR-0009).
+  String niveauDescription(NiveauExperience n) => switch (n) {
+        NiveauExperience.debutant => niveauDebutantDesc,
+        NiveauExperience.intermediaire => niveauIntermediaireDesc,
+        NiveauExperience.expert => niveauExpertDesc,
+      };
+
   /// Short label for a geolocation mode (the chip value).
   String geolocLabel(ModeGeolocalisation m) => switch (m) {
         ModeGeolocalisation.desactivee => geolocLabelOff,
@@ -144,9 +162,44 @@ extension LibellesEnums on AppLocalizations {
         TypeClimat.polaire => climatPolaire,
       };
 
+  /// Short helper describing a climate type (shown under each dropdown option).
+  String climatDescription(TypeClimat c) => switch (c) {
+        TypeClimat.tropical => climatTropicalDesc,
+        TypeClimat.subtropical => climatSubtropicalDesc,
+        TypeClimat.aride => climatArideDesc,
+        TypeClimat.semiAride => climatSemiArideDesc,
+        TypeClimat.mediterraneen => climatMediterraneenDesc,
+        TypeClimat.oceanique => climatOceaniqueDesc,
+        TypeClimat.continental => climatContinentalDesc,
+        TypeClimat.montagnard => climatMontagnardDesc,
+        TypeClimat.polaire => climatPolaireDesc,
+      };
+
   /// Label for a hardiness zone (USDA), e.g. "Zone 8".
   String rusticite(ZoneRusticite z) =>
       rusticiteZone(int.parse(z.name.replaceAll('zone', '')));
+
+  /// Short helper for a hardiness zone: its USDA average annual minimum
+  /// temperature range, in °C (shown under each dropdown option).
+  String rusticiteDescription(ZoneRusticite z) {
+    final n = int.parse(z.name.replaceAll('zone', ''));
+    final (int min, int max) = switch (n) {
+      1 => (-51, -45),
+      2 => (-45, -40),
+      3 => (-40, -34),
+      4 => (-34, -29),
+      5 => (-29, -23),
+      6 => (-23, -18),
+      7 => (-18, -12),
+      8 => (-12, -7),
+      9 => (-7, -1),
+      10 => (-1, 4),
+      11 => (4, 10),
+      12 => (10, 16),
+      _ => (16, 21), // zone 13
+    };
+    return rusticiteZoneDesc(min, max);
+  }
 
   /// Label for a parcelle (zone) type.
   String typeParcelle(TypeParcelle t) => switch (t) {
@@ -157,6 +210,47 @@ extension LibellesEnums on AppLocalizations {
         TypeParcelle.serre => typeParcelleServe,
         TypeParcelle.butte => typeParcelleButte,
         TypeParcelle.autre => typeParcelleAutre,
+      };
+
+  /// Label for a soil texture (ADR-0009 — expert).
+  String textureSol(TextureSol t) => switch (t) {
+        TextureSol.argileux => textureArgileux,
+        TextureSol.sableux => textureSableux,
+        TextureSol.limoneux => textureLimoneux,
+        TextureSol.calcaire => textureCalcaire,
+        TextureSol.humifere => textureHumifere,
+        TextureSol.tourbeux => textureTourbeux,
+        TextureSol.caillouteux => textureCaillouteux,
+      };
+
+  /// Label for a soil pH (ADR-0009 — expert).
+  String phSol(PhSol p) => switch (p) {
+        PhSol.acide => phAcide,
+        PhSol.neutre => phNeutre,
+        PhSol.alcalin => phAlcalin,
+      };
+
+  /// Label for a soil technique (ADR-0009 — intermédiaire+).
+  String techniqueSol(TechniqueSol t) => switch (t) {
+        TechniqueSol.butteLasagne => techButteLasagne,
+        TechniqueSol.hugelkultur => techHugelkultur,
+        TechniqueSol.butteRonde => techButteRonde,
+        TechniqueSol.buttePermanente => techButtePermanente,
+        TechniqueSol.paillage => techPaillage,
+        TechniqueSol.brf => techBrf,
+        TechniqueSol.mulchVivant => techMulchVivant,
+        TechniqueSol.engraisVertCouvert => techEngraisVertCouvert,
+        TechniqueSol.paillageMineral => techPaillageMineral,
+        TechniqueSol.carton => techCarton,
+        TechniqueSol.noDig => techNoDig,
+        TechniqueSol.grelinette => techGrelinette,
+        TechniqueSol.mulchDeFoin => techMulchDeFoin,
+        TechniqueSol.compostageSurface => techCompostageSurface,
+        TechniqueSol.compostEnTrou => techCompostEnTrou,
+        TechniqueSol.mycorhization => techMycorhization,
+        TechniqueSol.bokashi => techBokashi,
+        TechniqueSol.swales => techSwales,
+        TechniqueSol.keylineDesign => techKeylineDesign,
       };
 
   /// Label for the home weather watering verdict.
@@ -200,6 +294,86 @@ extension LibellesEnums on AppLocalizations {
         DestinationRecolte.autre => destinationAutre,
       };
 
+  /// Label for a growth stage.
+  String libelleStade(StadeCroissance s) => switch (s) {
+        StadeCroissance.levee => stadeLevee,
+        StadeCroissance.croissance => stadeCroissance,
+        StadeCroissance.maturation => stadeMaturation,
+        StadeCroissance.recolte => stadeRecolte,
+      };
+
+  /// Label for a beneficial-association mechanism (ADR-0010).
+  String mecanismeBenefice(TypeBeneficeAssociation m) => switch (m) {
+        TypeBeneficeAssociation.tuteurStructurel => assocMecaTuteurStructurel,
+        TypeBeneficeAssociation.etagementLumiere => assocMecaEtagementLumiere,
+        TypeBeneficeAssociation.repulsionRavageur => assocMecaRepulsionRavageur,
+        TypeBeneficeAssociation.brouillageOlfactif =>
+          assocMecaBrouillageOlfactif,
+        TypeBeneficeAssociation.attractionPollinisateurs =>
+          assocMecaAttractionPollinisateurs,
+        TypeBeneficeAssociation.attractionAuxiliaires =>
+          assocMecaAttractionAuxiliaires,
+        TypeBeneficeAssociation.plantePiege => assocMecaPlantePiege,
+        TypeBeneficeAssociation.fixationAzote => assocMecaFixationAzote,
+        TypeBeneficeAssociation.ameublissementSol => assocMecaAmeublissementSol,
+        TypeBeneficeAssociation.couvreSol => assocMecaCouvreSol,
+        TypeBeneficeAssociation.briseVent => assocMecaBriseVent,
+        TypeBeneficeAssociation.successionTemporelle =>
+          assocMecaSuccessionTemporelle,
+      };
+
+  /// Label for a conflicting-association mechanism (ADR-0010).
+  String mecanismeConflit(TypeConflitAssociation m) => switch (m) {
+        TypeConflitAssociation.memeFamilleRavageurs =>
+          assocMecaMemeFamilleRavageurs,
+        TypeConflitAssociation.competitionLumiere => assocMecaCompetitionLumiere,
+        TypeConflitAssociation.competitionAzote => assocMecaCompetitionAzote,
+        TypeConflitAssociation.competitionEau => assocMecaCompetitionEau,
+        TypeConflitAssociation.competitionEspace => assocMecaCompetitionEspace,
+        TypeConflitAssociation.partageMaladies => assocMecaPartageMaladies,
+        TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
+      };
+
+  /// Label for a derived-suggestion confidence level (ADR-0010).
+  String confiance(NiveauConfiance c) => switch (c) {
+        NiveauConfiance.faible => confianceFaible,
+        NiveauConfiance.moyen => confianceMoyen,
+        NiveauConfiance.eleve => confianceEleve,
+      };
+
+  /// Label for an association effect family (ADR-0011).
+  String familleEffet(FamilleEffetAssociation f) => switch (f) {
+        FamilleEffetAssociation.gainDePlace => familleEffetGainDePlace,
+        FamilleEffetAssociation.protectionRavageurs =>
+          familleEffetProtectionRavageurs,
+        FamilleEffetAssociation.fertilite => familleEffetFertilite,
+        FamilleEffetAssociation.pollinisation => familleEffetPollinisation,
+        FamilleEffetAssociation.couvertureAbri => familleEffetCouvertureAbri,
+      };
+
+  /// Label for an association **conflict** effect family (ADR-0014).
+  String familleEffetConflit(FamilleEffetConflit f) => switch (f) {
+        FamilleEffetConflit.concurrenceRessources => familleConflitConcurrence,
+        FamilleEffetConflit.risqueSanitaire => familleConflitSanitaire,
+        FamilleEffetConflit.allelopathie => familleConflitAllelopathie,
+      };
+
+  /// Label for an association weight level (ADR-0011).
+  String poids(PoidsAssociation p) => switch (p) {
+        PoidsAssociation.ignore => poidsIgnore,
+        PoidsAssociation.faible => poidsFaible,
+        PoidsAssociation.normal => poidsNormal,
+        PoidsAssociation.fort => poidsFort,
+      };
+
+  /// Label for a plant's root system (ADR-0014).
+  String enracinement(EnracinementPlante e) => switch (e) {
+        EnracinementPlante.superficiel => enracinementSuperficiel,
+        EnracinementPlante.moyen => enracinementMoyen,
+        EnracinementPlante.profond => enracinementProfond,
+        EnracinementPlante.pivotant => enracinementPivotant,
+      };
+
   /// Label for a planting method.
   String methode(MethodeMiseEnPlace m) => switch (m) {
         MethodeMiseEnPlace.semisDirect => methodeSemisDirect,
@@ -208,6 +382,17 @@ extension LibellesEnums on AppLocalizations {
         MethodeMiseEnPlace.plantAchete => methodePlantAchete,
         MethodeMiseEnPlace.bouture => methodeBouture,
         MethodeMiseEnPlace.division => methodeDivision,
+      };
+
+  /// Short helper describing a planting method (shown under each dropdown
+  /// option) — the planting "type" the user picks when adding a plantation.
+  String methodeDescription(MethodeMiseEnPlace m) => switch (m) {
+        MethodeMiseEnPlace.semisDirect => methodeSemisDirectDesc,
+        MethodeMiseEnPlace.semisInterieur => methodeSemisInterieurDesc,
+        MethodeMiseEnPlace.repiquage => methodeRepiquageDesc,
+        MethodeMiseEnPlace.plantAchete => methodePlantAcheteDesc,
+        MethodeMiseEnPlace.bouture => methodeBoutureDesc,
+        MethodeMiseEnPlace.division => methodeDivisionDesc,
       };
 }
 

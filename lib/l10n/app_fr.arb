@@ -99,6 +99,27 @@
   "@meteoVerdictArroser": { "description": "Verdict météo : conditions sèches." },
   "meteoVerdictClement": "Conditions clémentes pour le jardin.",
   "@meteoVerdictClement": { "description": "Verdict météo : rien de notable." },
+  "meteoStation": "Station : {ville}",
+  "@meteoStation": {
+    "description": "Météo détaillée : localité la plus proche (source Nominatim).",
+    "placeholders": { "ville": { "type": "String" } }
+  },
+  "meteoMajHeure": "MAJ {heure}",
+  "@meteoMajHeure": {
+    "description": "Météo détaillée : heure de la dernière mise à jour (ex. MAJ 15h45).",
+    "placeholders": { "heure": { "type": "String" } }
+  },
+  "meteoPourquoiTaches": "Pourquoi ces tâches ?",
+  "@meteoPourquoiTaches": { "description": "Météo détaillée : titre du bloc d'explication des tâches générées." },
+  "conseilArroserMaintenant": "Arroser",
+  "@conseilArroserMaintenant": { "description": "Conseil arrosage par culture : besoin immédiat." },
+  "conseilArroserBientot": "Arroser dans {jours} j",
+  "@conseilArroserBientot": {
+    "description": "Conseil arrosage par culture : besoin dans N jours.",
+    "placeholders": { "jours": { "type": "int" } }
+  },
+  "conseilPluieAVenir": "Pluie à venir",
+  "@conseilPluieAVenir": { "description": "Conseil arrosage par culture : pluie prévue, pas besoin d'arroser." },
   "accueilAlertesAVenir": "Alertes à venir",
   "@accueilAlertesAVenir": {
     "description": "Placeholder de la tuile d'alertes, pas encore branchée."
@@ -178,6 +199,30 @@
   "zoneDetailCultures": "Cultures",
   "@zoneDetailCultures": {
     "description": "Titre de la section des cultures sur l'écran de détail d'une zone."
+  },
+  "stadeLevee": "Levée",
+  "@stadeLevee": {
+    "description": "Stade de croissance : la jeune pousse vient de lever (semis)."
+  },
+  "stadeCroissance": "Croissance",
+  "@stadeCroissance": {
+    "description": "Stade de croissance : phase végétative principale."
+  },
+  "stadeMaturation": "Maturation",
+  "@stadeMaturation": {
+    "description": "Stade de croissance : la culture approche de la récolte."
+  },
+  "stadeRecolte": "Récolte",
+  "@stadeRecolte": {
+    "description": "Stade de croissance : la culture est dans (ou au-delà de) la fenêtre de récolte estimée."
+  },
+  "cultureProchaineTache": "Prochaine : {titre} · {date}",
+  "@cultureProchaineTache": {
+    "description": "Détail de zone : prochaine tâche planifiée d'une culture (intitulé + date).",
+    "placeholders": {
+      "titre": { "type": "String" },
+      "date": { "type": "String" }
+    }
   },
   "zoneDetailIntrouvable": "Zone introuvable.",
   "@zoneDetailIntrouvable": {
@@ -339,9 +384,354 @@
       "count": { "type": "int" }
     }
   },
+  "reseauZoomAvant": "Zoomer",
+  "@reseauZoomAvant": {
+    "description": "Bouton de la vue réseau : agrandir (zoom avant)."
+  },
+  "reseauZoomArriere": "Dézoomer",
+  "@reseauZoomArriere": {
+    "description": "Bouton de la vue réseau : réduire (zoom arrière)."
+  },
+  "reseauRecentrer": "Recentrer",
+  "@reseauRecentrer": {
+    "description": "Bouton de la vue réseau : recentrer et réinitialiser le zoom."
+  },
+  "reseauRechercher": "Rechercher une plante…",
+  "@reseauRechercher": {
+    "description": "Placeholder du champ de recherche par nom dans la vue réseau."
+  },
+  "reseauAucunResultat": "Aucune plante trouvée",
+  "@reseauAucunResultat": {
+    "description": "Message quand la recherche par nom de la vue réseau ne trouve rien."
+  },
+  "reseauFocusAucun": "Aucun compagnon à afficher",
+  "@reseauFocusAucun": {
+    "description": "État vide de la vue focus quand la plante n'a aucun compagnon connu."
+  },
+  "assocMecaTuteurStructurel": "Tuteur naturel",
+  "@assocMecaTuteurStructurel": {
+    "description": "Mécanisme d'association bénéfique (ADR-0010) : une plante sert de support à une grimpante."
+  },
+  "assocMecaEtagementLumiere": "Étagement / ombre",
+  "@assocMecaEtagementLumiere": {
+    "description": "Mécanisme d'association bénéfique : étager la végétation, ombrer les plantes qui le tolèrent."
+  },
+  "assocMecaRepulsionRavageur": "Éloigne un ravageur",
+  "@assocMecaRepulsionRavageur": {
+    "description": "Mécanisme d'association bénéfique : plante répulsive qui éloigne un ravageur du voisin sensible."
+  },
+  "assocMecaBrouillageOlfactif": "Brouillage olfactif",
+  "@assocMecaBrouillageOlfactif": {
+    "description": "Mécanisme d'association bénéfique : mélange d'odeurs qui désoriente les ravageurs."
+  },
+  "assocMecaAttractionPollinisateurs": "Attire les pollinisateurs",
+  "@assocMecaAttractionPollinisateurs": {
+    "description": "Mécanisme d'association bénéfique : attire les pollinisateurs au profit d'une plante entomophile."
+  },
+  "assocMecaPlantePiege": "Plante-piège",
+  "@assocMecaPlantePiege": {
+    "description": "Mécanisme d'association bénéfique : détourne un ravageur sur une plante-appât."
+  },
+  "assocMecaFixationAzote": "Fixe l'azote",
+  "@assocMecaFixationAzote": {
+    "description": "Mécanisme d'association bénéfique : une légumineuse enrichit le sol pour une plante gourmande."
+  },
+  "assocMecaCouvreSol": "Couvre-sol",
+  "@assocMecaCouvreSol": {
+    "description": "Mécanisme d'association bénéfique : couvre le sol (adventices, humidité)."
+  },
+  "assocMecaBriseVent": "Brise-vent",
+  "@assocMecaBriseVent": {
+    "description": "Mécanisme d'association bénéfique : protège du vent."
+  },
+  "assocMecaSuccessionTemporelle": "Succession dans le temps",
+  "@assocMecaSuccessionTemporelle": {
+    "description": "Mécanisme d'association bénéfique : cycle court et cycle long sur la même place."
+  },
+  "assocMecaMemeFamilleRavageurs": "Même famille",
+  "@assocMecaMemeFamilleRavageurs": {
+    "description": "Mécanisme d'association défavorable (ADR-0010) : même famille botanique, donc ravageurs et maladies partagés."
+  },
+  "assocMecaCompetitionLumiere": "Concurrence lumière",
+  "@assocMecaCompetitionLumiere": {
+    "description": "Mécanisme d'association défavorable : deux plantes hautes en plein soleil se font de l'ombre."
+  },
+  "assocMecaCompetitionAzote": "Concurrence azote",
+  "@assocMecaCompetitionAzote": {
+    "description": "Mécanisme d'association défavorable : deux plantes gourmandes en azote se concurrencent."
+  },
+  "assocMecaAllelopathie": "Allélopathie",
+  "@assocMecaAllelopathie": {
+    "description": "Mécanisme d'association défavorable : une plante inhibe chimiquement la croissance de l'autre."
+  },
+  "assocMecaAttractionAuxiliaires": "Attire les auxiliaires",
+  "@assocMecaAttractionAuxiliaires": {
+    "description": "Mécanisme d'association bénéfique : attire les insectes auxiliaires (prédateurs/parasitoïdes) qui régulent les ravageurs d'une voisine (ADR-0013)."
+  },
+  "assocMecaAmeublissementSol": "Ameublit le sol",
+  "@assocMecaAmeublissementSol": {
+    "description": "Mécanisme d'association bénéfique : des racines profondes décompactent le sol pour les voisines (ADR-0013)."
+  },
+  "assocMecaCompetitionEau": "Concurrence eau",
+  "@assocMecaCompetitionEau": {
+    "description": "Mécanisme d'association défavorable : deux plantes se concurrencent pour l'eau (ADR-0013)."
+  },
+  "assocMecaCompetitionEspace": "Concurrence espace",
+  "@assocMecaCompetitionEspace": {
+    "description": "Mécanisme d'association défavorable : deux plantes étalées se concurrencent pour la place (ADR-0013)."
+  },
+  "assocMecaPartageMaladies": "Maladies partagées",
+  "@assocMecaPartageMaladies": {
+    "description": "Mécanisme d'association défavorable : deux plantes hébergent un pathogène commun (fongique/sol), même hors même famille (ADR-0013)."
+  },
+  "assocMecaAutre": "Autre",
+  "@assocMecaAutre": {
+    "description": "Marqueur de présentation pour une association curatée sans mécanisme typé : le détail complet est dans la fiche (ADR-0013)."
+  },
+  "assocSuggere": "Suggestion",
+  "@assocSuggere": {
+    "description": "Badge d'une association dérivée (suggérée par le moteur, ADR-0010), distincte d'une association curatée."
+  },
+  "assocHorsSuggestion": "Hors moteur",
+  "@assocHorsSuggestion": {
+    "description": "Libellé d'une association curatée (non dérivée) dans la vue Associations, pendant de « Suggestion · … » (ADR-0013). Aussi utilisé comme option du filtre par niveau de suggestion."
+  },
+  "assocHorsSuggestionExpl": "Association reconnue et documentée, pas une déduction automatique de l'app.",
+  "@assocHorsSuggestionExpl": {
+    "description": "Phrase élaborant « Hors moteur » dans le bandeau de fiche (ADR-0013)."
+  },
+  "assocFiltreEleve": "Élevée",
+  "@assocFiltreEleve": {
+    "description": "Option du filtre par niveau de suggestion : confiance élevée (chip, majuscule initiale)."
+  },
+  "assocFiltreMoyen": "Moyenne",
+  "@assocFiltreMoyen": {
+    "description": "Option du filtre par niveau de suggestion : confiance moyenne (chip, majuscule initiale)."
+  },
+  "assocFiltreFaible": "Faible",
+  "@assocFiltreFaible": {
+    "description": "Option du filtre par niveau de suggestion : confiance faible (chip, majuscule initiale)."
+  },
+  "assocFiltrePrefixeAssoc": "Association",
+  "@assocFiltrePrefixeAssoc": {
+    "description": "Titre de la colonne filtre par direction (Donne / Reçoit / Mutuel) dans le panneau filtres côte à côte."
+  },
+  "assocFiltrePrefixeSugg": "Suggestion",
+  "@assocFiltrePrefixeSugg": {
+    "description": "Titre de la colonne filtre par niveau de suggestion (Élevée / Moyenne / …) dans le panneau filtres côte à côte."
+  },
+  "assocPrefsNormales": "Préférences d'association : normales (par défaut)",
+  "@assocPrefsNormales": {
+    "description": "Banderole de la vue Associations quand le profil de pondération est au défaut (ADR-0013)."
+  },
+  "assocPrefsPerso": "Préférences personnalisées",
+  "@assocPrefsPerso": {
+    "description": "Préfixe de la banderole quand le profil de pondération est personnalisé, suivi de la liste des familles ajustées (ADR-0013)."
+  },
+  "enracinementSuperficiel": "racines superficielles",
+  "@enracinementSuperficiel": { "description": "Système racinaire superficiel (ADR-0014)." },
+  "enracinementMoyen": "racines de profondeur moyenne",
+  "@enracinementMoyen": { "description": "Système racinaire de profondeur moyenne (ADR-0014)." },
+  "enracinementProfond": "racines profondes",
+  "@enracinementProfond": { "description": "Système racinaire profond (ADR-0014)." },
+  "enracinementPivotant": "racine pivotante",
+  "@enracinementPivotant": { "description": "Racine pivotante, décompacte le sol (ADR-0014)." },
+  "critereSourceFixeAzote": "{plante} fixe l'azote de l'air dans le sol",
+  "@critereSourceFixeAzote": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleGourmandeAzote": "{plante} est gourmande en azote (besoin élevé)",
+  "@critereCibleGourmandeAzote": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceAttirePollinisateurs": "{plante} attire les pollinisateurs",
+  "@critereSourceAttirePollinisateurs": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleEntomophile": "{plante} a besoin de pollinisateurs pour bien fructifier",
+  "@critereCibleEntomophile": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceAttireAuxiliaires": "{plante} attire les insectes auxiliaires (prédateurs de ravageurs)",
+  "@critereSourceAttireAuxiliaires": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleSujetteRavageurs": "{plante} est sujette à des ravageurs que ces auxiliaires régulent",
+  "@critereCibleSujetteRavageurs": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceSupport": "{plante} peut servir de tuteur vivant",
+  "@critereSourceSupport": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourcePlusHaute": "{plante} est plus haute et fait un appui solide",
+  "@critereSourcePlusHaute": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleGrimpante": "{plante} grimpe et a besoin d'un support",
+  "@critereCibleGrimpante": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceHaute": "{plante} est haute ({cm} cm) et porte de l'ombre au sol",
+  "@critereSourceHaute": { "placeholders": { "plante": { "type": "String" }, "cm": { "type": "String" } } },
+  "critereCiblePlusBasse": "{plante} est nettement plus basse ({cm} cm)",
+  "@critereCiblePlusBasse": { "placeholders": { "plante": { "type": "String" }, "cm": { "type": "String" } } },
+  "critereCiblePrefereOmbre": "{plante} préfère la mi-ombre",
+  "@critereCiblePrefereOmbre": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleTolereOmbre": "{plante} tolère la mi-ombre",
+  "@critereCibleTolereOmbre": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCyclesComplementaires": "Cycles complémentaires : l'une est rapide, l'autre longue",
+  "@critereCyclesComplementaires": { "description": "Critère succession (ADR-0014)." },
+  "critereOccupationsDecalees": "Leurs périodes d'occupation du sol se succèdent",
+  "@critereOccupationsDecalees": { "description": "Critère succession calendaire (ADR-0014)." },
+  "critereSourceCouvreSol": "{plante} couvre le sol (limite l'évaporation et les adventices)",
+  "@critereSourceCouvreSol": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceBriseVent": "{plante} protège ses voisines du vent",
+  "@critereSourceBriseVent": { "placeholders": { "plante": { "type": "String" } } },
+  "critereDeuxAromatiques": "Les deux sont aromatiques",
+  "@critereDeuxAromatiques": { "description": "Critère brouillage olfactif (ADR-0014)." },
+  "critereUneRepulsive": "L'une est répulsive et brouille les odeurs qui guident les ravageurs",
+  "@critereUneRepulsive": { "description": "Critère brouillage olfactif (ADR-0014)." },
+  "critereSourceRepulsiveCible": "{source} repousse un ravageur qui s'attaque à {cible}",
+  "@critereSourceRepulsiveCible": { "placeholders": { "source": { "type": "String" }, "cible": { "type": "String" } } },
+  "critereSourcePiegeCible": "{source} détourne (plante-piège) un ravageur de {cible}",
+  "@critereSourcePiegeCible": { "placeholders": { "source": { "type": "String" }, "cible": { "type": "String" } } },
+  "critereSourceRacineProfonde": "{plante} a une racine profonde qui décompacte le sol",
+  "@critereSourceRacineProfonde": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleRacineSuperficielle": "{plante} a des racines superficielles qui profitent du sol ameubli",
+  "@critereCibleRacineSuperficielle": { "placeholders": { "plante": { "type": "String" } } },
+  "critereMemeFamille": "Même famille botanique ({famille}) : mêmes ravageurs et maladies",
+  "@critereMemeFamille": { "placeholders": { "famille": { "type": "String" } } },
+  "critereDeuxHautesPleinSoleil": "Les deux sont hautes et exigent le plein soleil : elles se font de l'ombre",
+  "@critereDeuxHautesPleinSoleil": { "description": "Critère concurrence lumière (ADR-0014)." },
+  "critereDeuxGourmandesAzote": "Les deux sont gourmandes en azote : concurrence pour cet élément",
+  "@critereDeuxGourmandesAzote": { "description": "Critère concurrence azote (ADR-0014)." },
+  "critereDeuxAssoiffees": "Les deux ont un fort besoin en eau : concurrence hydrique",
+  "@critereDeuxAssoiffees": { "description": "Critère concurrence eau (ADR-0014)." },
+  "critereDeuxEtalees": "Les deux sont très étalées : concurrence pour la place",
+  "@critereDeuxEtalees": { "description": "Critère concurrence espace (ADR-0014)." },
+  "critereMaladieCommune": "Elles hébergent une même maladie (transmission facilitée)",
+  "@critereMaladieCommune": { "description": "Critère maladies partagées (ADR-0014)." },
+  "confianceFaible": "faible",
+  "@confianceFaible": {
+    "description": "Niveau de confiance faible d'une suggestion (affiché après « Suggéré · »)."
+  },
+  "confianceMoyen": "moyenne",
+  "@confianceMoyen": {
+    "description": "Niveau de confiance moyen d'une suggestion (affiché après « Suggéré · »)."
+  },
+  "confianceEleve": "élevée",
+  "@confianceEleve": {
+    "description": "Niveau de confiance élevé d'une suggestion (affiché après « Suggéré · »)."
+  },
+  "assocFacteursTitre": "Pourquoi cette suggestion :",
+  "@assocFacteursTitre": {
+    "description": "Titre de la liste des facteurs (critères) d'une association dérivée dans le bandeau de fiche (ADR-0014)."
+  },
+  "assocVoirPlus": "{count, plural, =1{Voir 1 suggestion de plus} other{Voir {count} suggestions de plus}}",
+  "@assocVoirPlus": {
+    "description": "Bouton dépliant les suggestions d'associations dérivées masquées (ADR-0011).",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "assocVoirMoins": "Voir moins",
+  "@assocVoirMoins": {
+    "description": "Bouton repliant les suggestions d'associations dérivées."
+  },
+  "filtreTout": "Tout",
+  "@filtreTout": {
+    "description": "Filtre de direction (vue Associations) : afficher toutes les directions."
+  },
+  "sensDonne": "Donne",
+  "@sensDonne": {
+    "description": "Filtre/direction : la plante centrale rend service à l'autre (centre → X)."
+  },
+  "sensRecoit": "Reçoit",
+  "@sensRecoit": {
+    "description": "Filtre/direction : l'autre plante rend service au centre (X → centre)."
+  },
+  "sensMutuel": "Mutuel",
+  "@sensMutuel": {
+    "description": "Filtre/direction : association réciproque (↔)."
+  },
+  "ficheAssocBon": "Bon compagnon",
+  "@ficheAssocBon": {
+    "description": "Titre par défaut du bandeau d'association (bénéfique) en tête de fiche."
+  },
+  "ficheAssocEviter": "À éviter",
+  "@ficheAssocEviter": {
+    "description": "Titre par défaut du bandeau d'association (défavorable) en tête de fiche."
+  },
+  "categPonderation": "Pondération des associations",
+  "@categPonderation": {
+    "description": "Titre de la catégorie/écran de réglage des poids d'associations (ADR-0011, expert)."
+  },
+  "categPonderationSub": "Ajuster l'importance de chaque type d'effet",
+  "@categPonderationSub": {
+    "description": "Sous-titre de la catégorie de réglage des poids d'associations."
+  },
+  "ponderationNote": "Le potager n'est pas une science exacte : ajustez l'importance de chaque effet selon ce qui marche chez vous. « Ignorer » masque complètement un type d'association.",
+  "@ponderationNote": {
+    "description": "Note explicative en tête de l'écran de pondération des associations."
+  },
+  "ponderationReinitialiser": "Réinitialiser les poids",
+  "@ponderationReinitialiser": {
+    "description": "Bouton remettant les poids d'associations à leur valeur par défaut."
+  },
+  "familleEffetGainDePlace": "Gain de place",
+  "@familleEffetGainDePlace": {
+    "description": "Famille d'effet d'association : structure / étagement / succession."
+  },
+  "familleEffetProtectionRavageurs": "Protection (ravageurs)",
+  "@familleEffetProtectionRavageurs": {
+    "description": "Famille d'effet d'association : répulsion / piège / brouillage."
+  },
+  "familleEffetFertilite": "Fertilité du sol",
+  "@familleEffetFertilite": {
+    "description": "Famille d'effet d'association : fixation d'azote."
+  },
+  "familleEffetPollinisation": "Pollinisation",
+  "@familleEffetPollinisation": {
+    "description": "Famille d'effet d'association : attraction des pollinisateurs."
+  },
+  "familleEffetCouvertureAbri": "Couverture & abri",
+  "@familleEffetCouvertureAbri": {
+    "description": "Famille d'effet d'association : couvre-sol / brise-vent."
+  },
+  "familleConflitConcurrence": "Concurrence (ressources)",
+  "@familleConflitConcurrence": {
+    "description": "Famille de conflit : concurrence lumière/eau/espace/azote (ADR-0014)."
+  },
+  "familleConflitSanitaire": "Risque sanitaire",
+  "@familleConflitSanitaire": {
+    "description": "Famille de conflit : même famille / maladies partagées (ADR-0014)."
+  },
+  "familleConflitAllelopathie": "Allélopathie",
+  "@familleConflitAllelopathie": {
+    "description": "Famille de conflit : inhibition chimique (ADR-0014)."
+  },
+  "ponderationConflitsTitre": "À éviter — importance des avertissements",
+  "@ponderationConflitsTitre": {
+    "description": "Titre de la section de pondération des conflits dans les réglages (ADR-0014)."
+  },
+  "poidsIgnore": "Ignorer",
+  "@poidsIgnore": {
+    "description": "Poids d'association : ignoré (×0, masqué)."
+  },
+  "poidsFaible": "Faible",
+  "@poidsFaible": {
+    "description": "Poids d'association : faible (×0.5)."
+  },
+  "poidsNormal": "Normal",
+  "@poidsNormal": {
+    "description": "Poids d'association : normal (×1)."
+  },
+  "poidsFort": "Fort",
+  "@poidsFort": {
+    "description": "Poids d'association : fort (×1.5)."
+  },
+  "reseauReglages": "Réglages d'affichage",
+  "@reseauReglages": {
+    "description": "Bouton repliable de la vue réseau ouvrant les contrôles (zoom, liens, noms)."
+  },
+  "reseauToggleLiens": "Afficher les liens",
+  "@reseauToggleLiens": {
+    "description": "Bascule du menu réseau : afficher ou masquer les liens entre les plantes."
+  },
+  "reseauToggleNomsFamille": "Afficher les noms de famille",
+  "@reseauToggleNomsFamille": {
+    "description": "Bascule du menu réseau : afficher ou masquer les noms des familles (halos)."
+  },
   "catalogueRecherche": "Nom, sol, exposition…",
   "@catalogueRecherche": {
     "description": "Placeholder du champ de recherche du catalogue."
+  },
+  "catalogueAssociations": "Associations",
+  "@catalogueAssociations": {
+    "description": "Bouton d'une fiche du catalogue : ouvrir la vue détaillée des associations de la plante."
   },
   "catalogueEffacer": "Effacer",
   "@catalogueEffacer": {
@@ -413,10 +803,42 @@
       "max": { "type": "int" }
     }
   },
+  "ficheExpositionPlage": "{min} à {max}",
+  "@ficheExpositionPlage": {
+    "description": "Plage d'exposition de la fiche : du minimum toléré à l'optimum (ADR-0014).",
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
+  },
+  "ficheHauteur": "Hauteur adulte",
+  "@ficheHauteur": { "description": "Libellé de la hauteur adulte dans la fiche (ADR-0014)." },
+  "ficheHauteurCm": "{min}–{max} cm",
+  "@ficheHauteurCm": {
+    "description": "Plage de hauteur adulte en cm (ADR-0014).",
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
+  "ficheHauteurCmUnique": "{cm} cm",
+  "@ficheHauteurCmUnique": {
+    "description": "Hauteur adulte unique en cm (ADR-0014).",
+    "placeholders": { "cm": { "type": "int" } }
+  },
+  "fichePh": "pH du sol",
+  "@fichePh": { "description": "Libellé du pH dans la fiche (ADR-0014)." },
+  "fichePhPlage": "{min} à {max}",
+  "@fichePhPlage": {
+    "description": "Plage de pH du sol (ADR-0014).",
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
+  },
   "ficheCalendrierTitre": "Semis & récolte",
   "@ficheCalendrierTitre": { "description": "Titre de la section calendrier semis/récolte de la fiche." },
   "ficheCalendrierSansContexte": "Crée un potager pour situer le calendrier de cette plante.",
   "@ficheCalendrierSansContexte": { "description": "Note quand aucun potager actif n'existe (pas de contexte climat)." },
+  "ficheVarieteChoisir": "Choisir variété…",
+  "@ficheVarieteChoisir": { "description": "Sélecteur de variété sur la fiche d'espèce, quand aucune variété n'est encore choisie ; ouvre la liste des variétés." },
+  "ficheVarieteRecherche": "Rechercher une variété",
+  "@ficheVarieteRecherche": { "description": "Texte indicatif du champ de recherche du sélecteur de variété." },
+  "ficheVarieteAucune": "Aucune variété ne correspond.",
+  "@ficheVarieteAucune": { "description": "État vide du sélecteur de variété quand la recherche ne renvoie rien." },
+  "ficheRetourEspece": "Retour à l'espèce",
+  "@ficheRetourEspece": { "description": "Infobulle du bouton retour : revenir de la variété affichée à sa fiche d'espèce mère." },
   "ficheAssociations": "Associations",
   "@ficheAssociations": { "description": "Titre de la section associations de la fiche." },
   "ficheBonsCompagnons": "Bons compagnons",
@@ -425,6 +847,19 @@
   "@ficheAEviter": { "description": "Sous-titre : plantes à ne pas associer." },
   "ficheAucuneAssociation": "Aucune association renseignée.",
   "@ficheAucuneAssociation": { "description": "État vide des associations." },
+  "ficheFamilleTitre": "Sa famille : {nom}",
+  "@ficheFamilleTitre": {
+    "description": "Titre de la section famille botanique de la fiche.",
+    "placeholders": { "nom": { "type": "String" } }
+  },
+  "ficheFamilleRotation": "Pourquoi la rotation",
+  "@ficheFamilleRotation": { "description": "Sous-titre : raison de la rotation au niveau famille." },
+  "ficheFamilleMaladies": "Maladies courantes",
+  "@ficheFamilleMaladies": { "description": "Sous-titre : maladies communes de la famille." },
+  "ficheFamilleRavageurs": "Ravageurs courants",
+  "@ficheFamilleRavageurs": { "description": "Sous-titre : ravageurs communs de la famille." },
+  "ficheFamilleAssociations": "Associations de la famille",
+  "@ficheFamilleAssociations": { "description": "Sous-titre : note d'associations au niveau famille." },
   "calendrierPorteeSemaine": "Cette semaine",
   "@calendrierPorteeSemaine": { "description": "Portée de l'agenda : 7 prochains jours." },
   "calendrierPorteeMois": "Ce mois-ci",
@@ -697,15 +1132,23 @@
   "@confidPositionAucune": { "description": "Statut : pas de position définie." },
   "confidPositionDefinie": "Position définie",
   "@confidPositionDefinie": { "description": "Statut : position définie (sans nom de lieu)." },
-  "geolocOff": "Désactivée — météo & zone climatique saisies à la main",
+  "confidPositionDesactivee": "Aucune — la géoloc est désactivée",
+  "@confidPositionDesactivee": { "description": "Statut position quand la géoloc est désactivée." },
+  "confidClimat": "Climat",
+  "@confidClimat": { "description": "Ligne de réglage : climat du potager actif." },
+  "confidRusticite": "Zone de rusticité",
+  "@confidRusticite": { "description": "Ligne de réglage : zone de rusticité du potager actif." },
+  "confidClimatSansPotager": "Crée un potager pour régler le climat et la rusticité.",
+  "@confidClimatSansPotager": { "description": "Invite quand aucun potager actif n'existe." },
+  "geolocOff": "Aucune position — météo indisponible, climat à régler à la main",
   "@geolocOff": { "description": "Géoloc désactivée (description)." },
-  "geolocManuelle": "Ville saisie manuellement",
+  "geolocManuelle": "Région approximative — météo activée, sans GPS",
   "@geolocManuelle": { "description": "Géoloc manuelle (description)." },
-  "geolocGps": "Position GPS de l'appareil",
+  "geolocGps": "Position GPS de l'appareil — météo précise",
   "@geolocGps": { "description": "Géoloc GPS (description)." },
-  "geolocLabelOff": "Désactivée",
+  "geolocLabelOff": "Aucune",
   "@geolocLabelOff": { "description": "Géoloc : étiquette désactivée." },
-  "geolocLabelManuelle": "Manuelle",
+  "geolocLabelManuelle": "Région",
   "@geolocLabelManuelle": { "description": "Géoloc : étiquette manuelle." },
   "geolocLabelGps": "GPS",
   "@geolocLabelGps": { "description": "Géoloc : étiquette GPS." },
@@ -784,8 +1227,6 @@
   "@formPotagerClimat": { "description": "Champ : type de climat." },
   "formPotagerRusticite": "Zone de rusticité",
   "@formPotagerRusticite": { "description": "Champ : zone de rusticité." },
-  "formPotagerRusticiteAide": "Si tu ne sais pas, laisse la valeur par défaut — modifiable plus tard.",
-  "@formPotagerRusticiteAide": { "description": "Aide du champ rusticité." },
   "formPotagerDetecter": "Détecter ma position",
   "@formPotagerDetecter": { "description": "Bouton : capter la position GPS pour pré-remplir le climat." },
   "formPotagerPositionDetectee": "Climat et rusticité pré-remplis depuis ta position — ajuste si besoin.",
@@ -830,8 +1271,8 @@
   "@formPlantationPlanteChoisir": { "description": "Invite de sélection de la plante." },
   "formPlantationDate": "Date de mise en place",
   "@formPlantationDate": { "description": "Champ : date de plantation/semis." },
-  "formPlantationMethode": "Méthode",
-  "@formPlantationMethode": { "description": "Champ : méthode de mise en place." },
+  "formPlantationMethode": "Type de mise en place",
+  "@formPlantationMethode": { "description": "Champ : type de mise en place (renommé depuis « Méthode » pour éviter la confusion avec les méthodes de culture)." },
   "formPlantationPieds": "Nombre de pieds",
   "@formPlantationPieds": { "description": "Champ : nombre de pieds." },
   "formPlantationSurface": "Surface occupée (m²)",
@@ -868,10 +1309,36 @@
   "@climatMontagnard": { "description": "Climat : montagnard." },
   "climatPolaire": "Polaire",
   "@climatPolaire": { "description": "Climat : polaire." },
+  "climatTropicalDesc": "Chaud et humide toute l'année, sans gel.",
+  "@climatTropicalDesc": { "description": "Aide : climat tropical." },
+  "climatSubtropicalDesc": "Étés chauds, hivers doux, gelées rares.",
+  "@climatSubtropicalDesc": { "description": "Aide : climat subtropical." },
+  "climatArideDesc": "Très sec, pluies rares, fortes amplitudes.",
+  "@climatArideDesc": { "description": "Aide : climat aride." },
+  "climatSemiArideDesc": "Sec, pluies limitées et saisonnières.",
+  "@climatSemiArideDesc": { "description": "Aide : climat semi-aride." },
+  "climatMediterraneenDesc": "Étés chauds et secs, hivers doux et humides.",
+  "@climatMediterraneenDesc": { "description": "Aide : climat méditerranéen." },
+  "climatOceaniqueDesc": "Doux et humide, faibles écarts de température.",
+  "@climatOceaniqueDesc": { "description": "Aide : climat océanique." },
+  "climatContinentalDesc": "Étés chauds, hivers froids, grands écarts.",
+  "@climatContinentalDesc": { "description": "Aide : climat continental." },
+  "climatMontagnardDesc": "Frais, hivers longs et neigeux en altitude.",
+  "@climatMontagnardDesc": { "description": "Aide : climat montagnard." },
+  "climatPolaireDesc": "Très froid, saison de culture très courte.",
+  "@climatPolaireDesc": { "description": "Aide : climat polaire." },
   "rusticiteZone": "Zone {n}",
   "@rusticiteZone": {
     "description": "Étiquette d'une zone de rusticité USDA.",
     "placeholders": { "n": { "type": "int" } }
+  },
+  "rusticiteZoneDesc": "Minimales hivernales de {min} à {max} °C.",
+  "@rusticiteZoneDesc": {
+    "description": "Aide d'une zone de rusticité USDA : plage de température minimale annuelle.",
+    "placeholders": {
+      "min": { "type": "int" },
+      "max": { "type": "int" }
+    }
   },
   "typeParcellePleineTerre": "Pleine terre",
   "@typeParcellePleineTerre": { "description": "Type de parcelle : pleine terre." },
@@ -899,6 +1366,18 @@
   "@methodeBouture": { "description": "Méthode : bouture." },
   "methodeDivision": "Division",
   "@methodeDivision": { "description": "Méthode : division." },
+  "methodeSemisDirectDesc": "Semer la graine directement en place, au jardin.",
+  "@methodeSemisDirectDesc": { "description": "Aide : semis direct." },
+  "methodeSemisInterieurDesc": "Semer à l'abri (maison, serre) avant de repiquer.",
+  "@methodeSemisInterieurDesc": { "description": "Aide : semis intérieur." },
+  "methodeRepiquageDesc": "Replanter un jeune plant semé par tes soins.",
+  "@methodeRepiquageDesc": { "description": "Aide : repiquage." },
+  "methodePlantAcheteDesc": "Mettre en terre un plant acheté en jardinerie.",
+  "@methodePlantAcheteDesc": { "description": "Aide : plant acheté." },
+  "methodeBoutureDesc": "Faire raciner un fragment de tige prélevé sur un pied.",
+  "@methodeBoutureDesc": { "description": "Aide : bouture." },
+  "methodeDivisionDesc": "Séparer une touffe existante en plusieurs éclats.",
+  "@methodeDivisionDesc": { "description": "Aide : division." },
   "potagerVideCta": "Crée ton premier potager pour commencer.",
   "@potagerVideCta": { "description": "Invite de l'état vide du Potager (aucun potager)." },
   "potagerCreer": "Créer un potager",
@@ -938,5 +1417,228 @@
   "snackTacheModifiee": "Tâche modifiée.",
   "@snackTacheModifiee": { "description": "Confirmation après modification d'une tâche." },
   "snackTacheSupprimee": "Tâche supprimée.",
-  "@snackTacheSupprimee": { "description": "Confirmation après suppression d'une tâche." }
+  "@snackTacheSupprimee": { "description": "Confirmation après suppression d'une tâche." },
+  "onboardingBienvenueTitre": "Bienvenue dans Pot'à Gérer",
+  "@onboardingBienvenueTitre": { "description": "Titre de l'écran d'accueil de l'onboarding au premier lancement." },
+  "onboardingBienvenueCorps": "Votre potager, 100 % sur votre appareil. Aucune donnée envoyée, aucun compte requis. Quelques étapes pour bien démarrer.",
+  "@onboardingBienvenueCorps": { "description": "Texte d'introduction de l'onboarding (vie privée + intention)." },
+  "onboardingCommencer": "Commencer",
+  "@onboardingCommencer": { "description": "Bouton principal lançant / terminant l'onboarding." },
+  "carteMondeTitre": "Choisir sur la carte",
+  "@carteMondeTitre": { "description": "Titre de l'écran de sélection de position sur la carte du monde." },
+  "carteMondeInstruction": "Touchez la carte pour situer votre potager. Pincez pour zoomer et préciser.",
+  "@carteMondeInstruction": { "description": "Consigne en haut du sélecteur de carte (tap + zoom)." },
+  "carteMondeValider": "Valider",
+  "@carteMondeValider": { "description": "Action de validation de la position choisie sur la carte." },
+  "captureCarteChoisir": "Choisir sur la carte",
+  "@captureCarteChoisir": { "description": "Entrée ouvrant le sélecteur de carte (feuille de capture, formulaire potager)." },
+  "onboardingSuivant": "Suivant",
+  "@onboardingSuivant": { "description": "Bouton passant à l'étape suivante de l'onboarding." },
+  "onboardingPrecedent": "Précédent",
+  "@onboardingPrecedent": { "description": "Bouton revenant à l'étape précédente de l'onboarding." },
+  "onboardingTerminer": "Terminer",
+  "@onboardingTerminer": { "description": "Bouton finalisant l'onboarding (dernière étape)." },
+  "onboardingViePriveeTitre": "Vos données restent chez vous",
+  "@onboardingViePriveeTitre": { "description": "Titre de l'étape vie privée de l'onboarding." },
+  "onboardingViePriveeCorps": "Tout est stocké localement sur cet appareil. Aucun compte, aucune donnée envoyée à un serveur. Chaque option (position, notifications…) reste désactivable à tout moment dans les paramètres.",
+  "@onboardingViePriveeCorps": { "description": "Texte rassurant sur la vie privée et les opt-outs." },
+  "onboardingPositionTitre": "Où se trouve votre potager ?",
+  "@onboardingPositionTitre": { "description": "Titre de l'étape position de l'onboarding." },
+  "onboardingPositionCorps": "Votre position sert à déduire votre hémisphère, votre climat et les bonnes périodes de culture. Elle reste approximative (~1 km) et locale.",
+  "@onboardingPositionCorps": { "description": "Explication de l'usage de la position à l'onboarding." },
+  "onboardingPositionDefinie": "Position enregistrée — vous pouvez l'affiner à l'étape suivante.",
+  "@onboardingPositionDefinie": { "description": "Confirmation affichée une fois la position choisie." },
+  "onboardingClimatTitre": "Votre climat",
+  "@onboardingClimatTitre": { "description": "Titre de l'étape de confirmation climat/rusticité." },
+  "onboardingClimatCorps": "Pré-remplis d'après votre position. Ajustez-les si vous connaissez mieux votre terrain.",
+  "@onboardingClimatCorps": { "description": "Texte de l'étape climat (valeurs dérivées, éditables)." },
+  "onboardingPotagerTitre": "Votre premier potager",
+  "@onboardingPotagerTitre": { "description": "Titre de l'étape de création du premier potager." },
+  "onboardingPotagerCorps": "Donnez-lui un nom pour commencer. Vous pourrez en ajouter d'autres plus tard.",
+  "@onboardingPotagerCorps": { "description": "Texte de l'étape premier potager." },
+  "onboardingNotifsTitre": "Rappels & alertes",
+  "@onboardingNotifsTitre": { "description": "Titre de l'étape d'opt-in aux notifications." },
+  "onboardingNotifsCorps": "Recevez des rappels d'arrosage, de semis et des alertes météo. Activez-les maintenant ou plus tard dans les paramètres.",
+  "@onboardingNotifsCorps": { "description": "Texte de l'étape notifications." },
+  "onboardingNotifsActiver": "Activer les notifications",
+  "@onboardingNotifsActiver": { "description": "Libellé de l'interrupteur d'opt-in aux notifications." },
+  "onboardingErreur": "Impossible de créer le potager. Réessayez.",
+  "@onboardingErreur": { "description": "Erreur affichée si la finalisation de l'onboarding échoue." },
+  "formPotagerPositionRequise": "Indiquez d'abord la position de votre potager (GPS ou carte).",
+  "@formPotagerPositionRequise": { "description": "Message bloquant l'enregistrement d'un potager sans position." },
+  "categDonnees": "Sauvegarde & données",
+  "@categDonnees": { "description": "Titre de la catégorie de paramètres dédiée aux données (export/import/reset)." },
+  "categDonneesSub": "Exporter, importer, réinitialiser",
+  "@categDonneesSub": { "description": "Sous-titre de la catégorie Sauvegarde & données." },
+  "donneesResetSectionTitre": "Réinitialisation",
+  "@donneesResetSectionTitre": { "description": "Titre de la section de réinitialisation des données." },
+  "donneesResetBouton": "Réinitialiser toutes les données",
+  "@donneesResetBouton": { "description": "Bouton déclenchant la réinitialisation totale." },
+  "donneesResetNote": "Efface définitivement tous vos potagers, plantations, tâches et préférences. L'application repart de l'accueil initial. Irréversible.",
+  "@donneesResetNote": { "description": "Note explicative sous le bouton de réinitialisation." },
+  "donneesResetTitre": "Réinitialiser toutes les données ?",
+  "@donneesResetTitre": { "description": "Titre des dialogues de confirmation de réinitialisation." },
+  "donneesResetMessage1": "Cette action efface définitivement tous vos potagers, plantations, tâches et préférences. Elle est irréversible.",
+  "@donneesResetMessage1": { "description": "Message de la première confirmation." },
+  "donneesResetConfirmer1": "Continuer",
+  "@donneesResetConfirmer1": { "description": "Bouton de la première confirmation." },
+  "donneesResetMessage2": "Dernière confirmation : toutes les données seront perdues et l'application redémarrera comme au premier lancement.",
+  "@donneesResetMessage2": { "description": "Message de la seconde (dernière) confirmation." },
+  "donneesResetConfirmer2": "Tout effacer",
+  "@donneesResetConfirmer2": { "description": "Bouton de la seconde confirmation (action destructive)." },
+  "donneesSauvegardeSectionTitre": "Sauvegarde",
+  "@donneesSauvegardeSectionTitre": { "description": "Titre de la section export/import." },
+  "donneesExportBouton": "Exporter mes données",
+  "@donneesExportBouton": { "description": "Bouton lançant l'export d'une sauvegarde." },
+  "donneesExportNote": "Crée un fichier de sauvegarde JSON, à partager ou à ranger où vous voulez. Tout reste local.",
+  "@donneesExportNote": { "description": "Note explicative de l'export." },
+  "donneesExportSucces": "Sauvegarde exportée.",
+  "@donneesExportSucces": { "description": "Confirmation après un export réussi." },
+  "donneesExportErreur": "Échec de l'export.",
+  "@donneesExportErreur": { "description": "Erreur lors de l'export." },
+  "donneesImportBouton": "Importer une sauvegarde",
+  "@donneesImportBouton": { "description": "Bouton lançant l'import d'une sauvegarde." },
+  "donneesImportModeTitre": "Mode d'import",
+  "@donneesImportModeTitre": { "description": "Titre du choix de mode d'import." },
+  "donneesImportModeRemplacer": "Remplacer tout",
+  "@donneesImportModeRemplacer": { "description": "Option d'import : remplacer toutes les données." },
+  "donneesImportModeRemplacerSub": "Efface les données actuelles, puis charge la sauvegarde.",
+  "@donneesImportModeRemplacerSub": { "description": "Détail de l'option remplacer." },
+  "donneesImportModeFusionner": "Fusionner",
+  "@donneesImportModeFusionner": { "description": "Option d'import : fusionner." },
+  "donneesImportModeFusionnerSub": "Conserve les données actuelles et ajoute ou met à jour depuis la sauvegarde.",
+  "@donneesImportModeFusionnerSub": { "description": "Détail de l'option fusionner." },
+  "donneesImportSucces": "Sauvegarde importée.",
+  "@donneesImportSucces": { "description": "Confirmation après un import réussi." },
+  "donneesImportErreur": "Fichier de sauvegarde invalide ou incompatible.",
+  "@donneesImportErreur": { "description": "Erreur d'import (JSON invalide ou version incompatible)." },
+  "niveauDebutantDesc": "L'essentiel, sans complexité. L'app vous guide pas à pas avec des conseils détaillés.",
+  "@niveauDebutantDesc": { "description": "Description du niveau débutant (ADR-0009)." },
+  "niveauIntermediaireDesc": "Plus de contrôle : outils, techniques de sol (lasagne…), vue Réseau des associations, observations, plusieurs potagers.",
+  "@niveauIntermediaireDesc": { "description": "Description du niveau intermédiaire (ADR-0009)." },
+  "niveauExpertDesc": "Tout est ouvert : sol et pH, statistiques, rotation, fiches perso. Conseils concis.",
+  "@niveauExpertDesc": { "description": "Description du niveau expert (ADR-0009)." },
+  "onboardingNiveauTitre": "Votre expérience au potager",
+  "@onboardingNiveauTitre": { "description": "Titre de l'étape de choix du niveau d'expérience." },
+  "onboardingNiveauCorps": "L'app s'adapte à vous. Choisissez votre niveau — vous pourrez le changer à tout moment dans les réglages.",
+  "@onboardingNiveauCorps": { "description": "Texte de l'étape niveau d'expérience." },
+  "onboardingPotagerZonesTitre": "Zones de culture",
+  "@onboardingPotagerZonesTitre": { "description": "Titre de la sous-section d'ajout de zones dans l'onboarding." },
+  "onboardingPotagerZonesCorps": "Un potager est fait d'une ou plusieurs zones où vous cultivez vos plants (planche, bac, serre…). Ajoutez-en une pour démarrer.",
+  "@onboardingPotagerZonesCorps": { "description": "Phrase explicative des zones de culture (onboarding)." },
+  "onboardingPotagerAjouterZone": "Ajouter une zone",
+  "@onboardingPotagerAjouterZone": { "description": "Bouton d'ajout d'une zone dans l'onboarding." },
+  "onboardingPotagerZonesCompte": "{n, plural, =0{Aucune zone pour l'instant} =1{1 zone ajoutée} other{{n} zones ajoutées}}",
+  "@onboardingPotagerZonesCompte": { "description": "Compteur de zones ajoutées.", "placeholders": { "n": { "type": "int" } } },
+  "astucePotagerZones": "Touchez une zone pour y ajouter vos plantes.",
+  "@astucePotagerZones": { "description": "Bulle d'aide post-onboarding sur le panneau Potager." },
+  "formZoneNonRenseigne": "Non renseigné",
+  "@formZoneNonRenseigne": { "description": "Option de liste : valeur non renseignée (texture/pH)." },
+  "formZoneTexture": "Texture du sol",
+  "@formZoneTexture": { "description": "Libellé du champ texture du sol (zone, niveau expert)." },
+  "formZonePh": "pH du sol",
+  "@formZonePh": { "description": "Libellé du champ pH du sol (zone, niveau expert)." },
+  "formZoneTechniquesTitre": "Techniques de sol",
+  "@formZoneTechniquesTitre": { "description": "Titre de la section techniques de sol (zone, niveau intermédiaire+)." },
+  "formZoneTechniquesAide": "Méthodes de préparation et d'entretien du sol (optionnel, plusieurs possibles).",
+  "@formZoneTechniquesAide": { "description": "Aide de la section techniques de sol." },
+  "textureArgileux": "Argileux", "@textureArgileux": { "description": "Texture de sol." },
+  "textureSableux": "Sableux", "@textureSableux": { "description": "Texture de sol." },
+  "textureLimoneux": "Limoneux", "@textureLimoneux": { "description": "Texture de sol." },
+  "textureCalcaire": "Calcaire", "@textureCalcaire": { "description": "Texture de sol." },
+  "textureHumifere": "Humifère", "@textureHumifere": { "description": "Texture de sol." },
+  "textureTourbeux": "Tourbeux", "@textureTourbeux": { "description": "Texture de sol." },
+  "textureCaillouteux": "Caillouteux", "@textureCaillouteux": { "description": "Texture de sol." },
+  "phAcide": "Acide", "@phAcide": { "description": "pH du sol." },
+  "phNeutre": "Neutre", "@phNeutre": { "description": "pH du sol." },
+  "phAlcalin": "Alcalin", "@phAlcalin": { "description": "pH du sol." },
+  "techButteLasagne": "Butte lasagne", "@techButteLasagne": { "description": "Technique de sol." },
+  "techHugelkultur": "Hügelkultur", "@techHugelkultur": { "description": "Technique de sol." },
+  "techButteRonde": "Butte ronde", "@techButteRonde": { "description": "Technique de sol." },
+  "techButtePermanente": "Butte permanente", "@techButtePermanente": { "description": "Technique de sol." },
+  "techPaillage": "Paillage", "@techPaillage": { "description": "Technique de sol." },
+  "techBrf": "BRF (bois raméal fragmenté)", "@techBrf": { "description": "Technique de sol." },
+  "techMulchVivant": "Mulch vivant", "@techMulchVivant": { "description": "Technique de sol." },
+  "techEngraisVertCouvert": "Engrais vert / couvert", "@techEngraisVertCouvert": { "description": "Technique de sol." },
+  "techPaillageMineral": "Paillage minéral", "@techPaillageMineral": { "description": "Technique de sol." },
+  "techCarton": "Carton", "@techCarton": { "description": "Technique de sol." },
+  "techNoDig": "No-dig (sans labour)", "@techNoDig": { "description": "Technique de sol." },
+  "techGrelinette": "Grelinette", "@techGrelinette": { "description": "Technique de sol." },
+  "techMulchDeFoin": "Mulch de foin", "@techMulchDeFoin": { "description": "Technique de sol." },
+  "techCompostageSurface": "Compostage de surface", "@techCompostageSurface": { "description": "Technique de sol." },
+  "techCompostEnTrou": "Compost en trou", "@techCompostEnTrou": { "description": "Technique de sol." },
+  "techMycorhization": "Mycorhization", "@techMycorhization": { "description": "Technique de sol." },
+  "techBokashi": "Bokashi", "@techBokashi": { "description": "Technique de sol." },
+  "techSwales": "Noues (swales)", "@techSwales": { "description": "Technique de sol." },
+  "techKeylineDesign": "Keyline design", "@techKeylineDesign": { "description": "Technique de sol." },
+  "categNiveaux": "Guide des niveaux",
+  "@categNiveaux": { "description": "Catégorie Plus : guide des paliers d'expérience." },
+  "categNiveauxSub": "Ce que chaque niveau débloque",
+  "@categNiveauxSub": { "description": "Sous-titre de la catégorie Guide des niveaux." },
+  "guideNiveauxIntro": "L'app s'adapte à votre niveau. Voici ce que chaque palier ouvre — et pourquoi. Vous pouvez changer de niveau à tout moment dans Préférences générales.",
+  "@guideNiveauxIntro": { "description": "Intro du guide des niveaux." },
+  "guideNiveauDebloque": "Débloqué",
+  "@guideNiveauDebloque": { "description": "Badge : feature débloquée au niveau courant." },
+  "guidePourquoi": "Pourquoi",
+  "@guidePourquoi": { "description": "Libellé : pourquoi cette feature existe." },
+  "guideComment": "Comment",
+  "@guideComment": { "description": "Libellé : comment utiliser cette feature." },
+  "tutoVueReseauTitre": "Vue Réseau du Catalogue",
+  "@tutoVueReseauTitre": { "description": "Mini-tuto." },
+  "tutoVueReseauPourquoi": "Voir d'un coup d'œil quelles plantes s'associent bien ou s'évitent.",
+  "@tutoVueReseauPourquoi": { "description": "Mini-tuto." },
+  "tutoVueReseauComment": "Catalogue → bascule « Réseau » en haut.",
+  "@tutoVueReseauComment": { "description": "Mini-tuto." },
+  "tutoVueSaisonTitre": "Vue Saison du Calendrier",
+  "@tutoVueSaisonTitre": { "description": "Mini-tuto." },
+  "tutoVueSaisonPourquoi": "Repérer les fenêtres de semis, plantation et récolte sur l'année.",
+  "@tutoVueSaisonPourquoi": { "description": "Mini-tuto." },
+  "tutoVueSaisonComment": "Calendrier → bascule « Saison ».",
+  "@tutoVueSaisonComment": { "description": "Mini-tuto." },
+  "tutoObservationsTitre": "Observations",
+  "@tutoObservationsTitre": { "description": "Mini-tuto." },
+  "tutoObservationsPourquoi": "Tenir un journal (vigueur, maladie, ravageur) pour mieux suivre vos cultures.",
+  "@tutoObservationsPourquoi": { "description": "Mini-tuto." },
+  "tutoObservationsComment": "Détail d'une zone → menu ⋮ d'une culture → « Observer ».",
+  "@tutoObservationsComment": { "description": "Mini-tuto." },
+  "tutoTechniquesSolTitre": "Techniques de sol",
+  "@tutoTechniquesSolTitre": { "description": "Mini-tuto." },
+  "tutoTechniquesSolPourquoi": "Documenter vos méthodes (lasagne, paillage, no-dig…) par zone.",
+  "@tutoTechniquesSolPourquoi": { "description": "Mini-tuto." },
+  "tutoTechniquesSolComment": "Formulaire d'une zone → section « Techniques de sol ».",
+  "@tutoTechniquesSolComment": { "description": "Mini-tuto." },
+  "tutoLunaireTitre": "Calendrier lunaire",
+  "@tutoLunaireTitre": { "description": "Mini-tuto." },
+  "tutoLunairePourquoi": "Suivre les phases de la lune si vous jardinez avec elle.",
+  "@tutoLunairePourquoi": { "description": "Mini-tuto." },
+  "tutoLunaireComment": "Paramètres → Confidentialité → « Calendrier lunaire ».",
+  "@tutoLunaireComment": { "description": "Mini-tuto." },
+  "tutoNotifsCategTitre": "Notifications par catégorie",
+  "@tutoNotifsCategTitre": { "description": "Mini-tuto." },
+  "tutoNotifsCategPourquoi": "Choisir finement quels rappels recevoir (arrosage, semis, météo…).",
+  "@tutoNotifsCategPourquoi": { "description": "Mini-tuto." },
+  "tutoNotifsCategComment": "Paramètres → Notifications.",
+  "@tutoNotifsCategComment": { "description": "Mini-tuto." },
+  "tutoSolTexturePhTitre": "Sol : texture & pH",
+  "@tutoSolTexturePhTitre": { "description": "Mini-tuto." },
+  "tutoSolTexturePhPourquoi": "Préciser votre sol pour des recommandations plus justes.",
+  "@tutoSolTexturePhPourquoi": { "description": "Mini-tuto." },
+  "tutoSolTexturePhComment": "Formulaire d'une zone → champs « Texture » et « pH ».",
+  "@tutoSolTexturePhComment": { "description": "Mini-tuto." },
+  "tutoStatsTitre": "Statistiques de récolte",
+  "@tutoStatsTitre": { "description": "Mini-tuto." },
+  "tutoStatsPourquoi": "Suivre vos récoltes de la saison d'un coup d'œil.",
+  "@tutoStatsPourquoi": { "description": "Mini-tuto." },
+  "tutoStatsComment": "Tableau de bord (Accueil), tuile « Récoltes de la saison ».",
+  "@tutoStatsComment": { "description": "Mini-tuto." },
+  "teaserPalierTexte": "{feature} s'ouvre en niveau {niveau}.",
+  "@teaserPalierTexte": { "description": "Texte du teaser de montée de palier.", "placeholders": { "feature": { "type": "String" }, "niveau": { "type": "String" } } },
+  "teaserPalierAction": "En savoir plus",
+  "@teaserPalierAction": { "description": "CTA du teaser → guide des niveaux." },
+  "teaserFermer": "Masquer",
+  "@teaserFermer": { "description": "Fermer le teaser (tooltip)." },
+  "generalNiveauChangeSnack": "Niveau mis à jour.",
+  "@generalNiveauChangeSnack": { "description": "Confirmation après un changement de niveau." },
+  "generalNiveauChangeAction": "Découvrir",
+  "@generalNiveauChangeAction": { "description": "Action du snackbar → guide des niveaux." }
 }

@@ -10,6 +10,6 @@ i18n:
       Famille de la capucine (Tropaeolum), à fleurs et feuilles comestibles au
       goût poivré. Plante-piège à pucerons très utilisée en compagnonnage, elle
       détourne les ravageurs des cultures voisines.
-ravageurs_communs: [puceron_noir, altise, piéride]
+ravageurs_communs: [puceron_noir, altise, pieride]
 contributeurs:
   - "@potagerer"

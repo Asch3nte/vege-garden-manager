@@ -10,6 +10,20 @@ i18n:
       Famille de plantes souvent gourmandes en chaleur et en éléments nutritifs,
       sensibles au mildiou ; comprend tomate, aubergine, poivron, piment et
       pomme de terre, ainsi que des ornementales comme le pétunia.
+    pourquoi_rotation: >
+      Très gourmandes et sensibles aux maladies du sol (mildiou, verticilliose),
+      les solanacées épuisent et contaminent la parcelle : attendez au moins
+      4 ans avant d'y replanter une solanacée, et ne les faites jamais se
+      succéder entre elles.
+    ennemis_communs_note: >
+      Le mildiou (taches brunes par temps humide), l'alternariose et le
+      doryphore frappent toute la famille ; regrouper plusieurs solanacées
+      concentre ces attaques.
+    associations_note: >
+      Les solanacées apprécient le voisinage d'aromatiques répulsives (basilic,
+      œillet d'Inde contre pucerons et nématodes) et des légumineuses qui
+      fixent l'azote ; évitez de les coller aux autres solanacées et aux pommes
+      de terre, avec qui elles partagent le mildiou.
 maladies_communes: [mildiou, alternariose, verticilliose]
 ravageurs_communs: [doryphore, puceron, aleurode]
 delai_retour_annees: 4

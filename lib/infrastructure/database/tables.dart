@@ -325,6 +325,7 @@ class MeteoCache extends Table {
   RealColumn get tempMoyenne => real().nullable()();
   RealColumn get precipitationsMm => real().nullable()();
   RealColumn get probabilitePluie => real().nullable()(); // forecast, 0..1
+  RealColumn get evapotranspirationMm => real().nullable()(); // ET₀ FAO-56, mm/day
   IntColumn get heuresEnsoleillement => integer().nullable()();
   RealColumn get ventVitesseMax => real().nullable()();
   IntColumn get ventDirection => integer().nullable()();
@@ -346,6 +347,7 @@ class MeteoCache extends Table {
         'CHECK (vent_direction IS NULL OR vent_direction BETWEEN 0 AND 360)',
         'CHECK (precipitations_mm IS NULL OR precipitations_mm >= 0)',
         'CHECK (probabilite_pluie IS NULL OR probabilite_pluie BETWEEN 0 AND 1)',
+        'CHECK (evapotranspiration_mm IS NULL OR evapotranspiration_mm >= 0)',
         'CHECK (heures_ensoleillement IS NULL OR heures_ensoleillement BETWEEN 0 AND 24)',
         'UNIQUE (latitude, longitude, date, type)',
       ];
@@ -422,8 +424,13 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(true))();
   TextColumn get notificationsParCategorie =>
       text().withDefault(const Constant('{}'))(); // JSON
+  // ADR-0011 — association weighting profile, JSON {familleEffet: poids}.
+  TextColumn get ponderationAssociations =>
+      text().withDefault(const Constant('{}'))(); // JSON
   TextColumn get nePasDerangerDebut => text().nullable()();
   TextColumn get nePasDerangerFin => text().nullable()();
+  BoolColumn get onboardingTermine =>
+      boolean().withDefault(const Constant(false))();
   IntColumn get schemaVersion => integer().withDefault(const Constant(1))();
   TextColumn get derniereModification => text()();
 

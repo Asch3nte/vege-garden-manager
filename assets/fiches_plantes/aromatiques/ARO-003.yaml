@@ -1,0 +1,145 @@
+# Fiche mère (espèce) — Ciboulette.
+# Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
+id: ARO-003
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - compagnonnage
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Allium schoenoprasum
+famille_botanique: Amaryllidaceae
+
+i18n:
+  fr:
+    nom_commun: Ciboulette
+    noms_alternatifs: [Civette, Ciboulette commune, Appétit]
+    description: >
+      Plante vivace de la famille des Amaryllidacées, formant des touffes de
+      tiges creuses vert vif de 20 à 35 cm. Arôme délicat d'oignon doux. Parmi
+      les aromates les plus faciles à cultiver : rustique, peu exigeante et très
+      productive. Ses fleurs mauves en pompon sont également comestibles et
+      mellifères. Se multiplie par division de touffes ou par semis.
+    conseils_culture: >
+      Cultiver en touffes denses. Couper régulièrement les tiges à 5 cm du sol
+      pour stimuler la repousse. Diviser les touffes tous les 2–3 ans pour
+      revitaliser la plante. Peut aussi être cultivée en pot sur un rebord de
+      fenêtre. La montée en fleurs est normale : couper les tiges florales si
+      l'on veut favoriser la production de feuilles.
+    conseils_recolte: >
+      Ciseler les tiges à 2–3 cm du sol dès qu'elles atteignent 15 cm. La
+      ciboulette repousse rapidement après coupe. Récolter avant la floraison
+      pour un arôme optimal. Les fleurs récoltées au stade bouton ou épanouies
+      sont comestibles (décoration de salades).
+    erreurs_frequentes:
+      - Planter trop peu (1–2 pieds : insuffisant pour une vraie récolte régulière)
+      - Ne pas diviser les touffes (s'épuisent et se dégarnissent au centre après 3 ans)
+      - Laisser monter en graines sans récolter les fleurs (favorise la propagation incontrôlée)
+  en:
+    nom_commun: Chives
+    noms_alternatifs: [Common chives, Onion chives]
+    description: >
+      Hardy perennial forming dense clumps of hollow green stems (20–35 cm)
+      with a mild onion flavour. Very easy to grow, productive, and virtually
+      pest-free. Edible purple pompom flowers are also attractive to pollinators.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 10
+  temperature_optimale: 18
+  temperature_min_survie: -25
+  gele_fatal: false
+
+cycle:
+  enracinement: superficiel
+  type: vivace
+  duree_germination_jours: [10, 14]
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [20, 35]
+  espacement_cm: 20
+  profondeur_semis_cm: 0.5
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      semis_exterieur: [3, 5]
+      plantation: [4, 5]
+      recolte: [4, 11]
+    continental:
+      semis_exterieur: [3, 5]
+      plantation: [4, 5]
+      recolte: [5, 10]
+    mediterraneen:
+      semis_exterieur: [2, 4]
+      recolte: [3, 12]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [10, 4]
+
+associations:
+  beneficies:
+    - id: LEG-004
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Repousse la mouche de la carotte (Psila rosae)", en: "Repels carrot fly (Psila rosae)" }
+    - id: LEG-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne les pucerons et améliore la saveur", en: "Deters aphids and improves flavour" }
+    - id: LEG-014
+      raison_i18n: { fr: "Association favorable, compagnonnage documenté", en: "Favourable association, documented companion planting" }
+    - id: LEG-009
+      type: [repulsion_ravageur, etagement_lumiere]
+      raison_i18n: { fr: "Repousse les parasites du sol autour des concombres", en: "Repels soil parasites around cucumbers" }
+  defavorables:
+    - id: LEG-013
+      type: allelopathie
+      raison_i18n: { fr: "Les alliacées inhibent la croissance des légumineuses", en: "Alliums inhibit legume growth" }
+    - id: LEG-018
+      type: allelopathie
+      raison_i18n: { fr: "Même famille — inhibition croisée avec les pois", en: "Allium family inhibits pea growth" }
+
+rotation:
+  famille: amaryllidaceae
+  delai_retour_annees: 3
+  precedents_favorables: [brassicacees, cucurbitacees]
+  precedents_defavorables: [amaryllidaceae]
+  fixe_azote: false
+  besoin_azote: faible
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Enveloppé dans un linge humide au réfrigérateur", en: "Wrapped in a damp cloth in the fridge" }
+  - methode: congelation
+    duree_mois: 6
+    conditions_i18n: { fr: "Ciselée en petits tronçons, congelée directement sans blanchiment", en: "Finely sliced, frozen directly without blanching" }
+  - methode: sechage
+    duree_mois: 3
+    conditions_i18n: { fr: "Séchage déconseillé (perte d'arôme importante) — préférer la congélation", en: "Drying not recommended (significant flavour loss) — prefer freezing" }
+utilisations_culinaires_i18n:
+  fr: [Omelette, fromage blanc, salades, soupes, vinaigrette, tartines, décoration]
+  en: [Omelette, cream cheese, salads, soups, vinaigrette, toast toppings, garnish]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ciboulette_(botanique)
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

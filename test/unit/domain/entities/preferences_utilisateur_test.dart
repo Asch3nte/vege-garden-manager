@@ -19,6 +19,30 @@ void main() {
       expect(p.communauteOptIn, isFalse);
       expect(p.aideContextuelleActive, isTrue);
       expect(p.nePasDerangerActif, isFalse);
+      expect(p.onboardingTermine, isFalse);
+    });
+  });
+
+  group('PreferencesUtilisateur — onboarding', () {
+    test('copierAvec sets the completion flag', () {
+      final p = PreferencesUtilisateur().copierAvec(onboardingTermine: true);
+      expect(p.onboardingTermine, isTrue);
+    });
+
+    test('the do-not-disturb helpers preserve the flag', () {
+      final p = PreferencesUtilisateur()
+          .copierAvec(onboardingTermine: true)
+          .avecNePasDeranger('22:00', '07:00');
+      expect(p.onboardingTermine, isTrue);
+      expect(p.sansNePasDeranger().onboardingTermine, isTrue);
+    });
+
+    test('it participates in equality', () {
+      expect(
+        PreferencesUtilisateur() ==
+            PreferencesUtilisateur(onboardingTermine: true),
+        isFalse,
+      );
     });
   });
 

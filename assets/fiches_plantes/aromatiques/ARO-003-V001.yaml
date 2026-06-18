@@ -1,0 +1,56 @@
+# Fiche fille (variété) — Ciboulette Géante de Chine. Hérite de ARO-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-003-V001
+parent_id: ARO-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium tuberosum"
+
+i18n:
+  fr:
+    nom_commun: Ciboulette ail
+    noms_alternatifs: [Ciboulette de Chine, Civette orientale, Ail chinois, Garlic chives]
+    description: >
+      Espèce voisine (Allium tuberosum) aux longues feuilles plates de 30 à
+      50 cm, à l'arôme alliant l'oignon et l'ail doux. Tiges aplaties (non
+      creuses), fleurs blanches étoilées très mellifères en août-septembre.
+      Vivace, encore plus résistante que la ciboulette commune. Présence
+      incontournable dans la cuisine asiatique (gyoza, nouilles sautées).
+    conseils_culture: >
+      Mêmes conditions que la ciboulette commune. Former des touffes généreuses.
+      Blanchir les tiges à la base en privant de lumière (couvrir 2–3 semaines)
+      pour obtenir un arôme plus doux et une texture fondante recherchée en
+      cuisine asiatique. Floraison abondante en fin d'été, très mellifère.
+    conseils_recolte: >
+      Couper les tiges à 5–8 cm du sol. La repousse est vigoureuse. Récolter
+      avant la floraison pour un arôme maximal ou laisser fleurir pour l'aspect
+      décoratif et les pollinateurs.
+    erreurs_frequentes:
+      - Confondre avec la ciboulette commune (feuilles plates vs. creuses — différence notable)
+      - Laisser se ressemer (espèce très prolifique si les fleurs montent à graine)
+  en:
+    nom_commun: Garlic chives
+    noms_alternatifs: [Chinese chives, Oriental garlic]
+    description: >
+      Related species (Allium tuberosum) with long flat leaves (30–50 cm) and
+      a mild garlic-onion aroma. White star-shaped flowers in late summer.
+      Very hardy perennial, essential in Asian cuisine.
+
+cycle:
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 25
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Gyoza, raviolis asiatiques, nouilles sautées, soupes miso, omelettes, salades]
+  en: [Gyoza, Asian dumplings, stir-fried noodles, miso soup, omelettes, salads]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ciboulette_de_Chine
+contributeurs:
+  - "@potagerer"

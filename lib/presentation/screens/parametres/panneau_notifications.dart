@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../application/state/acces_niveau_provider.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/entities/preferences_utilisateur.dart';
 import '../../../l10n/app_localizations.dart';
 import 'widgets_parametres.dart';
 
 /// A notification category: its stable storage key, icon and label resolver.
-typedef _CategorieNotif = ({String cle, IconData icone, String Function(AppLocalizations) label});
+typedef CategorieNotif = ({
+  String cle,
+  IconData icone,
+  String Function(AppLocalizations) label,
+});
+
+/// The notification categories (shared by the settings panel and the onboarding
+/// notifications step). Each defaults to **on** when absent from the stored map.
+const List<CategorieNotif> categoriesNotifications = [
+  (cle: 'semis', icone: Icons.grain, label: _labelSemis),
+  (cle: 'arrosage', icone: Icons.water_drop_outlined, label: _labelArrosage),
+  (cle: 'recolte', icone: Icons.shopping_basket_outlined, label: _labelRecolte),
+  (cle: 'meteo', icone: Icons.thunderstorm_outlined, label: _labelMeteo),
+  (cle: 'entretien', icone: Icons.content_cut, label: _labelEntretien),
+  (cle: 'rotation', icone: Icons.autorenew, label: _labelRotation),
+];
 
 /// Category 3 — **Notifications**: a master switch gating per-category toggles.
 ///
@@ -17,15 +33,6 @@ typedef _CategorieNotif = ({String cle, IconData icone, String Function(AppLocal
 /// wins).
 class PanneauNotifications extends ConsumerWidget {
   const PanneauNotifications({super.key});
-
-  static const List<_CategorieNotif> _categories = [
-    (cle: 'semis', icone: Icons.grain, label: _labelSemis),
-    (cle: 'arrosage', icone: Icons.water_drop_outlined, label: _labelArrosage),
-    (cle: 'recolte', icone: Icons.shopping_basket_outlined, label: _labelRecolte),
-    (cle: 'meteo', icone: Icons.thunderstorm_outlined, label: _labelMeteo),
-    (cle: 'entretien', icone: Icons.content_cut, label: _labelEntretien),
-    (cle: 'rotation', icone: Icons.autorenew, label: _labelRotation),
-  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,6 +45,10 @@ class PanneauNotifications extends ConsumerWidget {
     }
 
     final master = prefs.notificationsGlobalesActives;
+    // Per-category toggles are an intermediate+ feature (ADR-0009): beginners
+    // keep just the master switch. Hidden categories stay at their default (on),
+    // so essential/safety notifications (e.g. critical weather) still fire.
+    final parCategorie = ref.watch(accesNiveauProvider).notificationsParCategorie;
 
     return PanneauParametres(
       titre: l10n.categNotifications,
@@ -53,21 +64,22 @@ class PanneauNotifications extends ConsumerWidget {
             ),
           ],
         ),
-        ZoneParametres(
-          titre: l10n.notifParCategorie,
-          enfants: [
-            for (final cat in _categories)
-              RangeeInterrupteur(
-                icone: cat.icone,
-                label: cat.label(l10n),
-                valeur: master && _estActive(prefs, cat.cle),
-                // Disabled while the master switch is off.
-                onChanged: master
-                    ? (v) => notifier.definirNotificationCategorie(cat.cle, v)
-                    : null,
-              ),
-          ],
-        ),
+        if (parCategorie)
+          ZoneParametres(
+            titre: l10n.notifParCategorie,
+            enfants: [
+              for (final cat in categoriesNotifications)
+                RangeeInterrupteur(
+                  icone: cat.icone,
+                  label: cat.label(l10n),
+                  valeur: master && _estActive(prefs, cat.cle),
+                  // Disabled while the master switch is off.
+                  onChanged: master
+                      ? (v) => notifier.definirNotificationCategorie(cat.cle, v)
+                      : null,
+                ),
+            ],
+          ),
       ],
     );
   }

@@ -108,4 +108,29 @@ void main() {
       expect(_famille(id: 'solanaceae') == _famille(id: 'apiaceae'), isFalse);
     });
   });
+
+  group('FamilleBotanique — educational notes (ADR-0006 Lot 4)', () {
+    test('localizes notes, falling back to French', () {
+      final f = FamilleBotanique(
+        id: 'solanaceae',
+        nomScientifique: 'Solanaceae',
+        categories: {CategoriePlante.legume},
+        nomsLocalises: const {'fr': 'Solanacées'},
+        pourquoiRotationLocalise: const {'fr': 'Sol épuisé', 'en': 'Depleted'},
+        ennemisCommunsNoteLocalisee: const {'fr': 'Mildiou'},
+        associationsNoteLocalisee: const {'fr': 'Basilic'},
+      );
+      expect(f.pourquoiRotation('en'), 'Depleted');
+      expect(f.pourquoiRotation('es'), 'Sol épuisé');
+      expect(f.ennemisCommunsNote('fr'), 'Mildiou');
+      expect(f.associationsNote('fr'), 'Basilic');
+    });
+
+    test('notes are null when the sheet carries none', () {
+      final f = _famille();
+      expect(f.pourquoiRotation('fr'), isNull);
+      expect(f.ennemisCommunsNote('fr'), isNull);
+      expect(f.associationsNote('fr'), isNull);
+    });
+  });
 }

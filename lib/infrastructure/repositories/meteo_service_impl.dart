@@ -125,6 +125,12 @@ class MeteoServiceImpl implements AbstractMeteoService {
     return _client.obtenirPrevisionsHoraires(loc, nbJours: nbJours);
   }
 
+  @override
+  Future<double?> obtenirElevation(Localisation loc) =>
+      // Not cached: stable per location, cached at the Riverpod provider level
+      // (session lifetime). Never throws (ADR-0016 Lot 2).
+      _client.obtenirElevation(loc);
+
   /// Window mode (`joursPasses > 0`): a single Open-Meteo call returns the past
   /// + forecast days. Always fetched fresh (the watering engine wants accurate
   /// recent precipitation); the result is cached best-effort, and on a network

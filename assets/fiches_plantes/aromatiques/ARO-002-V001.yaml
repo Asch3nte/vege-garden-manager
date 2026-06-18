@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Persil Frisé. Hérite de ARO-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-002-V001
+parent_id: ARO-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Petroselinum crispum var. crispum"
+
+i18n:
+  fr:
+    nom_commun: Persil frisé
+    noms_alternatifs: [Persil moussu, Curly parsley]
+    description: >
+      Variété à feuilles finement découpées et bouclées, très décorative.
+      Arôme légèrement moins puissant que le persil plat, mais saveur fraîche
+      et plus douce. Plus tolérant au froid et plus résistant à la montée en
+      graines que les types à feuilles plates. Souvent préféré pour la décoration
+      culinaire et les garnitures grâce à son aspect ornemental.
+    conseils_culture: >
+      Mêmes besoins que le persil plat mais légèrement plus rustique et
+      plus compact. Excellent en pot ou en bordure de jardin. La forme frisée
+      retient davantage d'eau après la pluie — sécher légèrement avant de couper.
+    conseils_recolte: >
+      Cueillir les tiges extérieures une par une. La forme frisée se prête
+      bien à la récolte en bouquets pour la présentation. Éviter de récolter
+      par temps très humide pour limiter la pourriture.
+    erreurs_frequentes:
+      - Confondre avec le cerfeuil (feuilles similaires mais odeur très différente)
+      - Arrosage par aspersion (les feuilles bouclées retiennent l'eau et pourrissent)
+  en:
+    nom_commun: Curly parsley
+    description: >
+      Variety with finely cut, curly leaves. Slightly milder flavour than
+      flat-leaf parsley but more decorative. More cold-tolerant and slower to
+      bolt. Preferred for garnishes and culinary decoration.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Tige dans l'eau au réfrigérateur ou enveloppé dans un linge humide", en: "Stem in water in fridge or wrapped in a damp cloth" }
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Garniture décorative, bouquet garni, soupe, omelette, sauce aux herbes, persillade]
+  en: [Decorative garnish, bouquet garni, soup, omelette, herb sauce, persillade]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Persil_(plante)
+contributeurs:
+  - "@potagerer"

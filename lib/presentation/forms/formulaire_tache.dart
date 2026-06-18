@@ -84,14 +84,23 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
     super.dispose();
   }
 
-  /// Targets available for the active garden (whole garden + each zone).
+  /// Targets available for the active garden: the whole garden, each zone, and
+  /// each active crop (so a task can be tied to a specific plantation). Crops are
+  /// listed under their zone, labelled `Zone › Culture` to disambiguate.
   List<_CibleOption> _cibles(AppLocalizations l10n) {
     final vue = ref.watch(potagerProvider).value;
     if (vue?.potagerId == null) return const [];
     return [
       _CibleOption(CibleTache.potager, vue!.potagerId!, l10n.formTacheCiblePotager),
-      for (final zone in vue.zones)
+      for (final zone in vue.zones) ...[
         _CibleOption(CibleTache.parcelle, zone.id, zone.nom),
+        for (final culture in zone.cultures)
+          _CibleOption(
+            CibleTache.plantation,
+            culture.plantationId,
+            '${zone.nom} › ${culture.nom}',
+          ),
+      ],
     ];
   }
 

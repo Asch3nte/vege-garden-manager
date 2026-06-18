@@ -9,6 +9,7 @@ import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
+import '../engine/calculateur_dates_culture.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import 'potager_vue.dart';
@@ -32,9 +33,11 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     // The catalogue loads from YAML assets asynchronously.
     final fiches = await ref.watch(fichePlanteRepositoryProvider.future);
     final taches = ref.watch(tacheRepositoryProvider);
+    final calculateur = ref.watch(calculateurDatesCultureProvider);
     final maintenant = ref.watch(horlogeProvider);
 
-    return _assembler(potagers, parcelles, plantations, fiches, taches, maintenant);
+    return _assembler(
+        potagers, parcelles, plantations, fiches, taches, calculateur, maintenant);
   }
 
   Future<PotagerVue> _assembler(
@@ -43,6 +46,7 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     AbstractPlantationRepository plantations,
     AbstractFichePlanteRepository fiches,
     AbstractTacheRepository taches,
+    CalculateurDatesCulture calculateur,
     DateTime Function() maintenant,
   ) async {
     final potager = await potagers.obtenirPotagerActif();
@@ -51,7 +55,9 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     }
 
     final parcellesPotager = await parcelles.obtenirParPotager(potager.id);
-    final parcellesAvecTache = await _parcellesAvecTacheDuJour(taches, maintenant);
+    final parcellesAvecTache =
+        await _parcellesAvecTacheDuJour(taches, plantations, maintenant);
+    final now = maintenant();
 
     final zones = <ZonePotager>[];
     for (final parcelle in parcellesPotager) {
@@ -62,7 +68,8 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
           type: parcelle.type,
           surfaceM2: parcelle.surface.enMetresCarres,
           exposition: parcelle.exposition,
-          cultures: await _culturesActives(parcelle, plantations, fiches),
+          cultures: await _culturesActives(
+              parcelle, plantations, fiches, calculateur, now),
           aTacheAujourdhui: parcellesAvecTache.contains(parcelle.id),
         ),
       );
@@ -80,6 +87,8 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     Parcelle parcelle,
     AbstractPlantationRepository plantations,
     AbstractFichePlanteRepository fiches,
+    CalculateurDatesCulture calculateur,
+    DateTime maintenant,
   ) async {
     final cultures = <CulturePotager>[];
     for (final plantation in await plantations.obtenirParParcelle(parcelle.id)) {
@@ -89,25 +98,35 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
         cultures.add(CulturePotager(
           plantationId: plantation.id,
           nom: fiche.nomLocalise(_locale),
+          etat: calculateur.etatCroissance(plantation, fiche, maintenant),
         ));
       }
     }
     return cultures;
   }
 
-  /// Ids of the parcelles that have a task due today.
+  /// Ids of the parcelles that have a task due today (parcelle-level or
+  /// plantation-level — the latter is resolved to its parent parcelle).
   Future<Set<String>> _parcellesAvecTacheDuJour(
     AbstractTacheRepository taches,
+    AbstractPlantationRepository plantations,
     DateTime Function() maintenant,
   ) async {
     final n = maintenant();
     final debut = DateTime(n.year, n.month, n.day);
     final tachesDuJour =
         await taches.obtenirEntreDates(debut, debut.add(const Duration(days: 1)));
-    return {
-      for (final Tache t in tachesDuJour)
-        if (t.cible == CibleTache.parcelle && !t.estFaite) t.cibleId,
-    };
+    final result = <String>{};
+    for (final t in tachesDuJour) {
+      if (t.estFaite) continue;
+      if (t.cible == CibleTache.parcelle) {
+        result.add(t.cibleId);
+      } else if (t.cible == CibleTache.plantation) {
+        final plantation = await plantations.obtenirParId(t.cibleId);
+        if (plantation != null) result.add(plantation.parcelleId);
+      }
+    }
+    return result;
   }
 }
 

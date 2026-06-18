@@ -52,6 +52,7 @@ besoins:
   temperature_min_survie: -10
   gele_fatal: false
 cycle:
+  enracinement: pivotant
   type: annuelle
   duree_germination_jours: [5, 10]
   duree_avant_recolte_jours: [45, 70]
@@ -79,11 +80,14 @@ periodes:
 associations:
   beneficies:
     - id: LEG-014
+      type: succession_temporelle
       raison_i18n: { fr: "Bon usage de l'espace, cycles courts complémentaires", en: "Good space use, complementary short cycles" }
     - id: LEG-018
+      type: fixation_azote
       raison_i18n: { fr: "Les légumineuses enrichissent le sol en azote", en: "Legumes enrich soil with nitrogen" }
   defavorables:
     - id: moutarde
+      type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, partage les mêmes maladies", en: "Same family, shares the same diseases" }
 rotation:
   famille: brassicaceae

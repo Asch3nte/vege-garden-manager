@@ -7,6 +7,7 @@ import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/stade_croissance.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
@@ -45,12 +46,16 @@ void main() {
         },
       );
 
-  Plantation plantation(DateTime dateMiseEnPlace) => Plantation(
+  Plantation plantation(
+    DateTime dateMiseEnPlace, {
+    MethodeMiseEnPlace methode = MethodeMiseEnPlace.repiquage,
+  }) =>
+      Plantation(
         id: 'pl1',
         planteId: 'tomate',
         parcelleId: 'par1',
         dateMiseEnPlace: dateMiseEnPlace,
-        methode: MethodeMiseEnPlace.repiquage,
+        methode: methode,
         surfaceOccupee: Surface.enMetresCarres(1),
         nombrePieds: 2,
       );
@@ -73,6 +78,69 @@ void main() {
       expect(est.dateMin, DateTime.utc(2026, 2, 4));
       expect(est.dateMin.isUtc, isTrue);
       expect(est.dateMin, est.dateMax);
+    });
+  });
+
+  group('etatCroissance', () {
+    // dureeMin = 100 days → fraction thresholds fall on round day counts:
+    // levée < 12 j, croissance < 66 j, maturation < 100 j, récolte ≥ 100 j.
+    final f = fiche(dureeMin: 100, dureeMax: 120);
+    final mep = DateTime.utc(2026, 1, 1);
+
+    test('sowing methods pass through levée before croissance', () {
+      final p = plantation(mep, methode: MethodeMiseEnPlace.semisDirect);
+      // day 5 → 5% → still emerging.
+      expect(
+        calc.etatCroissance(p, f, DateTime.utc(2026, 1, 6)).stade,
+        StadeCroissance.levee,
+      );
+      // day 20 → 20% → vegetative growth.
+      expect(
+        calc.etatCroissance(p, f, DateTime.utc(2026, 1, 21)).stade,
+        StadeCroissance.croissance,
+      );
+    });
+
+    test('established plants skip the levée stage (start at croissance)', () {
+      final p = plantation(mep, methode: MethodeMiseEnPlace.repiquage);
+      // day 5 → 5%, but a transplant is already emerged.
+      expect(
+        calc.etatCroissance(p, f, DateTime.utc(2026, 1, 6)).stade,
+        StadeCroissance.croissance,
+      );
+    });
+
+    test('crosses into maturation then récolte at the thresholds', () {
+      final p = plantation(mep, methode: MethodeMiseEnPlace.repiquage);
+      // day 70 → 70% → maturation.
+      expect(
+        calc.etatCroissance(p, f, DateTime.utc(2026, 3, 12)).stade,
+        StadeCroissance.maturation,
+      );
+      // day 100 → 100% → harvest window reached.
+      expect(
+        calc.etatCroissance(p, f, DateTime.utc(2026, 4, 11)).stade,
+        StadeCroissance.recolte,
+      );
+    });
+
+    test('progression is the clamped elapsed/min-days-to-harvest ratio', () {
+      final p = plantation(mep, methode: MethodeMiseEnPlace.repiquage);
+      expect(
+        calc.etatCroissance(p, f, DateTime.utc(2026, 2, 20)).progression,
+        closeTo(0.50, 1e-9), // 50 days / 100
+      );
+      // Past the window → clamped to 1.0, still récolte.
+      final tard = calc.etatCroissance(p, f, DateTime.utc(2026, 6, 1));
+      expect(tard.progression, 1.0);
+      expect(tard.stade, StadeCroissance.recolte);
+    });
+
+    test('a reference before planting reads as age 0 (no negative progress)', () {
+      final p = plantation(mep, methode: MethodeMiseEnPlace.semisDirect);
+      final etat = calc.etatCroissance(p, f, DateTime.utc(2025, 12, 20));
+      expect(etat.progression, 0.0);
+      expect(etat.stade, StadeCroissance.levee);
     });
   });
 

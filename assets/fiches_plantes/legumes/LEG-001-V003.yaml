@@ -1,0 +1,64 @@
+# Fiche fille (variété) — Tomate San Marzano. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V003
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'San Marzano'"
+
+i18n:
+  fr:
+    nom_commun: Tomate San Marzano
+    noms_alternatifs: [San Marzano 2, Tomate italienne, Tomate pelati]
+    description: >
+      Variété italienne emblématique à fruits allongés (10–12 cm, 90–130 g),
+      chair ferme et peu aqueuse, peau fine et facile à éplucher, très peu de
+      graines. Saveur douce et légèrement acidulée, parfaite pour les sauces,
+      coulis et conserves. Port indéterminé (1–1,8 m) produisant des grappes
+      de 6–8 fruits. Récolte possible environ 80 jours après plantation.
+    conseils_culture: >
+      Exige un sol bien drainé, réchauffé et riche. Sensible au mildiou en
+      été humide : aérer, espacer à 70 cm minimum, pailler et éviter tout
+      mouillage du feuillage. Conduire à 1–2 tiges. Arrosage régulier mais
+      modéré : un excès d'eau dilue les arômes et favorise les maladies.
+    conseils_recolte: >
+      Récolter à pleine maturité (rouge vif uniforme) pour une teneur en sucre
+      et une fermeté optimales. Idéale pour la mise en conserve en fin de
+      saison (août–septembre) quand la production est maximale.
+    erreurs_frequentes:
+      - "Arrosage excessif (dilue les arômes, favorise le mildiou)"
+      - Récolte trop précoce (fruit pas assez sucré)
+      - Manque d'espacement (circulation d'air insuffisante, mildiou)
+  en:
+    nom_commun: San Marzano Tomato
+    description: >
+      Iconic Italian plum tomato with elongated fruits (10–12 cm, 90–130 g),
+      firm and dry flesh, thin skin easy to peel, very few seeds. Sweet and
+      slightly acidic flavour, ideal for sauces and canning.
+
+cycle:
+  duree_avant_recolte_jours: [75, 85]
+  hauteur_adulte_cm: [100, 180]
+  espacement_cm: 70
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Température ambiante, à l'abri du soleil direct", en: "Room temperature, away from direct sunlight" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Pelées et stérilisées en bocaux (référence mondiale des tomates pelées)", en: "Peeled and sterilised in jars (world reference for canned peeled tomatoes)" }
+  - methode: sechage
+    duree_mois: 12
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Sauce tomate, coulis, conserves (pelées entières), pizza, bruschetta, soupe]
+  en: [Tomato sauce, coulis, canned whole peeled, pizza, bruschetta, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate_San_Marzano
+  - https://jardinage.pagesjaunes.fr/astuce/voir/728637/tomate-san-marzano
+contributeurs:
+  - "@potagerer"

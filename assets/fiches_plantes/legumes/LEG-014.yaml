@@ -49,6 +49,7 @@ besoins:
   temperature_min_survie: -5
   gele_fatal: false
 cycle:
+  enracinement: superficiel
   type: annuelle
   duree_germination_jours: [6, 12]
   duree_avant_recolte_jours: [45, 70]
@@ -82,6 +83,7 @@ associations:
     - id: LEG-004
       raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
     - id: LEG-001
+      type: etagement_lumiere
       raison_i18n: { fr: "Profite de l'ombre portée des tomates en été", en: "Benefits from tomato shade in summer" }
   defavorables: []
 rotation:

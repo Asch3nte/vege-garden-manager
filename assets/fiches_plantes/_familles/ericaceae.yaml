@@ -10,6 +10,12 @@ i18n:
       Famille des plantes de terre de bruyère : myrtille, airelle et canneberge
       (Vaccinium). Exigent un sol acide, frais et drainé ; idéales en massif
       dédié ou en bac sur substrat acidifié.
+    pourquoi_rotation: >
+      Plantes de terre de bruyère pérennes : elles restent des années en place et exigent surtout un sol acide, frais et drainé ; un sol trop humide entraîne le phytophthora des racines.
+    ennemis_communs_note: >
+      La drosophile suzukii pond dans les baies mûres (myrtilles) et la pourriture grise gâte les fruits par temps humide.
+    associations_note: >
+      À cultiver entre plantes de terre de bruyère aux mêmes besoins ; évitez le voisinage de plantes calcicoles et tout apport de calcaire.
 maladies_communes: [pourriture_grise, phytophthora]
 ravageurs_communs: [drosophila_suzukii, puceron]
 contributeurs:
