@@ -10,6 +10,10 @@
 >   - la **`raison_i18n`** n'est plus rendue dans la constellation : elle passe en **bandeau sur la fiche** ouverte (exigence « zéro texte tronqué ») ;
 >   - la résolution reste bidirectionnelle pour le classement bon/à-éviter, mais la vue **conserve désormais le sens** (donne/reçoit/mutuel).
 >   - *Pour revenir en arrière* : ré-afficher `raison_i18n`+mécanisme dans `vue_associations.dart` et repasser `type` en valeur simple suffit (la donnée curatée est inchangée).
+> - **[ADR-0013](0013-vocabulaire-mecanismes-et-groupement-vue.md)** (2026-06-17) **étend la taxonomie** de la Décision 1 : +`attractionAuxiliaires`, `ameublissementSol` (bénéfice) ; +`partageMaladies`, `competitionEau`, `competitionEspace` (conflit) — mécanismes réels mais absents, révélés par l'audit du corpus. Le résidu de paires sans mécanisme énonçable reste **non typé** et porte un marqueur **« autre »** de présentation (aucun faux mécanisme ajouté au domaine).
+>   - *Pour revenir en arrière* : retirer les valeurs d'enum ajoutées et leurs `type:` dans les fiches (les paires retombent en « autre »).
+> - **[ADR-0014](0014-calcul-associations-exhaustif-explicable.md)** (2026-06-18) **précise les règles** de dérivation (Décision 1) : comparaisons réelles (écart de hauteur, besoins eau/espace/soleil identiques vs différents, périodes, maladies de famille) au lieu de présences brutes ; **étend le schéma de fiche** (`enracinement`, usage `attire_auxiliaires`) pour rendre dérivables `ameublissementSol` et `attractionAuxiliaires` (seule `allelopathie` reste curatée) ; chaque suggestion porte ses **critères** (`CritereAssociation`) pour une explication exhaustive.
+>   - *Pour revenir en arrière* : les seuils sont en constantes ; retirer les nouvelles règles/critères ramène au comportement « présence ».
 - **Contexte** : la vocation de Pot'à Gérer est de promouvoir des cultures
   **naturelles et permacoles**. Or, aujourd'hui, les associations de plantes se
   réduisent à deux listes d'`id` (« bénéfiques » / « négatives ») exposées par

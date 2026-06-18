@@ -64,6 +64,7 @@ besoins:
   gele_fatal: false
 
 cycle:
+  enracinement: superficiel
   type: vivace
   duree_germination_jours: [10, 14]
   duree_avant_recolte_jours: [60, 90]

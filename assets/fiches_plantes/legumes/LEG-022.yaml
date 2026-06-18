@@ -53,6 +53,7 @@ besoins:
   temperature_min_survie: -5
   gele_fatal: false
 cycle:
+  enracinement: pivotant
   type: annuelle
   duree_germination_jours: [3, 7]
   duree_avant_recolte_jours: [20, 30]
@@ -83,6 +84,7 @@ associations:
       type: succession_temporelle
       raison_i18n: { fr: "Cycle court complémentaire, optimise l'espace", en: "Complementary short cycle, optimizes space" }
     - id: LEG-004
+      type: ameublissement_sol
       raison_i18n: { fr: "Le radis ameublit le sol pour les carottes", en: "Radish loosens soil for carrots" }
   defavorables:
     - id: moutarde

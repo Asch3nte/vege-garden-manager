@@ -60,6 +60,7 @@ besoins:
   gele_fatal: true
 
 cycle:
+  enracinement: moyen
   type: annuelle
   duree_germination_jours: [10, 18]
   duree_avant_recolte_jours: [70, 110]

@@ -53,6 +53,7 @@ besoins:
   temperature_min_survie: 5
   gele_fatal: true
 cycle:
+  enracinement: profond
   type: annuelle
   duree_germination_jours: [7, 12]
   duree_avant_recolte_jours: [110, 140]
@@ -91,6 +92,7 @@ associations:
       raison_i18n: { fr: "Attire les pollinisateurs nécessaires à la nouaison", en: "Attracts pollinators needed for fruit set" }
   defavorables:
     - id: LEG-020
+      type: [competition_espace, competition_eau]
       raison_i18n: { fr: "Concurrence pour l'espace et l'eau", en: "Competition for space and water" }
 rotation:
   famille: cucurbitaceae

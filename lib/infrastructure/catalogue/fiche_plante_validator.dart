@@ -1,4 +1,5 @@
 import '../../domain/enums/charge_tuteur.dart';
+import '../../domain/enums/enracinement_plante.dart';
 import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
@@ -152,6 +153,33 @@ class FichePlanteValidator {
       exiger(
         chargeTuteur is String && valides.contains(_versCamel(chargeTuteur)),
         'cycle.charge_tuteur "$chargeTuteur" must be one of legere|moyenne|lourde',
+      );
+    }
+    // ADR-0015 Lot 4 — tolérance thermique & sécheresse (optionnel).
+    final temperatureMaxTolerance = besoins['temperature_max_tolerance'];
+    if (temperatureMaxTolerance != null) {
+      exiger(
+        temperatureMaxTolerance is num,
+        'besoins.temperature_max_tolerance must be a number (°C)',
+      );
+    }
+    final toleranceSecheresse = besoins['tolerance_secheresse'];
+    if (toleranceSecheresse != null) {
+      exiger(
+        toleranceSecheresse is String &&
+            ['faible', 'moyenne', 'forte'].contains(toleranceSecheresse),
+        'besoins.tolerance_secheresse must be faible | moyenne | forte',
+      );
+    }
+
+    // ADR-0014 — système racinaire (optionnel).
+    final enracinement = cycle['enracinement'];
+    if (enracinement != null) {
+      final valides = EnracinementPlante.values.map((e) => e.name).toSet();
+      exiger(
+        enracinement is String && valides.contains(_versCamel(enracinement)),
+        'cycle.enracinement "$enracinement" must be one of '
+        'superficiel|moyen|profond|pivotant',
       );
     }
 

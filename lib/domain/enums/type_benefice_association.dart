@@ -25,6 +25,13 @@ enum TypeBeneficeAssociation {
   /// borage + courgette).
   attractionPollinisateurs,
 
+  /// Attracting beneficial insects — predators/parasitoids (hoverflies,
+  /// lacewings, parasitic wasps) — that prey on a neighbour's pests (e.g. dill +
+  /// brassicas against caterpillars). Distinct from [attractionPollinisateurs]
+  /// (pollination): this is pest control. **Curated only**, not derivable from
+  /// current traits (ADR-0013).
+  attractionAuxiliaires,
+
   /// Diverting a pest onto a decoy/trap plant (e.g. nasturtium + broad bean for
   /// aphids).
   plantePiege,
@@ -32,6 +39,11 @@ enum TypeBeneficeAssociation {
   /// A legume enriches the soil in nitrogen for a hungry neighbour (e.g. bean +
   /// maize).
   fixationAzote,
+
+  /// Deep/strong roots loosen and structure the soil for shallower-rooted
+  /// neighbours (e.g. radish ahead of carrots). Belongs to the *fertilité et
+  /// structure du sol* family (ADR-0013).
+  ameublissementSol,
 
   /// Covering the soil (against weeds, to keep moisture) — e.g. squash in the
   /// milpa.

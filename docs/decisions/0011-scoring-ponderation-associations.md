@@ -6,6 +6,10 @@
 > ⚠️ **Révisions ultérieures** (traçabilité / rétropédalage) :
 > - **[ADR-0012](0012-associations-directionnelles-refonte-vue.md)** (2026-06-16) **étend** le rôle des *familles d'effet* : en plus de servir d'unité de pondération (ici), elles deviennent le **libellé affiché** dans la vue Associations (à la place du mécanisme précis). Le tri par score, le top-N et le « voir plus » de cet ADR sont **conservés** ; s'y ajoutent le sens (donne/reçoit/mutuel) et un filtre par direction.
 >   - *Pour revenir en arrière* : réafficher le mécanisme précis comme libellé dans `vue_associations.dart` (le modèle de scoring est inchangé).
+> - **[ADR-0013](0013-vocabulaire-mecanismes-et-groupement-vue.md)** (2026-06-17) ajoute des mécanismes au vocabulaire et les rattache à `familleDe` : `attractionAuxiliaires` → **protectionRavageurs**, `ameublissementSol` → **fertilite** (dont la portée est **élargie** à *fertilité **et structure** du sol*). Les nouveaux conflits (`partageMaladies`, `competitionEau/Espace`) **ne portent pas de famille** (les conflits ne sont pondérés que par confiance — inchangé).
+>   - *Pour revenir en arrière* : le scoring est inchangé ; retirer les nouveaux mécanismes de `familleDe` suffit.
+> - **[ADR-0014](0014-calcul-associations-exhaustif-explicable.md)** (2026-06-18) **revient sur** *« les conflits ne sont pas pondérés »* : les conflits deviennent **pondérables** par **famille de conflit** (concurrence ressources / risque sanitaire / allélopathie), pour que tout mécanisme dérivable soit priorisable par l'utilisateur. `score(conflit) = poids(familleConflit) × facteur(confiance)` ; défaut `normal` → comportement inchangé.
+>   - *Pour revenir en arrière* : fixer le poids conflit à `normal` (neutre) redonne le tri par confiance seule.
 - **Contexte** : le moteur de dérivation d'[ADR-0010](0010-associations-multi-mecanismes.md)
   (Lot 3) dérive **volontairement large** — une même plante peut matcher de
   nombreux mécanismes, dans les deux sens, pour de nombreuses voisines. Résultat :

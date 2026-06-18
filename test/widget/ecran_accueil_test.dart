@@ -37,6 +37,7 @@ import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_notifier.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_vue.dart';
+import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_accueil.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_zone_detail.dart';
@@ -78,6 +79,11 @@ class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 class MockRecoltes extends Mock implements AbstractRecolteRepository {}
 
 class MockMeteo extends Mock implements AbstractMeteoService {}
+
+class _StubGenererTachesArrosage implements GenererTachesArrosage {
+  @override
+  Future<void> executer() async {}
+}
 
 void main() {
   setUpAll(() {
@@ -155,6 +161,8 @@ void main() {
         meteoServiceProvider.overrideWithValue(meteo),
         fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
         horlogeProvider.overrideWithValue(() => maintenant),
+        genererTachesArrosageProvider
+            .overrideWith((ref) async => _StubGenererTachesArrosage()),
       ];
 
   Future<void> monter(WidgetTester tester, NiveauExperience niveau) async {

@@ -1,5 +1,7 @@
 import '../enums/categorie_plante.dart';
+import '../enums/tolerance_secheresse.dart';
 import '../enums/charge_tuteur.dart';
+import '../enums/enracinement_plante.dart';
 import '../enums/hemisphere.dart';
 import '../enums/niveau_besoin.dart';
 import '../enums/sous_type_legume.dart';
@@ -66,6 +68,11 @@ class FichePlante {
   final Set<String> _repulsifContre;
   final Set<String> _piegeA;
   final ChargeTuteur? _chargeTuteur;
+  // Enrichissement ADR-0014 — système racinaire (structuration du sol / concurrence).
+  final EnracinementPlante? _enracinement;
+  // Enrichissement ADR-0015 Lot 4 — réponse thermique & sécheresse
+  final ToleranceSecheresse? _toleranceSecheresse;
+  final double? _temperatureMaxTolerance;
 
   FichePlante._(
     this._id,
@@ -100,6 +107,9 @@ class FichePlante {
     this._repulsifContre,
     this._piegeA,
     this._chargeTuteur,
+    this._enracinement,
+    this._toleranceSecheresse,
+    this._temperatureMaxTolerance,
   )   : assert(_id.isNotEmpty, 'id must not be empty'),
         assert(_parentId == null || _parentId.isNotEmpty,
             'parentId, when set, must not be empty'),
@@ -162,6 +172,11 @@ class FichePlante {
     Set<String>? repulsifContre,
     Set<String>? piegeA,
     ChargeTuteur? chargeTuteur,
+    // Enrichissement ADR-0014
+    EnracinementPlante? enracinement,
+    // Enrichissement ADR-0015 Lot 4
+    ToleranceSecheresse? toleranceSecheresse,
+    double? temperatureMaxTolerance,
   }) =>
       FichePlante._(
         id,
@@ -198,6 +213,9 @@ class FichePlante {
         Set<String>.unmodifiable(repulsifContre ?? const <String>{}),
         Set<String>.unmodifiable(piegeA ?? const <String>{}),
         chargeTuteur,
+        enracinement,
+        toleranceSecheresse,
+        temperatureMaxTolerance,
       );
 
   static Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _figerPeriodes(
@@ -269,6 +287,20 @@ class FichePlante {
   /// How heavy this plant is for a support when grown as a climber, or `null`
   /// when unspecified (the engine then approximates it).
   ChargeTuteur? get chargeTuteur => _chargeTuteur;
+
+  /// Root system (depth/shape), or `null` when unspecified (ADR-0014). Drives
+  /// the soil-loosening rule and refines root competition.
+  EnracinementPlante? get enracinement => _enracinement;
+
+  // Enrichissement ADR-0015 Lot 4
+  /// Drought tolerance level, or `null` when unspecified. Used by [BilanArrosage]
+  /// to scale the demand index (×0.8 forte / ×1.0 moyenne / ×1.2 faible).
+  ToleranceSecheresse? get toleranceSecheresse => _toleranceSecheresse;
+
+  /// Plant-specific heat-stress threshold (°C), or `null` when unspecified.
+  /// When [tempMax] reaches this value the heatwave multiplier is applied
+  /// regardless of the generic tier (ADR-0015 Décision 4).
+  double? get temperatureMaxTolerance => _temperatureMaxTolerance;
 
   /// Common name for [locale], falling back to French (always present).
   String nomLocalise(String locale) =>

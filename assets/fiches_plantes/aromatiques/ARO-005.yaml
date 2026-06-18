@@ -63,6 +63,7 @@ besoins:
   gele_fatal: false
 
 cycle:
+  enracinement: superficiel
   type: vivace
   duree_avant_recolte_jours: [60, 90]
   hauteur_adulte_cm: [40, 90]
@@ -97,6 +98,7 @@ associations:
       raison_i18n: { fr: "Éloigne les papillons blancs des choux plantée en bordure", en: "Deters cabbage white butterflies when planted as a border" }
   defavorables:
     - id: ARO-001
+      type: competition_eau
       raison_i18n: { fr: "Concurrence hydrique si plantée trop près — tenir à distance", en: "Water competition if planted too close — keep at distance" }
 
 rotation:

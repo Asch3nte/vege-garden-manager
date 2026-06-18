@@ -72,12 +72,17 @@ class ContexteAssociation {
   /// Localised confidence (derived only), or `null`.
   final String? confiance;
 
+  /// Every factor (criterion) behind a derived association, each a full localised
+  /// sentence with its real values (ADR-0014). Empty for a curated relation.
+  final List<String> facteurs;
+
   const ContexteAssociation({
     required this.bon,
     this.mecanisme,
     this.raison,
     this.suggere = false,
     this.confiance,
+    this.facteurs = const [],
   });
 }
 
@@ -433,13 +438,41 @@ class _Faits extends StatelessWidget {
 
   const _Faits({required this.fiche});
 
+  /// Formats a pH value with a French decimal comma, dropping a trailing `,0`.
+  static String _ph(double v) {
+    final s = v.toStringAsFixed(1).replaceAll('.', ',');
+    return s.endsWith(',0') ? s.substring(0, s.length - 2) : s;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final b = fiche.besoins;
+    // Exposition shown as a **range** when a minimum tolerance is set (ADR-0014):
+    // e.g. « Mi-ombre à plein soleil » instead of just the optimum.
+    final expo = (b.soleilMin != null && b.soleilMin != b.soleil)
+        ? l10n.ficheExpositionPlage(
+            l10n.exposition(b.soleilMin!), l10n.exposition(b.soleil).toLowerCase())
+        : l10n.exposition(b.soleil);
+    final hMin = fiche.hauteurAdulteCmMin;
+    final hMax = fiche.hauteurAdulteCmMax;
     final faits = <(IconData, String, String)>[
-      (Icons.wb_sunny_outlined, l10n.ficheExposition, l10n.exposition(fiche.besoins.soleil)),
-      (Icons.water_drop_outlined, l10n.ficheArrosage, l10n.besoinEau(fiche.besoins.eau)),
+      (Icons.wb_sunny_outlined, l10n.ficheExposition, expo),
+      (Icons.water_drop_outlined, l10n.ficheArrosage, l10n.besoinEau(b.eau)),
       (Icons.straighten, l10n.ficheEspacement, l10n.ficheEspacementCm(fiche.espacementCm)),
+      if (hMin != null || hMax != null)
+        (
+          Icons.height,
+          l10n.ficheHauteur,
+          (hMin != null && hMax != null && hMin != hMax)
+              ? l10n.ficheHauteurCm(hMin, hMax)
+              : l10n.ficheHauteurCmUnique((hMax ?? hMin)!),
+        ),
+      (
+        Icons.science_outlined,
+        l10n.fichePh,
+        l10n.fichePhPlage(_ph(b.phMin), _ph(b.phMax)),
+      ),
       (
         Icons.eco_outlined,
         l10n.ficheRecolte,
@@ -752,6 +785,51 @@ class _BandeauAssociation extends StatelessWidget {
               style: theme.textTheme.labelSmall?.copyWith(
                 color: couleur.withValues(alpha: 0.9),
                 fontStyle: FontStyle.italic,
+              ),
+            ),
+            // Every variable that entered the calculation, with its real value
+            // (ADR-0014) — nothing left vague.
+            if (contexte.facteurs.isNotEmpty) ...[
+              const SizedBox(height: EspacementsApp.s2),
+              Text(
+                l10n.assocFacteursTitre,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              for (final f in contexte.facteurs)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('•  ',
+                          style: theme.textTheme.bodySmall
+                              ?.copyWith(color: couleur)),
+                      Expanded(
+                        child: Text(f, style: theme.textTheme.bodySmall),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ] else ...[
+            // Curated association: the counterpart of "Suggestion · …",
+            // elaborated here as promised by the cluster label (ADR-0013 §7).
+            const SizedBox(height: EspacementsApp.s1),
+            Text(
+              l10n.assocHorsSuggestion,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: couleur.withValues(alpha: 0.9),
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              l10n.assocHorsSuggestionExpl,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ],

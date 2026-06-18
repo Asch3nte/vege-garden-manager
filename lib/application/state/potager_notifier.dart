@@ -55,7 +55,8 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     }
 
     final parcellesPotager = await parcelles.obtenirParPotager(potager.id);
-    final parcellesAvecTache = await _parcellesAvecTacheDuJour(taches, maintenant);
+    final parcellesAvecTache =
+        await _parcellesAvecTacheDuJour(taches, plantations, maintenant);
     final now = maintenant();
 
     final zones = <ZonePotager>[];
@@ -104,19 +105,28 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     return cultures;
   }
 
-  /// Ids of the parcelles that have a task due today.
+  /// Ids of the parcelles that have a task due today (parcelle-level or
+  /// plantation-level — the latter is resolved to its parent parcelle).
   Future<Set<String>> _parcellesAvecTacheDuJour(
     AbstractTacheRepository taches,
+    AbstractPlantationRepository plantations,
     DateTime Function() maintenant,
   ) async {
     final n = maintenant();
     final debut = DateTime(n.year, n.month, n.day);
     final tachesDuJour =
         await taches.obtenirEntreDates(debut, debut.add(const Duration(days: 1)));
-    return {
-      for (final Tache t in tachesDuJour)
-        if (t.cible == CibleTache.parcelle && !t.estFaite) t.cibleId,
-    };
+    final result = <String>{};
+    for (final t in tachesDuJour) {
+      if (t.estFaite) continue;
+      if (t.cible == CibleTache.parcelle) {
+        result.add(t.cibleId);
+      } else if (t.cible == CibleTache.plantation) {
+        final plantation = await plantations.obtenirParId(t.cibleId);
+        if (plantation != null) result.add(plantation.parcelleId);
+      }
+    }
+    return result;
   }
 }
 

@@ -59,6 +59,9 @@ class CalculerBesoinArrosage {
     double? pluieRecenteMm;
     double? pluiePrevueMm;
     int? joursAvantPluie;
+    double probabilitePluiePrevu = 1.0;
+    double? tempMax;
+    double? et0Mm;
     if (localisation.estDefinie) {
       try {
         final fenetre = await _meteo.obtenirPrevisions(
@@ -72,9 +75,15 @@ class CalculerBesoinArrosage {
         final futur = fenetre
             .where((p) => p.type == TypeReleveMeteo.prevu)
             .toList(growable: false);
+        // Today's forecast tempMax and ET₀ — for the watering factor (ADR-0015).
+        tempMax = futur.firstOrNull?.tempMax;
+        et0Mm = futur.firstOrNull?.evapotranspirationMm;
         for (var i = 0; i < futur.length; i++) {
-          if (futur[i].precipitationsMm >= BilanArrosage.seuilPluiePrevueMm) {
+          final score =
+              futur[i].precipitationsMm * futur[i].probabilitePluie;
+          if (score >= BilanArrosage.seuilScorePluie) {
             pluiePrevueMm = futur[i].precipitationsMm;
+            probabilitePluiePrevu = futur[i].probabilitePluie;
             joursAvantPluie = i; // forecast starts today (offset 0)
             break;
           }
@@ -92,6 +101,11 @@ class CalculerBesoinArrosage {
       pluieRecenteMm: pluieRecenteMm,
       pluiePrevueMm: pluiePrevueMm,
       joursAvantPluie: joursAvantPluie,
+      probabilitePluiePrevu: probabilitePluiePrevu,
+      tempMax: tempMax,
+      et0Mm: et0Mm,
+      toleranceSecheresse: fiche.toleranceSecheresse,
+      temperatureMaxTolerance: fiche.temperatureMaxTolerance,
     );
   }
 }

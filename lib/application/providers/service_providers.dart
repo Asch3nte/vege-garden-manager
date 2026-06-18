@@ -1,13 +1,16 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/repositories/abstract_geocodage_service.dart';
 import '../../domain/repositories/abstract_geolocalisation_service.dart';
 import '../../domain/repositories/abstract_meteo_service.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_reinitialisation_service.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
+import '../../infrastructure/api/nominatim_client.dart';
 import '../../infrastructure/api/open_meteo_client.dart';
 import '../../infrastructure/repositories/meteo_service_impl.dart';
+import '../../infrastructure/services/geocodage_service_impl.dart';
 import '../../infrastructure/services/geolocalisation_service_impl.dart';
 import '../../infrastructure/services/notification_service_impl.dart';
 import '../../infrastructure/services/reinitialisation_service_impl.dart';
@@ -23,6 +26,16 @@ import 'database_providers.dart';
 /// Open-Meteo HTTP client (owns a default `http.Client`).
 final openMeteoClientProvider = Provider<OpenMeteoClient>(
   (ref) => OpenMeteoClient(),
+);
+
+/// Nominatim HTTP client (owns a default `http.Client`).
+final nominatimClientProvider = Provider<NominatimClient>(
+  (ref) => NominatimClient(),
+);
+
+/// Reverse-geocoding service (Nominatim / OSM — ADR-0016).
+final geocodageServiceProvider = Provider<AbstractGeocodageService>(
+  (ref) => GeocodageServiceImpl(ref.watch(nominatimClientProvider)),
 );
 
 final meteoServiceProvider = Provider<AbstractMeteoService>(

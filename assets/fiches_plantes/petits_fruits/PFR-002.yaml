@@ -64,6 +64,7 @@ besoins:
   gele_fatal: false
 
 cycle:
+  enracinement: moyen
   type: vivace
   duree_avant_recolte_jours: [365, 730]
   hauteur_adulte_cm: [120, 200]
@@ -95,6 +96,7 @@ associations:
       raison_i18n: { fr: "Les légumineuses enrichissent le sol en azote bénéfique aux framboisiers", en: "Legumes enrich soil with nitrogen beneficial to raspberries" }
   defavorables:
     - id: LEG-020
+      type: partage_maladies
       raison_i18n: { fr: "Partage des maladies fongiques (Verticillium) avec les Solanacées", en: "Shares fungal diseases (Verticillium) with Solanaceae" }
 
 rotation:

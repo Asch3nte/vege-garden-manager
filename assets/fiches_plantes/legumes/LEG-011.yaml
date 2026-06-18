@@ -54,6 +54,7 @@ besoins:
   temperature_min_survie: 5
   gele_fatal: true
 cycle:
+  enracinement: moyen
   type: annuelle
   duree_germination_jours: [5, 10]
   duree_avant_recolte_jours: [50, 70]
@@ -85,14 +86,17 @@ periodes:
 associations:
   beneficies:
     - id: LEG-013
+      type: couvre_sol
       raison_i18n: { fr: "Trio des trois sœurs : couvre le sol", en: "Three sisters trio: covers the soil" }
     - id: capucine
       type: [plante_piege, attraction_pollinisateurs]
       raison_i18n: { fr: "Attire les pollinisateurs, piège à pucerons", en: "Attracts pollinators, aphid trap" }
     - id: aneth
+      type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires", en: "Attracts beneficial insects" }
   defavorables:
     - id: LEG-020
+      type: partage_maladies
       raison_i18n: { fr: "Favorisent mutuellement les maladies fongiques", en: "Mutually promote fungal diseases" }
 rotation:
   famille: cucurbitaceae

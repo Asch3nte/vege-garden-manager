@@ -8,6 +8,7 @@ difficulte: 2
 usages:
   - condimentaire
   - alimentaire
+  - attire_auxiliaires
 
 rusticite:
   zone_min: zone10
@@ -65,6 +66,7 @@ besoins:
   gele_fatal: true
 
 cycle:
+  enracinement: pivotant
   type: annuelle
   duree_germination_jours: [7, 14]
   duree_avant_recolte_jours: [30, 50]

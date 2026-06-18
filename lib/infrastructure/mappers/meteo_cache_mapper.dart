@@ -59,6 +59,7 @@ class MeteoCacheMapper {
       ventVitesseMax: Value(d.ventVitesseMax),
       risqueGel: Value(d.risqueGel),
       risqueCanicule: Value(d.risqueCanicule),
+      evapotranspirationMm: Value(d.evapotranspirationMm),
       dateRecuperation: Value(dateRecuperation),
     );
   }
@@ -83,6 +84,7 @@ class MeteoCacheMapper {
       tempMax: Value(p.tempMax),
       precipitationsMm: Value(p.precipitationsMm),
       probabilitePluie: Value(p.probabilitePluie),
+      evapotranspirationMm: Value(p.evapotranspirationMm),
       dateRecuperation: Value(dateRecuperation),
     );
   }
@@ -98,6 +100,7 @@ class MeteoCacheMapper {
       ventVitesseMax: r.ventVitesseMax ?? 0,
       risqueGel: r.risqueGel,
       risqueCanicule: r.risqueCanicule,
+      evapotranspirationMm: r.evapotranspirationMm,
     );
   }
 
@@ -110,6 +113,7 @@ class MeteoCacheMapper {
       precipitationsMm: r.precipitationsMm ?? 0,
       probabilitePluie: r.probabilitePluie ?? 0,
       type: TypeReleveMeteo.values.byName(r.type),
+      evapotranspirationMm: r.evapotranspirationMm,
     );
   }
 }

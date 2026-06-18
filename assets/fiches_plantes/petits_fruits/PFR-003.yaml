@@ -62,6 +62,7 @@ besoins:
   gele_fatal: false
 
 cycle:
+  enracinement: moyen
   type: vivace
   duree_avant_recolte_jours: [365, 730]
   hauteur_adulte_cm: [100, 150]

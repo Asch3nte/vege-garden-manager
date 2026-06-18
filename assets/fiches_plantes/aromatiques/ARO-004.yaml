@@ -64,6 +64,7 @@ besoins:
   gele_fatal: false
 
 cycle:
+  enracinement: moyen
   type: vivace
   duree_germination_jours: [10, 20]
   duree_avant_recolte_jours: [90, 180]

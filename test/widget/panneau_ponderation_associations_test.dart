@@ -8,6 +8,7 @@ import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_conflit.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
@@ -56,6 +57,30 @@ void main() {
     expect(find.text('Couverture & abri'), findsOneWidget);
   });
 
+  testWidgets('shows the conflict families and persists a conflict weight '
+      '(ADR-0014)', (tester) async {
+    await monter(tester);
+    await tester.scrollUntilVisible(find.text('Allélopathie'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('Concurrence (ressources)'), findsOneWidget);
+    expect(find.text('Risque sanitaire'), findsOneWidget);
+
+    final zone = find.ancestor(
+        of: find.text('Risque sanitaire'), matching: find.byType(ChampEmpile));
+    final ignorer = find.descendant(of: zone, matching: find.text('Ignorer'));
+    await tester.ensureVisible(ignorer);
+    await tester.pumpAndSettle();
+    await tester.tap(ignorer);
+    await tester.pumpAndSettle();
+
+    final captured = verify(() => prefs.sauvegarder(captureAny())).captured;
+    expect(
+        (captured.last as PreferencesUtilisateur)
+            .ponderationAssociations
+            .poidsConflit(FamilleEffetConflit.risqueSanitaire),
+        PoidsAssociation.ignore);
+  });
+
   testWidgets('setting a family weight persists it', (tester) async {
     await monter(tester);
 
@@ -86,9 +111,10 @@ void main() {
         matching: find.byType(OutlinedButton)));
     expect(reset().onPressed, isNull);
 
-    // Change the last family (visible next to the button) → reset enabled.
+    // Change a family visible next to the button (the last conflict family) →
+    // reset enabled.
     final zone = find.ancestor(
-        of: find.text('Couverture & abri'), matching: find.byType(ChampEmpile));
+        of: find.text('Allélopathie'), matching: find.byType(ChampEmpile));
     await tester.tap(find.descendant(of: zone, matching: find.text('Fort')));
     await tester.pumpAndSettle();
     expect(reset().onPressed, isNotNull);

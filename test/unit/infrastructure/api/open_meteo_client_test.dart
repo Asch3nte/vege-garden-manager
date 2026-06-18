@@ -12,6 +12,7 @@ void main() {
   final loc = Localisation.manuelle(ville: 'Lyon', latitude: 45.75, longitude: 4.85);
 
   Map<String, dynamic> dailyPayload() => {
+        'elevation': 200.0,
         'daily': {
           'time': ['2026-06-05', '2026-06-06', '2026-06-07'],
           'temperature_2m_max': [22.0, 35.5, 10.0],
@@ -19,6 +20,19 @@ void main() {
           'precipitation_sum': [0.0, 5.0, 2.0],
           'precipitation_probability_max': [10, 80, 50],
           'wind_speed_10m_max': [15.0, 20.0, 30.0],
+          'weather_code': [1, 61, 3],
+        },
+      };
+
+  Map<String, dynamic> hourlyPayload() => {
+        'elevation': 65.0,
+        'hourly': {
+          'time': ['2026-06-05T00:00', '2026-06-05T01:00', '2026-06-05T02:00'],
+          'temperature_2m': [18.0, 17.5, 17.0],
+          'precipitation': [0.0, 0.2, 1.5],
+          'precipitation_probability': [0, 20, 80],
+          'weather_code': [0, 51, 61],
+          'wind_speed_10m': [5.0, 8.0, 15.0],
         },
       };
 
@@ -119,6 +133,15 @@ void main() {
       expect(previsions[1].probabilitePluie, closeTo(0.8, 1e-9));
     });
 
+    test('maps weathercode per day', () async {
+      final previsions =
+          await clientReturning(dailyPayload()).obtenirPrevisions(loc, 3);
+
+      expect(previsions[0].weathercode, 1);  // mainly clear
+      expect(previsions[1].weathercode, 61); // rain
+      expect(previsions[2].weathercode, 3);  // overcast
+    });
+
     test('rejects a non-positive horizon', () async {
       final client = clientReturning(dailyPayload());
       expect(
@@ -163,8 +186,102 @@ void main() {
       );
     });
   });
+
+  group('obtenirPrevisionsHoraires', () {
+    test('maps temperature, precipitation and probability', () async {
+      final heures =
+          await clientReturning(hourlyPayload()).obtenirPrevisionsHoraires(loc);
+
+      expect(heures, hasLength(3));
+      expect(heures[0].temperature, 18.0);
+      expect(heures[0].precipitationsMm, 0.0);
+      expect(heures[0].probabilitePluie, 0.0);
+    });
+
+    test('maps weathercode per hour', () async {
+      final heures =
+          await clientReturning(hourlyPayload()).obtenirPrevisionsHoraires(loc);
+
+      expect(heures[0].weathercode, 0);  // clear sky
+      expect(heures[1].weathercode, 51); // drizzle
+      expect(heures[2].weathercode, 61); // rain
+    });
+
+    test('maps wind speed per hour', () async {
+      final heures =
+          await clientReturning(hourlyPayload()).obtenirPrevisionsHoraires(loc);
+
+      expect(heures[0].ventKmh, 5.0);
+      expect(heures[1].ventKmh, 8.0);
+      expect(heures[2].ventKmh, 15.0);
+    });
+
+    test('converts rain probability from 0..100 to 0..1', () async {
+      final heures =
+          await clientReturning(hourlyPayload()).obtenirPrevisionsHoraires(loc);
+
+      expect(heures[1].probabilitePluie, closeTo(0.2, 1e-9));
+      expect(heures[2].probabilitePluie, closeTo(0.8, 1e-9));
+    });
+
+    test('rejects a non-positive horizon', () async {
+      expect(
+        () => clientReturning(hourlyPayload()).obtenirPrevisionsHoraires(loc, nbJours: 0),
+        throwsA(isA<MeteoIndisponibleException>()),
+      );
+    });
+
+    test('throws when location is undefined', () async {
+      expect(
+        () => clientReturning(hourlyPayload())
+            .obtenirPrevisionsHoraires(const Localisation.nonDefinie()),
+        throwsA(isA<MeteoIndisponibleException>()),
+      );
+    });
+  });
+
+  group('obtenirElevation', () {
+    test('returns elevation from response metadata', () async {
+      final elevation =
+          await clientReturning(hourlyPayload()).obtenirElevation(loc);
+
+      expect(elevation, 65.0);
+    });
+
+    test('returns null when elevation key is missing', () async {
+      final payload = Map<String, dynamic>.from(hourlyPayload())
+        ..remove('elevation');
+      final elevation = await clientReturning(payload).obtenirElevation(loc);
+
+      expect(elevation, isNull);
+    });
+
+    test('returns null when location is undefined', () async {
+      final elevation = await clientReturning(hourlyPayload())
+          .obtenirElevation(const Localisation.nonDefinie());
+
+      expect(elevation, isNull);
+    });
+
+    test('returns null on HTTP error (never throws)', () async {
+      final elevation =
+          await clientReturning({}, status: 500).obtenirElevation(loc);
+
+      expect(elevation, isNull);
+    });
+
+    test('returns null on network failure (never throws)', () async {
+      final client = OpenMeteoClient(
+        httpClient: MockClient((_) async => throw const _Boom()),
+      );
+      final elevation = await client.obtenirElevation(loc);
+
+      expect(elevation, isNull);
+    });
+  });
 }
 
 class _Boom implements Exception {
   const _Boom();
 }
+

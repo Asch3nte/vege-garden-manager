@@ -14,6 +14,9 @@ import '../../application/state/potager_vue.dart';
 import '../../application/state/prochaines_taches_zone_provider.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/statut_plantation.dart';
+import '../../domain/enums/urgence_arrosage.dart';
+import '../../domain/value_objects/conseil_arrosage.dart';
+import '../providers/conseil_arrosage_plantation_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_observation.dart';
 import '../forms/formulaire_recolte.dart';
@@ -400,6 +403,10 @@ class _LigneCulture extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     // Observations are an intermediate+ feature (ADR-0009).
     final observationsDispo = ref.watch(accesNiveauProvider).observations;
+    // Watering advice (ADR-0015) — silent on load/error (.value = null).
+    final conseil = ref
+        .watch(conseilArrosagePlantationProvider(culture.plantationId))
+        .value;
     return Container(
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s3,
@@ -466,6 +473,8 @@ class _LigneCulture extends ConsumerWidget {
                     ],
                   ),
                 ],
+                if (conseil != null)
+                  _LigneConseilArrosage(conseil: conseil, theme: theme, l10n: l10n),
               ],
             ),
           ),
@@ -557,6 +566,62 @@ class _Badge extends StatelessWidget {
         texte,
         style: theme.textTheme.labelSmall
             ?.copyWith(color: theme.colorScheme.primary),
+      ),
+    );
+  }
+}
+
+/// Compact watering advice row (icon + label), shown inside [_LigneCulture].
+///
+/// Only rendered for actionable states (`arroserMaintenant`, `bientot`,
+/// `pasNecessaire` + `pluiePrevue`). Silent otherwise (null conseil = no row).
+class _LigneConseilArrosage extends StatelessWidget {
+  final ConseilArrosage conseil;
+  final ThemeData theme;
+  final AppLocalizations l10n;
+
+  const _LigneConseilArrosage({
+    required this.conseil,
+    required this.theme,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final (icone, couleur, libelle) = switch (conseil.urgence) {
+      UrgenceArrosage.arroserMaintenant => (
+          Icons.water_drop,
+          theme.colorScheme.error,
+          l10n.conseilArroserMaintenant,
+        ),
+      UrgenceArrosage.bientot => (
+          Icons.water_drop_outlined,
+          theme.colorScheme.tertiary,
+          l10n.conseilArroserBientot(conseil.joursAvantArrosage ?? 2),
+        ),
+      UrgenceArrosage.pasNecessaire when conseil.pluiePrevue => (
+          Icons.water_outlined,
+          theme.colorScheme.primary,
+          l10n.conseilPluieAVenir,
+        ),
+      _ => (null, null, null),
+    };
+
+    if (libelle == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: EspacementsApp.s2),
+      child: Row(
+        children: [
+          Icon(icone, size: TaillesIconesApp.sm, color: couleur),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(
+              libelle,
+              style: theme.textTheme.bodySmall?.copyWith(color: couleur),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/enums/famille_effet_association.dart';
+import '../../domain/enums/famille_effet_conflit.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
@@ -93,6 +94,16 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
       _modifier((p) => p.copierAvec(
             ponderationAssociations:
                 p.ponderationAssociations.avec(famille, poids),
+          ));
+
+  /// Sets the weight of one **conflict** effect family (ADR-0014, expert).
+  Future<void> definirPoidsConflit(
+    FamilleEffetConflit famille,
+    PoidsAssociation poids,
+  ) =>
+      _modifier((p) => p.copierAvec(
+            ponderationAssociations:
+                p.ponderationAssociations.avecConflit(famille, poids),
           ));
 
   /// Resets the association weighting profile to the neutral default.

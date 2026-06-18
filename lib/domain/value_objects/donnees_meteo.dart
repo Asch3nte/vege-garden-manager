@@ -11,6 +11,7 @@ class DonneesMeteo {
   final double _ventVitesseMax;
   final bool _risqueGel;
   final bool _risqueCanicule;
+  final double? _evapotranspirationMm;
 
   const DonneesMeteo._(
     this._date,
@@ -21,6 +22,7 @@ class DonneesMeteo {
     this._ventVitesseMax,
     this._risqueGel,
     this._risqueCanicule,
+    this._evapotranspirationMm,
   )   : assert(_tempMin <= _tempMax, 'tempMin must be <= tempMax'),
         assert(_precipitationsMm >= 0, 'precipitations must be >= 0'),
         assert(_ventVitesseMax >= 0, 'wind speed must be >= 0');
@@ -34,8 +36,9 @@ class DonneesMeteo {
     required double ventVitesseMax,
     bool risqueGel = false,
     bool risqueCanicule = false,
+    double? evapotranspirationMm,
   }) : this._(date, tempMin, tempMax, tempMoyenne, precipitationsMm,
-            ventVitesseMax, risqueGel, risqueCanicule);
+            ventVitesseMax, risqueGel, risqueCanicule, evapotranspirationMm);
 
   DateTime get date => _date;
   double get tempMin => _tempMin;
@@ -45,6 +48,10 @@ class DonneesMeteo {
   double get ventVitesseMax => _ventVitesseMax;
   bool get risqueGel => _risqueGel;
   bool get risqueCanicule => _risqueCanicule;
+
+  /// Reference evapotranspiration ET₀ FAO-56 (mm/day), or `null` when not
+  /// provided by the weather source (ADR-0015 Lot 5).
+  double? get evapotranspirationMm => _evapotranspirationMm;
 
   @override
   bool operator ==(Object other) =>
@@ -56,9 +63,11 @@ class DonneesMeteo {
       other._precipitationsMm == _precipitationsMm &&
       other._ventVitesseMax == _ventVitesseMax &&
       other._risqueGel == _risqueGel &&
-      other._risqueCanicule == _risqueCanicule;
+      other._risqueCanicule == _risqueCanicule &&
+      other._evapotranspirationMm == _evapotranspirationMm;
 
   @override
   int get hashCode => Object.hash(_date, _tempMin, _tempMax, _tempMoyenne,
-      _precipitationsMm, _ventVitesseMax, _risqueGel, _risqueCanicule);
+      _precipitationsMm, _ventVitesseMax, _risqueGel, _risqueCanicule,
+      _evapotranspirationMm);
 }

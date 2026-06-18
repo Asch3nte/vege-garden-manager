@@ -68,16 +68,18 @@ void main() {
     ProfilPonderationAssociations? profil,
   }) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () => afficherVueAssociations(context, centre,
-                    catalogue, acces: acces, profil: profil),
-                child: const Text('ouvrir'),
+      ProviderScope(
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => afficherVueAssociations(context, centre,
+                      catalogue, acces: acces, profil: profil),
+                  child: const Text('ouvrir'),
+                ),
               ),
             ),
           ),
@@ -150,9 +152,52 @@ void main() {
     expect(find.text('Enrichit le sol pour la tomate'), findsOneWidget);
   });
 
-  testWidgets('a bare pair shows the name only — no mechanism, no reason', (
-    tester,
-  ) async {
+  testWidgets(
+      'the banner lists every factor of a derived suggestion (ADR-0014)',
+      (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => afficherFichePlanteDetail(
+                    context,
+                    _fiche('tomate'),
+                    contexte: const ContexteAssociation(
+                      bon: true,
+                      mecanisme: "Fixe l'azote",
+                      suggere: true,
+                      confiance: 'élevée',
+                      facteurs: [
+                        'Haricot fixe l\'azote de l\'air dans le sol',
+                        'Tomate est gourmande en azote (besoin élevé)',
+                      ],
+                    ),
+                  ),
+                  child: const Text('ouvrir'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('ouvrir'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Suggestion · élevée'), findsOneWidget);
+    expect(find.text('Pourquoi cette suggestion :'), findsOneWidget);
+    expect(find.textContaining('fixe l\'azote de l\'air'), findsOneWidget);
+    expect(find.textContaining('gourmande en azote'), findsOneWidget);
+  });
+
+  testWidgets(
+      'an untyped curated pair shows the name under a neutral "Autre" marker '
+      '(ADR-0013)', (tester) async {
     final centre = _fiche('centre', benefiques: [
       AssociationBenefique(cibleId: 'compagnon'),
     ]);
@@ -160,9 +205,37 @@ void main() {
 
     await ouvrir(tester, centre, [centre, compagnon]);
 
-    // The companion is listed (its name appears) but no mechanism chip text.
+    // The companion is listed; the typed mechanism is absent, but the pair is no
+    // longer orphaned — it carries the generic "Autre" chip (full detail lives in
+    // the sheet banner).
     expect(find.text('compagnon'), findsOneWidget);
     expect(find.text('Attire les pollinisateurs'), findsNothing);
+    expect(find.text('Autre'), findsOneWidget);
+    // A curated cluster shows the "Hors moteur" line (ADR-0013 §7); the
+    // suggestion dropdown shows the current selection ("Tout" by default), so
+    // "Hors moteur" appears exactly once (the cluster label only).
+    expect(find.text('Hors moteur'), findsOneWidget);
+  });
+
+  testWidgets(
+      'tapping a cluster bubble opens its sheet (regression guard, ADR-0013 §3)',
+      (tester) async {
+    final centre = _fiche('centre', benefiques: [
+      AssociationBenefique(
+        cibleId: 'compagnon',
+        mecanisme: TypeBeneficeAssociation.attractionPollinisateurs,
+        raisonI18n: const {'fr': 'Attire les abeilles'},
+      ),
+    ]);
+    final compagnon = _fiche('compagnon');
+
+    await ouvrir(tester, centre, [centre, compagnon]);
+
+    // Tapping the member bubble/name opens the sheet, whose banner carries the
+    // full editorial reason (proves the node is hit-testable again).
+    await tester.tap(find.text('compagnon'));
+    await tester.pumpAndSettle();
+    expect(find.text('Attire les abeilles'), findsOneWidget);
   });
 
   group('derived suggestions gated by experience level (ADR-0010/0009)', () {
@@ -175,7 +248,7 @@ void main() {
       await ouvrir(tester, haricot, [haricot, mais],
           acces: const AccesNiveau(NiveauExperience.debutant));
       expect(find.text("Fixe l'azote"), findsNothing);
-      expect(find.text('Suggéré · élevée'), findsNothing);
+      expect(find.text('Suggestion · élevée'), findsNothing);
     });
 
     testWidgets('intermédiaire sees the derived suggestion with confidence',
@@ -184,7 +257,19 @@ void main() {
           acces: const AccesNiveau(NiveauExperience.intermediaire));
       expect(find.text('mais'), findsOneWidget);
       expect(find.text("Fixe l'azote"), findsOneWidget);
-      expect(find.text('Suggéré · élevée'), findsOneWidget);
+      expect(find.text('Suggestion · élevée'), findsOneWidget);
+    });
+
+    testWidgets('tapping the suggestion lists its real factors end-to-end '
+        '(ADR-0014)', (tester) async {
+      await ouvrir(tester, haricot, [haricot, mais],
+          acces: const AccesNiveau(NiveauExperience.intermediaire));
+      await tester.tap(find.text('mais'));
+      await tester.pumpAndSettle();
+      // The engine's criteria flow into concrete factor sentences with names.
+      expect(find.text('Pourquoi cette suggestion :'), findsOneWidget);
+      expect(find.textContaining('fixe l\'azote de l\'air'), findsOneWidget);
+      expect(find.textContaining('gourmande en azote'), findsOneWidget);
     });
   });
 
@@ -207,6 +292,9 @@ void main() {
     testWidgets('« Reçoit » ne garde que les associations reçues',
         (tester) async {
       await ouvrir(tester, centre, catalogue);
+      // Open the Association dropdown (first PopupMenuButton = direction).
+      await tester.tap(find.byType(PopupMenuButton<Object?>).first);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Reçoit'));
       await tester.pumpAndSettle();
       expect(find.text('planteRecoit'), findsOneWidget);
@@ -216,6 +304,8 @@ void main() {
     testWidgets('« Donne » ne garde que les associations données',
         (tester) async {
       await ouvrir(tester, centre, catalogue);
+      await tester.tap(find.byType(PopupMenuButton<Object?>).first);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Donne'));
       await tester.pumpAndSettle();
       expect(find.text('planteDonne'), findsOneWidget);
@@ -227,10 +317,12 @@ void main() {
     const intermediaire = AccesNiveau(NiveauExperience.intermediaire);
 
     // mais (living stake, tall) + haricot (climber) → tuteurStructurel (gainDePlace).
+    // Distinct families so no same-family conflict competes with the benefit.
     final mais = _fiche('mais',
+        famille: 'Poaceae',
         usages: {UsagePlante.alimentaire, UsagePlante.tuteurVivant},
         hauteurMax: 200);
-    final haricot = _fiche('haricot', cultureVerticale: true);
+    final haricot = _fiche('haricot', famille: 'Fabaceae', cultureVerticale: true);
 
     testWidgets('default profile keeps a gainDePlace suggestion',
         (tester) async {
@@ -247,9 +339,12 @@ void main() {
       expect(find.text('Tuteur naturel'), findsNothing);
     });
 
-    testWidgets('caps derived suggestions per side behind "voir plus"',
-        (tester) async {
-      // One fixer centre + 7 heavy feeders → 7 derived benefits, capped at 5.
+    testWidgets(
+        'same-mechanism suggestions form a single cluster, not a capped list '
+        '(ADR-0013)', (tester) async {
+      // One fixer centre + 7 heavy feeders → 7 derived "Fixe l'azote" benefits,
+      // all in the same direction → ONE cluster (one shared label), so the
+      // per-side cap no longer hides anything: no "voir plus".
       final haricot = _fiche('haricot', famille: 'Fabaceae', fixeAzote: true);
       final gourmandes = [
         for (var i = 0; i < 7; i++)
@@ -259,12 +354,60 @@ void main() {
       await ouvrir(tester, haricot, [haricot, ...gourmandes],
           acces: intermediaire);
 
-      // 7 - 5 = 2 hidden → the toggle offers to reveal them.
-      expect(find.text('Voir 2 suggestions de plus'), findsOneWidget);
+      // One shared mechanism label for the whole cluster…
+      expect(find.text("Fixe l'azote"), findsOneWidget);
+      // …every member is still shown individually…
+      for (var i = 0; i < 7; i++) {
+        expect(find.text('g$i'), findsOneWidget);
+      }
+      // …and nothing is hidden behind the toggle.
+      expect(find.textContaining('Voir'), findsNothing);
+    });
+  });
 
-      await tester.tap(find.text('Voir 2 suggestions de plus'));
-      await tester.pumpAndSettle();
-      expect(find.text('Voir moins'), findsOneWidget);
+  group('conflict precedence — one side per pair (ADR-0013 §2/§3)', () {
+    const intermediaire = AccesNiveau(NiveauExperience.intermediaire);
+
+    testWidgets('a pair that is both beneficial and conflicting shows only on '
+        'the to-avoid side', (tester) async {
+      // centre × voisin: living-stake support (benefit) AND same family
+      // (conflict) → the warning wins, the bubble appears once, to-avoid.
+      final centre = _fiche('centre',
+          famille: 'Solanaceae',
+          usages: {UsagePlante.alimentaire, UsagePlante.tuteurVivant},
+          hauteurMax: 200);
+      final voisin =
+          _fiche('voisin', famille: 'Solanaceae', cultureVerticale: true);
+
+      await ouvrir(tester, centre, [centre, voisin], acces: intermediaire);
+
+      // Listed exactly once, under the conflict label (same family), never the
+      // support benefit.
+      expect(find.text('voisin'), findsOneWidget);
+      expect(find.text('Même famille'), findsOneWidget);
+      expect(find.text('Tuteur naturel'), findsNothing);
+    });
+  });
+
+  group('preferences banner (ADR-0013 §4)', () {
+    testWidgets('default profile → "normales (par défaut)"', (tester) async {
+      final centre = _fiche('centre',
+          benefiques: [AssociationBenefique(cibleId: 'compagnon')]);
+      await ouvrir(tester, centre, [centre, _fiche('compagnon')]);
+      expect(
+          find.textContaining('normales (par défaut)'), findsOneWidget);
+    });
+
+    testWidgets('a tuned profile names the adjusted family only (no prefix)',
+        (tester) async {
+      final centre = _fiche('centre',
+          benefiques: [AssociationBenefique(cibleId: 'compagnon')]);
+      await ouvrir(tester, centre, [centre, _fiche('compagnon')],
+          profil: ProfilPonderationAssociations.defaut().avec(
+              FamilleEffetAssociation.fertilite, PoidsAssociation.fort));
+      // The tuned family is shown; the verbose prefix is gone (ADR-0013 §7).
+      expect(find.textContaining('Fertilité du sol'), findsOneWidget);
+      expect(find.textContaining('Préférences personnalisées'), findsNothing);
     });
   });
 }

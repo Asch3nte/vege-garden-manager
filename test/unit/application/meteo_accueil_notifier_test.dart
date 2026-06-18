@@ -95,7 +95,7 @@ void main() {
     when(() => meteo.obtenirMeteoActuelle(any()))
         .thenAnswer((_) async => jour(tempMax: 22));
     when(() => meteo.obtenirPrevisions(any(), any()))
-        .thenAnswer((_) async => [prev(12)]); // >= 10 mm → rain coming
+        .thenAnswer((_) async => [prev(12, proba: 0.6)]); // 12 * 0.6 = 7.2 ≥ seuilScorePluie (6.0) → rain coming
 
     final vue = await conteneur().read(meteoAccueilProvider.future);
 

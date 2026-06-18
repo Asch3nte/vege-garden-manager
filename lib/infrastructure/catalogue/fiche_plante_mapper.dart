@@ -1,7 +1,9 @@
 import '../../domain/entities/fiche_plante.dart';
+import '../../domain/enums/tolerance_secheresse.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/charge_tuteur.dart';
+import '../../domain/enums/enracinement_plante.dart';
 import '../../domain/enums/hemisphere.dart';
 import '../../domain/enums/niveau_besoin.dart';
 import '../../domain/enums/niveau_soleil.dart';
@@ -97,6 +99,19 @@ class FichePlanteMapper {
       chargeTuteur: cycle['charge_tuteur'] == null
           ? null
           : _enum(ChargeTuteur.values, cycle['charge_tuteur'] as String),
+      // Enrichissement ADR-0014 — système racinaire
+      enracinement: cycle['enracinement'] == null
+          ? null
+          : _enum(EnracinementPlante.values, cycle['enracinement'] as String),
+      // Enrichissement ADR-0015 Lot 4
+      temperatureMaxTolerance: besoins['temperature_max_tolerance'] == null
+          ? null
+          : (besoins['temperature_max_tolerance'] as num).toDouble(),
+      toleranceSecheresse: besoins['tolerance_secheresse'] == null
+          ? null
+          : _enum(
+              ToleranceSecheresse.values,
+              besoins['tolerance_secheresse'] as String),
     );
   }
 

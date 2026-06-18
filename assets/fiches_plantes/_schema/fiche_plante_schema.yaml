@@ -27,8 +27,8 @@ categorie: # (requis) enum CategoriePlante : legume | aromatique | fruit | petit
 sous_type: # (optionnel — seulement si categorie: legume) enum SousTypeLegume :
                   # legume_fruit | legume_feuille | legume_racine | legume_bulbe | legume_tige | legume_fleur | legume_tubercule
 usages: [] # (requis, ≥ 1) enum UsagePlante (liste) : alimentaire | condimentaire | medicinale |
-                  # compagnonnage | repulsif | mellifere | pollinisateur | engrais_vert | couvre_sol |
-                  # brise_vent | tuteur_vivant | ornementale | fourrage
+                  # compagnonnage | repulsif | mellifere | pollinisateur | attire_auxiliaires |
+                  # engrais_vert | couvre_sol | brise_vent | tuteur_vivant | ornementale | fourrage
 schema_version: # (requis) entier, version du présent schéma
 difficulte: # (optionnel) int 1–3 : 1=débutant, 2=intermédiaire, 3=expert (§C doc-16)
 
@@ -64,6 +64,8 @@ besoins:
   temperature_optimale: # (optionnel) °C
   temperature_min_survie: # (optionnel) °C — seuil de mort par gel (§B doc-16 ; distinct du seuil de germination)
   gele_fatal: # (optionnel) bool — vrai si le moindre gel détruit la plante (défaut: false)
+  temperature_max_tolerance: # (optionnel) °C — seuil de stress thermique (ADR-0015 ; ex. 28 pour laitue)
+  tolerance_secheresse: # (optionnel) enum ToleranceSecheresse : faible | moyenne | forte (ADR-0015)
 
 # Cycle de culture
 cycle:
@@ -78,6 +80,8 @@ cycle:
   culture_verticale: # (optionnel) bool — supporte/profite d'un tuteur ou treillis (défaut: false ; §E doc-16)
   charge_tuteur: # (optionnel) enum ChargeTuteur : legere | moyenne | lourde — poids de la grimpante
                  # sur son support, pour la règle « grimpante adaptée au tuteur » (ADR-0010 Lot 2)
+  enracinement: # (optionnel) enum EnracinementPlante : superficiel | moyen | profond | pivotant
+                # système racinaire, pour « ameublit le sol » & concurrence racinaire (ADR-0014)
 
 # Périodes — par hémisphère puis TypeClimat ; mois en entiers 1–12.
 # Clés de climat autorisées : tropical | subtropical | aride | semi_aride | mediterraneen |

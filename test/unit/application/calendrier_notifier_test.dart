@@ -27,10 +27,17 @@ import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.d
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
+import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 
 class MockTaches extends Mock implements AbstractTacheRepository {}
+
+/// No-op stub: watering task generation is tested separately.
+class _StubGenererTachesArrosage implements GenererTachesArrosage {
+  @override
+  Future<void> executer() async {}
+}
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
@@ -88,6 +95,8 @@ void main() {
       potagerRepositoryProvider.overrideWithValue(potagers),
       fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
       horlogeProvider.overrideWithValue(() => maintenant),
+      genererTachesArrosageProvider
+          .overrideWith((ref) async => _StubGenererTachesArrosage()),
     ]);
     addTearDown(c.dispose);
     return c;

@@ -54,6 +54,7 @@ besoins:
   temperature_min_survie: -10
   gele_fatal: false
 cycle:
+  enracinement: moyen
   type: bisannuelle
   duree_germination_jours: [7, 14]
   duree_avant_recolte_jours: [120, 180]
@@ -88,6 +89,7 @@ associations:
       type: etagement_lumiere
       raison_i18n: { fr: "Bon usage de l'espace sous les choux", en: "Good use of space under cabbages" }
     - id: aneth
+      type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires contre la piéride", en: "Attracts beneficial insects against cabbage white" }
     - id: LEG-005
       type: repulsion_ravageur

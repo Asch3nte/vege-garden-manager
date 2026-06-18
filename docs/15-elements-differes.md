@@ -151,7 +151,7 @@ crédits). Le **thème de l'app suit la préférence** (`main.dart` → `ThemeMo
 | **Édition / suppression** (~~potager~~, ~~zone~~, ~~plantation~~, ~~tâche~~) | **Potager** (menu en-tête de l'onglet Potager → édition `FormulairePotager` en place / suppression en cascade soft via `AbstractPotagerRepository.supprimer`), **zone**, **plantation** et **tâche** câblés. La **tâche** : menu ⋮ par carte (Agenda + Mois) → édition (`FormulaireTache` en mode édition, reconstruit avec le même id) / suppression (`AbstractTacheRepository.supprimer`, confirmation). Reste le **swipe** (cf. §6 `sens_swipe`). | Swipe à généraliser. |
 | **Récolte** depuis l'UI | ✅ | `FormulaireRecolte` (date, quantité + unité, destination) via `CreerRecolte`, action **« Récolter »** du menu de culture (détail de zone) ; rafraîchit le compteur de récoltes de l'accueil. |
 | **Observation** depuis l'UI | ✅ | `FormulaireObservation` (type, titre, date, description) via `CreerObservation`, action **« Observer »** du menu de culture (détail de zone, cible = plantation). |
-| **Météo / alertes réelles** | cf. §2 (Accueil) — placeholders. | Brancher `meteoServiceProvider` une fois la localisation disponible. |
+| **Météo / alertes réelles** | 🔵 partiellement branché | Verdict jardin-global ✅ (`MeteoAccueilNotifier`) + **conseil arrosage par plantation** ✅ (`conseilArrosagePlantationProvider` → `_LigneConseilArrosage` dans `_LigneCulture`, [ADR-0015](decisions/0015-arrosage-intelligent-canicule.md)). Reste : lots 3–5 ADR-0015 (pondération pluie, sensibilité par plante, ET₀). |
 | **iOS / desktop packaging** | Alpha = Android d'abord. | `flutter build ipa` / Linux/Windows/macOS plus tard. |
 | **CI/CD (build APK auto)** | Pas de pipeline. | GitHub Actions (cf. CLAUDE.md « à venir »). |
 

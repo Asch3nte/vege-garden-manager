@@ -52,6 +52,7 @@ besoins:
   temperature_min_survie: -10
   gele_fatal: false
 cycle:
+  enracinement: pivotant
   type: annuelle
   duree_germination_jours: [5, 10]
   duree_avant_recolte_jours: [45, 70]

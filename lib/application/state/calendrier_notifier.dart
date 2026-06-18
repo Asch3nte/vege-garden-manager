@@ -11,6 +11,7 @@ import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
+import '../use_cases/generer_taches_arrosage.dart';
 import 'calendrier_vue.dart';
 
 /// Locale used to resolve crop display names (French-first app).
@@ -46,6 +47,13 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
     final maintenant = ref.watch(horlogeProvider);
     final n = maintenant();
     _moisAffiche ??= DateTime(n.year, n.month, 1);
+
+    // Ensure watering tasks are generated before querying the task list so the
+    // calendar is up-to-date even when the user opens this tab first.
+    // ref.read() — one-shot action, must not create a reactive dependency.
+    final generateur = await ref.read(genererTachesArrosageProvider.future);
+    await generateur.executer();
+
     return _assembler(
         taches, parcelles, plantations, potagers, fiches, maintenant);
   }

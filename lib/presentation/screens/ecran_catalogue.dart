@@ -566,6 +566,9 @@ class _CarteFiche extends ConsumerWidget {
                 acces: ref.read(accesNiveauProvider),
                 profil:
                     ref.read(preferencesProvider).value?.ponderationAssociations,
+                // Tapping the preferences banner jumps to the weighting page.
+                onOuvrirPreferences: () =>
+                    context.go(RoutesApp.plusPonderation),
               ),
             ),
             // The arrow only signals whether varieties exist (expandable) — the

@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/enums/famille_effet_association.dart';
+import '../../domain/enums/famille_effet_conflit.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
@@ -54,12 +55,21 @@ class PreferencesMapper {
   static ProfilPonderationAssociations _decoderPonderation(String json) {
     final brut = jsonDecode(json) as Map;
     final poids = <FamilleEffetAssociation, PoidsAssociation>{};
+    final poidsConflit = <FamilleEffetConflit, PoidsAssociation>{};
+    // Benefit and conflict families share one JSON map; their enum names never
+    // collide, so each key resolves to exactly one side (ADR-0014).
     for (final entry in brut.entries) {
-      final famille = _parNom(FamilleEffetAssociation.values, entry.key);
       final valeur = _parNom(PoidsAssociation.values, entry.value);
-      if (famille != null && valeur != null) poids[famille] = valeur;
+      if (valeur == null) continue;
+      final benef = _parNom(FamilleEffetAssociation.values, entry.key);
+      if (benef != null) {
+        poids[benef] = valeur;
+        continue;
+      }
+      final conflit = _parNom(FamilleEffetConflit.values, entry.key);
+      if (conflit != null) poidsConflit[conflit] = valeur;
     }
-    return ProfilPonderationAssociations(poids);
+    return ProfilPonderationAssociations(poids, poidsConflit: poidsConflit);
   }
 
   /// Enum value whose `name` equals [nom], or `null` (skip-unknown).
@@ -73,6 +83,8 @@ class PreferencesMapper {
   static String _encoderPonderation(ProfilPonderationAssociations p) =>
       jsonEncode({
         for (final f in FamilleEffetAssociation.values) f.name: p.poids(f).name,
+        for (final f in FamilleEffetConflit.values)
+          f.name: p.poidsConflit(f).name,
       });
 
   PreferencesCompanion versCompanion(PreferencesUtilisateur p) =>

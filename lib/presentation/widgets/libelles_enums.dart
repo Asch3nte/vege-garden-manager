@@ -5,7 +5,9 @@ import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/destination_recolte.dart';
+import '../../domain/enums/enracinement_plante.dart';
 import '../../domain/enums/famille_effet_association.dart';
+import '../../domain/enums/famille_effet_conflit.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/technique_sol.dart';
@@ -309,8 +311,11 @@ extension LibellesEnums on AppLocalizations {
           assocMecaBrouillageOlfactif,
         TypeBeneficeAssociation.attractionPollinisateurs =>
           assocMecaAttractionPollinisateurs,
+        TypeBeneficeAssociation.attractionAuxiliaires =>
+          assocMecaAttractionAuxiliaires,
         TypeBeneficeAssociation.plantePiege => assocMecaPlantePiege,
         TypeBeneficeAssociation.fixationAzote => assocMecaFixationAzote,
+        TypeBeneficeAssociation.ameublissementSol => assocMecaAmeublissementSol,
         TypeBeneficeAssociation.couvreSol => assocMecaCouvreSol,
         TypeBeneficeAssociation.briseVent => assocMecaBriseVent,
         TypeBeneficeAssociation.successionTemporelle =>
@@ -323,6 +328,9 @@ extension LibellesEnums on AppLocalizations {
           assocMecaMemeFamilleRavageurs,
         TypeConflitAssociation.competitionLumiere => assocMecaCompetitionLumiere,
         TypeConflitAssociation.competitionAzote => assocMecaCompetitionAzote,
+        TypeConflitAssociation.competitionEau => assocMecaCompetitionEau,
+        TypeConflitAssociation.competitionEspace => assocMecaCompetitionEspace,
+        TypeConflitAssociation.partageMaladies => assocMecaPartageMaladies,
         TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
       };
 
@@ -343,12 +351,27 @@ extension LibellesEnums on AppLocalizations {
         FamilleEffetAssociation.couvertureAbri => familleEffetCouvertureAbri,
       };
 
+  /// Label for an association **conflict** effect family (ADR-0014).
+  String familleEffetConflit(FamilleEffetConflit f) => switch (f) {
+        FamilleEffetConflit.concurrenceRessources => familleConflitConcurrence,
+        FamilleEffetConflit.risqueSanitaire => familleConflitSanitaire,
+        FamilleEffetConflit.allelopathie => familleConflitAllelopathie,
+      };
+
   /// Label for an association weight level (ADR-0011).
   String poids(PoidsAssociation p) => switch (p) {
         PoidsAssociation.ignore => poidsIgnore,
         PoidsAssociation.faible => poidsFaible,
         PoidsAssociation.normal => poidsNormal,
         PoidsAssociation.fort => poidsFort,
+      };
+
+  /// Label for a plant's root system (ADR-0014).
+  String enracinement(EnracinementPlante e) => switch (e) {
+        EnracinementPlante.superficiel => enracinementSuperficiel,
+        EnracinementPlante.moyen => enracinementMoyen,
+        EnracinementPlante.profond => enracinementProfond,
+        EnracinementPlante.pivotant => enracinementPivotant,
       };
 
   /// Label for a planting method.

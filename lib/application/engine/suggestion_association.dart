@@ -1,3 +1,4 @@
+import '../../domain/enums/critere_association.dart';
 import '../../domain/enums/niveau_confiance.dart';
 import '../../domain/enums/sens_association.dart';
 import '../../domain/enums/type_benefice_association.dart';
@@ -17,9 +18,10 @@ sealed class SuggestionAssociation {
   final NiveauConfiance _confiance;
   final SensAssociation _sens;
   final String? _slug;
+  final Set<CritereAssociation> _criteres;
 
   const SuggestionAssociation(
-      this._cibleId, this._confiance, this._sens, this._slug);
+      this._cibleId, this._confiance, this._sens, this._slug, this._criteres);
 
   /// Id of the other plant this suggestion relates the centre to.
   String get cibleId => _cibleId;
@@ -32,6 +34,10 @@ sealed class SuggestionAssociation {
 
   /// Bioaggressor slug the rule hinges on (repulsion / trap), else `null`.
   String? get slug => _slug;
+
+  /// Every criterion that the engine evaluated and found true for this
+  /// suggestion (ADR-0014) — the full, explicit evidence behind it.
+  Set<CritereAssociation> get criteres => _criteres;
 }
 
 /// A derived **beneficial** suggestion qualified by its [mecanisme].
@@ -44,7 +50,8 @@ final class SuggestionBenefique extends SuggestionAssociation {
     NiveauConfiance confiance,
     SensAssociation sens,
     String? slug,
-  ) : super(cibleId, confiance, sens, slug);
+    Set<CritereAssociation> criteres,
+  ) : super(cibleId, confiance, sens, slug, criteres);
 
   /// Builds a beneficial suggestion. [sens] defaults to [SensAssociation.donne]
   /// (the engine derives `a → b` as "a gives to b").
@@ -54,8 +61,9 @@ final class SuggestionBenefique extends SuggestionAssociation {
     required NiveauConfiance confiance,
     SensAssociation sens = SensAssociation.donne,
     String? slug,
+    Set<CritereAssociation> criteres = const {},
   }) =>
-      SuggestionBenefique._(mecanisme, cibleId, confiance, sens, slug);
+      SuggestionBenefique._(mecanisme, cibleId, confiance, sens, slug, criteres);
 
   /// The benefit mechanism inferred.
   TypeBeneficeAssociation get mecanisme => _mecanisme;
@@ -71,7 +79,8 @@ final class SuggestionConflit extends SuggestionAssociation {
     NiveauConfiance confiance,
     SensAssociation sens,
     String? slug,
-  ) : super(cibleId, confiance, sens, slug);
+    Set<CritereAssociation> criteres,
+  ) : super(cibleId, confiance, sens, slug, criteres);
 
   /// Builds a conflicting suggestion. [sens] defaults to [SensAssociation.donne].
   factory SuggestionConflit({
@@ -80,8 +89,9 @@ final class SuggestionConflit extends SuggestionAssociation {
     required NiveauConfiance confiance,
     SensAssociation sens = SensAssociation.donne,
     String? slug,
+    Set<CritereAssociation> criteres = const {},
   }) =>
-      SuggestionConflit._(mecanisme, cibleId, confiance, sens, slug);
+      SuggestionConflit._(mecanisme, cibleId, confiance, sens, slug, criteres);
 
   /// The conflict mechanism inferred.
   TypeConflitAssociation get mecanisme => _mecanisme;

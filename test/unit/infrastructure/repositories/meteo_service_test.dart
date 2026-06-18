@@ -234,6 +234,26 @@ void main() {
     });
   });
 
+  group('obtenirElevation', () {
+    test('delegates to the client and returns the elevation', () async {
+      when(() => client.obtenirElevation(loc))
+          .thenAnswer((_) async => 65.0);
+
+      final result = await service.obtenirElevation(loc);
+
+      expect(result, 65.0);
+      verify(() => client.obtenirElevation(loc)).called(1);
+    });
+
+    test('returns null when the client returns null', () async {
+      when(() => client.obtenirElevation(loc)).thenAnswer((_) async => null);
+
+      final result = await service.obtenirElevation(loc);
+
+      expect(result, isNull);
+    });
+  });
+
   group('obtenirPrevisions window mode (joursPasses > 0)', () {
     // 2 past (observe) + 2 forecast (prevu) days around 2026-06-05.
     List<PrevisionMeteo> fenetre() => [

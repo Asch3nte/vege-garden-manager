@@ -29,6 +29,10 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0010](0010-associations-multi-mecanismes.md) | Modèle d'associations multi-mécanismes (permaculture) : taxonomie typée + dérivation | Accepté |
 | [0011](0011-scoring-ponderation-associations.md) | Scoring & pondération des associations (profil personnalisable, tri/élagage de la vue) | Accepté |
 | [0012](0012-associations-directionnelles-refonte-vue.md) | Associations directionnelles & refonte de la vue Associations (sens, familles-labels, anti-chevauchement, bandeau fiche) | Accepté |
+| [0013](0013-vocabulaire-mecanismes-et-groupement-vue.md) | Extension du vocabulaire de mécanismes, marqueur « autre », groupement de la vue & raison de confiance | Accepté |
+| [0014](0014-calcul-associations-exhaustif-explicable.md) | Calcul d'associations exhaustif & explicable (comparaisons réelles, évidences par critère, fiche min/max) | Accepté |
+| [0015](0015-arrosage-intelligent-canicule.md) | Arrosage intelligent & facteur thermique (moteur ET₀-proxy + conseil par plantation en UI) | Accepté |
+| [0016](0016-refonte-ecran-meteo.md) | Refonte de l'écran météo : Nominatim, enrichissement modèle, vue détaillée | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

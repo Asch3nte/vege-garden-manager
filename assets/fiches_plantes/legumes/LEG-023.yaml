@@ -53,6 +53,7 @@ besoins:
   temperature_min_survie: -10
   gele_fatal: false
 cycle:
+  enracinement: profond
   type: vivace
   duree_avant_recolte_jours: [365, 400]
   hauteur_adulte_cm: [100, 150]

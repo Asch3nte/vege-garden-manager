@@ -74,7 +74,10 @@ void main() {
     nombrePieds: 2,
   );
 
-  List<PrevisionMeteo> fenetre({List<double> futurPrecip = const [0, 0, 0]}) {
+  List<PrevisionMeteo> fenetre({
+    List<double> futurPrecip = const [0, 0, 0],
+    List<double> futurProb = const [0.9, 0.9, 0.9],
+  }) {
     return [
       for (var i = 5; i >= 1; i--)
         PrevisionMeteo(
@@ -90,6 +93,7 @@ void main() {
           tempMin: 14,
           tempMax: 26,
           precipitationsMm: futurPrecip[i],
+          probabilitePluie: futurProb[i],
           type: TypeReleveMeteo.prevu,
         ),
     ];
@@ -127,7 +131,9 @@ void main() {
 
   test('forecast rain defers watering', () async {
     when(() => meteo.obtenirPrevisions(loc, 3, joursPasses: 5))
-        .thenAnswer((_) async => fenetre(futurPrecip: [0, 20, 0]));
+        .thenAnswer(
+            (_) async => fenetre(futurPrecip: [0, 20, 0], futurProb: [0, 0.9, 0]));
+    // score at i=1: 20 * 0.9 = 18 >= 6 → deferred
 
     final c = await useCase.executer(plantation: plantation, localisation: loc);
     expect(c!.urgence, UrgenceArrosage.pasNecessaire);
@@ -187,5 +193,78 @@ void main() {
     verifyNever(() => meteo.obtenirPrevisions(
         const Localisation.nonDefinie(), any(),
         joursPasses: any(named: 'joursPasses')));
+  });
+
+  test('heatwave (tempMax=36°C) promotes modere plant to arroserMaintenant',
+      () async {
+    // Forecast with first prevu day at 36°C, no rain.
+    when(() => meteo.obtenirPrevisions(loc, 3, joursPasses: 5)).thenAnswer(
+      (_) async => [
+        for (var i = 5; i >= 1; i--)
+          PrevisionMeteo(
+            date: DateTime.utc(2026, 6, 17).subtract(Duration(days: i)),
+            tempMin: 22,
+            tempMax: 36,
+            precipitationsMm: 0,
+            type: TypeReleveMeteo.observe,
+          ),
+        PrevisionMeteo(
+          date: DateTime.utc(2026, 6, 18),
+          tempMin: 25,
+          tempMax: 36, // heatwave
+          precipitationsMm: 0,
+          type: TypeReleveMeteo.prevu,
+        ),
+        PrevisionMeteo(
+          date: DateTime.utc(2026, 6, 19),
+          tempMin: 24,
+          tempMax: 35,
+          precipitationsMm: 0,
+          type: TypeReleveMeteo.prevu,
+        ),
+        PrevisionMeteo(
+          date: DateTime.utc(2026, 6, 20),
+          tempMin: 22,
+          tempMax: 34,
+          precipitationsMm: 0,
+          type: TypeReleveMeteo.prevu,
+        ),
+      ],
+    );
+    // Use a modere-need plant: without factor -> bientot, with 36°C -> arroserMaintenant.
+    final ficheModeree = FichePlante(
+      id: 'salade',
+      nomScientifique: 'Lactuca sativa',
+      familleBotanique: 'Asteraceae',
+      categorie: CategoriePlante.legume,
+      usages: const {UsagePlante.alimentaire},
+      nomsLocalises: const {'fr': 'Laitue'},
+      besoins: BesoinsCulture(
+        eau: BesoinEau.modere,
+        soleil: NiveauSoleil.pleinSoleil,
+        phMin: 6,
+        phMax: 7,
+      ),
+      espacementCm: 30,
+      dureeAvantRecolteJoursMin: 45,
+      dureeAvantRecolteJoursMax: 60,
+    );
+    when(() => fiches.obtenirParId('salade'))
+        .thenAnswer((_) async => ficheModeree);
+    final plantationSalade = Plantation(
+      id: 'pl-s',
+      planteId: 'salade',
+      parcelleId: 'par1',
+      dateMiseEnPlace: DateTime.utc(2026, 5, 15),
+      methode: MethodeMiseEnPlace.repiquage,
+      surfaceOccupee: Surface.enMetresCarres(0.5),
+      nombrePieds: 4,
+    );
+
+    final c = await useCase.executer(
+        plantation: plantationSalade, localisation: loc);
+    expect(c, isNotNull);
+    // 0.65 * 1.7 = 1.105 -> clamped to 1.0 -> arroserMaintenant
+    expect(c!.urgence, UrgenceArrosage.arroserMaintenant);
   });
 }

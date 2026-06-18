@@ -11,6 +11,7 @@ import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
@@ -25,14 +26,19 @@ import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
+import 'package:pot_a_gerer/domain/enums/type_releve_meteo.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_equipement_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
+import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
+import 'package:pot_a_gerer/domain/value_objects/prevision_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
@@ -45,16 +51,23 @@ class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
 class MockPlantations extends Mock implements AbstractPlantationRepository {}
 
+class MockEquipements extends Mock implements AbstractEquipementRepository {}
+
+class MockMeteo extends Mock implements AbstractMeteoService {}
+
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
 class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class _FakePlantation extends Fake implements Plantation {}
 
+class _FakeLocalisation extends Fake implements Localisation {}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(_FakePlantation());
     registerFallbackValue(CibleTache.plantation);
+    registerFallbackValue(_FakeLocalisation());
   });
 
   final maintenant = DateTime(2026, 6, 9, 8, 24);
@@ -64,6 +77,8 @@ void main() {
   late MockPlantations plantations;
   late MockFiches fiches;
   late MockTaches taches;
+  late MockEquipements equipements;
+  late MockMeteo meteo;
 
   setUp(() {
     potagers = MockPotagers();
@@ -71,15 +86,32 @@ void main() {
     plantations = MockPlantations();
     fiches = MockFiches();
     taches = MockTaches();
+    equipements = MockEquipements();
+    meteo = MockMeteo();
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);
     when(() => taches.obtenirParCible(any(), any()))
         .thenAnswer((_) async => []);
     when(() => plantations.obtenirParParcelle(any()))
         .thenAnswer((_) async => []);
+    when(() => plantations.obtenirParId(any())).thenAnswer((_) async => null);
     when(() => plantations.sauvegarder(any())).thenAnswer((_) async {});
     when(() => plantations.supprimer(any())).thenAnswer((_) async {});
     when(() => parcelles.supprimer(any())).thenAnswer((_) async {});
+    when(() => equipements.obtenirParParcelle(any()))
+        .thenAnswer((_) async => []);
+    // Minimal forecast for the watering advice provider (conseil arrosage).
+    when(() => meteo.obtenirPrevisions(any(), any(),
+            joursPasses: any(named: 'joursPasses')))
+        .thenAnswer((_) async => [
+              PrevisionMeteo(
+                date: DateTime(2026, 6, 9),
+                tempMin: 14,
+                tempMax: 24,
+                precipitationsMm: 0,
+                type: TypeReleveMeteo.prevu,
+              ),
+            ]);
     when(() => potagers.obtenirPotagerActif()).thenAnswer(
       (_) async => Potager(
         id: 'pot-1',
@@ -134,10 +166,20 @@ void main() {
 
   // Seeds zone z-1 with one active crop (Tomate).
   void semerUneCulture() {
+    final pl = unePlantation('p-1', 'tomate');
     when(() => plantations.obtenirParParcelle('z-1'))
-        .thenAnswer((_) async => [unePlantation('p-1', 'tomate')]);
+        .thenAnswer((_) async => [pl]);
+    when(() => plantations.obtenirParId('p-1')).thenAnswer((_) async => pl);
     when(() => fiches.obtenirParId('tomate'))
         .thenAnswer((_) async => uneFiche('tomate', 'Tomate'));
+    when(() => parcelles.obtenirParId('z-1')).thenAnswer((_) async => Parcelle(
+          id: 'z-1',
+          nom: 'Carré nord',
+          potagerId: 'pot-1',
+          type: TypeParcelle.bacSureleve,
+          surface: Surface.enMetresCarres(2),
+          exposition: NiveauSoleil.pleinSoleil,
+        ));
   }
 
   Future<void> monter(WidgetTester tester, String zoneId) async {
@@ -147,6 +189,8 @@ void main() {
           potagerRepositoryProvider.overrideWithValue(potagers),
           parcelleRepositoryProvider.overrideWithValue(parcelles),
           plantationRepositoryProvider.overrideWithValue(plantations),
+          equipementRepositoryProvider.overrideWithValue(equipements),
+          meteoServiceProvider.overrideWithValue(meteo),
           tacheRepositoryProvider.overrideWithValue(taches),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           horlogeProvider.overrideWithValue(() => maintenant),

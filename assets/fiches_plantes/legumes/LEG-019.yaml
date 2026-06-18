@@ -53,6 +53,7 @@ besoins:
   temperature_min_survie: 10
   gele_fatal: true
 cycle:
+  enracinement: moyen
   type: annuelle
   duree_germination_jours: [10, 18]
   duree_avant_recolte_jours: [75, 100]
@@ -87,6 +88,7 @@ associations:
       type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
     - id: LEG-004
+      type: ameublissement_sol
       raison_i18n: { fr: "Ameublit le sol pour les racines voisines", en: "Loosens soil for nearby roots" }
   defavorables:
     - id: fenouil

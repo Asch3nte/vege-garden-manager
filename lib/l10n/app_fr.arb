@@ -99,6 +99,27 @@
   "@meteoVerdictArroser": { "description": "Verdict météo : conditions sèches." },
   "meteoVerdictClement": "Conditions clémentes pour le jardin.",
   "@meteoVerdictClement": { "description": "Verdict météo : rien de notable." },
+  "meteoStation": "Station : {ville}",
+  "@meteoStation": {
+    "description": "Météo détaillée : localité la plus proche (source Nominatim).",
+    "placeholders": { "ville": { "type": "String" } }
+  },
+  "meteoMajHeure": "MAJ {heure}",
+  "@meteoMajHeure": {
+    "description": "Météo détaillée : heure de la dernière mise à jour (ex. MAJ 15h45).",
+    "placeholders": { "heure": { "type": "String" } }
+  },
+  "meteoPourquoiTaches": "Pourquoi ces tâches ?",
+  "@meteoPourquoiTaches": { "description": "Météo détaillée : titre du bloc d'explication des tâches générées." },
+  "conseilArroserMaintenant": "Arroser",
+  "@conseilArroserMaintenant": { "description": "Conseil arrosage par culture : besoin immédiat." },
+  "conseilArroserBientot": "Arroser dans {jours} j",
+  "@conseilArroserBientot": {
+    "description": "Conseil arrosage par culture : besoin dans N jours.",
+    "placeholders": { "jours": { "type": "int" } }
+  },
+  "conseilPluieAVenir": "Pluie à venir",
+  "@conseilPluieAVenir": { "description": "Conseil arrosage par culture : pluie prévue, pas besoin d'arroser." },
   "accueilAlertesAVenir": "Alertes à venir",
   "@accueilAlertesAVenir": {
     "description": "Placeholder de la tuile d'alertes, pas encore branchée."
@@ -443,10 +464,136 @@
   "@assocMecaAllelopathie": {
     "description": "Mécanisme d'association défavorable : une plante inhibe chimiquement la croissance de l'autre."
   },
-  "assocSuggere": "Suggéré",
+  "assocMecaAttractionAuxiliaires": "Attire les auxiliaires",
+  "@assocMecaAttractionAuxiliaires": {
+    "description": "Mécanisme d'association bénéfique : attire les insectes auxiliaires (prédateurs/parasitoïdes) qui régulent les ravageurs d'une voisine (ADR-0013)."
+  },
+  "assocMecaAmeublissementSol": "Ameublit le sol",
+  "@assocMecaAmeublissementSol": {
+    "description": "Mécanisme d'association bénéfique : des racines profondes décompactent le sol pour les voisines (ADR-0013)."
+  },
+  "assocMecaCompetitionEau": "Concurrence eau",
+  "@assocMecaCompetitionEau": {
+    "description": "Mécanisme d'association défavorable : deux plantes se concurrencent pour l'eau (ADR-0013)."
+  },
+  "assocMecaCompetitionEspace": "Concurrence espace",
+  "@assocMecaCompetitionEspace": {
+    "description": "Mécanisme d'association défavorable : deux plantes étalées se concurrencent pour la place (ADR-0013)."
+  },
+  "assocMecaPartageMaladies": "Maladies partagées",
+  "@assocMecaPartageMaladies": {
+    "description": "Mécanisme d'association défavorable : deux plantes hébergent un pathogène commun (fongique/sol), même hors même famille (ADR-0013)."
+  },
+  "assocMecaAutre": "Autre",
+  "@assocMecaAutre": {
+    "description": "Marqueur de présentation pour une association curatée sans mécanisme typé : le détail complet est dans la fiche (ADR-0013)."
+  },
+  "assocSuggere": "Suggestion",
   "@assocSuggere": {
     "description": "Badge d'une association dérivée (suggérée par le moteur, ADR-0010), distincte d'une association curatée."
   },
+  "assocHorsSuggestion": "Hors moteur",
+  "@assocHorsSuggestion": {
+    "description": "Libellé d'une association curatée (non dérivée) dans la vue Associations, pendant de « Suggestion · … » (ADR-0013). Aussi utilisé comme option du filtre par niveau de suggestion."
+  },
+  "assocHorsSuggestionExpl": "Association reconnue et documentée, pas une déduction automatique de l'app.",
+  "@assocHorsSuggestionExpl": {
+    "description": "Phrase élaborant « Hors moteur » dans le bandeau de fiche (ADR-0013)."
+  },
+  "assocFiltreEleve": "Élevée",
+  "@assocFiltreEleve": {
+    "description": "Option du filtre par niveau de suggestion : confiance élevée (chip, majuscule initiale)."
+  },
+  "assocFiltreMoyen": "Moyenne",
+  "@assocFiltreMoyen": {
+    "description": "Option du filtre par niveau de suggestion : confiance moyenne (chip, majuscule initiale)."
+  },
+  "assocFiltreFaible": "Faible",
+  "@assocFiltreFaible": {
+    "description": "Option du filtre par niveau de suggestion : confiance faible (chip, majuscule initiale)."
+  },
+  "assocFiltrePrefixeAssoc": "Association",
+  "@assocFiltrePrefixeAssoc": {
+    "description": "Titre de la colonne filtre par direction (Donne / Reçoit / Mutuel) dans le panneau filtres côte à côte."
+  },
+  "assocFiltrePrefixeSugg": "Suggestion",
+  "@assocFiltrePrefixeSugg": {
+    "description": "Titre de la colonne filtre par niveau de suggestion (Élevée / Moyenne / …) dans le panneau filtres côte à côte."
+  },
+  "assocPrefsNormales": "Préférences d'association : normales (par défaut)",
+  "@assocPrefsNormales": {
+    "description": "Banderole de la vue Associations quand le profil de pondération est au défaut (ADR-0013)."
+  },
+  "assocPrefsPerso": "Préférences personnalisées",
+  "@assocPrefsPerso": {
+    "description": "Préfixe de la banderole quand le profil de pondération est personnalisé, suivi de la liste des familles ajustées (ADR-0013)."
+  },
+  "enracinementSuperficiel": "racines superficielles",
+  "@enracinementSuperficiel": { "description": "Système racinaire superficiel (ADR-0014)." },
+  "enracinementMoyen": "racines de profondeur moyenne",
+  "@enracinementMoyen": { "description": "Système racinaire de profondeur moyenne (ADR-0014)." },
+  "enracinementProfond": "racines profondes",
+  "@enracinementProfond": { "description": "Système racinaire profond (ADR-0014)." },
+  "enracinementPivotant": "racine pivotante",
+  "@enracinementPivotant": { "description": "Racine pivotante, décompacte le sol (ADR-0014)." },
+  "critereSourceFixeAzote": "{plante} fixe l'azote de l'air dans le sol",
+  "@critereSourceFixeAzote": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleGourmandeAzote": "{plante} est gourmande en azote (besoin élevé)",
+  "@critereCibleGourmandeAzote": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceAttirePollinisateurs": "{plante} attire les pollinisateurs",
+  "@critereSourceAttirePollinisateurs": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleEntomophile": "{plante} a besoin de pollinisateurs pour bien fructifier",
+  "@critereCibleEntomophile": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceAttireAuxiliaires": "{plante} attire les insectes auxiliaires (prédateurs de ravageurs)",
+  "@critereSourceAttireAuxiliaires": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleSujetteRavageurs": "{plante} est sujette à des ravageurs que ces auxiliaires régulent",
+  "@critereCibleSujetteRavageurs": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceSupport": "{plante} peut servir de tuteur vivant",
+  "@critereSourceSupport": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourcePlusHaute": "{plante} est plus haute et fait un appui solide",
+  "@critereSourcePlusHaute": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleGrimpante": "{plante} grimpe et a besoin d'un support",
+  "@critereCibleGrimpante": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceHaute": "{plante} est haute ({cm} cm) et porte de l'ombre au sol",
+  "@critereSourceHaute": { "placeholders": { "plante": { "type": "String" }, "cm": { "type": "String" } } },
+  "critereCiblePlusBasse": "{plante} est nettement plus basse ({cm} cm)",
+  "@critereCiblePlusBasse": { "placeholders": { "plante": { "type": "String" }, "cm": { "type": "String" } } },
+  "critereCiblePrefereOmbre": "{plante} préfère la mi-ombre",
+  "@critereCiblePrefereOmbre": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleTolereOmbre": "{plante} tolère la mi-ombre",
+  "@critereCibleTolereOmbre": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCyclesComplementaires": "Cycles complémentaires : l'une est rapide, l'autre longue",
+  "@critereCyclesComplementaires": { "description": "Critère succession (ADR-0014)." },
+  "critereOccupationsDecalees": "Leurs périodes d'occupation du sol se succèdent",
+  "@critereOccupationsDecalees": { "description": "Critère succession calendaire (ADR-0014)." },
+  "critereSourceCouvreSol": "{plante} couvre le sol (limite l'évaporation et les adventices)",
+  "@critereSourceCouvreSol": { "placeholders": { "plante": { "type": "String" } } },
+  "critereSourceBriseVent": "{plante} protège ses voisines du vent",
+  "@critereSourceBriseVent": { "placeholders": { "plante": { "type": "String" } } },
+  "critereDeuxAromatiques": "Les deux sont aromatiques",
+  "@critereDeuxAromatiques": { "description": "Critère brouillage olfactif (ADR-0014)." },
+  "critereUneRepulsive": "L'une est répulsive et brouille les odeurs qui guident les ravageurs",
+  "@critereUneRepulsive": { "description": "Critère brouillage olfactif (ADR-0014)." },
+  "critereSourceRepulsiveCible": "{source} repousse un ravageur qui s'attaque à {cible}",
+  "@critereSourceRepulsiveCible": { "placeholders": { "source": { "type": "String" }, "cible": { "type": "String" } } },
+  "critereSourcePiegeCible": "{source} détourne (plante-piège) un ravageur de {cible}",
+  "@critereSourcePiegeCible": { "placeholders": { "source": { "type": "String" }, "cible": { "type": "String" } } },
+  "critereSourceRacineProfonde": "{plante} a une racine profonde qui décompacte le sol",
+  "@critereSourceRacineProfonde": { "placeholders": { "plante": { "type": "String" } } },
+  "critereCibleRacineSuperficielle": "{plante} a des racines superficielles qui profitent du sol ameubli",
+  "@critereCibleRacineSuperficielle": { "placeholders": { "plante": { "type": "String" } } },
+  "critereMemeFamille": "Même famille botanique ({famille}) : mêmes ravageurs et maladies",
+  "@critereMemeFamille": { "placeholders": { "famille": { "type": "String" } } },
+  "critereDeuxHautesPleinSoleil": "Les deux sont hautes et exigent le plein soleil : elles se font de l'ombre",
+  "@critereDeuxHautesPleinSoleil": { "description": "Critère concurrence lumière (ADR-0014)." },
+  "critereDeuxGourmandesAzote": "Les deux sont gourmandes en azote : concurrence pour cet élément",
+  "@critereDeuxGourmandesAzote": { "description": "Critère concurrence azote (ADR-0014)." },
+  "critereDeuxAssoiffees": "Les deux ont un fort besoin en eau : concurrence hydrique",
+  "@critereDeuxAssoiffees": { "description": "Critère concurrence eau (ADR-0014)." },
+  "critereDeuxEtalees": "Les deux sont très étalées : concurrence pour la place",
+  "@critereDeuxEtalees": { "description": "Critère concurrence espace (ADR-0014)." },
+  "critereMaladieCommune": "Elles hébergent une même maladie (transmission facilitée)",
+  "@critereMaladieCommune": { "description": "Critère maladies partagées (ADR-0014)." },
   "confianceFaible": "faible",
   "@confianceFaible": {
     "description": "Niveau de confiance faible d'une suggestion (affiché après « Suggéré · »)."
@@ -458,6 +605,10 @@
   "confianceEleve": "élevée",
   "@confianceEleve": {
     "description": "Niveau de confiance élevé d'une suggestion (affiché après « Suggéré · »)."
+  },
+  "assocFacteursTitre": "Pourquoi cette suggestion :",
+  "@assocFacteursTitre": {
+    "description": "Titre de la liste des facteurs (critères) d'une association dérivée dans le bandeau de fiche (ADR-0014)."
   },
   "assocVoirPlus": "{count, plural, =1{Voir 1 suggestion de plus} other{Voir {count} suggestions de plus}}",
   "@assocVoirPlus": {
@@ -529,6 +680,22 @@
   "familleEffetCouvertureAbri": "Couverture & abri",
   "@familleEffetCouvertureAbri": {
     "description": "Famille d'effet d'association : couvre-sol / brise-vent."
+  },
+  "familleConflitConcurrence": "Concurrence (ressources)",
+  "@familleConflitConcurrence": {
+    "description": "Famille de conflit : concurrence lumière/eau/espace/azote (ADR-0014)."
+  },
+  "familleConflitSanitaire": "Risque sanitaire",
+  "@familleConflitSanitaire": {
+    "description": "Famille de conflit : même famille / maladies partagées (ADR-0014)."
+  },
+  "familleConflitAllelopathie": "Allélopathie",
+  "@familleConflitAllelopathie": {
+    "description": "Famille de conflit : inhibition chimique (ADR-0014)."
+  },
+  "ponderationConflitsTitre": "À éviter — importance des avertissements",
+  "@ponderationConflitsTitre": {
+    "description": "Titre de la section de pondération des conflits dans les réglages (ADR-0014)."
   },
   "poidsIgnore": "Ignorer",
   "@poidsIgnore": {
@@ -635,6 +802,30 @@
       "min": { "type": "int" },
       "max": { "type": "int" }
     }
+  },
+  "ficheExpositionPlage": "{min} à {max}",
+  "@ficheExpositionPlage": {
+    "description": "Plage d'exposition de la fiche : du minimum toléré à l'optimum (ADR-0014).",
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
+  },
+  "ficheHauteur": "Hauteur adulte",
+  "@ficheHauteur": { "description": "Libellé de la hauteur adulte dans la fiche (ADR-0014)." },
+  "ficheHauteurCm": "{min}–{max} cm",
+  "@ficheHauteurCm": {
+    "description": "Plage de hauteur adulte en cm (ADR-0014).",
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
+  "ficheHauteurCmUnique": "{cm} cm",
+  "@ficheHauteurCmUnique": {
+    "description": "Hauteur adulte unique en cm (ADR-0014).",
+    "placeholders": { "cm": { "type": "int" } }
+  },
+  "fichePh": "pH du sol",
+  "@fichePh": { "description": "Libellé du pH dans la fiche (ADR-0014)." },
+  "fichePhPlage": "{min} à {max}",
+  "@fichePhPlage": {
+    "description": "Plage de pH du sol (ADR-0014).",
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
   },
   "ficheCalendrierTitre": "Semis & récolte",
   "@ficheCalendrierTitre": { "description": "Titre de la section calendrier semis/récolte de la fiche." },

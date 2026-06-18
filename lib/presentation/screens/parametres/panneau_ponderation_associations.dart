@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/enums/famille_effet_association.dart';
+import '../../../domain/enums/famille_effet_conflit.dart';
 import '../../../domain/enums/poids_association.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/libelles_enums.dart';
@@ -42,6 +43,24 @@ class PanneauPonderationAssociations extends ConsumerWidget {
                   ],
                   onChanged: (p) =>
                       notifier.definirPoidsAssociation(famille, p),
+                ),
+              ),
+          ],
+        ),
+        // Conflict families are weightable too (ADR-0014): prioritise or ignore a
+        // class of warnings.
+        ZoneParametres(
+          note: l10n.ponderationConflitsTitre,
+          enfants: [
+            for (final famille in FamilleEffetConflit.values)
+              ChampEmpile(
+                label: l10n.familleEffetConflit(famille),
+                enfant: ChampSegmente<PoidsAssociation>(
+                  valeur: profil.poidsConflit(famille),
+                  options: [
+                    for (final p in PoidsAssociation.values) (p, l10n.poids(p)),
+                  ],
+                  onChanged: (p) => notifier.definirPoidsConflit(famille, p),
                 ),
               ),
           ],

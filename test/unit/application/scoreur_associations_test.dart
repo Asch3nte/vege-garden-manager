@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/application/engine/scoreur_associations.dart';
 import 'package:pot_a_gerer/application/engine/suggestion_association.dart';
 import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
+import 'package:pot_a_gerer/domain/enums/famille_effet_conflit.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_confiance.dart';
 import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
@@ -30,6 +31,19 @@ void main() {
           FamilleEffetAssociation.pollinisation);
       expect(familleDe(TypeBeneficeAssociation.couvreSol),
           FamilleEffetAssociation.couvertureAbri);
+    });
+
+    test('every benefit mechanism maps to a family (exhaustive)', () {
+      for (final m in TypeBeneficeAssociation.values) {
+        expect(() => familleDe(m), returnsNormally);
+      }
+    });
+
+    test('ADR-0013 mechanisms join the expected families', () {
+      expect(familleDe(TypeBeneficeAssociation.attractionAuxiliaires),
+          FamilleEffetAssociation.protectionRavageurs);
+      expect(familleDe(TypeBeneficeAssociation.ameublissementSol),
+          FamilleEffetAssociation.fertilite);
     });
   });
 
@@ -87,15 +101,24 @@ void main() {
         mecanisme: TypeConflitAssociation.memeFamilleRavageurs,
         confiance: NiveauConfiance.eleve);
 
-    test('a conflict is scored by confidence, not weighted by the profile', () {
-      final profilExtreme = defaut.avec(
-          FamilleEffetAssociation.protectionRavageurs, PoidsAssociation.ignore);
-      expect(scoreur.score(conflit, profilExtreme),
-          ScoreurAssociations.facteurEleve);
+    test('default profile → conflict scored by confidence (weight 1)', () {
+      expect(scoreur.score(conflit, defaut), ScoreurAssociations.facteurEleve);
+      expect(scoreur.estRetenue(conflit, defaut), isTrue);
     });
 
-    test('a conflict is always retained (warning)', () {
-      expect(scoreur.estRetenue(conflit, defaut), isTrue);
+    test('its conflict family is weightable by the user (ADR-0014)', () {
+      // memeFamilleRavageurs → risque sanitaire; boosting it raises the score.
+      final fort = defaut.avecConflit(
+          FamilleEffetConflit.risqueSanitaire, PoidsAssociation.fort);
+      expect(scoreur.score(conflit, fort),
+          greaterThan(scoreur.score(conflit, defaut)));
+    });
+
+    test('an ignored conflict family is dropped (ADR-0014)', () {
+      final ignore = defaut.avecConflit(
+          FamilleEffetConflit.risqueSanitaire, PoidsAssociation.ignore);
+      expect(scoreur.score(conflit, ignore), 0);
+      expect(scoreur.estRetenue(conflit, ignore), isFalse);
     });
   });
 }

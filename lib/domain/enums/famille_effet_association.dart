@@ -12,7 +12,7 @@ enum FamilleEffetAssociation {
   /// Keeping pests away: repelling, trapping, scent confusion.
   protectionRavageurs,
 
-  /// Feeding the soil: nitrogen fixation.
+  /// Feeding and structuring the soil: nitrogen fixation, soil loosening.
   fertilite,
 
   /// Bringing pollinators to entomophilous neighbours.
@@ -32,9 +32,12 @@ FamilleEffetAssociation familleDe(TypeBeneficeAssociation mecanisme) =>
         FamilleEffetAssociation.gainDePlace,
       TypeBeneficeAssociation.repulsionRavageur ||
       TypeBeneficeAssociation.plantePiege ||
+      TypeBeneficeAssociation.attractionAuxiliaires ||
       TypeBeneficeAssociation.brouillageOlfactif =>
         FamilleEffetAssociation.protectionRavageurs,
-      TypeBeneficeAssociation.fixationAzote => FamilleEffetAssociation.fertilite,
+      TypeBeneficeAssociation.fixationAzote ||
+      TypeBeneficeAssociation.ameublissementSol =>
+        FamilleEffetAssociation.fertilite,
       TypeBeneficeAssociation.attractionPollinisateurs =>
         FamilleEffetAssociation.pollinisation,
       TypeBeneficeAssociation.couvreSol ||

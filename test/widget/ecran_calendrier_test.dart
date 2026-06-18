@@ -29,9 +29,16 @@ import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/application/state/saison_notifier.dart';
 import 'package:pot_a_gerer/application/state/saison_vue.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
+import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_calendrier.dart';
 
 class MockTaches extends Mock implements AbstractTacheRepository {}
+
+/// No-op stub: watering task generation is tested separately.
+class _StubGenererTachesArrosage implements GenererTachesArrosage {
+  @override
+  Future<void> executer() async {}
+}
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
@@ -103,6 +110,8 @@ void main() {
         potagerRepositoryProvider.overrideWithValue(potagers),
         fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
         horlogeProvider.overrideWithValue(() => maintenant),
+        genererTachesArrosageProvider
+            .overrideWith((ref) async => _StubGenererTachesArrosage()),
       ];
 
   Tache uneTache(String id, String titre, DateTime quand, {bool faite = false}) =>

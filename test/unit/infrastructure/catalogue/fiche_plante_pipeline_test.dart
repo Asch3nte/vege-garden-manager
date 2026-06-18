@@ -10,6 +10,7 @@ import 'package:pot_a_gerer/domain/enums/sous_type_legume.dart';
 import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_conflit_association.dart';
+import 'package:pot_a_gerer/domain/enums/enracinement_plante.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/exceptions/fiche_plante_invalide_exception.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/catalogue_yaml_parser.dart';
@@ -167,6 +168,107 @@ associations:
         TypeBeneficeAssociation.brouillageOlfactif,
         TypeBeneficeAssociation.repulsionRavageur,
       });
+    });
+
+    test('loads the ADR-0013 mechanisms from their snake_case tokens', () {
+      const yamlAdr13 = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+associations:
+  beneficies:
+    - id: LEG-002
+      type: attraction_auxiliaires
+    - id: LEG-003
+      type: ameublissement_sol
+  defavorables:
+    - id: LEG-004
+      type: competition_eau
+    - id: LEG-005
+      type: competition_espace
+    - id: LEG-006
+      type: partage_maladies
+''';
+      final m = _parser.parser(yamlAdr13, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'), returnsNormally);
+      final f = _mapper.versEntite(m);
+      expect(f.associationBenefiqueAvec('LEG-002')!.mecanisme,
+          TypeBeneficeAssociation.attractionAuxiliaires);
+      expect(f.associationBenefiqueAvec('LEG-003')!.mecanisme,
+          TypeBeneficeAssociation.ameublissementSol);
+      expect(f.associationConflitAvec('LEG-004')!.mecanisme,
+          TypeConflitAssociation.competitionEau);
+      expect(f.associationConflitAvec('LEG-005')!.mecanisme,
+          TypeConflitAssociation.competitionEspace);
+      expect(f.associationConflitAvec('LEG-006')!.mecanisme,
+          TypeConflitAssociation.partageMaladies);
+    });
+
+    test('loads enracinement and the attire_auxiliaires usage (ADR-0014)', () {
+      const yamlA14 = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: aromatique
+usages: [condimentaire, attire_auxiliaires]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+  enracinement: pivotant
+''';
+      final m = _parser.parser(yamlA14, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'), returnsNormally);
+      final f = _mapper.versEntite(m);
+      expect(f.enracinement, EnracinementPlante.pivotant);
+      expect(f.aUsage(UsagePlante.attireAuxiliaires), isTrue);
+    });
+
+    test('rejects an unknown enracinement (ADR-0014)', () {
+      const mauvais = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+  enracinement: tres_profond
+''';
+      final m = _parser.parser(mauvais, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'), throwsA(anything));
     });
 
     test('rejects an unknown mechanism inside a type list', () {

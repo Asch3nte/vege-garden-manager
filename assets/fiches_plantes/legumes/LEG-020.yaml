@@ -56,6 +56,7 @@ besoins:
   temperature_min_survie: 0
   gele_fatal: true
 cycle:
+  enracinement: moyen
   type: annuelle
   duree_avant_recolte_jours: [80, 110]
   hauteur_adulte_cm: [50, 80]
@@ -92,6 +93,7 @@ associations:
       type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille solanaceae, partage le mildiou", en: "Same solanaceae family, shares blight" }
     - id: LEG-009
+      type: partage_maladies
       raison_i18n: { fr: "Favorisent mutuellement le mildiou en conditions humides", en: "Mutually promote blight in humid conditions" }
 rotation:
   famille: solanaceae

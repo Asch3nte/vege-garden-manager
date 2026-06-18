@@ -65,6 +65,7 @@ besoins:
   gele_fatal: false
 
 cycle:
+  enracinement: superficiel
   type: vivace
   duree_avant_recolte_jours: [60, 90]
   hauteur_adulte_cm: [15, 30]
@@ -102,6 +103,7 @@ associations:
       raison_i18n: { fr: "Le basilic améliore la saveur et repousse les parasites", en: "Basil improves flavour and repels pests" }
   defavorables:
     - id: LEG-006
+      type: partage_maladies
       raison_i18n: { fr: "Les choux concurrencent les fraisiers et partagent certains champignons", en: "Cabbages compete with strawberries and share some fungi" }
 
 rotation:

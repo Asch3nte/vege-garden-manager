@@ -32,19 +32,21 @@ class MeteoAccueilNotifier extends AsyncNotifier<MeteoAccueilVue> {
       tempMin: actuelle.tempMin,
       tempMax: actuelle.tempMax,
       risqueGel: actuelle.risqueGel,
-      verdict: _verdict(actuelle, previsions),
+      verdict: MeteoAccueilNotifier.deriverVerdict(actuelle, previsions),
     );
   }
 
   /// Coarse garden-wide verdict: rain soon → wait; recent rain → moist soil;
   /// hot/dry → water; otherwise mild.
-  static VerdictMeteo _verdict(
+  ///
+  /// Public so that [MeteoDetailNotifier] can reuse the same logic without
+  /// duplicating the thresholds.
+  static VerdictMeteo deriverVerdict(
     DonneesMeteo actuelle,
     List<PrevisionMeteo> previsions,
   ) {
     final pluieAVenir = previsions.any((p) =>
-        p.precipitationsMm >= BilanArrosage.seuilPluiePrevueMm ||
-        p.probabilitePluie >= 0.6);
+        p.precipitationsMm * p.probabilitePluie >= BilanArrosage.seuilScorePluie);
     if (pluieAVenir) return VerdictMeteo.pluieAVenir;
     if (actuelle.precipitationsMm >= BilanArrosage.seuilPluieRecenteMm) {
       return VerdictMeteo.solHumide;
