@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../domain/repositories/abstract_geocodage_service.dart';
 import '../../domain/repositories/abstract_geolocalisation_service.dart';
+import '../../domain/repositories/abstract_info_application_service.dart';
 import '../../domain/repositories/abstract_meteo_service.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_reinitialisation_service.dart';
@@ -12,6 +13,7 @@ import '../../infrastructure/api/open_meteo_client.dart';
 import '../../infrastructure/repositories/meteo_service_impl.dart';
 import '../../infrastructure/services/geocodage_service_impl.dart';
 import '../../infrastructure/services/geolocalisation_service_impl.dart';
+import '../../infrastructure/services/info_application_service_impl.dart';
 import '../../infrastructure/services/notification_service_impl.dart';
 import '../../infrastructure/services/reinitialisation_service_impl.dart';
 import '../../infrastructure/services/sauvegarde_service_impl.dart';
@@ -61,4 +63,14 @@ final sauvegardeServiceProvider = Provider<AbstractSauvegardeService>(
 final reinitialisationServiceProvider =
     Provider<AbstractReinitialisationService>(
   (ref) => ReinitialisationServiceImpl(ref.watch(appDatabaseProvider)),
+);
+
+final infoApplicationServiceProvider =
+    Provider<AbstractInfoApplicationService>(
+  (ref) => InfoApplicationServiceImpl(),
+);
+
+/// One-shot read of the running app's version (docs/11 §7 — "À propos").
+final versionAppliProvider = FutureProvider<String>(
+  (ref) => ref.watch(infoApplicationServiceProvider).obtenirVersionAffichee(),
 );

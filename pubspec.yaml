@@ -61,6 +61,13 @@ dependencies:
   # transitive via geolocator_linux). The 12 beta migrated to win32 ^6 with an
   # unchanged pickFiles API. Move back to a caret on stable once 12.0.0 ships.
   file_picker: ^12.0.0-beta.7
+  # Runtime app version/build number (À propos screen) — validated with the dev
+  # (2026-07-07). Already resolved transitively at 10.2.0 via geolocator_linux,
+  # so promoting it to a direct dependency needs no other version bump.
+  package_info_plus: ^10.2.0
+  # Opens external links (source repo) in the platform's default handler —
+  # validated with the dev (2026-07-07). 100% local: no data sent by the app.
+  url_launcher: ^6.3.2
   freezed_annotation: ^3.1.0
   json_annotation: ^4.12.0
   # NOTE: phosphor_flutter retiré — incompatible Flutter 3.44.1 (il étend

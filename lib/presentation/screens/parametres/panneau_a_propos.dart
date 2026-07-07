@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/theme/dimensions_app.dart';
+import '../../../application/providers/service_providers.dart';
 import '../../../l10n/app_localizations.dart';
 import 'widgets_parametres.dart';
 
-/// App version shown on the About page.
-///
-/// Hardcoded to mirror `pubspec.yaml` for now; reading it at runtime needs
-/// `package_info_plus` (not in the validated stack) — deferred (docs/15).
-const String _versionAffichee = '1.0.0';
-
 /// Category 6 — **À propos**: identity, version, MIT licence, source/links,
 /// credits, and the standard third-party licences page.
-class PanneauAPropos extends StatelessWidget {
+class PanneauAPropos extends ConsumerWidget {
   const PanneauAPropos({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final version = ref.watch(versionAppliProvider).valueOrNull ?? '…';
 
     return PanneauParametres(
       titre: l10n.categApropos,
@@ -35,7 +32,7 @@ class PanneauAPropos extends StatelessWidget {
             Text(l10n.aproposNom, style: theme.textTheme.headlineSmall),
             const SizedBox(height: EspacementsApp.s1),
             Text(
-              l10n.aproposVersion(_versionAffichee),
+              l10n.aproposVersion(version),
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
@@ -69,7 +66,7 @@ class PanneauAPropos extends StatelessWidget {
               onTap: () => showLicensePage(
                 context: context,
                 applicationName: l10n.aproposNom,
-                applicationVersion: _versionAffichee,
+                applicationVersion: version,
               ),
             ),
           ],
