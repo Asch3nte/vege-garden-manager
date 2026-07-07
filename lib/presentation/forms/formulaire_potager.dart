@@ -16,6 +16,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/selecteur_carte_monde.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
+import '../glossaire/terme_glossaire.dart';
 
 /// Opens the garden form as a full-screen route and returns the saved [Potager]
 /// (or `null` if cancelled). When [potagerInitial] is provided, the form opens
@@ -242,6 +243,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
               libelle: l10n.climat,
               description: l10n.climatDescription,
               labelText: l10n.formPotagerClimat,
+              idAideGlossaire: TermeGlossaire.idNotion('type-climat'),
               onChanged: (v) => setState(() => _climat = v),
             ),
             const SizedBox(height: EspacementsApp.s4),
@@ -251,6 +253,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
               libelle: l10n.rusticite,
               description: l10n.rusticiteDescription,
               labelText: l10n.formPotagerRusticite,
+              idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
               onChanged: (v) => setState(() => _rusticite = v),
             ),
             const SizedBox(height: EspacementsApp.s6),

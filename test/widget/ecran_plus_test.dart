@@ -108,6 +108,11 @@ void main() {
     expect(find.text('Préférences générales'), findsOneWidget);
     expect(find.text('Confidentialité & opt-outs'), findsOneWidget);
     expect(find.text('Notifications'), findsOneWidget);
+    expect(find.text('Aide & lexique'), findsOneWidget);
+    // « À propos » sits below the fold since the glossary row was added
+    // (ADR-0017) — the lazy ListView needs a scroll to build it.
+    await tester.scrollUntilVisible(find.text('À propos'), 100,
+        scrollable: find.byType(Scrollable).first);
     expect(find.text('À propos'), findsOneWidget);
   });
 

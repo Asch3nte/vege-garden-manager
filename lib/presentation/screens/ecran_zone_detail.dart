@@ -25,6 +25,9 @@ import '../providers/ajout_plante_provider.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 import 'ecran_potager.dart' show couleurZone;
+import '../glossaire/type_terme_glossaire.dart';
+import '../glossaire/terme_glossaire.dart';
+import '../glossaire/terme_cliquable.dart';
 
 /// Detail of one garden zone (`ZoneDetail` in the `potager.jsx` mock-up), reached
 /// by tapping a bed on the Potager plan.
@@ -434,8 +437,12 @@ class _LigneCulture extends ConsumerWidget {
                 Text(culture.nom, style: theme.textTheme.titleMedium),
                 if (culture.etat != null) ...[
                   const SizedBox(height: EspacementsApp.s1),
-                  Text(
-                    l10n.libelleStade(culture.etat!.stade),
+                  // Clickable term (ADR-0017 D5): the stage label opens the
+                  // « Stades de croissance » glossary page.
+                  TermeCliquable(
+                    idTerme: TermeGlossaire.idNotion('stade-croissance'),
+                    texte: l10n.libelleStade(culture.etat!.stade),
+                    type: TypeTermeGlossaire.notion,
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),

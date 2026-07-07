@@ -11,12 +11,17 @@ class PanneauParametres extends StatelessWidget {
   /// Body content (already padded by the panel as needed).
   final List<Widget> enfants;
 
-  const PanneauParametres({super.key, required this.titre, required this.enfants});
+  /// Optional app-bar actions (e.g. an `AideGlossaire` towards the concept
+  /// page explaining the panel, ADR-0017 D5).
+  final List<Widget>? actions;
+
+  const PanneauParametres(
+      {super.key, required this.titre, required this.enfants, this.actions});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(titre)),
+      appBar: AppBar(title: Text(titre), actions: actions),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
           EspacementsApp.s4,

@@ -90,6 +90,23 @@ Direction artistique **« Carnet vivant »**, 5 principes :
 | Erreur            | Brique claire       | `#D17560` |
 | Bordure           | Bleu nuit clair     | `#2F3A48` |
 
+### 3.1 Couleurs des termes du glossaire (ADR-0017 D5)
+
+> Un **terme cliquable** (lien wiki, `TermeCliquable`, puce, badge) est teinté
+> par le **type** du terme visé — même grammaire visuelle partout dans l'app :
+> texte semi-gras souligné (inline) ou puce bordée (chips). Implémentation :
+> extension de thème `CouleursTermes` (`lib/app/theme/couleurs_termes.dart`),
+> enregistrée dans les deux thèmes. **Aucune couleur inventée** : chaque type
+> réutilise un token §2/§3 existant.
+
+| Type de terme | Light (token §2)                       | Dark (token §3 — à revalider)       |
+|---------------|----------------------------------------|-------------------------------------|
+| **Famille**   | Vert sauge profond `#2F7D4F` (primaire)| Vert sauge lumineux `#7FB088`       |
+| **Maladie**   | Brique douce `#B0463C` (erreur)        | Brique claire `#D17560`             |
+| **Ravageur**  | Terre `#A9744B` (déco `--c-terre`)     | Terracotta clair `#D89072`          |
+| **Outil**     | Bleu lin `#4E89B0` (info)              | Bleu lin clair `#8FA8C7`            |
+| **Notion**    | Aubergine `#6A3D5B` (déco)             | Aubergine clair `#B98AAC`           |
+
 ## 4. Typographie
 
 | Style       | Police          | Taille  | Graisse | Interligne  | Usage                 |

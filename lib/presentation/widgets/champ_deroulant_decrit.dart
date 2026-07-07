@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../glossaire/terme_cliquable.dart';
 
 /// A [DropdownButtonFormField] whose **menu** shows a short description under
 /// each option's label, while the **closed field** displays the label only
@@ -31,6 +32,10 @@ class ChampDeroulantDecrit<T> extends StatelessWidget {
   /// Optional field-level helper, under the closed field.
   final String? helperText;
 
+  /// Optional glossary page id of the field's concept (ADR-0017 D5): renders a
+  /// discreet « ? » suffix opening that page (e.g. `notion.type-climat`).
+  final String? idAideGlossaire;
+
   const ChampDeroulantDecrit({
     super.key,
     required this.value,
@@ -40,6 +45,7 @@ class ChampDeroulantDecrit<T> extends StatelessWidget {
     required this.onChanged,
     required this.labelText,
     this.helperText,
+    this.idAideGlossaire,
   });
 
   @override
@@ -55,6 +61,9 @@ class ChampDeroulantDecrit<T> extends StatelessWidget {
         helperText: helperText,
         helperMaxLines: 2,
         border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+        suffixIcon: idAideGlossaire == null
+            ? null
+            : AideGlossaire(idTerme: idAideGlossaire!, infobulle: labelText),
       ),
       // Closed field: label only, single line.
       selectedItemBuilder: (context) => [

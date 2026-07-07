@@ -8,6 +8,8 @@ import '../../../domain/enums/poids_association.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/libelles_enums.dart';
 import 'widgets_parametres.dart';
+import '../../glossaire/terme_glossaire.dart';
+import '../../glossaire/terme_cliquable.dart';
 
 /// Expert-only panel (ADR-0011) to weight each association **effect family**.
 /// Every change persists immediately and reshapes the ranking/pruning of derived
@@ -29,6 +31,12 @@ class PanneauPonderationAssociations extends ConsumerWidget {
 
     return PanneauParametres(
       titre: l10n.categPonderation,
+      // « ? » → the glossary page explaining the weighting (ADR-0017 D5).
+      actions: [
+        AideGlossaire(
+            idTerme: TermeGlossaire.idNotion('ponderation-associations'),
+            infobulle: l10n.categPonderation),
+      ],
       enfants: [
         ZoneParametres(
           note: l10n.ponderationNote,

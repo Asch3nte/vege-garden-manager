@@ -79,8 +79,10 @@ class Bootstrap {
   Future<void> _initialiserFuseauHoraire() async {
     tzdata.initializeTimeZones();
     try {
-      final nom = await FlutterTimezone.getLocalTimezone();
-      tz.setLocalLocation(tz.getLocation(nom));
+      // flutter_timezone >=5 returns a TimezoneInfo; `identifier` is the IANA
+      // name (e.g. "Europe/Brussels") the `timezone` package expects.
+      final info = await FlutterTimezone.getLocalTimezone();
+      tz.setLocalLocation(tz.getLocation(info.identifier));
     } catch (_) {
       // Unknown zone: keep the default (UTC). Non-fatal.
     }

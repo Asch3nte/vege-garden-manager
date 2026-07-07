@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'couleurs_app.dart';
+import 'couleurs_termes.dart';
 import 'dimensions_app.dart';
 import 'typographie_app.dart';
 
@@ -103,6 +104,7 @@ abstract final class ThemeApp {
         attention: CouleursApp.attentionClair,
         surfaceAlternee: CouleursApp.surfaceAlterneeClair,
       ),
+      termes: CouleursTermes.clair,
     );
   }
 
@@ -133,6 +135,7 @@ abstract final class ThemeApp {
         attention: CouleursApp.attentionSombre,
         surfaceAlternee: CouleursApp.surfaceAlterneeSombre,
       ),
+      termes: CouleursTermes.sombre,
     );
   }
 
@@ -142,6 +145,7 @@ abstract final class ThemeApp {
     required ColorScheme scheme,
     required Color couleurTexte,
     required AccentsCarnet accents,
+    required CouleursTermes termes,
   }) {
     final texte = TypographieApp.construire(couleurTexte);
 
@@ -151,7 +155,7 @@ abstract final class ThemeApp {
       scaffoldBackgroundColor: scheme.surface,
       textTheme: texte,
       fontFamily: TypographieApp.familleCorps,
-      extensions: [accents],
+      extensions: [accents, termes],
       cardTheme: CardThemeData(
         color: scheme.surfaceContainer,
         elevation: 0,

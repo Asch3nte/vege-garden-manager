@@ -19,6 +19,8 @@ import '../../domain/services/acces_niveau.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../../l10n/app_localizations.dart';
+import '../glossaire/catalogue/notions_associations.dart';
+import '../glossaire/terme_cliquable.dart';
 import 'explication_association.dart';
 import 'fiche_plante_detail.dart';
 import 'libelles_enums.dart';
@@ -68,6 +70,9 @@ Future<void> afficherVueAssociations(
         mecanisme: c.association.mecanisme == null
             ? null
             : l10n.mecanismeBenefice(c.association.mecanisme!),
+        idMecanisme: c.association.mecanisme == null
+            ? null
+            : idMecanismeBenefice(c.association.mecanisme!),
         raison: c.association.raison(locale),
         sens: c.sens,
         bon: true,
@@ -81,6 +86,9 @@ Future<void> afficherVueAssociations(
         mecanisme: c.association.mecanisme == null
             ? null
             : l10n.mecanismeConflit(c.association.mecanisme!),
+        idMecanisme: c.association.mecanisme == null
+            ? null
+            : idMecanismeConflit(c.association.mecanisme!),
         raison: c.association.raison(locale),
         sens: c.sens,
         bon: false,
@@ -164,6 +172,7 @@ void _ajouterSuggestions(
       fiche: f,
       score: scoreur.score(s, profil),
       mecanisme: l10n.mecanismeBenefice(s.mecanisme),
+      idMecanisme: idMecanismeBenefice(s.mecanisme),
       suggere: true,
       confiance: l10n.confiance(s.confiance),
       niveauConfiance: s.confiance,
@@ -179,6 +188,7 @@ void _ajouterSuggestions(
       fiche: f,
       score: scoreur.score(s, profil),
       mecanisme: l10n.mecanismeConflit(s.mecanisme),
+      idMecanisme: idMecanismeConflit(s.mecanisme),
       suggere: true,
       confiance: l10n.confiance(s.confiance),
       niveauConfiance: s.confiance,
@@ -196,6 +206,10 @@ class _NoeudAssoc {
   final FichePlante fiche;
   final double score;
   final String? mecanisme;
+
+  /// Glossary id of the mechanism page (`notion.meca-*`, ADR-0017) — makes the
+  /// group chip a clickable term; `null` for untyped pairs.
+  final String? idMecanisme;
   final String? raison;
   final bool suggere;
   final String? confiance;
@@ -218,6 +232,7 @@ class _NoeudAssoc {
     required this.fiche,
     this.score = 0,
     this.mecanisme,
+    this.idMecanisme,
     this.raison,
     this.suggere = false,
     this.confiance,
@@ -245,6 +260,7 @@ class _GroupeAssoc {
   SensAssociation? get sens => _repr.sens;
   bool get suggere => _repr.suggere;
   String? get mecanisme => _repr.mecanisme;
+  String? get idMecanisme => _repr.idMecanisme;
   String? get confiance => _repr.confiance;
 
   /// Best member score — curated (infinite) groups sort first.
@@ -465,6 +481,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
                               : ContexteAssociation(
                                   bon: n.bon!,
                                   mecanisme: n.mecanisme,
+                                  idMecanisme: n.idMecanisme,
                                   raison: n.raison,
                                   suggere: n.suggere,
                                   confiance: n.confiance,
@@ -1030,6 +1047,11 @@ class _GroupeWidget extends StatelessWidget {
             sens: groupe.sens,
             couleur: couleurChip,
             ligne: ligne,
+            // Typed mechanism → its glossary page (ADR-0017 D5); the dialog is
+            // closed first by ouvrirTermeGlossaire.
+            onTapLibelle: groupe.idMecanisme == null
+                ? null
+                : () => ouvrirTermeGlossaire(context, groupe.idMecanisme!),
           ),
           const SizedBox(height: EspacementsApp.s1),
           Wrap(
@@ -1062,11 +1084,16 @@ class _EnteteGroupe extends StatelessWidget {
   final Color couleur;
   final String ligne;
 
+  /// Opens the mechanism's glossary page (ADR-0017); `null` (untyped "Autre")
+  /// leaves the chip inert and un-underlined.
+  final VoidCallback? onTapLibelle;
+
   const _EnteteGroupe({
     required this.libelle,
     required this.sens,
     required this.couleur,
     required this.ligne,
+    this.onTapLibelle,
   });
 
   IconData? get _icone => switch (sens) {
@@ -1079,43 +1106,54 @@ class _EnteteGroupe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final chip = Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: EspacementsApp.s2,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: couleur.withValues(alpha: 0.12),
+        borderRadius: const BorderRadius.all(RayonsApp.sm),
+        border: Border.all(color: couleur.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              libelle,
+              textAlign: TextAlign.center,
+              // No ellipsis: the cluster is wide enough (ADR-0013 §4); wrap
+              // generously rather than truncate.
+              maxLines: 3,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: couleur,
+                fontWeight: FontWeight.w700,
+                height: 1.1,
+                // Clickable-term grammar (ADR-0017 D5): discreet underline.
+                decoration:
+                    onTapLibelle == null ? null : TextDecoration.underline,
+                decorationColor: couleur,
+              ),
+            ),
+          ),
+          if (_icone != null) ...[
+            const SizedBox(width: 2),
+            Icon(_icone, size: 12, color: couleur),
+          ],
+        ],
+      ),
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: EspacementsApp.s2,
-            vertical: 2,
-          ),
-          decoration: BoxDecoration(
-            color: couleur.withValues(alpha: 0.12),
-            borderRadius: const BorderRadius.all(RayonsApp.sm),
-            border: Border.all(color: couleur.withValues(alpha: 0.5)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  libelle,
-                  textAlign: TextAlign.center,
-                  // No ellipsis: the cluster is wide enough (ADR-0013 §4); wrap
-                  // generously rather than truncate.
-                  maxLines: 3,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: couleur,
-                    fontWeight: FontWeight.w700,
-                    height: 1.1,
-                  ),
-                ),
+        onTapLibelle == null
+            ? chip
+            : InkWell(
+                borderRadius: const BorderRadius.all(RayonsApp.sm),
+                onTap: onTapLibelle,
+                child: chip,
               ),
-              if (_icone != null) ...[
-                const SizedBox(width: 2),
-                Icon(_icone, size: 12, color: couleur),
-              ],
-            ],
-          ),
-        ),
         const SizedBox(height: 1),
         Text(
           ligne,

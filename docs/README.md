@@ -42,6 +42,7 @@ conservées hors du repo).
 | [14 — Couverture UI](14-couverture-ui.md) | Matrice fonction → écran : checklist de couverture du moteur par l'UI |
 | [15 — Éléments différés](15-elements-differes.md) | Registre des placeholders/fonctions à brancher plus tard : ce qui manque + où revenir |
 | [16 — Enrichissement fiches plantes](16-enrichissement-fiches-plantes.md) | Champs manquants dans les fiches YAML pour le moteur de recommandation (rusticité, gel, difficulté, contenants, ravageurs…) |
+| [17 — Illustrations du glossaire](17-illustrations-glossaire.md) | Procédure pas à pas : ajouter une image à une page du lexique (dossier, format WebP ≤ 800 px, licences PD/CC0, registre, SOURCES.txt, lint) |
 | [decisions/](decisions/) | ADR — décisions d'architecture |
 
 ## Pour le développement

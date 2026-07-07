@@ -33,6 +33,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0014](0014-calcul-associations-exhaustif-explicable.md) | Calcul d'associations exhaustif & explicable (comparaisons réelles, évidences par critère, fiche min/max) | Accepté |
 | [0015](0015-arrosage-intelligent-canicule.md) | Arrosage intelligent & facteur thermique (moteur ET₀-proxy + conseil par plantation en UI) | Accepté |
 | [0016](0016-refonte-ecran-meteo.md) | Refonte de l'écran météo : Nominatim, enrichissement modèle, vue détaillée | Accepté |
+| [0017](0017-glossaire-aide-lexique.md) | Glossaire « Aide & lexique » : la référence du jardinier (chapitres, liens, illustrations) | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

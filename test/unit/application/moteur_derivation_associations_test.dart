@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/application/engine/moteur_derivation_associations.dart';
 import 'package:pot_a_gerer/application/engine/suggestion_association.dart';
@@ -6,7 +8,6 @@ import 'package:pot_a_gerer/domain/enums/critere_association.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/enracinement_plante.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
-import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/charge_tuteur.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_besoin.dart';
@@ -413,6 +414,47 @@ void main() {
           famille: 'Cucurbitaceae', besoinAzote: NiveauBesoin.eleve);
       final s = moteur.suggestionsNouvelles(chou, [chou, courge]);
       expect(conflitVers(s, 'courge').sens, SensAssociation.mutuel);
+    });
+  });
+
+  group('inventaire des règles (provenance glossaire, ADR-0017)', () {
+    // The glossary marks each mechanism page "computed by the engine" vs
+    // "documented by the community" from [beneficesDerivables] /
+    // [conflitsDerivables]. This scan keeps those declared sets equal to the
+    // mechanisms the rules of `deriver` actually emit: a dormant mechanism
+    // left marked, or a new rule left unmarked, breaks the suite.
+    Set<String> emisPar(String source, String enumName) {
+      final sansCommentaires =
+          source.replaceAll(RegExp(r'//.*'), '').replaceAll(
+              RegExp(r'///.*'), '');
+      final corpsDeriver = sansCommentaires
+          .substring(sansCommentaires.indexOf('deriver('));
+      return RegExp('$enumName\\.(\\w+)')
+          .allMatches(corpsDeriver)
+          .map((m) => m.group(1)!)
+          .toSet();
+    }
+
+    late final String source = File(
+            'lib/application/engine/moteur_derivation_associations.dart')
+        .readAsStringSync();
+
+    test('beneficesDerivables = les bénéfices émis par les règles', () {
+      expect(
+        MoteurDerivationAssociations.beneficesDerivables
+            .map((m) => m.name)
+            .toSet(),
+        emisPar(source, 'TypeBeneficeAssociation'),
+      );
+    });
+
+    test('conflitsDerivables = les conflits émis par les règles', () {
+      expect(
+        MoteurDerivationAssociations.conflitsDerivables
+            .map((m) => m.name)
+            .toSet(),
+        emisPar(source, 'TypeConflitAssociation'),
+      );
     });
   });
 }

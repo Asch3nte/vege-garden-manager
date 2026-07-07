@@ -7,8 +7,13 @@
 //   • the bioaggressor reference parses/validates/maps cleanly;
 //   • every family `maladies_communes`/`ravageurs_communs` slug resolves to a
 //     coherent reference entry (VerificateurIntegriteBioagresseurs);
+//   • the glossary illustrations (ADR-0017 D4/Lot 5) are coherent: every
+//     `.webp` under assets/images/glossaire/ is registered in
+//     `illustrations_glossaire.dart` AND recorded in SOURCES.txt, and every
+//     registered id has its file (orphans in any direction are fatal);
 // and *warns* (non-fatal) on editorial gaps: families without the Lot 4 notes,
-// bioaggressors without a description or an EPPO code.
+// bioaggressors without a description or an EPPO code, stale SOURCES.txt
+// mentions.
 //
 // The species ⟷ family integrity is intentionally left to the test suite
 // (familles_reel_test.dart), which resolves species/variety inheritance.
@@ -27,6 +32,7 @@ import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_validator.dart
 import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_mapper.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_validator.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_bioagresseurs.dart';
+import 'package:pot_a_gerer/presentation/glossaire/illustrations_glossaire.dart';
 import 'package:yaml/yaml.dart';
 
 /// Outcome of a reference-data check: fatal [erreurs] and non-fatal
@@ -118,6 +124,42 @@ Future<RapportReferentiels> verifierReferentiels({
   final problemes = const VerificateurIntegriteBioagresseurs()
       .verifier(familles, BioagresseurCache(bioagresseurs));
   erreurs.addAll(problemes.map((p) => p.toString()));
+
+  // 4. Glossary illustrations (ADR-0017 D4/Lot 5): files ⟷ registry ⟷ sources.
+  final imagesDir = Directory(dossierIllustrationsGlossaire);
+  final sourcesFichier = File('$dossierIllustrationsGlossaire/SOURCES.txt');
+  final sources =
+      sourcesFichier.existsSync() ? sourcesFichier.readAsStringSync() : '';
+  final fichiersImages = <String>{
+    if (imagesDir.existsSync())
+      for (final f in imagesDir.listSync().whereType<File>())
+        if (f.path.endsWith('.webp'))
+          f.uri.pathSegments.last.replaceFirst(RegExp(r'\.webp$'), ''),
+  };
+  for (final id in fichiersImages) {
+    if (!idsIllustres.contains(id)) {
+      erreurs.add('image orpheline: $id.webp sans entrée dans '
+          'illustrations_glossaire.dart');
+    }
+    if (!sources.contains('$id.webp')) {
+      erreurs.add('image non sourcée: $id.webp absente de SOURCES.txt '
+          '(provenance + licence obligatoires)');
+    }
+  }
+  for (final id in idsIllustres) {
+    if (!fichiersImages.contains(id)) {
+      erreurs.add('illustration enregistrée sans fichier: '
+          '$dossierIllustrationsGlossaire/$id.webp manquant');
+    }
+  }
+  for (final m in RegExp(r'([a-z0-9.-]+)\.webp')
+      .allMatches(sources)
+      .map((m) => m.group(1)!)
+      .toSet()) {
+    if (!fichiersImages.contains(m)) {
+      avertissements.add('SOURCES.txt mentionne $m.webp sans fichier');
+    }
+  }
 
   return RapportReferentiels(erreurs, avertissements);
 }

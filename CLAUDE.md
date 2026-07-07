@@ -64,10 +64,13 @@ la vie privée. Approche permaculturelle.
 Flutter (Dart) · SQLite via **drift** · **Riverpod** · **go_router** ·
 Open-Meteo (`http`) · `flutter_local_notifications` · `geolocator` ·
 fiches plantes en **YAML embarqué** · i18n via `intl` + ARB · tests
-`flutter_test` + `mocktail`. Détail : [`docs/03-stack-technique.md`](docs/03-stack-technique.md).
+`flutter_test` + `mocktail` · sauvegarde locale `share_plus` + `file_picker`.
+Détail : [`docs/03-stack-technique.md`](docs/03-stack-technique.md).
 
 ### APIs externes autorisées
-- ✅ Open-Meteo uniquement (gratuit, sans clé, sans compte)
+- ✅ Open-Meteo (gratuit, sans clé, sans compte) — météo/prévisions + ET₀
+- ✅ Nominatim / OpenStreetMap (gratuit, sans clé, sans compte) — géocodage
+  inverse du nom de ville (ADR-0016, opt-out via géoloc)
 - ❌ Toute autre API nécessite validation explicite
 
 ---
@@ -121,18 +124,49 @@ Polymorphisme dès que pertinent.
     Accueil (tableau de bord), Potager (liste des zones), Catalogue (recherche +
     fiche détaillée), Calendrier (agenda cochable), Plus/Paramètres (préférences
     persistées + thème dynamique). Éléments non câblables consignés dans `docs/15`.
+15. **Alpha Android installable** : formulaires de création (potager/zone/plantation),
+    édition/suppression partout, récolte & observation, export/import JSON
+    (`share_plus`/`file_picker`), reset usine — APK signé clé debug (docs/15 §7)
+16. **Onboarding complet** (parcours guidé 6 étapes, carte monde locale, dérivation
+    localisation → climat/rusticité, niveau d'expérience — docs/15 §7)
+17. **Paliers d'expérience** (ADR-0009) : divulgation progressive 3 niveaux, gating
+    `AccesNiveau`, guide des niveaux + teaser de montée
+18. **Associations — cycle complet** (ADR-0010 → 0014) : mécanismes typés + raisons,
+    scoring pondéré (profil expert), sens directionnels, vocabulaire + clusters,
+    moteur exhaustif & explicable (critères avec valeurs réelles, conflits pondérables)
+19. **Arrosage intelligent** (ADR-0015, lots 1–5) : facteur thermique, conseil par
+    plantation, pluie pondérée, tolérance sécheresse par plante, ET₀ Open-Meteo,
+    `GenererTachesArrosage` (tâches urgentes + notifications)
+20. **Refonte écran météo** (ADR-0016) : Nominatim (nom de ville), modèle enrichi
+    WMO/vent, résumé généré, vue détaillée jour/heure
+21. **Glossaire « Aide & lexique »** (ADR-0017, lots 1–5) : 9 chapitres, pages par
+    terme (familles/bioagresseurs dérivés YAML + ~100 notions/outils), liens wiki,
+    charte `CouleursTermes` + termes cliquables (fiche plante), provenance des
+    mécanismes dérivée du moteur, couverture des enums prouvée par test (D6),
+    pipeline d'illustrations (`SOURCES.txt` + lint) + premier jeu 6 images DP/CC0
 
 ### 🚧 En cours / prochaine étape
+- **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
+  (procédure : [docs/17](docs/17-illustrations-glossaire.md)). Termes cliquables :
+  **toutes les surfaces branchées** (vue Associations, bandeau + faits fiche,
+  formulaires `AideGlossaire`, stade zone, calendrier, panneaux niveaux/
+  pondération) ; depuis un survol modal la page est **poussée au-dessus**
+  (retour = où on était). Alertes météo : pas de surface visuelle (notifications)
 - **Affiner / approfondir les écrans** : reprendre les éléments différés de
   [`docs/15`](docs/15-elements-differes.md) au fur et à mesure que le nécessaire existe
-- Composants UI normalisés restants (snackbar, dialog double-confirmation, swipe…)
-- **Onboarding** (dérivation localisation → hémisphère/climat/rusticité)
 
 ### ⏭️ À venir
-- Onboarding (dérivation localisation → hémisphère/climat/rusticité)
+- Features « build-then-gate » (docs/15 §9) : multi-potager, équipements,
+  fiches perso (scope V1), rotation avancée
+- i18n effective (ARB `en` + pilotage `locale`) · maquettes dark mode
 - Rebrancher **Phosphor Icons** (package cassé sur Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
-- CI/CD GitHub Actions
+- Distribution : keystore release réel, icône & splash, CI/CD GitHub Actions
+- **Juste avant release** : relecture éditoriale de **tous** les chapitres du
+  glossaire avec le dev (quand tous les termes/features/design seront figés —
+  docs/15 §7)
 - Packaging multiplateforme (Linux AppImage/Flatpak, APK, .exe, .dmg)
+- À arbitrer : **post-récolte** et **éditeur de fiches perso** (scope V1 selon
+  docs/13 §1, rien en code — reporter officiellement ou planifier)
 
 ---
 
@@ -197,12 +231,14 @@ pot-a-gerer/
 
 ## 🎬 PROCHAINE ACTION ATTENDUE
 
-Les **5 écrans principaux** de la couche Presentation sont implémentés, branchés
-sur le domaine et testés (Accueil, Potager, Catalogue, Calendrier, Plus/Paramètres).
-Prochaines étapes possibles (à arbitrer avec le dev) : **approfondir les éléments
-différés** de [`docs/15`](docs/15-elements-differes.md) quand le nécessaire existe
-(vues secondaires, météo/alertes, export/sync…), l'**onboarding**, ou les
-**composants UI normalisés** restants — toujours **avec leurs tests en parallèle**.
+L'app est **fonctionnelle de bout en bout** (onboarding → potager → plantations →
+tâches/arrosage → météo → export), alpha Android installée. Le **glossaire
+« Aide & lexique »** (ADR-0017) est livré lots 1–5 ; la **relecture éditoriale**
+de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
+**illustrations** sont choisies par le dev au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)).
+Reste côté glossaire : termes cliquables sur les surfaces restantes (docs/15 §8
+#4bis). Ensuite (à arbitrer) : multi-potager/équipements (§9), distribution
+(CI/CD, signing), i18n `en` — toujours **avec leurs tests en parallèle**.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
 > Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**

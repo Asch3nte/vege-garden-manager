@@ -82,6 +82,13 @@ class _Racine extends StatelessWidget {
           sousTitre: l10n.categNiveauxSub,
           onTap: () => context.go(RoutesApp.plusNiveaux),
         ),
+        // « Aide & lexique » — the gardener's reference (ADR-0017).
+        LigneCategorie(
+          icone: Icons.auto_stories_outlined,
+          titre: l10n.categAide,
+          sousTitre: l10n.categAideSub,
+          onTap: () => context.go(RoutesApp.plusAide),
+        ),
         // Association weighting — expert only (ADR-0011/0009).
         if (AccesNiveau(prefs.niveauExperience).ponderationAssociations)
           LigneCategorie(

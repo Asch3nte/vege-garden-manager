@@ -44,8 +44,8 @@ dependencies:
   http: ^1.6.0
   flutter_local_notifications: ^21.0.0
   timezone: ^0.11.0
-  flutter_timezone: ^4.1.1
-  geolocator: ^14.0.2
+  flutter_timezone: ^5.1.0
+  geolocator: ^14.0.3
   intl: ^0.20.2
   uuid: ^4.5.3
   yaml: ^3.1.3
@@ -54,8 +54,13 @@ dependencies:
   # Sauvegarde locale (export/import JSON) — validées avec le dev (2026-06-13) :
   # share_plus = feuille de partage native pour sortir le fichier ; file_picker =
   # sélection du fichier à importer. Aucune donnée ne part en réseau (100% local).
-  share_plus: ^10.0.0
-  file_picker: ^8.1.0
+  share_plus: ^13.2.0
+  # Pre-release pinned on purpose (dev-validated 2026-07-06): every *stable*
+  # file_picker still pins win32 ^5.x, which blocks the built-in-Kotlin (KGP
+  # removal) versions of share_plus (>=13.2) and package_info_plus (>=10.2,
+  # transitive via geolocator_linux). The 12 beta migrated to win32 ^6 with an
+  # unchanged pickFiles API. Move back to a caret on stable once 12.0.0 ships.
+  file_picker: ^12.0.0-beta.7
   freezed_annotation: ^3.1.0
   json_annotation: ^4.12.0
   # NOTE: phosphor_flutter retiré — incompatible Flutter 3.44.1 (il étend
@@ -109,6 +114,8 @@ flutter:
     - assets/fiches_plantes/engrais_verts/
     - assets/docs_aide/
     - assets/images/
+    # Illustrations du glossaire (ADR-0017 D4) : provenance dans SOURCES.txt.
+    - assets/images/glossaire/
     # Licences SIL OFL des polices embarquées (enregistrées via LicenseRegistry).
     - assets/fonts/OFL-Manrope.txt
     - assets/fonts/OFL-Inter.txt

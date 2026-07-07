@@ -14,6 +14,8 @@ import '../../domain/enums/type_parcelle.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
+import '../glossaire/terme_glossaire.dart';
+import '../glossaire/terme_cliquable.dart';
 
 /// Opens the zone form for [potagerId] and returns the saved [Parcelle].
 ///
@@ -173,6 +175,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
               decoration: InputDecoration(
                 labelText: l10n.formZoneType,
                 border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                suffixIcon: AideGlossaire(
+                    idTerme: TermeGlossaire.idNotion('types-parcelles'),
+                    infobulle: l10n.formZoneType),
               ),
               items: [
                 for (final t in TypeParcelle.values)
@@ -199,6 +204,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
               decoration: InputDecoration(
                 labelText: l10n.formZoneExposition,
                 border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                suffixIcon: AideGlossaire(
+                    idTerme: TermeGlossaire.idNotion('exposition'),
+                    infobulle: l10n.formZoneExposition),
               ),
               items: [
                 for (final s in NiveauSoleil.values)
@@ -209,8 +217,15 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
             // Soil techniques — intermediate+ (ADR-0009).
             if (acces.techniquesSol) ...[
               const SizedBox(height: EspacementsApp.s5),
-              Text(l10n.formZoneTechniquesTitre,
-                  style: theme.textTheme.titleMedium),
+              Row(
+                children: [
+                  Text(l10n.formZoneTechniquesTitre,
+                      style: theme.textTheme.titleMedium),
+                  AideGlossaire(
+                      idTerme: TermeGlossaire.idNotion('techniques-sol'),
+                      infobulle: l10n.formZoneTechniquesTitre),
+                ],
+              ),
               const SizedBox(height: EspacementsApp.s1),
               Text(
                 l10n.formZoneTechniquesAide,
@@ -241,6 +256,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
                   labelText: l10n.formZoneTexture,
                   border:
                       const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                  suffixIcon: AideGlossaire(
+                      idTerme: TermeGlossaire.idNotion('texture-sol'),
+                      infobulle: l10n.formZoneTexture),
                 ),
                 items: [
                   DropdownMenuItem(
@@ -257,6 +275,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
                   labelText: l10n.formZonePh,
                   border:
                       const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+                  suffixIcon: AideGlossaire(
+                      idTerme: TermeGlossaire.idNotion('ph-sol'),
+                      infobulle: l10n.formZonePh),
                 ),
                 items: [
                   DropdownMenuItem(

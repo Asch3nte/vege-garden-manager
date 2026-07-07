@@ -8,8 +8,12 @@ import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/contexte_climat.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
+import '../../domain/enums/type_bioagresseur.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
+import '../glossaire/terme_cliquable.dart';
+import '../glossaire/terme_glossaire.dart';
+import '../glossaire/type_terme_glossaire.dart';
 import 'calendrier_semis_recolte.dart';
 import 'libelles_enums.dart';
 
@@ -63,6 +67,10 @@ class ContexteAssociation {
   /// Localised mechanism / family label, or `null`.
   final String? mecanisme;
 
+  /// Glossary id of the mechanism page (`notion.meca-*`, ADR-0017) — makes the
+  /// banner title clickable; `null` for untyped relations.
+  final String? idMecanisme;
+
   /// Full localised editorial reason, or `null`.
   final String? raison;
 
@@ -79,6 +87,7 @@ class ContexteAssociation {
   const ContexteAssociation({
     required this.bon,
     this.mecanisme,
+    this.idMecanisme,
     this.raison,
     this.suggere = false,
     this.confiance,
@@ -456,10 +465,27 @@ class _Faits extends StatelessWidget {
         : l10n.exposition(b.soleil);
     final hMin = fiche.hauteurAdulteCmMin;
     final hMax = fiche.hauteurAdulteCmMax;
-    final faits = <(IconData, String, String)>[
-      (Icons.wb_sunny_outlined, l10n.ficheExposition, expo),
-      (Icons.water_drop_outlined, l10n.ficheArrosage, l10n.besoinEau(b.eau)),
-      (Icons.straighten, l10n.ficheEspacement, l10n.ficheEspacementCm(fiche.espacementCm)),
+    // (icon, label, value, glossary id) — a non-null id renders the label as a
+    // clickable term towards its concept page (ADR-0017 D5).
+    final faits = <(IconData, String, String, String?)>[
+      (
+        Icons.wb_sunny_outlined,
+        l10n.ficheExposition,
+        expo,
+        TermeGlossaire.idNotion('exposition'),
+      ),
+      (
+        Icons.water_drop_outlined,
+        l10n.ficheArrosage,
+        l10n.besoinEau(b.eau),
+        TermeGlossaire.idNotion('besoin-eau'),
+      ),
+      (
+        Icons.straighten,
+        l10n.ficheEspacement,
+        l10n.ficheEspacementCm(fiche.espacementCm),
+        null,
+      ),
       if (hMin != null || hMax != null)
         (
           Icons.height,
@@ -467,11 +493,13 @@ class _Faits extends StatelessWidget {
           (hMin != null && hMax != null && hMin != hMax)
               ? l10n.ficheHauteurCm(hMin, hMax)
               : l10n.ficheHauteurCmUnique((hMax ?? hMin)!),
+          null,
         ),
       (
         Icons.science_outlined,
         l10n.fichePh,
         l10n.fichePhPlage(_ph(b.phMin), _ph(b.phMax)),
+        TermeGlossaire.idNotion('ph-sol'),
       ),
       (
         Icons.eco_outlined,
@@ -480,15 +508,16 @@ class _Faits extends StatelessWidget {
           fiche.dureeAvantRecolteJoursMin,
           fiche.dureeAvantRecolteJoursMax,
         ),
+        null,
       ),
     ];
 
     return Column(
       children: [
-        for (final (icone, cle, valeur) in faits)
+        for (final (icone, cle, valeur, idTerme) in faits)
           Padding(
             padding: const EdgeInsets.only(bottom: EspacementsApp.s3),
-            child: _Fait(icone: icone, cle: cle, valeur: valeur),
+            child: _Fait(icone: icone, cle: cle, valeur: valeur, idTerme: idTerme),
           ),
       ],
     );
@@ -500,7 +529,15 @@ class _Fait extends StatelessWidget {
   final String cle;
   final String valeur;
 
-  const _Fait({required this.icone, required this.cle, required this.valeur});
+  /// Glossary id of the concept page — a non-null id renders [cle] as a
+  /// clickable term (ADR-0017 D5).
+  final String? idTerme;
+
+  const _Fait(
+      {required this.icone,
+      required this.cle,
+      required this.valeur,
+      this.idTerme});
 
   @override
   Widget build(BuildContext context) {
@@ -509,11 +546,18 @@ class _Fait extends StatelessWidget {
       children: [
         Icon(icone, size: TaillesIconesApp.md, color: theme.colorScheme.primary),
         const SizedBox(width: EspacementsApp.s3),
-        Text(
-          cle,
-          style: theme.textTheme.bodyMedium
-              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-        ),
+        idTerme == null
+            ? Text(
+                cle,
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              )
+            : TermeCliquable(
+                idTerme: idTerme!,
+                texte: cle,
+                type: TypeTermeGlossaire.notion,
+                style: theme.textTheme.bodyMedium,
+              ),
         const Spacer(),
         Text(valeur, style: theme.textTheme.bodyMedium),
       ],
@@ -665,11 +709,19 @@ class _SectionFamille extends ConsumerWidget {
     if (famille == null) return const SizedBox.shrink();
 
     final bioCache = ref.watch(bioagresseurCacheProvider).value;
+    // Clickable chip → the bioaggressor's glossary page (ADR-0017 Lot 3); an
+    // unresolved slug stays a plain chip (never a dead link).
     Widget puce(String slug) {
       final bio = bioCache?.parId(slug);
-      final chip = Chip(label: Text(bio?.nomLocalise('fr') ?? slug));
-      final desc = bio?.descriptionLocalisee('fr');
-      return desc == null ? chip : Tooltip(message: desc, child: chip);
+      if (bio == null) return Chip(label: Text(slug));
+      return PuceTermeGlossaire(
+        idTerme: TermeGlossaire.idBioagresseur(bio.id),
+        texte: bio.nomLocalise('fr'),
+        type: bio.type == TypeBioagresseur.maladie
+            ? TypeTermeGlossaire.maladie
+            : TypeTermeGlossaire.ravageur,
+        infobulle: bio.descriptionLocalisee('fr'),
+      );
     }
 
     Widget sousTitre(String t) => Padding(
@@ -686,8 +738,22 @@ class _SectionFamille extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: EspacementsApp.s5),
-        Text(l10n.ficheFamilleTitre(famille.nomLocalise('fr')),
-            style: theme.textTheme.titleLarge),
+        // Title: prefix + the family name as a clickable term → its glossary
+        // page (ADR-0017 Lot 3).
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: EspacementsApp.s2,
+          children: [
+            Text(l10n.ficheFamilleTitrePrefixe,
+                style: theme.textTheme.titleLarge),
+            TermeCliquable(
+              idTerme: TermeGlossaire.idFamille(famille.id),
+              texte: famille.nomLocalise('fr'),
+              type: TypeTermeGlossaire.famille,
+              style: theme.textTheme.titleLarge,
+            ),
+          ],
+        ),
         const SizedBox(height: EspacementsApp.s3),
         if (desc != null)
           Text(desc, style: theme.textTheme.bodyMedium),
@@ -768,11 +834,27 @@ class _BandeauAssociation extends StatelessWidget {
                   size: TaillesIconesApp.sm, color: couleur),
               const SizedBox(width: EspacementsApp.s2),
               Expanded(
-                child: Text(
-                  titre,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(color: couleur, fontWeight: FontWeight.w700),
-                ),
+                // Typed mechanism → its glossary page (ADR-0017 D5); the sheet
+                // is closed first by ouvrirTermeGlossaire.
+                child: contexte.idMecanisme == null
+                    ? Text(
+                        titre,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                            color: couleur, fontWeight: FontWeight.w700),
+                      )
+                    : InkWell(
+                        onTap: () => ouvrirTermeGlossaire(
+                            context, contexte.idMecanisme!),
+                        child: Text(
+                          titre,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            color: couleur,
+                            fontWeight: FontWeight.w700,
+                            decoration: TextDecoration.underline,
+                            decorationColor: couleur,
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),

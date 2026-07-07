@@ -25,6 +25,7 @@ import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/invalidation_vues.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/selecteur_carte_monde.dart';
+import '../glossaire/terme_glossaire.dart';
 
 /// First-launch onboarding flow (guided, multi-step).
 ///
@@ -343,6 +344,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           libelle: l10n.climat,
           description: l10n.climatDescription,
           labelText: l10n.formPotagerClimat,
+          idAideGlossaire: TermeGlossaire.idNotion('type-climat'),
           onChanged: (v) => setState(() => _climat = v),
         ),
         const SizedBox(height: EspacementsApp.s4),
@@ -352,6 +354,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           libelle: l10n.rusticite,
           description: l10n.rusticiteDescription,
           labelText: l10n.formPotagerRusticite,
+          idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
           onChanged: (v) => setState(() => _rusticite = v),
         ),
       ],

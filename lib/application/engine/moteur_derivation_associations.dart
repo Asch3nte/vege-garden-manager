@@ -56,6 +56,41 @@ class MoteurDerivationAssociations {
   /// space-competition rule (ADR-0014).
   static const int seuilEtaleeCm = 70;
 
+  /// Benefit mechanisms the engine has a derivation rule for (ADR-0017).
+  ///
+  /// This is the engine's **own rule inventory** — the single source the
+  /// glossary derives each mechanism page's provenance from ("computed by the
+  /// engine" vs "documented by the permaculture community"), never copied by
+  /// hand. A source-scan test keeps it in sync with the rules of [deriver]:
+  /// adding/removing a rule without updating this set breaks the suite.
+  static const Set<TypeBeneficeAssociation> beneficesDerivables = {
+    TypeBeneficeAssociation.fixationAzote,
+    TypeBeneficeAssociation.attractionPollinisateurs,
+    TypeBeneficeAssociation.tuteurStructurel,
+    TypeBeneficeAssociation.etagementLumiere,
+    TypeBeneficeAssociation.successionTemporelle,
+    TypeBeneficeAssociation.couvreSol,
+    TypeBeneficeAssociation.briseVent,
+    TypeBeneficeAssociation.brouillageOlfactif,
+    TypeBeneficeAssociation.repulsionRavageur,
+    TypeBeneficeAssociation.plantePiege,
+    TypeBeneficeAssociation.attractionAuxiliaires,
+    TypeBeneficeAssociation.ameublissementSol,
+  };
+
+  /// Conflict mechanisms the engine has a derivation rule for (ADR-0017).
+  ///
+  /// Same contract as [beneficesDerivables]. Allelopathy is **curated only**
+  /// (ADR-0013): no reliable trait-based rule exists, so it never appears here.
+  static const Set<TypeConflitAssociation> conflitsDerivables = {
+    TypeConflitAssociation.memeFamilleRavageurs,
+    TypeConflitAssociation.competitionLumiere,
+    TypeConflitAssociation.competitionAzote,
+    TypeConflitAssociation.competitionEau,
+    TypeConflitAssociation.competitionEspace,
+    TypeConflitAssociation.partageMaladies,
+  };
+
   /// Every association the engine can infer for the ordered pair [a] → [b]
   /// ("grow [b] near [a]"). Empty when [a] == [b]. Family-dependent rules need
   /// [familles]; the others rely on [a]/[b] traits only.

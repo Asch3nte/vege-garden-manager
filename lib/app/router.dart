@@ -8,6 +8,9 @@ import '../application/state/potager_notifier.dart';
 import '../application/state/potagers_notifier.dart';
 import '../application/state/preferences_notifier.dart';
 import '../l10n/app_localizations.dart';
+import '../presentation/glossaire/ecran_chapitre_glossaire.dart';
+import '../presentation/glossaire/page_terme_glossaire.dart';
+import '../presentation/glossaire/panneau_aide.dart';
 import 'historique_navigation.dart';
 import '../presentation/screens/ecran_accueil.dart';
 import '../presentation/screens/ecran_calendrier.dart';
@@ -76,6 +79,25 @@ abstract final class RoutesApp {
   static const String plusPonderation = '$plus/$plusPonderationSegment';
   static const String plusDonnees = '$plus/$plusDonneesSegment';
   static const String plusAPropos = '$plus/$plusAProposSegment';
+
+  // « Aide & lexique » glossary (ADR-0017): the panel and its chapter/term
+  // pages are sub-routes of [plus] so they join the global back history —
+  // back replays pages in the exact order the user opened them (D3).
+  static const String plusAideSegment = 'aide';
+  static const String plusAide = '$plus/$plusAideSegment';
+
+  /// Path segment of a glossary chapter list (`:nom` = `ChapitreGlossaire.name`).
+  static const String aideChapitreSegment = 'chapitre/:nom';
+
+  /// Path segment of a glossary term page (`:id` = prefixed term id).
+  static const String aideTermeSegment = 'terme/:id';
+
+  /// Absolute location of a glossary chapter list.
+  static String aideChapitre(String nomChapitre) =>
+      '$plusAide/chapitre/$nomChapitre';
+
+  /// Absolute location of a glossary term page (e.g. `famille.solanaceae`).
+  static String aideTerme(String idTerme) => '$plusAide/terme/$idTerme';
 }
 
 /// The five primary destinations, in display order (docs/09 §3).
@@ -386,6 +408,27 @@ final routeurProvider = Provider<GoRouter>((ref) {
                     path: RoutesApp.plusAProposSegment,
                     builder: (context, state) =>
                         const _RetourGlobal(child: PanneauAPropos()),
+                  ),
+                  GoRoute(
+                    path: RoutesApp.plusAideSegment,
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: PanneauAide()),
+                    routes: [
+                      GoRoute(
+                        path: RoutesApp.aideChapitreSegment,
+                        builder: (context, state) => _RetourGlobal(
+                          child: EcranChapitreGlossaire(
+                              nomChapitre: state.pathParameters['nom']!),
+                        ),
+                      ),
+                      GoRoute(
+                        path: RoutesApp.aideTermeSegment,
+                        builder: (context, state) => _RetourGlobal(
+                          child: PageTermeGlossaire(
+                              idTerme: state.pathParameters['id']!),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

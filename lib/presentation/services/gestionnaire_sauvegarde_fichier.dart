@@ -35,21 +35,25 @@ class GestionnaireSauvegardeFichier
     final dossier = await getTemporaryDirectory();
     final fichier = File(p.join(dossier.path, nomFichier));
     await fichier.writeAsString(contenu);
-    await Share.shareXFiles([XFile(fichier.path)], subject: nomFichier);
+    // share_plus >=11 replaced the static `Share` API with
+    // `SharePlus.instance.share(ShareParams(...))`.
+    await SharePlus.instance.share(
+      ShareParams(files: [XFile(fichier.path)], subject: nomFichier),
+    );
   }
 
   @override
   Future<String?> choisirEtLire() async {
-    final resultat = await FilePicker.platform.pickFiles(
+    // file_picker >=12 exposes static methods (no more `.platform`) and reads
+    // content lazily via `readAsBytes()` (replaces `withData`/`bytes`),
+    // whatever the underlying source (path, bytes or stream).
+    final resultat = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: const ['json'],
-      withData: true,
     );
     final fichier = resultat?.files.singleOrNull;
     if (fichier == null) return null;
-    if (fichier.bytes != null) return utf8.decode(fichier.bytes!);
-    if (fichier.path != null) return File(fichier.path!).readAsString();
-    return null;
+    return utf8.decode(await fichier.readAsBytes());
   }
 }
 

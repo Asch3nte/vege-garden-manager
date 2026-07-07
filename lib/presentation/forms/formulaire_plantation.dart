@@ -12,6 +12,7 @@ import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
+import '../glossaire/terme_glossaire.dart';
 
 /// Opens the "new plantation" form for [parcelleId] and returns the created
 /// [Plantation].
@@ -183,6 +184,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
               libelle: l10n.methode,
               description: l10n.methodeDescription,
               labelText: l10n.formPlantationMethode,
+              idAideGlossaire: TermeGlossaire.idNotion('methode-mise-en-place'),
               onChanged: (v) => setState(() => _methode = v),
             ),
             const SizedBox(height: EspacementsApp.s4),

@@ -1,7 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/parcelle.dart';
-import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';

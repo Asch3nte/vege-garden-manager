@@ -1,0 +1,72 @@
+Illustrations du glossaire « Aide & lexique » (ADR-0017, D4 / Lot 5)
+=====================================================================
+
+Procédure détaillée : docs/17-illustrations-glossaire.md.
+
+Discipline (même esprit que assets/images/carte_monde.SOURCE.txt) :
+- 1 fichier par terme illustré, nommé « <id du terme> » + extension webp
+  (ex. pour le terme outil.oya), dimensions plafonnées (~800 px de large max) ;
+- sources LIBRES uniquement : domaine public / CC0 / CC-BY (l'attribution
+  CC-BY doit alors être affichée dans « À propos ») ;
+- chaque image ajoutée est enregistrée dans
+  lib/presentation/glossaire/illustrations_glossaire.dart (idsIllustres)
+  ET consignée ici — le lint (tool/verifier_referentiels.dart) et le test
+  d'intégrité du glossaire cassent sinon.
+
+Format d'une entrée :
+
+  Fichier : <id>.webp
+  Terme   : <titre de la page>
+  Source  : <auteur / œuvre / lien Wikimedia Commons ou autre>
+  Licence : <domaine public | CC0 | CC-BY x.x (attribution : …)>
+
+---------------------------------------------------------------------
+
+Fichier : outil.oya.webp
+Terme   : Oya (outil.oya)
+Source  : « Oyas ou ollas irriguant des plants de tomates.jpg », Wikimedia
+          Commons — oyas enterrés au pied de tomates tuteurées et paillées.
+          https://commons.wikimedia.org/wiki/File:Oyas_ou_ollas_irriguant_des_plants_de_tomates.jpg
+Licence : CC0 (domaine public). Redimensionnée en WebP 800 px.
+
+Fichier : outil.cloche.webp
+Terme   : Cloche (outil.cloche)
+Source  : « Faceted garden cloche MET DP875315.jpg », The Metropolitan
+          Museum of Art (planche de gravures d'outils de maraîchage,
+          collection en libre accès) — recadrée sur la gravure « cloche
+          maraîchère ».
+          https://commons.wikimedia.org/wiki/File:Faceted_garden_cloche_MET_DP875315.jpg
+Licence : CC0 (MET Open Access). Recadrage + WebP.
+
+Fichier : outil.chassis.webp
+Terme   : Châssis (outil.chassis)
+Source  : « Gardener watering cold frame plants, posed to illustrate
+          Rudyard Kipling's poem The Glory of the Garden » (vers 1900),
+          Library of Congress LCCN00651263, via Wikimedia Commons —
+          recadrée (marges du film retirées).
+          https://commons.wikimedia.org/wiki/File:Gardener_watering_cold_frame_plants,_posed_to_illustrate_Rudyard_Kipling%27s_poem_The_Glory_of_the_Garden_LCCN00651263.jpg
+Licence : Domaine public (photo publiée avant 1930). Recadrage + WebP 800 px.
+
+Fichier : outil.recuperateur-eau.webp
+Terme   : Récupérateur d'eau (outil.recuperateur-eau)
+Source  : « Rain Barrel (15455931038).jpg », US EPA (Environmental
+          Protection Agency), via Wikimedia Commons — recadrée sur le
+          tonneau raccordé à la descente de gouttière.
+          https://commons.wikimedia.org/wiki/File:Rain_Barrel_(15455931038).jpg
+Licence : Domaine public (Public Domain Mark). Recadrage + WebP.
+
+Fichier : outil.hotel-a-insectes.webp
+Terme   : Hôtel à insectes (outil.hotel-a-insectes)
+Source  : « Insect Hotel Balcony.jpg », Wikimedia Commons — hôtel à
+          insectes en bois (tiges creuses, bois percé) fixé au mur.
+          https://commons.wikimedia.org/wiki/File:Insect_Hotel_Balcony.jpg
+Licence : CC0 (domaine public). Redimensionnée en WebP 800 px.
+
+Fichier : notion.sol-argileux.webp
+Terme   : Sol argileux (notion.sol-argileux)
+Source  : « Cracked dry mud (24663229471).jpg », USDA (U.S. Department
+          of Agriculture), via Wikimedia Commons — argile sèche craquelée
+          en plaques, typique des sols argileux.
+          https://commons.wikimedia.org/wiki/File:Cracked_dry_mud_(24663229471).jpg
+Licence : Domaine public (œuvre du gouvernement fédéral des États-Unis).
+          Redimensionnée en WebP 800 px.

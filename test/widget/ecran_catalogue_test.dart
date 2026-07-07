@@ -270,16 +270,19 @@ void main() {
     await tester.tap(find.text('Tomate'));
     await tester.pumpAndSettle();
 
+    // Title split since ADR-0017 Lot 3: prefix + the family name rendered as
+    // a clickable glossary term.
     await tester.scrollUntilVisible(
-      find.text('Sa famille : Solanacées'),
+      find.text('Sa famille :'),
       200,
       scrollable: find.byType(Scrollable).last,
     );
-    expect(find.text('Sa famille : Solanacées'), findsOneWidget);
+    expect(find.text('Sa famille :'), findsOneWidget);
+    expect(find.text('Solanacées'), findsOneWidget);
     expect(find.text('Rotation de 4 ans conseillée.'), findsOneWidget);
-    // Slugs resolved to localized bioaggressor names as chips.
-    expect(find.widgetWithText(Chip, 'Mildiou'), findsOneWidget);
-    expect(find.widgetWithText(Chip, 'Doryphore'), findsOneWidget);
+    // Slugs resolved to localized bioaggressor names as clickable term chips.
+    expect(find.widgetWithText(ActionChip, 'Mildiou'), findsOneWidget);
+    expect(find.widgetWithText(ActionChip, 'Doryphore'), findsOneWidget);
   });
 
   testWidgets('the detail sheet offers to add the plant to the garden',

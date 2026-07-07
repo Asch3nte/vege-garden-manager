@@ -7,6 +7,8 @@ import '../../../domain/enums/niveau_experience.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/libelles_enums.dart';
 import 'widgets_parametres.dart';
+import '../../glossaire/terme_glossaire.dart';
+import '../../glossaire/terme_cliquable.dart';
 
 /// One feature of the progressive-disclosure catalogue: the level that unlocks
 /// it and its mini-tuto content (title → why → how).
@@ -96,6 +98,12 @@ class PanneauNiveaux extends ConsumerWidget {
 
     return PanneauParametres(
       titre: l10n.categNiveaux,
+      // « ? » → the glossary page explaining the experience tiers (ADR-0017).
+      actions: [
+        AideGlossaire(
+            idTerme: TermeGlossaire.idNotion('niveaux-experience'),
+            infobulle: l10n.categNiveaux),
+      ],
       enfants: [
         Padding(
           padding: const EdgeInsets.only(bottom: EspacementsApp.s4),

@@ -4,6 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pot_a_gerer/app/router.dart';
+import 'package:pot_a_gerer/app/theme/theme_app.dart';
+import 'package:pot_a_gerer/domain/entities/bioagresseur.dart';
+import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
@@ -21,6 +26,9 @@ import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/profil_ponderation_associations.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
+import 'package:pot_a_gerer/presentation/glossaire/glossaire_providers.dart';
+import 'package:pot_a_gerer/presentation/glossaire/page_terme_glossaire.dart';
+import 'package:pot_a_gerer/presentation/glossaire/panneau_aide.dart';
 import 'package:pot_a_gerer/presentation/widgets/fiche_plante_detail.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_associations.dart';
 
@@ -408,6 +416,132 @@ void main() {
       // The tuned family is shown; the verbose prefix is gone (ADR-0013 §7).
       expect(find.textContaining('Fertilité du sol'), findsOneWidget);
       expect(find.textContaining('Préférences personnalisées'), findsNothing);
+    });
+  });
+
+  group('mécanismes cliquables → glossaire (ADR-0017 #4bis)', () {
+    // Router-based harness: the view opens from '/', the glossary term route
+    // is available so ouvrirTermeGlossaire can land somewhere.
+    Future<void> ouvrirAvecGlossaire(
+      WidgetTester tester,
+      FichePlante centre,
+      List<FichePlante> catalogue,
+    ) async {
+      final router = GoRouter(
+        initialLocation: '/',
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (context, state) => Scaffold(
+              body: Center(
+                child: Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () =>
+                        afficherVueAssociations(context, centre, catalogue),
+                    child: const Text('ouvrir'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: RoutesApp.plusAide,
+            builder: (context, state) => const PanneauAide(),
+            routes: [
+              GoRoute(
+                path: RoutesApp.aideTermeSegment,
+                builder: (context, state) =>
+                    PageTermeGlossaire(idTerme: state.pathParameters['id']!),
+              ),
+            ],
+          ),
+        ],
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            glossaireDonneesProvider.overrideWith((ref) async => (
+                  familles: <FamilleBotanique>[],
+                  bioagresseurs: <Bioagresseur>[],
+                )),
+          ],
+          child: MaterialApp.router(
+            theme: ThemeApp.clair(),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+          ),
+        ),
+      );
+      await tester.tap(find.text('ouvrir'));
+      await tester.pumpAndSettle();
+    }
+
+    FichePlante centreType() => _fiche('centre', benefiques: [
+          AssociationBenefique(
+            cibleId: 'compagnon',
+            mecanisme: TypeBeneficeAssociation.attractionPollinisateurs,
+          ),
+        ]);
+
+    testWidgets(
+        'the group chip opens the mechanism page; back returns to the view',
+        (tester) async {
+      await ouvrirAvecGlossaire(
+          tester, centreType(), [centreType(), _fiche('compagnon')]);
+
+      await tester.tap(find.text('Attire les pollinisateurs'));
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(AppBar, 'Attire les pollinisateurs'),
+          findsOneWidget);
+      // The provenance block is derived from the engine's rule inventory:
+      // this mechanism is derivable → "computed by the engine".
+      expect(find.textContaining('Calculé par le moteur'), findsOneWidget);
+
+      // The dialog was NOT closed: back lands on the associations view,
+      // exactly where the user was (#4bis, retour dev 2026-07-07).
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(Dialog), findsOneWidget);
+      expect(find.text('compagnon'), findsOneWidget);
+    });
+
+    testWidgets('the sheet banner title opens the mechanism page too',
+        (tester) async {
+      await ouvrirAvecGlossaire(
+          tester, centreType(), [centreType(), _fiche('compagnon')]);
+
+      // Open the companion's sheet from the view, then tap the banner title
+      // (the last matching text — the group chip behind is the first).
+      await tester.tap(find.text('compagnon'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Attire les pollinisateurs').last);
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(AppBar, 'Attire les pollinisateurs'),
+          findsOneWidget);
+
+      // Back replays the opening order: sheet, then the view underneath.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(BottomSheet), findsOneWidget);
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(Dialog), findsOneWidget);
+    });
+
+    testWidgets('an untyped pair keeps an inert "Autre" chip', (tester) async {
+      final centre = _fiche('centre',
+          benefiques: [AssociationBenefique(cibleId: 'compagnon')]);
+      await ouvrirAvecGlossaire(tester, centre, [centre, _fiche('compagnon')]);
+
+      await tester.tap(find.text('Autre'));
+      await tester.pumpAndSettle();
+
+      // No mechanism id → no navigation, the view is still there.
+      expect(find.byType(Dialog), findsOneWidget);
     });
   });
 }

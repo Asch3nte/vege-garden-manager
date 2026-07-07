@@ -18,6 +18,9 @@ import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/libelles_enums.dart';
+import '../glossaire/type_terme_glossaire.dart';
+import '../glossaire/terme_glossaire.dart';
+import '../glossaire/terme_cliquable.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
 /// tickable (docs/09 §6).
@@ -998,10 +1001,13 @@ class _CarteTache extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          l10n.typeTache(tache.type),
-                          style: theme.textTheme.labelSmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant),
+                        // Clickable term (ADR-0017 D5): the gesture label opens
+                        // the « Types de tâches » glossary page.
+                        TermeCliquable(
+                          idTerme: TermeGlossaire.idNotion('types-taches'),
+                          texte: l10n.typeTache(tache.type),
+                          type: TypeTermeGlossaire.notion,
+                          style: theme.textTheme.labelSmall,
                         ),
                         if (cibleLabel != null) ...[
                           Text(
