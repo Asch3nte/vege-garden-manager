@@ -1192,6 +1192,8 @@
   "@aproposLicence": { "description": "Mention de licence." },
   "aproposCodeSource": "Code source",
   "@aproposCodeSource": { "description": "Lien : code source." },
+  "aproposLienErreur": "Impossible d'ouvrir ce lien.",
+  "@aproposLienErreur": { "description": "Erreur : le lien externe n'a pas pu être ouvert." },
   "aproposLicences": "Licences open source",
   "@aproposLicences": { "description": "Lien : licences tierces (page Flutter)." },
   "aproposCredits": "Crédits",

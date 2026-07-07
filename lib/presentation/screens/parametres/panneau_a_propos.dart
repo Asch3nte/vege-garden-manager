@@ -6,6 +6,10 @@ import '../../../application/providers/service_providers.dart';
 import '../../../l10n/app_localizations.dart';
 import 'widgets_parametres.dart';
 
+/// Public source repository (docs/11 §7 — "lien GitHub").
+final Uri _urlCodeSource =
+    Uri.parse('https://github.com/Asch3nte/vege-garden-manager');
+
 /// Category 6 — **À propos**: identity, version, MIT licence, source/links,
 /// credits, and the standard third-party licences page.
 class PanneauAPropos extends ConsumerWidget {
@@ -56,9 +60,7 @@ class PanneauAPropos extends ConsumerWidget {
             _LigneAction(
               icone: Icons.code,
               label: l10n.aproposCodeSource,
-              // Opening the URL needs url_launcher (not in the validated stack):
-              // deferred. The row is present so the layout is final (docs/15).
-              onTap: null,
+              onTap: () => _ouvrirLien(context, ref, _urlCodeSource),
             ),
             _LigneAction(
               icone: Icons.description_outlined,
@@ -80,6 +82,20 @@ class PanneauAPropos extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  /// Opens [url] externally; shows a snackbar if no handler is available.
+  Future<void> _ouvrirLien(
+    BuildContext context,
+    WidgetRef ref,
+    Uri url,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final ouvert = await ref.read(ouvertureLienServiceProvider).ouvrir(url);
+    if (!ouvert) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.aproposLienErreur)));
+    }
   }
 }
 
