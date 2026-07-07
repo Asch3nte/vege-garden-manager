@@ -1,8 +1,10 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/entities/fiche_plante.dart';
 import '../../domain/repositories/abstract_bioagresseur_repository.dart';
 import '../../domain/repositories/abstract_equipement_repository.dart';
 import '../../domain/repositories/abstract_famille_botanique_repository.dart';
+import '../../domain/repositories/abstract_fiche_plante_personnelle_repository.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_observation_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
@@ -21,9 +23,11 @@ import '../../infrastructure/catalogue/famille_botanique_cache.dart';
 import '../../infrastructure/catalogue/familles_loader.dart';
 import '../../infrastructure/catalogue/fiche_asset_source.dart';
 import '../../infrastructure/catalogue/fiche_plante_cache.dart';
+import '../../infrastructure/catalogue/fiches_personnelles_loader.dart';
 import '../../infrastructure/repositories/bioagresseur_repository_impl.dart';
 import '../../infrastructure/repositories/equipement_repository_impl.dart';
 import '../../infrastructure/repositories/famille_botanique_repository_impl.dart';
+import '../../infrastructure/repositories/fiche_plante_personnelle_repository_impl.dart';
 import '../../infrastructure/repositories/fiche_plante_repository_impl.dart';
 import '../../infrastructure/repositories/observation_repository_impl.dart';
 import '../../infrastructure/repositories/parcelle_repository_impl.dart';
@@ -68,6 +72,13 @@ final tacheRepositoryProvider = Provider<AbstractTacheRepository>(
   (ref) => TacheRepositoryImpl(ref.watch(appDatabaseProvider)),
 );
 
+/// User-authored plant sheets (contribution feature, expert tier).
+final fichePlantePersonnelleRepositoryProvider =
+    Provider<AbstractFichePlantePersonnelleRepository>(
+  (ref) =>
+      FichePlantePersonnelleRepositoryImpl(ref.watch(appDatabaseProvider)),
+);
+
 final rappelRepositoryProvider = Provider<AbstractRappelRepository>(
   (ref) => RappelRepositoryImpl(ref.watch(appDatabaseProvider)),
 );
@@ -83,9 +94,37 @@ final catalogueLoaderProvider = Provider<CatalogueLoader>(
   (ref) => CatalogueLoader(BundleFicheAssetSource()),
 );
 
-/// The in-memory plant-sheet cache, loaded once from the bundled assets.
+/// Pipeline that loads user-authored sheets from the database (ADR-0002 A6).
+final fichesPersonnellesLoaderProvider = Provider<FichesPersonnellesLoader>(
+  (ref) => FichesPersonnellesLoader(
+    ref.watch(fichePlantePersonnelleRepositoryProvider),
+  ),
+);
+
+/// The user-authored sheets, parsed as catalogue entities. Invalidate this to
+/// refresh the catalogue after a personal sheet is created/edited/deleted.
+final fichesPersonnellesChargeesProvider = FutureProvider<List<FichePlante>>(
+  (ref) => ref.watch(fichesPersonnellesLoaderProvider).charger(),
+);
+
+/// Logical ids of the loaded personal sheets — used to badge them in the
+/// catalogue and to tell a personal sheet from a built-in one at a glance.
+final idsFichesPersonnellesProvider = FutureProvider<Set<String>>(
+  (ref) async => (await ref.watch(fichesPersonnellesChargeesProvider.future))
+      .map((f) => f.id)
+      .toSet(),
+);
+
+/// The in-memory plant-sheet cache: the bundled catalogue plus the user's own
+/// sheets. Personal sheets are added last, so on an id collision they win
+/// (ADR-0002 A6).
 final fichePlanteCacheProvider = FutureProvider<FichePlanteCache>(
-  (ref) => ref.watch(catalogueLoaderProvider).charger(),
+  (ref) async {
+    final embarquees = await ref.watch(catalogueLoaderProvider).charger();
+    final personnelles =
+        await ref.watch(fichesPersonnellesChargeesProvider.future);
+    return FichePlanteCache([...embarquees.toutes(), ...personnelles]);
+  },
 );
 
 /// The plant-sheet repository. Async because it depends on the loaded cache.
