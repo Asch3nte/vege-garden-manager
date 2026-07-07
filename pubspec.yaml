@@ -87,6 +87,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   mocktail: ^1.0.5
+  # Test-only: mocking UrlLauncherPlatform in ouverture_lien_service_test.dart
+  # (transitive via url_launcher, promoted to direct so the import lints clean).
+  plugin_platform_interface: ^2.1.8
+  url_launcher_platform_interface: ^2.3.2
   drift_dev: ^2.33.0
   build_runner: ^2.15.0
   freezed: ^3.2.6-dev.1

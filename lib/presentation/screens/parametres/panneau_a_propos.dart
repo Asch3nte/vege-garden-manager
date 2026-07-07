@@ -19,7 +19,7 @@ class PanneauAPropos extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final version = ref.watch(versionAppliProvider).valueOrNull ?? '…';
+    final version = ref.watch(versionAppliProvider).value ?? '…';
 
     return PanneauParametres(
       titre: l10n.categApropos,
@@ -109,12 +109,17 @@ class _LigneAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ListTile(
-      enabled: onTap != null,
-      leading: Icon(icone, color: theme.colorScheme.primary),
-      title: Text(label, style: theme.textTheme.bodyMedium),
-      trailing: Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
-      onTap: onTap,
+    // Transparent Material so the ink ripple isn't hidden by the section's
+    // coloured background (ZoneParametres) — same fix as panneau_donnees.dart.
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        enabled: onTap != null,
+        leading: Icon(icone, color: theme.colorScheme.primary),
+        title: Text(label, style: theme.textTheme.bodyMedium),
+        trailing: Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+        onTap: onTap,
+      ),
     );
   }
 }
