@@ -5,13 +5,15 @@
 > éditorial des familles/bioagresseurs). Généré le 2026-07-07 à partir de
 > [`docs/15-elements-differes.md`](docs/15-elements-differes.md) et
 > [`docs/13-roadmap-et-versioning.md`](docs/13-roadmap-et-versioning.md).
+> Mis à jour le 2026-07-07 après livraison du multi-potager (sélecteur +
+> création + F2 réglages).
 
 ## 1. Fonctionnalités « build-then-gate » (ADR-0009 §9)
 
 Réservées par palier mais sans UI ni donnée :
 
-- **Multi-potager** (inter+) : sélecteur de potager actif (pas de `setActif`
-  au repo, un seul actif aujourd'hui) + action « Ajouter un potager »
+- ~~**Multi-potager** (inter+)~~ ✅ **fait** : sélecteur de potager actif
+  (menu ⋮ Potager) + action « Ajouter un potager » + réglages (F2)
 - **Équipements/outils** (inter+) : toute l'UI manque (entité + table
   existent déjà)
 - **Fiches plantes perso** (expert) : toute l'UI de création/édition (table
@@ -40,11 +42,9 @@ Réservées par palier mais sans UI ni donnée :
     d'accès — n'existe pas)
   - Toggle « récupération météo auto » (champ manquant)
   - Toggle « Ne pas déranger » (champs domaine présents, UI absente)
-  - **Version dynamique** (`package_info_plus` à valider + brancher, remplace
-    la constante codée en dur)
-  - **Liens externes** (`url_launcher` à valider + brancher)
-  - **i18n effective** : ARB `en` + piloter `locale`/`localeResolutionCallback`
-    (actuellement stocké mais inerte)
+  - **Version dynamique** (`package_info_plus`), **liens externes**
+    (`url_launcher`), **i18n `en`** — 🚧 **en cours ailleurs**, branche
+    `feat/parametres-version-liens-i18n`
   - Appairage d'appareils (réseau local, à concevoir)
 
 ## 3. Distribution / packaging (docs/15 §7)
@@ -56,9 +56,7 @@ Réservées par palier mais sans UI ni donnée :
 
 ## 4. Backlog UX (docs/15 §8) — restes non-design
 
-- **F2** (multi-potager dans réglages) : lister les autres potagers
-  grisés/dépliables — déclenché quand l'action « Ajouter un potager » existera
-  (lié au §1)
+- ~~**F2** (multi-potager dans réglages)~~ ✅ **fait**
 - **§11** : (a) typer/renseigner le contenu éditorial des paires
   d'associations (mi-contenu, mi-dev) ; (c) brancher un `ResolveurFamille`
   complet pour activer les suggestions répulsion/piège (aujourd'hui `null`)
@@ -90,14 +88,14 @@ Réservées par palier mais sans UI ni donnée :
 
 ## En résumé — le plus proche/actionnable
 
-Dans l'ordre où ça touche le moins de terrain nouveau :
+- ~~Multi-potager (sélecteur actif + création) + F2~~ ✅ fait (2026-07-07)
+- 🚧 Version dynamique + liens externes + i18n `en` — en cours ailleurs
+  (`feat/parametres-version-liens-i18n`)
 
-1. **Version dynamique + liens externes** (deux petites deps à valider :
-   `package_info_plus`, `url_launcher`)
-2. **i18n `en`** (ARB déjà structuré, juste piloter `locale`)
-3. **Multi-potager** (sélecteur actif + action création) — débloque aussi F2
-   et une partie du gating ADR-0009
-4. **Distribution** : keystore release + CI/CD GitHub Actions
-5. Le reste (équipements, fiches perso, rotation avancée, transparence des
-   données, territoire/invasives) sont des chantiers plus lourds nécessitant
-   de nouvelles UI/modèles complets.
+Prochains candidats, par ordre de terrain nouveau croissant :
+
+1. **Distribution** : keystore release + CI/CD GitHub Actions
+2. **Équipements/outils** (inter+) : entité + table existent, UI à construire
+3. Le reste (fiches perso, rotation avancée, transparence des données,
+   territoire/invasives, besoins en eau détaillés) sont des chantiers plus
+   lourds nécessitant de nouvelles UI/modèles complets.
