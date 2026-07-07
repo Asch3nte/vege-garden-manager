@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../application/state/acces_niveau_provider.dart';
+import '../../../application/state/potagers_notifier.dart';
 import '../../../application/state/preferences_notifier.dart';
+import '../../../domain/entities/potager.dart';
 import '../../../domain/enums/mode_geolocalisation.dart';
 import '../../../domain/enums/type_climat.dart';
 import '../../../domain/enums/zone_rusticite.dart';
@@ -41,8 +43,16 @@ class PanneauConfidentialite extends ConsumerWidget {
     }
 
     final mode = prefs.modeGeolocalisation;
+    final acces = ref.watch(accesNiveauProvider);
     // The active garden carries the position + climate/hardiness shown & edited.
     final potager = ref.watch(potagerActifProvider).value;
+    // The other gardens (§8 F2, ADR-0009 multi-potager): read-only, listed
+    // below the active one when the tier unlocks multi-garden.
+    final autresPotagers = (potager == null || !acces.multiPotager)
+        ? const <Potager>[]
+        : (ref.watch(potagersProvider).value ?? const <Potager>[])
+            .where((p) => p.id != potager.id)
+            .toList();
 
     // Geolocation cycles off → manual → GPS → off (matches the mock-up).
     // Changing the mode resets the stored position so the user re-picks one.
@@ -171,6 +181,7 @@ class PanneauConfidentialite extends ConsumerWidget {
               onTap: cyclerGeoloc,
             ),
             ...groupePotager,
+            for (final p in autresPotagers) _GroupePotagerAutre(potager: p),
             RangeeInterrupteur(
               icone: Icons.wifi,
               label: l10n.confidSync,
@@ -179,7 +190,7 @@ class PanneauConfidentialite extends ConsumerWidget {
               onChanged: notifier.definirSyncLocale,
             ),
             // Lunar calendar is an intermediate+ option (ADR-0009).
-            if (ref.watch(accesNiveauProvider).calendrierLunaire)
+            if (acces.calendrierLunaire)
               RangeeInterrupteur(
                 icone: Icons.nightlight_outlined,
                 label: l10n.confidLunaire,
@@ -197,6 +208,82 @@ class PanneauConfidentialite extends ConsumerWidget {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+/// A collapsible group for a **non-active** garden (§8 F2): name + chevron,
+/// tap to reveal its position/climate/hardiness as read-only rows — only the
+/// active garden is editable in this panel.
+class _GroupePotagerAutre extends StatefulWidget {
+  final Potager potager;
+
+  const _GroupePotagerAutre({required this.potager});
+
+  @override
+  State<_GroupePotagerAutre> createState() => _GroupePotagerAutreState();
+}
+
+class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
+  bool _ouvert = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final z = widget.potager.zoneClimatique;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () => setState(() => _ouvert = !_ouvert),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(EspacementsApp.s6,
+                EspacementsApp.s2, EspacementsApp.s3, EspacementsApp.s2),
+            child: Row(
+              children: [
+                Icon(Icons.local_florist_outlined,
+                    size: TaillesIconesApp.md, color: theme.colorScheme.outline),
+                const SizedBox(width: EspacementsApp.s3),
+                Expanded(
+                  child: Text(
+                    widget.potager.nom,
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: _ouvert ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 150),
+                  child: Icon(Icons.expand_more,
+                      size: TaillesIconesApp.md,
+                      color: theme.colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_ouvert) ...[
+          _LigneReglage(
+            icone: Icons.public_outlined,
+            titre: l10n.confidPosition,
+            sousTitre: _statutPosition(l10n, widget.potager.localisation),
+            indent: true,
+          ),
+          _LigneReglage(
+            icone: Icons.thermostat_outlined,
+            titre: l10n.confidClimat,
+            valeur: l10n.climat(z.type),
+            indent: true,
+          ),
+          _LigneReglage(
+            icone: Icons.ac_unit_outlined,
+            titre: l10n.confidRusticite,
+            valeur: l10n.rusticite(z.rusticite),
+            indent: true,
+          ),
+        ],
       ],
     );
   }
