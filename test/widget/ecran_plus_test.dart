@@ -226,6 +226,93 @@ void main() {
     expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone8); // preserved
   });
 
+  testWidgets(
+      'privacy panel lists the other gardens read-only, collapsed by '
+      'default (§8 F2)', (tester) async {
+    when(() => repo.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(
+        niveauExperience: NiveauExperience.intermediaire,
+      ),
+    );
+    when(() => potagers.obtenirPotagerActif()).thenAnswer(
+      (_) async => Potager(
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+      ),
+    );
+    when(() => potagers.obtenirTous()).thenAnswer(
+      (_) async => [
+        Potager(
+          id: 'pot-1',
+          nom: 'Mon potager',
+          zoneClimatique:
+              const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+          dateCreation: DateTime(2026, 1, 1),
+        ),
+        Potager(
+          id: 'pot-2',
+          nom: 'Jardin de la grand-mère',
+          zoneClimatique: const ZoneClimatique(
+              TypeClimat.mediterraneen, ZoneRusticite.zone9),
+          dateCreation: DateTime(2026, 2, 1),
+        ),
+      ],
+    );
+
+    await monter(tester);
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    // The other garden is listed by name; its details stay hidden until
+    // expanded, and the active garden is not duplicated in the list.
+    expect(find.text('Jardin de la grand-mère'), findsOneWidget);
+    expect(find.text('Méditerranéen'), findsNothing);
+    expect(find.text('Mon potager'), findsOneWidget);
+
+    await tester.tap(find.text('Jardin de la grand-mère'));
+    await tester.pumpAndSettle();
+
+    // Expanded: read-only rows, no chevron (non-interactive — no picker).
+    expect(find.text('Méditerranéen'), findsOneWidget);
+    await tester.tap(find.text('Méditerranéen'));
+    await tester.pumpAndSettle();
+    verifyNever(() => potagers.sauvegarder(any()));
+  });
+
+  testWidgets('a beginner does not see the other-gardens list (ADR-0009)',
+      (tester) async {
+    when(() => potagers.obtenirPotagerActif()).thenAnswer(
+      (_) async => Potager(
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+      ),
+    );
+    when(() => potagers.obtenirTous()).thenAnswer(
+      (_) async => [
+        Potager(
+          id: 'pot-2',
+          nom: 'Jardin de la grand-mère',
+          zoneClimatique:
+              const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+          dateCreation: DateTime(2026, 2, 1),
+        ),
+      ],
+    );
+
+    await monter(tester); // débutant by default
+
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Jardin de la grand-mère'), findsNothing);
+  });
+
   testWidgets('notifications master gates the categories', (tester) async {
     // Master off; intermediate level so the per-category toggles are shown
     // (they are an intermediate+ feature — ADR-0009).
