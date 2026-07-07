@@ -7,6 +7,7 @@ import 'app/bootstrap.dart';
 import 'app/router.dart';
 import 'app/theme/theme_app.dart';
 import 'application/state/preferences_notifier.dart';
+import 'domain/enums/langue.dart';
 import 'domain/enums/theme_app.dart' as prefs_theme;
 import 'l10n/app_localizations.dart';
 
@@ -64,7 +65,7 @@ class PotAGererApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themePref = ref.watch(preferencesProvider).value?.theme;
+    final prefs = ref.watch(preferencesProvider).value;
     // Cached for the app's lifetime by the provider (a GoRouter must not be
     // rebuilt every frame).
     final routeur = ref.watch(routeurProvider);
@@ -74,7 +75,8 @@ class PotAGererApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeApp.clair(),
       darkTheme: ThemeApp.sombre(),
-      themeMode: _modeTheme(themePref),
+      themeMode: _modeTheme(prefs?.theme),
+      locale: _localeEffective(prefs?.langue),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: routeur,
@@ -87,5 +89,14 @@ class PotAGererApp extends ConsumerWidget {
         prefs_theme.ThemeApp.clair => ThemeMode.light,
         prefs_theme.ThemeApp.sombre => ThemeMode.dark,
         prefs_theme.ThemeApp.auto || null => ThemeMode.system,
+      };
+
+  /// Maps the stored language preference to a Flutter [Locale]; `auto` (or not
+  /// yet loaded) returns `null`, letting `MaterialApp` fall back to its default
+  /// system-locale resolution against `supportedLocales`.
+  static Locale? _localeEffective(Langue? pref) => switch (pref) {
+        Langue.fr => const Locale('fr'),
+        Langue.en => const Locale('en'),
+        Langue.auto || null => null,
       };
 }
