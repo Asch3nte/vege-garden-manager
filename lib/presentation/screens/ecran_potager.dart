@@ -52,6 +52,8 @@ class EcranPotager extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(potagerProvider);
+    // Multi-garden and equipment are intermediate+ features (ADR-0009); their
+    // menu entries are gated.
     final acces = ref.watch(accesNiveauProvider);
 
     // The FAB adds a zone to the active garden; only shown once a garden exists.
@@ -73,6 +75,8 @@ class EcranPotager extends ConsumerWidget {
               onSelected: (a) => switch (a) {
                 _ActionPotager.changer => _choisirPotager(context, ref),
                 _ActionPotager.ajouter => _ajouterPotager(context, ref),
+                _ActionPotager.equipements =>
+                  context.go(RoutesApp.equipements),
                 _ActionPotager.modifier => _modifierPotager(context, ref),
                 _ActionPotager.supprimer => _supprimerPotager(
                     context, ref, vue.value?.nomPotager ?? ''),
@@ -89,6 +93,11 @@ class EcranPotager extends ConsumerWidget {
                   ),
                   const PopupMenuDivider(),
                 ],
+                if (acces.equipements)
+                  PopupMenuItem(
+                    value: _ActionPotager.equipements,
+                    child: Text(l10n.equipTitre),
+                  ),
                 PopupMenuItem(
                   value: _ActionPotager.modifier,
                   child: Text(l10n.potagerModifier),
@@ -186,7 +195,7 @@ void _confirmer(WidgetRef ref, String message) {
 }
 
 /// Garden-level actions in the Potager header menu.
-enum _ActionPotager { changer, ajouter, modifier, supprimer }
+enum _ActionPotager { changer, ajouter, equipements, modifier, supprimer }
 
 /// Refreshes everything that depends on the active garden (plan, dashboard,
 /// season, climate context) after it changed or was deleted.

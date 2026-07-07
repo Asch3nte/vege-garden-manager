@@ -6,6 +6,7 @@ import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/destination_recolte.dart';
 import '../../domain/enums/enracinement_plante.dart';
+import '../../domain/enums/etat_equipement.dart';
 import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/famille_effet_conflit.dart';
 import '../../domain/enums/ph_sol.dart';
@@ -27,10 +28,12 @@ import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/enums/type_emplacement.dart';
+import '../../domain/enums/type_equipement.dart';
 import '../../domain/enums/type_observation.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/zone_rusticite.dart';
+import '../../domain/value_objects/effet_equipement.dart';
 import '../../l10n/app_localizations.dart';
 
 /// French labels for the domain enums shown across the UI.
@@ -394,6 +397,56 @@ extension LibellesEnums on AppLocalizations {
         MethodeMiseEnPlace.bouture => methodeBoutureDesc,
         MethodeMiseEnPlace.division => methodeDivisionDesc,
       };
+
+  /// Label for an equipment type.
+  String typeEquipement(TypeEquipement t) => switch (t) {
+        TypeEquipement.oya => equipTypeOya,
+        TypeEquipement.gouttesAGoutte => equipTypeGouttesAGoutte,
+        TypeEquipement.tuteur => equipTypeTuteur,
+        TypeEquipement.treillis => equipTypeTreillis,
+        TypeEquipement.tunnel => equipTypeTunnel,
+        TypeEquipement.serreSemis => equipTypeSerreSemis,
+        TypeEquipement.chassis => equipTypeChassis,
+        TypeEquipement.cloche => equipTypeCloche,
+        TypeEquipement.voileHivernage => equipTypeVoileHivernage,
+        TypeEquipement.filetAntiInsecte => equipTypeFiletAntiInsecte,
+        TypeEquipement.hotelInsectes => equipTypeHotelInsectes,
+        TypeEquipement.composteur => equipTypeComposteur,
+        TypeEquipement.recuperateurEau => equipTypeRecuperateurEau,
+        TypeEquipement.autre => equipTypeAutre,
+      };
+
+  /// Label for an equipment condition.
+  String etatEquipement(EtatEquipement e) => switch (e) {
+        EtatEquipement.neuf => equipEtatNeuf,
+        EtatEquipement.bon => equipEtatBon,
+        EtatEquipement.use => equipEtatUse,
+        EtatEquipement.aRemplacer => equipEtatARemplacer,
+        EtatEquipement.horsService => equipEtatHorsService,
+      };
+
+  /// Short, human-readable summary of an equipment's agronomic effect, as a list
+  /// of chip labels (empty when the effect is neutral). Numeric modifiers are
+  /// provisional (see `EffetEquipement`); only the meaningful ones are shown.
+  List<String> resumeEffet(EffetEquipement e) {
+    final resume = <String>[];
+    if (e.modificateurBesoinEau < 1) {
+      resume.add(equipEffetEau(((1 - e.modificateurBesoinEau) * 100).round()));
+    }
+    if (e.modificateurTemperatureC > 0) {
+      final delta = e.modificateurTemperatureC;
+      final texte = delta == delta.roundToDouble()
+          ? delta.toStringAsFixed(0)
+          : delta.toStringAsFixed(1);
+      resume.add(equipEffetChaleur(texte));
+    }
+    if (e.protectionGel) resume.add(equipEffetProtectionGel);
+    if (e.protectionInsectes) resume.add(equipEffetProtectionInsectes);
+    if (e.protectionOiseaux) resume.add(equipEffetProtectionOiseaux);
+    if (e.supportPhysique) resume.add(equipEffetSupport);
+    if (e.favoriseBiodiversite) resume.add(equipEffetBiodiversite);
+    return resume;
+  }
 }
 
 /// Material icon standing in for the eventual Phosphor icon of a task type
@@ -438,6 +491,26 @@ Color couleurTypeTache(TypeTache t) => switch (t) {
       TypeTache.entretienEquipement => CouleursApp.texteSecondaireClair,
       TypeTache.nettoyage => CouleursApp.accentInfoClair,
       TypeTache.autre => CouleursApp.texteSecondaireClair,
+    };
+
+/// Material icon standing in for the eventual Phosphor icon of an equipment
+/// type (cf. docs/15 — Phosphor pending). Kept beside the labels so an
+/// equipment's visual identity lives in one place.
+IconData iconeTypeEquipement(TypeEquipement t) => switch (t) {
+      TypeEquipement.oya => Icons.water_drop_outlined,
+      TypeEquipement.gouttesAGoutte => Icons.water_outlined,
+      TypeEquipement.tuteur => Icons.straighten,
+      TypeEquipement.treillis => Icons.grid_on,
+      TypeEquipement.tunnel => Icons.roofing,
+      TypeEquipement.serreSemis => Icons.home_outlined,
+      TypeEquipement.chassis => Icons.crop_square,
+      TypeEquipement.cloche => Icons.umbrella,
+      TypeEquipement.voileHivernage => Icons.ac_unit,
+      TypeEquipement.filetAntiInsecte => Icons.pest_control_outlined,
+      TypeEquipement.hotelInsectes => Icons.bug_report_outlined,
+      TypeEquipement.composteur => Icons.compost,
+      TypeEquipement.recuperateurEau => Icons.water,
+      TypeEquipement.autre => Icons.build_outlined,
     };
 
 /// Material icon for a weather watering verdict (home card).

@@ -144,6 +144,13 @@ Polymorphisme dès que pertinent.
     charte `CouleursTermes` + termes cliquables (fiche plante), provenance des
     mécanismes dérivée du moteur, couverture des enums prouvée par test (D6),
     pipeline d'illustrations (`SOURCES.txt` + lint) + premier jeu 6 images DP/CC0
+22. **Équipements / outils** (docs/15 §9, build-then-gate `acces.equipements`) :
+    UI complète livrée — écran liste (`ecran_equipements.dart` : en service +
+    retirés repliés, puce d'état, résumé d'effet dérivé, dates), formulaire
+    création/édition (`formulaire_equipement.dart`), libellés+icône+`resumeEffet`
+    (`libelles_enums`), entrée menu ⋮ Potager gatée + route `/potager/equipements`,
+    section « Équipements de cette zone » dans le détail de parcelle. Tests widget
+    + exhaustivité en //.
 
 ### 🚧 En cours / prochaine étape
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
@@ -156,8 +163,8 @@ Polymorphisme dès que pertinent.
   [`docs/15`](docs/15-elements-differes.md) au fur et à mesure que le nécessaire existe
 
 ### ⏭️ À venir
-- Features « build-then-gate » (docs/15 §9) : multi-potager, équipements,
-  fiches perso (scope V1), rotation avancée
+- Features « build-then-gate » (docs/15 §9) : multi-potager,
+  fiches perso (scope V1), rotation avancée *(équipements/outils ✅ livré)*
 - i18n effective (ARB `en` + pilotage `locale`) · maquettes dark mode
 - Rebrancher **Phosphor Icons** (package cassé sur Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
 - Distribution : keystore release réel, icône & splash, CI/CD GitHub Actions
@@ -237,7 +244,7 @@ tâches/arrosage → météo → export), alpha Android installée. Le **glossai
 de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
 **illustrations** sont choisies par le dev au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)).
 Reste côté glossaire : termes cliquables sur les surfaces restantes (docs/15 §8
-#4bis). Ensuite (à arbitrer) : multi-potager/équipements (§9), distribution
+#4bis). Ensuite (à arbitrer) : multi-potager (§9), distribution
 (CI/CD, signing), i18n `en` — toujours **avec leurs tests en parallèle**.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.

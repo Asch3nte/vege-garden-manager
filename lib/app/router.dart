@@ -18,6 +18,7 @@ import '../presentation/screens/ecran_meteo_detail.dart';
 import '../presentation/screens/ecran_onboarding.dart';
 import '../presentation/screens/ecran_catalogue.dart';
 import '../presentation/screens/ecran_plus.dart';
+import '../presentation/screens/ecran_equipements.dart';
 import '../presentation/screens/ecran_potager.dart';
 import '../presentation/screens/ecran_zone_detail.dart';
 import '../presentation/screens/parametres/panneau_a_propos.dart';
@@ -56,6 +57,13 @@ abstract final class RoutesApp {
   /// (see [pileNavigationProvider]) returns straight to the dashboard
   /// (docs/15 §8 D #5).
   static String zoneDetail(String id) => '$potager/zone/$id';
+
+  /// Path segment of the equipment list (under [potager]).
+  static const String equipementsSegment = 'equipements';
+
+  /// Absolute location of the equipment list, under the **Potager** branch
+  /// (keeps the bottom bar / rail; re-tapping the Potager tab pops back).
+  static const String equipements = '$potager/$equipementsSegment';
 
   /// Hourly weather detail, under the **Accueil** branch (so re-tapping the
   /// Accueil tab pops back to the dashboard).
@@ -347,6 +355,12 @@ final routeurProvider = Provider<GoRouter>((ref) {
                         zoneId: state.pathParameters['id']!,
                       ),
                     ),
+                  ),
+                  // Equipment list of the active garden (intermediate+).
+                  GoRoute(
+                    path: RoutesApp.equipementsSegment,
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: EcranEquipements()),
                   ),
                 ],
               ),

@@ -14,8 +14,9 @@ Réservées par palier mais sans UI ni donnée :
 
 - ~~**Multi-potager** (inter+)~~ ✅ **fait** : sélecteur de potager actif
   (menu ⋮ Potager) + action « Ajouter un potager » + réglages (F2)
-- **Équipements/outils** (inter+) : toute l'UI manque (entité + table
-  existent déjà)
+- ~~**Équipements/outils** (inter+) : toute l'UI manque~~ ✅ **Livré**
+  (liste + formulaire + section détail de zone, gaté `acces.equipements`,
+  entrée menu ⋮ Potager) — voir docs/15 §9
 - **Fiches plantes perso** (expert) : toute l'UI de création/édition (table
   existe)
 - **Rotation avancée** (expert) : UI de rotation (précédents culturaux, délai
@@ -95,7 +96,8 @@ Réservées par palier mais sans UI ni donnée :
 Prochains candidats, par ordre de terrain nouveau croissant :
 
 1. **Distribution** : keystore release + CI/CD GitHub Actions
-2. **Équipements/outils** (inter+) : entité + table existent, UI à construire
+2. ~~**Équipements/outils** (inter+)~~ ✅ **livré** (liste + formulaire +
+   section zone, gaté `acces.equipements`)
 3. Le reste (fiches perso, rotation avancée, transparence des données,
    territoire/invasives, besoins en eau détaillés) sont des chantiers plus
    lourds nécessitant de nouvelles UI/modèles complets.

@@ -7,17 +7,21 @@ import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/accueil_notifier.dart';
+import '../../application/state/equipements_notifier.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
 import '../../application/state/prochaines_taches_zone_provider.dart';
+import '../../domain/entities/equipement.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/statut_plantation.dart';
+import '../../domain/enums/type_equipement.dart';
 import '../../domain/enums/urgence_arrosage.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 import '../providers/conseil_arrosage_plantation_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../forms/formulaire_equipement.dart';
 import '../forms/formulaire_observation.dart';
 import '../forms/formulaire_recolte.dart';
 import '../forms/formulaire_zone.dart';
@@ -25,6 +29,7 @@ import '../providers/ajout_plante_provider.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 import 'ecran_potager.dart' show couleurZone;
+import '../glossaire/catalogue/outils.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
@@ -70,6 +75,7 @@ class EcranZoneDetail extends ConsumerWidget {
         final potagerId = data.potagerId!;
         return _Detail(
           zone: zone,
+          potagerId: potagerId,
           couleur: couleurZone(index),
           prochainesTaches: prochaines,
           onAjouterPlante: () {
@@ -219,6 +225,7 @@ Future<void> _observer(BuildContext context, CulturePotager culture) async {
 /// The loaded detail body for a resolved [zone].
 class _Detail extends StatelessWidget {
   final ZonePotager zone;
+  final String potagerId;
   final Color couleur;
 
   /// Next pending task per plantation id (absent when a crop has none).
@@ -233,6 +240,7 @@ class _Detail extends StatelessWidget {
 
   const _Detail({
     required this.zone,
+    required this.potagerId,
     required this.couleur,
     required this.prochainesTaches,
     required this.onAjouterPlante,
@@ -349,7 +357,163 @@ class _Detail extends StatelessWidget {
                 onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
               ),
             ],
+          // Equipment attached to this zone (intermediate+, ADR-0009).
+          _SectionEquipementsZone(
+            potagerId: potagerId,
+            zoneId: zone.id,
+          ),
         ],
+      ),
+    );
+  }
+}
+
+/// Equipment attached to the current zone: a compact list plus a shortcut to
+/// register a new one pre-attached to it. Hidden entirely below the required
+/// experience level (`acces.equipements`). Reads the garden-scoped
+/// [equipementsProvider] and filters to this zone's in-service equipment, so it
+/// refreshes automatically when the form mutates it.
+class _SectionEquipementsZone extends ConsumerWidget {
+  final String potagerId;
+  final String zoneId;
+
+  const _SectionEquipementsZone({
+    required this.potagerId,
+    required this.zoneId,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(accesNiveauProvider).equipements) {
+      return const SizedBox.shrink();
+    }
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final equipements = ref.watch(equipementsProvider(potagerId)).value ?? const [];
+    final aZone = equipements
+        .where((e) => e.parcelleId == zoneId && e.estEnService)
+        .toList()
+      ..sort((a, b) => b.dateInstallation.compareTo(a.dateInstallation));
+
+    Future<void> ajouter() async {
+      final messenger = ScaffoldMessenger.of(context);
+      final cree = await ouvrirFormulaireEquipement(
+        context,
+        potagerId,
+        parcelleIdInitiale: zoneId,
+      );
+      if (cree != null) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackCree)));
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: EspacementsApp.s5),
+        Row(
+          children: [
+            Text(l10n.zoneEquipementsTitre, style: theme.textTheme.titleLarge),
+            const SizedBox(width: EspacementsApp.s2),
+            _Badge(texte: '${aZone.length}'),
+          ],
+        ),
+        const SizedBox(height: EspacementsApp.s3),
+        if (aZone.isEmpty)
+          Text(
+            l10n.zoneEquipementsVide,
+            style: theme.textTheme.bodyMedium
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          )
+        else
+          for (final e in aZone) ...[
+            _LigneEquipementZone(equipement: e, potagerId: potagerId),
+            const SizedBox(height: EspacementsApp.s2),
+          ],
+        const SizedBox(height: EspacementsApp.s2),
+        OutlinedButton.icon(
+          onPressed: ajouter,
+          icon: const Icon(Icons.add),
+          label: Text(l10n.zoneEquipementsAjouter),
+        ),
+      ],
+    );
+  }
+}
+
+/// One compact equipment row in the zone detail: type icon + name + condition,
+/// tapping opens it for editing.
+class _LigneEquipementZone extends ConsumerWidget {
+  final Equipement equipement;
+  final String potagerId;
+
+  const _LigneEquipementZone({
+    required this.equipement,
+    required this.potagerId,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    Future<void> modifier() async {
+      final messenger = ScaffoldMessenger.of(context);
+      final maj = await ouvrirFormulaireEquipement(
+        context,
+        potagerId,
+        equipementInitial: equipement,
+      );
+      if (maj != null) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackModifie)));
+      }
+    }
+
+    return InkWell(
+      onTap: modifier,
+      borderRadius: RayonsApp.brLg,
+      child: Container(
+        padding: const EdgeInsets.all(EspacementsApp.s3),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainer,
+          borderRadius: const BorderRadius.all(RayonsApp.lg),
+          border: Border.all(color: theme.colorScheme.outline),
+        ),
+        child: Row(
+          children: [
+            Icon(iconeTypeEquipement(equipement.type),
+                size: TaillesIconesApp.md, color: theme.colorScheme.primary),
+            const SizedBox(width: EspacementsApp.s3),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(equipement.nom, style: theme.textTheme.titleMedium),
+                  // Type as a clickable term → its glossary page (bible page per
+                  // type; TypeEquipement.autre has none, shown plain).
+                  if (equipement.type == TypeEquipement.autre)
+                    Text(
+                      l10n.typeEquipement(equipement.type),
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    )
+                  else
+                    TermeCliquable(
+                      idTerme: idOutilEquipement(equipement.type),
+                      texte: l10n.typeEquipement(equipement.type),
+                      type: TypeTermeGlossaire.outil,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                ],
+              ),
+            ),
+            Text(
+              l10n.etatEquipement(equipement.etat),
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
       ),
     );
   }
