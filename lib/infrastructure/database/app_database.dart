@@ -29,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -59,6 +59,11 @@ class AppDatabase extends _$AppDatabase {
           if (from < 4) {
             await m.addColumn(
                 meteoCache, meteoCache.evapotranspirationMm);
+          }
+          // v4 → v5: active-garden selection (ADR-0009 multi-potager); null
+          // default preserves the existing "earliest-created" fallback.
+          if (from < 5) {
+            await m.addColumn(preferences, preferences.potagerActifId);
           }
         },
         beforeOpen: (details) async {

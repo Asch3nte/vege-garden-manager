@@ -46,6 +46,31 @@ void main() {
     });
   });
 
+  group('PreferencesUtilisateur — potagerActifId (ADR-0009 multi-potager)', () {
+    test('defaults to null (no explicit selection)', () {
+      expect(PreferencesUtilisateur().potagerActifId, isNull);
+    });
+
+    test('copierAvec sets the active garden selection', () {
+      final p = PreferencesUtilisateur().copierAvec(potagerActifId: 'pot-2');
+      expect(p.potagerActifId, 'pot-2');
+    });
+
+    test('copierAvec without the field keeps the previous selection', () {
+      final p = PreferencesUtilisateur(potagerActifId: 'pot-1')
+          .copierAvec(theme: ThemeApp.sombre);
+      expect(p.potagerActifId, 'pot-1');
+    });
+
+    test('it participates in equality', () {
+      expect(
+        PreferencesUtilisateur() ==
+            PreferencesUtilisateur(potagerActifId: 'pot-1'),
+        isFalse,
+      );
+    });
+  });
+
   group('PreferencesUtilisateur — copierAvec', () {
     test('overrides one field and keeps the rest', () {
       final p = PreferencesUtilisateur();

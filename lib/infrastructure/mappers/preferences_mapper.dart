@@ -46,6 +46,7 @@ class PreferencesMapper {
       onboardingTermine: row.onboardingTermine,
       ponderationAssociations:
           _decoderPonderation(row.ponderationAssociations),
+      potagerActifId: row.potagerActifId,
     );
   }
 
@@ -108,6 +109,7 @@ class PreferencesMapper {
         nePasDerangerDebut: Value(p.nePasDerangerDebut),
         nePasDerangerFin: Value(p.nePasDerangerFin),
         onboardingTermine: Value(p.onboardingTermine),
+        potagerActifId: Value(p.potagerActifId),
         derniereModification:
             Value(DateTime.now().toUtc().toIso8601String()),
       );

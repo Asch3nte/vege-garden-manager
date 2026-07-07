@@ -7,12 +7,14 @@ import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../app/theme/theme_app.dart';
 import '../../application/providers/repository_providers.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/contexte_climat.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../application/state/saison_notifier.dart';
+import '../../domain/entities/potager.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_potager.dart';
@@ -20,6 +22,7 @@ import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/potager_actif_actions.dart';
 
 /// Stable decorative colours assigned to zones by position, so each zone keeps a
 /// consistent accent across the plan (mirrors the per-zone colour of the mock-up).
@@ -49,6 +52,7 @@ class EcranPotager extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(potagerProvider);
+    final acces = ref.watch(accesNiveauProvider);
 
     // The FAB adds a zone to the active garden; only shown once a garden exists.
     final potagerId = vue.value?.potagerId;
@@ -67,11 +71,24 @@ class EcranPotager extends ConsumerWidget {
           if (potagerId != null)
             PopupMenuButton<_ActionPotager>(
               onSelected: (a) => switch (a) {
+                _ActionPotager.changer => _choisirPotager(context, ref),
+                _ActionPotager.ajouter => _ajouterPotager(context, ref),
                 _ActionPotager.modifier => _modifierPotager(context, ref),
                 _ActionPotager.supprimer => _supprimerPotager(
                     context, ref, vue.value?.nomPotager ?? ''),
               },
               itemBuilder: (context) => [
+                if (acces.multiPotager) ...[
+                  PopupMenuItem(
+                    value: _ActionPotager.changer,
+                    child: Text(l10n.potagerChangerDe),
+                  ),
+                  PopupMenuItem(
+                    value: _ActionPotager.ajouter,
+                    child: Text(l10n.potagerAjouterAutre),
+                  ),
+                  const PopupMenuDivider(),
+                ],
                 PopupMenuItem(
                   value: _ActionPotager.modifier,
                   child: Text(l10n.potagerModifier),
@@ -169,7 +186,7 @@ void _confirmer(WidgetRef ref, String message) {
 }
 
 /// Garden-level actions in the Potager header menu.
-enum _ActionPotager { modifier, supprimer }
+enum _ActionPotager { changer, ajouter, modifier, supprimer }
 
 /// Refreshes everything that depends on the active garden (plan, dashboard,
 /// season, climate context) after it changed or was deleted.
@@ -178,6 +195,32 @@ void _rafraichirPotager(WidgetRef ref) {
   ref.invalidate(accueilProvider);
   ref.invalidate(saisonProvider);
   ref.invalidate(contexteClimatProvider);
+}
+
+/// Opens a bottom sheet listing every garden (ADR-0009 multi-potager);
+/// tapping one switches to it and refreshes the dependent views.
+Future<void> _choisirPotager(BuildContext context, WidgetRef ref) async {
+  final potagers = await ref.read(potagersProvider.future);
+  final actif =
+      await ref.read(potagerRepositoryProvider).obtenirPotagerActif();
+  if (!context.mounted) return;
+  final choisi = await showModalBottomSheet<String>(
+    context: context,
+    showDragHandle: true,
+    builder: (_) =>
+        _FeuilleChoixPotager(potagers: potagers, actifId: actif?.id),
+  );
+  if (choisi == null || choisi == actif?.id) return;
+  await definirPotagerActif(ref, choisi);
+}
+
+/// Creates a new garden and switches to it immediately.
+Future<void> _ajouterPotager(BuildContext context, WidgetRef ref) async {
+  final l10n = AppLocalizations.of(context)!;
+  final cree = await ouvrirFormulairePotager(context);
+  if (cree == null) return;
+  await definirPotagerActif(ref, cree.id);
+  _confirmer(ref, l10n.snackPotagerCree);
 }
 
 /// Opens the active garden in the edit form, then refreshes on save.
@@ -212,6 +255,46 @@ Future<void> _supprimerPotager(
   await ref.read(potagersProvider.notifier).supprimer(potager.id);
   _rafraichirPotager(ref);
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackPotagerSupprime)));
+}
+
+/// Bottom sheet listing every garden (ADR-0009 multi-potager); returns the
+/// tapped garden's id, or `null` if dismissed without a choice.
+class _FeuilleChoixPotager extends StatelessWidget {
+  final List<Potager> potagers;
+  final String? actifId;
+
+  const _FeuilleChoixPotager({required this.potagers, required this.actifId});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+                EspacementsApp.s4, 0, EspacementsApp.s4, EspacementsApp.s2),
+            child: Text(l10n.potagerListeTitre, style: theme.textTheme.titleMedium),
+          ),
+          for (final p in potagers)
+            ListTile(
+              leading: Icon(
+                p.id == actifId ? Icons.check_circle : Icons.circle_outlined,
+                color: p.id == actifId
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outline,
+              ),
+              title: Text(p.nom),
+              onTap: () => Navigator.of(context).pop(p.id),
+            ),
+          const SizedBox(height: EspacementsApp.s2),
+        ],
+      ),
+    );
+  }
 }
 
 /// Scrollable plan for a loaded [PotagerVue].

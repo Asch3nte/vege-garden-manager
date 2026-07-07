@@ -36,6 +36,7 @@ class PreferencesUtilisateur {
   final String? _nePasDerangerFin;
   final bool _onboardingTermine;
   final ProfilPonderationAssociations _ponderationAssociations;
+  final String? _potagerActifId;
 
   PreferencesUtilisateur._(
     this._langue,
@@ -55,6 +56,7 @@ class PreferencesUtilisateur {
     this._nePasDerangerFin,
     this._onboardingTermine,
     this._ponderationAssociations,
+    this._potagerActifId,
   ) : assert(
           (_nePasDerangerDebut == null) == (_nePasDerangerFin == null),
           'do-not-disturb bounds must be both set or both null',
@@ -80,6 +82,7 @@ class PreferencesUtilisateur {
     String? nePasDerangerFin,
     bool onboardingTermine = false,
     ProfilPonderationAssociations? ponderationAssociations,
+    String? potagerActifId,
   }) =>
       PreferencesUtilisateur._(
         langue,
@@ -99,6 +102,7 @@ class PreferencesUtilisateur {
         nePasDerangerFin,
         onboardingTermine,
         ponderationAssociations ?? ProfilPonderationAssociations.defaut(),
+        potagerActifId,
       );
 
   String get id => idSingleton;
@@ -135,6 +139,11 @@ class PreferencesUtilisateur {
   ProfilPonderationAssociations get ponderationAssociations =>
       _ponderationAssociations;
 
+  /// The id of the garden the user last selected as active (ADR-0009
+  /// multi-potager), or `null` if none was ever chosen — the repository then
+  /// falls back to the earliest-created garden.
+  String? get potagerActifId => _potagerActifId;
+
   /// Returns a copy with the given fields overridden (do-not-disturb is kept;
   /// use [avecNePasDeranger] / [sansNePasDeranger] to change it).
   PreferencesUtilisateur copierAvec({
@@ -153,6 +162,7 @@ class PreferencesUtilisateur {
     Map<String, bool>? notificationsParCategorie,
     bool? onboardingTermine,
     ProfilPonderationAssociations? ponderationAssociations,
+    String? potagerActifId,
   }) =>
       PreferencesUtilisateur(
         langue: langue ?? _langue,
@@ -178,6 +188,7 @@ class PreferencesUtilisateur {
         onboardingTermine: onboardingTermine ?? _onboardingTermine,
         ponderationAssociations:
             ponderationAssociations ?? _ponderationAssociations,
+        potagerActifId: potagerActifId ?? _potagerActifId,
       );
 
   /// Returns a copy with a do-not-disturb window (`HH:MM` bounds).
@@ -206,6 +217,7 @@ class PreferencesUtilisateur {
         nePasDerangerFin: fin,
         onboardingTermine: _onboardingTermine,
         ponderationAssociations: _ponderationAssociations,
+        potagerActifId: _potagerActifId,
       );
 
   @override
@@ -227,6 +239,7 @@ class PreferencesUtilisateur {
       other._nePasDerangerFin == _nePasDerangerFin &&
       other._onboardingTermine == _onboardingTermine &&
       other._ponderationAssociations == _ponderationAssociations &&
+      other._potagerActifId == _potagerActifId &&
       _memeMap(other._notificationsParCategorie, _notificationsParCategorie);
 
   @override
@@ -251,6 +264,7 @@ class PreferencesUtilisateur {
         _notificationsParCategorie.entries
             .fold<int>(0, (h, e) => h ^ Object.hash(e.key, e.value)),
         _ponderationAssociations,
+        _potagerActifId,
       );
 
   static bool _memeMap(Map<String, bool> a, Map<String, bool> b) {

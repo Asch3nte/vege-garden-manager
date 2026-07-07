@@ -74,9 +74,37 @@ void main() {
     expect(await repo.obtenirTous(), hasLength(1));
   });
 
-  test('obtenirPotagerActif returns the earliest non-deleted', () async {
+  test('obtenirPotagerActif falls back to the earliest non-deleted when no '
+      'selection is persisted', () async {
     await repo.sauvegarder(potager(id: 'b', date: DateTime.utc(2026, 5, 1)));
     await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));
+    expect((await repo.obtenirPotagerActif())!.id, 'a');
+  });
+
+  test('obtenirPotagerActif honours the persisted selection (ADR-0009)',
+      () async {
+    await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));
+    await repo.sauvegarder(potager(id: 'b', date: DateTime.utc(2026, 5, 1)));
+    await db.into(db.preferences).insertOnConflictUpdate(
+          PreferencesCompanion.insert(
+            derniereModification: DateTime.now().toIso8601String(),
+            potagerActifId: const Value('b'),
+          ),
+        );
+    expect((await repo.obtenirPotagerActif())!.id, 'b');
+  });
+
+  test('obtenirPotagerActif falls back when the selection points at a '
+      'deleted garden', () async {
+    await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));
+    await repo.sauvegarder(potager(id: 'b', date: DateTime.utc(2026, 5, 1)));
+    await db.into(db.preferences).insertOnConflictUpdate(
+          PreferencesCompanion.insert(
+            derniereModification: DateTime.now().toIso8601String(),
+            potagerActifId: const Value('b'),
+          ),
+        );
+    await repo.supprimer('b');
     expect((await repo.obtenirPotagerActif())!.id, 'a');
   });
 

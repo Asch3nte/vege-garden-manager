@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../domain/entities/potager.dart';
+import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../database/app_database.dart';
 import '../mappers/potager_mapper.dart';
@@ -25,10 +26,22 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
     return rows.map(_mapper.versEntite).toList();
   }
 
-  // TODO(active): the "active" potager is, for now, the earliest non-deleted
-  // one. A persisted user selection (parametres) will refine this later.
+  // ADR-0009 (multi-potager): the active garden is the user's persisted
+  // selection (preferences.potagerActifId), when it still resolves to a
+  // non-deleted garden. Otherwise (no selection yet, or it points at a
+  // deleted/missing garden) it falls back to the earliest-created one.
   @override
   Future<Potager?> obtenirPotagerActif() async {
+    final prefs = await (_db.select(_db.preferences)
+          ..where((t) => t.id.equals(PreferencesUtilisateur.idSingleton)))
+        .getSingleOrNull();
+    final choixId = prefs?.potagerActifId;
+    if (choixId != null) {
+      final choisi = await (_db.select(_db.potagers)
+            ..where((t) => t.id.equals(choixId) & t.deletedAt.isNull()))
+          .getSingleOrNull();
+      if (choisi != null) return _mapper.versEntite(choisi);
+    }
     final row = await (_db.select(_db.potagers)
           ..where((t) => t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.dateCreation)])

@@ -76,6 +76,20 @@ void main() {
         FamilleEffetAssociation.fertilite), PoidsAssociation.normal);
   });
 
+  test('save then load round-trips the active-garden selection (ADR-0009)',
+      () async {
+    await repo.sauvegarder(
+        (await repo.charger()).copierAvec(potagerActifId: 'pot-2'));
+    expect((await repo.charger()).potagerActifId, 'pot-2');
+  });
+
+  test('reinitialiser clears the active-garden selection', () async {
+    await repo.sauvegarder(
+        (await repo.charger()).copierAvec(potagerActifId: 'pot-2'));
+    await repo.reinitialiser();
+    expect((await repo.charger()).potagerActifId, isNull);
+  });
+
   test('reinitialiser restores the defaults', () async {
     await repo.sauvegarder(
         (await repo.charger()).copierAvec(theme: ThemeApp.sombre));
