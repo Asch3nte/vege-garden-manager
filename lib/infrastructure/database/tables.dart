@@ -433,6 +433,9 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(false))();
   IntColumn get schemaVersion => integer().withDefault(const Constant(1))();
   TextColumn get derniereModification => text()();
+  // ADR-0009 — multi-garden active-selection (v4→v5); null = no explicit
+  // choice yet, the repository falls back to the earliest-created garden.
+  TextColumn get potagerActifId => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
