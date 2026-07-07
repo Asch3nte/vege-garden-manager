@@ -239,17 +239,16 @@ class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
         InkWell(
           onTap: () => setState(() => _ouvert = !_ouvert),
           child: Padding(
+            // Same left inset as the active garden's name label, so both
+            // names line up on the same tab stop (no leading icon here).
             padding: const EdgeInsets.fromLTRB(EspacementsApp.s6,
                 EspacementsApp.s2, EspacementsApp.s3, EspacementsApp.s2),
             child: Row(
               children: [
-                Icon(Icons.local_florist_outlined,
-                    size: TaillesIconesApp.md, color: theme.colorScheme.outline),
-                const SizedBox(width: EspacementsApp.s3),
                 Expanded(
                   child: Text(
                     widget.potager.nom,
-                    style: theme.textTheme.bodyMedium
+                    style: theme.textTheme.labelMedium
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),
                 ),
