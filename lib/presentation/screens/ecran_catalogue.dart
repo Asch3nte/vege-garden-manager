@@ -70,9 +70,23 @@ class EcranCatalogue extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(catalogueProvider);
+    // The personal-sheet editor is an expert feature (ADR-0009): the entry point
+    // only appears once unlocked. Personal sheets still show, tagged, in the
+    // catalogue list for every level.
+    final fichesPersoDispo = ref.watch(accesNiveauProvider).fichesPerso;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navCatalogue)),
+      appBar: AppBar(
+        title: Text(l10n.navCatalogue),
+        actions: [
+          if (fichesPersoDispo)
+            IconButton(
+              icon: const Icon(Icons.eco_outlined),
+              tooltip: l10n.fichesPersoOuvrir,
+              onPressed: () => context.go(RoutesApp.fichesPerso),
+            ),
+        ],
+      ),
       body: vue.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) =>
