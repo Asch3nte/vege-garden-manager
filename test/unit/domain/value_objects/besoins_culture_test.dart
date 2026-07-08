@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/phase_sensible_eau.dart';
 import 'package:pot_a_gerer/domain/enums/qualite_sol.dart';
+import 'package:pot_a_gerer/domain/value_objects/arrosage_detaille.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 
 BesoinsCulture _tomate({Set<QualiteSol>? sol}) => BesoinsCulture(
@@ -108,6 +110,48 @@ void main() {
         qualitesSol: {QualiteSol.riche, QualiteSol.bienDraine},
       );
       expect(a == b, isFalse);
+    });
+  });
+
+  group('BesoinsCulture — detailed watering (optional)', () {
+    test('arrosageDetaille is null by default', () {
+      final b = _tomate();
+      expect(b.arrosageDetaille, isNull);
+      expect(b.aArrosageDetaille, isFalse);
+    });
+
+    test('carries the detail when provided', () {
+      final detail = ArrosageDetaille(
+        frequenceJoursMin: 2,
+        frequenceJoursMax: 3,
+        phasesSensibles: {PhaseSensibleEau.fructification},
+      );
+      final b = BesoinsCulture(
+        eau: BesoinEau.eleve,
+        soleil: NiveauSoleil.pleinSoleil,
+        phMin: 6.0,
+        phMax: 7.0,
+        arrosageDetaille: detail,
+      );
+      expect(b.aArrosageDetaille, isTrue);
+      expect(b.arrosageDetaille, detail);
+    });
+
+    test('differing detail breaks equality', () {
+      BesoinsCulture avec(ArrosageDetaille? d) => BesoinsCulture(
+            eau: BesoinEau.eleve,
+            soleil: NiveauSoleil.pleinSoleil,
+            phMin: 6.0,
+            phMax: 7.0,
+            arrosageDetaille: d,
+          );
+      final a = avec(ArrosageDetaille(frequenceJoursMin: 2, frequenceJoursMax: 3));
+      final b = avec(ArrosageDetaille(frequenceJoursMin: 1, frequenceJoursMax: 3));
+      final none = avec(null);
+      expect(a == b, isFalse);
+      expect(a == none, isFalse);
+      expect(a == avec(ArrosageDetaille(frequenceJoursMin: 2, frequenceJoursMax: 3)),
+          isTrue);
     });
   });
 }

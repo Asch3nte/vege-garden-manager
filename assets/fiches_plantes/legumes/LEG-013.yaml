@@ -51,6 +51,16 @@ besoins:
   temperature_optimale: 20
   temperature_min_survie: 5
   gele_fatal: true
+  arrosage_detaille:
+    phases_sensibles:
+      - floraison
+      - fructification
+    note_i18n:
+      fr: >-
+        Un stress hydrique pendant la floraison et le remplissage des gousses
+        provoque la chute des fleurs et réduit fortement la récolte. Évitez
+        toutefois d'arroser avant la levée et à la plantation (risque de
+        pourriture).
 cycle:
   enracinement: moyen
   type: annuelle

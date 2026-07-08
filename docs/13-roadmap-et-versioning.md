@@ -27,6 +27,7 @@ Toutes les fonctionnalités décrites dans [01](01-vision-et-perimetre.md) et
 | Seuils météo configurables | `risque_gel`/`risque_canicule` paramétrables (figés en V1) |
 | Déduction du type de sol | Depuis API géologique / heuristique climat |
 | **Sensibilité météo par plante** (fiche) | Alertes gel/canicule/forte-pluie ciblées par plante — voir §2.1 ci-dessous |
+| **Arrosage : phase sensible → urgence** | Coupler `phasesSensibles` (livré, affichage seul) × stade de croissance pour moduler l'urgence d'arrosage — [ADR-0018](decisions/0018-stade-sensible-urgence-arrosage.md) (**Proposé**, cadrage figé). Prérequis : corpus renseigné + recalibration moteur |
 
 ### 2.1 Extension des fiches pour des alertes météo ciblées (reporté de V1)
 

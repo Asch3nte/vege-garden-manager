@@ -6,6 +6,7 @@ import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/charge_tuteur.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/phase_sensible_eau.dart';
 import 'package:pot_a_gerer/domain/enums/sous_type_legume.dart';
 import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
@@ -445,6 +446,172 @@ cycle:
   charge_tuteur: enorme
 ''';
       final m = _parser.parser(mauvais, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'),
+          throwsA(isA<FichePlanteInvalideException>()));
+    });
+  });
+
+  group('Catalogue pipeline — detailed watering (ADR-0009 eauDetaillee)', () {
+    final goldenMap = _parser.parser(
+      File('assets/fiches_plantes/legumes/LEG-001.yaml').readAsStringSync(),
+      source: 'LEG-001.yaml',
+    );
+
+    test('the golden LEG-001 carries sensitive stages and a note', () {
+      final f = _mapper.versEntite(goldenMap);
+      final d = f.besoins.arrosageDetaille;
+      expect(d, isNotNull);
+      expect(d!.phasesSensibles, {
+        PhaseSensibleEau.floraison,
+        PhaseSensibleEau.fructification,
+      });
+      expect(d.aNote, isTrue);
+      expect(d.note('fr'), contains('cul noir'));
+      // Seeded fiches deliberately carry no invented figures.
+      expect(d.aFrequence, isFalse);
+      expect(d.aVolume, isFalse);
+    });
+
+    test('a sheet without the block carries no detail', () {
+      const bare = '''
+id: y
+nom_scientifique: Y y
+famille_botanique: Yaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: Y
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final f = _mapper.versEntite(_parser.parser(bare, source: 'y'));
+      expect(f.besoins.arrosageDetaille, isNull);
+      expect(f.besoins.aArrosageDetaille, isFalse);
+    });
+
+    test('parses frequency, volume, stages and a localised note', () {
+      const yaml = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+  arrosage_detaille:
+    frequence_jours: [2, 3]
+    volume_litres_m2: [3, 5.5]
+    phases_sensibles: [floraison, fructification]
+    note_i18n: { fr: "Arrosez au pied.", en: "Water at the base." }
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final m = _parser.parser(yaml, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'), returnsNormally);
+      final d = _mapper.versEntite(m).besoins.arrosageDetaille!;
+      expect(d.frequenceJoursMin, 2);
+      expect(d.frequenceJoursMax, 3);
+      expect(d.volumeLitresM2Min, 3.0);
+      expect(d.volumeLitresM2Max, 5.5);
+      expect(d.phasesSensibles,
+          {PhaseSensibleEau.floraison, PhaseSensibleEau.fructification});
+      expect(d.note('en'), 'Water at the base.');
+      expect(d.note('es'), 'Arrosez au pied.'); // fallback
+    });
+
+    test('rejects a single frequency bound', () {
+      const yaml = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+  arrosage_detaille:
+    frequence_jours: [2]
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final m = _parser.parser(yaml, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'),
+          throwsA(isA<FichePlanteInvalideException>()));
+    });
+
+    test('rejects an unknown sensitive stage', () {
+      const yaml = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+  arrosage_detaille:
+    phases_sensibles: [maturation]
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final m = _parser.parser(yaml, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'),
+          throwsA(isA<FichePlanteInvalideException>()));
+    });
+
+    test('rejects an empty detail block', () {
+      const yaml = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+  arrosage_detaille:
+    frequence_jours:
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final m = _parser.parser(yaml, source: 'x');
       expect(() => _validator.valider(m, source: 'x'),
           throwsA(isA<FichePlanteInvalideException>()));
     });

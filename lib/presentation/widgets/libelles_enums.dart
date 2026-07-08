@@ -10,6 +10,7 @@ import '../../domain/enums/etat_equipement.dart';
 import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/famille_effet_conflit.dart';
 import '../../domain/enums/ph_sol.dart';
+import '../../domain/enums/phase_sensible_eau.dart';
 import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/qualite_sol.dart';
 import '../../domain/enums/sous_type_legume.dart';
@@ -61,6 +62,15 @@ extension LibellesEnums on AppLocalizations {
         BesoinEau.faible => eauFaible,
         BesoinEau.modere => eauModere,
         BesoinEau.eleve => eauEleve,
+      };
+
+  /// Label for a water-sensitive growth stage (detailed watering, expert).
+  String phaseSensibleEau(PhaseSensibleEau p) => switch (p) {
+        PhaseSensibleEau.germination => phaseSensibleGermination,
+        PhaseSensibleEau.feuillaison => phaseSensibleFeuillaison,
+        PhaseSensibleEau.floraison => phaseSensibleFloraison,
+        PhaseSensibleEau.fructification => phaseSensibleFructification,
+        PhaseSensibleEau.grossissement => phaseSensibleGrossissement,
       };
 
   /// Label for a sun exposure.

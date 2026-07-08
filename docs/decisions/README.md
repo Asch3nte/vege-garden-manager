@@ -34,6 +34,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0015](0015-arrosage-intelligent-canicule.md) | Arrosage intelligent & facteur thermique (moteur ET₀-proxy + conseil par plantation en UI) | Accepté |
 | [0016](0016-refonte-ecran-meteo.md) | Refonte de l'écran météo : Nominatim, enrichissement modèle, vue détaillée | Accepté |
 | [0017](0017-glossaire-aide-lexique.md) | Glossaire « Aide & lexique » : la référence du jardinier (chapitres, liens, illustrations) | Accepté |
+| [0018](0018-stade-sensible-urgence-arrosage.md) | Phase sensible × stade de croissance → modulation de l'urgence d'arrosage (cadrage) | **Proposé** |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

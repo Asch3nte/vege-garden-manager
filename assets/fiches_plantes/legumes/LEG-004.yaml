@@ -50,6 +50,16 @@ besoins:
   ensoleillement_min: mi_ombre
   temperature_min_survie: -15
   gele_fatal: false
+  arrosage_detaille:
+    phases_sensibles:
+      - germination
+      - grossissement
+    note_i18n:
+      fr: >-
+        Gardez le lit de semence humide jusqu'à la levée, qui est lente (deux à
+        trois semaines). Ensuite, arrosez régulièrement pendant le grossissement
+        des racines : une reprise d'arrosage après une période sèche fait
+        éclater les carottes.
 cycle:
   enracinement: pivotant
   type: bisannuelle

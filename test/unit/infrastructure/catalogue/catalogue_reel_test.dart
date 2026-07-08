@@ -53,6 +53,22 @@ void main() {
     expect(mortes, isEmpty, reason: 'dead association refs: $mortes');
   });
 
+  test('the seeded species carry detailed watering (sensitive stages)',
+      () async {
+    final cache = await CatalogueLoader(FilesystemFicheAssetSource()).charger();
+    // Species seeded in Lot 2 with real, documented sensitive stages + notes.
+    const seedees = {'LEG-001', 'LEG-014', 'LEG-004', 'LEG-011', 'LEG-013',
+        'ARO-001'};
+    for (final id in seedees) {
+      final f = cache.parId(id);
+      expect(f, isNotNull, reason: 'missing seeded fiche $id');
+      final detail = f!.besoins.arrosageDetaille;
+      expect(detail, isNotNull, reason: '$id should carry arrosage_detaille');
+      expect(detail!.aPhasesSensibles, isTrue,
+          reason: '$id should list sensitive growth stages');
+    }
+  });
+
   test('every repulsif_contre / piege_a slug resolves to a bioaggressor',
       () async {
     final cache = await CatalogueLoader(FilesystemFicheAssetSource()).charger();

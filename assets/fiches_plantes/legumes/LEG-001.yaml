@@ -53,6 +53,16 @@ besoins:
   temperature_optimale: 22
   temperature_min_survie: 5
   gele_fatal: true
+  arrosage_detaille:
+    phases_sensibles:
+      - floraison
+      - fructification
+    note_i18n:
+      fr: >-
+        Arrosez régulièrement au pied, sans à-coups : une irrigation irrégulière
+        pendant la nouaison et le grossissement des fruits favorise la nécrose
+        apicale (« cul noir ») et l'éclatement. Évitez de mouiller le feuillage
+        et paillez pour lisser l'humidité du sol.
 cycle:
   enracinement: profond
   type: annuelle
