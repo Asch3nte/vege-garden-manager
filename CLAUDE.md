@@ -151,6 +151,24 @@ Polymorphisme dès que pertinent.
     (`libelles_enums`), entrée menu ⋮ Potager gatée + route `/potager/equipements`,
     section « Équipements de cette zone » dans le détail de parcelle. Tests widget
     + exhaustivité en //.
+23. **Fiches plantes perso** (docs/15 §9, build-then-gate `acces.fichesPerso`,
+    palier expert) : feature complète de bout en bout, YAML = source de vérité,
+    fusionnées au catalogue (une fiche perso surcharge une intégrée sur collision
+    d'id, ADR-0002 A6).
+    - **Domain** : entité `FichePlantePersonnelle`, VO éditable
+      `ModeleFichePersonnelle` (sous-ensemble MVP identité+culture, invariants),
+      service `IdFichePersonnelle` (id logique préfixé `perso_`), repo abstrait.
+    - **Application** : use cases `CreerFichePersonnelle` (UUID + id logique
+      unique), `ModifierFichePersonnelle`, `DupliquerFicheEnModele` ; notifier
+      `FichesPersonnellesNotifier` (invalide le cache catalogue à chaque écriture).
+    - **Infra** : repo Drift (soft-delete + colonnes dénormalisées), mapper,
+      `FichesPersonnellesLoader` (parse→valide→map, skip robuste), sérialiseur YAML.
+    - **Presentation** : écran liste (`ecran_fiches_personnelles.dart`), formulaire
+      création/édition (`formulaire_fiche_personnelle.dart` : multi-sélections
+      usages/qualités de sol, plage pH, validations), entrée gatée AppBar Catalogue
+      + route `/catalogue/fiches-perso`, **tag visuel `BadgePerso`** sur les cartes
+      + en-tête de fiche, menu ⋮ « dupliquer / modifier » gaté. Tests unitaires +
+      widget en // (couche complète : 47 tests dédiés, suite widget 212 verte).
 
 ### 🚧 En cours / prochaine étape
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
@@ -163,8 +181,8 @@ Polymorphisme dès que pertinent.
   [`docs/15`](docs/15-elements-differes.md) au fur et à mesure que le nécessaire existe
 
 ### ⏭️ À venir
-- Features « build-then-gate » (docs/15 §9) : multi-potager,
-  fiches perso (scope V1), rotation avancée *(équipements/outils ✅ livré)*
+- Features « build-then-gate » (docs/15 §9) : multi-potager, rotation avancée
+  *(équipements/outils ✅ livré · fiches perso ✅ livré)*
 - i18n effective (ARB `en` + pilotage `locale`) · maquettes dark mode
 - Rebrancher **Phosphor Icons** (package cassé sur Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
 - Distribution : keystore release réel, icône & splash, CI/CD GitHub Actions
@@ -172,8 +190,8 @@ Polymorphisme dès que pertinent.
   glossaire avec le dev (quand tous les termes/features/design seront figés —
   docs/15 §7)
 - Packaging multiplateforme (Linux AppImage/Flatpak, APK, .exe, .dmg)
-- À arbitrer : **post-récolte** et **éditeur de fiches perso** (scope V1 selon
-  docs/13 §1, rien en code — reporter officiellement ou planifier)
+- À arbitrer : **post-récolte** (scope V1 selon docs/13 §1, rien en code —
+  reporter officiellement ou planifier) *(éditeur de fiches perso ✅ livré)*
 
 ---
 
@@ -243,8 +261,11 @@ tâches/arrosage → météo → export), alpha Android installée. Le **glossai
 « Aide & lexique »** (ADR-0017) est livré lots 1–5 ; la **relecture éditoriale**
 de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
 **illustrations** sont choisies par le dev au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)).
-Reste côté glossaire : termes cliquables sur les surfaces restantes (docs/15 §8
-#4bis). Ensuite (à arbitrer) : multi-potager (§9), distribution
+Dernière feature livrée : **éditeur de fiches plantes perso** (build-then-gate
+`acces.fichesPerso`, palier expert) — backend + UI (liste, formulaire, tag
+`Perso` dans le catalogue, dupliquer/éditer), tests en //. Reste côté glossaire :
+termes cliquables sur les surfaces restantes (docs/15 §8 #4bis). Ensuite
+(à arbitrer) : multi-potager (§9), rotation avancée (§9), distribution
 (CI/CD, signing), i18n `en` — toujours **avec leurs tests en parallèle**.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
