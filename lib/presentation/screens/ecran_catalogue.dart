@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/repository_providers.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/preferences_notifier.dart';
@@ -17,6 +18,7 @@ import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_plantation.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../screens/ecran_selection_zone.dart';
+import '../widgets/badge_perso.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/fiche_plante_detail.dart';
 import '../widgets/libelles_enums.dart';
@@ -519,6 +521,11 @@ class _CarteFiche extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    // Personal sheets are merged into the catalogue (ADR-0002 A6): tag them so
+    // the user tells their own sheet from a built-in one at a glance.
+    final estPerso =
+        ref.watch(idsFichesPersonnellesProvider).value?.contains(fiche.id) ??
+            false;
 
     return InkWell(
       onTap: () =>
@@ -537,9 +544,19 @@ class _CarteFiche extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    fiche.nomLocalise('fr'),
-                    style: theme.textTheme.titleLarge,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          fiche.nomLocalise('fr'),
+                          style: theme.textTheme.titleLarge,
+                        ),
+                      ),
+                      if (estPerso) ...[
+                        const SizedBox(width: EspacementsApp.s2),
+                        const BadgePerso(),
+                      ],
+                    ],
                   ),
                   const SizedBox(height: 2),
                   Text(

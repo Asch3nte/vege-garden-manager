@@ -4,16 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
 import '../../application/providers/repository_providers.dart';
+import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/contexte_climat.dart';
+import '../../application/use_cases/dupliquer_fiche_en_modele.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/type_bioagresseur.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
+import '../../domain/value_objects/modele_fiche_personnelle.dart';
 import '../../l10n/app_localizations.dart';
+import '../forms/formulaire_fiche_personnelle.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
+import 'badge_perso.dart';
 import 'calendrier_semis_recolte.dart';
 import 'libelles_enums.dart';
 
@@ -132,6 +137,14 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
     final varietes = vue?.varietesDe(mere.id) ?? const <FichePlante>[];
     final surVariete = _fiche.id != mere.id;
 
+    // Personal-sheet awareness: whether the shown sheet is one of the user's own
+    // (badge), and whether the editor is unlocked (⋮ actions). Both are expert
+    // concerns (ADR-0009); the badge shows for everyone, the actions do not.
+    final estPerso =
+        ref.watch(idsFichesPersonnellesProvider).value?.contains(_fiche.id) ??
+            false;
+    final accesPerso = ref.watch(accesNiveauProvider).fichesPerso;
+
     // Companions are resolved by the shared service over **every** species
     // (not the filtered list), bidirectionally — so the names and counts here
     // match the Réseau view exactly (ADR-0008).
@@ -175,7 +188,18 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_fiche.nomLocalise('fr'), style: theme.textTheme.headlineSmall),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(_fiche.nomLocalise('fr'),
+                            style: theme.textTheme.headlineSmall),
+                      ),
+                      if (estPerso) ...[
+                        const SizedBox(width: EspacementsApp.s2),
+                        const BadgePerso(),
+                      ],
+                    ],
+                  ),
                   Text(
                     l10n.categorie(_fiche.categorie),
                     style: theme.textTheme.bodySmall
@@ -184,6 +208,42 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                 ],
               ),
             ),
+            // Editor actions (expert): duplicate a built-in sheet into an
+            // editable copy, or edit the personal sheet shown here.
+            if (accesPerso)
+              PopupMenuButton<_ActionFichePerso>(
+                icon: const Icon(Icons.more_vert),
+                onSelected: (a) => switch (a) {
+                  _ActionFichePerso.dupliquer => _dupliquer(),
+                  _ActionFichePerso.modifier => _modifierPerso(),
+                },
+                itemBuilder: (context) => [
+                  if (estPerso)
+                    PopupMenuItem(
+                      value: _ActionFichePerso.modifier,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit_outlined,
+                              size: TaillesIconesApp.sm),
+                          const SizedBox(width: EspacementsApp.s2),
+                          Flexible(child: Text(l10n.fichePersoModifierFiche)),
+                        ],
+                      ),
+                    )
+                  else
+                    PopupMenuItem(
+                      value: _ActionFichePerso.dupliquer,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.copy_outlined,
+                              size: TaillesIconesApp.sm),
+                          const SizedBox(width: EspacementsApp.s2),
+                          Flexible(child: Text(l10n.fichePersoDupliquer)),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
           ],
         ),
         const SizedBox(height: EspacementsApp.s2),
@@ -273,7 +333,68 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
   /// Localized, alphabetically-sorted names of an iterable of sheets.
   List<String> _noms(Iterable<FichePlante> fiches) =>
       [for (final f in fiches) f.nomLocalise('fr')]..sort();
+
+  /// Projects the shown built-in sheet onto an editable draft and opens the
+  /// personal-sheet form pre-filled with it (a *copy*, not an override). Closes
+  /// the detail sheet first, then confirms on success.
+  Future<void> _dupliquer() async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final ModeleFichePersonnelle modele;
+    try {
+      modele = ref.read(dupliquerFicheEnModeleProvider).executer(_fiche);
+    } on ArgumentError {
+      // A source sheet without any soil quality cannot become a personal sheet
+      // (the catalogue never emits such a sheet in practice).
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.fichePersoDupliquerImpossible)),
+      );
+      return;
+    }
+    navigator.pop();
+    final cree = await ouvrirFormulaireFichePersonnelle(
+      navigator.context,
+      modeleInitial: modele,
+    );
+    if (cree != null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.fichesPersoSnackCreee)),
+      );
+    }
+  }
+
+  /// Resolves the personal sheet behind the shown entry and opens the form in
+  /// edit mode. Closes the detail sheet first, then confirms on success.
+  Future<void> _modifierPerso() async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final perso = await ref
+        .read(fichePlantePersonnelleRepositoryProvider)
+        .obtenirParIdFiche(_fiche.id);
+    if (!mounted) return;
+    if (perso == null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.fichePersoIntrouvable)),
+      );
+      return;
+    }
+    navigator.pop();
+    final maj = await ouvrirFormulaireFichePersonnelle(
+      navigator.context,
+      ficheInitiale: perso,
+    );
+    if (maj != null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.fichesPersoSnackModifiee)),
+      );
+    }
+  }
 }
+
+/// Editor actions available from a plant sheet's detail (expert).
+enum _ActionFichePerso { dupliquer, modifier }
 
 /// Variety switcher shown under the scientific name: a tappable line labelled
 /// "Espèce" that shows the species name and opens a searchable picker of that

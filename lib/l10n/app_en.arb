@@ -699,6 +699,10 @@
   "fichesPersoSupprimerMessage": "\"{nom}\" will be permanently removed from your sheets.",
   "fichesPersoModifieeLe": "Edited on {date}",
   "fichePersoBadge": "Personal",
+  "fichePersoDupliquer": "Duplicate as a personal sheet",
+  "fichePersoModifierFiche": "Edit this sheet",
+  "fichePersoDupliquerImpossible": "This sheet cannot be duplicated.",
+  "fichePersoIntrouvable": "Personal sheet not found.",
 
   "fichePersoFormTitre": "New sheet",
   "fichePersoFormTitreModifier": "Edit sheet",
