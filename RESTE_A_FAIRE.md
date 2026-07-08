@@ -32,12 +32,15 @@ Réservées par palier mais sans UI ni donnée :
   dans le détail de zone (`syntheseRotationZoneProvider` : historique récent,
   familles bloquées par délai de retour, opportunités azote), tests en //.
   - **⚠️ i18n restant (suivi)** : les **noms de famille** s'affichent en FR via
-    `FamilleBotanique.nomsLocalises` (résolu dans le provider), mais (a) c'est
-    figé en `'fr'` — le rendre **locale-aware** ; (b) les **libellés de groupe**
-    (« Légumineuses », « Engrais verts ») n'ont pas encore de surface UI (la
-    section n'affiche que des familles + noms de plantes) — prévoir des clés ARB
-    `GroupeCultural` + un libellé de repli famille pour le jour où l'affichage
-    des précédents groupes/slugs non résolus sera exposé (ex. sur la fiche plante).
+    `FamilleBotanique.nomsLocalises` (résolu dans le provider), mais c'est figé
+    en `'fr'` → le rendre **locale-aware**. Les **libellés de groupe**
+    (« Légumineuses », « Engrais verts ») + descriptions existent désormais en
+    ARB (`glossaireValGroupeCultural*`, affichés sur la page glossaire
+    `rotation-cultures`) ; reste à exposer les précédents groupes/slugs sur une
+    surface UI (ex. fiche plante) le jour venu, en réutilisant ces libellés.
+  - **Entrée glossaire `rotation-cultures`** enrichie (définition détaillée
+    pourquoi + implémentation, 7 conseils, valeurs `GroupeCultural`, « Voir
+    aussi »). Traduction `en` du glossaire : différée (cf. §7).
 - **Besoins en eau détaillés** (expert) : il faut d'abord enrichir
   `BesoinsCulture` (fréquence/quantité, pas juste le terme grossier) →
   **chantier à venir**
