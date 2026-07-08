@@ -181,15 +181,21 @@ Polymorphisme dès que pertinent.
   [`docs/15`](docs/15-elements-differes.md) au fur et à mesure que le nécessaire existe
 
 ### ⏭️ À venir
-- Features « build-then-gate » (docs/15 §9) : multi-potager, rotation avancée
-  *(équipements/outils ✅ livré · fiches perso ✅ livré)*
-- i18n effective (ARB `en` + pilotage `locale`) · maquettes dark mode
-- Rebrancher **Phosphor Icons** (package cassé sur Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
-- Distribution : keystore release réel, icône & splash, CI/CD GitHub Actions
+> État réel consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md).
+- Features « build-then-gate » restantes (docs/15 §9) : **rotation avancée**,
+  **besoins en eau détaillés** (+ lot 4 ADR-0009 mini-tutos/teaser)
+  *(multi-potager · équipements/outils · fiches perso : ✅ livrés)*
+- maquettes dark mode · Rebrancher **Phosphor Icons** (package cassé sur
+  Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
+- Finitions légères (docs/15 §2) : toggles paramètres (transparence des données,
+  météo auto, « Ne pas déranger »), sous-routes go_router restantes, écran
+  notifications d'accueil
+- Distribution / **pré-release** : CI ✅ analyze+test (reste le job
+  build/signature d'APK), keystore release réel, icône & splash, packaging
+  multiplateforme (Linux AppImage/Flatpak, .exe, .dmg, .ipa)
 - **Juste avant release** : relecture éditoriale de **tous** les chapitres du
-  glossaire avec le dev (quand tous les termes/features/design seront figés —
-  docs/15 §7)
-- Packaging multiplateforme (Linux AppImage/Flatpak, APK, .exe, .dmg)
+  glossaire avec le dev, **puis** sa traduction `en` (le reste de l'i18n `en`
+  UI + pilotage `locale` est ✅ livré) ; vérification dev Android (docs/15 §7)
 - À arbitrer : **post-récolte** (scope V1 selon docs/13 §1, rien en code —
   reporter officiellement ou planifier) *(éditeur de fiches perso ✅ livré)*
 
@@ -264,9 +270,12 @@ de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
 Dernière feature livrée : **éditeur de fiches plantes perso** (build-then-gate
 `acces.fichesPerso`, palier expert) — backend + UI (liste, formulaire, tag
 `Perso` dans le catalogue, dupliquer/éditer), tests en //. Reste côté glossaire :
-termes cliquables sur les surfaces restantes (docs/15 §8 #4bis). Ensuite
-(à arbitrer) : multi-potager (§9), rotation avancée (§9), distribution
-(CI/CD, signing), i18n `en` — toujours **avec leurs tests en parallèle**.
+termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
+Prochains chantiers V1 (chacun dans sa propre session, **tests en parallèle**) :
+**rotation avancée** (§9) puis **besoins en eau détaillés** (§9). Le reste
+(distribution/pré-release, finitions §2, traduction `en` du glossaire) est
+consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) — multi-potager, équipements,
+CI analyze+test, version dynamique, liens externes et i18n `en` UI sont ✅ livrés.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
 > Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**
