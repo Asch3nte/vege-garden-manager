@@ -151,6 +151,44 @@ Polymorphisme dès que pertinent.
     (`libelles_enums`), entrée menu ⋮ Potager gatée + route `/potager/equipements`,
     section « Équipements de cette zone » dans le détail de parcelle. Tests widget
     + exhaustivité en //.
+23. **Fiches plantes perso** (docs/15 §9, build-then-gate `acces.fichesPerso`,
+    palier expert) : feature complète de bout en bout, YAML = source de vérité,
+    fusionnées au catalogue (une fiche perso surcharge une intégrée sur collision
+    d'id, ADR-0002 A6).
+    - **Domain** : entité `FichePlantePersonnelle`, VO éditable
+      `ModeleFichePersonnelle` (sous-ensemble MVP identité+culture, invariants),
+      service `IdFichePersonnelle` (id logique préfixé `perso_`), repo abstrait.
+    - **Application** : use cases `CreerFichePersonnelle` (UUID + id logique
+      unique), `ModifierFichePersonnelle`, `DupliquerFicheEnModele` ; notifier
+      `FichesPersonnellesNotifier` (invalide le cache catalogue à chaque écriture).
+    - **Infra** : repo Drift (soft-delete + colonnes dénormalisées), mapper,
+      `FichesPersonnellesLoader` (parse→valide→map, skip robuste), sérialiseur YAML.
+    - **Presentation** : écran liste (`ecran_fiches_personnelles.dart`), formulaire
+      création/édition (`formulaire_fiche_personnelle.dart` : multi-sélections
+      usages/qualités de sol, plage pH, validations), entrée gatée AppBar Catalogue
+      + route `/catalogue/fiches-perso`, **tag visuel `BadgePerso`** sur les cartes
+      + en-tête de fiche, menu ⋮ « dupliquer / modifier » gaté. Tests unitaires +
+      widget en // (couche complète : 47 tests dédiés, suite widget 212 verte).
+24. **Rotation avancée** (docs/15 §9, build-then-gate `acces.rotationAvancee`,
+    palier expert) : feature complète de bout en bout.
+    - **Domain** : enum `GroupeCultural { legumineuses, engraisVerts }`, VO
+      `PrecedentCultural` (famille xor groupe) + normaliseur `analyser()` qui
+      absorbe la dérive orthographique du corpus (`cucurbitacees→cucurbitaceae`,
+      `graminées→poaceae`, `ail→amaryllidaceae`), champs
+      `precedentsFavorables/Defavorables` sur `FichePlante`.
+    - **Infra** : mapper lit `rotation.precedents_*` (normalisation + skip
+      robuste), `VerificateurIntegriteFamilles` étendu (tout précédent-famille
+      résout vers une fiche `_familles/*.yaml`, gardé par `familles_reel_test`).
+    - **Application/moteur** : `EvaluationRotation` (dans `application/engine/`,
+      comme `SuggestionAssociation`) → `ResultatRotation` (verdict favorable/
+      défavorable/neutre + `RaisonRotation` explicites) ; réconcilie précédents
+      déclarés + délai de retour famille + azote (`legumineuses↔fixeAzote`,
+      `engrais_verts↔categorie`) ; défavorable domine.
+    - **Presentation** : section « Rotation » dans le détail de zone
+      (`syntheseRotationZoneProvider` : historique récent, familles bloquées par
+      délai de retour avec année de libération, opportunités azote), gatée
+      expert, lien glossaire `rotation-cultures`, clés ARB fr+en. Tests unitaires
+      + widget en // (suite complète 1170 verte).
 
 ### 🚧 En cours / prochaine étape
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
@@ -163,17 +201,23 @@ Polymorphisme dès que pertinent.
   [`docs/15`](docs/15-elements-differes.md) au fur et à mesure que le nécessaire existe
 
 ### ⏭️ À venir
-- Features « build-then-gate » (docs/15 §9) : multi-potager,
-  fiches perso (scope V1), rotation avancée *(équipements/outils ✅ livré)*
-- i18n effective (ARB `en` + pilotage `locale`) · maquettes dark mode
-- Rebrancher **Phosphor Icons** (package cassé sur Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
-- Distribution : keystore release réel, icône & splash, CI/CD GitHub Actions
+> État réel consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md).
+- Features « build-then-gate » restantes (docs/15 §9) : **besoins en eau
+  détaillés** (+ lot 4 ADR-0009 mini-tutos/teaser)
+  *(multi-potager · équipements/outils · fiches perso · **rotation avancée** : ✅ livrés)*
+- maquettes dark mode · Rebrancher **Phosphor Icons** (package cassé sur
+  Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
+- Finitions légères (docs/15 §2) : toggles paramètres (transparence des données,
+  météo auto, « Ne pas déranger »), sous-routes go_router restantes, écran
+  notifications d'accueil
+- Distribution / **pré-release** : CI ✅ analyze+test (reste le job
+  build/signature d'APK), keystore release réel, icône & splash, packaging
+  multiplateforme (Linux AppImage/Flatpak, .exe, .dmg, .ipa)
 - **Juste avant release** : relecture éditoriale de **tous** les chapitres du
-  glossaire avec le dev (quand tous les termes/features/design seront figés —
-  docs/15 §7)
-- Packaging multiplateforme (Linux AppImage/Flatpak, APK, .exe, .dmg)
-- À arbitrer : **post-récolte** et **éditeur de fiches perso** (scope V1 selon
-  docs/13 §1, rien en code — reporter officiellement ou planifier)
+  glossaire avec le dev, **puis** sa traduction `en` (le reste de l'i18n `en`
+  UI + pilotage `locale` est ✅ livré) ; vérification dev Android (docs/15 §7)
+- À arbitrer : **post-récolte** (scope V1 selon docs/13 §1, rien en code —
+  reporter officiellement ou planifier) *(éditeur de fiches perso ✅ livré)*
 
 ---
 
@@ -243,9 +287,18 @@ tâches/arrosage → météo → export), alpha Android installée. Le **glossai
 « Aide & lexique »** (ADR-0017) est livré lots 1–5 ; la **relecture éditoriale**
 de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
 **illustrations** sont choisies par le dev au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)).
-Reste côté glossaire : termes cliquables sur les surfaces restantes (docs/15 §8
-#4bis). Ensuite (à arbitrer) : multi-potager (§9), distribution
-(CI/CD, signing), i18n `en` — toujours **avec leurs tests en parallèle**.
+Dernière feature livrée : **rotation avancée** (build-then-gate
+`acces.rotationAvancee`, palier expert) — domain (VO `PrecedentCultural` +
+normaliseur, enum `GroupeCultural`) + infra (mapper + intégrité) + moteur
+(`EvaluationRotation`) + UI (section « Rotation » dans le détail de zone :
+historique, familles bloquées, opportunités azote), tests en //. Reste côté
+glossaire : termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
+Prochain chantier V1 (dans sa propre session, **tests en parallèle**) :
+**besoins en eau détaillés** (§9) — commencer par enrichir `BesoinsCulture`
+(fréquence/quantité) avant l'UI. Le reste
+(distribution/pré-release, finitions §2, traduction `en` du glossaire) est
+consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) — multi-potager, équipements,
+CI analyze+test, version dynamique, liens externes et i18n `en` UI sont ✅ livrés.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
 > Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**

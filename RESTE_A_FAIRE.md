@@ -5,8 +5,9 @@
 > éditorial des familles/bioagresseurs). Généré le 2026-07-07 à partir de
 > [`docs/15-elements-differes.md`](docs/15-elements-differes.md) et
 > [`docs/13-roadmap-et-versioning.md`](docs/13-roadmap-et-versioning.md).
-> Mis à jour le 2026-07-07 après livraison du multi-potager (sélecteur +
-> création + F2 réglages).
+> Mis à jour le 2026-07-08 après livraison des **fiches plantes perso** et de la
+> **CI analyze+test** (le multi-potager, les équipements, la version dynamique,
+> les liens externes et l'i18n `en` UI étant déjà livrés).
 
 ## 1. Fonctionnalités « build-then-gate » (ADR-0009 §9)
 
@@ -17,12 +18,32 @@ Réservées par palier mais sans UI ni donnée :
 - ~~**Équipements/outils** (inter+) : toute l'UI manque~~ ✅ **Livré**
   (liste + formulaire + section détail de zone, gaté `acces.equipements`,
   entrée menu ⋮ Potager) — voir docs/15 §9
-- **Fiches plantes perso** (expert) : toute l'UI de création/édition (table
-  existe)
-- **Rotation avancée** (expert) : UI de rotation (précédents culturaux, délai
-  retour famille) — donnée sur la fiche mais aucun écran
+- ~~**Fiches plantes perso** (expert) : toute l'UI de création/édition~~
+  ✅ **Livré** : couche complète (domain→infra→UI), YAML = source de vérité,
+  fusion au catalogue (surcharge sur collision d'id, ADR-0002 A6), **tag `Perso`**
+  sur les cartes + fiche, dupliquer/éditer depuis le catalogue, gaté
+  `acces.fichesPerso` — voir docs/15 §9
+- ~~**Rotation avancée** (expert) : UI de rotation~~ ✅ **Livré** (Lots 1–4) :
+  **domain** — enum `GroupeCultural`, VO `PrecedentCultural` + normaliseur,
+  `precedentsFavorables/Defavorables` sur `FichePlante` ; **infra** — mapper +
+  intégrité référentielle des précédents-familles ; **moteur** —
+  `EvaluationRotation` (verdict favorable/défavorable/neutre + raisons
+  explicites) ; **UI** — section « Rotation » gatée `acces.rotationAvancee`
+  dans le détail de zone (`syntheseRotationZoneProvider` : historique récent,
+  familles bloquées par délai de retour, opportunités azote), tests en //.
+  - **⚠️ i18n restant (suivi)** : les **noms de famille** s'affichent en FR via
+    `FamilleBotanique.nomsLocalises` (résolu dans le provider), mais c'est figé
+    en `'fr'` → le rendre **locale-aware**. Les **libellés de groupe**
+    (« Légumineuses », « Engrais verts ») + descriptions existent désormais en
+    ARB (`glossaireValGroupeCultural*`, affichés sur la page glossaire
+    `rotation-cultures`) ; reste à exposer les précédents groupes/slugs sur une
+    surface UI (ex. fiche plante) le jour venu, en réutilisant ces libellés.
+  - **Entrée glossaire `rotation-cultures`** enrichie (définition détaillée
+    pourquoi + implémentation, 7 conseils, valeurs `GroupeCultural`, « Voir
+    aussi »). Traduction `en` du glossaire : différée (cf. §7).
 - **Besoins en eau détaillés** (expert) : il faut d'abord enrichir
-  `BesoinsCulture` (fréquence/quantité, pas juste le terme grossier)
+  `BesoinsCulture` (fréquence/quantité, pas juste le terme grossier) →
+  **chantier à venir**
 - **Lot 4 ADR-0009** : mini-tutos par palier + teaser de montée (modèle de
   contenu partagé avec le glossaire — mais l'implémentation du mécanisme, pas
   le texte, reste du dev)
@@ -43,17 +64,27 @@ Réservées par palier mais sans UI ni donnée :
     d'accès — n'existe pas)
   - Toggle « récupération météo auto » (champ manquant)
   - Toggle « Ne pas déranger » (champs domaine présents, UI absente)
-  - **Version dynamique** (`package_info_plus`), **liens externes**
-    (`url_launcher`), **i18n `en`** — 🚧 **en cours ailleurs**, branche
-    `feat/parametres-version-liens-i18n`
+  - ~~**Version dynamique** (`package_info_plus`), **liens externes**
+    (`url_launcher`), **i18n `en`**~~ ✅ **livrés** : version lue au runtime,
+    liens externes fonctionnels, ARB `en` + pilotage `locale` (glossaire non
+    traduit, cf. §7 relecture éditoriale différée)
   - Appairage d'appareils (réseau local, à concevoir)
 
-## 3. Distribution / packaging (docs/15 §7)
+## 3. Distribution / packaging (docs/15 §7) — groupé « juste avant release »
 
-- Signing release réel (keystore + `key.properties`, actuellement clé debug)
-- CI/CD GitHub Actions (aucun pipeline)
-- iOS / desktop packaging (Linux AppImage/Flatpak, .exe, .dmg) — alpha =
+- ~~CI/CD GitHub Actions (aucun pipeline)~~ ✅ **partiel** : pipeline
+  `.github/workflows/ci.yml` sur push/PR `main` (pub get → gen-l10n → codegen →
+  `flutter analyze` + `flutter test`). **Reste le job de build/signature d'APK
+  release** — couplé au keystore ci-dessous, donc reporté juste avant release
+  (le commit CI le note : « signing release reste un chantier séparé »)
+- Signing release réel (keystore + `signingConfigs.release` + `key.properties`
+  hors VCS, actuellement clé **debug**) — pré-release
+- Icône & splash screen — pré-release
+- iOS / desktop packaging (Linux AppImage/Flatpak, .exe, .dmg, .ipa) — alpha =
   Android seul pour l'instant
+- ⚠️ **Vérification développeur Android** (Google, rollout global 2027) —
+  démarche d'identité du **dev**, non-code, à décider avant la sortie grand
+  public (docs/15 §7)
 
 ## 4. Backlog UX (docs/15 §8) — restes non-design
 
@@ -89,15 +120,25 @@ Réservées par palier mais sans UI ni donnée :
 
 ## En résumé — le plus proche/actionnable
 
-- ~~Multi-potager (sélecteur actif + création) + F2~~ ✅ fait (2026-07-07)
-- 🚧 Version dynamique + liens externes + i18n `en` — en cours ailleurs
-  (`feat/parametres-version-liens-i18n`)
+Livré depuis la dernière révision : ~~Multi-potager + F2~~ ✅ · ~~Équipements~~ ✅ ·
+~~Version dynamique + liens externes + i18n `en` UI~~ ✅ · ~~CI analyze+test~~ ✅ ·
+~~**Fiches plantes perso**~~ ✅ (2026-07-08).
 
-Prochains candidats, par ordre de terrain nouveau croissant :
+Côté **features V1**, il ne reste vraiment que deux chantiers de code
+substantiels — à traiter chacun dans sa propre conversation :
 
-1. **Distribution** : keystore release + CI/CD GitHub Actions
-2. ~~**Équipements/outils** (inter+)~~ ✅ **livré** (liste + formulaire +
-   section zone, gaté `acces.equipements`)
-3. Le reste (fiches perso, rotation avancée, transparence des données,
-   territoire/invasives, besoins en eau détaillés) sont des chantiers plus
-   lourds nécessitant de nouvelles UI/modèles complets.
+1. **Rotation avancée** (expert) : donnée présente sur la fiche, aucun écran.
+2. **Besoins en eau détaillés** (expert) : enrichir d'abord `BesoinsCulture`
+   (fréquence/quantité), puis l'UI.
+   (+ Lot 4 ADR-0009 : mécanisme mini-tutos/teaser.)
+
+Tout le reste se range en :
+
+- **Pré-release / distribution** (groupé avant la sortie) : keystore release +
+  job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
+  éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
+- **Finitions légères** (docs/15 §2) : toggles paramètres (transparence des
+  données, météo auto, « Ne pas déranger »), sous-routes go_router restantes,
+  écran notifications d'accueil, `ResolveurFamille` complet (§11).
+- **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
+  conformité territoriale, communauté P2P, plan spatial, calendrier lunaire.

@@ -19,6 +19,7 @@ import '../../domain/value_objects/association_conflit.dart';
 import '../../domain/value_objects/besoins_culture.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../domain/value_objects/periodes_culture.dart';
+import '../../domain/value_objects/precedent_cultural.dart';
 
 /// Maps a validated plant-sheet map into a domain [FichePlante].
 ///
@@ -69,6 +70,9 @@ class FichePlanteMapper {
       associationsNegatives: _conflits(y),
       rotationFamille: rotation?['famille'] as String?,
       delaiRetourAnnees: rotation?['delai_retour_annees'] as int?,
+      // Rotation avancée (Lot 2) — typed cultural precedents, normalized.
+      precedentsFavorables: _precedents(rotation?['precedents_favorables']),
+      precedentsDefavorables: _precedents(rotation?['precedents_defavorables']),
       // Enrichissement §A
       rusticiteMin: rusticite?['zone_min'] == null
           ? null
@@ -120,6 +124,17 @@ class FichePlanteMapper {
   Set<String> _slugs(Object? liste) => liste == null
       ? const {}
       : (liste as Iterable).map((e) => e as String).toSet();
+
+  /// Cultural precedents (`rotation.precedents_favorables` /
+  /// `precedents_defavorables`) as a normalized, deduplicated set. Empty when
+  /// absent; blank entries are silently skipped (robust to sparse YAML).
+  Set<PrecedentCultural> _precedents(Object? liste) {
+    if (liste == null) return const {};
+    return {
+      for (final e in liste as Iterable)
+        if (e is String) ?PrecedentCultural.analyser(e),
+    };
+  }
 
   Map<String, String> _nomsLocalises(Map i18n) => {
         for (final entry in i18n.entries)

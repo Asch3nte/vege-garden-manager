@@ -11,6 +11,9 @@ import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/famille_effet_conflit.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/poids_association.dart';
+import '../../domain/enums/qualite_sol.dart';
+import '../../domain/enums/sous_type_legume.dart';
+import '../../domain/enums/usage_plante.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/unite_quantite.dart';
@@ -65,6 +68,48 @@ extension LibellesEnums on AppLocalizations {
         NiveauSoleil.pleinSoleil => expositionPleinSoleil,
         NiveauSoleil.miOmbre => expositionMiOmbre,
         NiveauSoleil.ombre => expositionOmbre,
+      };
+
+  /// Label for a legume sub-type. Reuses the glossary's value labels so the
+  /// personal-sheet form and the glossary stay in sync (single source).
+  String sousTypeLegume(SousTypeLegume s) => switch (s) {
+        SousTypeLegume.legumeFruit => glossaireValLegumeFruit,
+        SousTypeLegume.legumeFeuille => glossaireValLegumeFeuille,
+        SousTypeLegume.legumeRacine => glossaireValLegumeRacine,
+        SousTypeLegume.legumeBulbe => glossaireValLegumeBulbe,
+        SousTypeLegume.legumeTige => glossaireValLegumeTige,
+        SousTypeLegume.legumeFleur => glossaireValLegumeFleur,
+        SousTypeLegume.legumeTubercule => glossaireValLegumeTubercule,
+      };
+
+  /// Label for a plant functional use. Reuses the glossary's value labels.
+  String usagePlante(UsagePlante u) => switch (u) {
+        UsagePlante.alimentaire => glossaireValUsageAlimentaire,
+        UsagePlante.condimentaire => glossaireValUsageCondimentaire,
+        UsagePlante.medicinale => glossaireValUsageMedicinale,
+        UsagePlante.compagnonnage => glossaireValUsageCompagnonnage,
+        UsagePlante.repulsif => glossaireValUsageRepulsif,
+        UsagePlante.mellifere => glossaireValUsageMellifere,
+        UsagePlante.pollinisateur => glossaireValUsagePollinisateur,
+        UsagePlante.attireAuxiliaires => glossaireValUsageAttireAuxiliaires,
+        UsagePlante.engraisVert => glossaireValUsageEngraisVert,
+        UsagePlante.couvreSol => glossaireValUsageCouvreSol,
+        UsagePlante.briseVent => glossaireValUsageBriseVent,
+        UsagePlante.tuteurVivant => glossaireValUsageTuteurVivant,
+        UsagePlante.ornementale => glossaireValUsageOrnementale,
+        UsagePlante.fourrage => glossaireValUsageFourrage,
+      };
+
+  /// Label for a desired soil quality. Reuses the glossary's value labels.
+  String qualiteSol(QualiteSol q) => switch (q) {
+        QualiteSol.riche => glossaireValQualiteRiche,
+        QualiteSol.pauvre => glossaireValQualitePauvre,
+        QualiteSol.bienDraine => glossaireValQualiteBienDraine,
+        QualiteSol.malDraine => glossaireValQualiteMalDraine,
+        QualiteSol.frais => glossaireValQualiteFrais,
+        QualiteSol.sec => glossaireValQualiteSec,
+        QualiteSol.lourd => glossaireValQualiteLourd,
+        QualiteSol.leger => glossaireValQualiteLeger,
       };
 
   /// Label for the interface language.

@@ -13,10 +13,12 @@ import '../../application/state/plantations_notifier.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../application/state/potager_vue.dart';
 import '../../application/state/prochaines_taches_zone_provider.dart';
+import '../../application/state/synthese_rotation_zone_provider.dart';
 import '../../domain/entities/equipement.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../domain/enums/type_equipement.dart';
+import '../../domain/enums/type_parcelle.dart';
 import '../../domain/enums/urgence_arrosage.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 import '../providers/conseil_arrosage_plantation_provider.dart';
@@ -357,6 +359,8 @@ class _Detail extends StatelessWidget {
                 onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
               ),
             ],
+          // Crop rotation of this zone (expert, ADR-0009 / rotation avancée).
+          _SectionRotationZone(zoneId: zone.id, type: zone.type),
           // Equipment attached to this zone (intermediate+, ADR-0009).
           _SectionEquipementsZone(
             potagerId: potagerId,
@@ -373,6 +377,133 @@ class _Detail extends StatelessWidget {
 /// experience level (`acces.equipements`). Reads the garden-scoped
 /// [equipementsProvider] and filters to this zone's in-service equipment, so it
 /// refreshes automatically when the form mutates it.
+/// Crop-rotation readout for one zone (expert, `acces.rotationAvancee`). Shows
+/// what grew here recently, families still blocked by their return delay, and
+/// the nitrogen opportunities the history leaves. Entirely hidden below expert,
+/// when rotation does not apply (renewable-soil containers), or when the plot
+/// has no history worth showing. Data from [syntheseRotationZoneProvider].
+class _SectionRotationZone extends ConsumerWidget {
+  final String zoneId;
+  final TypeParcelle type;
+
+  const _SectionRotationZone({required this.zoneId, required this.type});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(accesNiveauProvider).rotationAvancee) {
+      return const SizedBox.shrink();
+    }
+    final synthese = ref
+        .watch(syntheseRotationZoneProvider((zoneId: zoneId, type: type)))
+        .value;
+    if (synthese == null || !synthese.aQuelqueChose) {
+      return const SizedBox.shrink();
+    }
+
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: EspacementsApp.s5),
+        Row(
+          children: [
+            Text(l10n.zoneRotationTitre, style: theme.textTheme.titleLarge),
+            AideGlossaire(
+              idTerme: TermeGlossaire.idNotion('rotation-cultures'),
+              infobulle: l10n.zoneRotationTitre,
+            ),
+          ],
+        ),
+        if (synthese.recentes.isNotEmpty) ...[
+          const SizedBox(height: EspacementsApp.s2),
+          _SousTitreRotation(texte: l10n.zoneRotationRecentesTitre),
+          for (final r in synthese.recentes)
+            _LigneRotation(
+              icone: Icons.history,
+              couleur: theme.colorScheme.onSurfaceVariant,
+              texte: l10n.zoneRotationRecenteLigne(
+                  r.nomFamille ?? r.familleSlug, r.nomPlante, r.annee),
+            ),
+        ],
+        if (synthese.famillesBloquees.isNotEmpty) ...[
+          const SizedBox(height: EspacementsApp.s3),
+          _SousTitreRotation(texte: l10n.zoneRotationAEviterTitre),
+          for (final b in synthese.famillesBloquees)
+            _LigneRotation(
+              icone: Icons.block,
+              couleur: theme.colorScheme.error,
+              texte: l10n.zoneRotationBloqueeLigne(
+                  b.nomFamille ?? b.familleSlug, b.anneeLibre, b.delaiAnnees),
+            ),
+        ],
+        if (synthese.opportunites.isNotEmpty) ...[
+          const SizedBox(height: EspacementsApp.s3),
+          _SousTitreRotation(texte: l10n.zoneRotationOpportunitesTitre),
+          for (final o in synthese.opportunites)
+            _LigneRotation(
+              icone: Icons.eco_outlined,
+              couleur: theme.colorScheme.primary,
+              texte: l10n.zoneRotationOpportuniteAzote(o.nomPlante),
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+/// A small sub-heading inside the rotation section.
+class _SousTitreRotation extends StatelessWidget {
+  final String texte;
+
+  const _SousTitreRotation({required this.texte});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: EspacementsApp.s1),
+      child: Text(
+        texte,
+        style: theme.textTheme.labelLarge
+            ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+      ),
+    );
+  }
+}
+
+/// One icon-led line of rotation guidance.
+class _LigneRotation extends StatelessWidget {
+  final IconData icone;
+  final Color couleur;
+  final String texte;
+
+  const _LigneRotation({
+    required this.icone,
+    required this.couleur,
+    required this.texte,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: EspacementsApp.s1),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icone, size: 16, color: couleur),
+          const SizedBox(width: EspacementsApp.s2),
+          Expanded(
+            child: Text(texte, style: theme.textTheme.bodyMedium),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SectionEquipementsZone extends ConsumerWidget {
   final String potagerId;
   final String zoneId;

@@ -1,4 +1,6 @@
+import '../../domain/enums/groupe_cultural.dart';
 import '../../l10n/app_localizations.dart';
+import 'complement_terme.dart';
 import 'catalogue/notions_associations.dart';
 import 'catalogue/notions_climat.dart';
 import 'catalogue/notions_cultures.dart';
@@ -38,7 +40,39 @@ List<TermeGlossaire> construireNotions(AppLocalizations l10n) =>
         titre: l10n.glossaireNotionRotationTitre,
         definition: l10n.glossaireNotionRotationDef,
         astuce: l10n.glossaireNotionRotationAstuce,
-        conseils: [l10n.glossaireNotionRotationConseil1],
+        conseils: [
+          l10n.glossaireNotionRotationConseil1,
+          l10n.glossaireNotionRotationConseil2,
+          l10n.glossaireNotionRotationConseil3,
+          l10n.glossaireNotionRotationConseil4,
+          l10n.glossaireNotionRotationConseil5,
+          l10n.glossaireNotionRotationConseil6,
+          l10n.glossaireNotionRotationConseil7,
+        ],
+        complements: [
+          // The two functional crop groups (GroupeCultural) a plant can list as
+          // a rotation precedent — this is where those values are explained.
+          ComplementValeursEnum(valeurs: [
+            for (final g in GroupeCultural.values)
+              switch (g) {
+                GroupeCultural.legumineuses => (
+                    libelle: l10n.glossaireValGroupeCulturalLegumineuses,
+                    description:
+                        l10n.glossaireValGroupeCulturalLegumineusesDesc
+                  ),
+                GroupeCultural.engraisVerts => (
+                    libelle: l10n.glossaireValGroupeCulturalEngraisVerts,
+                    description:
+                        l10n.glossaireValGroupeCulturalEngraisVertsDesc
+                  ),
+              },
+          ]),
+          ComplementVoirAussi(ids: [
+            TermeGlossaire.idNotion('famille-botanique'),
+            TermeGlossaire.idNotion('compagnonnage'),
+            TermeGlossaire.idNotion('besoin-nutriments'),
+          ]),
+        ],
       ),
       TermeGlossaire(
         id: TermeGlossaire.idNotion('compagnonnage'),

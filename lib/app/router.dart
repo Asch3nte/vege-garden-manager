@@ -17,6 +17,7 @@ import '../presentation/screens/ecran_calendrier.dart';
 import '../presentation/screens/ecran_meteo_detail.dart';
 import '../presentation/screens/ecran_onboarding.dart';
 import '../presentation/screens/ecran_catalogue.dart';
+import '../presentation/screens/ecran_fiches_personnelles.dart';
 import '../presentation/screens/ecran_plus.dart';
 import '../presentation/screens/ecran_equipements.dart';
 import '../presentation/screens/ecran_potager.dart';
@@ -64,6 +65,14 @@ abstract final class RoutesApp {
   /// Absolute location of the equipment list, under the **Potager** branch
   /// (keeps the bottom bar / rail; re-tapping the Potager tab pops back).
   static const String equipements = '$potager/$equipementsSegment';
+
+  /// Path segment of the personal-sheets list (under [catalogue]).
+  static const String fichesPersoSegment = 'fiches-perso';
+
+  /// Absolute location of the user's personal plant sheets, under the
+  /// **Catalogue** branch (keeps the bottom bar / rail; re-tapping the Catalogue
+  /// tab pops back). Gated by `acces.fichesPerso` at the entry point.
+  static const String fichesPerso = '$catalogue/$fichesPersoSegment';
 
   /// Hourly weather detail, under the **Accueil** branch (so re-tapping the
   /// Accueil tab pops back to the dashboard).
@@ -371,6 +380,15 @@ final routeurProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutesApp.catalogue,
                 builder: (context, state) => const EcranCatalogue(),
+                routes: [
+                  // The user's own plant sheets, pushed on top of the Catalogue
+                  // branch (expert feature, gated at the entry point).
+                  GoRoute(
+                    path: RoutesApp.fichesPersoSegment,
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: EcranFichesPersonnelles()),
+                  ),
+                ],
               ),
             ],
           ),
