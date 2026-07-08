@@ -23,8 +23,21 @@ Réservées par palier mais sans UI ni donnée :
   fusion au catalogue (surcharge sur collision d'id, ADR-0002 A6), **tag `Perso`**
   sur les cartes + fiche, dupliquer/éditer depuis le catalogue, gaté
   `acces.fichesPerso` — voir docs/15 §9
-- **Rotation avancée** (expert) : UI de rotation (précédents culturaux, délai
-  retour famille) — donnée sur la fiche mais aucun écran → **chantier à venir**
+- ~~**Rotation avancée** (expert) : UI de rotation~~ ✅ **Livré** (Lots 1–4) :
+  **domain** — enum `GroupeCultural`, VO `PrecedentCultural` + normaliseur,
+  `precedentsFavorables/Defavorables` sur `FichePlante` ; **infra** — mapper +
+  intégrité référentielle des précédents-familles ; **moteur** —
+  `EvaluationRotation` (verdict favorable/défavorable/neutre + raisons
+  explicites) ; **UI** — section « Rotation » gatée `acces.rotationAvancee`
+  dans le détail de zone (`syntheseRotationZoneProvider` : historique récent,
+  familles bloquées par délai de retour, opportunités azote), tests en //.
+  - **⚠️ i18n restant (suivi)** : les **noms de famille** s'affichent en FR via
+    `FamilleBotanique.nomsLocalises` (résolu dans le provider), mais (a) c'est
+    figé en `'fr'` — le rendre **locale-aware** ; (b) les **libellés de groupe**
+    (« Légumineuses », « Engrais verts ») n'ont pas encore de surface UI (la
+    section n'affiche que des familles + noms de plantes) — prévoir des clés ARB
+    `GroupeCultural` + un libellé de repli famille pour le jour où l'affichage
+    des précédents groupes/slugs non résolus sera exposé (ex. sur la fiche plante).
 - **Besoins en eau détaillés** (expert) : il faut d'abord enrichir
   `BesoinsCulture` (fréquence/quantité, pas juste le terme grossier) →
   **chantier à venir**

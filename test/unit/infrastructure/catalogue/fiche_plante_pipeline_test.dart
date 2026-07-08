@@ -11,7 +11,9 @@ import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_conflit_association.dart';
 import 'package:pot_a_gerer/domain/enums/enracinement_plante.dart';
+import 'package:pot_a_gerer/domain/enums/groupe_cultural.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/value_objects/precedent_cultural.dart';
 import 'package:pot_a_gerer/domain/exceptions/fiche_plante_invalide_exception.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/catalogue_yaml_parser.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fiche_plante_mapper.dart';
@@ -51,6 +53,18 @@ void main() {
       expect(f.delaiRetourAnnees, 4);
     });
 
+    test('maps the cultural precedents (rotation avancée)', () {
+      final f = _mapper.versEntite(map);
+      // LEG-001: precedents_favorables: [legumineuses, engrais_verts]
+      expect(f.precedentsFavorables, {
+        const PrecedentCultural.groupe(GroupeCultural.legumineuses),
+        const PrecedentCultural.groupe(GroupeCultural.engraisVerts),
+      });
+      // precedents_defavorables: [solanaceae]
+      expect(f.precedentsDefavorables,
+          {PrecedentCultural.famille('solanaceae')});
+    });
+
     test('maps the periods (hemisphere × climate)', () {
       final f = _mapper.versEntite(map);
       expect(
@@ -76,6 +90,73 @@ void main() {
       expect(f.entreEnConflitAvec('fenouil'), isTrue); // no fiche yet
       expect(f.entreEnConflitAvec('LEG-020'), isTrue); // pomme de terre → LEG-020
       expect(f.sAssocieBienAvec('fenouil'), isFalse);
+    });
+  });
+
+  group('Catalogue pipeline — cultural precedents normalization (Lot 2)', () {
+    const yamlPrecedents = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, cucurbitacees, "graminées"]
+  precedents_defavorables: [ail, "", solanaceae]
+''';
+
+    test('normalizes spelling drift and skips blank entries', () {
+      final m = _parser.parser(yamlPrecedents, source: 'x');
+      final f = _mapper.versEntite(m);
+      expect(f.precedentsFavorables, {
+        const PrecedentCultural.groupe(GroupeCultural.legumineuses),
+        PrecedentCultural.famille('cucurbitaceae'), // cucurbitacees →
+        PrecedentCultural.famille('poaceae'), // graminées →
+      });
+      // "ail" → amaryllidaceae, blank skipped, solanaceae kept.
+      expect(f.precedentsDefavorables, {
+        PrecedentCultural.famille('amaryllidaceae'),
+        PrecedentCultural.famille('solanaceae'),
+      });
+    });
+
+    test('a sheet without a rotation block carries empty precedent sets', () {
+      const bare = '''
+id: y
+nom_scientifique: Y y
+famille_botanique: Yaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: Y
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+''';
+      final f = _mapper.versEntite(_parser.parser(bare, source: 'y'));
+      expect(f.precedentsFavorables, isEmpty);
+      expect(f.precedentsDefavorables, isEmpty);
     });
   });
 

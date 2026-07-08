@@ -2685,6 +2685,40 @@
   "zoneEquipementsAjouter": "Ajouter un équipement",
   "@zoneEquipementsAjouter": { "description": "Bouton d'ajout d'un équipement rattaché à la zone." },
 
+  "zoneRotationTitre": "Rotation",
+  "@zoneRotationTitre": { "description": "Titre de la section rotation des cultures dans le détail d'une zone (feature experte)." },
+  "zoneRotationRecentesTitre": "Ont poussé ici récemment",
+  "@zoneRotationRecentesTitre": { "description": "Sous-titre listant les familles cultivées récemment sur la zone." },
+  "zoneRotationRecenteLigne": "{famille} ({plante}) — {annee}",
+  "@zoneRotationRecenteLigne": {
+    "description": "Une famille cultivée récemment : nom de famille, plante exemple, année.",
+    "placeholders": {
+      "famille": { "type": "String" },
+      "plante": { "type": "String" },
+      "annee": { "type": "int" }
+    }
+  },
+  "zoneRotationAEviterTitre": "À éviter maintenant",
+  "@zoneRotationAEviterTitre": { "description": "Sous-titre listant les familles à ne pas replanter tout de suite." },
+  "zoneRotationBloqueeLigne": "{famille} — attendre {annee} ({delai, plural, =1{délai de retour 1 an} other{délai de retour {delai} ans}})",
+  "@zoneRotationBloqueeLigne": {
+    "description": "Une famille bloquée par son délai de retour : famille, année de libération, délai en années.",
+    "placeholders": {
+      "famille": { "type": "String" },
+      "annee": { "type": "int" },
+      "delai": { "type": "int" }
+    }
+  },
+  "zoneRotationOpportunitesTitre": "Bon à planter ensuite",
+  "@zoneRotationOpportunitesTitre": { "description": "Sous-titre listant les opportunités laissées par l'historique." },
+  "zoneRotationOpportuniteAzote": "Gros besoins en azote : profiteront de l'azote laissé par {plante}",
+  "@zoneRotationOpportuniteAzote": {
+    "description": "Opportunité : un fixateur d'azote a poussé, favorable aux gros consommateurs.",
+    "placeholders": {
+      "plante": { "type": "String" }
+    }
+  },
+
   "fichesPersoTitre": "Mes fiches perso",
   "@fichesPersoTitre": { "description": "Titre de l'écran listant les fiches plantes de l'utilisateur." },
   "fichesPersoOuvrir": "Mes fiches perso",

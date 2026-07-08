@@ -13,6 +13,7 @@ import '../value_objects/association_benefique.dart';
 import '../value_objects/association_conflit.dart';
 import '../value_objects/besoins_culture.dart';
 import '../value_objects/periodes_culture.dart';
+import '../value_objects/precedent_cultural.dart';
 
 /// Reference sheet for a species/variety, loaded from the YAML catalogue and
 /// **not created by the user**. Multilingual by design (localised names),
@@ -42,6 +43,10 @@ class FichePlante {
   final List<AssociationConflit> _associationsNegatives;
   final String? _rotationFamille;
   final int? _delaiRetourAnnees;
+  // Rotation avancée (Lot 1) — typed cultural precedents (families or
+  // functional groups). Empty when the sheet declares none.
+  final Set<PrecedentCultural> _precedentsFavorables;
+  final Set<PrecedentCultural> _precedentsDefavorables;
   final Map<String, String> _descriptionsLocalisees;
 
   // Enrichissement §A — rusticité USDA tolérée par la plante
@@ -92,6 +97,8 @@ class FichePlante {
     this._associationsNegatives,
     this._rotationFamille,
     this._delaiRetourAnnees,
+    this._precedentsFavorables,
+    this._precedentsDefavorables,
     this._descriptionsLocalisees,
     this._rusticiteMin,
     this._temperatureMinSurvie,
@@ -149,6 +156,8 @@ class FichePlante {
     List<AssociationConflit>? associationsNegatives,
     String? rotationFamille,
     int? delaiRetourAnnees,
+    Set<PrecedentCultural>? precedentsFavorables,
+    Set<PrecedentCultural>? precedentsDefavorables,
     Map<String, String>? descriptionsLocalisees,
     // Enrichissement §A
     ZoneRusticite? rusticiteMin,
@@ -198,6 +207,10 @@ class FichePlante {
             associationsNegatives ?? const <AssociationConflit>[]),
         rotationFamille,
         delaiRetourAnnees,
+        Set<PrecedentCultural>.unmodifiable(
+            precedentsFavorables ?? const <PrecedentCultural>{}),
+        Set<PrecedentCultural>.unmodifiable(
+            precedentsDefavorables ?? const <PrecedentCultural>{}),
         Map<String, String>.unmodifiable(descriptionsLocalisees ?? const {}),
         rusticiteMin,
         temperatureMinSurvie,
@@ -249,6 +262,15 @@ class FichePlante {
   int get dureeAvantRecolteJoursMax => _dureeAvantRecolteJoursMax;
   String? get rotationFamille => _rotationFamille;
   int? get delaiRetourAnnees => _delaiRetourAnnees;
+
+  /// Cultural precedents that make this plant a **good** follower (unmodifiable,
+  /// possibly empty) — families or functional groups it does well after
+  /// (rotation avancée). See [PrecedentCultural].
+  Set<PrecedentCultural> get precedentsFavorables => _precedentsFavorables;
+
+  /// Cultural precedents that make this plant a **poor** follower (unmodifiable,
+  /// possibly empty) — typically its own family or shared-pest families.
+  Set<PrecedentCultural> get precedentsDefavorables => _precedentsDefavorables;
 
   /// Typed beneficial associations of this plant — each pairs a target id with
   /// an optional mechanism and localised reason (unmodifiable, ADR-0010).

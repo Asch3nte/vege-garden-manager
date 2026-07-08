@@ -3,6 +3,7 @@ import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/charge_tuteur.dart';
+import 'package:pot_a_gerer/domain/enums/groupe_cultural.dart';
 import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
@@ -12,6 +13,7 @@ import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
+import 'package:pot_a_gerer/domain/value_objects/precedent_cultural.dart';
 
 BesoinsCulture _besoins() => BesoinsCulture(
       eau: BesoinEau.eleve,
@@ -34,6 +36,8 @@ FichePlante _fiche({
   Set<String>? repulsifContre,
   Set<String>? piegeA,
   ChargeTuteur? chargeTuteur,
+  Set<PrecedentCultural>? precedentsFavorables,
+  Set<PrecedentCultural>? precedentsDefavorables,
 }) =>
     FichePlante(
       id: id,
@@ -57,6 +61,8 @@ FichePlante _fiche({
       repulsifContre: repulsifContre,
       piegeA: piegeA,
       chargeTuteur: chargeTuteur,
+      precedentsFavorables: precedentsFavorables,
+      precedentsDefavorables: precedentsDefavorables,
     );
 
 void main() {
@@ -200,6 +206,37 @@ void main() {
       expect(f.chargeTuteur, isNull);
       expect(() => f.repulsifContre.add('x'), throwsUnsupportedError);
       expect(() => f.piegeA.add('x'), throwsUnsupportedError);
+    });
+  });
+
+  group('FichePlante — précédents culturaux (rotation avancée, Lot 1)', () {
+    test('carries favorable and unfavorable precedents', () {
+      final f = _fiche(
+        precedentsFavorables: {
+          const PrecedentCultural.groupe(GroupeCultural.legumineuses),
+          PrecedentCultural.famille('cucurbitaceae'),
+        },
+        precedentsDefavorables: {PrecedentCultural.famille('solanaceae')},
+      );
+      expect(f.precedentsFavorables, hasLength(2));
+      expect(f.precedentsFavorables,
+          contains(const PrecedentCultural.groupe(GroupeCultural.legumineuses)));
+      expect(f.precedentsDefavorables,
+          equals({PrecedentCultural.famille('solanaceae')}));
+    });
+
+    test('defaults: empty, immutable sets', () {
+      final f = _fiche();
+      expect(f.precedentsFavorables, isEmpty);
+      expect(f.precedentsDefavorables, isEmpty);
+      expect(
+        () => f.precedentsFavorables.add(PrecedentCultural.famille('x')),
+        throwsUnsupportedError,
+      );
+      expect(
+        () => f.precedentsDefavorables.add(PrecedentCultural.famille('x')),
+        throwsUnsupportedError,
+      );
     });
   });
 

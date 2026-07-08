@@ -169,6 +169,26 @@ Polymorphisme dès que pertinent.
       + route `/catalogue/fiches-perso`, **tag visuel `BadgePerso`** sur les cartes
       + en-tête de fiche, menu ⋮ « dupliquer / modifier » gaté. Tests unitaires +
       widget en // (couche complète : 47 tests dédiés, suite widget 212 verte).
+24. **Rotation avancée** (docs/15 §9, build-then-gate `acces.rotationAvancee`,
+    palier expert) : feature complète de bout en bout.
+    - **Domain** : enum `GroupeCultural { legumineuses, engraisVerts }`, VO
+      `PrecedentCultural` (famille xor groupe) + normaliseur `analyser()` qui
+      absorbe la dérive orthographique du corpus (`cucurbitacees→cucurbitaceae`,
+      `graminées→poaceae`, `ail→amaryllidaceae`), champs
+      `precedentsFavorables/Defavorables` sur `FichePlante`.
+    - **Infra** : mapper lit `rotation.precedents_*` (normalisation + skip
+      robuste), `VerificateurIntegriteFamilles` étendu (tout précédent-famille
+      résout vers une fiche `_familles/*.yaml`, gardé par `familles_reel_test`).
+    - **Application/moteur** : `EvaluationRotation` (dans `application/engine/`,
+      comme `SuggestionAssociation`) → `ResultatRotation` (verdict favorable/
+      défavorable/neutre + `RaisonRotation` explicites) ; réconcilie précédents
+      déclarés + délai de retour famille + azote (`legumineuses↔fixeAzote`,
+      `engrais_verts↔categorie`) ; défavorable domine.
+    - **Presentation** : section « Rotation » dans le détail de zone
+      (`syntheseRotationZoneProvider` : historique récent, familles bloquées par
+      délai de retour avec année de libération, opportunités azote), gatée
+      expert, lien glossaire `rotation-cultures`, clés ARB fr+en. Tests unitaires
+      + widget en // (suite complète 1170 verte).
 
 ### 🚧 En cours / prochaine étape
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
@@ -182,9 +202,9 @@ Polymorphisme dès que pertinent.
 
 ### ⏭️ À venir
 > État réel consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md).
-- Features « build-then-gate » restantes (docs/15 §9) : **rotation avancée**,
-  **besoins en eau détaillés** (+ lot 4 ADR-0009 mini-tutos/teaser)
-  *(multi-potager · équipements/outils · fiches perso : ✅ livrés)*
+- Features « build-then-gate » restantes (docs/15 §9) : **besoins en eau
+  détaillés** (+ lot 4 ADR-0009 mini-tutos/teaser)
+  *(multi-potager · équipements/outils · fiches perso · **rotation avancée** : ✅ livrés)*
 - maquettes dark mode · Rebrancher **Phosphor Icons** (package cassé sur
   Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
 - Finitions légères (docs/15 §2) : toggles paramètres (transparence des données,
@@ -267,12 +287,15 @@ tâches/arrosage → météo → export), alpha Android installée. Le **glossai
 « Aide & lexique »** (ADR-0017) est livré lots 1–5 ; la **relecture éditoriale**
 de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
 **illustrations** sont choisies par le dev au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)).
-Dernière feature livrée : **éditeur de fiches plantes perso** (build-then-gate
-`acces.fichesPerso`, palier expert) — backend + UI (liste, formulaire, tag
-`Perso` dans le catalogue, dupliquer/éditer), tests en //. Reste côté glossaire :
-termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
-Prochains chantiers V1 (chacun dans sa propre session, **tests en parallèle**) :
-**rotation avancée** (§9) puis **besoins en eau détaillés** (§9). Le reste
+Dernière feature livrée : **rotation avancée** (build-then-gate
+`acces.rotationAvancee`, palier expert) — domain (VO `PrecedentCultural` +
+normaliseur, enum `GroupeCultural`) + infra (mapper + intégrité) + moteur
+(`EvaluationRotation`) + UI (section « Rotation » dans le détail de zone :
+historique, familles bloquées, opportunités azote), tests en //. Reste côté
+glossaire : termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
+Prochain chantier V1 (dans sa propre session, **tests en parallèle**) :
+**besoins en eau détaillés** (§9) — commencer par enrichir `BesoinsCulture`
+(fréquence/quantité) avant l'UI. Le reste
 (distribution/pré-release, finitions §2, traduction `en` du glossaire) est
 consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) — multi-potager, équipements,
 CI analyze+test, version dynamique, liens externes et i18n `en` UI sont ✅ livrés.

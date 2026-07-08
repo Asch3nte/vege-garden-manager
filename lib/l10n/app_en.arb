@@ -687,6 +687,14 @@
   "zoneEquipementsVide": "No equipment on this zone.",
   "zoneEquipementsAjouter": "Add equipment",
 
+  "zoneRotationTitre": "Rotation",
+  "zoneRotationRecentesTitre": "Recently grown here",
+  "zoneRotationRecenteLigne": "{famille} ({plante}) — {annee}",
+  "zoneRotationAEviterTitre": "Avoid for now",
+  "zoneRotationBloqueeLigne": "{famille} — wait until {annee} ({delai, plural, =1{1-year return delay} other{{delai}-year return delay}})",
+  "zoneRotationOpportunitesTitre": "Good to plant next",
+  "zoneRotationOpportuniteAzote": "Heavy nitrogen feeders: will benefit from the nitrogen left by {plante}",
+
   "fichesPersoTitre": "My plant sheets",
   "fichesPersoOuvrir": "My plant sheets",
   "fichesPersoVide": "No personal sheet yet.",

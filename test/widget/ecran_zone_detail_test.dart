@@ -12,6 +12,8 @@ import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/providers/service_providers.dart';
+import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
+import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
@@ -21,6 +23,7 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
@@ -36,7 +39,9 @@ import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dar
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
+import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
@@ -421,5 +426,95 @@ void main() {
 
     verify(() => parcelles.supprimer('z-1')).called(1);
     expect(find.text('PLAN'), findsOneWidget);
+  });
+
+  // ── Rotation section (expert, rotation avancée Lot 4) ─────────────────────
+
+  FichePlante ficheRotation() => FichePlante(
+        id: 'tomate',
+        nomScientifique: 'Solanum lycopersicum',
+        familleBotanique: 'solanaceae',
+        rotationFamille: 'solanaceae',
+        categorie: CategoriePlante.legume,
+        usages: const {UsagePlante.alimentaire},
+        nomsLocalises: const {'fr': 'Tomate'},
+        besoins: BesoinsCulture(
+          eau: BesoinEau.modere,
+          soleil: NiveauSoleil.pleinSoleil,
+          phMin: 6,
+          phMax: 7,
+        ),
+        espacementCm: 40,
+        dureeAvantRecolteJoursMin: 60,
+        dureeAvantRecolteJoursMax: 80,
+        delaiRetourAnnees: 4,
+      );
+
+  // Seeds zone z-1 with a solanaceae culture grown this year, resolvable in the
+  // full catalogue (which the rotation synthesis reads via obtenirToutes).
+  void semerPourRotation() {
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [unePlantation('p-1', 'tomate')]);
+    when(() => fiches.obtenirParId('tomate'))
+        .thenAnswer((_) async => ficheRotation());
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [ficheRotation()]);
+  }
+
+  Future<void> monterAvecNiveau(
+    WidgetTester tester,
+    NiveauExperience niveau,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(potagers),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
+          plantationRepositoryProvider.overrideWithValue(plantations),
+          equipementRepositoryProvider.overrideWithValue(equipements),
+          meteoServiceProvider.overrideWithValue(meteo),
+          tacheRepositoryProvider.overrideWithValue(taches),
+          fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          familleBotaniqueCacheProvider.overrideWith((ref) async =>
+              FamilleBotaniqueCache([
+                FamilleBotanique(
+                  id: 'solanaceae',
+                  nomScientifique: 'Solanaceae',
+                  categories: const {CategoriePlante.legume},
+                  nomsLocalises: const {'fr': 'Solanacées'},
+                ),
+              ])),
+          accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
+          horlogeProvider.overrideWithValue(() => maintenant),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const EcranZoneDetail(zoneId: 'z-1'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('expert: the rotation section reads out history and blocks',
+      (tester) async {
+    semerPourRotation();
+    await monterAvecNiveau(tester, NiveauExperience.expert);
+
+    expect(find.text('Rotation'), findsOneWidget);
+    // Grown here recently: family name + example plant + year (2026).
+    expect(find.textContaining('Solanacées'), findsWidgets);
+    expect(find.textContaining('Tomate'), findsWidgets);
+    // Blocked until 2026 + 4 = 2030.
+    expect(find.textContaining('2030'), findsOneWidget);
+  });
+
+  testWidgets('below expert: the rotation section is hidden', (tester) async {
+    semerPourRotation();
+    await monterAvecNiveau(tester, NiveauExperience.intermediaire);
+
+    expect(find.text('Rotation'), findsNothing);
   });
 }
