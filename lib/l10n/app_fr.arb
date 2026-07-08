@@ -784,6 +784,46 @@
   "@ficheExposition": { "description": "Libellé de la donnée exposition dans la fiche." },
   "ficheArrosage": "Arrosage",
   "@ficheArrosage": { "description": "Libellé de la donnée arrosage dans la fiche." },
+  "ficheArrosageDetailleTitre": "Arrosage détaillé",
+  "@ficheArrosageDetailleTitre": { "description": "Titre de la section arrosage détaillé de la fiche (expert, acces.eauDetaillee)." },
+  "ficheArrosageIndicatif": "Repères indicatifs par temps chaud et sec — l'app ajuste selon la météo, le sol et vos équipements.",
+  "@ficheArrosageIndicatif": { "description": "Avertissement sous les chiffres d'arrosage : ce sont des repères, pas un calendrier fixe." },
+  "ficheArrosageFrequence": "Fréquence",
+  "@ficheArrosageFrequence": { "description": "Libellé de la fréquence d'arrosage détaillée." },
+  "ficheArrosageFrequenceJours": "Tous les {min} à {max} jours",
+  "@ficheArrosageFrequenceJours": {
+    "description": "Intervalle indicatif entre deux arrosages, en jours.",
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
+  "ficheArrosageFrequenceJoursUnique": "Tous les {jours} jours",
+  "@ficheArrosageFrequenceJoursUnique": {
+    "description": "Intervalle indicatif entre deux arrosages quand min = max.",
+    "placeholders": { "jours": { "type": "int" } }
+  },
+  "ficheArrosageVolume": "Volume",
+  "@ficheArrosageVolume": { "description": "Libellé du volume d'arrosage détaillé." },
+  "ficheArrosageVolumeLitres": "{min} à {max} L/m²",
+  "@ficheArrosageVolumeLitres": {
+    "description": "Volume indicatif par arrosage, en litres par mètre carré.",
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
+  },
+  "ficheArrosageVolumeLitresUnique": "{litres} L/m²",
+  "@ficheArrosageVolumeLitresUnique": {
+    "description": "Volume indicatif par arrosage quand min = max.",
+    "placeholders": { "litres": { "type": "String" } }
+  },
+  "ficheArrosagePhases": "Périodes les plus sensibles au manque d'eau",
+  "@ficheArrosagePhases": { "description": "Libellé de la liste des phases de croissance sensibles au stress hydrique." },
+  "phaseSensibleGermination": "Germination / levée",
+  "@phaseSensibleGermination": { "description": "Phase sensible à l'eau : germination et levée." },
+  "phaseSensibleFeuillaison": "Croissance du feuillage",
+  "@phaseSensibleFeuillaison": { "description": "Phase sensible à l'eau : croissance végétative du feuillage." },
+  "phaseSensibleFloraison": "Floraison",
+  "@phaseSensibleFloraison": { "description": "Phase sensible à l'eau : floraison." },
+  "phaseSensibleFructification": "Fructification",
+  "@phaseSensibleFructification": { "description": "Phase sensible à l'eau : nouaison et développement des fruits." },
+  "phaseSensibleGrossissement": "Grossissement (racine, bulbe, pomme)",
+  "@phaseSensibleGrossissement": { "description": "Phase sensible à l'eau : grossissement de l'organe récolté (racine, bulbe, pomme de salade/chou)." },
   "ficheEspacement": "Espacement",
   "@ficheEspacement": { "description": "Libellé de la donnée espacement dans la fiche." },
   "ficheEspacementCm": "{cm} cm",

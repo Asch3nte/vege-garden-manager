@@ -7,6 +7,7 @@ import '../../domain/enums/enracinement_plante.dart';
 import '../../domain/enums/hemisphere.dart';
 import '../../domain/enums/niveau_besoin.dart';
 import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/phase_sensible_eau.dart';
 import '../../domain/enums/qualite_sol.dart';
 import '../../domain/enums/sous_type_legume.dart';
 import '../../domain/enums/type_benefice_association.dart';
@@ -14,6 +15,7 @@ import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/enums/usage_plante.dart';
 import '../../domain/enums/zone_rusticite.dart';
+import '../../domain/value_objects/arrosage_detaille.dart';
 import '../../domain/value_objects/association_benefique.dart';
 import '../../domain/value_objects/association_conflit.dart';
 import '../../domain/value_objects/besoins_culture.dart';
@@ -61,6 +63,8 @@ class FichePlanteMapper {
         soleilMin: besoins['ensoleillement_min'] == null
             ? null
             : _enum(NiveauSoleil.values, besoins['ensoleillement_min'] as String),
+        // Detailed watering (optional, ADR-0009 `acces.eauDetaillee`).
+        arrosageDetaille: _arrosageDetaille(besoins['arrosage_detaille']),
       ),
       espacementCm: cycle['espacement_cm'] as int,
       dureeAvantRecolteJoursMin: duree[0] as int,
@@ -134,6 +138,30 @@ class FichePlanteMapper {
       for (final e in liste as Iterable)
         if (e is String) ?PrecedentCultural.analyser(e),
     };
+  }
+
+  /// Builds the optional [ArrosageDetaille] from `besoins.arrosage_detaille`,
+  /// or `null` when absent. Assumes the block passed [FichePlanteValidator]
+  /// (every aspect is optional; at least one is guaranteed present).
+  ArrosageDetaille? _arrosageDetaille(Object? bloc) {
+    if (bloc == null) return null;
+    final m = bloc as Map;
+    final frequence = m['frequence_jours'] as List?;
+    final volume = m['volume_litres_m2'] as List?;
+    final phases = m['phases_sensibles'] as Iterable?;
+    return ArrosageDetaille(
+      frequenceJoursMin: frequence?[0] as int?,
+      frequenceJoursMax: frequence?[1] as int?,
+      volumeLitresM2Min: (volume?[0] as num?)?.toDouble(),
+      volumeLitresM2Max: (volume?[1] as num?)?.toDouble(),
+      phasesSensibles: phases == null
+          ? const {}
+          : {
+              for (final p in phases)
+                _enum(PhaseSensibleEau.values, p as String),
+            },
+      noteI18n: _raisonI18n(m['note_i18n'] as Map?),
+    );
   }
 
   Map<String, String> _nomsLocalises(Map i18n) => {

@@ -66,6 +66,12 @@ besoins:
   gele_fatal: # (optionnel) bool — vrai si le moindre gel détruit la plante (défaut: false)
   temperature_max_tolerance: # (optionnel) °C — seuil de stress thermique (ADR-0015 ; ex. 28 pour laitue)
   tolerance_secheresse: # (optionnel) enum ToleranceSecheresse : faible | moyenne | forte (ADR-0015)
+  arrosage_detaille: # (optionnel, expert — acces.eauDetaillee) détail d'arrosage ; CHAQUE sous-champ optionnel, ≥1 requis. Les chiffres doivent être RÉELS (sourcés), jamais inventés.
+    frequence_jours: [] # (optionnel) [min, max] jours entre arrosages, indicatif par temps chaud/sec (0 < min <= max)
+    volume_litres_m2: [] # (optionnel) [min, max] L/m² par arrosage (0 < min <= max)
+    phases_sensibles: [] # (optionnel) liste de PhaseSensibleEau : germination | feuillaison | floraison | fructification | grossissement
+    note_i18n: # (optionnel) { fr: "...", en: "..." } — conseil éditorial localisé
+      fr:
 
 # Cycle de culture
 cycle:

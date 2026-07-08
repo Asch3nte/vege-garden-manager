@@ -1,5 +1,6 @@
 import '../../domain/enums/charge_tuteur.dart';
 import '../../domain/enums/enracinement_plante.dart';
+import '../../domain/enums/phase_sensible_eau.dart';
 import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_conflit_association.dart';
 import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
@@ -169,6 +170,69 @@ class FichePlanteValidator {
         toleranceSecheresse is String &&
             ['faible', 'moyenne', 'forte'].contains(toleranceSecheresse),
         'besoins.tolerance_secheresse must be faible | moyenne | forte',
+      );
+    }
+
+    // Detailed watering (optional, ADR-0009 `acces.eauDetaillee`). Every aspect
+    // is independently optional; numbers must be real (never invented), so a
+    // block may carry only sensitive stages and/or a note. At least one aspect
+    // must be present when the block exists.
+    final arrosageDetaille = besoins['arrosage_detaille'];
+    if (arrosageDetaille != null) {
+      exiger(arrosageDetaille is Map,
+          'besoins.arrosage_detaille must be a map');
+      final detail = arrosageDetaille as Map;
+      final frequence = detail['frequence_jours'];
+      final aFrequence = frequence != null;
+      if (aFrequence) {
+        exiger(
+          frequence is List &&
+              frequence.length == 2 &&
+              frequence[0] is int &&
+              frequence[1] is int &&
+              (frequence[0] as int) > 0 &&
+              (frequence[0] as int) <= (frequence[1] as int),
+          'besoins.arrosage_detaille.frequence_jours must be [min, max] days '
+          'with 0 < min <= max',
+        );
+      }
+      final volume = detail['volume_litres_m2'];
+      final aVolume = volume != null;
+      if (aVolume) {
+        exiger(
+          volume is List &&
+              volume.length == 2 &&
+              volume[0] is num &&
+              volume[1] is num &&
+              (volume[0] as num) > 0 &&
+              (volume[0] as num) <= (volume[1] as num),
+          'besoins.arrosage_detaille.volume_litres_m2 must be [min, max] L/m² '
+          'with 0 < min <= max',
+        );
+      }
+      final phases = detail['phases_sensibles'];
+      final aPhases = phases != null;
+      if (aPhases) {
+        exiger(phases is List,
+            'besoins.arrosage_detaille.phases_sensibles must be a list');
+        final valides = PhaseSensibleEau.values.map((e) => e.name).toSet();
+        for (final p in phases as List) {
+          exiger(
+            p is String && valides.contains(_versCamel(p)),
+            'besoins.arrosage_detaille.phases_sensibles entry "$p" must be one '
+            'of germination|feuillaison|floraison|fructification|grossissement',
+          );
+        }
+      }
+      final note = detail['note_i18n'];
+      final aNote = note != null;
+      if (aNote) {
+        exiger(note is Map,
+            'besoins.arrosage_detaille.note_i18n must be a map of locale→text');
+      }
+      exiger(
+        aFrequence || aVolume || aPhases || aNote,
+        'besoins.arrosage_detaille must carry at least one aspect',
       );
     }
 

@@ -41,9 +41,18 @@ Réservées par palier mais sans UI ni donnée :
   - **Entrée glossaire `rotation-cultures`** enrichie (définition détaillée
     pourquoi + implémentation, 7 conseils, valeurs `GroupeCultural`, « Voir
     aussi »). Traduction `en` du glossaire : différée (cf. §7).
-- **Besoins en eau détaillés** (expert) : il faut d'abord enrichir
-  `BesoinsCulture` (fréquence/quantité, pas juste le terme grossier) →
-  **chantier à venir**
+- ~~**Besoins en eau détaillés** (expert) : enrichir d'abord `BesoinsCulture`~~
+  ✅ **Livré** : VO optionnel `ArrosageDetaille` (fréquence/volume/phases
+  sensibles/note, chaque sous-champ optionnel) + enum `PhaseSensibleEau` ;
+  bloc YAML `besoins.arrosage_detaille` (validateur/mapper) ; **6 espèces
+  seedées** (phases sensibles + notes documentées ; **chiffres laissés vides à
+  sourcer par le dev**, jamais inventés) ; section gatée `acces.eauDetaillee`
+  dans le détail de fiche (terme grossier conservé pour tous), **moteur
+  inchangé** — voir docs/15 §9
+  - **Suite envisagée (post-V1)** : [ADR-0018](docs/decisions/0018-stade-sensible-urgence-arrosage.md)
+    (statut **Proposé**) — coupler `phasesSensibles` × stade de croissance pour
+    **moduler l'urgence d'arrosage** ; cadrage figé (mapping fin↔grossier,
+    garde-fou ADR-0009, recalibration). Prérequis : corpus renseigné.
 - **Lot 4 ADR-0009** : mini-tutos par palier + teaser de montée (modèle de
   contenu partagé avec le glossaire — mais l'implémentation du mécanisme, pas
   le texte, reste du dev)
@@ -122,15 +131,15 @@ Réservées par palier mais sans UI ni donnée :
 
 Livré depuis la dernière révision : ~~Multi-potager + F2~~ ✅ · ~~Équipements~~ ✅ ·
 ~~Version dynamique + liens externes + i18n `en` UI~~ ✅ · ~~CI analyze+test~~ ✅ ·
-~~**Fiches plantes perso**~~ ✅ (2026-07-08).
+~~**Fiches plantes perso**~~ ✅ (2026-07-08) · ~~**Rotation avancée**~~ ✅ ·
+~~**Besoins en eau détaillés**~~ ✅ (2026-07-08).
 
-Côté **features V1**, il ne reste vraiment que deux chantiers de code
-substantiels — à traiter chacun dans sa propre conversation :
+Côté **features V1 build-then-gate (§9), tout est livré.** Reste, plus léger :
 
-1. **Rotation avancée** (expert) : donnée présente sur la fiche, aucun écran.
-2. **Besoins en eau détaillés** (expert) : enrichir d'abord `BesoinsCulture`
-   (fréquence/quantité), puis l'UI.
-   (+ Lot 4 ADR-0009 : mécanisme mini-tutos/teaser.)
+1. **Lot 4 ADR-0009** : mécanisme mini-tutos/teaser de palier (contenu partagé
+   avec le glossaire).
+2. Arbitrage **post-récolte** (docs/13 §1) : reporter ou planifier.
+   (+ finitions §2 : toggles paramètres, sous-routes go_router.)
 
 Tout le reste se range en :
 

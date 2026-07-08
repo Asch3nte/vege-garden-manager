@@ -52,6 +52,14 @@ besoins:
   temperature_optimale: 22
   temperature_min_survie: 10
   gele_fatal: true
+  arrosage_detaille:
+    phases_sensibles:
+      - feuillaison
+    note_i18n:
+      fr: >-
+        Gardez le sol légèrement humide sans excès : arrosez le matin, au pied,
+        en gardant le feuillage sec pour limiter les maladies. Un sol détrempé
+        fait pourrir les racines.
 cycle:
   enracinement: moyen
   type: annuelle

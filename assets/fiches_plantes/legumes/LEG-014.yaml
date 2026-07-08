@@ -48,6 +48,15 @@ besoins:
   ensoleillement_min: ombre
   temperature_min_survie: -5
   gele_fatal: false
+  arrosage_detaille:
+    phases_sensibles:
+      - feuillaison
+      - grossissement
+    note_i18n:
+      fr: >-
+        Maintenez le sol frais en permanence : un stress hydrique fait monter la
+        laitue à graine (montaison) et rend les feuilles amères. Des arrosages
+        fréquents et légers valent mieux qu'un apport massif espacé.
 cycle:
   enracinement: superficiel
   type: annuelle

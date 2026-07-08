@@ -53,6 +53,15 @@ besoins:
   ensoleillement_min: mi_ombre
   temperature_min_survie: 5
   gele_fatal: true
+  arrosage_detaille:
+    phases_sensibles:
+      - floraison
+      - fructification
+    note_i18n:
+      fr: >-
+        Fort besoin en eau dès la floraison et pendant toute la production.
+        Arrosez copieusement au pied, sans mouiller le feuillage pour limiter
+        l'oïdium.
 cycle:
   enracinement: moyen
   type: annuelle

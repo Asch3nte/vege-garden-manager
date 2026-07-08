@@ -12,6 +12,7 @@ import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/type_bioagresseur.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
+import '../../domain/value_objects/arrosage_detaille.dart';
 import '../../domain/value_objects/modele_fiche_personnelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_fiche_personnelle.dart';
@@ -144,6 +145,9 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
         ref.watch(idsFichesPersonnellesProvider).value?.contains(_fiche.id) ??
             false;
     final accesPerso = ref.watch(accesNiveauProvider).fichesPerso;
+    // Detailed watering is an expert-only reading (ADR-0009); lower tiers keep
+    // the coarse "Arrosage" fact only.
+    final accesEauDetaillee = ref.watch(accesNiveauProvider).eauDetaillee;
 
     // Companions are resolved by the shared service over **every** species
     // (not the filtered list), bidirectionally — so the names and counts here
@@ -273,6 +277,12 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
         ],
         const SizedBox(height: EspacementsApp.s5),
         _Faits(fiche: _fiche),
+        // Detailed watering (expert): only when the fiche carries the optional
+        // detail. The coarse fact above stays visible for every tier.
+        if (accesEauDetaillee && _fiche.besoins.aArrosageDetaille) ...[
+          const SizedBox(height: EspacementsApp.s5),
+          _SectionArrosageDetaille(detail: _fiche.besoins.arrosageDetaille!),
+        ],
         const SizedBox(height: EspacementsApp.s5),
         Text(l10n.ficheCalendrierTitre, style: theme.textTheme.titleLarge),
         const SizedBox(height: EspacementsApp.s3),
@@ -813,6 +823,118 @@ class _SectionCalendrier extends ConsumerWidget {
 ///
 /// Renders nothing when the family sheet is unknown; each editorial note is
 /// shown only when present (no invented content — docs/15 rule).
+/// Detailed watering guidance (expert, ADR-0009 `acces.eauDetaillee`).
+///
+/// Renders only the aspects the fiche actually carries — frequency, volume,
+/// water-sensitive growth stages and an editorial note are each optional. The
+/// numeric figures are **indicative** (a caption says so); the watering engine
+/// still reasons from the coarse need + weather, so this section is purely
+/// informational.
+class _SectionArrosageDetaille extends StatelessWidget {
+  final ArrosageDetaille detail;
+
+  const _SectionArrosageDetaille({required this.detail});
+
+  /// Formats a volume with a French decimal comma, dropping a trailing ",0".
+  static String _num(double v) {
+    final s = v.toStringAsFixed(1).replaceAll('.', ',');
+    return s.endsWith(',0') ? s.substring(0, s.length - 2) : s;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final note = detail.note('fr');
+
+    Widget ligne(IconData icone, String cle, String valeur) => Padding(
+          padding: const EdgeInsets.only(bottom: EspacementsApp.s3),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icone,
+                  size: TaillesIconesApp.sm,
+                  color: theme.colorScheme.onSurfaceVariant),
+              const SizedBox(width: EspacementsApp.s3),
+              Text('$cle : ',
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w600)),
+              Expanded(
+                  child: Text(valeur, style: theme.textTheme.bodyMedium)),
+            ],
+          ),
+        );
+
+    // Sensitive stages ordered by growth-cycle position for a stable display.
+    final phases = detail.phasesSensibles.toList()
+      ..sort((a, b) => a.index.compareTo(b.index));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title as a clickable term → the "besoin en eau" glossary page.
+        TermeCliquable(
+          idTerme: TermeGlossaire.idNotion('besoin-eau'),
+          texte: l10n.ficheArrosageDetailleTitre,
+          type: TypeTermeGlossaire.notion,
+          style: theme.textTheme.titleLarge,
+        ),
+        const SizedBox(height: EspacementsApp.s3),
+        if (detail.aFrequence)
+          ligne(
+            Icons.schedule,
+            l10n.ficheArrosageFrequence,
+            detail.frequenceJoursMin == detail.frequenceJoursMax
+                ? l10n.ficheArrosageFrequenceJoursUnique(
+                    detail.frequenceJoursMin!)
+                : l10n.ficheArrosageFrequenceJours(
+                    detail.frequenceJoursMin!, detail.frequenceJoursMax!),
+          ),
+        if (detail.aVolume)
+          ligne(
+            Icons.water_drop_outlined,
+            l10n.ficheArrosageVolume,
+            detail.volumeLitresM2Min == detail.volumeLitresM2Max
+                ? l10n.ficheArrosageVolumeLitresUnique(
+                    _num(detail.volumeLitresM2Min!))
+                : l10n.ficheArrosageVolumeLitres(
+                    _num(detail.volumeLitresM2Min!),
+                    _num(detail.volumeLitresM2Max!)),
+          ),
+        if (detail.aFrequence || detail.aVolume) ...[
+          Text(
+            l10n.ficheArrosageIndicatif,
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: EspacementsApp.s3),
+        ],
+        if (phases.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: EspacementsApp.s2),
+            child:
+                Text(l10n.ficheArrosagePhases, style: theme.textTheme.bodySmall),
+          ),
+          Wrap(
+            spacing: EspacementsApp.s2,
+            runSpacing: EspacementsApp.s2,
+            children: [
+              for (final p in phases)
+                Chip(label: Text(l10n.phaseSensibleEau(p))),
+            ],
+          ),
+        ],
+        if (note != null) ...[
+          const SizedBox(height: EspacementsApp.s3),
+          Text(note, style: theme.textTheme.bodyMedium),
+        ],
+      ],
+    );
+  }
+}
+
 class _SectionFamille extends ConsumerWidget {
   final FichePlante fiche;
 

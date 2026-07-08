@@ -169,6 +169,23 @@ Polymorphisme dès que pertinent.
       + route `/catalogue/fiches-perso`, **tag visuel `BadgePerso`** sur les cartes
       + en-tête de fiche, menu ⋮ « dupliquer / modifier » gaté. Tests unitaires +
       widget en // (couche complète : 47 tests dédiés, suite widget 212 verte).
+25. **Besoins en eau détaillés** (docs/15 §9, build-then-gate `acces.eauDetaillee`,
+    palier expert) : feature complète de bout en bout.
+    - **Domain** : VO optionnel `ArrosageDetaille` (chaque sous-champ
+      indépendamment optionnel : `frequenceJours` min/max, `volumeLitresM2`
+      min/max, `phasesSensibles`, `noteI18n` ; ≥1 aspect requis, invariants),
+      enum `PhaseSensibleEau` (germination/feuillaison/floraison/fructification/
+      grossissement), champ `BesoinsCulture.arrosageDetaille` (nullable).
+    - **Infra** : bloc YAML `besoins.arrosage_detaille` (schéma + validateur
+      optionnel/type-checké + mapper). **6 espèces seedées** avec **phases
+      sensibles + note documentées** — chiffres volontairement vides (à remplir
+      par le dev avec des sources réelles, jamais inventées).
+    - **Presentation** : `_SectionArrosageDetaille` (`fiche_plante_detail.dart`),
+      gatée `acces.eauDetaillee` + affichée si donnée présente ; le fait grossier
+      « Arrosage » reste pour tous. Chiffres cadrés « repères indicatifs par temps
+      chaud et sec » ; titre → glossaire `besoin-eau`. Clés ARB fr+en,
+      `PhaseSensibleEau` couvert D6. **Moteur inchangé** (détail = informatif).
+      Tests unitaires + widget en // (suite complète 1200 verte).
 24. **Rotation avancée** (docs/15 §9, build-then-gate `acces.rotationAvancee`,
     palier expert) : feature complète de bout en bout.
     - **Domain** : enum `GroupeCultural { legumineuses, engraisVerts }`, VO
@@ -202,9 +219,10 @@ Polymorphisme dès que pertinent.
 
 ### ⏭️ À venir
 > État réel consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md).
-- Features « build-then-gate » restantes (docs/15 §9) : **besoins en eau
-  détaillés** (+ lot 4 ADR-0009 mini-tutos/teaser)
-  *(multi-potager · équipements/outils · fiches perso · **rotation avancée** : ✅ livrés)*
+- **Toutes les features « build-then-gate » de docs/15 §9 sont livrées** (multi-
+  potager · équipements/outils · fiches perso · rotation avancée · **besoins en
+  eau détaillés** : ✅). Reste d'ADR-0009 : **lot 4 mini-tutos/teaser** de palier
+  (contenu, pas de nouveau gating)
 - maquettes dark mode · Rebrancher **Phosphor Icons** (package cassé sur
   Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
 - Finitions légères (docs/15 §2) : toggles paramètres (transparence des données,
@@ -287,18 +305,21 @@ tâches/arrosage → météo → export), alpha Android installée. Le **glossai
 « Aide & lexique »** (ADR-0017) est livré lots 1–5 ; la **relecture éditoriale**
 de tous les chapitres est **reportée juste avant release** (docs/15 §7), les
 **illustrations** sont choisies par le dev au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)).
-Dernière feature livrée : **rotation avancée** (build-then-gate
-`acces.rotationAvancee`, palier expert) — domain (VO `PrecedentCultural` +
-normaliseur, enum `GroupeCultural`) + infra (mapper + intégrité) + moteur
-(`EvaluationRotation`) + UI (section « Rotation » dans le détail de zone :
-historique, familles bloquées, opportunités azote), tests en //. Reste côté
+Dernière feature livrée : **besoins en eau détaillés** (build-then-gate
+`acces.eauDetaillee`, palier expert) — domain (VO optionnel `ArrosageDetaille`
++ enum `PhaseSensibleEau`) + infra (bloc YAML `besoins.arrosage_detaille`,
+validateur/mapper + 6 espèces seedées avec phases sensibles & notes documentées,
+chiffres laissés vides à sourcer par le dev) + UI (`_SectionArrosageDetaille`
+gatée expert, terme grossier conservé pour tous) ; moteur inchangé ; tests en //.
+**Toutes les features build-then-gate de §9 sont désormais livrées.** Reste côté
 glossaire : termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
-Prochain chantier V1 (dans sa propre session, **tests en parallèle**) :
-**besoins en eau détaillés** (§9) — commencer par enrichir `BesoinsCulture`
-(fréquence/quantité) avant l'UI. Le reste
-(distribution/pré-release, finitions §2, traduction `en` du glossaire) est
-consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) — multi-potager, équipements,
-CI analyze+test, version dynamique, liens externes et i18n `en` UI sont ✅ livrés.
+Prochains chantiers V1 possibles (chacun dans sa propre session, **tests en
+parallèle**) : **ADR-0009 lot 4** (mini-tutos/teaser de palier) · finitions §2
+(toggles paramètres, sous-routes) · arbitrage **post-récolte** (docs/13 §1). Le
+reste (distribution/pré-release, traduction `en` du glossaire) est consolidé
+dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) — multi-potager, équipements, fiches
+perso, rotation avancée, CI analyze+test, version dynamique, liens externes et
+i18n `en` UI sont ✅ livrés.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
 > Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**
