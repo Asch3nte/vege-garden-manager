@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Carotte Purple Haze. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V007
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Purple Haze'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Purple Haze
+    noms_alternatifs: [Purple Haze, Carotte violette]
+    description: >
+      Carotte hybride (F1) à peau violet foncé et cœur orange, longue et sucrée,
+      très décorative crue en rondelles. La couleur violette pâlit à la cuisson.
+      Riche en anthocyanes. Semences non reproductibles.
+  en:
+    nom_commun: Purple Haze Carrot
+    description: >
+      Hybrid (F1) carrot with dark-purple skin and an orange core, long and sweet,
+      very decorative raw in slices. Purple fades on cooking. Seed not true to type.
+
+cycle:
+  duree_avant_recolte_jours: [70, 100]
+conservation:
+  - methode: frais
+    duree_jours: 20
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Crue en rondelles, râpée, en jus, glacée]
+  en: [Raw in slices, grated, juiced, glazed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

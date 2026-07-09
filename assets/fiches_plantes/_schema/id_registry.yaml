@@ -51,8 +51,17 @@ legumes:
   LEG-003-V001: Betterave Chioggia
   LEG-004: Carotte
   LEG-004-V001: Carotte Nantaise Améliorée
+  LEG-004-V002: Carotte de Colmar à cœur rouge
+  LEG-004-V003: Carotte Touchon
+  LEG-004-V004: Carotte Chantenay à cœur rouge
+  LEG-004-V005: Carotte Jaune du Doubs
+  LEG-004-V006: Carotte Blanche des Vosges
+  LEG-004-V007: Carotte Purple Haze
+  LEG-004-V008: Carotte Marché de Paris
   LEG-005: Céleri-rave
   LEG-005-V001: Céleri-rave Brilliant
+  LEG-005-V002: Céleri-rave Géant de Prague
+  LEG-005-V003: Céleri-rave Monarch
   LEG-006: Chou brocoli
   LEG-006-V001: Chou brocoli Calabrese
   LEG-006-V002: Chou brocoli De Cicco
@@ -152,6 +161,9 @@ legumes:
   LEG-023-V003: Artichaut Camus de Bretagne
   LEG-023-V004: Artichaut Blanc Hyérois
   LEG-024: Fenouil
+  LEG-024-V001: Fenouil Doux de Florence
+  LEG-024-V002: Fenouil Zefa Fino
+  LEG-024-V003: Fenouil Romanesco
   LEG-025: Ail
   LEG-026: Fève
   LEG-026-V001: Fève Aguadulce à très longue cosse
@@ -174,7 +186,12 @@ legumes:
   LEG-032-V002: Chou frisé Cavolo Nero
   LEG-032-V003: Chou frisé Redbor
   LEG-033: Panais
+  LEG-033-V001: Panais Demi-Long de Guernesey
+  LEG-033-V002: Panais Tender and True
   LEG-034: Céleri branche
+  LEG-034-V001: Céleri branche Vert d'Elne
+  LEG-034-V002: Céleri branche Plein Blanc Pascal
+  LEG-034-V003: Céleri branche Doré Chemin
   LEG-035: Roquette
   LEG-036: Chou-rave
   LEG-036-V001: Chou-rave Blanc de Vienne
@@ -216,6 +233,8 @@ aromatiques:
   ARO-001: Basilic
   ARO-002: Persil
   ARO-002-V001: Persil Frisé
+  ARO-002-V002: Persil Géant d'Italie
+  ARO-002-V003: Persil Frisé Vert Foncé
   ARO-003: Ciboulette
   ARO-003-V001: Ciboulette ail (Allium tuberosum)
   ARO-004: Thym
@@ -224,6 +243,7 @@ aromatiques:
   ARO-005-V001: Menthe Verte
   ARO-006: Coriandre
   ARO-006-V001: Coriandre Santos
+  ARO-006-V002: Coriandre Commune
   ARO-007: Aneth
 
 petits_fruits:

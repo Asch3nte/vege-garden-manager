@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Carotte de Colmar à cœur rouge. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V002
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'de Colmar à cœur rouge'"
+
+i18n:
+  fr:
+    nom_commun: Carotte de Colmar à cœur rouge
+    noms_alternatifs: [de Colmar, Colmar à cœur rouge]
+    description: >
+      Carotte longue et conique à cœur rouge peu marqué, à chair sucrée. Variété
+      de conservation par excellence, récoltée à l'automne et gardée tout
+      l'hiver en cave ou en silo.
+  en:
+    nom_commun: Colmar Red-cored Carrot
+    description: >
+      Long, conical carrot with a faint red core and sweet flesh. The keeping
+      carrot par excellence, harvested in autumn and stored all winter.
+
+cycle:
+  duree_avant_recolte_jours: [110, 150]
+  profondeur_sol_min_cm: 35
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Crue râpée, en potée, en purée, en soupe]
+  en: [Raw grated, in stew, mashed, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

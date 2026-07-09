@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Fenouil Romanesco. Hérite de LEG-024.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-024-V003
+parent_id: LEG-024
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Foeniculum vulgare var. azoricum 'Romanesco'"
+
+i18n:
+  fr:
+    nom_commun: Fenouil Romanesco
+    noms_alternatifs: [Romanesco, Gros de Naples]
+    description: >
+      Fenouil italien à très gros bulbe blanc charnu, doux et parfumé. Productif
+      et vigoureux, apprécié en climat doux pour ses bulbes volumineux ; culture
+      d'été à automne.
+  en:
+    nom_commun: Romanesco Fennel
+    description: >
+      Italian fennel with a very large, fleshy white bulb, sweet and aromatic.
+      Productive and vigorous, valued in mild climates for its big bulbs.
+cycle:
+  hauteur_adulte_cm: [50, 90]
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, braisé, rôti, en gratin]
+  en: [Raw in salad, braised, roasted, gratin]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Fenouil
+contributeurs:
+  - "@potagerer"

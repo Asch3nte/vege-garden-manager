@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Carotte Chantenay à cœur rouge. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V004
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Chantenay à cœur rouge'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Chantenay à cœur rouge
+    noms_alternatifs: [Chantenay, Chantenay à cœur rouge]
+    description: >
+      Carotte courte, large et conique à épaules fortes, à chair rouge-orangé
+      dense et sucrée. Robuste, elle réussit bien en sols lourds ou peu profonds
+      où les longues carottes fourchent.
+  en:
+    nom_commun: Red-cored Chantenay Carrot
+    description: >
+      Short, broad, conical carrot with strong shoulders and dense, sweet
+      red-orange flesh. Robust, doing well in heavy or shallow soils.
+
+cycle:
+  duree_avant_recolte_jours: [80, 110]
+  profondeur_sol_min_cm: 20
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Crue râpée, en potée, en jus, en purée]
+  en: [Raw grated, in stew, juiced, mashed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

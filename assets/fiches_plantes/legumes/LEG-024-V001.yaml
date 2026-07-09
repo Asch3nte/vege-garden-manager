@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Fenouil Doux de Florence. Hérite de LEG-024.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-024-V001
+parent_id: LEG-024
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Foeniculum vulgare var. azoricum 'Doux de Florence'"
+
+i18n:
+  fr:
+    nom_commun: Fenouil Doux de Florence
+    noms_alternatifs: [Doux de Florence, Fenouil de Florence]
+    description: >
+      Fenouil bulbeux à gros bulbe blanc renflé, tendre et très parfumé à l'anis.
+      Variété de référence ; à semer en été pour éviter la montaison prématurée
+      liée aux jours longs.
+  en:
+    nom_commun: Florence Sweet Fennel
+    description: >
+      Bulb fennel with a large, swollen white bulb, tender and strongly
+      anise-scented. The reference variety; sow in summer to avoid early bolting.
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, braisé, rôti, en gratin]
+  en: [Raw in salad, braised, roasted, gratin]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Fenouil
+contributeurs:
+  - "@potagerer"

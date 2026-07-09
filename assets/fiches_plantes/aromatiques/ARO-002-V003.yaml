@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Persil Frisé Vert Foncé. Hérite de ARO-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-002-V003
+parent_id: ARO-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Petroselinum crispum var. crispum 'Vert Foncé'"
+
+i18n:
+  fr:
+    nom_commun: Persil Frisé Vert Foncé
+    noms_alternatifs: [Frisé Vert Foncé, Frisé nain mousse]
+    description: >
+      Persil frisé à feuilles très découpées et cloquées vert foncé, décoratif et
+      parfumé. Compact et productif, idéal en bordure et en garniture ; feuilles
+      qui tiennent bien après la cueillette.
+  en:
+    nom_commun: Dark Green Curled Parsley
+    description: >
+      Curly parsley with very cut, crinkled dark-green leaves, decorative and
+      aromatic. Compact and productive, ideal for edging and garnish.
+utilisations_culinaires_i18n:
+  fr: [Cru ciselé, en garniture, frit, en bouquet garni]
+  en: [Raw chopped, as garnish, fried, bouquet garni]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Persil
+contributeurs:
+  - "@potagerer"

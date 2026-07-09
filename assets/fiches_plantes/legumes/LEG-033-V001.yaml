@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Panais Demi-Long de Guernesey. Hérite de LEG-033.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-033-V001
+parent_id: LEG-033
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pastinaca sativa 'Demi-Long de Guernesey'"
+
+i18n:
+  fr:
+    nom_commun: Panais Demi-Long de Guernesey
+    noms_alternatifs: [Demi-Long de Guernesey]
+    description: >
+      Panais à racine demi-longue conique à large épaule, à chair blanche douce
+      et sucrée. Variété de référence, régulière et productive, adaptée à la
+      plupart des sols de jardin ; se bonifie au froid.
+  en:
+    nom_commun: Guernsey Half-Long Parsnip
+    description: >
+      Parsnip with a half-long, conical, broad-shouldered root and sweet white
+      flesh. A reliable, productive reference variety; sweetens with cold.
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "En terre l'hiver, ou cave humide en silo de sable", en: "In the ground over winter, or sand clamp in a humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [En purée, rôti, en potée, en soupe, en frites]
+  en: [Mashed, roasted, in stew, soup, as fries]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Panais
+contributeurs:
+  - "@potagerer"

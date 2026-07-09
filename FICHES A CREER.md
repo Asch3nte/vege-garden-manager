@@ -287,35 +287,35 @@
 
 ### Carotte — *Daucus carota* ✅ `LEG-004` 🔡
 - ✅ `V001` Nantaise Améliorée
-- ⬜ de Colmar à cœur rouge
-- ⬜ Touchon
-- ⬜ Chantenay à cœur rouge
+- ✅ `V002` Carotte de Colmar à cœur rouge
+- ✅ `V003` Carotte Touchon
+- ✅ `V004` Carotte Chantenay à cœur rouge
 - ⬜ de Meaux
-- ⬜ Jaune du Doubs
-- ⬜ Blanche des Vosges
-- ⬜ Violette (Purple Haze / Cosmic Purple)
-- ⬜ Marché de Paris (ronde)
+- ✅ `V005` Carotte Jaune du Doubs
+- ✅ `V006` Carotte Blanche des Vosges
+- ✅ `V007` Carotte Purple Haze
+- ✅ `V008` Carotte Marché de Paris
 
 ### Céleri-rave — *Apium graveolens* var. *rapaceum* ✅ `LEG-005`
 - ✅ `V001` Brilliant
-- ⬜ Géant de Prague
-- ⬜ Monarch
+- ✅ `V002` Céleri-rave Géant de Prague
+- ✅ `V003` Céleri-rave Monarch
 
 ### Céleri branche — *Apium graveolens* var. *dulce* ✅ `LEG-034`
-- ⬜ Vert d'Elne
-- ⬜ Doré Chemin
-- ⬜ Plein Blanc Pascal
+- ✅ `V001` Céleri branche Vert d'Elne
+- ✅ `V003` Céleri branche Doré Chemin
+- ✅ `V002` Céleri branche Plein Blanc Pascal
 
 ### Panais — *Pastinaca sativa* ✅ `LEG-033`
-- ⬜ Demi-Long de Guernesey
+- ✅ `V001` Panais Demi-Long de Guernesey
 - ⬜ Half Long White
-- ⬜ Tender and True
+- ✅ `V002` Panais Tender and True
 
 ### Fenouil (bulbe) — *Foeniculum vulgare* var. *azoricum* ✅ `LEG-024`
 > Espèce mère créée (lot « fleurs compagnes »). Variétés encore à créer :
-- ⬜ Doux de Florence
-- ⬜ Zefa Fino
-- ⬜ Romanesco
+- ✅ `V001` Fenouil Doux de Florence
+- ✅ `V002` Fenouil Zefa Fino
+- ✅ `V003` Fenouil Romanesco
 
 ### Persil-racine — *Petroselinum crispum* var. *tuberosum* ⬜ *(id à attribuer au moment de la création)*
 > (Le persil aromatique est en `ARO-002`.)
@@ -627,12 +627,12 @@
 
 ### Persil — *Petroselinum crispum* ✅ `ARO-002`
 - ✅ `V001` Frisé
-- ⬜ Commun / Plat (Géant d'Italie)
-- ⬜ Frisé Vert Foncé
+- ✅ `V002` Persil Géant d'Italie
+- ✅ `V003` Persil Frisé Vert Foncé
 
 ### Coriandre — *Coriandrum sativum* ✅ `ARO-006`
 - ✅ `V001` Santos (montaison lente)
-- ⬜ Commune / à graines
+- ✅ `V002` Coriandre Commune
 
 ### Aneth — *Anethum graveolens* ✅ `ARO-007`
 

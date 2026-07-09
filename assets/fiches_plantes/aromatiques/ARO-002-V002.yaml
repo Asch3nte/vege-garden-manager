@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Persil Géant d'Italie (plat). Hérite de ARO-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-002-V002
+parent_id: ARO-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Petroselinum crispum var. neapolitanum 'Géant d'Italie'"
+
+i18n:
+  fr:
+    nom_commun: Persil Géant d'Italie
+    noms_alternatifs: [Persil plat, Géant d'Italie, Grand de Naples]
+    description: >
+      Persil à grandes feuilles plates vert foncé, au parfum plus prononcé que le
+      persil frisé. Vigoureux et productif, il est le persil de cuisine par
+      excellence, ajouté en fin de cuisson ou cru.
+  en:
+    nom_commun: Italian Flat-leaf Parsley
+    description: >
+      Parsley with large, flat, dark-green leaves and a stronger aroma than curly
+      parsley. Vigorous and productive, the go-to cooking parsley.
+utilisations_culinaires_i18n:
+  fr: [Cru ciselé, en persillade, en taboulé, en bouquet garni]
+  en: [Raw chopped, in persillade, tabbouleh, bouquet garni]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Persil
+contributeurs:
+  - "@potagerer"
