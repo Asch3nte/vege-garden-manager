@@ -1,0 +1,100 @@
+# Fiche mère (espèce) — Céleri branche.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Légume-tige ombellifère gourmand en eau. Lot « courantes restantes ».
+id: LEG-034
+version_fiche: 1
+categorie: legume
+sous_type: legume_tige
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - condimentaire
+
+rusticite:
+  zone_min: zone7
+nom_scientifique: Apium graveolens var. dulce
+famille_botanique: Apiaceae
+
+i18n:
+  fr:
+    nom_commun: Céleri branche
+    noms_alternatifs: [Céleri à côtes, Céleri à couper]
+    description: >
+      Légume-tige bisannuel de la famille des Apiacées, cultivé pour ses côtes
+      charnues et croquantes. Exigeant en eau et en sol riche, il demande un
+      arrosage régulier pour éviter les côtes creuses et filandreuses.
+    conseils_culture: >
+      Semer au chaud, repiquer en sol très riche et frais, arroser abondamment
+      et régulièrement. Lier et butter les pieds en fin de culture pour blanchir
+      les côtes si souhaité.
+    conseils_recolte: >
+      Récolter les côtes extérieures au fur et à mesure, ou le pied entier à
+      maturité, avant les fortes gelées.
+    erreurs_frequentes:
+      - Manque d'eau (côtes creuses, amères et filandreuses)
+      - Sol pauvre (plants chétifs)
+      - Repiquage trop précoce (montée à graines)
+  en:
+    nom_commun: Celery
+    description: >
+      Biennial stalk vegetable of the Apiaceae family, grown for its fleshy,
+      crisp ribs. Demanding in water and rich soil.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - frais
+    - lourd
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 12
+  temperature_optimale: 18
+  temperature_min_survie: -3
+  tolerance_secheresse: faible
+cycle:
+  enracinement: superficiel
+  type: bisannuelle
+  duree_germination_jours: [14, 21]
+  duree_avant_recolte_jours: [120, 160]
+  hauteur_adulte_cm: [40, 70]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 11]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [9, 10]
+      plantation: [11, 12]
+      recolte: [2, 5]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [apiaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/C%C3%A9leri  # description
+contributeurs:
+  - "@potagerer"

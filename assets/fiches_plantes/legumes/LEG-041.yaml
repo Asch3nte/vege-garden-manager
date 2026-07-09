@@ -1,0 +1,109 @@
+# Fiche mère (espèce) — Pastèque.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Cucurbitacée de chaleur à gros fruit. Lot « courantes restantes ».
+id: LEG-041
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Citrullus lanatus
+famille_botanique: Cucurbitaceae
+
+i18n:
+  fr:
+    nom_commun: Pastèque
+    noms_alternatifs: [Melon d'eau]
+    description: >
+      Cucurbitacée annuelle cultivée pour ses gros fruits à chair juteuse et
+      sucrée, très riche en eau. Exigeante en chaleur et en soleil, elle demande
+      une longue saison chaude, difficile à satisfaire en climat frais.
+    conseils_culture: >
+      Semer au chaud, repiquer en sol très réchauffé et riche après les gelées,
+      en plein soleil, sous abri en climat frais. Limiter le nombre de fruits par
+      pied pour qu'ils mûrissent. Pailler pour conserver la chaleur.
+    conseils_recolte: >
+      Récolter à pleine maturité : la vrille proche du fruit sèche, la tache au
+      sol jaunit et le fruit sonne creux.
+    erreurs_frequentes:
+      - Climat trop frais ou saison trop courte (fruits qui ne mûrissent pas)
+      - Excès d'eau en fin de maturité (chair fade et éclatée)
+      - Trop de fruits par pied (aucun n'arrive à maturité)
+  en:
+    nom_commun: Watermelon
+    description: >
+      Annual cucurbit grown for its large, juicy, sweet, very watery fruit. Very
+      demanding in heat and sun, needing a long warm season.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 20
+  temperature_optimale: 26
+  temperature_min_survie: 8
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+  arrosage_detaille:
+    phases_sensibles:
+      - floraison
+      - fructification
+    note_i18n:
+      fr: >-
+        Arrosez régulièrement au pied pendant la nouaison et le grossissement,
+        sans mouiller le feuillage. Réduisez fortement les apports dès que les
+        fruits approchent de la maturité pour concentrer les sucres et éviter
+        l'éclatement.
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [90, 120]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 120
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 9]
+    mediterraneen:
+      semis_interieur: [2, 4]
+      plantation: [4, 5]
+      recolte: [7, 9]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 10]
+      plantation: [11, 12]
+      recolte: [2, 4]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: cucurbitaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [cucurbitaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Past%C3%A8que  # description
+contributeurs:
+  - "@potagerer"

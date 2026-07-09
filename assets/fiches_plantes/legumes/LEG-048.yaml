@@ -1,0 +1,96 @@
+# Fiche mère (espèce) — Patate douce.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Tubercule de chaleur, conduite annuelle. Lot « courantes restantes ».
+id: LEG-048
+version_fiche: 1
+categorie: legume
+sous_type: legume_tubercule
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Ipomoea batatas
+famille_botanique: Convolvulaceae
+
+i18n:
+  fr:
+    nom_commun: Patate douce
+    noms_alternatifs: [Batate]
+    description: >
+      Plante de la famille des Convolvulacées, cultivée pour ses tubercules
+      sucrés. Frileuse et gourmande en chaleur, elle se conduit en annuelle sous
+      climat tempéré, plantée par jeunes plants après tout risque de gel.
+    conseils_culture: >
+      Planter les jeunes plants en sol léger, réchauffé et bien drainé, sur
+      butte ou paillage plastique pour capter la chaleur. Laisser les tiges
+      ramper ou palisser. Arroser régulièrement en été.
+    conseils_recolte: >
+      Récolter les tubercules avant les premières gelées, quand le feuillage
+      commence à jaunir. Les laisser ressuyer puis les conserver au chaud.
+    erreurs_frequentes:
+      - Plantation en sol froid (croissance bloquée)
+      - Récolte après une gelée (tubercules qui pourrissent au stockage)
+      - Excès d'azote (feuillage abondant, peu de tubercules)
+  en:
+    nom_commun: Sweet potato
+    description: >
+      Plant of the Convolvulaceae family, grown for its sweet tubers. Frost-tender
+      and heat-loving, grown as an annual in temperate climates from slips planted
+      after all frost risk.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - leger
+    - bien_draine
+    - riche
+  ph_min: 5.5
+  ph_max: 6.5
+  temperature_min_germination: 18
+  temperature_optimale: 25
+  temperature_min_survie: 8
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_avant_recolte_jours: [120, 150]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 40
+  profondeur_semis_cm: 8
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [5, 6]
+      recolte: [9, 10]
+    mediterraneen:
+      plantation: [4, 5]
+      recolte: [9, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [11, 12]
+      recolte: [3, 4]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: convolvulaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [convolvulaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Patate_douce  # description
+contributeurs:
+  - "@potagerer"

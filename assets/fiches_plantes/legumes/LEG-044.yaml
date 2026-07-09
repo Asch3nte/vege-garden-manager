@@ -1,0 +1,95 @@
+# Fiche mère (espèce) — Topinambour.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Tubercule vivace rustique et productif. Lot « courantes restantes ».
+id: LEG-044
+version_fiche: 1
+categorie: legume
+sous_type: legume_tubercule
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Helianthus tuberosus
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Topinambour
+    noms_alternatifs: [Artichaut de Jérusalem, Poire de terre]
+    description: >
+      Plante vivace de la famille des Astéracées, proche du tournesol, cultivée
+      pour ses tubercules au goût d'artichaut. Extrêmement rustique et productive,
+      elle peut devenir envahissante : le moindre tubercule oublié repart.
+    conseils_culture: >
+      Planter les tubercules au printemps, dans un coin dédié car la plante est
+      envahissante et haute. Peu exigeante ; se passe presque d'entretien. Butter
+      pour soutenir les tiges hautes.
+    conseils_recolte: >
+      Récolter les tubercules à l'automne et tout l'hiver, au fur et à mesure des
+      besoins ; ils se conservent mieux en terre.
+    erreurs_frequentes:
+      - Plantation en pleine planche (envahit tout le potager)
+      - Récolte incomplète (repousse spontanée l'année suivante)
+  en:
+    nom_commun: Jerusalem artichoke
+    description: >
+      Perennial of the Asteraceae family, close to the sunflower, grown for its
+      artichoke-flavoured tubers. Extremely hardy and productive, it can become
+      invasive.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: faible
+  qualites_sol:
+    - pauvre
+    - bien_draine
+    - leger
+  ph_min: 5.5
+  ph_max: 7.5
+  temperature_min_germination: 8
+  temperature_optimale: 20
+  temperature_min_survie: -20
+  tolerance_secheresse: forte
+cycle:
+  enracinement: moyen
+  type: vivace
+  duree_avant_recolte_jours: [150, 210]
+  hauteur_adulte_cm: [150, 300]
+  espacement_cm: 60
+  profondeur_semis_cm: 10
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [2, 4]
+      recolte: [10, 3]
+    continental:
+      plantation: [3, 4]
+      recolte: [10, 2]
+  hemisphere_sud:
+    oceanique:
+      plantation: [8, 10]
+      recolte: [4, 9]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 2
+  precedents_favorables: [legumineuses]
+  precedents_defavorables: [asteraceae]
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Topinambour  # description
+contributeurs:
+  - "@potagerer"

@@ -82,6 +82,22 @@ legumes:
   LEG-030: Melon
   LEG-031: Chou de Bruxelles
   LEG-032: Chou frisé (kale)
+  LEG-033: Panais
+  LEG-034: Céleri branche
+  LEG-035: Roquette
+  LEG-036: Chou-rave
+  LEG-037: Rutabaga
+  LEG-038: Pak choï
+  LEG-039: Cresson alénois
+  LEG-040: Pâtisson
+  LEG-041: Pastèque
+  LEG-042: Chicorée witloof (endive)
+  LEG-043: Scarole
+  LEG-044: Topinambour
+  LEG-045: Rhubarbe
+  LEG-046: Oseille
+  LEG-047: Asperge
+  LEG-048: Patate douce
 
 aromatiques:
   ARO-001: Basilic

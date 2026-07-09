@@ -79,7 +79,7 @@
 - ⬜ Sucette de Provence
 - ⬜ Doux des Landes
 
-### Piment — *Capsicum spp.* ⬜ `LEG-024` 🔡
+### Piment — *Capsicum spp.* ⬜ *(id à attribuer au moment de la création)* 🔡
 > À arbitrer : espèce distincte ou variétés sous *C. annuum/chinense/frutescens*.
 - ⬜ Piment d'Espelette (*C. annuum*)
 - ⬜ Piment de Cayenne
@@ -105,11 +105,11 @@
 - ⬜ Pompadour
 - ⬜ Roseval
 
-### Physalis / Coqueret du Pérou — *Physalis peruviana* ⬜ `LEG-025`
+### Physalis / Coqueret du Pérou — *Physalis peruviana* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Goldie
 - ⬜ Amour en cage (Physalis alkekengi — ornemental, à distinguer)
 
-### Tomatillo — *Physalis philadelphica* ⬜ `LEG-026`
+### Tomatillo — *Physalis philadelphica* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Verde
 - ⬜ Purple
 
@@ -146,12 +146,12 @@
 - ⬜ Hubbard
 - ⬜ Courge de Siam
 
-### Potiron — *Cucurbita maxima* ⬜ `LEG-027` (si séparé du potimarron)
+### Potiron — *Cucurbita maxima* ⬜ *(id à attribuer au moment de la création)* (si séparé du potimarron)
 - ⬜ Jaune Gros de Paris
 - ⬜ Atlantic Giant
 - ⬜ Galeux d'Eysines
 
-### Courge / Pâtisson & autres *pepo* — ⬜ `LEG-028`
+### Courge / Pâtisson & autres *pepo* — ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Pâtisson Blanc
 - ⬜ Pâtisson Panaché Vert et Blanc
 - ⬜ Spaghetti végétal
@@ -168,7 +168,7 @@
 - ⬜ Lemon (rond jaune)
 - ⬜ Beit Alpha (libanais)
 
-### Cornichon — *Cucumis sativus* ⬜ `LEG-029` (ou variété du concombre)
+### Cornichon — *Cucumis sativus* ⬜ *(id à attribuer au moment de la création)* (ou variété du concombre)
 - ⬜ Vert Petit de Paris
 - ⬜ Fin de Meaux
 - ⬜ Vorgebirgstrauben
@@ -182,17 +182,17 @@
 - ⬜ Ananas d'Amérique
 - ⬜ Melon d'eau / de conserve
 
-### Pastèque — *Citrullus lanatus* ⬜ `LEG-031`
+### Pastèque — *Citrullus lanatus* ✅ `LEG-041`
 - ⬜ Sugar Baby
 - ⬜ Crimson Sweet
 - ⬜ Charleston Gray
 - ⬜ À confiture (à graines rouges)
 
-### Gourde / Calebasse — *Lagenaria siceraria* ⬜ `LEG-032`
+### Gourde / Calebasse — *Lagenaria siceraria* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Pèlerine
 - ⬜ Massue d'Hercule
 
-### Chayotte / Christophine — *Sechium edule* ⬜ `LEG-033`
+### Chayotte / Christophine — *Sechium edule* ⬜ *(id à attribuer au moment de la création)*
 
 ---
 
@@ -232,16 +232,16 @@
 - ⬜ Redbor (rouge)
 - ⬜ Rouge de Russie (Red Russian)
 
-### Chou-rave — *Brassica oleracea* var. *gongylodes* ⬜ `LEG-036`
+### Chou-rave — *Brassica oleracea* var. *gongylodes* ✅ `LEG-036`
 - ⬜ Blanc de Vienne
 - ⬜ Bleu de Vienne
 - ⬜ Superschmelz
 
-### Chou pommé de Chine / Pé-tsaï — *Brassica rapa* subsp. *pekinensis* ⬜ `LEG-037`
+### Chou pommé de Chine / Pé-tsaï — *Brassica rapa* subsp. *pekinensis* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Michihili
 - ⬜ Nagaoka F1
 
-### Pak choï — *Brassica rapa* subsp. *chinensis* ⬜ `LEG-038`
+### Pak choï — *Brassica rapa* subsp. *chinensis* ✅ `LEG-038`
 - ⬜ Blanc / Baby
 
 ### Navet — *Brassica rapa* subsp. *rapa* ✅ `LEG-015`
@@ -251,7 +251,7 @@
 - ⬜ Blanc Globe à collet violet
 - ⬜ Milan Rouge
 
-### Rutabaga — *Brassica napus* var. *napobrassica* ⬜ `LEG-039`
+### Rutabaga — *Brassica napus* var. *napobrassica* ✅ `LEG-037`
 - ⬜ Wilhelmsburger
 - ⬜ à collet rouge
 
@@ -266,20 +266,20 @@
 - ⬜ Green Meat / Green Luobo
 - ⬜ Daïkon (radis blanc japonais)
 
-### Roquette — *Eruca vesicaria* ⬜ `LEG-040`
+### Roquette — *Eruca vesicaria* ✅ `LEG-035`
 - ⬜ Cultivée
 - ⬜ Sauvage (*Diplotaxis tenuifolia*)
 
-### Cresson de fontaine — *Nasturtium officinale* ⬜ `LEG-041`
+### Cresson de fontaine — *Nasturtium officinale* ⬜ *(id à attribuer au moment de la création)*
 
-### Cresson alénois — *Lepidium sativum* ⬜ `LEG-042`
+### Cresson alénois — *Lepidium sativum* ✅ `LEG-039`
 
-### Moutarde — *Brassica juncea* ⬜ `LEG-043`
+### Moutarde — *Brassica juncea* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Rouge / Red Giant
 - ⬜ Mizuna (*B. rapa* var. *nipposinica*)
 - ⬜ Mibuna
 
-### Raifort — *Armoracia rusticana* ⬜ `LEG-044`
+### Raifort — *Armoracia rusticana* ⬜ *(id à attribuer au moment de la création)*
 
 ---
 
@@ -301,12 +301,12 @@
 - ⬜ Géant de Prague
 - ⬜ Monarch
 
-### Céleri branche — *Apium graveolens* var. *dulce* ⬜ `LEG-045`
+### Céleri branche — *Apium graveolens* var. *dulce* ✅ `LEG-034`
 - ⬜ Vert d'Elne
 - ⬜ Doré Chemin
 - ⬜ Plein Blanc Pascal
 
-### Panais — *Pastinaca sativa* ⬜ `LEG-046`
+### Panais — *Pastinaca sativa* ✅ `LEG-033`
 - ⬜ Demi-Long de Guernesey
 - ⬜ Half Long White
 - ⬜ Tender and True
@@ -317,7 +317,7 @@
 - ⬜ Zefa Fino
 - ⬜ Romanesco
 
-### Persil-racine — *Petroselinum crispum* var. *tuberosum* ⬜ `LEG-048`
+### Persil-racine — *Petroselinum crispum* var. *tuberosum* ⬜ *(id à attribuer au moment de la création)*
 > (Le persil aromatique est en `ARO-002`.)
 
 ---
@@ -337,7 +337,7 @@
 - ⬜ Blue Lake
 - ⬜ Soissons (gros grain blanc)
 
-### Haricot d'Espagne — *Phaseolus coccineus* ⬜ `LEG-049`
+### Haricot d'Espagne — *Phaseolus coccineus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ à fleurs rouges
 - ⬜ Blanc géant
 
@@ -357,17 +357,17 @@
 - ⬜ Superaguadulce
 - ⬜ The Sutton (naine)
 
-### Lentille — *Lens culinaris* ⬜ `LEG-051`
+### Lentille — *Lens culinaris* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Verte du Puy
 - ⬜ Blonde
 - ⬜ Corail (rose)
 - ⬜ Beluga (noire)
 
-### Pois chiche — *Cicer arietinum* ⬜ `LEG-052`
+### Pois chiche — *Cicer arietinum* ⬜ *(id à attribuer au moment de la création)*
 
-### Soja (edamame) — *Glycine max* ⬜ `LEG-053`
+### Soja (edamame) — *Glycine max* ⬜ *(id à attribuer au moment de la création)*
 
-### Arachide — *Arachis hypogaea* ⬜ `LEG-054`
+### Arachide — *Arachis hypogaea* ⬜ *(id à attribuer au moment de la création)*
 
 ---
 
@@ -388,13 +388,13 @@
 - ⬜ Iceberg / Batavia Blonde de Paris
 - ⬜ Craquerelle du Midi
 
-### Chicorée frisée / scarole — *Cichorium endivia* ⬜ `LEG-055`
+### Chicorée frisée / scarole — *Cichorium endivia* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Frisée de Ruffec
 - ⬜ Frisée Wallonne
 - ⬜ Scarole Cornet d'Anjou
 - ⬜ Scarole Géante Maraîchère
 
-### Chicorée sauvage / Endive — *Cichorium intybus* ⬜ `LEG-056`
+### Chicorée sauvage / Endive — *Cichorium intybus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Witloof (endive / chicon)
 - ⬜ Pain de Sucre
 - ⬜ Rouge de Vérone (Trévise)
@@ -409,17 +409,17 @@
 - ⬜ Camus de Bretagne
 - ⬜ Blanc Hyérois
 
-### Cardon — *Cynara cardunculus* ⬜ `LEG-057`
+### Cardon — *Cynara cardunculus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ de Tours épineux
 - ⬜ Plein Blanc Inerme
 
-### Salsifis — *Tragopogon porrifolius* ⬜ `LEG-058`
+### Salsifis — *Tragopogon porrifolius* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Blanc géant / Mammouth
 
-### Scorsonère — *Scorzonera hispanica* ⬜ `LEG-059`
+### Scorsonère — *Scorzonera hispanica* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Géante Noire de Russie
 
-### Topinambour — *Helianthus tuberosus* ⬜ `LEG-060`
+### Topinambour — *Helianthus tuberosus* ✅ `LEG-044`
 - ⬜ Fuseau
 - ⬜ Rouge du Limousin
 - ⬜ Patate (blanc)
@@ -450,13 +450,13 @@
 - ⬜ America
 - ⬜ Butterflay
 
-### Arroche — *Atriplex hortensis* ⬜ `LEG-062`
+### Arroche — *Atriplex hortensis* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Rouge
 - ⬜ Blonde
 
-### Épinard-fraise — *Chenopodium foliosum* ⬜ `LEG-063`
+### Épinard-fraise — *Chenopodium foliosum* ⬜ *(id à attribuer au moment de la création)*
 
-### Quinoa — *Chenopodium quinoa* ⬜ `LEG-064` (ou céréale)
+### Quinoa — *Chenopodium quinoa* ⬜ *(id à attribuer au moment de la création)* (ou céréale)
 
 ---
 
@@ -495,7 +495,7 @@
 - ⬜ Malabare
 - ⬜ d'Hiver Géant d'Hiver
 
-### Ciboule / Cive — *Allium fistulosum* ⬜ `LEG-067`
+### Ciboule / Cive — *Allium fistulosum* ⬜ *(id à attribuer au moment de la création)*
 > (La ciboulette aromatique est en `ARO-003`.)
 - ⬜ Rouge
 - ⬜ Blanche hâtive
@@ -504,7 +504,7 @@
 
 ## Convolvulaceae — Convolvulacées
 
-### Patate douce — *Ipomoea batatas* ⬜ `LEG-068`
+### Patate douce — *Ipomoea batatas* ✅ `LEG-048`
 - ⬜ Beauregard (chair orange)
 - ⬜ Évangéline
 - ⬜ O'Henry (chair blanche)
@@ -514,12 +514,12 @@
 
 ## Polygonaceae — Polygonacées
 
-### Oseille — *Rumex acetosa* ⬜ `LEG-069`
+### Oseille — *Rumex acetosa* ✅ `LEG-046`
 - ⬜ Large de Belleville
 - ⬜ Sanguine (à feuilles veinées de rouge)
 - ⬜ Petite oseille / oseille des prés
 
-### Rhubarbe — *Rheum rhabarbarum* ⬜ `LEG-070`
+### Rhubarbe — *Rheum rhabarbarum* ✅ `LEG-045`
 - ⬜ Victoria
 - ⬜ Framboozen Rood
 - ⬜ Mira / Goliath
@@ -528,7 +528,7 @@
 
 ## Malvaceae — Malvacées
 
-### Gombo (okra) — *Abelmoschus esculentus* ⬜ `LEG-071`
+### Gombo (okra) — *Abelmoschus esculentus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Clemson Spineless
 - ⬜ Rouge de Bourgogne
 
@@ -543,29 +543,29 @@
 - ⬜ Ronde maraîchère
 - ⬜ à grosse graine
 
-### Pourpier — *Portulaca oleracea* (Portulacaceae) ⬜ `LEG-073`
+### Pourpier — *Portulaca oleracea* (Portulacaceae) ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Doré à large feuille
 - ⬜ Vert
 
-### Tétragone (épinard de Nouvelle-Zélande) — *Tetragonia tetragonioides* ⬜ `LEG-074`
+### Tétragone (épinard de Nouvelle-Zélande) — *Tetragonia tetragonioides* ⬜ *(id à attribuer au moment de la création)*
 
-### Crosne du Japon — *Stachys affinis* (Lamiaceae) ⬜ `LEG-075`
+### Crosne du Japon — *Stachys affinis* (Lamiaceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Maïs doux — *Zea mays* var. *saccharata* (Poaceae) ⬜ `LEG-076`
+### Maïs doux — *Zea mays* var. *saccharata* (Poaceae) ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Golden Bantam
 - ⬜ Country Gentleman
 - ⬜ Double Standard
 > (Voir aussi § Céréales pour le maïs grain/pop-corn.)
 
-### Asperge — *Asparagus officinalis* (Asparagaceae) ⬜ `LEG-077`
+### Asperge — *Asparagus officinalis* (Asparagaceae) ✅ `LEG-047`
 - ⬜ d'Argenteuil hâtive
 - ⬜ Violette d'Albenga
 - ⬜ Verte Précoce d'Argenteuil
 - ⬜ Mary Washington
 
-### Igname — *Dioscorea spp.* ⬜ `LEG-078`
+### Igname — *Dioscorea spp.* ⬜ *(id à attribuer au moment de la création)*
 
-### Manioc — *Manihot esculenta* ⬜ `LEG-079`
+### Manioc — *Manihot esculenta* ⬜ *(id à attribuer au moment de la création)*
 
 ---
 
@@ -597,31 +597,31 @@
 - ⬜ Thym serpolet (*T. serpyllum*)
 - ⬜ Thym d'hiver / Faustini
 
-### Romarin — *Salvia rosmarinus* ⬜ `ARO-007`
+### Romarin — *Salvia rosmarinus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Officinal dressé
 - ⬜ Rampant / Prostratus
 
-### Sauge — *Salvia officinalis* ⬜ `ARO-008`
+### Sauge — *Salvia officinalis* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Officinale
 - ⬜ Purpurascens (pourpre)
 - ⬜ Tricolor
 - ⬜ Ananas (*S. elegans*)
 
-### Origan — *Origanum vulgare* ⬜ `ARO-009`
+### Origan — *Origanum vulgare* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Commun
 - ⬜ Doré (Aureum)
 
-### Marjolaine — *Origanum majorana* ⬜ `ARO-010`
+### Marjolaine — *Origanum majorana* ⬜ *(id à attribuer au moment de la création)*
 
-### Mélisse — *Melissa officinalis* ⬜ `ARO-011`
+### Mélisse — *Melissa officinalis* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Citronnelle
 - ⬜ Panachée (Aurea)
 
-### Sarriette — *Satureja* spp. ⬜ `ARO-012`
+### Sarriette — *Satureja* spp. ⬜ *(id à attribuer au moment de la création)*
 - ⬜ des jardins (annuelle, *S. hortensis*)
 - ⬜ vivace / des montagnes (*S. montana*)
 
-### Hysope — *Hyssopus officinalis* ⬜ `ARO-013`
+### Hysope — *Hyssopus officinalis* ⬜ *(id à attribuer au moment de la création)*
 
 ## Apiaceae — Apiacées aromatiques
 
@@ -636,17 +636,17 @@
 
 ### Aneth — *Anethum graveolens* ✅ `ARO-007`
 
-### Cerfeuil — *Anthriscus cerefolium* ⬜ `ARO-015`
+### Cerfeuil — *Anthriscus cerefolium* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Commun
 - ⬜ Frisé
 
-### Cumin — *Cuminum cyminum* ⬜ `ARO-016`
+### Cumin — *Cuminum cyminum* ⬜ *(id à attribuer au moment de la création)*
 
-### Carvi — *Carum carvi* ⬜ `ARO-017`
+### Carvi — *Carum carvi* ⬜ *(id à attribuer au moment de la création)*
 
-### Livèche (ache des montagnes) — *Levisticum officinale* ⬜ `ARO-018`
+### Livèche (ache des montagnes) — *Levisticum officinale* ⬜ *(id à attribuer au moment de la création)*
 
-### Anis vert — *Pimpinella anisum* ⬜ `ARO-019`
+### Anis vert — *Pimpinella anisum* ⬜ *(id à attribuer au moment de la création)*
 
 ## Autres aromatiques
 
@@ -654,20 +654,20 @@
 - ✅ `V001` Ciboulette ail (*Allium tuberosum*)
 - ⬜ Commune
 
-### Estragon — *Artemisia dracunculus* (Asteraceae) ⬜ `ARO-020`
+### Estragon — *Artemisia dracunculus* (Asteraceae) ⬜ *(id à attribuer au moment de la création)*
 - ⬜ français / vrai
 - ⬜ de Russie
 
-### Laurier-sauce — *Laurus nobilis* (Lauraceae) ⬜ `ARO-021`
+### Laurier-sauce — *Laurus nobilis* (Lauraceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Verveine citronnelle — *Aloysia citrodora* (Verbenaceae) ⬜ `ARO-022`
+### Verveine citronnelle — *Aloysia citrodora* (Verbenaceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Fenouil aromatique — *Foeniculum vulgare* (feuillage) ⬜ `ARO-023`
+### Fenouil aromatique — *Foeniculum vulgare* (feuillage) ⬜ *(id à attribuer au moment de la création)*
 > (Le fenouil bulbe est en § Légumes / Apiaceae.)
 
-### Gingembre — *Zingiber officinale* (Zingiberaceae) ⬜ `ARO-024`
+### Gingembre — *Zingiber officinale* (Zingiberaceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Curcuma — *Curcuma longa* (Zingiberaceae) ⬜ `ARO-025`
+### Curcuma — *Curcuma longa* (Zingiberaceae) ⬜ *(id à attribuer au moment de la création)*
 
 ### Raifort → voir `LEG-044` (Brassicaceae, condiment-racine)
 
@@ -714,29 +714,29 @@
 - ⬜ Patriot
 - ⬜ Myrtille sauvage / airelle (*V. myrtillus*)
 
-### Groseillier à maquereau — *Ribes uva-crispa* ⬜ `PFR-006`
+### Groseillier à maquereau — *Ribes uva-crispa* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Invicta
 - ⬜ Captivator (sans épines)
 - ⬜ Hinnonmäki Rouge / Jaune
 
-### Casseille (cassis × groseille) — *Ribes × nidigrolaria* ⬜ `PFR-007`
+### Casseille (cassis × groseille) — *Ribes × nidigrolaria* ⬜ *(id à attribuer au moment de la création)*
 
-### Mûre (ronce) — *Rubus fruticosus* ⬜ `PFR-008`
+### Mûre (ronce) — *Rubus fruticosus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Thornless Evergreen (sans épines)
 - ⬜ Chester
 - ⬜ Loch Ness
 
-### Mûre-framboise (Tayberry / Loganberry) — *Rubus* hybrides ⬜ `PFR-009`
+### Mûre-framboise (Tayberry / Loganberry) — *Rubus* hybrides ⬜ *(id à attribuer au moment de la création)*
 
-### Baie de mai (camérisier) — *Lonicera caerulea* ⬜ `PFR-010`
+### Baie de mai (camérisier) — *Lonicera caerulea* ⬜ *(id à attribuer au moment de la création)*
 
-### Argousier — *Hippophae rhamnoides* ⬜ `PFR-011`
+### Argousier — *Hippophae rhamnoides* ⬜ *(id à attribuer au moment de la création)*
 
-### Goji (baie) — *Lycium barbarum* ⬜ `PFR-012`
+### Goji (baie) — *Lycium barbarum* ⬜ *(id à attribuer au moment de la création)*
 
-### Amélanchier — *Amelanchier* spp. ⬜ `PFR-013`
+### Amélanchier — *Amelanchier* spp. ⬜ *(id à attribuer au moment de la création)*
 
-### Raisin de table — *Vitis vinifera* (Vitaceae) ⬜ `PFR-014` (ou fruit)
+### Raisin de table — *Vitis vinifera* (Vitaceae) ⬜ *(id à attribuer au moment de la création)* (ou fruit)
 - ⬜ Chasselas
 - ⬜ Muscat de Hambourg
 - ⬜ Cardinal
@@ -757,36 +757,36 @@
 
 ### Souci — *Calendula officinalis* (Asteraceae) ✅ `FLE-002`
 
-### Œillet d'Inde / Rose d'Inde — *Tagetes* spp. (Asteraceae) ⬜ `FLE-003`
+### Œillet d'Inde / Rose d'Inde — *Tagetes* spp. (Asteraceae) ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Œillet d'Inde (*T. patula*)
 - ⬜ Rose d'Inde (*T. erecta*)
 - ⬜ Tagète minute (*T. minuta*, anti-nématodes)
 
-### Bourrache — *Borago officinalis* (Boraginaceae) ⬜ `FLE-004`
+### Bourrache — *Borago officinalis* (Boraginaceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Cosmos — *Cosmos bipinnatus* (Asteraceae) ⬜ `FLE-005`
+### Cosmos — *Cosmos bipinnatus* (Asteraceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Tournesol — *Helianthus annuus* (Asteraceae) ⬜ `FLE-006`
+### Tournesol — *Helianthus annuus* (Asteraceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Souci / Zinnia — *Zinnia elegans* (Asteraceae) ⬜ `FLE-007`
+### Souci / Zinnia — *Zinnia elegans* (Asteraceae) ⬜ *(id à attribuer au moment de la création)*
 
-### Phacélie — *Phacelia tanacetifolia* (Boraginaceae) ⬜ `FLE-008`
+### Phacélie — *Phacelia tanacetifolia* (Boraginaceae) ⬜ *(id à attribuer au moment de la création)*
 > (Aussi engrais vert / mellifère — voir § Engrais verts.)
 
-### Lavande — *Lavandula* spp. (Lamiaceae) ⬜ `FLE-009`
+### Lavande — *Lavandula* spp. (Lamiaceae) ⬜ *(id à attribuer au moment de la création)*
 
 ---
 
 # 🌾 CÉRÉALES (`CER`)
 
-### Blé — *Triticum aestivum* (Poaceae) ⬜ `CER-001`
-### Maïs (grain / pop-corn) — *Zea mays* ⬜ `CER-002`
-### Orge — *Hordeum vulgare* ⬜ `CER-003`
-### Avoine — *Avena sativa* ⬜ `CER-004`
-### Seigle — *Secale cereale* ⬜ `CER-005`
-### Sarrasin (blé noir) — *Fagopyrum esculentum* (Polygonaceae) ⬜ `CER-006`
-### Millet — *Panicum miliaceum* ⬜ `CER-007`
-### Épeautre — *Triticum spelta* ⬜ `CER-008`
+### Blé — *Triticum aestivum* (Poaceae) ⬜ *(id à attribuer au moment de la création)*
+### Maïs (grain / pop-corn) — *Zea mays* ⬜ *(id à attribuer au moment de la création)*
+### Orge — *Hordeum vulgare* ⬜ *(id à attribuer au moment de la création)*
+### Avoine — *Avena sativa* ⬜ *(id à attribuer au moment de la création)*
+### Seigle — *Secale cereale* ⬜ *(id à attribuer au moment de la création)*
+### Sarrasin (blé noir) — *Fagopyrum esculentum* (Polygonaceae) ⬜ *(id à attribuer au moment de la création)*
+### Millet — *Panicum miliaceum* ⬜ *(id à attribuer au moment de la création)*
+### Épeautre — *Triticum spelta* ⬜ *(id à attribuer au moment de la création)*
 
 ---
 
@@ -795,16 +795,16 @@
 ### Moutarde blanche — *Sinapis alba* (Brassicaceae) ✅ `ENG-001`
 > Espèce mère créée (lot « fleurs compagnes »). ⚠ Brassicacée : partage
 > maladies/ravageurs avec les choux (défavorable en rotation/voisinage).
-### Phacélie — *Phacelia tanacetifolia* ⬜ `ENG-002`
-### Trèfle incarnat — *Trifolium incarnatum* (Fabaceae) ⬜ `ENG-003`
-### Trèfle blanc — *Trifolium repens* ⬜ `ENG-004`
-### Vesce commune — *Vicia sativa* (Fabaceae) ⬜ `ENG-005`
-### Luzerne — *Medicago sativa* (Fabaceae) ⬜ `ENG-006`
-### Sarrasin (couvre-sol) — *Fagopyrum esculentum* ⬜ `ENG-007`
-### Seigle fourrager — *Secale cereale* ⬜ `ENG-008`
-### Féverole — *Vicia faba* var. *minor* ⬜ `ENG-009`
-### Lupin — *Lupinus* spp. (Fabaceae) ⬜ `ENG-010`
-### Radis fourrager — *Raphanus sativus* var. *oleiformis* ⬜ `ENG-011`
+### Phacélie — *Phacelia tanacetifolia* ⬜ *(id à attribuer au moment de la création)*
+### Trèfle incarnat — *Trifolium incarnatum* (Fabaceae) ⬜ *(id à attribuer au moment de la création)*
+### Trèfle blanc — *Trifolium repens* ⬜ *(id à attribuer au moment de la création)*
+### Vesce commune — *Vicia sativa* (Fabaceae) ⬜ *(id à attribuer au moment de la création)*
+### Luzerne — *Medicago sativa* (Fabaceae) ⬜ *(id à attribuer au moment de la création)*
+### Sarrasin (couvre-sol) — *Fagopyrum esculentum* ⬜ *(id à attribuer au moment de la création)*
+### Seigle fourrager — *Secale cereale* ⬜ *(id à attribuer au moment de la création)*
+### Féverole — *Vicia faba* var. *minor* ⬜ *(id à attribuer au moment de la création)*
+### Lupin — *Lupinus* spp. (Fabaceae) ⬜ *(id à attribuer au moment de la création)*
+### Radis fourrager — *Raphanus sativus* var. *oleiformis* ⬜ *(id à attribuer au moment de la création)*
 ### Sarrasin / Nyger / Ray-grass — à compléter ⬜
 
 ---

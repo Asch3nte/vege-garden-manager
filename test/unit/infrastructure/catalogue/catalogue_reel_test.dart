@@ -92,6 +92,23 @@ void main() {
       'LEG-030': CategoriePlante.legume, // Melon
       'LEG-031': CategoriePlante.legume, // Chou de Bruxelles
       'LEG-032': CategoriePlante.legume, // Chou frisé (kale)
+      // Lot « courantes restantes » :
+      'LEG-033': CategoriePlante.legume, // Panais
+      'LEG-034': CategoriePlante.legume, // Céleri branche
+      'LEG-035': CategoriePlante.legume, // Roquette
+      'LEG-036': CategoriePlante.legume, // Chou-rave
+      'LEG-037': CategoriePlante.legume, // Rutabaga
+      'LEG-038': CategoriePlante.legume, // Pak choï
+      'LEG-039': CategoriePlante.legume, // Cresson alénois
+      'LEG-040': CategoriePlante.legume, // Pâtisson
+      'LEG-041': CategoriePlante.legume, // Pastèque
+      'LEG-042': CategoriePlante.legume, // Chicorée witloof
+      'LEG-043': CategoriePlante.legume, // Scarole
+      'LEG-044': CategoriePlante.legume, // Topinambour
+      'LEG-045': CategoriePlante.legume, // Rhubarbe
+      'LEG-046': CategoriePlante.legume, // Oseille
+      'LEG-047': CategoriePlante.legume, // Asperge
+      'LEG-048': CategoriePlante.legume, // Patate douce
     };
     attendu.forEach((id, categorie) {
       final f = cache.parId(id);
