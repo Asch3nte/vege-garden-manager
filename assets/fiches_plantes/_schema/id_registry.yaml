@@ -121,8 +121,18 @@ legumes:
   LEG-015-V004: Navet Milan Rouge
   LEG-016: Oignon
   LEG-016-V001: Oignon Rouge de Florence
+  LEG-016-V002: Oignon Jaune Paille des Vertus
+  LEG-016-V003: Oignon Blanc de Paris
+  LEG-016-V004: Oignon Rouge de Brunswick
+  LEG-016-V005: Oignon doux des Cévennes
+  LEG-016-V006: Oignon Rosé de Roscoff
+  LEG-016-V007: Oignon Sturon
   LEG-017: Poireau
   LEG-017-V001: Poireau Bleu de Solaise
+  LEG-017-V002: Poireau de Carentan
+  LEG-017-V003: Poireau Monstrueux d'Elbeuf
+  LEG-017-V004: Poireau Gros Long d'Été
+  LEG-017-V005: Poireau Géant d'Hiver
   LEG-018: Pois
   LEG-018-V001: Pois mangetout Carouby
   LEG-018-V002: Pois Petit Provençal
@@ -165,11 +175,18 @@ legumes:
   LEG-024-V002: Fenouil Zefa Fino
   LEG-024-V003: Fenouil Romanesco
   LEG-025: Ail
+  LEG-025-V001: Ail Blanc de la Drôme
+  LEG-025-V002: Ail Rose de Lautrec
+  LEG-025-V003: Ail Violet de Cadours
+  LEG-025-V004: Ail Fructidor
   LEG-026: Fève
   LEG-026-V001: Fève Aguadulce à très longue cosse
   LEG-026-V002: Fève de Séville
   LEG-026-V003: Fève The Sutton
   LEG-027: Échalote
+  LEG-027-V001: Échalote Grise
+  LEG-027-V002: Échalote Longue de Jersey
+  LEG-027-V003: Échalote Cuisse de Poulet
   LEG-028: Mâche
   LEG-029: Bette (poirée)
   LEG-030: Melon
@@ -237,6 +254,7 @@ aromatiques:
   ARO-002-V003: Persil Frisé Vert Foncé
   ARO-003: Ciboulette
   ARO-003-V001: Ciboulette ail (Allium tuberosum)
+  ARO-003-V002: Ciboulette Commune
   ARO-004: Thym
   ARO-004-V001: Thym Citron
   ARO-005: Menthe poivrée

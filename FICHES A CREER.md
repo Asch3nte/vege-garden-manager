@@ -464,36 +464,36 @@
 
 ### Oignon — *Allium cepa* ✅ `LEG-016`
 - ✅ `V001` Rouge de Florence
-- ⬜ Jaune Paille des Vertus
-- ⬜ Blanc de Paris / Hâtif de Paris
-- ⬜ Rouge de Brunswick
-- ⬜ des Cévennes (doux)
-- ⬜ Rosé de Roscoff
+- ✅ `V002` Oignon Jaune Paille des Vertus
+- ✅ `V003` Oignon Blanc de Paris
+- ✅ `V004` Oignon Rouge de Brunswick
+- ✅ `V005` Oignon doux des Cévennes
+- ✅ `V006` Oignon Rosé de Roscoff
 - ⬜ de Mulhouse (à conserver)
-- ⬜ Sturon
+- ✅ `V007` Oignon Sturon
 
 ### Échalote — *Allium cepa* var. *aggregatum* ✅ `LEG-027`
 > Espèce mère créée (lot « potagères courantes »). Variétés encore à créer :
-- ⬜ Grise (de Jersey)
-- ⬜ Longue / de Jersey rose
-- ⬜ Cuisse de Poulet
+- ✅ `V001` Échalote Grise
+- ✅ `V002` Échalote Longue de Jersey
+- ✅ `V003` Échalote Cuisse de Poulet
 
 ### Ail — *Allium sativum* ✅ `LEG-025`
 > Espèce mère créée (lot « fleurs compagnes »). Variétés encore à créer :
-- ⬜ Blanc de la Drôme
-- ⬜ Rose de Lautrec
-- ⬜ Violet de Cadours
-- ⬜ Fructidor
+- ✅ `V001` Ail Blanc de la Drôme
+- ✅ `V002` Ail Rose de Lautrec
+- ✅ `V003` Ail Violet de Cadours
+- ✅ `V004` Ail Fructidor
 - ⬜ Rouge (d'automne)
 - ⬜ des Ours (*A. ursinum*, aromatique sauvage)
 
 ### Poireau — *Allium ampeloprasum* var. *porrum* ✅ `LEG-017`
 - ✅ `V001` Bleu de Solaise
-- ⬜ de Carentan
-- ⬜ Monstrueux d'Elbeuf
-- ⬜ Gros Long d'Été
+- ✅ `V002` Poireau de Carentan
+- ✅ `V003` Poireau Monstrueux d'Elbeuf
+- ✅ `V004` Poireau Gros Long d'Été
 - ⬜ Malabare
-- ⬜ d'Hiver Géant d'Hiver
+- ✅ `V005` Poireau Géant d'Hiver
 
 ### Ciboule / Cive — *Allium fistulosum* ⬜ *(id à attribuer au moment de la création)*
 > (La ciboulette aromatique est en `ARO-003`.)
@@ -652,7 +652,7 @@
 
 ### Ciboulette — *Allium schoenoprasum* ✅ `ARO-003`
 - ✅ `V001` Ciboulette ail (*Allium tuberosum*)
-- ⬜ Commune
+- ✅ `V002` Ciboulette Commune
 
 ### Estragon — *Artemisia dracunculus* (Asteraceae) ⬜ *(id à attribuer au moment de la création)*
 - ⬜ français / vrai

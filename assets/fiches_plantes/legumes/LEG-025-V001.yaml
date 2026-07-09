@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Ail Blanc de la Drôme. Hérite de LEG-025.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-025-V001
+parent_id: LEG-025
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium sativum 'Blanc de la Drôme'"
+
+i18n:
+  fr:
+    nom_commun: Ail Blanc de la Drôme
+    noms_alternatifs: [Blanc de la Drôme]
+    description: >
+      Ail blanc d'automne à gros bulbe régulier, à la saveur franche, réputé pour
+      sa très bonne conservation. Planté à l'automne, il bénéficie du froid
+      hivernal ; l'un des ails blancs de référence.
+  en:
+    nom_commun: Drôme White Garlic
+    description: >
+      Autumn white garlic with a large, regular bulb and a clean flavour, known
+      for very good keeping. Planted in autumn, it benefits from winter cold.
+conservation:
+  - methode: frais
+    duree_mois: 10
+    conditions_i18n: { fr: "Local sec et aéré, en tresse", en: "Dry, airy room, braided" }
+utilisations_culinaires_i18n:
+  fr: [Cru écrasé, confit, en persillade, rôti en chemise]
+  en: [Raw crushed, confit, in persillade, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ail_cultiv%C3%A9
+contributeurs:
+  - "@potagerer"
