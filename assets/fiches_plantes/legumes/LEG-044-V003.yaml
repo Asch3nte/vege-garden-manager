@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Topinambour Patate. Hérite de LEG-044.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-044-V003
+parent_id: LEG-044
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Helianthus tuberosus 'Patate'"
+
+i18n:
+  fr:
+    nom_commun: Topinambour Patate
+    noms_alternatifs: [Patate, Blanc commun]
+    description: >
+      Variété à gros tubercules blancs arrondis, à chair douce, un peu plus
+      réguliers que le rouge. Rustique et très productive ; le port haut fait
+      aussi un bon brise-vent temporaire au potager.
+  en:
+    nom_commun: Patate Jerusalem Artichoke
+    description: >
+      Variety with large, rounded white tubers and sweet flesh, a little more
+      regular than the red type. Hardy and very productive.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "En terre l'hiver, ou cave humide en silo de sable", en: "In the ground over winter, or sand clamp in a humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [En purée, sauté, en velouté, rôti]
+  en: [Mashed, sautéed, velouté, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Topinambour
+contributeurs:
+  - "@potagerer"

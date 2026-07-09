@@ -375,39 +375,39 @@
 
 ### Laitue — *Lactuca sativa* ✅ `LEG-014` 🔡
 - ✅ `V001` Batavia Rouge Grenobloise
-- ⬜ Reine de Mai (pommée de printemps)
-- ⬜ Merveille des Quatre Saisons
-- ⬜ Grosse Blonde Paresseuse
+- ✅ `V002` Laitue Reine de Mai
+- ✅ `V004` Laitue Merveille des Quatre Saisons
+- ✅ `V003` Laitue Grosse Blonde Paresseuse
 - ⬜ Rougette de Montpellier
-- ⬜ Feuille de Chêne (blonde / rouge)
-- ⬜ Lollo Rossa / Lollo Bionda
-- ⬜ Sucrine
-- ⬜ Romaine Blonde Maraîchère
+- ✅ `V005` Laitue Feuille de Chêne
+- ✅ `V006` Laitue Lollo Rossa
+- ✅ `V007` Laitue Sucrine
+- ✅ `V008` Laitue Romaine Blonde Maraîchère
 - ⬜ Romaine Ballon
 - ⬜ à couper (Gloire du Dauphiné)
-- ⬜ Iceberg / Batavia Blonde de Paris
+- ✅ `V009` Laitue Batavia Blonde de Paris
 - ⬜ Craquerelle du Midi
 
 ### Chicorée frisée / scarole — *Cichorium endivia* ⬜ *(id à attribuer au moment de la création)*
-- ⬜ Frisée de Ruffec
+- ✅ `V002` Chicorée Frisée de Ruffec
 - ⬜ Frisée Wallonne
-- ⬜ Scarole Cornet d'Anjou
-- ⬜ Scarole Géante Maraîchère
+- ✅ `V001` Scarole Cornet d'Anjou
+- ✅ `V003` Scarole Géante Maraîchère
 
 ### Chicorée sauvage / Endive — *Cichorium intybus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Witloof (endive / chicon)
-- ⬜ Pain de Sucre
-- ⬜ Rouge de Vérone (Trévise)
-- ⬜ Chioggia (Radicchio)
+- ✅ `V001` Chicorée Pain de Sucre
+- ✅ `V002` Chicorée Rouge de Vérone (Trévise)
+- ✅ `V003` Chicorée Chioggia
 - ⬜ Barbe de Capucin
 - ⬜ Sauvage améliorée / à café
 
 ### Artichaut — *Cynara cardunculus* var. *scolymus* ✅ `LEG-023`
 - ✅ `V001` Vert de Laon
-- ⬜ Violet de Provence
+- ✅ `V002` Artichaut Violet de Provence
 - ⬜ Gros Vert de Laon (si distinct)
-- ⬜ Camus de Bretagne
-- ⬜ Blanc Hyérois
+- ✅ `V003` Artichaut Camus de Bretagne
+- ✅ `V004` Artichaut Blanc Hyérois
 
 ### Cardon — *Cynara cardunculus* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ de Tours épineux
@@ -420,9 +420,9 @@
 - ⬜ Géante Noire de Russie
 
 ### Topinambour — *Helianthus tuberosus* ✅ `LEG-044`
-- ⬜ Fuseau
-- ⬜ Rouge du Limousin
-- ⬜ Patate (blanc)
+- ✅ `V001` Topinambour Fuseau
+- ✅ `V002` Topinambour Rouge du Limousin
+- ✅ `V003` Topinambour Patate
 
 ---
 

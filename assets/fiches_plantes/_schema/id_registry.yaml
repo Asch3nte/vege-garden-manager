@@ -97,6 +97,14 @@ legumes:
   LEG-013-V008: Haricot Borlotto Lingot de Rome
   LEG-014: Laitue
   LEG-014-V001: Laitue Batavia Rouge Grenobloise
+  LEG-014-V002: Laitue Reine de Mai
+  LEG-014-V003: Laitue Grosse Blonde Paresseuse
+  LEG-014-V004: Laitue Merveille des Quatre Saisons
+  LEG-014-V005: Laitue Feuille de Chêne
+  LEG-014-V006: Laitue Lollo Rossa
+  LEG-014-V007: Laitue Sucrine
+  LEG-014-V008: Laitue Romaine Blonde Maraîchère
+  LEG-014-V009: Laitue Batavia Blonde de Paris
   LEG-015: Navet
   LEG-015-V001: Navet Boule d'Or
   LEG-015-V002: Navet de Nancy
@@ -140,6 +148,9 @@ legumes:
   LEG-022-V006: Radis Noir Gros Rond d'Hiver
   LEG-023: Artichaut
   LEG-023-V001: Artichaut Vert de Laon
+  LEG-023-V002: Artichaut Violet de Provence
+  LEG-023-V003: Artichaut Camus de Bretagne
+  LEG-023-V004: Artichaut Blanc Hyérois
   LEG-024: Fenouil
   LEG-025: Ail
   LEG-026: Fève
@@ -185,8 +196,17 @@ legumes:
   LEG-041-V002: Pastèque Crimson Sweet
   LEG-041-V003: Pastèque Charleston Gray
   LEG-042: Chicorée witloof (endive)
+  LEG-042-V001: Chicorée Pain de Sucre
+  LEG-042-V002: Chicorée Rouge de Vérone (Trévise)
+  LEG-042-V003: Chicorée Chioggia
   LEG-043: Scarole
+  LEG-043-V001: Scarole Cornet d'Anjou
+  LEG-043-V002: Chicorée Frisée de Ruffec
+  LEG-043-V003: Scarole Géante Maraîchère
   LEG-044: Topinambour
+  LEG-044-V001: Topinambour Fuseau
+  LEG-044-V002: Topinambour Rouge du Limousin
+  LEG-044-V003: Topinambour Patate
   LEG-045: Rhubarbe
   LEG-046: Oseille
   LEG-047: Asperge

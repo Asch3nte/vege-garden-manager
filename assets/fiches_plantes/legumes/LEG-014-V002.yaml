@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Laitue Reine de Mai. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V002
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa 'Reine de Mai'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Reine de Mai
+    noms_alternatifs: [Reine de Mai, Laitue pommée de printemps]
+    description: >
+      Laitue pommée de type beurre, précoce, à pomme tendre teintée de rose au
+      cœur. Rustique et adaptée aux semis de fin d'hiver et de printemps ; l'une
+      des premières salades de l'année.
+  en:
+    nom_commun: Reine de Mai Lettuce
+    description: >
+      Early butterhead lettuce with a tender head tinged with pink at the heart.
+      Hardy, suited to late-winter and spring sowing.
+
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade]
+  en: [Raw in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

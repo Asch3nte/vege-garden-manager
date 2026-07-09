@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Laitue Lollo Rossa. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V006
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa 'Lollo Rossa'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Lollo Rossa
+    noms_alternatifs: [Lollo Rossa, Lollo Rosso]
+    description: >
+      Laitue à couper italienne à feuilles très frisées et cloquées, bordées de
+      rouge intense, ne pommant pas. Très décorative en salade et en bordure,
+      elle se récolte feuille à feuille. Il existe une forme blonde (Lollo Bionda).
+  en:
+    nom_commun: Lollo Rossa Lettuce
+    description: >
+      Italian loose-leaf lettuce with very curly, crinkled leaves edged in intense
+      red, non-heading. Very decorative; picked leaf by leaf.
+
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en mesclun, en décoration d'assiette]
+  en: [Raw in salad, in mesclun, as a plate garnish]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

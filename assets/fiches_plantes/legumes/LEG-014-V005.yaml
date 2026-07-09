@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Laitue Feuille de Chêne. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V005
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa 'Feuille de Chêne'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Feuille de Chêne
+    noms_alternatifs: [Feuille de Chêne, Oak Leaf]
+    description: >
+      Laitue à couper à feuilles découpées en lobes rappelant la feuille de
+      chêne, blondes ou rouges, tendres et fondantes. Se récolte feuille à
+      feuille pour une repousse prolongée ; peu sensible à la montaison.
+  en:
+    nom_commun: Oak Leaf Lettuce
+    description: >
+      Loose-leaf lettuce with lobed oak-leaf-shaped leaves, blond or red, tender
+      and melting. Picked leaf by leaf for prolonged regrowth.
+
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en mesclun]
+  en: [Raw in salad, in mesclun]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

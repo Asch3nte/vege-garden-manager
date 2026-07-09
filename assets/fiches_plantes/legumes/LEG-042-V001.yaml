@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Chicorée Pain de Sucre. Hérite de LEG-042.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+# Chicorée à pommer (non forcée) : la culture diffère de la mère (witloof).
+id: LEG-042-V001
+parent_id: LEG-042
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cichorium intybus var. foliosum 'Pain de Sucre'"
+
+i18n:
+  fr:
+    nom_commun: Chicorée Pain de Sucre
+    noms_alternatifs: [Pain de Sucre, Sugarloaf]
+    description: >
+      Grande chicorée à pomme allongée vert clair, serrée, au cœur blanc doux et
+      légèrement amer. Contrairement à la witloof, elle ne se force pas : elle
+      pomme au potager et se récolte en automne.
+    conseils_culture: >
+      Semer en été, en place, en sol frais et riche ; éclaircir. Aucune opération
+      de forçage : la pomme se forme directement au jardin. Rustique, elle résiste
+      aux premières gelées.
+    conseils_recolte: >
+      Récolter les pommes entières en automne, avant les fortes gelées ; le cœur
+      blanchi est le plus doux.
+  en:
+    nom_commun: Sugarloaf Chicory
+    description: >
+      Large chicory forming an elongated, tight, light-green head with a mild,
+      slightly bitter white heart. Unlike witloof, it is not forced: it hearts up
+      in the garden and is harvested in autumn.
+
+cycle:
+  duree_avant_recolte_jours: [80, 110]
+  espacement_cm: 30
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, braisée, à la poêle]
+  en: [Raw in salad, braised, pan-fried]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_sauvage
+contributeurs:
+  - "@potagerer"
