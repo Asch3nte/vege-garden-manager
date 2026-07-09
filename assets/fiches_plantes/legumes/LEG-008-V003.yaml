@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Chou-fleur Géant d'Automne. Hérite de LEG-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-008-V003
+parent_id: LEG-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. botrytis 'Géant d'Automne'"
+
+i18n:
+  fr:
+    nom_commun: Chou-fleur Géant d'Automne
+    noms_alternatifs: [Géant d'Automne]
+    description: >
+      Chou-fleur tardif à grosse pomme blanche, récolté à l'automne. Vigoureux et
+      productif, il demande une longue période de culture et un sol riche et
+      frais pour former de belles pommes.
+  en:
+    nom_commun: Autumn Giant Cauliflower
+    description: >
+      Late cauliflower with a large white head, harvested in autumn. Vigorous and
+      productive; needs a long season and rich, moist soil.
+
+cycle:
+  duree_avant_recolte_jours: [120, 160]
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, en gratin, en velouté, rôti au four]
+  en: [Steamed, gratin, velouté, oven-roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-fleur
+contributeurs:
+  - "@potagerer"

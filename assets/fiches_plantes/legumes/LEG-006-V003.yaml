@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Chou brocoli Pourpre du Cap. Hérite de LEG-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-006-V003
+parent_id: LEG-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. italica 'Purple Sprouting'"
+
+i18n:
+  fr:
+    nom_commun: Chou brocoli Pourpre du Cap
+    noms_alternatifs: [Purple Sprouting, Brocoli à jets violets]
+    description: >
+      Brocoli rustique à jets violets, semé au printemps ou en été pour une
+      récolte de fin d'hiver et de printemps. Très résistant au froid, il produit
+      de nombreuses petites pousses tendres sur une longue période.
+  en:
+    nom_commun: Purple Sprouting Broccoli
+    description: >
+      Hardy purple-sprouting broccoli, sown in spring or summer for a late-winter
+      to spring harvest. Very cold-hardy, producing many tender shoots over a
+      long period.
+
+cycle:
+  type: bisannuelle
+  duree_avant_recolte_jours: [200, 300]
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, sauté, poêlé à l'ail]
+  en: [Steamed, stir-fried, pan-fried with garlic]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Brocoli
+contributeurs:
+  - "@potagerer"

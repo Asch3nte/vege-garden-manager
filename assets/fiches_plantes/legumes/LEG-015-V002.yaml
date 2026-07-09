@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Navet de Nancy. Hérite de LEG-015.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-015-V002
+parent_id: LEG-015
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica rapa subsp. rapa 'de Nancy'"
+
+i18n:
+  fr:
+    nom_commun: Navet de Nancy
+    noms_alternatifs: [de Nancy à collet violet, Rouge plat hâtif à collet violet]
+    description: >
+      Navet rond et aplati à collet violet et chair blanche, précoce et tendre.
+      Classique des semis de printemps ; à récolter jeune pour une chair douce et
+      non piquante.
+  en:
+    nom_commun: Nancy Turnip
+    description: >
+      Round, flattened turnip with purple top and white flesh, early and tender.
+      A spring-sowing classic; harvest young for mild, non-pungent flesh.
+
+conservation:
+  - methode: frais
+    duree_jours: 20
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Braisé, en potée, glacé, en purée]
+  en: [Braised, in stew, glazed, mashed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Navet
+contributeurs:
+  - "@potagerer"

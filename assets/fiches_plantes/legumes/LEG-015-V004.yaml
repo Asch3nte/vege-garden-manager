@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Navet Milan Rouge. Hérite de LEG-015.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-015-V004
+parent_id: LEG-015
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica rapa subsp. rapa 'Milan Rouge'"
+
+i18n:
+  fr:
+    nom_commun: Navet Milan Rouge
+    noms_alternatifs: [Rouge plat de Milan, Milan à collet rouge]
+    description: >
+      Navet plat très hâtif à collet rouge-violet vif et chair blanche fine.
+      Rapide et précoce, idéal pour les premiers semis de printemps et les semis
+      d'arrière-saison ; à consommer jeune.
+  en:
+    nom_commun: Milan Red Turnip
+    description: >
+      Very early flat turnip with a bright red-purple top and fine white flesh.
+      Quick and early, ideal for first spring sowings and late-season sowings.
+
+cycle:
+  duree_avant_recolte_jours: [40, 55]
+conservation:
+  - methode: frais
+    duree_jours: 12
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Braisé, glacé, en potée, cru râpé jeune]
+  en: [Braised, glazed, in stew, raw grated when young]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Navet
+contributeurs:
+  - "@potagerer"

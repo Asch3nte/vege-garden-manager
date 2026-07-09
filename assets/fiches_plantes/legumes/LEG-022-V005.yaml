@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Radis Glaçon. Hérite de LEG-022.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-022-V005
+parent_id: LEG-022
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Raphanus sativus 'Glaçon'"
+
+i18n:
+  fr:
+    nom_commun: Radis Glaçon
+    noms_alternatifs: [Glaçon, Blanc long de Glace]
+    description: >
+      Radis long entièrement blanc, à chair croquante, douce et juteuse. Un peu
+      plus lent que les roses, il reste tendre plus longtemps et supporte bien la
+      chaleur estivale.
+  en:
+    nom_commun: Icicle Radish
+    description: >
+      Long, all-white radish with crisp, mild, juicy flesh. Slightly slower than
+      pink types, it stays tender longer and tolerates summer heat well.
+
+cycle:
+  duree_avant_recolte_jours: [25, 35]
+conservation:
+  - methode: frais
+    duree_jours: 8
+    conditions_i18n: { fr: "Réfrigérateur, sans les fanes", en: "Refrigerator, tops removed" }
+utilisations_culinaires_i18n:
+  fr: [Cru croqué, en salade, mariné]
+  en: [Raw, in salad, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Radis
+contributeurs:
+  - "@potagerer"

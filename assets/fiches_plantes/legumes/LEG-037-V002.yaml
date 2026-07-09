@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Rutabaga à collet rouge. Hérite de LEG-037.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-037-V002
+parent_id: LEG-037
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica napus var. napobrassica 'à collet rouge'"
+
+i18n:
+  fr:
+    nom_commun: Rutabaga à collet rouge
+    noms_alternatifs: [Rouge à collet, Rouge d'automne]
+    description: >
+      Rutabaga à collet rouge-pourpre et chair jaune, productif et savoureux.
+      Rustique et de bonne conservation, il forme de grosses racines régulières
+      pour les usages d'hiver.
+  en:
+    nom_commun: Red-topped Swede
+    description: >
+      Swede with a red-purple top and yellow flesh, productive and tasty. Hardy
+      and a good keeper, forming large, regular roots for winter use.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [En potée, en purée, rôti, en soupe]
+  en: [In stew, mashed, roasted, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Rutabaga
+contributeurs:
+  - "@potagerer"

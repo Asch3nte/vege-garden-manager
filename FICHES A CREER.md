@@ -200,68 +200,68 @@
 
 ### Chou brocoli — *Brassica oleracea* var. *italica* ✅ `LEG-006`
 - ✅ `V001` Calabrese
-- ⬜ De Cicco
+- ✅ `V002` Chou brocoli De Cicco
 - ⬜ Romanesco (à arbitrer : brocoli vs chou-fleur)
-- ⬜ Pourpre du Cap / Purple Sprouting
+- ✅ `V003` Chou brocoli Pourpre du Cap
 
 ### Chou cabus (pommé) — *Brassica oleracea* var. *capitata* ✅ `LEG-007`
 - ✅ `V001` Rouge (Cabus rouge)
-- ⬜ Cœur de Bœuf des Vertus
-- ⬜ Quintal d'Alsace (chou à choucroute)
+- ✅ `V002` Chou cabus Cœur de Bœuf des Vertus
+- ✅ `V003` Chou cabus Quintal d'Alsace
 - ⬜ De Milan / Milan de Pontoise (frisé)
-- ⬜ Nantais hâtif
+- ✅ `V004` Chou cabus Nantais hâtif
 - ⬜ Point de Bruxelles
 
 ### Chou-fleur — *Brassica oleracea* var. *botrytis* ✅ `LEG-008`
 - ✅ `V001` de Bretagne
-- ⬜ Merveille de Toutes Saisons
-- ⬜ Géant d'Automne
-- ⬜ Romanesco
-- ⬜ Violet de Sicile
+- ✅ `V002` Chou-fleur Merveille de Toutes Saisons
+- ✅ `V003` Chou-fleur Géant d'Automne
+- ✅ `V004` Chou Romanesco
+- ✅ `V005` Chou-fleur Violet de Sicile
 
 ### Chou de Bruxelles — *Brassica oleracea* var. *gemmifera* ✅ `LEG-031`
 > Espèce mère créée (lot « potagères courantes »). Variétés encore à créer :
-- ⬜ de Rosny
-- ⬜ Long Island
-- ⬜ Groninger
+- ✅ `V001` Chou de Bruxelles de Rosny
+- ✅ `V002` Chou de Bruxelles Long Island
+- ✅ `V003` Chou de Bruxelles Groninger
 
 ### Chou frisé / Kale — *Brassica oleracea* var. *sabellica* ✅ `LEG-032`
 > Espèce mère créée (lot « potagères courantes »). Variétés encore à créer :
-- ⬜ Kale Vert Demi-Nain
-- ⬜ Cavolo Nero / Noir de Toscane
-- ⬜ Redbor (rouge)
+- ✅ `V001` Chou frisé Vert Demi-Nain
+- ✅ `V002` Chou frisé Cavolo Nero
+- ✅ `V003` Chou frisé Redbor
 - ⬜ Rouge de Russie (Red Russian)
 
 ### Chou-rave — *Brassica oleracea* var. *gongylodes* ✅ `LEG-036`
-- ⬜ Blanc de Vienne
-- ⬜ Bleu de Vienne
-- ⬜ Superschmelz
+- ✅ `V001` Chou-rave Blanc de Vienne
+- ✅ `V002` Chou-rave Bleu de Vienne
+- ✅ `V003` Chou-rave Superschmelz
 
 ### Chou pommé de Chine / Pé-tsaï — *Brassica rapa* subsp. *pekinensis* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Michihili
 - ⬜ Nagaoka F1
 
 ### Pak choï — *Brassica rapa* subsp. *chinensis* ✅ `LEG-038`
-- ⬜ Blanc / Baby
+- ✅ `V001` Pak choï de Canton
 
 ### Navet — *Brassica rapa* subsp. *rapa* ✅ `LEG-015`
 - ✅ `V001` Boule d'Or
-- ⬜ de Nancy (à collet violet)
-- ⬜ des Vertus Marteau
+- ✅ `V002` Navet de Nancy
+- ✅ `V003` Navet des Vertus Marteau
 - ⬜ Blanc Globe à collet violet
-- ⬜ Milan Rouge
+- ✅ `V004` Navet Milan Rouge
 
 ### Rutabaga — *Brassica napus* var. *napobrassica* ✅ `LEG-037`
-- ⬜ Wilhelmsburger
-- ⬜ à collet rouge
+- ✅ `V001` Rutabaga Wilhelmsburger
+- ✅ `V002` Rutabaga à collet rouge
 
 ### Radis — *Raphanus sativus* ✅ `LEG-022`
 - ✅ `V001` Cherry Belle
-- ⬜ de 18 jours
-- ⬜ National 2
-- ⬜ Flamboyant
-- ⬜ Glaçon (blanc long)
-- ⬜ Noir Gros Rond d'Hiver
+- ✅ `V002` Radis de 18 jours
+- ✅ `V003` Radis National 2
+- ✅ `V004` Radis Flamboyant
+- ✅ `V005` Radis Glaçon
+- ✅ `V006` Radis Noir Gros Rond d'Hiver
 - ⬜ Rose de Chine
 - ⬜ Green Meat / Green Luobo
 - ⬜ Daïkon (radis blanc japonais)

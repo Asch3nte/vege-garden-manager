@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou de Bruxelles Groninger. Hérite de LEG-031.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-031-V003
+parent_id: LEG-031
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. gemmifera 'Groninger'"
+
+i18n:
+  fr:
+    nom_commun: Chou de Bruxelles Groninger
+    noms_alternatifs: [Groninger]
+    description: >
+      Variété néerlandaise très rustique, à pommes fermes de couleur vert foncé,
+      résistantes au froid. Adaptée aux récoltes tardives d'hiver ; saveur
+      corsée qui s'adoucit avec le gel.
+  en:
+    nom_commun: Groninger Brussels Sprout
+    description: >
+      Very hardy Dutch variety with firm, dark-green cold-resistant sprouts.
+      Suited to late-winter harvest; robust flavour that mellows with frost.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur ; ou récolte au fur et à mesure sur pied", en: "Refrigerator; or pick from the standing plant" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, sautés, rôtis au four, braisés]
+  en: [Steamed, sautéed, oven-roasted, braised]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_de_Bruxelles
+contributeurs:
+  - "@potagerer"

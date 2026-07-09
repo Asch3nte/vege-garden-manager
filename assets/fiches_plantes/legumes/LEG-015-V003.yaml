@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Navet des Vertus Marteau. Hérite de LEG-015.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-015-V003
+parent_id: LEG-015
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica rapa subsp. rapa 'des Vertus Marteau'"
+
+i18n:
+  fr:
+    nom_commun: Navet des Vertus Marteau
+    noms_alternatifs: [des Vertus Marteau, Marteau]
+    description: >
+      Navet long blanc en forme de marteau, à chair fine, douce et savoureuse.
+      Variété d'été et d'automne appréciée pour sa tendreté ; à récolter avant
+      qu'il ne devienne creux.
+  en:
+    nom_commun: Vertus Marteau Turnip
+    description: >
+      Long white hammer-shaped turnip with fine, sweet, tasty flesh. A summer and
+      autumn variety valued for its tenderness; harvest before it turns hollow.
+
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Braisé, en potée, glacé, sauté]
+  en: [Braised, in stew, glazed, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Navet
+contributeurs:
+  - "@potagerer"

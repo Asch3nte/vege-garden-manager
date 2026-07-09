@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pak choï de Canton (à côtes blanches). Hérite de LEG-038.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-038-V001
+parent_id: LEG-038
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica rapa subsp. chinensis 'Canton'"
+
+i18n:
+  fr:
+    nom_commun: Pak choï de Canton
+    noms_alternatifs: [à côtes blanches, Canton]
+    description: >
+      Pak choï à larges côtes blanches croquantes et feuilles vert foncé.
+      Croissance rapide, apprécié sauté au wok. Semis de printemps et surtout
+      d'automne pour éviter la montée à graines.
+  en:
+    nom_commun: White-stemmed Pak Choi
+    description: >
+      Pak choi with broad, crunchy white ribs and dark-green leaves. Fast-growing,
+      prized stir-fried. Sow in spring and especially autumn to avoid bolting.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Sauté au wok, en soupe, vapeur, cru jeune en salade]
+  en: [Stir-fried, soup, steamed, raw young in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pak_cho%C3%AF
+contributeurs:
+  - "@potagerer"

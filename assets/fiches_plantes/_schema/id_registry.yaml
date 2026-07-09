@@ -55,10 +55,19 @@ legumes:
   LEG-005-V001: Céleri-rave Brilliant
   LEG-006: Chou brocoli
   LEG-006-V001: Chou brocoli Calabrese
+  LEG-006-V002: Chou brocoli De Cicco
+  LEG-006-V003: Chou brocoli Pourpre du Cap
   LEG-007: Chou cabus
   LEG-007-V001: Chou cabus rouge
+  LEG-007-V002: Chou cabus Cœur de Bœuf des Vertus
+  LEG-007-V003: Chou cabus Quintal d'Alsace
+  LEG-007-V004: Chou cabus Nantais hâtif
   LEG-008: Chou-fleur
   LEG-008-V001: Chou-fleur de Bretagne
+  LEG-008-V002: Chou-fleur Merveille de Toutes Saisons
+  LEG-008-V003: Chou-fleur Géant d'Automne
+  LEG-008-V004: Chou Romanesco
+  LEG-008-V005: Chou-fleur Violet de Sicile
   LEG-009: Concombre
   LEG-009-V001: Concombre Marketmore
   LEG-009-V002: Concombre Vert Long Maraîcher
@@ -83,6 +92,9 @@ legumes:
   LEG-014-V001: Laitue Batavia Rouge Grenobloise
   LEG-015: Navet
   LEG-015-V001: Navet Boule d'Or
+  LEG-015-V002: Navet de Nancy
+  LEG-015-V003: Navet des Vertus Marteau
+  LEG-015-V004: Navet Milan Rouge
   LEG-016: Oignon
   LEG-016-V001: Oignon Rouge de Florence
   LEG-017: Poireau
@@ -109,6 +121,11 @@ legumes:
   LEG-021-V004: Potimarron Marina di Chioggia
   LEG-022: Radis
   LEG-022-V001: Radis Cherry Belle
+  LEG-022-V002: Radis de 18 jours
+  LEG-022-V003: Radis National 2
+  LEG-022-V004: Radis Flamboyant
+  LEG-022-V005: Radis Glaçon
+  LEG-022-V006: Radis Noir Gros Rond d'Hiver
   LEG-023: Artichaut
   LEG-023-V001: Artichaut Vert de Laon
   LEG-024: Fenouil
@@ -123,13 +140,26 @@ legumes:
   LEG-030-V003: Melon Cantaloup de Bellegarde
   LEG-030-V004: Melon Sucrin de Tours
   LEG-031: Chou de Bruxelles
+  LEG-031-V001: Chou de Bruxelles de Rosny
+  LEG-031-V002: Chou de Bruxelles Long Island
+  LEG-031-V003: Chou de Bruxelles Groninger
   LEG-032: Chou frisé (kale)
+  LEG-032-V001: Chou frisé Vert Demi-Nain
+  LEG-032-V002: Chou frisé Cavolo Nero
+  LEG-032-V003: Chou frisé Redbor
   LEG-033: Panais
   LEG-034: Céleri branche
   LEG-035: Roquette
   LEG-036: Chou-rave
+  LEG-036-V001: Chou-rave Blanc de Vienne
+  LEG-036-V002: Chou-rave Bleu de Vienne
+  LEG-036-V003: Chou-rave Superschmelz
   LEG-037: Rutabaga
+  LEG-037-V001: Rutabaga Wilhelmsburger
+  LEG-037-V002: Rutabaga à collet rouge
   LEG-038: Pak choï
+  LEG-038-V001: Pak choï de Canton
+  LEG-038-V002: Pak choï de Shanghai
   LEG-039: Cresson alénois
   LEG-040: Pâtisson
   LEG-040-V001: Pâtisson Blanc
