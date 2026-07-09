@@ -29,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -64,6 +64,11 @@ class AppDatabase extends _$AppDatabase {
           // default preserves the existing "earliest-created" fallback.
           if (from < 5) {
             await m.addColumn(preferences, preferences.potagerActifId);
+          }
+          // v5 → v6: automatic-weather opt-out (defaults to true, so existing
+          // installs keep fetching weather exactly as before).
+          if (from < 6) {
+            await m.addColumn(preferences, preferences.meteoAutoActive);
           }
         },
         beforeOpen: (details) async {

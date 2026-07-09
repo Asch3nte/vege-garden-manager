@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -198,6 +200,7 @@ class _VueAgenda extends ConsumerWidget {
                       _GroupeJour(
                         groupe: groupe,
                         cibleLabelDe: vue.cibleNom,
+                        onOuvrir: (t) => context.go(RoutesApp.tacheDetail(t.id)),
                         onCocher: notifier.cocher,
                         onModifier: (t) => _modifierTache(context, ref, t),
                         onSupprimer: (t) => _supprimerTache(context, ref, t),
@@ -312,6 +315,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
             _CarteTache(
               tache: tache,
               cibleLabel: vue.cibleNom(tache),
+              onOuvrir: (t) => context.go(RoutesApp.tacheDetail(t.id)),
               onCocher: notifier.cocher,
               onModifier: (t) => _modifierTache(context, ref, t),
               onSupprimer: (t) => _supprimerTache(context, ref, t),
@@ -898,6 +902,7 @@ class _GroupeJour extends StatelessWidget {
 
   /// Resolves a task's target display name (zone / crop / garden).
   final String? Function(Tache) cibleLabelDe;
+  final ValueChanged<Tache> onOuvrir;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
@@ -905,6 +910,7 @@ class _GroupeJour extends StatelessWidget {
   const _GroupeJour({
     required this.groupe,
     required this.cibleLabelDe,
+    required this.onOuvrir,
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
@@ -930,6 +936,7 @@ class _GroupeJour extends StatelessWidget {
           _CarteTache(
             tache: tache,
             cibleLabel: cibleLabelDe(tache),
+            onOuvrir: onOuvrir,
             onCocher: onCocher,
             onModifier: onModifier,
             onSupprimer: onSupprimer,
@@ -947,6 +954,7 @@ class _CarteTache extends StatelessWidget {
 
   /// Resolved name of the task's target (zone / crop / garden), or `null`.
   final String? cibleLabel;
+  final ValueChanged<Tache> onOuvrir;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
@@ -954,6 +962,7 @@ class _CarteTache extends StatelessWidget {
   const _CarteTache({
     required this.tache,
     required this.cibleLabel,
+    required this.onOuvrir,
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
@@ -968,8 +977,9 @@ class _CarteTache extends StatelessWidget {
     return Card(
       child: InkWell(
         borderRadius: RayonsApp.brLg,
-        // Tapping toggles completion (check ↔ uncheck via Tache.rouvrir).
-        onTap: () => onCocher(tache),
+        // Tapping the card opens the task detail; the round pill (below) toggles
+        // completion without leaving the list (docs/15 §1 D′).
+        onTap: () => onOuvrir(tache),
         child: Padding(
           padding: const EdgeInsets.all(EspacementsApp.s3),
           child: Row(
@@ -1035,9 +1045,15 @@ class _CarteTache extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: EspacementsApp.s2),
-              Icon(
-                fait ? Icons.check_circle : Icons.radio_button_unchecked,
-                color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+              // The round pill toggles completion (check ↔ uncheck) in place.
+              IconButton(
+                tooltip: fait ? l10n.tacheDetailRouvrir : l10n.tacheDetailMarquerFaite,
+                onPressed: () => onCocher(tache),
+                icon: Icon(
+                  fait ? Icons.check_circle : Icons.radio_button_unchecked,
+                  color:
+                      fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+                ),
               ),
               PopupMenuButton<_ActionTache>(
                 tooltip: l10n.actionsTache,

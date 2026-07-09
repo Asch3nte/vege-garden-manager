@@ -9,8 +9,10 @@ import 'package:pot_a_gerer/application/state/meteo_accueil_vue.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/donnees_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_meteo.dart';
@@ -20,6 +22,8 @@ class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockMeteo extends Mock implements AbstractMeteoService {}
 
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
 class _FakeLoc extends Fake implements Localisation {}
 
 void main() {
@@ -27,10 +31,15 @@ void main() {
 
   late MockPotagers potagers;
   late MockMeteo meteo;
+  late MockPreferences preferences;
 
   setUp(() {
     potagers = MockPotagers();
     meteo = MockMeteo();
+    preferences = MockPreferences();
+    // Default: automatic weather on, so the notifier fetches as before.
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
   });
 
   Potager unPotager({Localisation? localisation}) => Potager(
@@ -71,6 +80,7 @@ void main() {
     final c = ProviderContainer(overrides: [
       potagerRepositoryProvider.overrideWithValue(potagers),
       meteoServiceProvider.overrideWithValue(meteo),
+      preferencesRepositoryProvider.overrideWithValue(preferences),
     ]);
     addTearDown(c.dispose);
     return c;
@@ -84,6 +94,24 @@ void main() {
 
     expect(vue.disponible, isFalse);
     verifyNever(() => meteo.obtenirMeteoActuelle(any()));
+  });
+
+  test('automatic weather off → disabled state, no network call', () async {
+    when(() => potagers.obtenirPotagerActif()).thenAnswer(
+      (_) async => unPotager(
+        localisation: Localisation.gps(latitude: 48.85, longitude: 2.35),
+      ),
+    );
+    when(() => preferences.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(meteoAutoActive: false),
+    );
+
+    final vue = await conteneur().read(meteoAccueilProvider.future);
+
+    expect(vue.disponible, isFalse);
+    expect(vue.desactivee, isTrue); // distinct from "no position"
+    verifyNever(() => meteo.obtenirMeteoActuelle(any()));
+    verifyNever(() => meteo.obtenirPrevisions(any(), any()));
   });
 
   test('rain in the forecast → "rain coming" verdict', () async {

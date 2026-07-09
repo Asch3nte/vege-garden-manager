@@ -8,9 +8,11 @@ import 'package:pot_a_gerer/application/state/meteo_detail_notifier.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_geocodage_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/donnees_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_horaire.dart';
@@ -23,6 +25,8 @@ class MockMeteo extends Mock implements AbstractMeteoService {}
 
 class MockGeocodage extends Mock implements AbstractGeocodageService {}
 
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
 class _FakeLoc extends Fake implements Localisation {}
 
 void main() {
@@ -31,11 +35,15 @@ void main() {
   late MockPotagers potagers;
   late MockMeteo meteo;
   late MockGeocodage geocodage;
+  late MockPreferences preferences;
 
   setUp(() {
     potagers = MockPotagers();
     meteo = MockMeteo();
     geocodage = MockGeocodage();
+    preferences = MockPreferences();
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
   });
 
   final loc = Localisation.gps(latitude: 50.85, longitude: 4.35);
@@ -78,6 +86,7 @@ void main() {
       potagerRepositoryProvider.overrideWithValue(potagers),
       meteoServiceProvider.overrideWithValue(meteo),
       geocodageServiceProvider.overrideWithValue(geocodage),
+      preferencesRepositoryProvider.overrideWithValue(preferences),
     ]);
     addTearDown(c.dispose);
     return c;

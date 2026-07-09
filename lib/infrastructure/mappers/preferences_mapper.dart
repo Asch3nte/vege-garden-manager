@@ -47,6 +47,7 @@ class PreferencesMapper {
       ponderationAssociations:
           _decoderPonderation(row.ponderationAssociations),
       potagerActifId: row.potagerActifId,
+      meteoAutoActive: row.meteoAutoActive,
     );
   }
 
@@ -110,6 +111,7 @@ class PreferencesMapper {
         nePasDerangerFin: Value(p.nePasDerangerFin),
         onboardingTermine: Value(p.onboardingTermine),
         potagerActifId: Value(p.potagerActifId),
+        meteoAutoActive: Value(p.meteoAutoActive),
         derniereModification:
             Value(DateTime.now().toUtc().toIso8601String()),
       );

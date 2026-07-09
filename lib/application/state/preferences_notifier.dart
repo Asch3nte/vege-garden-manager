@@ -86,6 +86,20 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
     });
   }
 
+  /// Toggles automatic weather fetching (Open-Meteo). Off keeps coordinates on
+  /// device — weather surfaces go quiet, the watering engine advises from plant
+  /// needs alone (privacy opt-out, docs/11).
+  Future<void> definirMeteoAuto(bool actif) =>
+      _modifier((p) => p.copierAvec(meteoAutoActive: actif));
+
+  /// Sets a do-not-disturb window (`HH:MM` bounds) silencing notifications.
+  Future<void> definirNePasDeranger(String debut, String fin) =>
+      _modifier((p) => p.avecNePasDeranger(debut, fin));
+
+  /// Clears the do-not-disturb window.
+  Future<void> desactiverNePasDeranger() =>
+      _modifier((p) => p.sansNePasDeranger());
+
   /// Sets the weight of one association effect family (ADR-0011, expert).
   Future<void> definirPoidsAssociation(
     FamilleEffetAssociation famille,

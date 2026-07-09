@@ -14,10 +14,12 @@ import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/enums/mode_import.dart';
 import 'package:pot_a_gerer/domain/exceptions/sauvegarde_invalide_exception.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_inventaire_donnees_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_reinitialisation_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_sauvegarde_service.dart';
+import 'package:pot_a_gerer/domain/value_objects/inventaire_donnees.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_donnees.dart';
 import 'package:pot_a_gerer/presentation/services/gestionnaire_sauvegarde_fichier.dart';
@@ -33,6 +35,8 @@ class _MockPrefs extends Mock implements AbstractPreferencesRepository {}
 
 class _MockPotagers extends Mock implements AbstractPotagerRepository {}
 
+class _MockInventaire extends Mock implements AbstractInventaireDonneesService {}
+
 void main() {
   setUpAll(() => registerFallbackValue(ModeImport.remplacer));
 
@@ -41,6 +45,7 @@ void main() {
   late _MockGestionnaire gestionnaire;
   late _MockPrefs prefs;
   late _MockPotagers potagers;
+  late _MockInventaire inventaire;
 
   setUp(() {
     reinit = _MockReinit();
@@ -48,10 +53,17 @@ void main() {
     gestionnaire = _MockGestionnaire();
     prefs = _MockPrefs();
     potagers = _MockPotagers();
+    inventaire = _MockInventaire();
     when(() => reinit.reinitialiserTout()).thenAnswer((_) async {});
     when(() => prefs.charger())
         .thenAnswer((_) async => PreferencesUtilisateur());
     when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+    when(() => inventaire.obtenir()).thenAnswer(
+      (_) async => InventaireDonnees([
+        EntreeInventaire(table: 'potagers', nombre: 2),
+        EntreeInventaire(table: 'plantations', nombre: 5),
+      ]),
+    );
   });
 
   Future<void> monter(WidgetTester tester) async {
@@ -63,6 +75,7 @@ void main() {
           gestionnaireSauvegardeFichierProvider.overrideWithValue(gestionnaire),
           preferencesRepositoryProvider.overrideWithValue(prefs),
           potagerRepositoryProvider.overrideWithValue(potagers),
+          inventaireDonneesServiceProvider.overrideWithValue(inventaire),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -90,6 +103,26 @@ void main() {
               .captured;
       expect(args[0], '{"backup":true}');
       expect(args[1], endsWith('.json'));
+    });
+  });
+
+  group('transparency', () {
+    testWidgets('lists per-table record counts and the total', (tester) async {
+      await monter(tester);
+
+      expect(find.text('Transparence des données'), findsOneWidget);
+      // Curated labels for the mocked tables, with their counts.
+      expect(find.text('Potagers'), findsOneWidget);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('Plantations'), findsOneWidget);
+      expect(find.text('5'), findsOneWidget);
+      // Total across tables (2 + 5).
+      expect(find.text('7 enregistrements au total'), findsOneWidget);
+      // The "everything stays local" guarantee is shown.
+      expect(
+        find.textContaining('jamais transmis'),
+        findsOneWidget,
+      );
     });
   });
 

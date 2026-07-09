@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/enums/mode_import.dart';
 import '../../../domain/exceptions/sauvegarde_invalide_exception.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../providers/inventaire_donnees_provider.dart';
 import '../../services/gestionnaire_sauvegarde_fichier.dart';
 import '../../widgets/dialogue_confirmation.dart';
 import '../../widgets/invalidation_vues.dart';
@@ -26,6 +28,7 @@ class PanneauDonnees extends ConsumerWidget {
     return PanneauParametres(
       titre: l10n.categDonnees,
       enfants: [
+        const _SectionTransparence(),
         ZoneParametres(
           titre: l10n.donneesSauvegardeSectionTitre,
           note: l10n.donneesExportNote,
@@ -160,6 +163,143 @@ class PanneauDonnees extends ConsumerWidget {
     // then redirects to the onboarding.
     ref.invalidate(preferencesProvider);
     invaliderVuesDonnees(ref);
+  }
+}
+
+/// Display order of the stored tables (user data first, technical tables last);
+/// any table not listed here is still shown, appended with its raw SQL name.
+const List<String> _ordreTables = [
+  'potagers',
+  'parcelles',
+  'plantations',
+  'taches',
+  'rappels',
+  'observations',
+  'recoltes',
+  'equipements',
+  'fiches_plantes_personnelles',
+  'meteo_cache',
+  'parametres',
+  'preferences',
+];
+
+/// Human label for a stored table; falls back to the raw SQL name so a table
+/// added later is never hidden from the inventory.
+String _libelleTable(AppLocalizations l10n, String table) => switch (table) {
+      'potagers' => l10n.transparenceTablePotagers,
+      'parcelles' => l10n.transparenceTableParcelles,
+      'plantations' => l10n.transparenceTablePlantations,
+      'recoltes' => l10n.transparenceTableRecoltes,
+      'equipements' => l10n.transparenceTableEquipements,
+      'taches' => l10n.transparenceTableTaches,
+      'rappels' => l10n.transparenceTableRappels,
+      'observations' => l10n.transparenceTableObservations,
+      'meteo_cache' => l10n.transparenceTableMeteoCache,
+      'parametres' => l10n.transparenceTableParametres,
+      'fiches_plantes_personnelles' => l10n.transparenceTableFichesPerso,
+      'preferences' => l10n.transparenceTablePreferences,
+      _ => table,
+    };
+
+/// Read-only data-transparency section: how many records each stored table
+/// holds, a total, and the "everything stays local" guarantee. No access
+/// journal is kept (docs/15 §6): a local app has no third party to audit.
+class _SectionTransparence extends ConsumerWidget {
+  const _SectionTransparence();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final async = ref.watch(inventaireDonneesProvider);
+
+    return async.when(
+      loading: () => ZoneParametres(
+        titre: l10n.transparenceSectionTitre,
+        note: l10n.transparenceNote,
+        enfants: const [
+          Padding(
+            padding: EdgeInsets.all(EspacementsApp.s4),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ],
+      ),
+      error: (_, _) => ZoneParametres(
+        titre: l10n.transparenceSectionTitre,
+        enfants: [
+          Padding(
+            padding: const EdgeInsets.all(EspacementsApp.s3),
+            child: Text(
+              l10n.transparenceErreur,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+        ],
+      ),
+      data: (inventaire) {
+        // Ordered entries (curated order first, unknown tables appended).
+        final parNom = {for (final e in inventaire.entrees) e.table: e.nombre};
+        final ordonnees = <String>[
+          ..._ordreTables.where(parNom.containsKey),
+          ...parNom.keys.where((t) => !_ordreTables.contains(t)),
+        ];
+        return ZoneParametres(
+          titre: l10n.transparenceSectionTitre,
+          note: l10n.transparenceNote,
+          enfants: [
+            for (final table in ordonnees)
+              _LigneInventaire(
+                libelle: _libelleTable(l10n, table),
+                nombre: parNom[table]!,
+              ),
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: EspacementsApp.s3,
+                vertical: EspacementsApp.s3,
+              ),
+              child: Text(
+                l10n.transparenceTotal(inventaire.total),
+                style: theme.textTheme.labelLarge
+                    ?.copyWith(color: theme.colorScheme.primary),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// One inventory row: a table label on the left, its record count on the right.
+class _LigneInventaire extends StatelessWidget {
+  final String libelle;
+  final int nombre;
+
+  const _LigneInventaire({required this.libelle, required this.nombre});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: EspacementsApp.s3,
+        vertical: EspacementsApp.s2,
+      ),
+      child: Row(
+        children: [
+          Expanded(child: Text(libelle, style: theme.textTheme.bodyMedium)),
+          Text(
+            '$nombre',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

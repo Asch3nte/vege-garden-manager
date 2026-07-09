@@ -104,6 +104,40 @@ void main() {
     expect(map['arrosage'], isFalse);
   });
 
+  test('definirMeteoAuto toggles and persists the automatic-weather opt-out',
+      () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+    final notifier = c.read(preferencesProvider.notifier);
+
+    expect(c.read(preferencesProvider).value!.meteoAutoActive, isTrue); // default
+
+    await notifier.definirMeteoAuto(false);
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.last as PreferencesUtilisateur).meteoAutoActive, isFalse);
+    expect(c.read(preferencesProvider).value!.meteoAutoActive, isFalse);
+  });
+
+  test('do-not-disturb setter stores the window, and clearing removes it',
+      () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+    final notifier = c.read(preferencesProvider.notifier);
+
+    await notifier.definirNePasDeranger('22:00', '07:00');
+    var prefs = c.read(preferencesProvider).value!;
+    expect(prefs.nePasDerangerActif, isTrue);
+    expect(prefs.nePasDerangerDebut, '22:00');
+    expect(prefs.nePasDerangerFin, '07:00');
+
+    await notifier.desactiverNePasDeranger();
+    prefs = c.read(preferencesProvider).value!;
+    expect(prefs.nePasDerangerActif, isFalse);
+    expect(prefs.nePasDerangerDebut, isNull);
+    expect(prefs.nePasDerangerFin, isNull);
+  });
+
   test('setting an association weight updates only that family (ADR-0011)',
       () async {
     final c = conteneur();

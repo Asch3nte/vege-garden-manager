@@ -8,8 +8,10 @@ import 'package:pot_a_gerer/application/state/meteo_detail_notifier.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_horaire.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
@@ -18,6 +20,8 @@ class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockMeteo extends Mock implements AbstractMeteoService {}
 
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
 class _FakeLoc extends Fake implements Localisation {}
 
 void main() {
@@ -25,10 +29,14 @@ void main() {
 
   late MockPotagers potagers;
   late MockMeteo meteo;
+  late MockPreferences preferences;
 
   setUp(() {
     potagers = MockPotagers();
     meteo = MockMeteo();
+    preferences = MockPreferences();
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
   });
 
   Potager unPotager({Localisation? localisation}) => Potager(
@@ -44,6 +52,7 @@ void main() {
     final c = ProviderContainer(overrides: [
       potagerRepositoryProvider.overrideWithValue(potagers),
       meteoServiceProvider.overrideWithValue(meteo),
+      preferencesRepositoryProvider.overrideWithValue(preferences),
     ]);
     addTearDown(c.dispose);
     return c;

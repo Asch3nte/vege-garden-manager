@@ -182,6 +182,16 @@ class PanneauConfidentialite extends ConsumerWidget {
             ),
             ...groupePotager,
             for (final p in autresPotagers) _GroupePotagerAutre(potager: p),
+            // Automatic-weather opt-out: gates all Open-Meteo egress. Off keeps
+            // a manual position local (season/climate) and the watering engine
+            // keeps advising from plant needs alone (sub-label spells this out).
+            RangeeInterrupteur(
+              icone: Icons.cloud_outlined,
+              label: l10n.confidMeteoAuto,
+              sousTitre: l10n.confidMeteoAutoSub,
+              valeur: prefs.meteoAutoActive,
+              onChanged: notifier.definirMeteoAuto,
+            ),
             RangeeInterrupteur(
               icone: Icons.wifi,
               label: l10n.confidSync,

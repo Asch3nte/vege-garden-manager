@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:riverpod/riverpod.dart';
 
 import '../../core/constants/constantes_moteur.dart';
+import '../../domain/services/localisation_meteo.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../domain/value_objects/prevision_meteo.dart';
 import '../engine/generateur_resume_meteo.dart';
@@ -11,6 +12,7 @@ import '../providers/service_providers.dart';
 import 'jour_meteo_vue.dart';
 import 'meteo_accueil_notifier.dart';
 import 'meteo_detail_vue.dart';
+import 'preferences_notifier.dart';
 
 // ── Legacy provider (kept for EcranMeteoDetail until Lot 4 refonte) ──────────
 
@@ -27,9 +29,12 @@ final meteoHoraireProvider = FutureProvider<List<PrevisionHoraire>>((ref) async 
   if (potager == null || !potager.localisation.estDefinie) {
     return const <PrevisionHoraire>[];
   }
-  return ref
-      .watch(meteoServiceProvider)
-      .obtenirPrevisionsHoraires(potager.localisation, nbJours: 3);
+  // Automatic weather off → treat as no position (no Open-Meteo call).
+  final prefs = await ref.watch(preferencesProvider.future);
+  final loc = localisationPourMeteo(potager.localisation,
+      meteoAutoActive: prefs.meteoAutoActive);
+  if (!loc.estDefinie) return const <PrevisionHoraire>[];
+  return ref.watch(meteoServiceProvider).obtenirPrevisionsHoraires(loc, nbJours: 3);
 });
 
 // ── Rich view-model provider (ADR-0016 Lot 3) ────────────────────────────────
@@ -51,7 +56,13 @@ final meteoDetailProvider = FutureProvider<MeteoDetailVue>((ref) async {
     return MeteoDetailVue.indisponible(nomPotager: potager?.nom ?? '');
   }
 
-  final loc = potager.localisation;
+  // Automatic weather off → no Open-Meteo call; the detail view is unavailable.
+  final prefs = await ref.watch(preferencesProvider.future);
+  final loc = localisationPourMeteo(potager.localisation,
+      meteoAutoActive: prefs.meteoAutoActive);
+  if (!loc.estDefinie) {
+    return MeteoDetailVue.indisponible(nomPotager: potager.nom);
+  }
 
   // Start all five fetches concurrently.
   final nomVilleFuture = geocodage.obtenirNomLocalite(loc);

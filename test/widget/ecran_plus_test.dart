@@ -27,6 +27,7 @@ import 'package:pot_a_gerer/presentation/screens/parametres/panneau_a_propos.dar
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_confidentialite.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_general.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_notifications.dart';
+import 'package:pot_a_gerer/presentation/screens/parametres/widgets_parametres.dart';
 
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
@@ -194,6 +195,30 @@ void main() {
     expect(potager.localisation.estDefinie, isTrue);
   });
 
+  testWidgets('privacy panel toggles the automatic-weather opt-out',
+      (tester) async {
+    await monter(tester);
+
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    // The toggle is on by default; the sub-label spells out the offline fallback.
+    expect(find.text('Récupération météo auto'), findsOneWidget);
+    expect(
+      find.textContaining('basés sur les seuls besoins des plantes'),
+      findsOneWidget,
+    );
+
+    final row = find.widgetWithText(
+        RangeeInterrupteur, 'Récupération météo auto');
+    await tester.tap(find.descendant(of: row, matching: find.byType(Switch)));
+    await tester.pumpAndSettle();
+
+    final p = verify(() => repo.sauvegarder(captureAny())).captured.last
+        as PreferencesUtilisateur;
+    expect(p.meteoAutoActive, isFalse);
+  });
+
   testWidgets('privacy panel edits the active garden climate', (tester) async {
     when(() => potagers.obtenirPotagerActif()).thenAnswer(
       (_) async => Potager(
@@ -344,5 +369,55 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.widgetList<Switch>(find.byType(Switch)).length, 1);
+  });
+
+  testWidgets('enabling do-not-disturb persists the default window',
+      (tester) async {
+    when(() => repo.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(
+        niveauExperience: NiveauExperience.intermediaire,
+      ),
+    );
+    await monter(tester);
+
+    await tester.tap(find.text('Notifications'));
+    await tester.pumpAndSettle();
+
+    // The panel's ListView builds children lazily; scroll the do-not-disturb
+    // row into view before toggling it.
+    final dndSousTitre =
+        find.text('Silence les notifications sur une plage horaire.');
+    await tester.scrollUntilVisible(dndSousTitre, 100,
+        scrollable: find.byType(Scrollable).first);
+    final dndRow = find.ancestor(
+        of: dndSousTitre, matching: find.byType(RangeeInterrupteur));
+    await tester
+        .tap(find.descendant(of: dndRow, matching: find.byType(Switch)));
+    await tester.pumpAndSettle();
+
+    final p = verify(() => repo.sauvegarder(captureAny())).captured.last
+        as PreferencesUtilisateur;
+    expect(p.nePasDerangerActif, isTrue);
+    expect(p.nePasDerangerDebut, '22:00');
+    expect(p.nePasDerangerFin, '07:00');
+  });
+
+  testWidgets('an active do-not-disturb window shows the start/end selectors',
+      (tester) async {
+    when(() => repo.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(
+        niveauExperience: NiveauExperience.intermediaire,
+      ).avecNePasDeranger('22:00', '07:00'),
+    );
+    await monter(tester);
+
+    await tester.tap(find.text('Notifications'));
+    await tester.pumpAndSettle();
+
+    // Scroll to the bottom section (lazily built) to surface the time rows.
+    await tester.scrollUntilVisible(find.text('Début'), 100,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('Début'), findsOneWidget);
+    expect(find.text('Fin'), findsOneWidget);
   });
 }

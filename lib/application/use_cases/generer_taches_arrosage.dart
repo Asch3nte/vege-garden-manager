@@ -9,7 +9,10 @@ import '../../domain/enums/urgence_arrosage.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
+import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
+import '../../domain/services/filtre_notifications.dart';
+import '../../domain/services/localisation_meteo.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 import '../../domain/value_objects/notification_locale.dart';
 import '../providers/repository_providers.dart';
@@ -31,6 +34,7 @@ class GenererTachesArrosage {
   final AbstractPotagerRepository _potager;
   final AbstractTacheRepository _taches;
   final AbstractNotificationService _notifications;
+  final AbstractPreferencesRepository _preferences;
   final CalculerBesoinArrosage _calcul;
 
   GenererTachesArrosage(
@@ -38,6 +42,7 @@ class GenererTachesArrosage {
     this._potager,
     this._taches,
     this._notifications,
+    this._preferences,
     this._calcul, {
     DateTime Function()? maintenant,
   }) : _maintenant = maintenant ?? DateTime.now;
@@ -60,6 +65,15 @@ class GenererTachesArrosage {
     final potager = await _potager.obtenirPotagerActif();
     if (potager == null) return;
 
+    final prefs = await _preferences.charger();
+    // Notification opt-outs (master switch, per-category mute, do-not-disturb)
+    // are applied by this filter before any notification is scheduled.
+    final filtre = FiltreNotifications(prefs);
+    // Automatic weather off → advise from plant needs alone (no Open-Meteo call):
+    // an undefined location makes CalculerBesoinArrosage skip the weather fetch.
+    final localisationMeteo = localisationPourMeteo(potager.localisation,
+        meteoAutoActive: prefs.meteoAutoActive);
+
     final plantations = await _plantations.obtenirActives();
     final n = _maintenant();
     final debutJour = DateTime(n.year, n.month, n.day);
@@ -67,7 +81,7 @@ class GenererTachesArrosage {
     for (final plantation in plantations) {
       final conseil = await _calcul.executer(
         plantation: plantation,
-        localisation: potager.localisation,
+        localisation: localisationMeteo,
       );
 
       // All watering tasks for this plantation regardless of day.
@@ -116,7 +130,7 @@ class GenererTachesArrosage {
         ));
         // Push notifications only for truly urgent cases (today).
         if (urgence == UrgenceArrosage.arroserMaintenant) {
-          await _programmerNotification(plantation, targetDate);
+          await _programmerNotification(plantation, targetDate, filtre);
         }
       }
     }
@@ -129,11 +143,14 @@ class GenererTachesArrosage {
     return debutJour.add(Duration(days: conseil.joursAvantArrosage ?? 2));
   }
 
-  /// Schedules a push notification at 08:00 on [debutJour].
-  /// Does nothing if 08:00 has already passed on that day.
+  /// Schedules a push notification at 08:00 on [debutJour], subject to the
+  /// notification opt-outs carried by [filtre] (suppressed when muted, deferred
+  /// out of the do-not-disturb window). Does nothing if 08:00 has already passed
+  /// on that day.
   Future<void> _programmerNotification(
     Plantation plantation,
     DateTime debutJour,
+    FiltreNotifications filtre,
   ) async {
     final heure = debutJour.copyWith(
         hour: 8, minute: 0, second: 0, millisecond: 0, microsecond: 0);
@@ -142,7 +159,7 @@ class GenererTachesArrosage {
         '${debutJour.year.toString().padLeft(4, '0')}'
         '-${debutJour.month.toString().padLeft(2, '0')}'
         '-${debutJour.day.toString().padLeft(2, '0')}';
-    await _notifications.programmer(
+    final notif = filtre.filtrer(
       NotificationLocale(
         id: 'arrosage_${plantation.id}_$dateStr',
         titre: 'Arrosage à prévoir',
@@ -152,6 +169,8 @@ class GenererTachesArrosage {
         cibleRoute: '/potager',
       ),
     );
+    if (notif == null) return;
+    await _notifications.programmer(notif);
   }
 
   bool _memeJour(DateTime a, DateTime b) =>
@@ -167,6 +186,7 @@ final genererTachesArrosageProvider = FutureProvider<GenererTachesArrosage>(
     ref.read(potagerRepositoryProvider),
     ref.read(tacheRepositoryProvider),
     ref.read(notificationServiceProvider),
+    ref.read(preferencesRepositoryProvider),
     await ref.read(calculerBesoinArrosageProvider.future),
   ),
 );

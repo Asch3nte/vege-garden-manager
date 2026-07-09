@@ -20,6 +20,10 @@ import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
+import 'package:pot_a_gerer/domain/enums/priorite_tache.dart';
+import 'package:pot_a_gerer/domain/enums/type_alerte_meteo.dart';
+import 'package:pot_a_gerer/domain/value_objects/alerte_culture.dart';
+import 'package:pot_a_gerer/presentation/providers/notifications_accueil_provider.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
@@ -56,6 +60,12 @@ class _FakeMeteo extends MeteoAccueilNotifier {
 class _FakeMeteoIndispo extends MeteoAccueilNotifier {
   @override
   Future<MeteoAccueilVue> build() async => MeteoAccueilVue.indisponible();
+}
+
+/// Automatic weather off → the card shows the neutral "weather off" state.
+class _FakeMeteoDesactivee extends MeteoAccueilNotifier {
+  @override
+  Future<MeteoAccueilVue> build() async => MeteoAccueilVue.desactivee();
 }
 
 class _MockGeoloc extends Mock implements AbstractGeolocalisationService {}
@@ -262,6 +272,32 @@ void main() {
     expect(find.text("Pluie à venir — l'arrosage peut attendre."), findsOneWidget);
   });
 
+  testWidgets('automatic weather off shows the neutral disabled card',
+      (tester) async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          ...base(),
+          meteoAccueilProvider.overrideWith(_FakeMeteoDesactivee.new),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const EcranAccueil(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Météo automatique désactivée'), findsOneWidget);
+    // Not the misleading "add a position" prompt (a position is set).
+    expect(find.textContaining('Ajoute ta position'), findsNothing);
+  });
+
   testWidgets('the weather prompt sets the garden position', (tester) async {
     // Wide surface so the map's region band fits without horizontal scrolling.
     tester.view.physicalSize = const Size(1600, 800);
@@ -358,5 +394,106 @@ void main() {
     // The zone-detail screen is shown (its "Cultures" section header).
     expect(find.widgetWithText(AppBar, 'Carré nord'), findsOneWidget);
     expect(find.text('Cultures'), findsOneWidget);
+  });
+
+  testWidgets('the header bell opens the notifications panel (alerts + tasks)',
+      (tester) async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    final vue = NotificationsAccueilVue(
+      alertes: [
+        AlerteCulture(
+          type: TypeAlerteMeteo.gel,
+          date: DateTime(2026, 7, 12),
+          valeurDeclenchante: -2,
+          plantationsConcernees: const ['p-1'],
+        ),
+      ],
+      tachesUrgentes: [
+        Tache(
+          id: 't-urg',
+          titre: 'Arroser d\'urgence',
+          type: TypeTache.arrosage,
+          cible: CibleTache.plantation,
+          cibleId: 'p-1',
+          datePrevue: DateTime(2026, 7, 12),
+          priorite: PrioriteTache.urgente,
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          ...base(),
+          notificationsAccueilProvider.overrideWith((ref) async => vue),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const EcranAccueil(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.notifications_outlined));
+    await tester.pumpAndSettle();
+
+    // The panel lists both sections with their content.
+    expect(find.text('Alertes météo'), findsOneWidget);
+    expect(find.textContaining('Gel le 12/07'), findsOneWidget);
+    expect(find.text('Tâches urgentes'), findsOneWidget);
+    expect(find.text('Arroser d\'urgence'), findsOneWidget);
+  });
+
+  testWidgets('the header overflow menu lists notification and help shortcuts',
+      (tester) async {
+    await monter(tester, NiveauExperience.intermediaire);
+
+    await tester.tap(find.byType(PopupMenuButton<String>));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Notifications'), findsOneWidget);
+    expect(find.text('Aide & lexique'), findsOneWidget);
+  });
+
+  testWidgets('the tasks header link opens the Calendar tab', (tester) async {
+    when(() => preferences.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(),
+    );
+    final router = GoRouter(
+      initialLocation: RoutesApp.accueil,
+      routes: [
+        GoRoute(
+          path: RoutesApp.accueil,
+          builder: (context, state) => const EcranAccueil(),
+        ),
+        GoRoute(
+          path: RoutesApp.calendrier,
+          builder: (context, state) =>
+              const Scaffold(body: Text('Écran calendrier')),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: base(),
+        child: MaterialApp.router(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Voir le calendrier'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Écran calendrier'), findsOneWidget);
   });
 }

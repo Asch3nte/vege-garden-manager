@@ -71,6 +71,31 @@ void main() {
     });
   });
 
+  group('PreferencesUtilisateur — meteoAutoActive (weather opt-out)', () {
+    test('defaults to on', () {
+      expect(PreferencesUtilisateur().meteoAutoActive, isTrue);
+    });
+
+    test('copierAvec toggles the opt-out', () {
+      final p = PreferencesUtilisateur().copierAvec(meteoAutoActive: false);
+      expect(p.meteoAutoActive, isFalse);
+    });
+
+    test('copierAvec without the field keeps the previous value', () {
+      final p = PreferencesUtilisateur(meteoAutoActive: false)
+          .copierAvec(theme: ThemeApp.sombre);
+      expect(p.meteoAutoActive, isFalse);
+    });
+
+    test('it participates in equality', () {
+      expect(
+        PreferencesUtilisateur() ==
+            PreferencesUtilisateur(meteoAutoActive: false),
+        isFalse,
+      );
+    });
+  });
+
   group('PreferencesUtilisateur — copierAvec', () {
     test('overrides one field and keeps the rest', () {
       final p = PreferencesUtilisateur();

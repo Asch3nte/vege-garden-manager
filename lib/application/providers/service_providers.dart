@@ -4,6 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/repositories/abstract_geocodage_service.dart';
 import '../../domain/repositories/abstract_geolocalisation_service.dart';
 import '../../domain/repositories/abstract_info_application_service.dart';
+import '../../domain/repositories/abstract_inventaire_donnees_service.dart';
 import '../../domain/repositories/abstract_meteo_service.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_ouverture_lien_service.dart';
@@ -15,6 +16,7 @@ import '../../infrastructure/repositories/meteo_service_impl.dart';
 import '../../infrastructure/services/geocodage_service_impl.dart';
 import '../../infrastructure/services/geolocalisation_service_impl.dart';
 import '../../infrastructure/services/info_application_service_impl.dart';
+import '../../infrastructure/services/inventaire_donnees_service_impl.dart';
 import '../../infrastructure/services/notification_service_impl.dart';
 import '../../infrastructure/services/ouverture_lien_service_impl.dart';
 import '../../infrastructure/services/reinitialisation_service_impl.dart';
@@ -65,6 +67,12 @@ final sauvegardeServiceProvider = Provider<AbstractSauvegardeService>(
 final reinitialisationServiceProvider =
     Provider<AbstractReinitialisationService>(
   (ref) => ReinitialisationServiceImpl(ref.watch(appDatabaseProvider)),
+);
+
+/// Read-only inventory of locally stored data (data-transparency screen).
+final inventaireDonneesServiceProvider =
+    Provider<AbstractInventaireDonneesService>(
+  (ref) => InventaireDonneesServiceImpl(ref.watch(appDatabaseProvider)),
 );
 
 final infoApplicationServiceProvider =

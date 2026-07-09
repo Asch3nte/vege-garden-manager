@@ -24,6 +24,14 @@ void main() {
     expect(p.theme, ThemeApp.auto);
     expect(p.modeGeolocalisation, ModeGeolocalisation.desactivee);
     expect(p.onboardingTermine, isFalse);
+    expect(p.meteoAutoActive, isTrue); // on by default
+  });
+
+  test('save then load round-trips the automatic-weather opt-out (v5→v6)',
+      () async {
+    await repo.sauvegarder(
+        (await repo.charger()).copierAvec(meteoAutoActive: false));
+    expect((await repo.charger()).meteoAutoActive, isFalse);
   });
 
   test('save then load round-trips the onboarding flag', () async {

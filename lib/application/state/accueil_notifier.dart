@@ -1,9 +1,10 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/plantation.dart';
-import '../../domain/entities/potager.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/statut_plantation.dart';
+import '../../domain/services/localisation_meteo.dart';
+import '../../domain/value_objects/localisation.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/detecter_alertes_meteo.dart';
@@ -57,7 +58,11 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
       niveau: prefs.niveauExperience,
       zones: [for (final p in parcelles) ZoneApercu(id: p.id, nom: p.nom)],
       tachesDuJour: await _tachesDuJour(maintenant),
-      nombreAlertes: await _compterAlertes(potager, toutesPlantations),
+      nombreAlertes: await _compterAlertes(
+        localisationPourMeteo(potager.localisation,
+            meteoAutoActive: prefs.meteoAutoActive),
+        toutesPlantations,
+      ),
       nombreRecoltesSaison:
           await _compterRecoltes(toutesPlantations, maintenant().year),
     );
@@ -85,15 +90,16 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
     );
   }
 
-  /// Number of active weather alerts (0 without a position; degrades to 0 when
-  /// the weather is unavailable — the use case handles both).
+  /// Number of active weather alerts (0 without a position or with automatic
+  /// weather off; degrades to 0 when the weather is unavailable — the use case
+  /// handles all three, given the effective [localisation]).
   Future<int> _compterAlertes(
-    Potager potager,
+    Localisation localisation,
     List<Plantation> toutes,
   ) async {
     final actives = toutes.where((p) => !p.statut.estTerminal).toList();
     final alertes = await ref.read(detecterAlertesMeteoProvider).executer(
-          localisation: potager.localisation,
+          localisation: localisation,
           plantationsActives: actives,
         );
     return alertes.length;

@@ -6,6 +6,7 @@ import '../engine/bilan_arrosage.dart';
 import '../providers/repository_providers.dart';
 import '../providers/service_providers.dart';
 import 'meteo_accueil_vue.dart';
+import 'preferences_notifier.dart';
 
 /// Builds the home **weather card** view-model: today's conditions and a
 /// garden-level watering verdict for the active garden's position.
@@ -22,6 +23,10 @@ class MeteoAccueilNotifier extends AsyncNotifier<MeteoAccueilVue> {
     if (potager == null || !potager.localisation.estDefinie) {
       return MeteoAccueilVue.indisponible();
     }
+    // Automatic weather off (privacy opt-out): a position exists but no call is
+    // made — show the neutral "weather off" state, not the position prompt.
+    final prefs = await ref.watch(preferencesProvider.future);
+    if (!prefs.meteoAutoActive) return MeteoAccueilVue.desactivee();
 
     final meteo = ref.watch(meteoServiceProvider);
     final loc = potager.localisation;

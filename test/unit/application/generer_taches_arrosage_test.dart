@@ -13,9 +13,11 @@ import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/urgence_arrosage.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_notification_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/conseil_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
@@ -30,6 +32,8 @@ class MockPotager extends Mock implements AbstractPotagerRepository {}
 class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class MockNotifications extends Mock implements AbstractNotificationService {}
+
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
 class MockCalculerBesoinArrosage extends Mock
     implements CalculerBesoinArrosage {}
@@ -47,6 +51,7 @@ void main() {
   late MockPotager potager;
   late MockTaches taches;
   late MockNotifications notifications;
+  late MockPreferences preferences;
   late MockCalculerBesoinArrosage calcul;
   late GenererTachesArrosage useCase;
 
@@ -67,9 +72,14 @@ void main() {
     potager = MockPotager();
     taches = MockTaches();
     notifications = MockNotifications();
+    preferences = MockPreferences();
     calcul = MockCalculerBesoinArrosage();
+    // Default preferences: master on, no category muted, no do-not-disturb —
+    // the notification filter is a pass-through unless a test overrides this.
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
     useCase = GenererTachesArrosage(plantations, potager, taches, notifications,
-        calcul, maintenant: () => pinned07h);
+        preferences, calcul, maintenant: () => pinned07h);
   });
 
   Potager unPotager() => Potager(
@@ -177,6 +187,90 @@ void main() {
     final notif = notifCaptured.first as NotificationLocale;
     expect(notif.categorie, 'arrosage');
     expect(notif.id, startsWith('arrosage_p-1_'));
+  });
+
+  test('master switch off → task created but no notification scheduled',
+      () async {
+    when(() => preferences.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(notificationsGlobalesActives: false),
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    // The task is still materialized (the opt-out only gates push notifications).
+    verify(() => taches.sauvegarder(any())).called(1);
+    verifyNever(() => notifications.programmer(any()));
+  });
+
+  test('arrosage category muted → task created but no notification', () async {
+    when(() => preferences.charger()).thenAnswer(
+      (_) async =>
+          PreferencesUtilisateur(notificationsParCategorie: {'arrosage': false}),
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    verify(() => taches.sauvegarder(any())).called(1);
+    verifyNever(() => notifications.programmer(any()));
+  });
+
+  test('automatic weather off → advice computed with an undefined location',
+      () async {
+    when(() => preferences.charger()).thenAnswer(
+      (_) async => PreferencesUtilisateur(meteoAutoActive: false),
+    );
+    when(() => potager.obtenirPotagerActif()).thenAnswer(
+      (_) async => Potager(
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+        localisation: Localisation.gps(latitude: 48.85, longitude: 2.35),
+      ),
+    );
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+
+    await useCase.executer();
+
+    // The engine still runs, but with an undefined location → no Open-Meteo call.
+    final loc = verify(() => calcul.executer(
+          plantation: any(named: 'plantation'),
+          localisation: captureAny(named: 'localisation'),
+        )).captured.single as Localisation;
+    expect(loc.estDefinie, isFalse);
   });
 
   test('existing uncompleted task today → no duplicate created', () async {

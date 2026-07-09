@@ -37,6 +37,7 @@ class PreferencesUtilisateur {
   final bool _onboardingTermine;
   final ProfilPonderationAssociations _ponderationAssociations;
   final String? _potagerActifId;
+  final bool _meteoAutoActive;
 
   PreferencesUtilisateur._(
     this._langue,
@@ -57,6 +58,7 @@ class PreferencesUtilisateur {
     this._onboardingTermine,
     this._ponderationAssociations,
     this._potagerActifId,
+    this._meteoAutoActive,
   ) : assert(
           (_nePasDerangerDebut == null) == (_nePasDerangerFin == null),
           'do-not-disturb bounds must be both set or both null',
@@ -83,6 +85,7 @@ class PreferencesUtilisateur {
     bool onboardingTermine = false,
     ProfilPonderationAssociations? ponderationAssociations,
     String? potagerActifId,
+    bool meteoAutoActive = true,
   }) =>
       PreferencesUtilisateur._(
         langue,
@@ -103,6 +106,7 @@ class PreferencesUtilisateur {
         onboardingTermine,
         ponderationAssociations ?? ProfilPonderationAssociations.defaut(),
         potagerActifId,
+        meteoAutoActive,
       );
 
   String get id => idSingleton;
@@ -144,6 +148,12 @@ class PreferencesUtilisateur {
   /// falls back to the earliest-created garden.
   String? get potagerActifId => _potagerActifId;
 
+  /// Whether the app may fetch weather automatically (Open-Meteo). When false,
+  /// no coordinates leave the device: weather cards/alerts go quiet and the
+  /// watering engine advises from plant needs alone. A manual position still
+  /// drives local season/climate derivation. Defaults to on.
+  bool get meteoAutoActive => _meteoAutoActive;
+
   /// Returns a copy with the given fields overridden (do-not-disturb is kept;
   /// use [avecNePasDeranger] / [sansNePasDeranger] to change it).
   PreferencesUtilisateur copierAvec({
@@ -163,6 +173,7 @@ class PreferencesUtilisateur {
     bool? onboardingTermine,
     ProfilPonderationAssociations? ponderationAssociations,
     String? potagerActifId,
+    bool? meteoAutoActive,
   }) =>
       PreferencesUtilisateur(
         langue: langue ?? _langue,
@@ -189,6 +200,7 @@ class PreferencesUtilisateur {
         ponderationAssociations:
             ponderationAssociations ?? _ponderationAssociations,
         potagerActifId: potagerActifId ?? _potagerActifId,
+        meteoAutoActive: meteoAutoActive ?? _meteoAutoActive,
       );
 
   /// Returns a copy with a do-not-disturb window (`HH:MM` bounds).
@@ -218,6 +230,7 @@ class PreferencesUtilisateur {
         onboardingTermine: _onboardingTermine,
         ponderationAssociations: _ponderationAssociations,
         potagerActifId: _potagerActifId,
+        meteoAutoActive: _meteoAutoActive,
       );
 
   @override
@@ -240,6 +253,7 @@ class PreferencesUtilisateur {
       other._onboardingTermine == _onboardingTermine &&
       other._ponderationAssociations == _ponderationAssociations &&
       other._potagerActifId == _potagerActifId &&
+      other._meteoAutoActive == _meteoAutoActive &&
       _memeMap(other._notificationsParCategorie, _notificationsParCategorie);
 
   @override
@@ -265,6 +279,7 @@ class PreferencesUtilisateur {
             .fold<int>(0, (h, e) => h ^ Object.hash(e.key, e.value)),
         _ponderationAssociations,
         _potagerActifId,
+        _meteoAutoActive,
       );
 
   static bool _memeMap(Map<String, bool> a, Map<String, bool> b) {

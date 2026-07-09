@@ -165,21 +165,23 @@ void main() {
     expect(find.text('Carré nord'), findsNWidgets(2));
   });
 
-  testWidgets('tapping a task ticks it off (persisted)', (tester) async {
+  testWidgets('tapping the pill ticks a task off (persisted)', (tester) async {
+    // The card tap now opens the detail; the round pill toggles completion.
     final tache = uneTache('t1', 'Arroser les tomates', DateTime(2026, 6, 8, 10));
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => [tache]);
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
     await monter(tester);
-    await tester.tap(find.text('Arroser les tomates'));
+    await tester.tap(find.byIcon(Icons.radio_button_unchecked));
     await tester.pumpAndSettle();
 
     expect(tache.estFaite, isTrue);
     verify(() => taches.sauvegarder(tache)).called(1);
   });
 
-  testWidgets('tapping a done task unchecks it (persisted)', (tester) async {
+  testWidgets('tapping the pill unchecks a done task (persisted)',
+      (tester) async {
     final tache = uneTache('t1', 'Arroser les tomates', DateTime(2026, 6, 8, 10),
         faite: true);
     when(() => taches.obtenirEntreDates(any(), any()))
@@ -187,7 +189,7 @@ void main() {
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
     await monter(tester);
-    await tester.tap(find.text('Arroser les tomates'));
+    await tester.tap(find.byIcon(Icons.check_circle));
     await tester.pumpAndSettle();
 
     expect(tache.estFaite, isFalse);

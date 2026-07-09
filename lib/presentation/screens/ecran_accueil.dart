@@ -13,8 +13,10 @@ import '../../application/state/meteo_accueil_notifier.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/notifications_accueil_provider.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/panneau_notifications_accueil.dart';
 import '../widgets/position_potager_actions.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
@@ -33,7 +35,10 @@ class EcranAccueil extends ConsumerWidget {
     final vue = ref.watch(accueilProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navAccueil)),
+      appBar: AppBar(
+        title: Text(l10n.navAccueil),
+        actions: const [_ClocheNotifications(), _MenuEntete()],
+      ),
       body: vue.when(
         // Keep showing data while it reloads (e.g. on tab re-entry) — no flash.
         skipLoadingOnReload: true,
@@ -46,6 +51,9 @@ class EcranAccueil extends ConsumerWidget {
             // Jump to the zone detail on the Potager tab (#5); the global back
             // stack returns straight to the dashboard.
             onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
+            // "See tasks" switches to the Calendar tab (docs/15 §2); the shared
+            // back stack returns to the dashboard.
+            onVoirCalendrier: () => context.go(RoutesApp.calendrier),
             onToggleTache: (t) =>
                 ref.read(accueilProvider.notifier).basculerTache(t),
           ),
@@ -55,15 +63,78 @@ class EcranAccueil extends ConsumerWidget {
   }
 }
 
+/// Header bell: opens the notifications panel (alerts + urgent tasks), with a
+/// badge counting the pending items.
+class _ClocheNotifications extends ConsumerWidget {
+  const _ClocheNotifications();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final total = ref.watch(notificationsAccueilProvider).maybeWhen(
+          data: (vue) => vue.total,
+          orElse: () => 0,
+        );
+    return IconButton(
+      tooltip: l10n.accueilNotifsTooltip,
+      onPressed: () => afficherNotificationsAccueil(context),
+      icon: Badge.count(
+        count: total,
+        isLabelVisible: total > 0,
+        child: const Icon(Icons.notifications_outlined),
+      ),
+    );
+  }
+}
+
+/// Header overflow menu (⋮): shortcuts to the notification settings and help.
+class _MenuEntete extends StatelessWidget {
+  const _MenuEntete();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return PopupMenuButton<String>(
+      tooltip: l10n.accueilMenuTooltip,
+      onSelected: (valeur) => context.go(valeur),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: RoutesApp.plusNotifications,
+          child: Row(
+            children: [
+              const Icon(Icons.notifications_active_outlined,
+                  size: TaillesIconesApp.md),
+              const SizedBox(width: EspacementsApp.s3),
+              Text(l10n.categNotifications),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: RoutesApp.plusAide,
+          child: Row(
+            children: [
+              const Icon(Icons.help_outline, size: TaillesIconesApp.md),
+              const SizedBox(width: EspacementsApp.s3),
+              Text(l10n.categAide),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// Scrollable dashboard body for a loaded [AccueilVue].
 class _Contenu extends StatelessWidget {
   final AccueilVue vue;
   final void Function(String zoneId) onZoneTap;
+  final VoidCallback onVoirCalendrier;
   final void Function(Tache tache) onToggleTache;
 
   const _Contenu({
     required this.vue,
     required this.onZoneTap,
+    required this.onVoirCalendrier,
     required this.onToggleTache,
   });
 
@@ -81,7 +152,11 @@ class _Contenu extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s4),
         const _CarteMeteo(),
         const SizedBox(height: EspacementsApp.s5),
-        _SectionTaches(taches: vue.tachesDuJour, onToggle: onToggleTache),
+        _SectionTaches(
+          taches: vue.tachesDuJour,
+          onToggle: onToggleTache,
+          onVoirCalendrier: onVoirCalendrier,
+        ),
         const SizedBox(height: EspacementsApp.s5),
         _GrilleStats(
           nombreAlertes: vue.nombreAlertes,
@@ -203,6 +278,15 @@ class _CarteMeteo extends ConsumerWidget {
         null,
       ),
       data: (vue) {
+        // Automatic weather off (privacy opt-out): a position exists but no call
+        // is made — a neutral state, no "add a position" prompt.
+        if (vue.desactivee) {
+          return (
+            Icons.cloud_off_outlined,
+            Text(l10n.accueilMeteoDesactivee, style: muted),
+            null,
+          );
+        }
         if (!vue.disponible) {
           return (
             Icons.location_off_outlined,
@@ -292,8 +376,13 @@ class _CarteMeteo extends ConsumerWidget {
 class _SectionTaches extends StatelessWidget {
   final List<Tache> taches;
   final void Function(Tache tache) onToggle;
+  final VoidCallback onVoirCalendrier;
 
-  const _SectionTaches({required this.taches, required this.onToggle});
+  const _SectionTaches({
+    required this.taches,
+    required this.onToggle,
+    required this.onVoirCalendrier,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +393,14 @@ class _SectionTaches extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _LabelSection(texte: l10n.accueilTachesDuJour, compteur: aFaire),
+        _LabelSection(
+          texte: l10n.accueilTachesDuJour,
+          compteur: aFaire,
+          action: _LienSection(
+            texte: l10n.accueilVoirCalendrier,
+            onTap: onVoirCalendrier,
+          ),
+        ),
         const SizedBox(height: EspacementsApp.s2),
         Card(
           child: Padding(
@@ -575,19 +671,28 @@ class _TuileZone extends StatelessWidget {
   }
 }
 
-/// Section label with an optional count badge.
+/// Section label with an optional count badge and a trailing [action] (e.g. a
+/// "see all" link aligned to the right of the header).
 class _LabelSection extends StatelessWidget {
   final String texte;
   final int? compteur;
+  final Widget? action;
 
-  const _LabelSection({required this.texte, this.compteur});
+  const _LabelSection({required this.texte, this.compteur, this.action});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
       children: [
-        Text(texte, style: theme.textTheme.titleLarge),
+        Flexible(
+          child: Text(
+            texte,
+            style: theme.textTheme.titleLarge,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         if (compteur != null) ...[
           const SizedBox(width: EspacementsApp.s2),
           Container(
@@ -603,7 +708,46 @@ class _LabelSection extends StatelessWidget {
             ),
           ),
         ],
+        if (action != null) ...[
+          const Spacer(),
+          action!,
+        ],
       ],
+    );
+  }
+}
+
+/// A discreet text link (label + chevron) for a section header action.
+class _LienSection extends StatelessWidget {
+  final String texte;
+  final VoidCallback onTap;
+
+  const _LienSection({required this.texte, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: const BorderRadius.all(RayonsApp.full),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: EspacementsApp.s2,
+          vertical: EspacementsApp.s1,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              texte,
+              style: theme.textTheme.labelMedium
+                  ?.copyWith(color: theme.colorScheme.primary),
+            ),
+            Icon(Icons.chevron_right,
+                size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
+          ],
+        ),
+      ),
     );
   }
 }

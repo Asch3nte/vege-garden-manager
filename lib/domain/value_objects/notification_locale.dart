@@ -42,6 +42,17 @@ class NotificationLocale {
   /// Optional in-app route to open when the notification is tapped.
   String? get cibleRoute => _cibleRoute;
 
+  /// Returns a copy overriding the given fields (used to defer the schedule out
+  /// of a do-not-disturb window — see `FiltreNotifications`).
+  NotificationLocale copierAvec({DateTime? dateProgrammee}) => NotificationLocale(
+        id: _id,
+        titre: _titre,
+        corps: _corps,
+        dateProgrammee: dateProgrammee ?? _dateProgrammee,
+        categorie: _categorie,
+        cibleRoute: _cibleRoute,
+      );
+
   @override
   bool operator ==(Object other) =>
       other is NotificationLocale &&

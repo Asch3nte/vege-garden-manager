@@ -1,7 +1,9 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../application/providers/repository_providers.dart';
+import '../../application/state/preferences_notifier.dart';
 import '../../application/use_cases/calculer_besoin_arrosage.dart';
+import '../../domain/services/localisation_meteo.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 
 /// Per-plantation watering advice, derived on demand (auto-dispose).
@@ -28,11 +30,14 @@ final conseilArrosagePlantationProvider =
         await ref.watch(potagerRepositoryProvider).obtenirPotagerActif();
     if (potager == null) return null;
 
+    // Automatic weather off → demand-only advice, no Open-Meteo call.
+    final prefs = await ref.watch(preferencesProvider.future);
     final useCase =
         await ref.watch(calculerBesoinArrosageProvider.future);
     return useCase.executer(
       plantation: plantation,
-      localisation: potager.localisation,
+      localisation: localisationPourMeteo(potager.localisation,
+          meteoAutoActive: prefs.meteoAutoActive),
     );
   },
 );

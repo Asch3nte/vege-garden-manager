@@ -436,6 +436,10 @@ class Preferences extends Table {
   // ADR-0009 — multi-garden active-selection (v4→v5); null = no explicit
   // choice yet, the repository falls back to the earliest-created garden.
   TextColumn get potagerActifId => text().nullable()();
+  // Automatic weather fetching (v5→v6). When false, no coordinates leave the
+  // device for Open-Meteo; a manual position still drives local season/climate
+  // derivation and the watering engine still advises from plant needs alone.
+  BoolColumn get meteoAutoActive => boolean().withDefault(const Constant(true))();
 
   @override
   Set<Column> get primaryKey => {id};
