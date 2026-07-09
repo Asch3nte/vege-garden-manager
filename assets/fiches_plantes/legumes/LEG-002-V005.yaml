@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Aubergine Ronde de Valence. Hérite de LEG-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-002-V005
+parent_id: LEG-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum melongena 'Ronde de Valence'"
+
+i18n:
+  fr:
+    nom_commun: Aubergine Ronde de Valence
+    noms_alternatifs: [Violette ronde]
+    description: >
+      Variété à gros fruits ronds et trapus, violet foncé, à chair épaisse et
+      ferme. Sa forme la rend idéale pour les tranches à griller et les
+      aubergines farcies.
+  en:
+    nom_commun: Ronde de Valence Aubergine
+    description: >
+      Variety with large, round, squat dark-purple fruits and thick, firm flesh.
+      Its shape is ideal for grilling slices and stuffing.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Farcie, grillée en tranches, en gratin]
+  en: [Stuffed, grilled in slices, gratin]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Aubergine de Barbentane. Hérite de LEG-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-002-V002
+parent_id: LEG-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum melongena 'de Barbentane'"
+
+i18n:
+  fr:
+    nom_commun: Aubergine de Barbentane
+    noms_alternatifs: [Violette longue de Barbentane]
+    description: >
+      Variété ancienne provençale à longs fruits violet foncé brillant, à chair
+      blanche fine et peu amère. Productive et vigoureuse, c'est une valeur sûre
+      sous climat chaud et en abri.
+  en:
+    nom_commun: Barbentane Aubergine
+    description: >
+      Old Provençal variety with long, glossy dark-purple fruits and fine,
+      barely bitter white flesh. Productive and vigorous.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Grillée, en ratatouille, farcie, en gratin, caviar d'aubergine]
+  en: [Grilled, ratatouille, stuffed, gratin, aubergine caviar]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

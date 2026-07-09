@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Aubergine Black Beauty. Hérite de LEG-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-002-V003
+parent_id: LEG-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum melongena 'Black Beauty'"
+
+i18n:
+  fr:
+    nom_commun: Aubergine Black Beauty
+    noms_alternatifs: [Noire Belle]
+    description: >
+      Variété classique à gros fruits ovales noir violacé brillant, à chair
+      dense. Très répandue, productive et fiable ; convient bien à la culture en
+      pleine terre sous climat chaud comme en abri.
+  en:
+    nom_commun: Black Beauty Aubergine
+    description: >
+      Classic variety with large, glossy blackish-purple oval fruits and dense
+      flesh. Widespread, productive and reliable.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Grillée, en ratatouille, farcie, en gratin, moussaka]
+  en: [Grilled, ratatouille, stuffed, gratin, moussaka]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

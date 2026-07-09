@@ -31,6 +31,10 @@ legumes:
   LEG-001-V011: Tomate Tigerella
   LEG-002: Aubergine
   LEG-002-V001: Aubergine Violette de Florence
+  LEG-002-V002: Aubergine de Barbentane
+  LEG-002-V003: Aubergine Black Beauty
+  LEG-002-V004: Aubergine Listada de Gandia
+  LEG-002-V005: Aubergine Ronde de Valence
   LEG-003: Betterave
   LEG-003-V001: Betterave Chioggia
   LEG-004: Carotte
@@ -45,10 +49,20 @@ legumes:
   LEG-008-V001: Chou-fleur de Bretagne
   LEG-009: Concombre
   LEG-009-V001: Concombre Marketmore
+  LEG-009-V002: Concombre Vert Long Maraîcher
+  LEG-009-V003: Concombre Blanc Long Parisien
+  LEG-009-V004: Concombre Lemon
   LEG-010: Courge musquée
   LEG-010-V001: Courge Butternut Ponca
+  LEG-010-V002: Courge Butternut Waltham
+  LEG-010-V003: Courge Musquée de Provence
+  LEG-010-V004: Courge Longue de Nice
   LEG-011: Courgette
   LEG-011-V001: Courgette Black Beauty
+  LEG-011-V002: Courgette Ronde de Nice
+  LEG-011-V003: Courgette Gold Rush
+  LEG-011-V004: Courgette Verte des Maraîchers
+  LEG-011-V005: Courgette Costata Romanesca
   LEG-012: Épinard
   LEG-012-V001: Épinard Géant d'Hiver
   LEG-013: Haricot
@@ -65,10 +79,22 @@ legumes:
   LEG-018-V001: Pois mangetout Carouby
   LEG-019: Poivron
   LEG-019-V001: Poivron Corno di Toro
+  LEG-019-V002: Poivron California Wonder
+  LEG-019-V003: Poivron Marconi
+  LEG-019-V004: Poivron Doux d'Espagne
+  LEG-019-V005: Poivron Yolo Wonder
   LEG-020: Pomme de terre
   LEG-020-V001: Pomme de terre Charlotte
+  LEG-020-V002: Pomme de terre Bintje
+  LEG-020-V003: Pomme de terre Ratte
+  LEG-020-V004: Pomme de terre Vitelotte
+  LEG-020-V005: Pomme de terre Désirée
+  LEG-020-V006: Pomme de terre Belle de Fontenay
   LEG-021: Potimarron
   LEG-021-V001: Potimarron Rouge Vif d'Étampes
+  LEG-021-V002: Potimarron Red Kuri
+  LEG-021-V003: Potimarron Bleu de Hongrie
+  LEG-021-V004: Potimarron Marina di Chioggia
   LEG-022: Radis
   LEG-022-V001: Radis Cherry Belle
   LEG-023: Artichaut

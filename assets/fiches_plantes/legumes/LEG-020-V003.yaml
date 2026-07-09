@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Pomme de terre Ratte. Hérite de LEG-020.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-020-V003
+parent_id: LEG-020
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum tuberosum 'Ratte'"
+
+i18n:
+  fr:
+    nom_commun: Pomme de terre Ratte
+    noms_alternatifs: [Ratte du Touquet, Quenelle de Lyon]
+    description: >
+      Variété tardive à petits tubercules allongés et bosselés, à chair ferme et
+      fine, au goût de noisette prononcé. Recherchée en gastronomie ; se tient
+      parfaitement à la cuisson.
+  en:
+    nom_commun: Ratte Potato
+    description: >
+      Late variety with small, elongated, knobbly tubers and firm, fine flesh
+      with a pronounced hazelnut flavour. Prized in fine cooking; holds its shape.
+
+cycle:
+  duree_avant_recolte_jours: [120, 140]
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave sombre, sèche et fraîche (6–10 °C)", en: "Dark, dry, cool cellar (6–10 °C)" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, rissolée, en salade, en purée fine]
+  en: [Steamed, pan-fried, in salad, fine mash]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ratte_(pomme_de_terre)
+contributeurs:
+  - "@potagerer"

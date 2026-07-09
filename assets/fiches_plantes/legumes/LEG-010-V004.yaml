@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Courge Longue de Nice. Hérite de LEG-010.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-010-V004
+parent_id: LEG-010
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita moschata 'Longue de Nice'"
+
+i18n:
+  fr:
+    nom_commun: Courge Longue de Nice
+    noms_alternatifs: [Courge de Nice à fruit long]
+    description: >
+      Très longue courge cylindrique renflée à une extrémité, à chair orange fine
+      et sucrée, peu de graines. Se consomme jeune en courgette d'été ou mûre en
+      courge d'hiver ; se tranche au fur et à mesure des besoins.
+  en:
+    nom_commun: Longue de Nice Squash
+    description: >
+      Very long cylindrical squash, swollen at one end, with fine, sweet orange
+      flesh and few seeds. Eaten young as summer squash or ripe as winter squash.
+
+cycle:
+  espacement_cm: 120
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Local sec et aéré, 10–15 °C", en: "Dry, airy room, 10–15 °C" }
+utilisations_culinaires_i18n:
+  fr: [En soupe, rôtie, en gratin, jeune comme une courgette]
+  en: [Soup, roasted, gratin, young like a courgette]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courge_musqu%C3%A9e
+contributeurs:
+  - "@potagerer"

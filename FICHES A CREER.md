@@ -60,10 +60,10 @@
 
 ### Aubergine — *Solanum melongena* ✅ `LEG-002`
 - ✅ `V001` Violette de Florence
-- ⬜ Barbentane (violette allongée)
-- ⬜ Black Beauty
-- ⬜ Ronde de Valence
-- ⬜ Listada de Gandia (zébrée)
+- ✅ `V002` Aubergine de Barbentane
+- ✅ `V003` Aubergine Black Beauty
+- ✅ `V005` Aubergine Ronde de Valence
+- ✅ `V004` Aubergine Listada de Gandia
 - ⬜ Longue Violette de Barbentane
 - ⬜ Blanche (Dourga / White Egg)
 - ⬜ Thaï (verte longue)
@@ -71,10 +71,10 @@
 
 ### Poivron — *Capsicum annuum* ✅ `LEG-019`
 - ✅ `V001` Corno di Toro
-- ⬜ California Wonder (carré)
-- ⬜ Yolo Wonder
-- ⬜ Marconi
-- ⬜ Doux d'Espagne (long)
+- ✅ `V002` Poivron California Wonder
+- ✅ `V005` Poivron Yolo Wonder
+- ✅ `V003` Poivron Marconi
+- ✅ `V004` Poivron Doux d'Espagne
 - ⬜ Lamuyo
 - ⬜ Sucette de Provence
 - ⬜ Doux des Landes
@@ -92,14 +92,14 @@
 
 ### Pomme de terre — *Solanum tuberosum* ✅ `LEG-020` 🔡
 - ✅ `V001` Charlotte
-- ⬜ Bintje
-- ⬜ Ratte
+- ✅ `V002` Pomme de terre Bintje
+- ✅ `V003` Pomme de terre Ratte
 - ⬜ Amandine
 - ⬜ Nicola
 - ⬜ Rosabelle
-- ⬜ Désirée
-- ⬜ Vitelotte (violette)
-- ⬜ Belle de Fontenay
+- ✅ `V005` Pomme de terre Désirée
+- ✅ `V004` Pomme de terre Vitelotte
+- ✅ `V006` Pomme de terre Belle de Fontenay
 - ⬜ Monalisa
 - ⬜ Agata
 - ⬜ Pompadour
@@ -119,29 +119,29 @@
 
 ### Courgette — *Cucurbita pepo* ✅ `LEG-011`
 - ✅ `V001` Black Beauty
-- ⬜ Verte des Maraîchers
-- ⬜ Ronde de Nice
-- ⬜ Gold Rush (jaune)
+- ✅ `V004` Courgette Verte des Maraîchers
+- ✅ `V002` Courgette Ronde de Nice
+- ✅ `V003` Courgette Gold Rush
 - ⬜ Grisette de Provence
-- ⬜ Costata Romanesca
+- ✅ `V005` Courgette Costata Romanesca
 - ⬜ Blanche de Virginie
 - ⬜ Courgette-tromba / Tromboncino
 
 ### Courge musquée — *Cucurbita moschata* ✅ `LEG-010`
 - ✅ `V001` Butternut Ponca
-- ⬜ Butternut Waltham
-- ⬜ Musquée de Provence
-- ⬜ Longue de Nice
+- ✅ `V002` Courge Butternut Waltham
+- ✅ `V003` Courge Musquée de Provence
+- ✅ `V004` Courge Longue de Nice
 - ⬜ Sucrine du Berry
 
 ### Potimarron — *Cucurbita maxima* ✅ `LEG-021`
 - ✅ `V001` Rouge Vif d'Étampes
 > Note : Rouge Vif d'Étampes est un potiron (*maxima*) ; vérifier le
 > rattachement espèce vs. « Potimarron » lors du batch.
-- ⬜ Potimarron Red Kuri / Uchiki Kuri
+- ✅ `V002` Potimarron Red Kuri / Uchiki Kuri
 - ⬜ Giraumon Turban
-- ⬜ Bleu de Hongrie
-- ⬜ Marina di Chioggia
+- ✅ `V003` Potimarron Bleu de Hongrie
+- ✅ `V004` Potimarron Marina di Chioggia
 - ⬜ Buttercup
 - ⬜ Hubbard
 - ⬜ Courge de Siam
@@ -163,9 +163,9 @@
 ### Concombre — *Cucumis sativus* ✅ `LEG-009`
 - ✅ `V001` Marketmore
 - ⬜ Le Généreux
-- ⬜ Vert Long Maraîcher
-- ⬜ Blanc Long Parisien
-- ⬜ Lemon (rond jaune)
+- ✅ `V002` Concombre Vert Long Maraîcher
+- ✅ `V003` Concombre Blanc Long Parisien
+- ✅ `V004` Concombre Lemon
 - ⬜ Beit Alpha (libanais)
 
 ### Cornichon — *Cucumis sativus* ⬜ *(id à attribuer au moment de la création)* (ou variété du concombre)

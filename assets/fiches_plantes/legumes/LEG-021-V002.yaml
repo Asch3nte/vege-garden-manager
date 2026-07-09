@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Potimarron Red Kuri (Uchiki Kuri). Hérite de LEG-021.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-021-V002
+parent_id: LEG-021
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita maxima 'Uchiki Kuri'"
+
+i18n:
+  fr:
+    nom_commun: Potimarron Red Kuri
+    noms_alternatifs: [Uchiki Kuri, Potimarron orange]
+    description: >
+      Le potimarron classique : petit fruit en toupie rouge-orangé, à chair
+      dense au goût de châtaigne. Peau fine consommable après cuisson. Productif
+      et de bonne conservation ; incontournable au potager.
+  en:
+    nom_commun: Red Kuri Squash
+    description: >
+      The classic potimarron: small, teardrop, red-orange fruit with dense,
+      chestnut-flavoured flesh. Thin skin edible once cooked. Productive and a
+      good keeper.
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Local sec et aéré, 10–15 °C", en: "Dry, airy room, 10–15 °C" }
+utilisations_culinaires_i18n:
+  fr: [En soupe, rôti au four, en purée, en velouté]
+  en: [Soup, oven-roasted, mashed, velouté]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Potimarron
+contributeurs:
+  - "@potagerer"
