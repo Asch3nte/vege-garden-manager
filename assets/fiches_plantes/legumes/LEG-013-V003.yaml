@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Haricot Beurre de Rocquencourt. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V003
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Beurre de Rocquencourt'"
+
+i18n:
+  fr:
+    nom_commun: Haricot Beurre de Rocquencourt
+    noms_alternatifs: [Beurre de Rocquencourt, Haricot beurre nain]
+    description: >
+      Haricot nain mangetout à gousses jaune beurre, tendres et sans fil, au goût
+      fin. Précoce et productif, décoratif au jardin et facile à repérer à la
+      récolte. Port buissonnant sans tuteurage.
+  en:
+    nom_commun: Rocquencourt Wax Bean
+    description: >
+      Dwarf wax snap bean with butter-yellow, tender, stringless pods and a fine
+      flavour. Early and productive, easy to spot at harvest.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Équeuter et blanchir 3 min", en: "Top and tail, blanch 3 min" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, poêlé, en salade, en conserve]
+  en: [Steamed, sautéed, in salad, canned]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Haricot
+contributeurs:
+  - "@potagerer"

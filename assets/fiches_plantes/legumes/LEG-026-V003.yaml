@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Fève The Sutton (naine). Hérite de LEG-026.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-026-V003
+parent_id: LEG-026
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Vicia faba 'The Sutton'"
+
+i18n:
+  fr:
+    nom_commun: Fève The Sutton
+    noms_alternatifs: [The Sutton, Fève naine]
+    description: >
+      Fève naine compacte (30–45 cm), ne nécessitant pas de tuteurage, idéale en
+      petit potager, en pot ou en zone ventée. Grains verts tendres et productifs
+      malgré sa petite taille ; récolte étalée.
+  en:
+    nom_commun: The Sutton Broad Bean
+    description: >
+      Compact dwarf broad bean (30–45 cm), needing no staking, ideal for small
+      gardens, pots or windy sites. Tender green seeds, productive despite its size.
+
+cycle:
+  hauteur_adulte_cm: [30, 45]
+  espacement_cm: 20
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled seeds, refrigerated" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique", en: "Dry seeds, airtight jar" }
+utilisations_culinaires_i18n:
+  fr: [Écossée fraîche, crue à la croque, en purée, mijotée]
+  en: [Fresh-shelled, raw, mashed, stewed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/F%C3%A8ve
+contributeurs:
+  - "@potagerer"

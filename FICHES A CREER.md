@@ -326,15 +326,15 @@
 
 ### Haricot — *Phaseolus vulgaris* ✅ `LEG-013` 🔡
 - ✅ `V001` vert Fin de Bagnols
-- ⬜ Contender (nain mangetout)
-- ⬜ Beurre de Rocquencourt (nain jaune)
-- ⬜ Tarbais (à rames, grain)
-- ⬜ Coco de Paimpol
-- ⬜ Flageolet Chevrier
-- ⬜ Borlotto / Coco rose (Lingot)
+- ✅ `V002` Haricot Contender
+- ✅ `V003` Haricot Beurre de Rocquencourt
+- ✅ `V005` Haricot Tarbais
+- ✅ `V006` Haricot Coco de Paimpol
+- ✅ `V007` Haricot Flageolet Chevrier
+- ✅ `V008` Haricot Borlotto Lingot de Rome
 - ⬜ Mangetout à rames Or du Rhin
 - ⬜ Roi des Belges
-- ⬜ Blue Lake
+- ✅ `V004` Haricot Blue Lake à rames
 - ⬜ Soissons (gros grain blanc)
 
 ### Haricot d'Espagne — *Phaseolus coccineus* ⬜ *(id à attribuer au moment de la création)*
@@ -343,19 +343,19 @@
 
 ### Pois — *Pisum sativum* ✅ `LEG-018`
 - ✅ `V001` mangetout Carouby (de Maussane)
-- ⬜ Petit Provençal (à grains)
-- ⬜ Merveille de Kelvedon
-- ⬜ Serpette Guilloteau
+- ✅ `V002` Pois Petit Provençal
+- ✅ `V003` Pois Merveille de Kelvedon
+- ✅ `V005` Pois Serpette Guilloteau
 - ⬜ Roi des Conserves
-- ⬜ Corne de Bélier (mangetout)
-- ⬜ Petit pois Douce Provence
+- ✅ `V006` Pois Corne de Bélier
+- ✅ `V004` Pois Douce Provence
 
 ### Fève — *Vicia faba* ✅ `LEG-026`
 > Espèce mère créée (lot « potagères courantes »). Variétés encore à créer :
-- ⬜ d'Aguadulce à très longue cosse
-- ⬜ de Séville
+- ✅ `V001` Fève Aguadulce à très longue cosse
+- ✅ `V002` Fève de Séville
 - ⬜ Superaguadulce
-- ⬜ The Sutton (naine)
+- ✅ `V003` Fève The Sutton
 
 ### Lentille — *Lens culinaris* ⬜ *(id à attribuer au moment de la création)*
 - ⬜ Verte du Puy

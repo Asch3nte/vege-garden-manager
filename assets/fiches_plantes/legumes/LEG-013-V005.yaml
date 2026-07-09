@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Haricot Tarbais. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V005
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Tarbais'"
+
+i18n:
+  fr:
+    nom_commun: Haricot Tarbais
+    noms_alternatifs: [Tarbais, Haricot de Tarbes]
+    description: >
+      Haricot à rames à gros grain blanc, cultivé pour le grain sec, à la peau
+      fine qui tient à la cuisson. Traditionnellement palissé sur maïs. Le haricot
+      du cassoulet et du garbure ; grimpant vigoureux et tardif.
+  en:
+    nom_commun: Tarbais Bean
+    description: >
+      Pole bean with a large white seed, grown for dry grain, with a thin skin
+      that holds when cooked. The classic cassoulet bean; vigorous, late climber.
+
+cycle:
+  duree_avant_recolte_jours: [110, 150]
+  hauteur_adulte_cm: [200, 300]
+  culture_verticale: true
+  charge_tuteur: moyenne
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique à l'abri de l'humidité", en: "Dry seeds, airtight jar away from moisture" }
+utilisations_culinaires_i18n:
+  fr: [En cassoulet, en garbure, en soupe, mijoté]
+  en: [In cassoulet, in garbure, soup, stewed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Haricot_tarbais
+contributeurs:
+  - "@potagerer"

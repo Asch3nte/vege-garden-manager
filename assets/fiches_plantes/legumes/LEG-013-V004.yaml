@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Haricot Blue Lake à rames. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V004
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Blue Lake'"
+
+i18n:
+  fr:
+    nom_commun: Haricot Blue Lake à rames
+    noms_alternatifs: [Blue Lake, Blue Lake grimpant]
+    description: >
+      Haricot mangetout à rames à longues gousses vertes rondes, charnues et sans
+      fil, très productif sur une longue période. Grimpant vigoureux à palisser
+      sur rames ou treillis ; récolte facilitée en hauteur.
+  en:
+    nom_commun: Blue Lake Pole Bean
+    description: >
+      Climbing snap bean with long, round, fleshy, stringless green pods, very
+      productive over a long period. Vigorous climber for poles or trellis.
+
+cycle:
+  hauteur_adulte_cm: [180, 250]
+  culture_verticale: true
+  charge_tuteur: legere
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Équeuter et blanchir 3 min", en: "Top and tail, blanch 3 min" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, poêlé, en salade, en conserve]
+  en: [Steamed, sautéed, in salad, canned]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Haricot
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Haricot Flageolet Chevrier. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V007
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Flageolet Chevrier'"
+
+i18n:
+  fr:
+    nom_commun: Haricot Flageolet Chevrier
+    noms_alternatifs: [Chevrier vert, Flageolet]
+    description: >
+      Haricot nain cultivé pour le grain, récolté avant maturité complète pour un
+      grain vert tendre : le flageolet. Grain fin et fondant, classique
+      accompagnement du gigot. Port buissonnant sans tuteurage.
+  en:
+    nom_commun: Flageolet Chevrier Bean
+    description: >
+      Dwarf bean grown for grain, picked before full maturity for a tender green
+      seed: the flageolet. Fine, melting seed, a classic side for lamb.
+
+cycle:
+  duree_avant_recolte_jours: [85, 100]
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled seeds, refrigerated" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique", en: "Dry seeds, airtight jar" }
+utilisations_culinaires_i18n:
+  fr: [Écossé mijoté, en accompagnement, en conserve]
+  en: [Shelled and stewed, as a side, canned]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Flageolet_(l%C3%A9gume)
+contributeurs:
+  - "@potagerer"

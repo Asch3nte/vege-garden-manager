@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Fève de Séville. Hérite de LEG-026.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-026-V002
+parent_id: LEG-026
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Vicia faba 'de Séville'"
+
+i18n:
+  fr:
+    nom_commun: Fève de Séville
+    noms_alternatifs: [de Séville, Séville hâtive]
+    description: >
+      Fève hâtive à longues cosses et gros grains verts savoureux, appréciée pour
+      sa précocité. Rustique, elle convient aux semis d'automne et de fin d'hiver.
+      Plant vigoureux à butter.
+  en:
+    nom_commun: Seville Broad Bean
+    description: >
+      Early broad bean with long pods and large, tasty green seeds, valued for
+      its earliness. Hardy, suited to autumn and late-winter sowing.
+
+cycle:
+  hauteur_adulte_cm: [90, 130]
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled seeds, refrigerated" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique", en: "Dry seeds, airtight jar" }
+utilisations_culinaires_i18n:
+  fr: [Écossée fraîche, crue à la croque, en purée, mijotée]
+  en: [Fresh-shelled, raw, mashed, stewed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/F%C3%A8ve
+contributeurs:
+  - "@potagerer"

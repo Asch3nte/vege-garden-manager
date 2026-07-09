@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Pois Douce Provence. Hérite de LEG-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-018-V004
+parent_id: LEG-018
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pisum sativum 'Douce Provence'"
+
+i18n:
+  fr:
+    nom_commun: Pois Douce Provence
+    noms_alternatifs: [Douce Provence]
+    description: >
+      Petit pois nain à grains, précoce et rustique, supportant les semis
+      d'automne sous climat doux pour une récolte de printemps. Grains sucrés ;
+      port bas à soutenir légèrement.
+  en:
+    nom_commun: Douce Provence Pea
+    description: >
+      Early, hardy dwarf shelling pea, tolerating autumn sowing in mild climates
+      for a spring harvest. Sweet peas; low habit needing light support.
+
+cycle:
+  duree_avant_recolte_jours: [70, 90]
+  hauteur_adulte_cm: [45, 65]
+  charge_tuteur: legere
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled peas, refrigerated" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Écosser et blanchir 1 min", en: "Shell and blanch 1 min" }
+utilisations_culinaires_i18n:
+  fr: [Écossé à la française, en velouté, sauté]
+  en: [Shelled French-style, in velouté, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pois
+contributeurs:
+  - "@potagerer"

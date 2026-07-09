@@ -88,6 +88,13 @@ legumes:
   LEG-012-V001: Épinard Géant d'Hiver
   LEG-013: Haricot
   LEG-013-V001: Haricot vert Fin de Bagnols
+  LEG-013-V002: Haricot Contender
+  LEG-013-V003: Haricot Beurre de Rocquencourt
+  LEG-013-V004: Haricot Blue Lake à rames
+  LEG-013-V005: Haricot Tarbais
+  LEG-013-V006: Haricot Coco de Paimpol
+  LEG-013-V007: Haricot Flageolet Chevrier
+  LEG-013-V008: Haricot Borlotto Lingot de Rome
   LEG-014: Laitue
   LEG-014-V001: Laitue Batavia Rouge Grenobloise
   LEG-015: Navet
@@ -101,6 +108,11 @@ legumes:
   LEG-017-V001: Poireau Bleu de Solaise
   LEG-018: Pois
   LEG-018-V001: Pois mangetout Carouby
+  LEG-018-V002: Pois Petit Provençal
+  LEG-018-V003: Pois Merveille de Kelvedon
+  LEG-018-V004: Pois Douce Provence
+  LEG-018-V005: Pois Serpette Guilloteau
+  LEG-018-V006: Pois Corne de Bélier
   LEG-019: Poivron
   LEG-019-V001: Poivron Corno di Toro
   LEG-019-V002: Poivron California Wonder
@@ -131,6 +143,9 @@ legumes:
   LEG-024: Fenouil
   LEG-025: Ail
   LEG-026: Fève
+  LEG-026-V001: Fève Aguadulce à très longue cosse
+  LEG-026-V002: Fève de Séville
+  LEG-026-V003: Fève The Sutton
   LEG-027: Échalote
   LEG-028: Mâche
   LEG-029: Bette (poirée)
