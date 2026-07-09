@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_asset_source.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseurs_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/catalogue_loader.dart';
@@ -14,8 +15,10 @@ import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_repu
 /// real fiche id — otherwise it is a dead reference (a typo or a missed
 /// migration), and this test fails.
 const _refsSansFiche = {
-  'capucine', 'fenouil', 'aneth', 'moutarde', 'soucis', 'persil', 'fraise',
-  'ail',
+  // capucine→FLE-001, soucis→FLE-002, fenouil→LEG-024, ail→LEG-025,
+  // aneth→ARO-007, moutarde→ENG-001 : fiches créées (lot « fleurs compagnes »),
+  // refs repointées. Restent sans fiche dédiée :
+  'persil', 'fraise',
 };
 
 void main() {
@@ -67,6 +70,34 @@ void main() {
       expect(detail!.aPhasesSensibles, isTrue,
           reason: '$id should list sensitive growth stages');
     }
+  });
+
+  test('content-lot fiches load with their expected category', () async {
+    final cache = await CatalogueLoader(FilesystemFicheAssetSource()).charger();
+    // id → expected category. Guards the recent content lots: « fleurs
+    // compagnes » (resolves the formerly-orphan refs capucine, soucis, fenouil,
+    // ail, aneth, moutarde) and « potagères courantes ».
+    const attendu = {
+      'FLE-001': CategoriePlante.fleur, // Capucine
+      'FLE-002': CategoriePlante.fleur, // Souci
+      'LEG-024': CategoriePlante.legume, // Fenouil
+      'LEG-025': CategoriePlante.legume, // Ail
+      'ARO-007': CategoriePlante.aromatique, // Aneth
+      'ENG-001': CategoriePlante.engraisVert, // Moutarde blanche
+      // Lot « potagères courantes » :
+      'LEG-026': CategoriePlante.legume, // Fève
+      'LEG-027': CategoriePlante.legume, // Échalote
+      'LEG-028': CategoriePlante.legume, // Mâche
+      'LEG-029': CategoriePlante.legume, // Bette
+      'LEG-030': CategoriePlante.legume, // Melon
+      'LEG-031': CategoriePlante.legume, // Chou de Bruxelles
+      'LEG-032': CategoriePlante.legume, // Chou frisé (kale)
+    };
+    attendu.forEach((id, categorie) {
+      final f = cache.parId(id);
+      expect(f, isNotNull, reason: 'missing companion fiche $id');
+      expect(f!.categorie, categorie, reason: '$id should be $categorie');
+    });
   });
 
   test('every repulsif_contre / piege_a slug resolves to a bioaggressor',

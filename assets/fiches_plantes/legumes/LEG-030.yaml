@@ -1,0 +1,115 @@
+# Fiche mère (espèce) — Melon.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Cucurbitacée de chaleur, gourmande. Lot « potagères courantes ».
+id: LEG-030
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Cucumis melo
+famille_botanique: Cucurbitaceae
+
+i18n:
+  fr:
+    nom_commun: Melon
+    noms_alternatifs: [Melon charentais, Melon cantaloup]
+    description: >
+      Cucurbitacée annuelle cultivée pour ses fruits sucrés et parfumés. Très
+      exigeante en chaleur et en soleil, elle demande un sol riche et une longue
+      saison chaude pour mûrir. Se conduit au sol ou palissée sur support.
+    conseils_culture: >
+      Semer au chaud, repiquer après les dernières gelées en sol réchauffé et
+      fumé. Tailler pour limiter le nombre de fruits et favoriser leur maturité.
+      Pailler pour garder la chaleur et l'humidité du sol.
+    conseils_recolte: >
+      Récolter à pleine maturité, quand le fruit se détache facilement du pédoncule
+      et dégage son parfum. Réduire les arrosages en fin de maturité pour
+      concentrer les sucres.
+    erreurs_frequentes:
+      - Plantation trop précoce en sol froid (blocage de la croissance)
+      - Excès d'arrosage à l'approche de la récolte (fruits fades et éclatés)
+      - Absence de taille (fruits nombreux mais peu sucrés)
+  en:
+    nom_commun: Melon
+    description: >
+      Annual cucurbit grown for its sweet, fragrant fruit. Very demanding in heat
+      and sun, it needs rich soil and a long warm season to ripen.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 18
+  temperature_optimale: 25
+  temperature_min_survie: 5
+  gele_fatal: true
+  tolerance_secheresse: faible
+  arrosage_detaille:
+    phases_sensibles:
+      - floraison
+      - fructification
+    note_i18n:
+      fr: >-
+        Arrosez régulièrement au pied pendant la nouaison et le grossissement
+        des fruits, sans mouiller le feuillage. Réduisez nettement les apports
+        à l'approche de la maturité pour concentrer les sucres et éviter que les
+        fruits n'éclatent.
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [90, 120]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 100
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: true
+  culture_verticale: true
+  charge_tuteur: moyenne
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [8, 9]
+    mediterraneen:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [7, 9]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 10]
+      plantation: [11, 12]
+      recolte: [2, 4]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: cucurbitaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [cucurbitaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Melon_(plante)  # description
+contributeurs:
+  - "@potagerer"

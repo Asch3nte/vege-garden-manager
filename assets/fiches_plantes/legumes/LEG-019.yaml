@@ -91,7 +91,7 @@ associations:
       type: ameublissement_sol
       raison_i18n: { fr: "Ameublit le sol pour les racines voisines", en: "Loosens soil for nearby roots" }
   defavorables:
-    - id: fenouil
+    - id: LEG-024
       type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:

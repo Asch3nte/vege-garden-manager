@@ -1,0 +1,95 @@
+# Fiche mère (espèce) — Mâche.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Salade d'hiver très rustique. Lot « potagères courantes ».
+id: LEG-028
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone5
+nom_scientifique: Valerianella locusta
+famille_botanique: Caprifoliaceae
+
+i18n:
+  fr:
+    nom_commun: Mâche
+    noms_alternatifs: [Doucette, Rampon, Salade de blé]
+    description: >
+      Petite salade annuelle de la famille des Caprifoliacées, cultivée pour ses
+      rosettes de feuilles tendres récoltées en automne et en hiver. Très
+      rustique, peu exigeante, idéale en culture de fin de saison après un
+      légume d'été.
+    conseils_culture: >
+      Semer en place de la fin de l'été à l'automne, sur sol tassé et frais.
+      La germination est meilleure à la fraîcheur ; arroser régulièrement tant
+      que les températures restent douces.
+    conseils_recolte: >
+      Récolter les rosettes entières au couteau, au ras du sol, au fur et à
+      mesure des besoins pendant tout l'hiver.
+    erreurs_frequentes:
+      - Semis trop tardif en sol sec (levée irrégulière)
+      - Semis de printemps par forte chaleur (montée à graines rapide)
+  en:
+    nom_commun: Lamb's lettuce
+    description: >
+      Small annual salad of the Caprifoliaceae family, grown for its tender leaf
+      rosettes harvested in autumn and winter. Very hardy and undemanding.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - bien_draine
+    - riche
+  ph_min: 6.5
+  ph_max: 7.5
+  temperature_min_germination: 5
+  temperature_optimale: 15
+  temperature_min_survie: -10
+  tolerance_secheresse: faible
+cycle:
+  enracinement: superficiel
+  type: annuelle
+  duree_germination_jours: [10, 20]
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [10, 15]
+  espacement_cm: 10
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [8, 10]
+      recolte: [10, 3]
+    continental:
+      semis_exterieur: [8, 9]
+      recolte: [10, 2]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [2, 4]
+      recolte: [4, 9]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: caprifoliaceae
+  delai_retour_annees: 1
+  precedents_favorables: [legumineuses]
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/M%C3%A2che  # description
+contributeurs:
+  - "@potagerer"

@@ -73,6 +73,15 @@ legumes:
   LEG-022-V001: Radis Cherry Belle
   LEG-023: Artichaut
   LEG-023-V001: Artichaut Vert de Laon
+  LEG-024: Fenouil
+  LEG-025: Ail
+  LEG-026: Fève
+  LEG-027: Échalote
+  LEG-028: Mâche
+  LEG-029: Bette (poirée)
+  LEG-030: Melon
+  LEG-031: Chou de Bruxelles
+  LEG-032: Chou frisé (kale)
 
 aromatiques:
   ARO-001: Basilic
@@ -86,6 +95,7 @@ aromatiques:
   ARO-005-V001: Menthe Verte
   ARO-006: Coriandre
   ARO-006-V001: Coriandre Santos
+  ARO-007: Aneth
 
 petits_fruits:
   PFR-001: Fraisier
@@ -99,6 +109,17 @@ petits_fruits:
   PFR-005: Myrtille
   PFR-005-V001: Myrtille Bluecrop
 
+fleurs:
+  FLE-001: Capucine
+  FLE-002: Souci
+
+engrais_verts:
+  ENG-001: Moutarde blanche
+
 # Réfs d'associations citées par les fiches mais sans fiche dédiée à ce jour
 # (laissées telles quelles ; à créer en contenu ultérieur) :
-#   capucine, fenouil, aneth, moutarde, soucis, ail.
+#   persil, fraise.
+#
+# NOTE : capucine → FLE-001, soucis → FLE-002, fenouil → LEG-024, ail → LEG-025,
+# aneth → ARO-007, moutarde → ENG-001 ont été créés (lot « fleurs compagnes ») et
+# les références d'associations correspondantes ont été repointées sur ces ids.

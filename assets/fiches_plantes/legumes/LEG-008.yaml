@@ -94,7 +94,7 @@ associations:
     - id: fraise
       type: partage_maladies
       raison_i18n: { fr: "Favorisent mutuellement les maladies du sol", en: "Mutually promote soil diseases" }
-    - id: moutarde
+    - id: ENG-001
       type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille brassicaceae, mêmes ravageurs", en: "Same brassicaceae family, same pests" }
 rotation:

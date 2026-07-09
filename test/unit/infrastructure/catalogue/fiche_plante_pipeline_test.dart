@@ -87,10 +87,10 @@ void main() {
     test('maps associations by canonical mother id', () {
       final f = _mapper.versEntite(map);
       expect(f.sAssocieBienAvec('ARO-001'), isTrue); // basilic → ARO-001
-      expect(f.sAssocieBienAvec('soucis'), isTrue); // no fiche yet, kept as-is
-      expect(f.entreEnConflitAvec('fenouil'), isTrue); // no fiche yet
+      expect(f.sAssocieBienAvec('FLE-002'), isTrue); // souci → FLE-002
+      expect(f.entreEnConflitAvec('LEG-024'), isTrue); // fenouil → LEG-024
       expect(f.entreEnConflitAvec('LEG-020'), isTrue); // pomme de terre → LEG-020
-      expect(f.sAssocieBienAvec('fenouil'), isFalse);
+      expect(f.sAssocieBienAvec('LEG-024'), isFalse);
     });
   });
 

@@ -96,11 +96,11 @@ associations:
     - id: ARO-001
       type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les pucerons, améliore la saveur", en: "Repels aphids, improves flavor" }
-    - id: capucine
+    - id: FLE-001
       type: plante_piege
       raison_i18n: { fr: "Plante-piège à pucerons et doryphores", en: "Trap crop for aphids and beetles" }
   defavorables:
-    - id: fenouil
+    - id: LEG-024
       type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
     - id: LEG-020
