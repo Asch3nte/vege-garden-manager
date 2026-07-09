@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Gardener's Delight. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V018
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Gardener's Delight'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Gardener's Delight
+    noms_alternatifs: [Délice du jardinier]
+    description: >
+      Tomate-cerise rouge à la saveur sucrée et parfumée, extrêmement productive,
+      formant de longues grappes régulières. Plant indéterminé robuste et facile,
+      idéal pour débuter. À tuteurer.
+  en:
+    nom_commun: Gardener's Delight Tomato
+    description: >
+      Sweet, aromatic red cherry tomato, extremely productive, bearing long,
+      regular trusses. Robust, easy indeterminate plant, ideal for beginners.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue à l'apéritif, en salade, confite]
+  en: [Raw as a snack, in salad, candied]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

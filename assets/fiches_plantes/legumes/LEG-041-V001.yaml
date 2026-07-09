@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pastèque Sugar Baby. Hérite de LEG-041.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-041-V001
+parent_id: LEG-041
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Citrullus lanatus 'Sugar Baby'"
+
+i18n:
+  fr:
+    nom_commun: Pastèque Sugar Baby
+    noms_alternatifs: [Sugar Baby]
+    description: >
+      Petite pastèque ronde à écorce vert très foncé, à chair rouge sucrée et
+      juteuse. Précoce et de taille modérée (3–5 kg), c'est la plus adaptée aux
+      climats tempérés et aux saisons courtes.
+  en:
+    nom_commun: Sugar Baby Watermelon
+    description: >
+      Small round watermelon with very dark-green rind and sweet, juicy red flesh.
+      Early and moderate in size (3–5 kg), the best suited to temperate climates.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Frais et sombre entier ; réfrigérateur une fois coupé", en: "Cool and dark whole; refrigerator once cut" }
+utilisations_culinaires_i18n:
+  fr: [Crue en tranches, en salade de fruits, en jus]
+  en: [Raw in slices, in fruit salad, juiced]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Past%C3%A8que
+contributeurs:
+  - "@potagerer"

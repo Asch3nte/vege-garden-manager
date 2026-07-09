@@ -29,6 +29,18 @@ legumes:
   LEG-001-V009: Tomate Montfavet
   LEG-001-V010: Tomate Roma
   LEG-001-V011: Tomate Tigerella
+  LEG-001-V012: Tomate Green Zebra
+  LEG-001-V013: Tomate Black Cherry
+  LEG-001-V014: Tomate Beefsteak
+  LEG-001-V015: Tomate Saint-Pierre
+  LEG-001-V016: Tomate Costoluto Fiorentino
+  LEG-001-V017: Tomate Brandywine
+  LEG-001-V018: Tomate Gardener's Delight
+  LEG-001-V019: Tomate Sungold
+  LEG-001-V020: Tomate Téton de Vénus
+  LEG-001-V021: Tomate Poire Jaune
+  LEG-001-V022: Tomate Fantasio
+  LEG-001-V023: Tomate Cœur de Pigeon
   LEG-002: Aubergine
   LEG-002-V001: Aubergine Violette de Florence
   LEG-002-V002: Aubergine de Barbentane
@@ -106,6 +118,10 @@ legumes:
   LEG-028: Mâche
   LEG-029: Bette (poirée)
   LEG-030: Melon
+  LEG-030-V001: Melon Charentais
+  LEG-030-V002: Melon Petit Gris de Rennes
+  LEG-030-V003: Melon Cantaloup de Bellegarde
+  LEG-030-V004: Melon Sucrin de Tours
   LEG-031: Chou de Bruxelles
   LEG-032: Chou frisé (kale)
   LEG-033: Panais
@@ -116,7 +132,13 @@ legumes:
   LEG-038: Pak choï
   LEG-039: Cresson alénois
   LEG-040: Pâtisson
+  LEG-040-V001: Pâtisson Blanc
+  LEG-040-V002: Pâtisson Panaché Vert et Blanc
+  LEG-040-V003: Pâtisson Jaune (Sunburst)
   LEG-041: Pastèque
+  LEG-041-V001: Pastèque Sugar Baby
+  LEG-041-V002: Pastèque Crimson Sweet
+  LEG-041-V003: Pastèque Charleston Gray
   LEG-042: Chicorée witloof (endive)
   LEG-043: Scarole
   LEG-044: Topinambour

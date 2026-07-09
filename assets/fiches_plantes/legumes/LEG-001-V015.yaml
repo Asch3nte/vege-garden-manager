@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Saint-Pierre. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V015
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Saint-Pierre'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Saint-Pierre
+    noms_alternatifs: [Saint-Pierre]
+    description: >
+      Variété française classique à fruits ronds rouges réguliers, de taille
+      moyenne, à chair juteuse et équilibrée. Rustique, fiable et productive,
+      c'est une valeur sûre polyvalente. Plant indéterminé à tuteurer.
+  en:
+    nom_commun: Saint-Pierre Tomato
+    description: >
+      Classic French variety with regular, round, medium red fruits and juicy,
+      well-balanced flesh. Hardy, reliable and productive; a versatile all-rounder.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en sauce, farcie, au four]
+  en: [Raw in salad, in sauce, stuffed, baked]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Tomate Sungold. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V019
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Sungold'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Sungold
+    noms_alternatifs: [Sungold F1]
+    description: >
+      Tomate-cerise hybride (F1) orange doré, à la saveur exceptionnellement
+      sucrée et fruitée. Précoce, très productive et prolongée, en longues
+      grappes. Plant indéterminé vigoureux à tuteurer. Semences non reproductibles.
+  en:
+    nom_commun: Sungold Tomato
+    description: >
+      Hybrid (F1) golden-orange cherry tomato with an exceptionally sweet, fruity
+      flavour. Early, very productive over a long season, in long trusses. Seed
+      not true to type.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue à l'apéritif, en salade, confite]
+  en: [Raw as a snack, in salad, candied]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

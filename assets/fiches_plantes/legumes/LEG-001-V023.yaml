@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Cœur de Pigeon. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V023
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Cœur de Pigeon'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Cœur de Pigeon
+    noms_alternatifs: [Cœur de Pigeon]
+    description: >
+      Tomate-cerise allongée rouge, à la peau fine et à la chair sucrée et ferme,
+      en petites grappes. Très productive et régulière. Plant indéterminé
+      vigoureux à tuteurer.
+  en:
+    nom_commun: Cœur de Pigeon Tomato
+    description: >
+      Elongated red cherry tomato with thin skin and sweet, firm flesh, in small
+      trusses. Very productive and consistent. Vigorous indeterminate plant.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue à l'apéritif, en salade, confite, séchée]
+  en: [Raw as a snack, in salad, candied, dried]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pâtisson Jaune (Sunburst). Hérite de LEG-040.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-040-V003
+parent_id: LEG-040
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Sunburst'"
+
+i18n:
+  fr:
+    nom_commun: Pâtisson Jaune
+    noms_alternatifs: [Sunburst, Jaune d'or]
+    description: >
+      Pâtisson festonné jaune d'or vif, décoratif et savoureux, à chair tendre.
+      Variété productive à récolter très jeune (5–8 cm) pour le meilleur de sa
+      texture. Plant buissonnant compact.
+  en:
+    nom_commun: Yellow Pattypan (Sunburst)
+    description: >
+      Bright golden-yellow scalloped pattypan, decorative and tasty, with tender
+      flesh. Productive; harvest very young (5–8 cm) for the best texture.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, farci, en gratin, poêlé]
+  en: [Steamed, stuffed, gratin, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%A2tisson
+contributeurs:
+  - "@potagerer"

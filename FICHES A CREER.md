@@ -40,23 +40,23 @@
 - ✅ `V009` Montfavet
 - ✅ `V010` Roma
 - ✅ `V011` Tigerella
-- ⬜ Green Zebra
-- ⬜ Black Cherry
+- ✅ `V012` Tomate Green Zebra
+- ✅ `V013` Tomate Black Cherry
 - ⬜ Cornue des Andes (si distinguée de l'Andine)
-- ⬜ Beefsteak
-- ⬜ Saint-Pierre
+- ✅ `V014` Tomate Beefsteak
+- ✅ `V015` Tomate Saint-Pierre
 - ⬜ Coeur de Boeuf Orange
-- ⬜ Téton de Vénus
+- ✅ `V020` Tomate Téton de Vénus
 - ⬜ Cœur de Bœuf Blanc / Green
 - ⬜ Yellow Submarine (jaune poire)
-- ⬜ Poire jaune / Poire rouge
-- ⬜ Costoluto Fiorentino
-- ⬜ Brandywine
-- ⬜ Gardener's Delight
-- ⬜ Sungold (cerise orange)
-- ⬜ Fantasio (F1 résistante mildiou)
+- ✅ `V021` Tomate Poire Jaune
+- ✅ `V016` Tomate Costoluto Fiorentino
+- ✅ `V017` Tomate Brandywine
+- ✅ `V018` Tomate Gardener's Delight
+- ✅ `V019` Tomate Sungold
+- ✅ `V022` Tomate Fantasio
 - ⬜ Maestria (F1 résistante)
-- ⬜ Cœur de Pigeon
+- ✅ `V023` Tomate Cœur de Pigeon
 
 ### Aubergine — *Solanum melongena* ✅ `LEG-002`
 - ✅ `V001` Violette de Florence
@@ -175,17 +175,17 @@
 
 ### Melon — *Cucumis melo* ✅ `LEG-030`
 > Espèce mère créée (lot « potagères courantes »). Variétés encore à créer :
-- ⬜ Charentais
-- ⬜ Cantaloup de Bellegarde
-- ⬜ Petit Gris de Rennes
-- ⬜ Sucrin de Tours
+- ✅ `V001` Melon Charentais
+- ✅ `V003` Melon Cantaloup de Bellegarde
+- ✅ `V002` Melon Petit Gris de Rennes
+- ✅ `V004` Melon Sucrin de Tours
 - ⬜ Ananas d'Amérique
 - ⬜ Melon d'eau / de conserve
 
 ### Pastèque — *Citrullus lanatus* ✅ `LEG-041`
-- ⬜ Sugar Baby
-- ⬜ Crimson Sweet
-- ⬜ Charleston Gray
+- ✅ `V001` Pastèque Sugar Baby
+- ✅ `V002` Pastèque Crimson Sweet
+- ✅ `V003` Pastèque Charleston Gray
 - ⬜ À confiture (à graines rouges)
 
 ### Gourde / Calebasse — *Lagenaria siceraria* ⬜ *(id à attribuer au moment de la création)*

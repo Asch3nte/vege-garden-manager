@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Tomate Costoluto Fiorentino. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V016
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Costoluto Fiorentino'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Costoluto Fiorentino
+    noms_alternatifs: [Côtelée de Florence]
+    description: >
+      Variété ancienne toscane à fruits rouges fortement côtelés et aplatis, à
+      chair dense et savoureuse, légèrement acidulée. Excellente en sauce et
+      cuite. Plant indéterminé résistant à la chaleur.
+  en:
+    nom_commun: Costoluto Fiorentino Tomato
+    description: >
+      Old Tuscan variety with heavily ribbed, flattened red fruits and dense,
+      flavourful, slightly tart flesh. Excellent in sauce and cooked.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+  - methode: conserves
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [En sauce, cuite, farcie, en salade]
+  en: [In sauce, cooked, stuffed, in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"
