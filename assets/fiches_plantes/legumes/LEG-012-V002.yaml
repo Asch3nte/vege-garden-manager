@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Épinard Monstrueux de Viroflay. Hérite de LEG-012.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-012-V002
+parent_id: LEG-012
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Spinacia oleracea 'Monstrueux de Viroflay'"
+
+i18n:
+  fr:
+    nom_commun: Épinard Monstrueux de Viroflay
+    noms_alternatifs: [Monstrueux de Viroflay]
+    description: >
+      Épinard ancien à très grandes feuilles vert foncé, épaisses et charnues,
+      productif. Vigoureux, il pousse vite ; à récolter jeune pour la tendreté.
+      Adapté aux semis de printemps et d'automne.
+  en:
+    nom_commun: Monstrueux de Viroflay Spinach
+    description: >
+      Old spinach with very large, thick, fleshy dark-green leaves, productive.
+      Vigorous and fast; harvest young for tenderness.
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Blanchir 1 min, presser, puis congeler", en: "Blanch 1 min, press, then freeze" }
+utilisations_culinaires_i18n:
+  fr: [Jeune cru en salade, en branche, en gratin, en quiche]
+  en: [Young raw in salad, sautéed, gratin, quiche]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89pinard
+contributeurs:
+  - "@potagerer"

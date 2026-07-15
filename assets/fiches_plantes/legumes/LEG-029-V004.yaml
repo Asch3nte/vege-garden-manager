@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Bette Blonde à couper (épinard perpétuel). Hérite de LEG-029.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-029-V004
+parent_id: LEG-029
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris var. cicla 'Blonde à couper'"
+
+i18n:
+  fr:
+    nom_commun: Bette Blonde à couper
+    noms_alternatifs: [Blonde à couper, Épinard perpétuel, Poirée à couper]
+    description: >
+      Bette à petites cardes fines et feuilles tendres vert clair, cultivée pour
+      son feuillage récolté feuille à feuille (« épinard perpétuel »). Très
+      rustique et peu montante, elle produit longtemps, même en hiver doux.
+  en:
+    nom_commun: Perpetual Spinach (Leaf Beet)
+    description: >
+      Leaf beet with small, thin ribs and tender pale-green leaves, grown for its
+      foliage picked leaf by leaf ("perpetual spinach"). Very hardy and slow to
+      bolt, cropping over a long period.
+cycle:
+  duree_avant_recolte_jours: [50, 70]
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Comme l'épinard, en branche, en gratin, en quiche]
+  en: [Like spinach, sautéed, gratin, quiche]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Bette_(plante)
+contributeurs:
+  - "@potagerer"

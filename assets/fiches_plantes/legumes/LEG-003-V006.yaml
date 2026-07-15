@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Betterave Blanche Albina. Hérite de LEG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-003-V006
+parent_id: LEG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris 'Albina Vereduna'"
+
+i18n:
+  fr:
+    nom_commun: Betterave Blanche Albina
+    noms_alternatifs: [Albina, Blanche, Albina Vereduna]
+    description: >
+      Betterave à racine ronde à chair entièrement blanche, douce et sucrée, sans
+      coloration. Originale au potager et pratique en cuisine (ne colore pas les
+      plats). Fanes ondulées également comestibles.
+  en:
+    nom_commun: Albina White Beetroot
+    description: >
+      Beetroot with a round root and entirely white, sweet flesh, without staining.
+      Unusual and practical in the kitchen. Wavy leaves also edible.
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Rôtie, cuite en salade, crue râpée ; fanes sautées]
+  en: [Roasted, cooked in salad, raw grated; leaves sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potag%C3%A8re
+contributeurs:
+  - "@potagerer"

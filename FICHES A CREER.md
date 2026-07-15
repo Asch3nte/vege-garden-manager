@@ -430,24 +430,24 @@
 
 ### Betterave — *Beta vulgaris* ✅ `LEG-003`
 - ✅ `V001` Chioggia
-- ⬜ de Détroit / Noire Plate d'Égypte
-- ⬜ Crapaudine
-- ⬜ Blanche / Albina
-- ⬜ Burpee's Golden (jaune)
-- ⬜ Cylindra (allongée)
+- ✅ `V002` Betterave de Détroit
+- ✅ `V003` Betterave Crapaudine
+- ✅ `V006` Betterave Blanche Albina
+- ✅ `V004` Betterave Burpee's Golden
+- ✅ `V005` Betterave Cylindra
 
 ### Bette / Blette (poirée) — *Beta vulgaris* var. *cicla* ✅ `LEG-029`
 > Espèce mère créée (lot « potagères courantes »). Variétés encore à créer :
-- ⬜ Verte à cardes blanches
-- ⬜ à cardes Blondes à couper (épinard perpétuel)
-- ⬜ Bright Lights / Five Colors (multicolore)
-- ⬜ Rhubarb Chard (à carde rouge)
+- ✅ `V001` Bette Verte à cardes blanches
+- ✅ `V004` Bette Blonde à couper
+- ✅ `V002` Bette Bright Lights
+- ✅ `V003` Bette à cardes rouges
 
 ### Épinard — *Spinacia oleracea* ✅ `LEG-012`
 - ✅ `V001` Géant d'Hiver
-- ⬜ Monstrueux de Viroflay
-- ⬜ Matador
-- ⬜ America
+- ✅ `V002` Épinard Monstrueux de Viroflay
+- ✅ `V003` Épinard Matador
+- ✅ `V004` Épinard America
 - ⬜ Butterflay
 
 ### Arroche — *Atriplex hortensis* ⬜ *(id à attribuer au moment de la création)*

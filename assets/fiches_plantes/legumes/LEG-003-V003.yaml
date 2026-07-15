@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Betterave Crapaudine. Hérite de LEG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-003-V003
+parent_id: LEG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris 'Crapaudine'"
+
+i18n:
+  fr:
+    nom_commun: Betterave Crapaudine
+    noms_alternatifs: [Crapaudine]
+    description: >
+      Très ancienne betterave à racine allongée à peau rugueuse et crevassée
+      (d'où son nom), à chair rouge sombre exceptionnellement sucrée et parfumée.
+      Plus lente à pousser mais réputée l'une des meilleures au goût.
+  en:
+    nom_commun: Crapaudine Beetroot
+    description: >
+      A very old beetroot with an elongated, rough, cracked-skinned root (hence
+      its name) and exceptionally sweet, aromatic dark-red flesh. Slower-growing
+      but rated among the best-tasting.
+cycle:
+  duree_avant_recolte_jours: [90, 120]
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Rôtie au four, cuite en salade, en carpaccio]
+  en: [Oven-roasted, cooked in salad, carpaccio]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potag%C3%A8re
+contributeurs:
+  - "@potagerer"

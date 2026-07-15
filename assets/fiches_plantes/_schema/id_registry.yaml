@@ -49,6 +49,11 @@ legumes:
   LEG-002-V005: Aubergine Ronde de Valence
   LEG-003: Betterave
   LEG-003-V001: Betterave Chioggia
+  LEG-003-V002: Betterave de Détroit
+  LEG-003-V003: Betterave Crapaudine
+  LEG-003-V004: Betterave Burpee's Golden
+  LEG-003-V005: Betterave Cylindra
+  LEG-003-V006: Betterave Blanche Albina
   LEG-004: Carotte
   LEG-004-V001: Carotte Nantaise Améliorée
   LEG-004-V002: Carotte de Colmar à cœur rouge
@@ -95,6 +100,9 @@ legumes:
   LEG-011-V005: Courgette Costata Romanesca
   LEG-012: Épinard
   LEG-012-V001: Épinard Géant d'Hiver
+  LEG-012-V002: Épinard Monstrueux de Viroflay
+  LEG-012-V003: Épinard Matador
+  LEG-012-V004: Épinard America
   LEG-013: Haricot
   LEG-013-V001: Haricot vert Fin de Bagnols
   LEG-013-V002: Haricot Contender
@@ -189,6 +197,10 @@ legumes:
   LEG-027-V003: Échalote Cuisse de Poulet
   LEG-028: Mâche
   LEG-029: Bette (poirée)
+  LEG-029-V001: Bette Verte à cardes blanches
+  LEG-029-V002: Bette Bright Lights
+  LEG-029-V003: Bette à cardes rouges
+  LEG-029-V004: Bette Blonde à couper
   LEG-030: Melon
   LEG-030-V001: Melon Charentais
   LEG-030-V002: Melon Petit Gris de Rennes

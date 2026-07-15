@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Bette Verte à cardes blanches. Hérite de LEG-029.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-029-V001
+parent_id: LEG-029
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris var. cicla 'Verte à cardes blanches'"
+
+i18n:
+  fr:
+    nom_commun: Bette Verte à cardes blanches
+    noms_alternatifs: [Verte à carde blanche, Poirée blanche]
+    description: >
+      Bette classique à larges feuilles vert foncé cloquées et cardes blanches
+      épaisses. Deux légumes en un : le vert se cuit comme l'épinard, les cardes
+      comme un légume à part. Productive et rustique.
+  en:
+    nom_commun: White-ribbed Chard
+    description: >
+      Classic chard with broad, savoyed dark-green leaves and thick white ribs.
+      Two vegetables in one: the greens cook like spinach, the ribs as a dish of
+      their own. Productive and hardy.
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vert en gratin/en branche, cardes en gratin, en tourte, en poêlée]
+  en: [Greens as gratin/sautéed, ribs in gratin, in pie, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Bette_(plante)
+contributeurs:
+  - "@potagerer"
