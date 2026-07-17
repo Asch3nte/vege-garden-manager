@@ -64,10 +64,15 @@ Stocké dans `preferences.notifications_par_categorie` (JSON) +
 
 ## 6. Catégorie 5 — Transparence des données (principe UX n°6)
 
-- Visualisation des données stockées : liste des tables, nombre d'enregistrements,
-  taille sur disque.
-- Journal des accès aux données sensibles (géolocalisation, notifications).
-- Politique de confidentialité : texte clair, **hors-ligne**, consultable à tout moment.
+- ✅ **Visualisation des données stockées** (livré 2026-07-17) : section
+  « Données stockées » du panneau Données — liste des tables, nombre
+  d'enregistrements par table, taille de la base sur l'appareil.
+- ⏭️ **Journal des accès aux données sensibles** (géolocalisation, notifications)
+  — **différé** : nécessiterait un sous-système de journalisation à instrumenter
+  partout ; valeur discutable pour une app 100 % locale (à reconsidérer si le
+  besoin émerge).
+- ⏭️ **Politique de confidentialité** : texte clair, **hors-ligne**, consultable
+  à tout moment — **à rédiger** (contenu éditorial du dev).
 
 ## 7. Catégorie 6 — À propos
 

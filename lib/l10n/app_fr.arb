@@ -1567,6 +1567,34 @@
   "@categDonnees": { "description": "Titre de la catégorie de paramètres dédiée aux données (export/import/reset)." },
   "categDonneesSub": "Exporter, importer, réinitialiser",
   "@categDonneesSub": { "description": "Sous-titre de la catégorie Sauvegarde & données." },
+  "donneesStockageSectionTitre": "Données stockées",
+  "@donneesStockageSectionTitre": { "description": "Titre de la section transparence des données (docs/11 §6)." },
+  "donneesStockageNote": "Ce que l'application conserve sur cet appareil. Aucune donnée n'est envoyée sur un serveur.",
+  "@donneesStockageNote": { "description": "Note explicative de la section données stockées." },
+  "donneesStockageTaille": "Taille sur l'appareil",
+  "@donneesStockageTaille": { "description": "Libellé de la taille de la base sur disque." },
+  "donneesStockageTotalLignes": "{count, plural, =0{Aucun enregistrement} =1{1 enregistrement au total} other{{count} enregistrements au total}}",
+  "@donneesStockageTotalLignes": {
+    "description": "Nombre total d'enregistrements toutes tables confondues.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "donneesStockageErreur": "Impossible de lire les statistiques de stockage.",
+  "@donneesStockageErreur": { "description": "État d'erreur de la section données stockées." },
+  "donneesTailleOctets": "{o} o",
+  "@donneesTailleOctets": {
+    "description": "Taille en octets.",
+    "placeholders": { "o": { "type": "int" } }
+  },
+  "donneesTailleKo": "{ko} Ko",
+  "@donneesTailleKo": {
+    "description": "Taille en kilo-octets (1 décimale).",
+    "placeholders": { "ko": { "type": "String" } }
+  },
+  "donneesTailleMo": "{mo} Mo",
+  "@donneesTailleMo": {
+    "description": "Taille en méga-octets (1 décimale).",
+    "placeholders": { "mo": { "type": "String" } }
+  },
   "donneesResetSectionTitre": "Réinitialisation",
   "@donneesResetSectionTitre": { "description": "Titre de la section de réinitialisation des données." },
   "donneesResetBouton": "Réinitialiser toutes les données",

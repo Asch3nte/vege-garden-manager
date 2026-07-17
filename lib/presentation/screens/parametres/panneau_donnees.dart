@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/providers/service_providers.dart';
 import '../../../application/state/preferences_notifier.dart';
+import '../../../application/state/statistiques_donnees_notifier.dart';
 import '../../../domain/enums/mode_import.dart';
 import '../../../domain/exceptions/sauvegarde_invalide_exception.dart';
 import '../../../l10n/app_localizations.dart';
@@ -43,6 +44,7 @@ class PanneauDonnees extends ConsumerWidget {
             ),
           ],
         ),
+        const _SectionStockage(),
         ZoneParametres(
           titre: l10n.donneesResetSectionTitre,
           note: l10n.donneesResetNote,
@@ -160,6 +162,91 @@ class PanneauDonnees extends ConsumerWidget {
     // then redirects to the onboarding.
     ref.invalidate(preferencesProvider);
     invaliderVuesDonnees(ref);
+  }
+}
+
+/// Data-transparency section (docs/11 §6): the database's on-disk size and the
+/// per-table record counts — read live from the SQLite database, so the user
+/// can see exactly what the app keeps on this device (nothing leaves it).
+class _SectionStockage extends ConsumerWidget {
+  const _SectionStockage();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final stats = ref.watch(statistiquesDonneesProvider);
+
+    return ZoneParametres(
+      titre: l10n.donneesStockageSectionTitre,
+      note: l10n.donneesStockageNote,
+      enfants: [
+        stats.when(
+          loading: () => const Padding(
+            padding: EdgeInsets.all(16),
+            child: Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          ),
+          error: (_, _) => Material(
+            type: MaterialType.transparency,
+            child: ListTile(
+              leading: Icon(Icons.error_outline, color: theme.colorScheme.error),
+              title: Text(l10n.donneesStockageErreur),
+              trailing: TextButton(
+                onPressed: () => ref.invalidate(statistiquesDonneesProvider),
+                child: Text(l10n.actionReessayer),
+              ),
+            ),
+          ),
+          data: (s) => Column(
+            children: [
+              Material(
+                type: MaterialType.transparency,
+                child: ListTile(
+                  leading: const Icon(Icons.sd_storage_outlined),
+                  title: Text(l10n.donneesStockageTaille),
+                  subtitle: Text(l10n.donneesStockageTotalLignes(s.totalLignes)),
+                  trailing: Text(
+                    _formaterTaille(l10n, s.tailleOctets),
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+              ),
+              for (final t in s.tables) ...[
+                const Divider(height: 1),
+                Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    dense: true,
+                    title: Text(t.nom, style: theme.textTheme.bodyMedium),
+                    trailing: Text(
+                      '${t.lignes}',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Formats a byte count into a compact localised size (o / Ko / Mo), one
+  /// decimal above the byte range.
+  static String _formaterTaille(AppLocalizations l10n, int octets) {
+    if (octets < 1024) return l10n.donneesTailleOctets(octets);
+    final ko = octets / 1024;
+    if (ko < 1024) return l10n.donneesTailleKo(ko.toStringAsFixed(1));
+    final mo = ko / 1024;
+    return l10n.donneesTailleMo(mo.toStringAsFixed(1));
   }
 }
 
