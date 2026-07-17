@@ -414,6 +414,9 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(true))();
   BoolColumn get syncLocaleActive =>
       boolean().withDefault(const Constant(false))();
+  // Auto weather-fetch opt-out (docs/11): true = fetch Open-Meteo automatically.
+  BoolColumn get meteoAutoActive =>
+      boolean().withDefault(const Constant(true))();
   BoolColumn get communauteOptIn =>
       boolean().withDefault(const Constant(false))();
   BoolColumn get calendrierLunaireOptIn =>

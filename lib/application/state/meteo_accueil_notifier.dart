@@ -6,6 +6,7 @@ import '../engine/bilan_arrosage.dart';
 import '../providers/repository_providers.dart';
 import '../providers/service_providers.dart';
 import 'meteo_accueil_vue.dart';
+import 'preferences_notifier.dart';
 
 /// Builds the home **weather card** view-model: today's conditions and a
 /// garden-level watering verdict for the active garden's position.
@@ -17,6 +18,13 @@ import 'meteo_accueil_vue.dart';
 class MeteoAccueilNotifier extends AsyncNotifier<MeteoAccueilVue> {
   @override
   Future<MeteoAccueilVue> build() async {
+    // Auto weather-fetch opt-out (docs/11): with it off, the card is muted and
+    // no automatic Open-Meteo call is made (constraint #3).
+    final prefs = await ref.watch(preferencesProvider.future);
+    if (!prefs.meteoAutoActive) {
+      return MeteoAccueilVue.desactivee();
+    }
+
     final potager =
         await ref.watch(potagerRepositoryProvider).obtenirPotagerActif();
     if (potager == null || !potager.localisation.estDefinie) {

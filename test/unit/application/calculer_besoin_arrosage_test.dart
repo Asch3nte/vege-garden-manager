@@ -195,6 +195,19 @@ void main() {
         joursPasses: any(named: 'joursPasses')));
   });
 
+  test('skips weather entirely when auto weather-fetch is off (opt-out)',
+      () async {
+    final c = await useCase.executer(
+      plantation: plantation,
+      localisation: loc,
+      meteoAutoActive: false,
+    );
+    // Advice still produced (demand-only), but no Open-Meteo call is made.
+    expect(c, isNotNull);
+    verifyNever(() => meteo.obtenirPrevisions(loc, any(),
+        joursPasses: any(named: 'joursPasses')));
+  });
+
   test('heatwave (tempMax=36°C) promotes modere plant to arroserMaintenant',
       () async {
     // Forecast with first prevu day at 36°C, no rain.

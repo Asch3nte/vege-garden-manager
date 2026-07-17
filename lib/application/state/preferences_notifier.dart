@@ -77,6 +77,11 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> terminerOnboarding() =>
       _modifier((p) => p.copierAvec(onboardingTermine: true));
 
+  /// Toggles automatic weather fetching (docs/11 opt-out). When off, no Open-Meteo
+  /// call is made automatically (home card, watering advice, alerts).
+  Future<void> definirMeteoAuto(bool actif) =>
+      _modifier((p) => p.copierAvec(meteoAutoActive: actif));
+
   /// Sets the do-not-disturb window (`HH:MM` bounds); notifications whose time
   /// falls inside are suppressed by the Application layer (docs/11, opt-out #3).
   Future<void> definirNePasDeranger(String debut, String fin) =>

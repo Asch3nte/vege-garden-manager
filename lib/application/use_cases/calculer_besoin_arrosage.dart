@@ -21,9 +21,10 @@ import '../providers/service_providers.dart';
 /// [BilanArrosage].
 ///
 /// Returns `null` only when the plant is absent from the catalogue (no water
-/// need to reason about). When the location is undefined or the weather is
-/// unavailable offline, the advice is still produced from the plant + soil +
-/// equipment demand alone (rain figures simply omitted).
+/// need to reason about). When the location is undefined, the weather is
+/// unavailable offline, or the auto-fetch opt-out ([meteoAutoActive]) is off,
+/// the advice is still produced from the plant + soil + equipment demand alone
+/// (rain figures simply omitted).
 class CalculerBesoinArrosage {
   final AbstractFichePlanteRepository _fiches;
   final AbstractParcelleRepository _parcelles;
@@ -44,6 +45,7 @@ class CalculerBesoinArrosage {
     required Localisation localisation,
     int joursRecents = 5,
     int joursFuturs = 3,
+    bool meteoAutoActive = true,
   }) async {
     final fiche = await _fiches.obtenirParId(plantation.planteId);
     if (fiche == null) return null;
@@ -62,7 +64,10 @@ class CalculerBesoinArrosage {
     double probabilitePluiePrevu = 1.0;
     double? tempMax;
     double? et0Mm;
-    if (localisation.estDefinie) {
+    // Weather is fetched only when a position exists AND the auto-fetch opt-out
+    // is on (docs/11): with it off, the advice degrades to demand-only, exactly
+    // like the offline/no-position case — no automatic Open-Meteo call is made.
+    if (localisation.estDefinie && meteoAutoActive) {
       try {
         final fenetre = await _meteo.obtenirPrevisions(
           localisation,

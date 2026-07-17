@@ -203,6 +203,14 @@ class _CarteMeteo extends ConsumerWidget {
         null,
       ),
       data: (vue) {
+        // Auto weather-fetch opt-out is off (docs/11): muted, no fetch happened.
+        if (vue.meteoDesactivee) {
+          return (
+            Icons.cloud_off_outlined,
+            Text(l10n.meteoDesactivee, style: muted),
+            null,
+          );
+        }
         if (!vue.disponible) {
           return (
             Icons.location_off_outlined,

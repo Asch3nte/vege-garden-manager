@@ -28,6 +28,7 @@ class PreferencesUtilisateur {
   final ModeGeolocalisation _modeGeolocalisation;
   final bool _notificationsGlobalesActives;
   final bool _syncLocaleActive;
+  final bool _meteoAutoActive;
   final bool _communauteOptIn;
   final bool _calendrierLunaireOptIn;
   final bool _aideContextuelleActive;
@@ -48,6 +49,7 @@ class PreferencesUtilisateur {
     this._modeGeolocalisation,
     this._notificationsGlobalesActives,
     this._syncLocaleActive,
+    this._meteoAutoActive,
     this._communauteOptIn,
     this._calendrierLunaireOptIn,
     this._aideContextuelleActive,
@@ -74,6 +76,7 @@ class PreferencesUtilisateur {
     ModeGeolocalisation modeGeolocalisation = ModeGeolocalisation.desactivee,
     bool notificationsGlobalesActives = true,
     bool syncLocaleActive = false,
+    bool meteoAutoActive = true,
     bool communauteOptIn = false,
     bool calendrierLunaireOptIn = false,
     bool aideContextuelleActive = true,
@@ -94,6 +97,7 @@ class PreferencesUtilisateur {
         modeGeolocalisation,
         notificationsGlobalesActives,
         syncLocaleActive,
+        meteoAutoActive,
         communauteOptIn,
         calendrierLunaireOptIn,
         aideContextuelleActive,
@@ -115,6 +119,12 @@ class PreferencesUtilisateur {
   ModeGeolocalisation get modeGeolocalisation => _modeGeolocalisation;
   bool get notificationsGlobalesActives => _notificationsGlobalesActives;
   bool get syncLocaleActive => _syncLocaleActive;
+
+  /// Whether the app may fetch weather from Open-Meteo **automatically** (home
+  /// card, watering advice, weather alerts). When `false`, no automatic network
+  /// call is made — the weather card is hidden and only the detail screen still
+  /// refreshes on explicit user action (docs/11 opt-out, absolute constraint #3).
+  bool get meteoAutoActive => _meteoAutoActive;
   bool get communauteOptIn => _communauteOptIn;
   bool get calendrierLunaireOptIn => _calendrierLunaireOptIn;
   bool get aideContextuelleActive => _aideContextuelleActive;
@@ -161,6 +171,7 @@ class PreferencesUtilisateur {
     ModeGeolocalisation? modeGeolocalisation,
     bool? notificationsGlobalesActives,
     bool? syncLocaleActive,
+    bool? meteoAutoActive,
     bool? communauteOptIn,
     bool? calendrierLunaireOptIn,
     bool? aideContextuelleActive,
@@ -180,6 +191,7 @@ class PreferencesUtilisateur {
         notificationsGlobalesActives:
             notificationsGlobalesActives ?? _notificationsGlobalesActives,
         syncLocaleActive: syncLocaleActive ?? _syncLocaleActive,
+        meteoAutoActive: meteoAutoActive ?? _meteoAutoActive,
         communauteOptIn: communauteOptIn ?? _communauteOptIn,
         calendrierLunaireOptIn:
             calendrierLunaireOptIn ?? _calendrierLunaireOptIn,
@@ -214,6 +226,7 @@ class PreferencesUtilisateur {
         modeGeolocalisation: _modeGeolocalisation,
         notificationsGlobalesActives: _notificationsGlobalesActives,
         syncLocaleActive: _syncLocaleActive,
+        meteoAutoActive: _meteoAutoActive,
         communauteOptIn: _communauteOptIn,
         calendrierLunaireOptIn: _calendrierLunaireOptIn,
         aideContextuelleActive: _aideContextuelleActive,
@@ -237,6 +250,7 @@ class PreferencesUtilisateur {
       other._modeGeolocalisation == _modeGeolocalisation &&
       other._notificationsGlobalesActives == _notificationsGlobalesActives &&
       other._syncLocaleActive == _syncLocaleActive &&
+      other._meteoAutoActive == _meteoAutoActive &&
       other._communauteOptIn == _communauteOptIn &&
       other._calendrierLunaireOptIn == _calendrierLunaireOptIn &&
       other._aideContextuelleActive == _aideContextuelleActive &&
@@ -259,6 +273,7 @@ class PreferencesUtilisateur {
         Object.hash(
           _notificationsGlobalesActives,
           _syncLocaleActive,
+          _meteoAutoActive,
           _communauteOptIn,
           _calendrierLunaireOptIn,
           _aideContextuelleActive,

@@ -231,9 +231,9 @@ Polymorphisme dès que pertinent.
   (mini-tuto « Guide des niveaux » + teaser de montée — vérifié 2026-07-17)
 - maquettes dark mode · Rebrancher **Phosphor Icons** (package cassé sur
   Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
-- Finitions légères (docs/15 §2) : toggles paramètres (transparence des données,
-  météo auto, « Ne pas déranger »), sous-routes go_router restantes, écran
-  notifications d'accueil
+- Finitions légères (docs/15 §2) : toggles paramètres (transparence des données ;
+  **« météo auto » ✅ et « Ne pas déranger » ✅ livrés**), sous-routes go_router
+  restantes, écran notifications d'accueil
 - Distribution / **pré-release** : CI ✅ analyze+test (reste le job
   build/signature d'APK), keystore release réel, icône & splash, packaging
   multiplateforme (Linux AppImage/Flatpak, .exe, .dmg, .ipa)
