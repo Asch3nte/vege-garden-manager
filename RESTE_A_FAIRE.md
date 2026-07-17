@@ -35,6 +35,10 @@
 > tout (noms dans le titre + « +N », liste complète dans le corps) — anti-spam,
 > détail maximal. Brouillon **politique de confidentialité**
 > (`docs/politique-confidentialite.md`) livré. Branche `feat/detail-tache`.
+> Mis à jour le 2026-07-18 (suite) : **audit i18n** — nouveau **§4bis** listant
+> le texte UI encore codé en français en dur (résumé météo, tâches/notifs
+> d'arrosage, `_moisFr` ×4, 1 placeholder). **Borné** (pas un chantier
+> global) ; à corriger avec/avant la traduction `en`.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
@@ -189,6 +193,9 @@ Réservées par palier mais sans UI ni donnée :
 - ⚠️ **Vérification développeur Android** (Google, rollout global 2027) —
   démarche d'identité du **dev**, non-code, à décider avant la sortie grand
   public (docs/15 §7)
+- **Prérequis à la traduction `en`** : corriger d'abord la **dette i18n**
+  (texte UI codé en FR en dur — voir **§4bis**), sinon ces chaînes resteront en
+  français quelle que soit la langue choisie.
 
 ## 4. Backlog UX (docs/15 §8) — restes non-design
 
@@ -196,6 +203,49 @@ Réservées par palier mais sans UI ni donnée :
 - **§11** : (a) typer/renseigner le contenu éditorial des paires
   d'associations (mi-contenu, mi-dev) ; (c) brancher un `ResolveurFamille`
   complet pour activer les suggestions répulsion/piège (aujourd'hui `null`)
+
+## 4bis. Dette i18n — texte UI codé en français en dur (à corriger)
+
+> ⚠️ **Règle projet** : tout texte visible par l'utilisateur doit passer par
+> l'i18n (ARB `AppLocalizations`), **toujours**. Quelques endroits y ont
+> échappé — à réparer avant la traduction `en` (§3). **Bonne nouvelle : c'est
+> borné** (l'UI est déjà i18n à ~167 endroits `AppLocalizations.of(context)`).
+> Audit du 2026-07-18 : sur 29 littéraux accentués, seuls ceux ci-dessous sont
+> du vrai texte UI (le reste = tables de normalisation d'accents, clés de
+> données, noms de mois — voir plus bas).
+
+Vrai texte UI à faire passer en ARB :
+
+- **`application/engine/generateur_resume_meteo.dart`** (~8 chaînes) — **le plus
+  gros** : tout le résumé météo affiché (« Vent très fort », « Pluie prévue
+  prochainement… », « Temps ensoleillé/Ensoleillé », les 4 verdicts d'arrosage).
+  Générateur de la couche **application** → pas de `BuildContext`, d'où le
+  contournement.
+- **`application/use_cases/generer_taches_arrosage.dart`** — titres de tâches
+  (« Arroser : X ») **persistés en base** + textes de notification. ⚠️ cas
+  double : le titre stocké **fige la langue** → la vraie correction est de **ne
+  pas persister de titre localisé** mais de le **dériver à l'affichage** depuis
+  `type` + cible (déjà porté par `Tache`). Notifications = injecter un
+  fournisseur de textes localisés (garde la couche Application sans Flutter).
+- **`presentation/screens/ecran_en_construction.dart`** — « Écran à venir. »
+  (placeholder, trivial).
+- **Tableaux `_moisFr`** dupliqués dans **4** fichiers (`ecran_meteo_detail`,
+  `ecran_notifications`, `ecran_calendrier`, `ecran_tache_detail`) — noms de mois
+  FR en dur ; devraient venir de `intl`/`DateFormat` localisé. **Double dette** :
+  i18n **et** duplication (à factoriser en un helper unique).
+
+**Non concernés** (à laisser tels quels) : jeux de caractères `àâä…` =
+normalisation d'accents pour la recherche (`bioagresseur`, `famille_botanique`,
+`precedent_cultural`, `vue_reseau_catalogue`, `recherche_glossaire`) ; clé de
+donnée `"défavorable"` (`verificateur_integrite_familles`).
+
+> Racine commune : les **générateurs de la couche application** (résumé météo,
+> tâches d'arrosage) produisent du texte utilisateur **sans `BuildContext`**,
+> alors que la règle « pas de Flutter dans Application » interdit
+> `AppLocalizations.of(context)`. Correctif propre : injecter une petite
+> **interface de textes localisés** (implémentée côté présentation) dans ces
+> use cases — ou, pour les titres de tâches, **dériver à l'affichage** au lieu
+> de persister. À faire **avec/avant la traduction `en`** (§3), pas en urgence.
 
 ## 5. V1.1 (docs/13 §2)
 
