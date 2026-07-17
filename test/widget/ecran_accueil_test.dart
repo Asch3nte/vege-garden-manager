@@ -359,4 +359,79 @@ void main() {
     expect(find.widgetWithText(AppBar, 'Carré nord'), findsOneWidget);
     expect(find.text('Cultures'), findsOneWidget);
   });
+
+  testWidgets('the header bell opens the notifications inbox', (tester) async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    final router = GoRouter(
+      initialLocation: RoutesApp.accueil,
+      routes: [
+        GoRoute(
+          path: RoutesApp.accueil,
+          builder: (context, state) => const EcranAccueil(),
+          routes: [
+            GoRoute(
+              path: RoutesApp.accueilNotificationsSegment,
+              builder: (context, state) =>
+                  const Scaffold(body: Text('INBOX')),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: base(),
+        child: MaterialApp.router(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Notifications'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('INBOX'), findsOneWidget);
+  });
+
+  testWidgets('the "see all tasks" link opens the agenda', (tester) async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    final router = GoRouter(
+      initialLocation: RoutesApp.accueil,
+      routes: [
+        GoRoute(
+          path: RoutesApp.accueil,
+          builder: (context, state) => const EcranAccueil(),
+        ),
+        GoRoute(
+          path: RoutesApp.calendrier,
+          builder: (context, state) => const Scaffold(body: Text('AGENDA')),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: base(),
+        child: MaterialApp.router(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Voir toutes les tâches'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('AGENDA'), findsOneWidget);
+  });
 }

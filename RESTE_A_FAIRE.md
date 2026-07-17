@@ -17,6 +17,11 @@
 > Mis à jour le 2026-07-17 (soir, suite) : livraison du **toggle « Météo
 > automatique »** (opt-out docs/11 rendu effectif — aucun appel Open-Meteo
 > automatique quand off ; branche `feat/toggle-meteo-auto`) ; entrées rayées.
+> Mis à jour le 2026-07-17 (soir, suite 2) : livraison de l'**écran
+> notifications d'accueil** (`/accueil/notifications` : alertes météo + cloche +
+> lien « Voir toutes les tâches » ; branche `feat/accueil-notifications`) et
+> **arbitrage des sous-routes go_router** (fiche = modale, détail tâche
+> redondant) ; entrées rayées.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
@@ -82,10 +87,22 @@ Réservées par palier mais sans UI ni donnée :
 
 ## 2. Éléments différés docs/15 — non-design
 
-- **Navigation** : sous-routes go_router restantes (détail tâche, fiche
-  plante en route dédiée)
-- **Accueil** : écran notifications + menu ⋮ (actions d'en-tête), lien « voir
-  les tâches » → Calendrier
+- ~~**Navigation** : sous-routes go_router restantes (détail tâche, fiche
+  plante en route dédiée)~~ ✅ **arbitré** (2026-07-17) : **fiche plante gardée
+  en modale** (`showModalBottomSheet`, bien intégrée + meilleure UX — décision
+  dev) ; **détail tâche jugé redondant** (une tâche est déjà cochable + éditable
+  via `ouvrirFormulaireTache` + supprimable → pas de route dédiée). Seule
+  sous-route ajoutée : `/accueil/notifications` (voir Accueil ci-dessous).
+- ~~**Accueil** : écran notifications + menu ⋮ (actions d'en-tête), lien « voir
+  les tâches » → Calendrier~~ ✅ **fait** (2026-07-17) : écran
+  `EcranNotifications` (route `/accueil/notifications`) surfaçant les **alertes
+  météo** (gel/canicule/forte pluie de `DetecterAlertesMeteo`, jusqu'ici
+  seulement comptées) via un provider partagé `alertesMeteoProvider` (**source
+  unique** : le badge de la cloche == la liste) ; **cloche** dans l'AppBar
+  d'accueil (badge = nombre d'alertes) ; **lien « Voir toutes les tâches »** →
+  Calendrier en pied de section « Tâches du jour ». Le « menu ⋮ » est résolu par
+  la cloche (le tableau de bord, read-only, n'a pas d'autre action d'en-tête).
+  Provider + widget + navigation testés en //.
 - **Potager** : la **création fonctionne déjà** partout (FAB « ajouter une zone »
   dans `ecran_potager.dart`, potager via menu ⋮, plantation via détail de zone) ;
   reste seulement, **optionnel**, les métadonnées de zone (besoin eau/dimensions
@@ -181,8 +198,8 @@ Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
    ✅ **tranché** (2026-07-17) : **reporté en V1.1** — [ADR-0019](docs/decisions/0019-report-post-recolte-v11.md)
    (Accepté). Périmètre V1 fermé ; docs/13 §1→§2 alignés, docstring
    `ecran_plus.dart` alignée, clés ARB `plusPostRecolte(Sub)` réservées V1.1.
-   Reste, plus léger : finitions §2 (transparence des données, sous-routes
-   go_router, écran notifications d'accueil).
+   Reste, plus léger : finitions §2 (transparence des données ; ~~sous-routes
+   go_router~~ ✅ arbitré, ~~écran notifications d'accueil~~ ✅ livré).
 
 Tout le reste se range en :
 
@@ -191,8 +208,10 @@ Tout le reste se range en :
   éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
 - **Finitions légères** (docs/15 §2) : toggles paramètres restants (transparence
   des données — les **« Ne pas déranger »** et **« météo auto » sont ✅ livrés**,
-  cf. § Paramètres), sous-routes go_router restantes, écran notifications d'accueil,
-  `ResolveurFamille` complet (§11).
+  cf. § Paramètres) ; ~~sous-routes go_router restantes~~ ✅ **arbitré** (fiche =
+  modale, détail tâche redondant, `/accueil/notifications` ajoutée) ; ~~écran
+  notifications d'accueil~~ ✅ **livré** ; `ResolveurFamille` complet (§11).
+  **Reste vraiment : la « transparence des données ».**
 - **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
   **post-récolte (conservation, recettes — reporté, ADR-0019)**, conformité
   territoriale, communauté P2P, plan spatial, calendrier lunaire.
