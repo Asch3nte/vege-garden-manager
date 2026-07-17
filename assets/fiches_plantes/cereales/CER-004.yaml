@@ -1,0 +1,114 @@
+# Fiche mère (espèce) — Amarante.
+# Rédigée à la main (lot « céréales »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: CER-004
+version_fiche: 1
+categorie: cereale
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - ornementale
+
+rusticite:
+  zone_min: zone8
+nom_scientifique: Amaranthus caudatus
+famille_botanique: Amaranthaceae
+
+i18n:
+  fr:
+    nom_commun: Amarante
+    noms_alternatifs: [Amarante queue-de-renard, Discipline de religieuse]
+    description: >
+      Pseudo-céréale de la famille des Amaranthacées, à la fois ornementale
+      (longs épis retombants) et nourricière : ses minuscules graines très
+      protéinées et ses jeunes feuilles se consomment. Plante en C4, vigoureuse
+      et résistante à la chaleur et à la sécheresse.
+    conseils_culture: >
+      Semer après les dernières gelées (frileuse), en sol réchauffé. Éclaircir
+      les jeunes plants. Croissance rapide en été. Récolter les feuilles jeunes
+      au fil des besoins ; laisser mûrir les épis pour la récolte des graines.
+    conseils_recolte: >
+      Feuilles : cueillir jeunes comme des épinards. Graines : couper les épis
+      quand ils sèchent et qu'ils libèrent les grains au froissement, puis
+      battre et vanner. Séchage complet avant stockage.
+    erreurs_frequentes:
+      - Semis trop précoce (très sensible au froid)
+      - La cultiver après épinard, betterave ou quinoa (même famille)
+      - La laisser grainer partout (ressemis abondant)
+  en:
+    nom_commun: Amaranth
+    noms_alternatifs: [Love-lies-bleeding, Tassel flower]
+    description: >
+      A pseudo-cereal of the Amaranthaceae family, both ornamental (long drooping
+      tassels) and edible: its tiny protein-rich seeds and young leaves are
+      eaten. A vigorous C4 plant tolerant of heat and drought.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 15
+  temperature_optimale: 25
+  temperature_min_survie: 3
+  gele_fatal: true
+  temperature_max_tolerance: 38
+  tolerance_secheresse: forte
+cycle:
+  enracinement: pivotant
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [100, 130]
+  hauteur_adulte_cm: [100, 200]
+  espacement_cm: 40
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [4, 4]
+      semis_exterieur: [5, 6]
+      recolte: [9, 10]
+    continental:
+      semis_exterieur: [5, 6]
+      recolte: [9, 10]
+    mediterraneen:
+      semis_exterieur: [4, 6]
+      recolte: [8, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [10, 12]
+      recolte: [3, 4]
+associations:
+  beneficies: []
+  defavorables:
+    - id: CER-003
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Même famille que le quinoa (Amaranthacées), ravageurs partagés", en: "Same family as quinoa (Amaranthaceae), shared pests" }
+    - id: LEG-012
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Même famille que l'épinard, mêmes ravageurs foliaires", en: "Same family as spinach, same leaf pests" }
+    - id: LEG-003
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Même famille que la betterave", en: "Same family as beetroot" }
+rotation:
+  famille: amaranthaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, fabaceae]
+  precedents_defavorables: [amaranthaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Amaranthus_caudatus  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,118 @@
+# Fiche mère (espèce) — Maïs doux.
+# Rédigée à la main (lot « céréales »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: CER-001
+version_fiche: 1
+categorie: cereale
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - tuteur_vivant
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Zea mays
+famille_botanique: Poaceae
+
+i18n:
+  fr:
+    nom_commun: Maïs doux
+    noms_alternatifs: [Maïs sucré, Blé d'Inde]
+    description: >
+      Céréale annuelle de la famille des Poacées, cultivée pour ses épis
+      sucrés récoltés au stade laiteux. Pilier de la « milpa » (les trois
+      sœurs) : sa tige robuste sert de tuteur vivant au haricot grimpant,
+      tandis que la courge couvre le sol à ses pieds.
+    conseils_culture: >
+      Semer après les dernières gelées, en blocs serrés (plusieurs rangs
+      rapprochés) plutôt qu'en ligne unique : la pollinisation se fait par le
+      vent et exige la proximité des plants. Sol riche et frais, arrosages
+      soutenus à la floraison et au remplissage des grains.
+    conseils_recolte: >
+      Récolter au stade laiteux : les soies (barbes) brunissent et un grain
+      pressé à l'ongle libère un jus laiteux. La teneur en sucre chute vite
+      après récolte : consommer ou transformer dans les heures qui suivent.
+    erreurs_frequentes:
+      - Semer en une seule ligne (pollinisation ratée, épis incomplets)
+      - Récolter trop tard (grains farineux, perte de sucre)
+      - Manque d'eau à la floraison (épis mal remplis)
+  en:
+    nom_commun: Sweet corn
+    noms_alternatifs: [Sugar corn]
+    description: >
+      An annual Poaceae grown for its sweet ears harvested at the milk stage.
+      Cornerstone of the "three sisters": its sturdy stalk is a living stake for
+      climbing beans while squash covers the ground below.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 5.8
+  ph_max: 7.0
+  temperature_min_germination: 10
+  temperature_optimale: 24
+  temperature_min_survie: 2
+  gele_fatal: true
+  temperature_max_tolerance: 35
+  tolerance_secheresse: faible
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 12]
+  duree_avant_recolte_jours: [70, 100]
+  hauteur_adulte_cm: [150, 250]
+  espacement_cm: 35
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [4, 4]
+      semis_exterieur: [5, 6]
+      recolte: [8, 10]
+    continental:
+      semis_exterieur: [5, 6]
+      recolte: [8, 10]
+    mediterraneen:
+      semis_exterieur: [4, 6]
+      recolte: [7, 9]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [10, 12]
+      recolte: [2, 4]
+associations:
+  beneficies:
+    - id: LEG-013
+      type: [tuteur_structurel, fixation_azote]
+      raison_i18n: { fr: "Trois sœurs : la tige tuteure le haricot, qui fixe l'azote en retour", en: "Three sisters: the stalk stakes the bean, which fixes nitrogen in return" }
+    - id: LEG-010
+      type: couvre_sol
+      raison_i18n: { fr: "Trois sœurs : la courge couvre le sol et limite les adventices", en: "Three sisters: squash covers the ground and limits weeds" }
+    - id: LEG-021
+      type: couvre_sol
+      raison_i18n: { fr: "Trois sœurs : le potimarron ombrage le pied et garde la fraîcheur", en: "Three sisters: the squash shades the base and keeps moisture" }
+  defavorables:
+    - id: LEG-001
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Partage la noctuelle (ver de l'épi et de la tomate)", en: "Shares the corn earworm / tomato fruitworm" }
+rotation:
+  famille: poaceae
+  delai_retour_annees: 2
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [poaceae]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Ma%C3%AFs_doux  # description
+contributeurs:
+  - "@potagerer"

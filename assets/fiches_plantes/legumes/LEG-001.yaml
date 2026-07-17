@@ -98,17 +98,17 @@ associations:
     - id: ARO-001
       type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les pucerons, améliore le goût", en: "Repels aphids, enhances flavor" }
-    - id: soucis
+    - id: FLE-002
       type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les nématodes du sol", en: "Repels soil nematodes" }
-    - id: capucine
+    - id: FLE-001
       type: plante_piege
       raison_i18n: { fr: "Plante-piège à pucerons", en: "Aphid trap crop" }
   defavorables:
     - id: LEG-020
       type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, partage le mildiou", en: "Same family, shares blight" }
-    - id: fenouil
+    - id: ARO-007
       type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:

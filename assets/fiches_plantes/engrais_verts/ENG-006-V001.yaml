@@ -1,0 +1,29 @@
+# Fiche fille (variété) — Sarrasin 'La Harpe'. Hérite de ENG-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-006-V001
+parent_id: ENG-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Fagopyrum esculentum 'La Harpe'"
+
+i18n:
+  fr:
+    nom_commun: Sarrasin 'La Harpe'
+    description: >
+      Variété française de référence, à croissance rapide et floraison
+      généreuse. Culture et cycle identiques au sarrasin type ; convient aussi
+      bien à l'engrais vert qu'à la production de graines (farine de blé noir).
+    conseils_culture: >
+      Même conduite que le sarrasin commun. Pour un usage strictement engrais
+      vert, faucher à la floraison sans attendre la formation des graines.
+  en:
+    nom_commun: Buckwheat 'La Harpe'
+    description: >
+      A French reference variety, fast-growing with generous bloom. Same culture
+      as the type; suitable for both green manure and grain.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sarrasin_commun
+contributeurs:
+  - "@potagerer"

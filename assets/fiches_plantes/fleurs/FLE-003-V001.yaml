@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Œillet d'Inde 'Petite Orange'. Hérite de FLE-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FLE-003-V001
+parent_id: FLE-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Tagetes patula 'Petite Orange'"
+
+i18n:
+  fr:
+    nom_commun: Œillet d'Inde 'Petite Orange'
+    noms_alternatifs: [Tagète naine 'Petite']
+    description: >
+      Variété très naine et compacte (20–25 cm), à petites fleurs doubles
+      orange vif, parfaite en bordure serrée ou en jardinière au pied des
+      légumes-fruits. Floraison précoce et ininterrompue jusqu'aux gelées.
+    conseils_culture: >
+      Culture identique à l'œillet d'Inde commun. Sa taille réduite permet de
+      l'intercaler densément entre les plants de tomates ou de poivrons.
+  en:
+    nom_commun: French marigold 'Petite Orange'
+    description: >
+      A very dwarf, compact variety (20–25 cm) with small bright-orange double
+      flowers. Ideal for tight edging and interplanting among fruiting crops.
+
+cycle:
+  hauteur_adulte_cm: [20, 25]
+  espacement_cm: 20
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C5%92illet_d%27Inde
+contributeurs:
+  - "@potagerer"

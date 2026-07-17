@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Poirier 'Conférence'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V001
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pyrus communis 'Conférence'"
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Conférence'
+    description: >
+      Variété d'automne très répandue, à poire allongée bronze-roussâtre, chair
+      fine, juteuse et sucrée. Réputée fiable et productive, partiellement
+      autofertile (mais mieux fructifiée avec un pollinisateur). Bonne aptitude
+      à la conservation. Culture identique au poirier type.
+    conseils_culture: >
+      Même conduite que le poirier commun. Sa vigueur modérée et sa régularité
+      la rendent adaptée aux petites formes palissées. Cueillir ferme pour un
+      mûrissement en fruitier.
+  en:
+    nom_commun: Pear 'Conference'
+    description: >
+      A widely grown autumn pear, elongated and russet-bronze, with fine, juicy,
+      sweet flesh. Reliable and productive, partly self-fertile. Good keeper.
+      Same culture as the type.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [9, 10]
+    continental:
+      plantation: [11, 3]
+      recolte: [9, 10]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Conf%C3%A9rence_(poire)
+contributeurs:
+  - "@potagerer"

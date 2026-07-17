@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Seigle fourrager 'Dukato'. Hérite de ENG-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-007-V001
+parent_id: ENG-007
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Secale cereale 'Dukato'"
+
+i18n:
+  fr:
+    nom_commun: Seigle fourrager 'Dukato'
+    noms_alternatifs: [Seigle multicaule 'Dukato']
+    description: >
+      Type fourrager très tallant, à forte production de biomasse foliaire,
+      couramment employé comme couvert d'hiver. Culture et cycle identiques au
+      seigle type ; couvre le sol densément dès l'automne.
+    conseils_culture: >
+      Même conduite que le seigle commun. Son tallage marqué en fait un couvert
+      hivernal dense, efficace contre l'érosion et le lessivage de l'azote.
+  en:
+    nom_commun: Forage rye 'Dukato'
+    description: >
+      A strongly tillering forage type with high leaf biomass, commonly used as
+      a winter cover. Same culture as the type; covers soil densely from autumn.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Seigle_cultiv%C3%A9
+contributeurs:
+  - "@potagerer"

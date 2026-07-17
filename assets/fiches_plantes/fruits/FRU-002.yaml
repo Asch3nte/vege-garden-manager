@@ -1,0 +1,117 @@
+# Fiche mère (espèce) — Poirier.
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-002
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Pyrus communis
+famille_botanique: Rosaceae
+
+i18n:
+  fr:
+    nom_commun: Poirier
+    noms_alternatifs: [Poirier commun, Poirier domestique]
+    description: >
+      Arbre fruitier vivace de la famille des Rosacées, proche du pommier mais
+      plus longévif et plus exigeant en chaleur. Floraison précoce (sensible
+      aux gelées tardives), fructification de la fin d'été à l'automne. La
+      plupart des variétés demandent un pollinisateur compatible.
+    conseils_culture: >
+      Planter en situation ensoleillée et abritée des gelées de printemps, en
+      sol profond et frais. Se prête bien aux formes palissées (espalier,
+      cordon) contre un mur chaud. Tailler en hiver ; l'arcure des branches
+      favorise la mise à fruit.
+    conseils_recolte: >
+      Récolter les poires d'été à pleine maturité. Les poires d'automne et
+      d'hiver se cueillent fermes, avant maturité, puis mûrissent en fruitier :
+      c'est la clé d'une chair fondante et non granuleuse.
+    erreurs_frequentes:
+      - Laisser mûrir les poires d'hiver sur l'arbre (chair blette au cœur)
+      - Situation gélive (fleurs précoces détruites)
+      - Variété unique autostérile sans pollinisateur
+  en:
+    nom_commun: Pear tree
+    description: >
+      A perennial Rosaceae fruit tree, close to the apple but longer-lived and
+      more heat-demanding. Early bloom (frost-sensitive), late-summer to autumn
+      fruiting. Most varieties need a compatible pollinator.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_survie: -28
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [1460, 2190]
+  hauteur_adulte_cm: [250, 800]
+  espacement_cm: 500
+  profondeur_sol_min_cm: 60
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [8, 10]
+    continental:
+      plantation: [11, 3]
+      recolte: [8, 10]
+    mediterraneen:
+      plantation: [11, 2]
+      recolte: [7, 9]
+  hemisphere_sud:
+    oceanique:
+      plantation: [5, 9]
+      recolte: [2, 4]
+associations:
+  beneficies:
+    - id: FLE-001
+      type: plante_piege
+      raison_i18n: { fr: "La capucine détourne les pucerons du poirier", en: "Nasturtium draws aphids away from the pear tree" }
+    - id: LEG-024
+      type: repulsion_ravageur
+      raison_i18n: { fr: "L'ail au pied a un effet répulsif et antifongique", en: "Garlic at the base is repellent and antifungal" }
+  defavorables:
+    - id: FRU-001
+      type: partage_maladies
+      raison_i18n: { fr: "Partage tavelure et feu bactérien avec le pommier", en: "Shares scab and fire blight with apple" }
+rotation:
+  famille: rosaceae
+  delai_retour_annees: 5
+  precedents_defavorables: [rosaceae]
+  fixe_azote: false
+  besoin_azote: modere
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Variétés d'hiver en fruitier frais, mûrissement progressif", en: "Winter varieties in a cool store, ripening gradually" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Poires au sirop, compote, jus", en: "Pears in syrup, compote, juice" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, pochée, tarte, compote, jus, séchée]
+  en: [Fresh, poached, tart, compote, juice, dried]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Poirier_commun  # description
+contributeurs:
+  - "@potagerer"

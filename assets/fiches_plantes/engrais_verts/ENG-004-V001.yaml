@@ -1,0 +1,29 @@
+# Fiche fille (variété) — Luzerne 'Europe'. Hérite de ENG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-004-V001
+parent_id: ENG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Medicago sativa 'Europe'"
+
+i18n:
+  fr:
+    nom_commun: Luzerne 'Europe'
+    description: >
+      Variété très répandue, rustique et productive, à bonne pérennité. Culture
+      et cycle identiques à la luzerne type ; adaptée à une installation de
+      longue durée sur parcelle au repos.
+    conseils_culture: >
+      Même conduite que la luzerne cultivée. Semer sur sol bien préparé et non
+      acide pour réussir l'implantation de cette variété pérenne.
+  en:
+    nom_commun: Alfalfa 'Europe'
+    description: >
+      A widely grown, hardy and productive variety with good persistence. Same
+      culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Luzerne_cultiv%C3%A9e
+contributeurs:
+  - "@potagerer"

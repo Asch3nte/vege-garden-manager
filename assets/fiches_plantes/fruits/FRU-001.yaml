@@ -1,0 +1,125 @@
+# Fiche mère (espèce) — Pommier.
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-001
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Malus domestica
+famille_botanique: Rosaceae
+
+i18n:
+  fr:
+    nom_commun: Pommier
+    noms_alternatifs: [Pommier domestique, Pommier commun]
+    description: >
+      Arbre fruitier vivace de la famille des Rosacées, l'un des plus cultivés
+      des vergers tempérés. Floraison printanière mellifère, fructification à
+      l'automne. La plupart des variétés sont autostériles : prévoir un second
+      pommier (ou un pommier d'ornement) fleurissant à la même période pour la
+      pollinisation croisée.
+    conseils_culture: >
+      Planter à racines nues de l'automne au début du printemps, hors gel, en
+      sol profond et frais. Choisir le porte-greffe selon la place (nain pour
+      petit jardin, franc pour grand verger). Tailler en hiver pour aérer la
+      charpente. Éclaircir les fruits en juin pour de plus beaux calibres.
+    conseils_recolte: >
+      Cueillir quand le pédoncule se détache facilement en soulevant le fruit.
+      Les variétés de garde se conservent plusieurs mois en cave fraîche ;
+      récolter avant pleine maturité pour la conservation.
+    erreurs_frequentes:
+      - Planter une seule variété autostérile (peu ou pas de fruits)
+      - Enterrer le point de greffe (affranchissement du porte-greffe)
+      - Négliger l'éclaircissage (petits fruits, alternance de production)
+  en:
+    nom_commun: Apple tree
+    description: >
+      A perennial Rosaceae fruit tree, among the most grown in temperate
+      orchards. Spring bee-friendly bloom, autumn fruiting. Most varieties are
+      self-sterile — plant a second compatible pollinator nearby.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_survie: -30
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [1095, 1460]
+  hauteur_adulte_cm: [200, 600]
+  espacement_cm: 450
+  profondeur_sol_min_cm: 60
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [9, 10]
+    continental:
+      plantation: [11, 3]
+      recolte: [9, 10]
+    mediterraneen:
+      plantation: [11, 2]
+      recolte: [8, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [5, 9]
+      recolte: [3, 4]
+associations:
+  beneficies:
+    - id: FLE-001
+      type: plante_piege
+      raison_i18n: { fr: "La capucine détourne les pucerons du pommier", en: "Nasturtium draws aphids away from the apple tree" }
+    - id: ARO-003
+      type: repulsion_ravageur
+      raison_i18n: { fr: "La ciboulette au pied limiterait la tavelure", en: "Chives at the base reportedly reduce apple scab" }
+    - id: LEG-024
+      type: repulsion_ravageur
+      raison_i18n: { fr: "L'ail éloigne pucerons et champignons", en: "Garlic deters aphids and fungi" }
+  defavorables:
+    - id: FRU-002
+      type: partage_maladies
+      raison_i18n: { fr: "Partage tavelure et feu bactérien avec le poirier", en: "Shares scab and fire blight with pear" }
+rotation:
+  famille: rosaceae
+  delai_retour_annees: 5
+  precedents_defavorables: [rosaceae]
+  fixe_azote: false
+  besoin_azote: modere
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche et aérée (variétés de garde), sur clayettes sans contact", en: "Cool airy cellar (keeper varieties), on racks without touching" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "En anneaux ou lamelles séchées", en: "Dried rings or slices" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Compote, gelée, jus", en: "Compote, jelly, juice" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, compote, tarte, jus, cidre, gelée, séchée]
+  en: [Fresh, compote, tart, juice, cider, jelly, dried]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Pommier_domestique  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Luzerne.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-004
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 2
+usages:
+  - engrais_vert
+  - fourrage
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Medicago sativa
+famille_botanique: Fabaceae
+
+i18n:
+  fr:
+    nom_commun: Luzerne
+    noms_alternatifs: [Luzerne cultivée, Foin de Bourgogne]
+    description: >
+      Légumineuse vivace de la famille des Fabacées, fixatrice d'azote, à racine
+      pivotante très profonde (plusieurs mètres) qui décompacte le sol et
+      remonte les minéraux des couches basses. Engrais vert de longue durée
+      (plusieurs années) pour parcelles au repos.
+    conseils_culture: >
+      Semer au printemps en sol drainé et non acide (elle déteste l'excès
+      d'eau). Installation lente la première année ; ensuite très pérenne et
+      productive. Faucher plusieurs fois par saison en laissant les résidus au
+      sol. Idéale pour restructurer une parcelle fatiguée sur 2–3 ans.
+    conseils_recolte: >
+      « Récolte » = fauches répétées à la floraison. Broyer et laisser en
+      surface, ou exporter en fourrage. Retourner la luzernière en fin de cycle
+      libère un stock d'azote important.
+    erreurs_frequentes:
+      - Sol acide ou mal drainé (échec de l'implantation)
+      - Impatience la première année (croissance lente au départ)
+      - La ressemer aussitôt sur elle-même (autotoxicité)
+  en:
+    nom_commun: Alfalfa
+    noms_alternatifs: [Lucerne]
+    description: >
+      A perennial nitrogen-fixing Fabaceae with a very deep taproot that
+      decompacts soil and lifts minerals from lower layers. A long-term green
+      manure for resting beds.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - riche
+    - sec
+  ph_min: 6.5
+  ph_max: 8.0
+  temperature_min_germination: 8
+  temperature_optimale: 20
+  temperature_min_survie: -20
+  gele_fatal: false
+  tolerance_secheresse: forte
+cycle:
+  enracinement: pivotant
+  type: vivace
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [40, 90]
+  espacement_cm: 10
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [4, 6]
+      recolte: [6, 9]
+    continental:
+      semis_exterieur: [4, 6]
+      recolte: [6, 9]
+    mediterraneen:
+      semis_exterieur: [3, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [10, 12]
+      recolte: [12, 3]
+associations:
+  beneficies:
+    - id: LEG-001
+      type: fixation_azote
+      raison_i18n: { fr: "Restitue de l'azote au sol pour les cultures gourmandes suivantes", en: "Returns nitrogen to soil for following hungry crops" }
+  defavorables: []
+rotation:
+  famille: fabaceae
+  delai_retour_annees: 3
+  precedents_defavorables: [fabaceae]
+  fixe_azote: true
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Luzerne_cultiv%C3%A9e  # description
+contributeurs:
+  - "@potagerer"

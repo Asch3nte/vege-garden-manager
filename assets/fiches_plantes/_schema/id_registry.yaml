@@ -73,6 +73,8 @@ legumes:
   LEG-022-V001: Radis Cherry Belle
   LEG-023: Artichaut
   LEG-023-V001: Artichaut Vert de Laon
+  LEG-024: Ail
+  LEG-024-V001: Ail rose de Lautrec
 
 aromatiques:
   ARO-001: Basilic
@@ -86,6 +88,10 @@ aromatiques:
   ARO-005-V001: Menthe Verte
   ARO-006: Coriandre
   ARO-006-V001: Coriandre Santos
+  ARO-007: Fenouil
+  ARO-007-V001: Fenouil bronze 'Purpureum'
+  ARO-008: Aneth
+  ARO-008-V001: Aneth 'Bouquet'
 
 petits_fruits:
   PFR-001: Fraisier
@@ -99,6 +105,62 @@ petits_fruits:
   PFR-005: Myrtille
   PFR-005-V001: Myrtille Bluecrop
 
-# Réfs d'associations citées par les fiches mais sans fiche dédiée à ce jour
-# (laissées telles quelles ; à créer en contenu ultérieur) :
-#   capucine, fenouil, aneth, moutarde, soucis, ail.
+fleurs:
+  FLE-001: Capucine
+  FLE-001-V001: Capucine naine 'Tom Pouce'
+  FLE-002: Souci
+  FLE-002-V001: Souci 'Orange King'
+  FLE-003: Œillet d'Inde
+  FLE-003-V001: Œillet d'Inde 'Petite Orange'
+  FLE-004: Bourrache
+  FLE-004-V001: Bourrache blanche 'Alba'
+
+engrais_verts:
+  ENG-001: Moutarde blanche
+  ENG-001-V001: Moutarde blanche 'Ludic'
+  ENG-002: Phacélie
+  ENG-002-V001: Phacélie 'Angelia'
+  ENG-003: Trèfle incarnat
+  ENG-003-V001: Trèfle incarnat 'Contea'
+  ENG-004: Luzerne
+  ENG-004-V001: Luzerne 'Europe'
+  ENG-005: Vesce commune
+  ENG-005-V001: Vesce commune 'Topaze'
+  ENG-006: Sarrasin
+  ENG-006-V001: Sarrasin 'La Harpe'
+  ENG-007: Seigle
+  ENG-007-V001: Seigle fourrager 'Dukato'
+  ENG-008: Avoine
+  ENG-008-V001: Avoine de printemps 'Canyon'
+
+cereales:
+  CER-001: Maïs doux
+  CER-001-V001: Maïs doux 'Golden Bantam'
+  CER-002: Blé tendre
+  CER-002-V001: Blé 'Rouge de Bordeaux'
+  CER-003: Quinoa
+  CER-003-V001: Quinoa 'Titicaca'
+  CER-004: Amarante
+  CER-004-V001: Amarante 'Viridis'
+
+fruits:
+  FRU-001: Pommier
+  FRU-001-V001: Pommier 'Reine des Reinettes'
+  FRU-002: Poirier
+  FRU-002-V001: Poirier 'Conférence'
+  FRU-003: Cerisier
+  FRU-003-V001: Cerisier 'Bigarreau Burlat'
+  FRU-004: Prunier
+  FRU-004-V001: Prunier 'Reine-Claude dorée'
+  FRU-005: Pêcher
+  FRU-005-V001: Pêcher 'Reine des vergers'
+  FRU-006: Figuier
+  FRU-006-V001: Figuier 'Violette de Bordeaux'
+  FRU-007: Noisetier
+  FRU-007-V001: Noisetier 'Fertile de Coutard'
+  FRU-008: Vigne
+  FRU-008-V001: Vigne 'Chasselas doré'
+
+# Toutes les réfs d'associations résolvent désormais vers une fiche réelle
+# (plus aucune espèce citée « en nom » sans fiche). Voir le garde-fou
+# _refsSansFiche dans test/unit/infrastructure/catalogue/catalogue_reel_test.dart.

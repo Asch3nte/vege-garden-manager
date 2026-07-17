@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Vigne 'Chasselas doré'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V001
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Vitis vinifera 'Chasselas doré'"
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Chasselas doré'
+    noms_alternatifs: [Chasselas de Fontainebleau, Chasselas]
+    description: >
+      Cépage de table ancien et réputé, à grains ronds dorés, chair fondante et
+      sucrée, à peau fine. Précoce et rustique, il mûrit bien même en climat
+      frais, ce qui en fait le raisin de treille de référence au nord.
+      Autofertile. Culture identique à la vigne type.
+    conseils_culture: >
+      Même conduite que la vigne. Sa précocité et sa rusticité le rendent
+      adapté aux treilles et pergolas des régions à été modéré ; palisser au
+      sud pour concentrer chaleur et sucres.
+  en:
+    nom_commun: Grape 'Chasselas doré'
+    description: >
+      A renowned old table grape with round golden berries, melting sweet flesh
+      and thin skin. Early and hardy, ripening even in cool climates — the
+      reference trellis grape in the north. Self-fertile. Same culture as the
+      type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chasselas
+contributeurs:
+  - "@potagerer"

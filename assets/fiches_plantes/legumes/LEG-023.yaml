@@ -81,7 +81,7 @@ associations:
     - id: LEG-014
       type: etagement_lumiere
       raison_i18n: { fr: "Profite de l'ombre partielle des artichauts en été", en: "Benefits from partial artichoke shade in summer" }
-    - id: capucine
+    - id: FLE-001
       type: [plante_piege, attraction_pollinisateurs]
       raison_i18n: { fr: "Attire les pollinisateurs, plante-piège", en: "Attracts pollinators, trap crop" }
   defavorables:

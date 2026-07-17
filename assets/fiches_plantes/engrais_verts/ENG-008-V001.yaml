@@ -1,0 +1,29 @@
+# Fiche fille (variété) — Avoine de printemps 'Canyon'. Hérite de ENG-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-008-V001
+parent_id: ENG-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Avena sativa 'Canyon'"
+
+i18n:
+  fr:
+    nom_commun: Avoine de printemps 'Canyon'
+    description: >
+      Variété de printemps couramment employée, à bon développement et forte
+      biomasse. Culture et cycle identiques à l'avoine type ; à semer de
+      préférence au printemps en couvert de courte durée.
+    conseils_culture: >
+      Même conduite que l'avoine cultivée. Semée seule pour occuper vite une
+      planche libre, ou en mélange avec une vesce pour un couvert équilibré.
+  en:
+    nom_commun: Spring oat 'Canyon'
+    description: >
+      A commonly grown spring variety with good development and high biomass.
+      Same culture as the type; best spring-sown as a short-term cover.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Avoine_cultiv%C3%A9e
+contributeurs:
+  - "@potagerer"

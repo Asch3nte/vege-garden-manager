@@ -1,0 +1,31 @@
+# Fiche fille (variété) — Amarante 'Viridis'. Hérite de CER-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: CER-004-V001
+parent_id: CER-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Amaranthus caudatus 'Viridis'"
+
+i18n:
+  fr:
+    nom_commun: Amarante 'Viridis'
+    noms_alternatifs: [Amarante queue-de-renard verte]
+    description: >
+      Forme à longs épis vert tendre plutôt que rouges, à la fois décorative et
+      productive en feuilles. Culture et cycle identiques à l'amarante type ;
+      appréciée en fleur coupée et comme légume-feuille d'été.
+    conseils_culture: >
+      Même conduite que l'amarante commune. La couleur verte des épis se marie
+      bien en massif avec les variétés rouges ; récolter les feuilles jeunes
+      pour l'usage potager.
+  en:
+    nom_commun: Amaranth 'Viridis'
+    description: >
+      A green-tasselled form rather than red, both decorative and productive as
+      a leaf vegetable. Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Amaranthus_caudatus
+contributeurs:
+  - "@potagerer"

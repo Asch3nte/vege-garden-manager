@@ -1,0 +1,120 @@
+# Fiche mère (espèce) — Prunier.
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-004
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Prunus domestica
+famille_botanique: Rosaceae
+
+i18n:
+  fr:
+    nom_commun: Prunier
+    noms_alternatifs: [Prunier domestique, Prunier européen]
+    description: >
+      Arbre fruitier vivace de la famille des Rosacées (genre Prunus), rustique
+      et généralement de taille moyenne. Floraison blanche mellifère, récolte
+      des prunes de la fin de l'été au début de l'automne. Certaines variétés
+      sont autofertiles, d'autres exigent un pollinisateur.
+    conseils_culture: >
+      Planter en sol profond et drainé, au soleil. Tailler peu et de préférence
+      en été (comme tous les Prunus) pour limiter gommose et chancre. Éclaircir
+      si la charge est excessive pour éviter l'épuisement et l'alternance.
+    conseils_recolte: >
+      Récolter à pleine maturité (fruit souple, pruine intacte) pour les prunes
+      de bouche ; un peu plus fermes pour la cuisson et le transport. La
+      maturité s'étale sur 2–3 semaines selon les variétés.
+    erreurs_frequentes:
+      - Taille d'hiver (écoulement de gomme, portes d'entrée aux maladies)
+      - Surcharge non éclaircie (petits fruits, branches cassées)
+      - Récolte trop précoce (prunes acides, peu sucrées)
+  en:
+    nom_commun: Plum tree
+    noms_alternatifs: [European plum]
+    description: >
+      A hardy perennial Rosaceae (genus Prunus), usually medium-sized. White
+      bee-friendly bloom, late-summer to autumn harvest. Some varieties are
+      self-fertile, others need a pollinator.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_survie: -30
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [1095, 1460]
+  hauteur_adulte_cm: [250, 500]
+  espacement_cm: 450
+  profondeur_sol_min_cm: 60
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [8, 9]
+    continental:
+      plantation: [11, 3]
+      recolte: [8, 9]
+    mediterraneen:
+      plantation: [11, 2]
+      recolte: [7, 9]
+  hemisphere_sud:
+    oceanique:
+      plantation: [5, 9]
+      recolte: [2, 3]
+associations:
+  beneficies:
+    - id: LEG-024
+      type: repulsion_ravageur
+      raison_i18n: { fr: "L'ail au pied a un effet répulsif et antifongique", en: "Garlic at the base is repellent and antifungal" }
+  defavorables:
+    - id: FRU-003
+      type: partage_maladies
+      raison_i18n: { fr: "Même genre Prunus que le cerisier : moniliose et sharka", en: "Same Prunus genus as cherry: brown rot and sharka" }
+    - id: FRU-005
+      type: partage_maladies
+      raison_i18n: { fr: "Même genre Prunus que le pêcher : maladies communes", en: "Same Prunus genus as peach: shared diseases" }
+rotation:
+  famille: rosaceae
+  delai_retour_annees: 5
+  precedents_defavorables: [rosaceae]
+  fixe_azote: false
+  besoin_azote: modere
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, non lavées, pruine conservée", en: "Refrigerator, unwashed, bloom preserved" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Séchées en pruneaux (variétés à forte teneur en sucre)", en: "Dried into prunes (high-sugar varieties)" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, prunes au sirop, tarte congelée", en: "Jam, plums in syrup, frozen tart" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, tarte, confiture, pruneaux, eau-de-vie]
+  en: [Fresh, tart, jam, prunes, spirit]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Prunier  # description
+contributeurs:
+  - "@potagerer"

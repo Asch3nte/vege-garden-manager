@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Pêcher 'Reine des vergers'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V001
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Prunus persica 'Reine des vergers'"
+
+i18n:
+  fr:
+    nom_commun: Pêcher 'Reine des vergers'
+    description: >
+      Variété ancienne à chair blanche fine, juteuse et parfumée, à maturité de
+      fin d'été. Autofertile et productive. Comme tous les pêchers, sensible à
+      la cloque : conduite préventive indispensable. Culture identique au
+      pêcher type.
+    conseils_culture: >
+      Même conduite que le pêcher commun. Sa chair blanche délicate se récolte
+      juste à point et se consomme rapidement.
+  en:
+    nom_commun: Peach 'Reine des vergers'
+    description: >
+      A heirloom white-fleshed peach, fine, juicy and aromatic, ripening in late
+      summer. Self-fertile and productive. Same culture as the type; watch for
+      leaf curl.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [8, 9]
+    continental:
+      plantation: [11, 3]
+      recolte: [8, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

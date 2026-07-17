@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Pommier 'Reine des Reinettes'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V001
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Malus domestica 'Reine des Reinettes'"
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Reine des Reinettes'
+    noms_alternatifs: [Reinette, Goldparmäne]
+    description: >
+      Variété ancienne et réputée, à pomme bicolore jaune striée de rouge,
+      chair fine, sucrée et acidulée, très parfumée. Excellente pomme à couteau
+      et à cuire, récoltée en fin d'été à début d'automne. Culture identique au
+      pommier type ; prévoir un pollinisateur compatible.
+    conseils_culture: >
+      Même conduite que le pommier commun. Variété assez sensible à la
+      tavelure : privilégier une situation aérée et une taille dégageant le
+      cœur de l'arbre. Récolte de garde moyenne (quelques semaines à 2 mois).
+  en:
+    nom_commun: Apple 'Reine des Reinettes'
+    description: >
+      A renowned heirloom apple, bicolour yellow-and-red, with fine, sweet-tart,
+      highly aromatic flesh. Excellent dessert and cooking apple. Same culture
+      as the type; needs a compatible pollinator.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [9, 9]
+    continental:
+      plantation: [11, 3]
+      recolte: [9, 10]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Reine_des_reinettes
+contributeurs:
+  - "@potagerer"

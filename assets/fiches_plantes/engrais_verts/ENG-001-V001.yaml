@@ -1,0 +1,31 @@
+# Fiche fille (variété) — Moutarde blanche 'Ludic'. Hérite de ENG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-001-V001
+parent_id: ENG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Sinapis alba 'Ludic'"
+
+i18n:
+  fr:
+    nom_commun: Moutarde blanche 'Ludic'
+    noms_alternatifs: [Moutarde anti-nématodes 'Ludic']
+    description: >
+      Sélection à vocation biofumigante, riche en glucosinolates, employée pour
+      réduire les populations de nématodes du sol après enfouissement. Culture
+      et cycle identiques à la moutarde blanche commune.
+    conseils_culture: >
+      Même conduite que le type. Pour l'effet biofumigant, faucher finement à
+      pleine floraison puis enfouir aussitôt et arroser : les composés soufrés
+      se libèrent au broyage des tissus frais.
+  en:
+    nom_commun: White mustard 'Ludic'
+    description: >
+      A biofumigant selection rich in glucosinolates, used to reduce soil
+      nematode populations after incorporation. Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Moutarde_blanche
+contributeurs:
+  - "@potagerer"

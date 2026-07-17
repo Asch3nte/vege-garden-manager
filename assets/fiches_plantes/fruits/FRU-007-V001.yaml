@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Noisetier 'Fertile de Coutard'. Hérite de FRU-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-007-V001
+parent_id: FRU-007
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Corylus avellana 'Fertile de Coutard'"
+
+i18n:
+  fr:
+    nom_commun: Noisetier 'Fertile de Coutard'
+    noms_alternatifs: [Barcelona, Longue d'Espagne]
+    description: >
+      Variété très productive et rustique, à grosse noisette ronde de bonne
+      qualité, l'une des plus répandues au verger et en haie. Bon pollinisateur
+      universel, mais à associer tout de même à une autre variété. Culture
+      identique au noisetier type.
+    conseils_culture: >
+      Même conduite que le noisetier commun. Sa vigueur et sa fertilité en font
+      une base fiable ; l'accompagner d'une variété à floraison concordante
+      (par ex. 'Merveille de Bollwiller') pour sécuriser la fécondation.
+  en:
+    nom_commun: Hazel 'Fertile de Coutard'
+    noms_alternatifs: [Barcelona]
+    description: >
+      A very productive, hardy variety with large round good-quality nuts, among
+      the most widely grown. A good universal pollinator, but still pair with
+      another variety. Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Noisetier_commun
+contributeurs:
+  - "@potagerer"

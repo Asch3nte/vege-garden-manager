@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Avoine.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-008
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 1
+usages:
+  - engrais_vert
+  - couvre_sol
+  - fourrage
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Avena sativa
+famille_botanique: Poaceae
+
+i18n:
+  fr:
+    nom_commun: Avoine
+    noms_alternatifs: [Avoine cultivée, Avoine de printemps]
+    description: >
+      Céréale de la famille des Poacées, engrais vert à croissance rapide et
+      biomasse abondante. Son enracinement dense améliore la structure de
+      surface et mobilise l'azote résiduel. Moins rustique que le seigle :
+      souvent semée au printemps, ou à l'automne comme couvert « gélif » qui se
+      détruit seul en hiver froid.
+    conseils_culture: >
+      Semer au printemps, ou en fin d'été pour un couvert d'automne. Faucher ou
+      laisser geler avant l'épiaison. S'associe bien à une légumineuse (vesce,
+      trèfle) pour équilibrer l'apport carbone/azote. Se décompose vite après
+      enfouissement.
+    conseils_recolte: >
+      « Récolte » = fauchage avant épiaison, ou destruction naturelle par le
+      gel (mulch en place). Enfouir tendre pour une minéralisation rapide.
+    erreurs_frequentes:
+      - La croire aussi rustique que le seigle (gèle plus tôt)
+      - Faucher trop tard (tiges creuses lignifiées)
+  en:
+    nom_commun: Oat
+    noms_alternatifs: [Common oat, Spring oat]
+    description: >
+      A fast-growing Poaceae green manure with abundant biomass. Its dense roots
+      improve topsoil structure and mobilise residual nitrogen. Less hardy than
+      rye — often spring-sown, or autumn-sown as a winter-killed cover.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - frais
+    - leger
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 5
+  temperature_optimale: 15
+  temperature_min_survie: -8
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 10
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 4]
+      recolte: [6, 7]
+    continental:
+      semis_exterieur: [3, 4]
+      recolte: [6, 8]
+    mediterraneen:
+      semis_exterieur: [2, 4]
+      recolte: [5, 7]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 10]
+      recolte: [12, 1]
+associations:
+  beneficies:
+    - id: ENG-005
+      type: tuteur_structurel
+      raison_i18n: { fr: "Soutient la vesce grimpante dans un mélange de couvert", en: "Supports the climbing vetch in a cover-crop mix" }
+  defavorables: []
+rotation:
+  famille: poaceae
+  delai_retour_annees: 2
+  precedents_defavorables: [poaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Avoine_cultiv%C3%A9e  # description
+contributeurs:
+  - "@potagerer"

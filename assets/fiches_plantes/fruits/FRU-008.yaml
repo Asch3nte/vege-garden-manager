@@ -1,0 +1,115 @@
+# Fiche mère (espèce) — Vigne (raisin de table).
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-008
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+  - ornementale
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Vitis vinifera
+famille_botanique: Vitaceae
+
+i18n:
+  fr:
+    nom_commun: Vigne
+    noms_alternatifs: [Vigne cultivée, Raisin de table]
+    description: >
+      Liane fruitière vivace de la famille des Vitacées, cultivée pour ses
+      grappes de raisin. Grimpante par vrilles, elle se conduit sur treille,
+      pergola ou palissage — utile aussi comme ombrage comestible. La plupart
+      des variétés sont autofertiles. Exige chaleur et soleil pour bien mûrir
+      ses sucres.
+    conseils_culture: >
+      Planter en situation très ensoleillée et abritée, en sol drainé même
+      pauvre. Palisser sur fils de fer. La taille hivernale est essentielle :
+      la vigne fructifie sur les rameaux de l'année issus du bois d'un an ;
+      tailler court chaque hiver pour équilibrer vigueur et fructification.
+      Éclaircir les grappes et effeuiller autour pour l'ensoleillement.
+    conseils_recolte: >
+      Récolter les grappes à pleine maturité : le raisin ne sucre plus après
+      cueillette. Goûter pour juger (couleur seule trompeuse). Couper la grappe
+      entière au sécateur, la manipuler par la rafle pour préserver la pruine.
+    erreurs_frequentes:
+      - Ne pas tailler (bois envahissant, grappes rares et petites)
+      - Situation trop fraîche ou ombragée (raisin acide, mildiou/oïdium)
+      - Récolte sur la seule couleur (raisin coloré mais pas encore sucré)
+  en:
+    nom_commun: Grapevine
+    noms_alternatifs: [Table grape]
+    description: >
+      A perennial Vitaceae liana grown for its grape clusters. Climbing by
+      tendrils, trained on wires, pergola or trellis — also an edible shade.
+      Mostly self-fertile. Needs heat and sun to ripen its sugars.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - pauvre
+    - sec
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_survie: -18
+  gele_fatal: false
+  tolerance_secheresse: forte
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [730, 1095]
+  hauteur_adulte_cm: [150, 300]
+  espacement_cm: 150
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: false
+  culture_verticale: true
+  charge_tuteur: lourde
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 4]
+      recolte: [9, 10]
+    continental:
+      plantation: [11, 4]
+      recolte: [9, 10]
+    mediterraneen:
+      plantation: [11, 3]
+      recolte: [8, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [5, 10]
+      recolte: [2, 4]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: vitaceae
+  delai_retour_annees: 4
+  precedents_defavorables: [vitaceae]
+  fixe_azote: false
+  besoin_azote: faible
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, grappes entières non lavées", en: "Refrigerator, whole unwashed clusters" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Raisins secs (variétés sucrées, idéalement apyrènes)", en: "Raisins (sweet, ideally seedless varieties)" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Jus de raisin, gelée", en: "Grape juice, jelly" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, jus, gelée, raisins secs, tarte]
+  en: [Fresh, juice, jelly, raisins, tart]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Vigne  # description
+contributeurs:
+  - "@potagerer"

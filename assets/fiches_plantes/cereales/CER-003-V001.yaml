@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Quinoa 'Titicaca'. Hérite de CER-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: CER-003-V001
+parent_id: CER-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Chenopodium quinoa 'Titicaca'"
+
+i18n:
+  fr:
+    nom_commun: Quinoa 'Titicaca'
+    description: >
+      Sélection à cycle court adaptée aux climats tempérés frais, à récolte
+      précoce et hauteur modérée, ce qui limite la verse. Culture et cycle
+      identiques au quinoa type, avec une maturité plus rapide bien utile sous
+      étés courts.
+    conseils_culture: >
+      Même conduite que le quinoa commun. Son cycle raccourci sécurise la
+      récolte avant les pluies d'automne en climat océanique.
+  en:
+    nom_commun: Quinoa 'Titicaca'
+    description: >
+      A short-cycle selection suited to cool temperate climates, with early
+      harvest and moderate height that limits lodging. Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Quinoa
+contributeurs:
+  - "@potagerer"

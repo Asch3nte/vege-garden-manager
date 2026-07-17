@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Quinoa.
+# Rédigée à la main (lot « céréales »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: CER-003
+version_fiche: 1
+categorie: cereale
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Chenopodium quinoa
+famille_botanique: Amaranthaceae
+
+i18n:
+  fr:
+    nom_commun: Quinoa
+    noms_alternatifs: [Riz du Pérou, Chénopode quinoa]
+    description: >
+      Pseudo-céréale de la famille des Amaranthacées (comme l'épinard et la
+      betterave), cultivée pour ses graines riches en protéines ; les jeunes
+      feuilles se consomment aussi comme des épinards. Rustique et tolérante à
+      la sécheresse, elle s'acclimate bien en climat tempéré.
+    conseils_culture: >
+      Semer au printemps, en sol léger et drainé. Éclaircir les jeunes plants.
+      Peu gourmande en eau une fois installée. Rincer les graines récoltées à
+      l'eau claire pour éliminer la saponine amère qui les enrobe.
+    conseils_recolte: >
+      Récolter quand les panicules sont sèches et que les graines se détachent
+      sous les doigts. Battre, vanner, puis rincer abondamment avant séchage
+      et stockage au sec.
+    erreurs_frequentes:
+      - Oublier de rincer les graines (amertume de la saponine)
+      - Semis en sol détrempé (fonte des semis)
+      - La cultiver après épinard ou betterave (même famille, mêmes ravageurs)
+  en:
+    nom_commun: Quinoa
+    description: >
+      A pseudo-cereal of the Amaranthaceae family (like spinach and beetroot),
+      grown for its protein-rich seeds; young leaves are eaten like spinach.
+      Hardy and drought-tolerant, it adapts well to temperate climates.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - leger
+    - pauvre
+  ph_min: 6.0
+  ph_max: 8.0
+  temperature_min_germination: 8
+  temperature_optimale: 18
+  temperature_min_survie: -2
+  gele_fatal: false
+  tolerance_secheresse: forte
+cycle:
+  enracinement: pivotant
+  type: annuelle
+  duree_germination_jours: [4, 10]
+  duree_avant_recolte_jours: [90, 120]
+  hauteur_adulte_cm: [100, 200]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [4, 5]
+      recolte: [9, 10]
+    continental:
+      semis_exterieur: [4, 5]
+      recolte: [9, 10]
+    mediterraneen:
+      semis_exterieur: [3, 5]
+      recolte: [8, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [10, 11]
+      recolte: [3, 4]
+associations:
+  beneficies: []
+  defavorables:
+    - id: LEG-012
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Même famille que l'épinard, partage mineuse et pégomyie", en: "Same family as spinach, shares leaf miners" }
+    - id: LEG-003
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Même famille que la betterave, mêmes ravageurs", en: "Same family as beetroot, same pests" }
+rotation:
+  famille: amaranthaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, fabaceae]
+  precedents_defavorables: [amaranthaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Quinoa  # description
+contributeurs:
+  - "@potagerer"

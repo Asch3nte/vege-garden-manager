@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Ail rose de Lautrec. Hérite de LEG-024.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-024-V001
+parent_id: LEG-024
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium sativum 'Rose de Lautrec'"
+
+i18n:
+  fr:
+    nom_commun: Ail rose de Lautrec
+    noms_alternatifs: [Ail rose, Ail de Lautrec]
+    description: >
+      Variété d'ail de printemps à tunique rose, réputée pour sa longue
+      conservation et sa saveur fine (Label Rouge, IGP dans le Tarn). Bulbe
+      régulier à gros caïeux, très parfumé.
+    conseils_culture: >
+      Ail de printemps : plantation de fin d'hiver à début de printemps. Sol
+      léger, drainant et non fraîchement fumé. Excellente aptitude à la
+      conservation si le séchage est soigné.
+    conseils_recolte: >
+      Récolter à jaunissement du feuillage, puis ressuyer soigneusement : c'est
+      la clé de sa conservation prolongée (jusqu'à l'hiver suivant).
+  en:
+    nom_commun: Lautrec pink garlic
+    description: >
+      A spring garlic with pink skin, prized for long storage and fine flavour
+      (protected origin in the Tarn, France). Regular bulb with large cloves.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [2, 4]
+      recolte: [7, 8]
+    continental:
+      plantation: [2, 4]
+      recolte: [7, 8]
+    mediterraneen:
+      plantation: [2, 3]
+      recolte: [6, 7]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ail_rose_de_Lautrec
+contributeurs:
+  - "@potagerer"

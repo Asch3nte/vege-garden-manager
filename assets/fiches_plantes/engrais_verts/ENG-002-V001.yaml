@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Phacélie 'Angelia'. Hérite de ENG-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-002-V001
+parent_id: ENG-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phacelia tanacetifolia 'Angelia'"
+
+i18n:
+  fr:
+    nom_commun: Phacélie 'Angelia'
+    noms_alternatifs: [Phacélie 'Angélia']
+    description: >
+      Sélection couramment proposée en couvert et bande fleurie, à floraison
+      homogène et prolongée, très visitée par les abeilles. Culture et cycle
+      identiques à la phacélie type.
+    conseils_culture: >
+      Même conduite que la phacélie commune. Souvent intégrée aux mélanges
+      mellifères pour bandes enherbées et bordures de potager.
+  en:
+    nom_commun: Phacelia 'Angelia'
+    description: >
+      A selection commonly offered for cover crops and flower strips, with even,
+      long-lasting bloom. Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Phacelia_tanacetifolia
+contributeurs:
+  - "@potagerer"

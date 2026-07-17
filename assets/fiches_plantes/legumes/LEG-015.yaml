@@ -86,7 +86,7 @@ associations:
       type: fixation_azote
       raison_i18n: { fr: "Les légumineuses enrichissent le sol en azote", en: "Legumes enrich soil with nitrogen" }
   defavorables:
-    - id: moutarde
+    - id: ENG-001
       type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, partage les mêmes maladies", en: "Same family, shares the same diseases" }
 rotation:

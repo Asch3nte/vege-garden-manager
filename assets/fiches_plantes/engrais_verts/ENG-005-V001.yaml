@@ -1,0 +1,29 @@
+# Fiche fille (variété) — Vesce commune 'Topaze'. Hérite de ENG-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-005-V001
+parent_id: ENG-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Vicia sativa 'Topaze'"
+
+i18n:
+  fr:
+    nom_commun: Vesce commune 'Topaze'
+    description: >
+      Sélection de printemps couramment employée en couvert, à bon
+      développement végétatif. Culture et cycle identiques à la vesce commune
+      type ; à associer de préférence à une céréale.
+    conseils_culture: >
+      Même conduite que la vesce commune. Semée au printemps en mélange avec
+      l'avoine ou le seigle pour un couvert dressé et facile à faucher.
+  en:
+    nom_commun: Common vetch 'Topaze'
+    description: >
+      A spring selection commonly used as a cover crop with good vegetative
+      growth. Same culture as the type; best grown with a cereal.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vesce_commune
+contributeurs:
+  - "@potagerer"
