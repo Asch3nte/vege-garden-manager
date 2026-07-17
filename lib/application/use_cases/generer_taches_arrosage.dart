@@ -9,8 +9,10 @@ import '../../domain/enums/urgence_arrosage.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
+import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
+import '../../domain/value_objects/fenetre_ne_pas_deranger.dart';
 import '../../domain/value_objects/notification_locale.dart';
 import '../providers/repository_providers.dart';
 import '../providers/service_providers.dart';
@@ -26,11 +28,18 @@ import 'package:riverpod/riverpod.dart';
 ///
 /// Also schedules a local push notification (category `'arrosage'`) at 08:00
 /// on the task day — does nothing if 08:00 has already passed (ADR-0015).
+///
+/// The push notification honours the user's notification **opt-outs** (docs/11,
+/// absolute constraint #3): it is suppressed when the master switch is off, when
+/// the `'arrosage'` category is muted, or when 08:00 falls inside the
+/// do-not-disturb window. The **task itself is always created** — opt-outs mute
+/// notifications, not the gardening plan.
 class GenererTachesArrosage {
   final AbstractPlantationRepository _plantations;
   final AbstractPotagerRepository _potager;
   final AbstractTacheRepository _taches;
   final AbstractNotificationService _notifications;
+  final AbstractPreferencesRepository _preferences;
   final CalculerBesoinArrosage _calcul;
 
   GenererTachesArrosage(
@@ -38,6 +47,7 @@ class GenererTachesArrosage {
     this._potager,
     this._taches,
     this._notifications,
+    this._preferences,
     this._calcul, {
     DateTime Function()? maintenant,
   }) : _maintenant = maintenant ?? DateTime.now;
@@ -63,6 +73,15 @@ class GenererTachesArrosage {
     final plantations = await _plantations.obtenirActives();
     final n = _maintenant();
     final debutJour = DateTime(n.year, n.month, n.day);
+
+    // Notification opt-outs (constraint #3): the watering push is only scheduled
+    // when the master switch is on and the 'arrosage' category is not muted.
+    // The do-not-disturb window is time-based, so it is checked per scheduled
+    // time in [_programmerNotification]. Loaded once — constant across plantations.
+    final prefs = await _preferences.charger();
+    final arrosageNotifiable = prefs.notificationsGlobalesActives &&
+        (prefs.notificationsParCategorie['arrosage'] ?? true);
+    final fenetreNpd = prefs.fenetreNePasDeranger;
 
     for (final plantation in plantations) {
       final conseil = await _calcul.executer(
@@ -114,9 +133,10 @@ class GenererTachesArrosage {
           datePrevue: targetDate,
           priorite: priorite,
         ));
-        // Push notifications only for truly urgent cases (today).
-        if (urgence == UrgenceArrosage.arroserMaintenant) {
-          await _programmerNotification(plantation, targetDate);
+        // Push notifications only for truly urgent cases (today), and only when
+        // the user's notification opt-outs allow it.
+        if (urgence == UrgenceArrosage.arroserMaintenant && arrosageNotifiable) {
+          await _programmerNotification(plantation, targetDate, fenetreNpd);
         }
       }
     }
@@ -130,14 +150,18 @@ class GenererTachesArrosage {
   }
 
   /// Schedules a push notification at 08:00 on [debutJour].
-  /// Does nothing if 08:00 has already passed on that day.
+  /// Does nothing if 08:00 has already passed on that day, or if 08:00 falls
+  /// inside the do-not-disturb window [fenetreNpd] (when set).
   Future<void> _programmerNotification(
     Plantation plantation,
     DateTime debutJour,
+    FenetreNePasDeranger? fenetreNpd,
   ) async {
     final heure = debutJour.copyWith(
         hour: 8, minute: 0, second: 0, millisecond: 0, microsecond: 0);
     if (!heure.isAfter(_maintenant())) return;
+    // Do-not-disturb: suppress a notification whose time is inside the window.
+    if (fenetreNpd != null && fenetreNpd.contient(heure)) return;
     final dateStr =
         '${debutJour.year.toString().padLeft(4, '0')}'
         '-${debutJour.month.toString().padLeft(2, '0')}'
@@ -167,6 +191,7 @@ final genererTachesArrosageProvider = FutureProvider<GenererTachesArrosage>(
     ref.read(potagerRepositoryProvider),
     ref.read(tacheRepositoryProvider),
     ref.read(notificationServiceProvider),
+    ref.read(preferencesRepositoryProvider),
     await ref.read(calculerBesoinArrosageProvider.future),
   ),
 );

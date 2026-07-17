@@ -104,6 +104,33 @@ void main() {
     expect(map['arrosage'], isFalse);
   });
 
+  test('definirNePasDeranger sets the quiet-hours window', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier)
+        .definirNePasDeranger('22:00', '07:00');
+
+    final prefs = c.read(preferencesProvider).value!;
+    expect(prefs.nePasDerangerActif, isTrue);
+    expect(prefs.nePasDerangerDebut, '22:00');
+    expect(prefs.nePasDerangerFin, '07:00');
+  });
+
+  test('desactiverNePasDeranger clears the quiet-hours window', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+    final notifier = c.read(preferencesProvider.notifier);
+
+    await notifier.definirNePasDeranger('22:00', '07:00');
+    await notifier.desactiverNePasDeranger();
+
+    final prefs = c.read(preferencesProvider).value!;
+    expect(prefs.nePasDerangerActif, isFalse);
+    expect(prefs.nePasDerangerDebut, isNull);
+    expect(prefs.nePasDerangerFin, isNull);
+  });
+
   test('setting an association weight updates only that family (ADR-0011)',
       () async {
     final c = conteneur();
