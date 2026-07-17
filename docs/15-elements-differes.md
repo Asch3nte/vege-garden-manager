@@ -235,10 +235,15 @@ crédits). Le **thème de l'app suit la préférence** (`main.dart` → `ThemeMo
 | **Rotation avancée** | expert | **UI de rotation** (précédents culturaux, délai de retour famille) — la donnée `rotation` existe sur la fiche, mais **aucun écran**. | `acces.rotationAvancee` |
 | **Besoins en eau détaillés** | expert ✅ | ✅ **Livré.** VO optionnel `ArrosageDetaille` (chaque sous-champ indépendamment optionnel : `frequence_jours` [min,max], `volume_litres_m2` [min,max], `phases_sensibles` — enum `PhaseSensibleEau` germination/feuillaison/floraison/fructification/grossissement — et `note_i18n`) porté par `BesoinsCulture.arrosageDetaille`. Bloc YAML `besoins.arrosage_detaille` (schéma + validateur optionnel/type-checké + mapper). **6 espèces seedées** avec **phases sensibles + note documentées** (LEG-001/014/004/011/013, ARO-001) — **chiffres volontairement laissés vides** (à remplir par le dev avec des sources réelles, jamais inventées). Section `_SectionArrosageDetaille` dans `fiche_plante_detail.dart`, **gatée `acces.eauDetaillee`** et affichée seulement si la fiche porte le détail ; le fait grossier « Arrosage » reste pour tous les paliers. Chiffres cadrés « repères indicatifs par temps chaud et sec » ; titre → glossaire `besoin-eau` ; `PhaseSensibleEau` couvert D6 (rattaché à `besoin-eau`). Clés ARB fr+en. **Moteur inchangé** (`BilanArrosage` raisonne toujours sur le terme grossier + météo ; détail = informatif). Tests unitaires (VO, mapper/validateur, réel) + widget en //, suite 1200 verte. | `acces.eauDetaillee` ; `fiche_plante_detail.dart` |
 
-> **Lot 4 d'ADR-0009 (à venir)** : **mini-tutos par palier** (features débloquées :
-> pourquoi/comment, présentés à l'atteinte du palier + re-consultables) **+
-> teaser** de montée de palier — modèle de contenu commun avec « Aide & lexique »
-> (§8 C4).
+> **Lot 4 d'ADR-0009 ✅ livré** : **mini-tuto par palier** (4a) — panneau « Guide
+> des niveaux » (`panneau_niveaux.dart`, route `/plus/niveaux`) : catalogue des
+> features construites par palier (titre → pourquoi → comment), badge « Débloqué »
+> selon le niveau, paliers supérieurs en teaser statique — re-consultable, modèle
+> de contenu commun avec « Aide & lexique » (§8 C4). **Teaser de montée** (4b) —
+> `CarteTeaserPalier` (dismissable, CTA « En savoir plus » → Guide) sur Catalogue
+> (Vue Réseau) et Calendrier (Vue Saison) pour les paliers inférieurs, + nudge
+> auto au changement de niveau (`panneau_general.dart`). Tests widget en //.
+> Commits `59d32ed` (4a) / `80de958` (4b).
 
 ---
 

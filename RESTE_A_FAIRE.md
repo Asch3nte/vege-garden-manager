@@ -8,6 +8,9 @@
 > Mis à jour le 2026-07-08 après livraison des **fiches plantes perso** et de la
 > **CI analyze+test** (le multi-potager, les équipements, la version dynamique,
 > les liens externes et l'i18n `en` UI étant déjà livrés).
+> Mis à jour le 2026-07-17 : **correction de suivi** — **ADR-0009 lot 4**
+> (mini-tutos/teaser de palier) était listé « à faire » alors qu'il était déjà
+> livré et mergé ; entrées rayées.
 
 ## 1. Fonctionnalités « build-then-gate » (ADR-0009 §9)
 
@@ -53,9 +56,12 @@ Réservées par palier mais sans UI ni donnée :
     (statut **Proposé**) — coupler `phasesSensibles` × stade de croissance pour
     **moduler l'urgence d'arrosage** ; cadrage figé (mapping fin↔grossier,
     garde-fou ADR-0009, recalibration). Prérequis : corpus renseigné.
-- **Lot 4 ADR-0009** : mini-tutos par palier + teaser de montée (modèle de
-  contenu partagé avec le glossaire — mais l'implémentation du mécanisme, pas
-  le texte, reste du dev)
+- ~~**Lot 4 ADR-0009** : mini-tutos par palier + teaser de montée~~ ✅ **Livré**
+  (2026-07-17, vérifié) : **4a** panneau « Guide des niveaux »
+  (`panneau_niveaux.dart`, route `/plus/niveaux`) re-consultable ; **4b** teaser
+  contextuel `CarteTeaserPalier` (Catalogue/Calendrier) + nudge au changement de
+  niveau — commits `59d32ed` / `80de958`. **L'ADR-0009 marquait déjà le lot ✅**
+  (ligne 172) ; ce fichier était périmé.
 
 ## 2. Éléments différés docs/15 — non-design
 
@@ -132,13 +138,14 @@ Réservées par palier mais sans UI ni donnée :
 Livré depuis la dernière révision : ~~Multi-potager + F2~~ ✅ · ~~Équipements~~ ✅ ·
 ~~Version dynamique + liens externes + i18n `en` UI~~ ✅ · ~~CI analyze+test~~ ✅ ·
 ~~**Fiches plantes perso**~~ ✅ (2026-07-08) · ~~**Rotation avancée**~~ ✅ ·
-~~**Besoins en eau détaillés**~~ ✅ (2026-07-08).
+~~**Besoins en eau détaillés**~~ ✅ (2026-07-08) · ~~**Lot 4 ADR-0009**
+(mini-tutos/teaser de palier)~~ ✅ (livré antérieurement, suivi corrigé le
+2026-07-17).
 
-Côté **features V1 build-then-gate (§9), tout est livré.** Reste, plus léger :
+Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
+(ADR-0009), tout est livré.** Reste, plus léger :
 
-1. **Lot 4 ADR-0009** : mécanisme mini-tutos/teaser de palier (contenu partagé
-   avec le glossaire).
-2. Arbitrage **post-récolte** (docs/13 §1) : reporter ou planifier.
+1. Arbitrage **post-récolte** (docs/13 §1) : reporter ou planifier.
    (+ finitions §2 : toggles paramètres, sous-routes go_router.)
 
 Tout le reste se range en :
