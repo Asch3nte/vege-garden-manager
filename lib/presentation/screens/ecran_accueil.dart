@@ -31,9 +31,26 @@ class EcranAccueil extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(accueilProvider);
+    // Badge count from the loaded view-model (0 while loading); the bell always
+    // opens the notifications inbox, whose list uses the same source of truth.
+    final nombreAlertes = vue.value?.nombreAlertes ?? 0;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navAccueil)),
+      appBar: AppBar(
+        title: Text(l10n.navAccueil),
+        actions: [
+          IconButton(
+            tooltip: l10n.accueilNotificationsTooltip,
+            onPressed: () => context.go(RoutesApp.accueilNotifications),
+            icon: nombreAlertes > 0
+                ? Badge.count(
+                    count: nombreAlertes,
+                    child: const Icon(Icons.notifications_outlined),
+                  )
+                : const Icon(Icons.notifications_none_outlined),
+          ),
+        ],
+      ),
       body: vue.when(
         // Keep showing data while it reloads (e.g. on tab re-entry) — no flash.
         skipLoadingOnReload: true,
@@ -48,6 +65,8 @@ class EcranAccueil extends ConsumerWidget {
             onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
             onToggleTache: (t) =>
                 ref.read(accueilProvider.notifier).basculerTache(t),
+            // "See all tasks" jumps to the Calendrier tab (its full agenda).
+            onVoirTaches: () => context.go(RoutesApp.calendrier),
           ),
         ),
       ),
@@ -60,11 +79,13 @@ class _Contenu extends StatelessWidget {
   final AccueilVue vue;
   final void Function(String zoneId) onZoneTap;
   final void Function(Tache tache) onToggleTache;
+  final VoidCallback onVoirTaches;
 
   const _Contenu({
     required this.vue,
     required this.onZoneTap,
     required this.onToggleTache,
+    required this.onVoirTaches,
   });
 
   @override
@@ -81,7 +102,11 @@ class _Contenu extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s4),
         const _CarteMeteo(),
         const SizedBox(height: EspacementsApp.s5),
-        _SectionTaches(taches: vue.tachesDuJour, onToggle: onToggleTache),
+        _SectionTaches(
+          taches: vue.tachesDuJour,
+          onToggle: onToggleTache,
+          onVoirTaches: onVoirTaches,
+        ),
         const SizedBox(height: EspacementsApp.s5),
         _GrilleStats(
           nombreAlertes: vue.nombreAlertes,
@@ -300,8 +325,13 @@ class _CarteMeteo extends ConsumerWidget {
 class _SectionTaches extends StatelessWidget {
   final List<Tache> taches;
   final void Function(Tache tache) onToggle;
+  final VoidCallback onVoirTaches;
 
-  const _SectionTaches({required this.taches, required this.onToggle});
+  const _SectionTaches({
+    required this.taches,
+    required this.onToggle,
+    required this.onVoirTaches,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -337,6 +367,15 @@ class _SectionTaches extends StatelessWidget {
                       ],
                     ],
                   ),
+          ),
+        ),
+        // Full-agenda link, in the section footer (kept out of the header row so
+        // it never competes with the title width on narrow screens).
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: onVoirTaches,
+            child: Text(l10n.accueilVoirTaches),
           ),
         ),
       ],

@@ -135,6 +135,44 @@
     "description": "Tuile accueil : nombre d'alertes météo actives.",
     "placeholders": { "count": { "type": "int" } }
   },
+  "accueilNotificationsTooltip": "Notifications",
+  "@accueilNotificationsTooltip": { "description": "Info-bulle de la cloche de notifications (AppBar accueil)." },
+  "accueilVoirTaches": "Voir toutes les tâches",
+  "@accueilVoirTaches": { "description": "Lien de la section « Tâches du jour » vers le Calendrier." },
+  "notificationsTitre": "Notifications",
+  "@notificationsTitre": { "description": "Titre de l'écran des notifications (alertes)." },
+  "notificationsEntete": "Alertes météo",
+  "@notificationsEntete": { "description": "En-tête cliquable de la liste des alertes (lien glossaire)." },
+  "notificationsVide": "Aucune alerte",
+  "@notificationsVide": { "description": "État vide : aucune alerte active." },
+  "notificationsVideDetail": "Vos cultures en place ne risquent rien de particulier dans les prochains jours.",
+  "@notificationsVideDetail": { "description": "État vide : message rassurant." },
+  "notificationsAlerteGelTitre": "Risque de gel",
+  "@notificationsAlerteGelTitre": { "description": "Titre de carte d'alerte gel." },
+  "notificationsAlerteCaniculeTitre": "Risque de canicule",
+  "@notificationsAlerteCaniculeTitre": { "description": "Titre de carte d'alerte canicule." },
+  "notificationsAlerteFortePluieTitre": "Risque de forte pluie",
+  "@notificationsAlerteFortePluieTitre": { "description": "Titre de carte d'alerte forte pluie." },
+  "notificationsAlerteGelDetail": "Minimale prévue : {temp} °C",
+  "@notificationsAlerteGelDetail": {
+    "description": "Détail d'alerte gel : température minimale déclenchante.",
+    "placeholders": { "temp": { "type": "int" } }
+  },
+  "notificationsAlerteCaniculeDetail": "Maximale prévue : {temp} °C",
+  "@notificationsAlerteCaniculeDetail": {
+    "description": "Détail d'alerte canicule : température maximale déclenchante.",
+    "placeholders": { "temp": { "type": "int" } }
+  },
+  "notificationsAlerteFortePluieDetail": "Cumul prévu : {mm} mm",
+  "@notificationsAlerteFortePluieDetail": {
+    "description": "Détail d'alerte forte pluie : cumul de précipitations déclenchant.",
+    "placeholders": { "mm": { "type": "int" } }
+  },
+  "notificationsCulturesConcernees": "{count, plural, =1{1 culture en place concernée} other{{count} cultures en place concernées}}",
+  "@notificationsCulturesConcernees": {
+    "description": "Nombre de cultures en place concernées par l'alerte.",
+    "placeholders": { "count": { "type": "int" } }
+  },
   "accueilRecoltesSaison": "{count, plural, =0{Aucune récolte cette saison} =1{1 récolte cette saison} other{{count} récoltes cette saison}}",
   "@accueilRecoltesSaison": {
     "description": "Tuile accueil : nombre de récoltes de la saison en cours.",

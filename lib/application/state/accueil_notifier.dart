@@ -1,14 +1,12 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/plantation.dart';
-import '../../domain/entities/potager.dart';
 import '../../domain/entities/tache.dart';
-import '../../domain/enums/statut_plantation.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
-import '../use_cases/detecter_alertes_meteo.dart';
 import '../use_cases/generer_taches_arrosage.dart';
 import 'accueil_vue.dart';
+import 'notifications_notifier.dart';
 
 /// Assembles the **Accueil** dashboard view-model from the repositories.
 ///
@@ -17,11 +15,12 @@ import 'accueil_vue.dart';
 /// experience level. Each piece comes from an existing Domain repository — no
 /// new persistence is introduced here, the notifier only composes reads.
 ///
-/// The clock is injectable (via [AccueilNotifier.avecHorloge] in tests) so the
-/// "today" window is deterministic. Weather, alerts and season harvests are
-/// **not** wired yet (they need verdict logic / aggregate queries that do not
-/// exist); the screen renders those as explicit "à venir" placeholders rather
-/// than fabricated values.
+/// The clock is injectable (overridable in tests) so the "today" window is
+/// deterministic. The active weather-alert count comes from the shared
+/// [alertesMeteoProvider] (same source as the notifications screen, so the bell
+/// badge and the alert list never disagree); the season-harvest count is
+/// aggregated from the recolte repository. Live weather still renders from its
+/// own [meteoAccueilProvider].
 class AccueilNotifier extends AsyncNotifier<AccueilVue> {
   @override
   Future<AccueilVue> build() async {
@@ -57,8 +56,8 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
       niveau: prefs.niveauExperience,
       zones: [for (final p in parcelles) ZoneApercu(id: p.id, nom: p.nom)],
       tachesDuJour: await _tachesDuJour(maintenant),
-      nombreAlertes:
-          await _compterAlertes(potager, toutesPlantations, prefs.meteoAutoActive),
+      // Same source as the notifications screen (single truth: badge == list).
+      nombreAlertes: (await ref.watch(alertesMeteoProvider.future)).length,
       nombreRecoltesSaison:
           await _compterRecoltes(toutesPlantations, maintenant().year),
     );
@@ -84,23 +83,6 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
           .read(tacheRepositoryProvider)
           .obtenirEntreDates(debut, debut.add(const Duration(days: 1))),
     );
-  }
-
-  /// Number of active weather alerts (0 without a position; degrades to 0 when
-  /// the weather is unavailable — the use case handles both). Returns 0 without
-  /// any fetch when the auto weather opt-out is off ([meteoAutoActive] false).
-  Future<int> _compterAlertes(
-    Potager potager,
-    List<Plantation> toutes,
-    bool meteoAutoActive,
-  ) async {
-    if (!meteoAutoActive) return 0;
-    final actives = toutes.where((p) => !p.statut.estTerminal).toList();
-    final alertes = await ref.read(detecterAlertesMeteoProvider).executer(
-          localisation: potager.localisation,
-          plantationsActives: actives,
-        );
-    return alertes.length;
   }
 
   /// Number of harvests recorded during [annee] across the garden's plantations.

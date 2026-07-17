@@ -15,6 +15,7 @@ import 'historique_navigation.dart';
 import '../presentation/screens/ecran_accueil.dart';
 import '../presentation/screens/ecran_calendrier.dart';
 import '../presentation/screens/ecran_meteo_detail.dart';
+import '../presentation/screens/ecran_notifications.dart';
 import '../presentation/screens/ecran_onboarding.dart';
 import '../presentation/screens/ecran_catalogue.dart';
 import '../presentation/screens/ecran_fiches_personnelles.dart';
@@ -78,6 +79,12 @@ abstract final class RoutesApp {
   /// Accueil tab pops back to the dashboard).
   static const String accueilMeteoSegment = 'meteo';
   static const String accueilMeteo = '$accueil/$accueilMeteoSegment';
+
+  /// Notifications inbox (weather alerts), under the **Accueil** branch — opened
+  /// from the dashboard bell; re-tapping the Accueil tab pops back.
+  static const String accueilNotificationsSegment = 'notifications';
+  static const String accueilNotifications =
+      '$accueil/$accueilNotificationsSegment';
 
   // Settings sub-panels, as go_router sub-routes of [plus] (so re-tapping the
   // Plus tab pops back to the settings root — imperative pushes would not).
@@ -344,6 +351,12 @@ final routeurProvider = Provider<GoRouter>((ref) {
                     path: RoutesApp.accueilMeteoSegment,
                     builder: (context, state) =>
                         const _RetourGlobal(child: EcranMeteoDetail()),
+                  ),
+                  // Notifications inbox (weather alerts), opened from the bell.
+                  GoRoute(
+                    path: RoutesApp.accueilNotificationsSegment,
+                    builder: (context, state) =>
+                        const _RetourGlobal(child: EcranNotifications()),
                   ),
                 ],
               ),
