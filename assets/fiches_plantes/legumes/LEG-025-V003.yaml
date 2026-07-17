@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Ail Violet de Cadours. Hérite de LEG-025.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-025-V003
+parent_id: LEG-025
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium sativum 'Violet de Cadours'"
+
+i18n:
+  fr:
+    nom_commun: Ail Violet de Cadours
+    noms_alternatifs: [Violet de Cadours]
+    description: >
+      Ail violet à tunique striée de violet, à la saveur prononcée, bénéficiant
+      d'une AOP. Planté à l'automne, il forme de gros bulbes ; conservation
+      correcte, un peu moins longue que les ails blancs.
+  en:
+    nom_commun: Cadours Purple Garlic
+    description: >
+      Purple garlic with violet-streaked skin and a pronounced flavour, with a
+      PDO. Planted in autumn, forming large bulbs; fair keeping.
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Local sec et aéré, en tresse", en: "Dry, airy room, braided" }
+utilisations_culinaires_i18n:
+  fr: [Cru écrasé, confit, en persillade, rôti en chemise]
+  en: [Raw crushed, confit, in persillade, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ail_violet_de_Cadours
+contributeurs:
+  - "@potagerer"

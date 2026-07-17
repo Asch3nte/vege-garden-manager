@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Chou cabus Nantais hâtif. Hérite de LEG-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-007-V004
+parent_id: LEG-007
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. capitata 'Nantais hâtif'"
+
+i18n:
+  fr:
+    nom_commun: Chou cabus Nantais hâtif
+    noms_alternatifs: [Nantais hâtif, Express]
+    description: >
+      Petit chou pommé rond et hâtif, à pomme ferme, idéal pour les récoltes de
+      printemps et d'été. Peu encombrant, il convient aux petits potagers et aux
+      cultures serrées.
+  en:
+    nom_commun: Early Nantais Cabbage
+    description: >
+      Small, round, early head cabbage with a firm head, ideal for spring and
+      summer harvests. Compact, suited to small gardens and close spacing.
+
+cycle:
+  duree_avant_recolte_jours: [70, 90]
+  espacement_cm: 40
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé, braisé, sauté, en salade]
+  en: [Raw grated, braised, sautéed, in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_cabus
+contributeurs:
+  - "@potagerer"

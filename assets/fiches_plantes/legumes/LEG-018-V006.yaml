@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Pois Corne de Bélier. Hérite de LEG-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-018-V006
+parent_id: LEG-018
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pisum sativum 'Corne de Bélier'"
+
+i18n:
+  fr:
+    nom_commun: Pois Corne de Bélier
+    noms_alternatifs: [Corne de Bélier, Pois mangetout géant]
+    description: >
+      Pois mangetout à très longues cosses larges et courbées, sans parchemin, se
+      consommant entières. Grimpant vigoureux et productif à palisser sur rames
+      hautes ; l'un des plus grands mangetout.
+  en:
+    nom_commun: Corne de Bélier Snow Pea
+    description: >
+      Snow pea (mangetout) with very long, broad, curved pods without parchment,
+      eaten whole. Vigorous, productive climber for tall poles.
+
+cycle:
+  duree_avant_recolte_jours: [75, 95]
+  hauteur_adulte_cm: [150, 200]
+  charge_tuteur: legere
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cosses entières sautées au wok, vapeur, en salade]
+  en: [Whole pods stir-fried, steamed, in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pois
+contributeurs:
+  - "@potagerer"

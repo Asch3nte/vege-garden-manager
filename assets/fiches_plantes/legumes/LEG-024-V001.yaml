@@ -1,46 +1,34 @@
-# Fiche fille (variété) — Ail rose de Lautrec. Hérite de LEG-024.
+# Fiche fille (variété) — Fenouil Doux de Florence. Hérite de LEG-024.
 # Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
 id: LEG-024-V001
 parent_id: LEG-024
 version_fiche: 1
 schema_version: 1
 
-nom_scientifique: "Allium sativum 'Rose de Lautrec'"
+nom_scientifique: "Foeniculum vulgare var. azoricum 'Doux de Florence'"
 
 i18n:
   fr:
-    nom_commun: Ail rose de Lautrec
-    noms_alternatifs: [Ail rose, Ail de Lautrec]
+    nom_commun: Fenouil Doux de Florence
+    noms_alternatifs: [Doux de Florence, Fenouil de Florence]
     description: >
-      Variété d'ail de printemps à tunique rose, réputée pour sa longue
-      conservation et sa saveur fine (Label Rouge, IGP dans le Tarn). Bulbe
-      régulier à gros caïeux, très parfumé.
-    conseils_culture: >
-      Ail de printemps : plantation de fin d'hiver à début de printemps. Sol
-      léger, drainant et non fraîchement fumé. Excellente aptitude à la
-      conservation si le séchage est soigné.
-    conseils_recolte: >
-      Récolter à jaunissement du feuillage, puis ressuyer soigneusement : c'est
-      la clé de sa conservation prolongée (jusqu'à l'hiver suivant).
+      Fenouil bulbeux à gros bulbe blanc renflé, tendre et très parfumé à l'anis.
+      Variété de référence ; à semer en été pour éviter la montaison prématurée
+      liée aux jours longs.
   en:
-    nom_commun: Lautrec pink garlic
+    nom_commun: Florence Sweet Fennel
     description: >
-      A spring garlic with pink skin, prized for long storage and fine flavour
-      (protected origin in the Tarn, France). Regular bulb with large cloves.
-
-periodes:
-  hemisphere_nord:
-    oceanique:
-      plantation: [2, 4]
-      recolte: [7, 8]
-    continental:
-      plantation: [2, 4]
-      recolte: [7, 8]
-    mediterraneen:
-      plantation: [2, 3]
-      recolte: [6, 7]
+      Bulb fennel with a large, swollen white bulb, tender and strongly
+      anise-scented. The reference variety; sow in summer to avoid early bolting.
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, braisé, rôti, en gratin]
+  en: [Raw in salad, braised, roasted, gratin]
 
 sources:
-  - https://fr.wikipedia.org/wiki/Ail_rose_de_Lautrec
+  - https://fr.wikipedia.org/wiki/Fenouil
 contributeurs:
   - "@potagerer"

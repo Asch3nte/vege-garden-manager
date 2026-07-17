@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Black Cherry. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V013
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Black Cherry'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Black Cherry
+    noms_alternatifs: [Cerise noire]
+    description: >
+      Tomate-cerise à petits fruits ronds pourpre-brun, à la saveur sucrée et
+      complexe, très appréciée. Plant indéterminé vigoureux et très productif,
+      formant de longues grappes. À tuteurer.
+  en:
+    nom_commun: Black Cherry Tomato
+    description: >
+      Cherry tomato with small round purple-brown fruits and a sweet, complex
+      flavour. Vigorous, very productive indeterminate plant with long trusses.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue à l'apéritif, en salade, confite, séchée]
+  en: [Raw as a snack, in salad, candied, dried]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

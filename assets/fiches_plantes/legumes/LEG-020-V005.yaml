@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pomme de terre Désirée. Hérite de LEG-020.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-020-V005
+parent_id: LEG-020
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum tuberosum 'Désirée'"
+
+i18n:
+  fr:
+    nom_commun: Pomme de terre Désirée
+    noms_alternatifs: [Désirée]
+    description: >
+      Variété de demi-saison à peau rouge et chair jaune ferme, polyvalente et
+      rustique. Résistante à la sécheresse, productive et de bonne conservation ;
+      convient à la plupart des usages culinaires.
+  en:
+    nom_commun: Désirée Potato
+    description: >
+      Maincrop variety with red skin and firm yellow flesh, versatile and hardy.
+      Drought-tolerant, productive and a good keeper.
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Cave sombre, sèche et fraîche (6–10 °C)", en: "Dark, dry, cool cellar (6–10 °C)" }
+utilisations_culinaires_i18n:
+  fr: [Au four, en purée, en gratin, à la vapeur]
+  en: [Baked, mash, gratin, steamed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/D%C3%A9sir%C3%A9e_(pomme_de_terre)
+contributeurs:
+  - "@potagerer"

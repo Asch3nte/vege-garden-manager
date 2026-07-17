@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Fève.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Légumineuse rustique fixatrice d'azote. Lot « potagères courantes ».
+id: LEG-026
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Vicia faba
+famille_botanique: Fabaceae
+
+i18n:
+  fr:
+    nom_commun: Fève
+    noms_alternatifs: [Fève des marais, Gourgane]
+    description: >
+      Légumineuse annuelle de la famille des Fabacées, cultivée pour ses grosses
+      graines consommées fraîches ou sèches. Très rustique, elle fixe l'azote de
+      l'air et enrichit le sol. Ses sommités attirent les pucerons noirs, qu'on
+      peut étêter pour protéger le reste de la culture.
+    conseils_culture: >
+      Semer en place, en sol frais et bien drainé, en fin d'hiver ou à l'automne
+      sous climat doux. Butter les jeunes plants et pincer les têtes dès
+      l'apparition des premières fleurs et des pucerons noirs.
+    conseils_recolte: >
+      Récolter les gousses jeunes pour une consommation fraîche, ou attendre le
+      dessèchement pour les graines sèches.
+    erreurs_frequentes:
+      - Semis en sol détrempé (pourriture des graines)
+      - Absence d'étêtage (invasion de pucerons noirs)
+  en:
+    nom_commun: Broad bean
+    description: >
+      Hardy annual legume of the Fabaceae family, grown for its large seeds eaten
+      fresh or dried. It fixes atmospheric nitrogen and enriches the soil.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.5
+  ph_max: 7.5
+  temperature_min_germination: 5
+  temperature_optimale: 15
+  temperature_min_survie: -8
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: pivotant
+  type: annuelle
+  duree_germination_jours: [8, 15]
+  duree_avant_recolte_jours: [90, 130]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 20
+  profondeur_semis_cm: 5
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [2, 4]
+      recolte: [6, 7]
+    continental:
+      semis_exterieur: [3, 4]
+      recolte: [7, 8]
+    mediterraneen:
+      semis_exterieur: [10, 12]
+      recolte: [4, 6]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [8, 10]
+      recolte: [12, 1]
+piege_a:
+  - puceron_noir
+associations:
+  beneficies: []
+  defavorables:
+    - id: LEG-016
+      type: allelopathie
+      raison_i18n: { fr: "Les alliums freinent la croissance des légumineuses", en: "Alliums slow the growth of legumes" }
+    - id: LEG-025
+      type: allelopathie
+      raison_i18n: { fr: "L'ail freine la croissance des fèves", en: "Garlic slows the growth of broad beans" }
+rotation:
+  famille: fabaceae
+  delai_retour_annees: 3
+  precedents_favorables: [engrais_verts]
+  precedents_defavorables: [fabaceae]
+  fixe_azote: true
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/F%C3%A8ve  # description
+contributeurs:
+  - "@potagerer"

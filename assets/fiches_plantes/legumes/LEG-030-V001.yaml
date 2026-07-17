@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Melon Charentais. Hérite de LEG-030.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-030-V001
+parent_id: LEG-030
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis melo 'Charentais'"
+
+i18n:
+  fr:
+    nom_commun: Melon Charentais
+    noms_alternatifs: [Cantaloup charentais]
+    description: >
+      Le melon français par excellence : fruit rond à écorce lisse gris-vert
+      côtelée, à chair orange très parfumée et sucrée. Taille modérée, à un ou
+      deux fruits mûrs par pied. Le plus cultivé en climat tempéré.
+  en:
+    nom_commun: Charentais Melon
+    description: >
+      The quintessential French melon: round fruit with smooth, ribbed grey-green
+      rind and very fragrant, sweet orange flesh. Moderate size.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur une fois mûr, sous film", en: "Refrigerator once ripe, wrapped" }
+utilisations_culinaires_i18n:
+  fr: [Cru en entrée, en salade de fruits, avec du jambon]
+  en: [Raw as a starter, in fruit salad, with cured ham]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Melon_(plante)
+contributeurs:
+  - "@potagerer"

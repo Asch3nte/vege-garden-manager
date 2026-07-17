@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Laitue Batavia Blonde de Paris. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V009
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa var. capitata 'Batavia Blonde de Paris'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Batavia Blonde de Paris
+    noms_alternatifs: [Batavia Blonde de Paris, Iceberg blonde]
+    description: >
+      Laitue batavia à pomme ferme et feuilles blondes gaufrées, très croquantes.
+      Résistante à la chaleur et à la montaison, elle tient bien en été et se
+      conserve mieux que les laitues beurre.
+  en:
+    nom_commun: Batavia Blonde de Paris Lettuce
+    description: >
+      Batavia (crisphead) lettuce with a firm head and blond crinkled, very crisp
+      leaves. Heat- and bolt-resistant, standing well in summer.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en burger, émincée]
+  en: [Raw in salad, in burgers, shredded]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

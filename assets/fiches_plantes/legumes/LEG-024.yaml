@@ -1,124 +1,119 @@
-# Fiche mère (espèce) — Ail.
-# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
-# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+# Fiche mère (espèce) — Fenouil bulbeux.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Légume-bulbe ombellifère, allélopathique (défavorable à de nombreux voisins).
+# Créée au lot « fleurs compagnes » pour résoudre les références orphelines
+# (ex-id legacy `fenouil`).
 id: LEG-024
 version_fiche: 1
 categorie: legume
 sous_type: legume_bulbe
 schema_version: 1
-difficulte: 1
+difficulte: 2
 usages:
   - alimentaire
   - condimentaire
-  - repulsif
-  - medicinale
 
 rusticite:
-  zone_min: zone4
-nom_scientifique: Allium sativum
-famille_botanique: Amaryllidaceae
+  zone_min: zone6
+nom_scientifique: Foeniculum vulgare var. azoricum
+famille_botanique: Apiaceae
 
 i18n:
   fr:
-    nom_commun: Ail
-    noms_alternatifs: [Ail cultivé, Ail commun]
+    nom_commun: Fenouil
+    noms_alternatifs: [Fenouil bulbeux, Fenouil doux, Fenouil de Florence]
     description: >
-      Plante de la famille des Amaryllidacées, cultivée en annuelle pour son
-      bulbe composé de caïeux (gousses) à saveur et odeur fortes. Condiment
-      majeur et remarquable répulsif au potager : ses composés soufrés
-      éloignent pucerons et de nombreux ravageurs et champignons.
+      Légume-bulbe de la famille des Apiacées, cultivé pour sa base charnue au
+      goût anisé, consommée crue ou cuite. Le feuillage et les graines sont
+      aromatiques. Plante allélopathique : elle inhibe la croissance de nombreux
+      voisins et se cultive plutôt à l'écart.
     conseils_culture: >
-      Planter les caïeux pointe vers le haut, en sol léger et bien drainé, au
-      soleil. L'ail d'automne (planté oct.–déc.) profite du froid hivernal
-      (vernalisation) ; l'ail de printemps se plante en fév.–mars. Ne pas
-      fumer avant plantation (l'excès d'azote fait pourrir le bulbe). Réduire
-      l'arrosage en fin de cycle.
+      Semer en place à partir de la fin du printemps pour éviter la montée à
+      graines prématurée liée aux jours longs. Sol frais et riche, arrosage
+      régulier. Butter légèrement la base pour blanchir le bulbe.
     conseils_recolte: >
-      Récolter quand le feuillage jaunit et se couche, par temps sec. Arracher,
-      puis laisser sécher (ressuyage) 2–3 semaines à l'ombre et à l'air avant
-      de tresser ou stocker au sec.
+      Récolter les bulbes bien formés et fermes avant les fortes gelées, en les
+      coupant au ras du sol.
     erreurs_frequentes:
-      - Sol trop humide ou trop riche en azote (pourriture du bulbe)
-      - Planter trop profond ou pointe en bas
-      - Récolter trop tard (bulbe éclaté, mauvaise conservation)
+      - Semis trop précoce (montée à graines sans former de bulbe)
+      - Manque d'eau (bulbes filandreux)
+      - Proximité de cultures sensibles (effet allélopathique)
   en:
-    nom_commun: Garlic
+    nom_commun: Fennel
     description: >
-      An Amaryllidaceae grown as an annual for its bulb of strong-flavoured
-      cloves. A major condiment and a notable garden repellent: its sulphur
-      compounds deter aphids and many pests and fungi.
+      Bulb vegetable of the Apiaceae family, grown for its fleshy anise-flavoured
+      base eaten raw or cooked. Allelopathic: it inhibits the growth of many
+      neighbours and is best grown apart.
 
 besoins:
   ensoleillement: plein_soleil
-  arrosage: faible
+  arrosage: modere
   qualites_sol:
-    - leger
+    - riche
+    - frais
     - bien_draine
   ph_min: 6.0
   ph_max: 7.5
-  temperature_min_germination: 4
-  temperature_optimale: 15
-  temperature_min_survie: -15
-  gele_fatal: false
-  tolerance_secheresse: forte
+  temperature_min_germination: 12
+  temperature_optimale: 20
+  temperature_min_survie: 0
+  tolerance_secheresse: moyenne
 cycle:
-  enracinement: superficiel
+  enracinement: pivotant
   type: annuelle
-  duree_avant_recolte_jours: [180, 270]
-  hauteur_adulte_cm: [30, 60]
-  espacement_cm: 12
-  profondeur_semis_cm: 4
-  profondeur_sol_min_cm: 20
-  compatible_hors_sol: true
+  duree_germination_jours: [10, 14]
+  duree_avant_recolte_jours: [80, 100]
+  hauteur_adulte_cm: [40, 80]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: false
   culture_verticale: false
 periodes:
   hemisphere_nord:
     oceanique:
-      plantation: [10, 12]
-      recolte: [6, 7]
-    continental:
-      plantation: [2, 3]
-      recolte: [7, 8]
+      semis_exterieur: [5, 7]
+      plantation: [6, 7]
+      recolte: [9, 11]
     mediterraneen:
-      plantation: [10, 11]
-      recolte: [5, 6]
+      semis_exterieur: [4, 8]
+      recolte: [8, 12]
   hemisphere_sud:
     oceanique:
-      plantation: [4, 6]
-      recolte: [11, 1]
+      semis_exterieur: [11, 1]
+      recolte: [3, 5]
 associations:
-  beneficies:
-    - id: LEG-004
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Éloigne la mouche de la carotte", en: "Repels carrot root fly" }
-    - id: LEG-001
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Repousse pucerons et acariens, effet fongicide", en: "Repels aphids and mites, fungicidal effect" }
-    - id: PFR-001
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Protège le fraisier des maladies et pucerons", en: "Protects strawberries from disease and aphids" }
-    - id: LEG-003
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Compagnonnage favorable à la betterave", en: "Beneficial companion to beetroot" }
+  beneficies: []
   defavorables:
+    - id: LEG-001
+      type: allelopathie
+      raison_i18n: { fr: "Inhibe la croissance des tomates voisines", en: "Inhibits the growth of neighbouring tomatoes" }
+    - id: LEG-002
+      type: allelopathie
+      raison_i18n: { fr: "Inhibe la croissance des aubergines voisines", en: "Inhibits the growth of neighbouring aubergines" }
+    - id: LEG-009
+      type: allelopathie
+      raison_i18n: { fr: "Inhibe la croissance des concombres voisins", en: "Inhibits the growth of neighbouring cucumbers" }
     - id: LEG-013
       type: allelopathie
-      raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
+      raison_i18n: { fr: "Inhibe la croissance des haricots voisins", en: "Inhibits the growth of neighbouring beans" }
     - id: LEG-018
       type: allelopathie
-      raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
+      raison_i18n: { fr: "Inhibe la croissance des pois voisins", en: "Inhibits the growth of neighbouring peas" }
+    - id: LEG-019
+      type: allelopathie
+      raison_i18n: { fr: "Inhibe la croissance des poivrons voisins", en: "Inhibits the growth of neighbouring peppers" }
 rotation:
-  famille: amaryllidaceae
+  famille: apiaceae
   delai_retour_annees: 3
-  precedents_favorables: [cucurbitaceae, solanaceae]
-  precedents_defavorables: [amaryllidaceae]
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [apiaceae]
   fixe_azote: false
-  besoin_azote: faible
-repulsif_contre: [puceron, mouche_carotte]
+  besoin_azote: modere
 
 sources:
   - https://www.gbif.org  # taxonomie
   - https://www.wikidata.org  # vérification famille
-  - https://fr.wikipedia.org/wiki/Ail_cultiv%C3%A9  # description
+  - https://fr.wikipedia.org/wiki/Fenouil  # description
 contributeurs:
   - "@potagerer"

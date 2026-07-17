@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Courge Musquée de Provence. Hérite de LEG-010.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-010-V003
+parent_id: LEG-010
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita moschata 'Musquée de Provence'"
+
+i18n:
+  fr:
+    nom_commun: Courge Musquée de Provence
+    noms_alternatifs: [Muscade de Provence, Fromage de Provence]
+    description: >
+      Grosse courge aplatie fortement côtelée, brun cuivré à maturité, à chair
+      orange épaisse, musquée et sucrée. Très décorative et de longue
+      conservation ; se vend souvent en tranches tant elle est grosse.
+  en:
+    nom_commun: Musquée de Provence Squash
+    description: >
+      Large, flattened, deeply ribbed squash, coppery-brown when ripe, with thick,
+      musky, sweet orange flesh. Very decorative and a long keeper.
+
+cycle:
+  espacement_cm: 120
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Local sec et aéré, 10–15 °C", en: "Dry, airy room, 10–15 °C" }
+utilisations_culinaires_i18n:
+  fr: [En soupe, rôtie, en gratin, en tarte sucrée]
+  en: [Soup, roasted, gratin, sweet pie]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courge_musqu%C3%A9e
+contributeurs:
+  - "@potagerer"

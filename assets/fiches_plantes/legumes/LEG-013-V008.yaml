@@ -1,0 +1,43 @@
+# Fiche fille (variété) — Haricot Borlotto Lingot de Rome. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V008
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Borlotto'"
+
+i18n:
+  fr:
+    nom_commun: Haricot Borlotto Lingot de Rome
+    noms_alternatifs: [Borlotto, Coco rose, Lingua di Fuoco]
+    description: >
+      Haricot à rames à grain marbré rouge et crème dans une cosse striée de
+      rouge, très décorative. Cultivé pour le grain demi-sec ou sec, fondant et
+      savoureux. Grimpant vigoureux à palisser.
+  en:
+    nom_commun: Borlotto Bean
+    description: >
+      Pole bean with a red-and-cream marbled seed in a red-streaked pod, very
+      decorative. Grown for semi-dry or dry grain, melting and tasty.
+
+cycle:
+  duree_avant_recolte_jours: [90, 110]
+  hauteur_adulte_cm: [180, 250]
+  culture_verticale: true
+  charge_tuteur: legere
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled seeds, refrigerated" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique", en: "Dry seeds, airtight jar" }
+utilisations_culinaires_i18n:
+  fr: [Écossé mijoté, en soupe (minestrone), en salade tiède]
+  en: [Shelled and stewed, in soup (minestrone), warm salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Haricot
+contributeurs:
+  - "@potagerer"

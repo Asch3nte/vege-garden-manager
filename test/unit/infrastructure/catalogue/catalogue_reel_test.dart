@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_asset_source.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseurs_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/catalogue_loader.dart';
@@ -13,10 +14,12 @@ import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_repu
 /// a later content lot). An association ref outside this set must resolve to a
 /// real fiche id — otherwise it is a dead reference (a typo or a missed
 /// migration), and this test fails.
-///
-/// Now empty: every association ref resolves to a real fiche id. When a future
-/// content lot cites a not-yet-authored species, add its bare name here.
-const _refsSansFiche = <String>{};
+const _refsSansFiche = {
+  // capucine→FLE-001, soucis→FLE-002, fenouil→LEG-024, ail→LEG-025,
+  // aneth→ARO-007, moutarde→ENG-001 : fiches créées (lot « fleurs compagnes »),
+  // refs repointées. Restent sans fiche dédiée :
+  'persil', 'fraise',
+};
 
 void main() {
   test('the embedded catalogue loads with zero errors', () async {
@@ -67,6 +70,51 @@ void main() {
       expect(detail!.aPhasesSensibles, isTrue,
           reason: '$id should list sensitive growth stages');
     }
+  });
+
+  test('content-lot fiches load with their expected category', () async {
+    final cache = await CatalogueLoader(FilesystemFicheAssetSource()).charger();
+    // id → expected category. Guards the recent content lots: « fleurs
+    // compagnes » (resolves the formerly-orphan refs capucine, soucis, fenouil,
+    // ail, aneth, moutarde) and « potagères courantes ».
+    const attendu = {
+      'FLE-001': CategoriePlante.fleur, // Capucine
+      'FLE-002': CategoriePlante.fleur, // Souci
+      'LEG-024': CategoriePlante.legume, // Fenouil
+      'LEG-025': CategoriePlante.legume, // Ail
+      'ARO-007': CategoriePlante.aromatique, // Aneth
+      'ENG-001': CategoriePlante.engraisVert, // Moutarde blanche
+      // Lot « potagères courantes » :
+      'LEG-026': CategoriePlante.legume, // Fève
+      'LEG-027': CategoriePlante.legume, // Échalote
+      'LEG-028': CategoriePlante.legume, // Mâche
+      'LEG-029': CategoriePlante.legume, // Bette
+      'LEG-030': CategoriePlante.legume, // Melon
+      'LEG-031': CategoriePlante.legume, // Chou de Bruxelles
+      'LEG-032': CategoriePlante.legume, // Chou frisé (kale)
+      // Lot « courantes restantes » :
+      'LEG-033': CategoriePlante.legume, // Panais
+      'LEG-034': CategoriePlante.legume, // Céleri branche
+      'LEG-035': CategoriePlante.legume, // Roquette
+      'LEG-036': CategoriePlante.legume, // Chou-rave
+      'LEG-037': CategoriePlante.legume, // Rutabaga
+      'LEG-038': CategoriePlante.legume, // Pak choï
+      'LEG-039': CategoriePlante.legume, // Cresson alénois
+      'LEG-040': CategoriePlante.legume, // Pâtisson
+      'LEG-041': CategoriePlante.legume, // Pastèque
+      'LEG-042': CategoriePlante.legume, // Chicorée witloof
+      'LEG-043': CategoriePlante.legume, // Scarole
+      'LEG-044': CategoriePlante.legume, // Topinambour
+      'LEG-045': CategoriePlante.legume, // Rhubarbe
+      'LEG-046': CategoriePlante.legume, // Oseille
+      'LEG-047': CategoriePlante.legume, // Asperge
+      'LEG-048': CategoriePlante.legume, // Patate douce
+    };
+    attendu.forEach((id, categorie) {
+      final f = cache.parId(id);
+      expect(f, isNotNull, reason: 'missing companion fiche $id');
+      expect(f!.categorie, categorie, reason: '$id should be $categorie');
+    });
   });
 
   test('every repulsif_contre / piege_a slug resolves to a bioaggressor',

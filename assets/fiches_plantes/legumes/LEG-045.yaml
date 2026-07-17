@@ -1,0 +1,97 @@
+# Fiche mère (espèce) — Rhubarbe.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Vivace à pétioles (feuilles toxiques). Lot « courantes restantes ».
+id: LEG-045
+version_fiche: 1
+categorie: legume
+sous_type: legume_tige
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone3
+nom_scientifique: Rheum rhabarbarum
+famille_botanique: Polygonaceae
+
+i18n:
+  fr:
+    nom_commun: Rhubarbe
+    noms_alternatifs: [Rhubarbe des jardins]
+    description: >
+      Plante vivace de la famille des Polygonacées, cultivée pour ses pétioles
+      acidulés consommés cuits (compotes, tartes). Très rustique et longévive,
+      elle occupe la même place plusieurs années. Attention : les limbes des
+      feuilles sont toxiques, seuls les pétioles se consomment.
+    conseils_culture: >
+      Planter un éclat de souche en sol profond, riche et frais, en situation
+      dégagée. Ne pas récolter la première année pour laisser la souche
+      s'installer. Supprimer les hampes florales pour prolonger la production.
+    conseils_recolte: >
+      Tirer les pétioles bien développés en les détachant à la base, à partir de
+      la deuxième année, au printemps et au début de l'été. Ne jamais consommer
+      les feuilles.
+    erreurs_frequentes:
+      - Récolte dès la première année (souche affaiblie)
+      - Consommation des limbes (toxiques)
+      - Récolte trop tardive en été (pétioles fibreux)
+  en:
+    nom_commun: Rhubarb
+    description: >
+      Perennial of the Polygonaceae family, grown for its tart petioles eaten
+      cooked. Very hardy and long-lived. The leaf blades are toxic; only the
+      petioles are edible.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 10
+  temperature_optimale: 18
+  temperature_min_survie: -25
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [365, 730]
+  hauteur_adulte_cm: [80, 150]
+  espacement_cm: 100
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [10, 11]
+      recolte: [4, 6]
+    continental:
+      plantation: [3, 4]
+      recolte: [5, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [4, 5]
+      recolte: [10, 12]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: polygonaceae
+  delai_retour_annees: 5
+  precedents_favorables: [legumineuses, engrais_verts]
+  fixe_azote: false
+  besoin_azote: eleve
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Rhubarbe  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Courgette Ronde de Nice. Hérite de LEG-011.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-011-V002
+parent_id: LEG-011
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Ronde de Nice'"
+
+i18n:
+  fr:
+    nom_commun: Courgette Ronde de Nice
+    noms_alternatifs: [Ronde de Nice, Courgette ronde]
+    description: >
+      Variété à fruits ronds vert clair moucheté, à chair tendre et fondante.
+      Idéale farcie grâce à sa forme. À récolter jeune (taille d'une balle de
+      tennis) ; plant buissonnant.
+  en:
+    nom_commun: Ronde de Nice Courgette
+    description: >
+      Variety with round, light-green speckled fruits and tender, melting flesh.
+      Ideal for stuffing thanks to its shape; harvest young.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Farcie, poêlée, gratinée, en ratatouille]
+  en: [Stuffed, sautéed, gratin, ratatouille]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courgette
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou de Bruxelles Long Island. Hérite de LEG-031.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-031-V002
+parent_id: LEG-031
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. gemmifera 'Long Island'"
+
+i18n:
+  fr:
+    nom_commun: Chou de Bruxelles Long Island
+    noms_alternatifs: [Long Island Improved]
+    description: >
+      Variété américaine à tige compacte fortement garnie de petites pommes
+      serrées, à bon rendement. Résistante et régulière, elle convient aux
+      récoltes d'automne et d'hiver.
+  en:
+    nom_commun: Long Island Brussels Sprout
+    description: >
+      American variety with a compact stem densely set with small, tight sprouts
+      and good yield. Sturdy and consistent for autumn and winter harvest.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur ; ou récolte au fur et à mesure sur pied", en: "Refrigerator; or pick from the standing plant" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, sautés, rôtis au four, braisés]
+  en: [Steamed, sautéed, oven-roasted, braised]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_de_Bruxelles
+contributeurs:
+  - "@potagerer"

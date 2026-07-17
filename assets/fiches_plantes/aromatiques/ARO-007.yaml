@@ -1,120 +1,114 @@
-# Fiche mère (espèce) — Fenouil (fenouil commun / officinal).
-# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
-# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+# Fiche mère (espèce) — Aneth.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Aromatique ombellifère, attire les auxiliaires. Créée au lot « fleurs
+# compagnes » pour résoudre les références orphelines (ex-id legacy `aneth`).
 id: ARO-007
 version_fiche: 1
 categorie: aromatique
 schema_version: 1
-difficulte: 2
+difficulte: 1
 usages:
   - condimentaire
-  - medicinale
-  - mellifere
   - attire_auxiliaires
+  - mellifere
 
 rusticite:
-  zone_min: zone6
-nom_scientifique: Foeniculum vulgare
+  zone_min: zone7
+nom_scientifique: Anethum graveolens
 famille_botanique: Apiaceae
 
 i18n:
   fr:
-    nom_commun: Fenouil
-    noms_alternatifs: [Fenouil commun, Fenouil officinal, Fenouil aromatique]
+    nom_commun: Aneth
+    noms_alternatifs: [Fenouil bâtard, Aneth odorant]
     description: >
-      Plante vivace de la famille des Apiacées, cultivée pour son feuillage
-      anisé, ses graines et ses ombelles très visitées par les auxiliaires
-      (syrphes, guêpes parasitoïdes). À distinguer du fenouil bulbeux
-      (var. azoricum), cultivé en légume annuel. Attention : fenouil réputé
-      allélopathique, à isoler des cultures.
+      Plante aromatique annuelle de la famille des Apiacées, au feuillage fin et
+      aux ombelles jaunes. Feuilles et graines sont condimentaires. Ses fleurs
+      attirent de nombreux insectes auxiliaires (syrphes, guêpes parasitoïdes).
     conseils_culture: >
-      Semer en place au printemps, en plein soleil et sol drainé. Le planter
-      à l'écart du potager : ses exsudats racinaires inhibent de nombreuses
-      cultures voisines. Rabattre en fin de saison ; la souche repart chaque
-      année en climat doux.
+      Semer en place, l'aneth supporte mal le repiquage à cause de sa racine
+      pivotante. Sol léger et bien drainé, plein soleil. Échelonner les semis
+      pour disposer de feuilles fraîches tout l'été.
     conseils_recolte: >
-      Prélever le feuillage au besoin tout au long de la saison. Récolter les
-      graines quand les ombelles brunissent, puis les faire sécher à l'ombre.
+      Cueillir les feuilles jeunes avant la floraison pour le maximum d'arôme.
+      Récolter les graines quand les ombelles brunissent.
     erreurs_frequentes:
-      - Le planter au milieu du potager (effet allélopathique sur les voisins)
-      - Le confondre avec le fenouil-bulbe (légume, cycle annuel)
-      - Laisser toutes les ombelles grainer (ressemis envahissant)
+      - Repiquage (la racine pivotante supporte mal le déplacement)
+      - Semis unique (montée à graines rapide, feuilles vite épuisées)
   en:
-    nom_commun: Fennel
-    noms_alternatifs: [Common fennel, Herb fennel]
+    nom_commun: Dill
     description: >
-      A perennial of the Apiaceae family grown for its anise-scented foliage and
-      seeds; its umbels attract many beneficial insects. Distinct from bulb
-      fennel (var. azoricum). Reputedly allelopathic — best isolated from crops.
+      Annual herb of the Apiaceae family with feathery foliage and yellow
+      umbels. Leaves and seeds are used as seasoning; its flowers attract many
+      beneficial insects.
 
 besoins:
   ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
   arrosage: modere
   qualites_sol:
-    - riche
+    - leger
     - bien_draine
     - frais
-  ph_min: 6.0
-  ph_max: 7.5
-  temperature_min_germination: 12
-  temperature_optimale: 20
-  temperature_min_survie: -10
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 8
+  temperature_optimale: 18
+  temperature_min_survie: 0
   gele_fatal: false
-  tolerance_secheresse: moyenne
 cycle:
   enracinement: pivotant
-  type: vivace
-  duree_germination_jours: [10, 14]
-  duree_avant_recolte_jours: [60, 90]
-  hauteur_adulte_cm: [100, 200]
-  espacement_cm: 45
+  type: annuelle
+  duree_germination_jours: [10, 21]
+  duree_avant_recolte_jours: [40, 60]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 25
   profondeur_semis_cm: 1
-  profondeur_sol_min_cm: 30
-  compatible_hors_sol: false
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
   culture_verticale: false
 periodes:
   hemisphere_nord:
     oceanique:
-      semis_exterieur: [4, 6]
-      recolte: [6, 10]
+      semis_exterieur: [4, 7]
+      recolte: [6, 9]
     continental:
-      semis_exterieur: [5, 6]
-      recolte: [7, 10]
+      semis_exterieur: [5, 7]
+      recolte: [7, 9]
     mediterraneen:
-      semis_exterieur: [3, 5]
-      recolte: [5, 11]
+      semis_exterieur: [3, 6]
+      recolte: [5, 10]
   hemisphere_sud:
     oceanique:
-      semis_exterieur: [9, 11]
-      recolte: [11, 4]
+      semis_exterieur: [10, 1]
+      recolte: [12, 3]
 associations:
   beneficies:
-    - id: LEG-014
-      type: attraction_pollinisateurs
-      raison_i18n: { fr: "Ses ombelles attirent syrphes et guêpes parasitoïdes (à distance)", en: "Umbels attract hoverflies and parasitic wasps (at a distance)" }
-  defavorables:
-    - id: LEG-001
-      type: allelopathie
-      raison_i18n: { fr: "Inhibe la croissance de la tomate", en: "Inhibits tomato growth" }
-    - id: LEG-013
-      type: allelopathie
-      raison_i18n: { fr: "Freine le développement des haricots", en: "Stunts bean development" }
-    - id: LEG-018
-      type: allelopathie
-      raison_i18n: { fr: "Défavorable au pois", en: "Unfavourable to peas" }
-    - id: ARO-006
-      type: allelopathie
-      raison_i18n: { fr: "Se nuit avec la coriandre (Apiacées, croisement possible)", en: "Antagonistic with coriander (Apiaceae, may cross)" }
+    - id: LEG-004
+      type: attraction_auxiliaires
+      raison_i18n: { fr: "Attire les auxiliaires près des carottes", en: "Attracts beneficial insects near carrots" }
+    - id: LEG-006
+      type: attraction_auxiliaires
+      raison_i18n: { fr: "Attire les auxiliaires contre les chenilles du brocoli", en: "Attracts beneficials against broccoli caterpillars" }
+    - id: LEG-007
+      type: attraction_auxiliaires
+      raison_i18n: { fr: "Attire les auxiliaires contre les chenilles du chou", en: "Attracts beneficials against cabbage caterpillars" }
+    - id: LEG-009
+      type: attraction_auxiliaires
+      raison_i18n: { fr: "Attire les auxiliaires près des concombres", en: "Attracts beneficials near cucumbers" }
+    - id: LEG-011
+      type: attraction_auxiliaires
+      raison_i18n: { fr: "Attire les auxiliaires près des courgettes", en: "Attracts beneficials near courgettes" }
+  defavorables: []
 rotation:
   famille: apiaceae
   delai_retour_annees: 3
   precedents_defavorables: [apiaceae]
-  fixe_azote: false
   besoin_azote: modere
 
 sources:
   - https://www.gbif.org  # taxonomie
   - https://www.wikidata.org  # vérification famille
-  - https://fr.wikipedia.org/wiki/Fenouil_commun  # description
+  - https://fr.wikipedia.org/wiki/Aneth_odorant  # description
 contributeurs:
   - "@potagerer"

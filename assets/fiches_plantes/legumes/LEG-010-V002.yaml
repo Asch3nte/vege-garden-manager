@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Courge Butternut Waltham. Hérite de LEG-010.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-010-V002
+parent_id: LEG-010
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita moschata 'Waltham Butternut'"
+
+i18n:
+  fr:
+    nom_commun: Courge Butternut Waltham
+    noms_alternatifs: [Doubeurre Waltham]
+    description: >
+      Butternut de référence, à fruits piriformes beige clair, à chair orange
+      dense, sucrée et sans fils. Bonne conservation hivernale. Variété fiable et
+      productive, adaptée aux climats tempérés.
+  en:
+    nom_commun: Waltham Butternut Squash
+    description: >
+      The reference butternut, with pale-beige pear-shaped fruits and dense,
+      sweet, stringless orange flesh. Good winter keeper.
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Local sec et aéré, 10–15 °C", en: "Dry, airy room, 10–15 °C" }
+utilisations_culinaires_i18n:
+  fr: [En soupe, rôtie au four, en purée, en gratin]
+  en: [Soup, oven-roasted, mashed, gratin]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courge_musqu%C3%A9e
+contributeurs:
+  - "@potagerer"

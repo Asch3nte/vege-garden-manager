@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Topinambour Rouge du Limousin. Hérite de LEG-044.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-044-V002
+parent_id: LEG-044
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Helianthus tuberosus 'Rouge du Limousin'"
+
+i18n:
+  fr:
+    nom_commun: Topinambour Rouge du Limousin
+    noms_alternatifs: [Rouge du Limousin, Commun rouge]
+    description: >
+      Variété traditionnelle à tubercules bosselés à peau rouge-violacé et chair
+      blanche, au goût prononcé d'artichaut. Très rustique et productive, mais
+      tubercules plus difficiles à éplucher.
+  en:
+    nom_commun: Red Limousin Jerusalem Artichoke
+    description: >
+      Traditional variety with knobbly red-purple-skinned tubers and white flesh,
+      with a pronounced artichoke flavour. Very hardy and productive.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "En terre l'hiver, ou cave humide en silo de sable", en: "In the ground over winter, or sand clamp in a humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [En purée, sauté, en velouté, rôti]
+  en: [Mashed, sautéed, velouté, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Topinambour
+contributeurs:
+  - "@potagerer"

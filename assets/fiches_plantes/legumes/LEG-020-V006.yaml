@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Pomme de terre Belle de Fontenay. Hérite de LEG-020.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-020-V006
+parent_id: LEG-020
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum tuberosum 'Belle de Fontenay'"
+
+i18n:
+  fr:
+    nom_commun: Pomme de terre Belle de Fontenay
+    noms_alternatifs: [Belle de Fontenay]
+    description: >
+      Variété précoce à chair jaune ferme et fine, au goût réputé, idéale en
+      primeur. Excellente tenue à la cuisson ; parfaite vapeur, rissolée ou en
+      salade. Conservation moyenne.
+  en:
+    nom_commun: Belle de Fontenay Potato
+    description: >
+      Early variety with firm, fine yellow flesh and prized flavour, ideal as a
+      new potato. Excellent shape retention when cooked.
+
+cycle:
+  duree_avant_recolte_jours: [90, 110]
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave sombre, sèche et fraîche (6–10 °C)", en: "Dark, dry, cool cellar (6–10 °C)" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, rissolée, en salade, sautée]
+  en: [Steamed, pan-fried, in salad, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Belle_de_Fontenay
+contributeurs:
+  - "@potagerer"

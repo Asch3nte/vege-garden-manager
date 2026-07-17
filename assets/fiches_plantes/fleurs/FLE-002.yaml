@@ -1,6 +1,7 @@
-# Fiche mère (espèce) — Souci officinal (calendula).
-# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
-# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+# Fiche mère (espèce) — Souci officinal.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Fleur compagne (répulsif au potager, mellifère). Créée au lot « fleurs
+# compagnes » pour résoudre les références orphelines (ex-id legacy `soucis`).
 id: FLE-002
 version_fiche: 1
 categorie: fleur
@@ -8,45 +9,41 @@ schema_version: 1
 difficulte: 1
 usages:
   - ornementale
-  - compagnonnage
-  - medicinale
   - alimentaire
+  - medicinale
+  - compagnonnage
   - mellifere
-  - attire_auxiliaires
 
 rusticite:
-  zone_min: zone6
+  zone_min: zone7
 nom_scientifique: Calendula officinalis
 famille_botanique: Asteraceae
 
 i18n:
   fr:
     nom_commun: Souci
-    noms_alternatifs: [Souci officinal, Calendula, Souci des jardins]
+    noms_alternatifs: [Souci officinal, Souci des jardins, Calendula]
     description: >
-      Plante annuelle de la famille des Astéracées, à floraison jaune à orangé
-      longue et généreuse. Fleur comestible et médicinale (calendula), elle
-      attire les auxiliaires (syrphes, coccinelles) et éloignerait les
-      nématodes du sol. Se ressème spontanément d'année en année.
+      Plante annuelle de la famille des Astéracées, à floraison orangée
+      prolongée. Rustique et facile, elle se ressème seule. Les pétales sont
+      comestibles ; elle attire les pollinisateurs et les auxiliaires, et
+      contribue à éloigner certains ravageurs du sol.
     conseils_culture: >
-      Semer en place au printemps, en tout sol bien drainé et au soleil.
-      Supporte des sols pauvres. Supprimer les fleurs fanées prolonge la
-      floraison ; en laisser quelques-unes monter en graines pour le
-      ressemis spontané.
+      Semer en place au printemps, en plein soleil, dans un sol ordinaire bien
+      drainé. Supprimer les fleurs fanées pour prolonger la floraison. Laisser
+      quelques fleurs monter en graines pour un ressemis spontané.
     conseils_recolte: >
-      Cueillir les capitules entièrement ouverts, par temps sec, pour un usage
-      alimentaire (pétales en salade) ou médicinal (séchage). Récolter
-      régulièrement stimule de nouvelles fleurs.
+      Cueillir les fleurs bien ouvertes le matin, par temps sec, pour un usage
+      culinaire (pétales) ou en séchage.
     erreurs_frequentes:
-      - Laisser les fleurs faner sur pied (arrête la floraison)
-      - Excès d'eau ou sol mal drainé (oïdium sur le feuillage)
+      - Excès d'azote (feuillage abondant, floraison réduite)
+      - Absence de suppression des fleurs fanées (floraison écourtée)
   en:
     nom_commun: Pot marigold
-    noms_alternatifs: [Calendula, English marigold]
     description: >
-      An annual of the Asteraceae family with long-lasting yellow to orange
-      flowers. Edible and medicinal (calendula); attracts beneficial insects
-      and is reputed to repel soil nematodes. Self-seeds readily.
+      Hardy annual of the Asteraceae family with long-lasting orange flowers.
+      Edible petals; attracts pollinators and beneficial insects and helps keep
+      some soil pests away.
 
 besoins:
   ensoleillement: plein_soleil
@@ -55,6 +52,7 @@ besoins:
   qualites_sol:
     - bien_draine
     - leger
+    - pauvre
   ph_min: 6.0
   ph_max: 7.5
   temperature_min_germination: 10
@@ -65,8 +63,8 @@ besoins:
 cycle:
   enracinement: moyen
   type: annuelle
-  duree_germination_jours: [7, 14]
-  duree_avant_recolte_jours: [50, 70]
+  duree_germination_jours: [8, 14]
+  duree_avant_recolte_jours: [45, 60]
   hauteur_adulte_cm: [30, 60]
   espacement_cm: 30
   profondeur_semis_cm: 1
@@ -76,16 +74,14 @@ cycle:
 periodes:
   hemisphere_nord:
     oceanique:
-      semis_interieur: [3, 4]
-      semis_exterieur: [4, 6]
+      semis_exterieur: [3, 5]
       recolte: [6, 10]
     continental:
-      semis_interieur: [3, 4]
-      semis_exterieur: [4, 6]
-      recolte: [6, 10]
+      semis_exterieur: [4, 5]
+      recolte: [7, 10]
     mediterraneen:
-      semis_exterieur: [2, 5]
-      recolte: [4, 11]
+      semis_exterieur: [2, 4]
+      recolte: [5, 11]
   hemisphere_sud:
     oceanique:
       semis_exterieur: [9, 11]
@@ -93,22 +89,15 @@ periodes:
 associations:
   beneficies:
     - id: LEG-001
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Éloigne les nématodes et attire les syrphes prédateurs de pucerons", en: "Repels nematodes and attracts aphid-eating hoverflies" }
-    - id: LEG-020
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Réduit les nématodes du sol autour de la pomme de terre", en: "Reduces soil nematodes around potatoes" }
-    - id: LEG-002
-      type: repulsion_ravageur
-      raison_i18n: { fr: "Éloigne les nématodes de l'aubergine", en: "Repels nematodes from aubergine" }
+      type: [repulsion_ravageur, attraction_pollinisateurs]
+      raison_i18n: { fr: "Repousse certains ravageurs du sol et attire les pollinisateurs des tomates", en: "Repels some soil pests and attracts tomato pollinators" }
     - id: LEG-013
-      type: attraction_pollinisateurs
-      raison_i18n: { fr: "Attire pollinisateurs et auxiliaires près des haricots", en: "Attracts pollinators and beneficials near beans" }
+      type: [repulsion_ravageur, attraction_pollinisateurs]
+      raison_i18n: { fr: "Éloigne les pucerons noirs et attire les auxiliaires près des haricots", en: "Deters black aphids and draws beneficials near beans" }
   defavorables: []
 rotation:
   famille: asteraceae
-  delai_retour_annees: 1
-  fixe_azote: false
+  delai_retour_annees: 2
   besoin_azote: faible
 
 sources:

@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Chou brocoli De Cicco. Hérite de LEG-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-006-V002
+parent_id: LEG-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. italica 'De Cicco'"
+
+i18n:
+  fr:
+    nom_commun: Chou brocoli De Cicco
+    noms_alternatifs: [De Cicco]
+    description: >
+      Variété italienne ancienne à pomme centrale de taille moyenne suivie de
+      nombreuses repousses latérales, permettant une récolte étalée. Rustique et
+      productive, idéale pour les récoltes échelonnées au potager familial.
+  en:
+    nom_commun: De Cicco Broccoli
+    description: >
+      Old Italian variety with a medium central head followed by many side
+      shoots, giving a spread-out harvest. Hardy and productive.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Blanchir 3 min avant congélation", en: "Blanch 3 min before freezing" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, sauté, en gratin, en soupe]
+  en: [Steamed, stir-fried, gratin, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Brocoli
+contributeurs:
+  - "@potagerer"

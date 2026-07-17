@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Poire Jaune. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V021
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Yellow Pear'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Poire Jaune
+    noms_alternatifs: [Yellow Pear, Poire jaune]
+    description: >
+      Petite tomate en forme de poire, jaune vif, à la saveur douce et peu acide.
+      Très productive et décorative, en longues grappes. Plant indéterminé
+      vigoureux et facile ; se ressème facilement.
+  en:
+    nom_commun: Yellow Pear Tomato
+    description: >
+      Small pear-shaped bright-yellow tomato with a mild, low-acid flavour. Very
+      productive and decorative, in long trusses. Vigorous, easy indeterminate plant.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue à l'apéritif, en salade, confite]
+  en: [Raw as a snack, in salad, candied]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

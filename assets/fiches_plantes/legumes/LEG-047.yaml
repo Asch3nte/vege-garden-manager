@@ -1,0 +1,95 @@
+# Fiche mère (espèce) — Asperge.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Vivace de longue installation (griffes). Lot « courantes restantes ».
+id: LEG-047
+version_fiche: 1
+categorie: legume
+sous_type: legume_tige
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Asparagus officinalis
+famille_botanique: Asparagaceae
+
+i18n:
+  fr:
+    nom_commun: Asperge
+    noms_alternatifs: [Asperge officinale]
+    description: >
+      Plante vivace de la famille des Asparagacées, cultivée pour ses jeunes
+      pousses (turions) récoltées au printemps. Culture de longue haleine : une
+      aspergeraie s'installe pour dix à quinze ans mais ne produit qu'à partir de
+      la troisième année.
+    conseils_culture: >
+      Planter les griffes au printemps dans une tranchée profonde, en sol léger,
+      profond et bien drainé. Ne pas récolter les deux premières années pour
+      laisser les griffes se renforcer. Butter pour les asperges blanches.
+    conseils_recolte: >
+      Couper les turions à la base quand ils atteignent 15–20 cm, au printemps,
+      pendant six à huit semaines, à partir de la troisième année.
+    erreurs_frequentes:
+      - Récolte trop précoce (griffes épuisées, aspergeraie ruinée)
+      - Sol lourd et humide (pourriture des griffes)
+      - Récolte prolongée trop tard en saison (plante affaiblie)
+  en:
+    nom_commun: Asparagus
+    description: >
+      Perennial of the Asparagaceae family, grown for its young spears harvested
+      in spring. A long-term crop: a bed lasts 10–15 years but only produces from
+      the third year.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - leger
+    - bien_draine
+    - riche
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -20
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [700, 1000]
+  hauteur_adulte_cm: [100, 150]
+  espacement_cm: 50
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [4, 6]
+    continental:
+      plantation: [3, 4]
+      recolte: [4, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [10, 12]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: asparagaceae
+  delai_retour_annees: 8
+  precedents_favorables: [legumineuses, engrais_verts]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Asperge  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Chou-fleur Romanesco. Hérite de LEG-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-008-V004
+parent_id: LEG-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. botrytis 'Romanesco'"
+
+i18n:
+  fr:
+    nom_commun: Chou Romanesco
+    noms_alternatifs: [Romanesco, Chou-fleur romanesco]
+    description: >
+      Chou à pomme vert tendre formée de pyramides fractales spectaculaires, à la
+      saveur douce et fine, plus proche du chou-fleur que du brocoli. Décoratif et
+      savoureux ; culture d'automne.
+  en:
+    nom_commun: Romanesco
+    description: >
+      Cabbage with a light-green head of striking fractal pyramids, mild and fine
+      in flavour, closer to cauliflower than broccoli. Decorative and tasty.
+
+cycle:
+  duree_avant_recolte_jours: [100, 130]
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, en gratin, poêlé, cru en salade]
+  en: [Steamed, gratin, sautéed, raw in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_romanesco
+contributeurs:
+  - "@potagerer"

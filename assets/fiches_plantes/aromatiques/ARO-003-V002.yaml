@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Ciboulette Commune. Hérite de ARO-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-003-V002
+parent_id: ARO-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium schoenoprasum 'Commune'"
+
+i18n:
+  fr:
+    nom_commun: Ciboulette Commune
+    noms_alternatifs: [Ciboulette fine, Civette]
+    description: >
+      Ciboulette classique à fins tubes creux vert vif, au léger goût d'oignon,
+      et à jolies fleurs roses comestibles et mellifères. Vivace en touffe, elle
+      se coupe régulièrement et se divise tous les deux à trois ans.
+  en:
+    nom_commun: Common Chives
+    description: >
+      Classic chives with fine, hollow bright-green tubes, a mild onion flavour
+      and pretty edible, melliferous pink flowers. Clump-forming perennial.
+utilisations_culinaires_i18n:
+  fr: [Crue ciselée sur salades, omelettes, fromage frais ; fleurs en décoration]
+  en: [Raw chopped on salads, omelettes, fresh cheese; flowers as garnish]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ciboulette
+contributeurs:
+  - "@potagerer"

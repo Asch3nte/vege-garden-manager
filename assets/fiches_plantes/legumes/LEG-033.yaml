@@ -1,0 +1,97 @@
+# Fiche mère (espèce) — Panais.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Légume-racine ombellifère rustique. Lot « courantes restantes ».
+id: LEG-033
+version_fiche: 1
+categorie: legume
+sous_type: legume_racine
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone5
+nom_scientifique: Pastinaca sativa
+famille_botanique: Apiaceae
+
+i18n:
+  fr:
+    nom_commun: Panais
+    noms_alternatifs: [Grand chervis]
+    description: >
+      Légume-racine bisannuel de la famille des Apiacées, cultivé pour sa racine
+      charnue au goût doux et sucré, proche de la carotte. Très rustique, il se
+      bonifie avec le froid et se conserve en terre tout l'hiver.
+    conseils_culture: >
+      Semer en place au printemps en sol profond, meuble et sans cailloux, avec
+      des graines fraîches (elles perdent vite leur pouvoir germinatif). La levée
+      est lente ; garder le sol humide jusqu'à l'apparition des plants.
+    conseils_recolte: >
+      Arracher les racines à partir de l'automne, au fur et à mesure des besoins.
+      Une gelée avant récolte améliore la saveur.
+    erreurs_frequentes:
+      - Graines trop vieilles (levée très irrégulière)
+      - Sol caillouteux (racines fourchues)
+      - Semis en sol sec (échec de la levée lente)
+  en:
+    nom_commun: Parsnip
+    description: >
+      Biennial root vegetable of the Apiaceae family, grown for its sweet,
+      carrot-like root. Very hardy; it sweetens with cold and keeps in the ground
+      all winter.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 8
+  temperature_optimale: 16
+  temperature_min_survie: -12
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: pivotant
+  type: bisannuelle
+  duree_germination_jours: [15, 28]
+  duree_avant_recolte_jours: [150, 210]
+  hauteur_adulte_cm: [30, 60]
+  espacement_cm: 20
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 5]
+      recolte: [10, 2]
+    continental:
+      semis_exterieur: [4, 5]
+      recolte: [10, 1]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [4, 8]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [apiaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Panais  # description
+contributeurs:
+  - "@potagerer"

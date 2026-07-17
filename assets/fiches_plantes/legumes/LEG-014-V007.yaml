@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Laitue Sucrine. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V007
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa 'Sucrine'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Sucrine
+    noms_alternatifs: [Sucrine, Petite romaine]
+    description: >
+      Petite laitue type mini-romaine à pomme allongée compacte, aux feuilles
+      épaisses, croquantes et douces (« sucrine » pour leur douceur). Rustique et
+      peu encombrante, idéale en culture serrée et en pot.
+  en:
+    nom_commun: Sucrine (Little Gem) Lettuce
+    description: >
+      Small mini-cos lettuce with a compact upright head and thick, crunchy,
+      sweet leaves. Hardy and compact, ideal for close spacing and pots.
+
+cycle:
+  espacement_cm: 20
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, braisée, grillée en demi]
+  en: [Raw in salad, braised, grilled in halves]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

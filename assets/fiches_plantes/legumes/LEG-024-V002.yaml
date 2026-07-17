@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Fenouil Zefa Fino. Hérite de LEG-024.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-024-V002
+parent_id: LEG-024
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Foeniculum vulgare var. azoricum 'Zefa Fino'"
+
+i18n:
+  fr:
+    nom_commun: Fenouil Zefa Fino
+    noms_alternatifs: [Zefa Fino]
+    description: >
+      Variété suisse sélectionnée pour sa résistance à la montaison, à bulbe rond
+      régulier et charnu. Plus tolérante aux semis de printemps que les fenouils
+      traditionnels ; fiable et productive.
+  en:
+    nom_commun: Zefa Fino Fennel
+    description: >
+      Swiss variety selected for bolt resistance, with a round, regular, fleshy
+      bulb. More tolerant of spring sowing than traditional fennels.
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, braisé, rôti, en gratin]
+  en: [Raw in salad, braised, roasted, gratin]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Fenouil
+contributeurs:
+  - "@potagerer"

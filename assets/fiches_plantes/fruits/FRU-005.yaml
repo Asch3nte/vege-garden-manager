@@ -82,7 +82,7 @@ periodes:
       recolte: [1, 3]
 associations:
   beneficies:
-    - id: LEG-024
+    - id: LEG-025
       type: repulsion_ravageur
       raison_i18n: { fr: "L'ail au pied a un effet répulsif et antifongique", en: "Garlic at the base is repellent and antifungal" }
     - id: ARO-003

@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Céleri branche Vert d'Elne. Hérite de LEG-034.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-034-V001
+parent_id: LEG-034
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Apium graveolens var. dulce 'Vert d'Elne'"
+
+i18n:
+  fr:
+    nom_commun: Céleri branche Vert d'Elne
+    noms_alternatifs: [Vert d'Elne]
+    description: >
+      Céleri à côtes vertes, robuste et parfumé, à côtes pleines et charnues.
+      Variété rustique et productive ne nécessitant pas de blanchiment ; goût
+      prononcé apprécié en cuisine.
+  en:
+    nom_commun: Vert d'Elne Celery
+    description: >
+      Green-ribbed celery, robust and aromatic, with full, fleshy ribs. Hardy and
+      productive, needing no blanching; pronounced flavour.
+conservation:
+  - methode: frais
+    duree_jours: 12
+    conditions_i18n: { fr: "Réfrigérateur, pieds dans un peu d'eau", en: "Refrigerator, stalks in a little water" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, braisé, en soupe, en mirepoix]
+  en: [Raw in salad, braised, in soup, mirepoix]
+
+sources:
+  - https://fr.wikipedia.org/wiki/C%C3%A9leri
+contributeurs:
+  - "@potagerer"

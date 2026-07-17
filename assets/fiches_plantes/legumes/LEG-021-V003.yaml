@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Potimarron Bleu de Hongrie. Hérite de LEG-021.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-021-V003
+parent_id: LEG-021
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita maxima 'Bleu de Hongrie'"
+
+i18n:
+  fr:
+    nom_commun: Potimarron Bleu de Hongrie
+    noms_alternatifs: [Bleu de Hongrie]
+    description: >
+      Courge à peau gris-bleu légèrement côtelée, à chair orange épaisse, fine et
+      sucrée. Rustique, productive et de très longue conservation. Excellente en
+      soupe comme en pâtisserie.
+  en:
+    nom_commun: Blue Hubbard-type (Bleu de Hongrie)
+    description: >
+      Squash with slightly ribbed grey-blue skin and thick, fine, sweet orange
+      flesh. Hardy, productive and a very long keeper.
+
+cycle:
+  espacement_cm: 120
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Local sec et aéré, 10–15 °C", en: "Dry, airy room, 10–15 °C" }
+utilisations_culinaires_i18n:
+  fr: [En soupe, rôtie, en purée, en tarte sucrée]
+  en: [Soup, roasted, mashed, sweet pie]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Potimarron
+contributeurs:
+  - "@potagerer"

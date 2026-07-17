@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Artichaut Violet de Provence. Hérite de LEG-023.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-023-V002
+parent_id: LEG-023
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cynara cardunculus var. scolymus 'Violet de Provence'"
+
+i18n:
+  fr:
+    nom_commun: Artichaut Violet de Provence
+    noms_alternatifs: [Violet de Provence, Bouquet]
+    description: >
+      Artichaut à petits capitules coniques violacés, tendres, se consommant
+      jeunes crus « à la poivrade » ou cuits. Productif et hâtif, moins rustique
+      que les gros verts ; apprécié en climat doux.
+  en:
+    nom_commun: Provence Purple Artichoke
+    description: >
+      Artichoke with small, conical, purplish heads, tender, eaten young raw
+      ("à la poivrade") or cooked. Productive and early, less hardy than large
+      green types.
+
+cycle:
+  hauteur_adulte_cm: [80, 120]
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tige dans l'eau", en: "Refrigerator, stem in water" }
+utilisations_culinaires_i18n:
+  fr: [Jeune cru à la poivrade, cuit à la vapeur, en barigoule]
+  en: [Young raw à la poivrade, steamed, barigoule]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Artichaut
+contributeurs:
+  - "@potagerer"

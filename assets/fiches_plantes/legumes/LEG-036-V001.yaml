@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou-rave Blanc de Vienne. Hérite de LEG-036.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-036-V001
+parent_id: LEG-036
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. gongylodes 'Blanc de Vienne'"
+
+i18n:
+  fr:
+    nom_commun: Chou-rave Blanc de Vienne
+    noms_alternatifs: [Blanc de Vienne, Vienne blanc]
+    description: >
+      Chou-rave hâtif à boule vert pâle, à chair blanche tendre et douce. Rapide
+      et facile, à récolter jeune (taille d'une balle de tennis) pour éviter la
+      chair fibreuse.
+  en:
+    nom_commun: White Vienna Kohlrabi
+    description: >
+      Early kohlrabi with a pale-green globe and tender, mild white flesh. Quick
+      and easy; harvest young to avoid fibrous flesh.
+
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé, en salade, vapeur, sauté]
+  en: [Raw grated, in salad, steamed, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-rave
+contributeurs:
+  - "@potagerer"

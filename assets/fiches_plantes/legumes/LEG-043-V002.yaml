@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chicorée Frisée de Ruffec. Hérite de LEG-043.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-043-V002
+parent_id: LEG-043
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cichorium endivia var. crispum 'Frisée de Ruffec'"
+
+i18n:
+  fr:
+    nom_commun: Chicorée Frisée de Ruffec
+    noms_alternatifs: [Frisée de Ruffec]
+    description: >
+      Chicorée frisée à feuilles finement découpées et cloquées, formant une
+      touffe étalée. Blanchie au cœur, elle est tendre et légèrement amère.
+      Rustique, elle prolonge la saison des salades en automne.
+  en:
+    nom_commun: Ruffec Frisée
+    description: >
+      Curly endive with finely cut, crinkled leaves forming a spreading rosette.
+      Blanched at the heart, it is tender and slightly bitter.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade (aux lardons), braisée]
+  en: [Raw in salad (with bacon), braised]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_endive
+contributeurs:
+  - "@potagerer"

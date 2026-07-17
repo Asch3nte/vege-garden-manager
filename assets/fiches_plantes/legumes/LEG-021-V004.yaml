@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Potimarron Marina di Chioggia. Hérite de LEG-021.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-021-V004
+parent_id: LEG-021
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita maxima 'Marina di Chioggia'"
+
+i18n:
+  fr:
+    nom_commun: Potimarron Marina di Chioggia
+    noms_alternatifs: [Marina di Chioggia, Courge de Chioggia]
+    description: >
+      Courge italienne turbanée à peau vert-gris fortement bosselée, à chair
+      orange sucrée et sèche. Très décorative, réputée pour les gnocchi et les
+      raviolis ; excellente conservation.
+  en:
+    nom_commun: Marina di Chioggia Squash
+    description: >
+      Turban-shaped Italian squash with heavily warted grey-green skin and sweet,
+      dry orange flesh. Very decorative, prized for gnocchi and ravioli.
+
+cycle:
+  espacement_cm: 120
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Local sec et aéré, 10–15 °C", en: "Dry, airy room, 10–15 °C" }
+utilisations_culinaires_i18n:
+  fr: [En gnocchi, en raviolis, rôtie, en soupe]
+  en: [Gnocchi, ravioli, roasted, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Potimarron
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Téton de Vénus. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V020
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Téton de Vénus'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Téton de Vénus
+    noms_alternatifs: [Téton de Vénus rose]
+    description: >
+      Variété ancienne à fruits rose-rouge en forme de cœur terminé par un
+      téton caractéristique, à chair dense, douce et peu acide. Décorative et
+      savoureuse. Plant indéterminé à tuteurer.
+  en:
+    nom_commun: Téton de Vénus Tomato
+    description: >
+      Old variety with pink-red heart-shaped fruits ending in a characteristic
+      nipple, with dense, sweet, low-acid flesh. Decorative and tasty.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en tranches, farcie]
+  en: [Raw in salad, in slices, stuffed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

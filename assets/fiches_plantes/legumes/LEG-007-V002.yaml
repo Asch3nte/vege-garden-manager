@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou cabus Cœur de Bœuf des Vertus. Hérite de LEG-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-007-V002
+parent_id: LEG-007
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. capitata 'Cœur de Bœuf des Vertus'"
+
+i18n:
+  fr:
+    nom_commun: Chou cabus Cœur de Bœuf des Vertus
+    noms_alternatifs: [Cœur de Bœuf des Vertus]
+    description: >
+      Chou pommé pointu, précoce, à pomme conique compacte et tendre. Rustique et
+      hâtif, il ouvre la saison des choux ; feuilles fines appréciées crues comme
+      cuites.
+  en:
+    nom_commun: Cœur de Bœuf des Vertus Cabbage
+    description: >
+      Pointed early head cabbage with a compact, tender conical head. Hardy and
+      early, opening the cabbage season; fine leaves.
+
+conservation:
+  - methode: frais
+    duree_jours: 20
+    conditions_i18n: { fr: "Cave fraîche et humide, ou réfrigérateur", en: "Cool humid cellar, or refrigerator" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé, braisé, en potée, sauté]
+  en: [Raw grated, braised, in stew, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_cabus
+contributeurs:
+  - "@potagerer"

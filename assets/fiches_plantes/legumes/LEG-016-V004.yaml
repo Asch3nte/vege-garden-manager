@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Oignon Rouge de Brunswick. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V004
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Rouge de Brunswick'"
+
+i18n:
+  fr:
+    nom_commun: Oignon Rouge de Brunswick
+    noms_alternatifs: [Rouge de Brunswick]
+    description: >
+      Oignon rouge à bulbe rond aplati, à chair rosée ferme et de saveur
+      soutenue. Variété ancienne rustique et productive, de bonne conservation ;
+      décorative crue en salade.
+  en:
+    nom_commun: Red Brunswick Onion
+    description: >
+      Red onion with a round, flattened bulb, firm pink-tinged flesh and a full
+      flavour. Old, hardy, productive variety with good keeping.
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Local sec et aéré, en cagette ou tresse", en: "Dry, airy room, in a crate or braid" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, cuit, confit, en pickles]
+  en: [Raw in salad, cooked, confit, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon
+contributeurs:
+  - "@potagerer"

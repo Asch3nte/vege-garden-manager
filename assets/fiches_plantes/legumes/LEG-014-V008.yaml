@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Laitue Romaine Blonde Maraîchère. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V008
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa var. longifolia 'Blonde Maraîchère'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Romaine Blonde Maraîchère
+    noms_alternatifs: [Romaine Blonde Maraîchère]
+    description: >
+      Laitue romaine à pomme dressée allongée, aux feuilles épaisses, croquantes
+      et nervurées. Classique des salades type césar. Vigoureuse et productive,
+      elle apprécie un arrosage régulier.
+  en:
+    nom_commun: Blonde Maraîchère Romaine Lettuce
+    description: >
+      Cos (romaine) lettuce with an upright elongated head and thick, crunchy,
+      ribbed leaves. The classic Caesar-salad lettuce.
+
+cycle:
+  hauteur_adulte_cm: [25, 35]
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade (césar), braisée, grillée]
+  en: [Raw in salad (Caesar), braised, grilled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

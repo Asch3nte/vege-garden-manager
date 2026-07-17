@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Pois Merveille de Kelvedon. Hérite de LEG-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-018-V003
+parent_id: LEG-018
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pisum sativum 'Merveille de Kelvedon'"
+
+i18n:
+  fr:
+    nom_commun: Pois Merveille de Kelvedon
+    noms_alternatifs: [Merveille de Kelvedon]
+    description: >
+      Petit pois nain à grains ridés, sucré et productif, à récolte groupée.
+      Variété fiable de mi-saison, appréciée pour la congélation. Port bas à
+      soutenir par un léger rame ou des rameaux.
+  en:
+    nom_commun: Kelvedon Wonder Pea
+    description: >
+      Dwarf wrinkled-seed shelling pea, sweet and productive, with a concentrated
+      harvest. A reliable mid-season variety, good for freezing.
+
+cycle:
+  duree_avant_recolte_jours: [65, 85]
+  hauteur_adulte_cm: [45, 60]
+  charge_tuteur: legere
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled peas, refrigerated" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Écosser et blanchir 1 min", en: "Shell and blanch 1 min" }
+utilisations_culinaires_i18n:
+  fr: [Écossé à la française, en velouté, congelé]
+  en: [Shelled French-style, in velouté, frozen]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pois
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Radis Flamboyant. Hérite de LEG-022.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-022-V004
+parent_id: LEG-022
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Raphanus sativus 'Flamboyant'"
+
+i18n:
+  fr:
+    nom_commun: Radis Flamboyant
+    noms_alternatifs: [Flamboyant 5, Demi-long rouge à bout blanc]
+    description: >
+      Radis demi-long rouge vif à bout blanc, très décoratif et savoureux, à
+      chair croquante et douce. Productif et régulier ; l'un des plus cultivés au
+      potager familial.
+  en:
+    nom_commun: Flamboyant Radish
+    description: >
+      Half-long bright-red radish with a white tip, very decorative and tasty,
+      with crisp, mild flesh. Productive and consistent.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, sans les fanes", en: "Refrigerator, tops removed" }
+utilisations_culinaires_i18n:
+  fr: [Cru croqué, en salade, à la croque au sel]
+  en: [Raw, in salad, with butter and salt]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Radis
+contributeurs:
+  - "@potagerer"

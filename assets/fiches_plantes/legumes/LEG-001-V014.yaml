@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Tomate Beefsteak. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V014
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Beefsteak'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Beefsteak
+    noms_alternatifs: [Tomate à steak]
+    description: >
+      Grosse tomate ronde et légèrement côtelée, rouge, à chair épaisse et
+      charnue. Idéale en tranches (burgers, sandwichs). Plant indéterminé
+      vigoureux ; les fruits lourds demandent un tuteurage solide.
+  en:
+    nom_commun: Beefsteak Tomato
+    description: >
+      Large, round, slightly ribbed red tomato with thick, meaty flesh. Ideal
+      sliced (burgers, sandwiches). Vigorous indeterminate plant; heavy fruit
+      needs sturdy staking.
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue en tranches, farcie, en salade]
+  en: [Raw in slices, stuffed, in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

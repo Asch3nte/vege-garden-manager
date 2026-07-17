@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Oignon Blanc de Paris. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V003
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Blanc de Paris'"
+
+i18n:
+  fr:
+    nom_commun: Oignon Blanc de Paris
+    noms_alternatifs: [Blanc de Paris, Blanc hâtif de Paris]
+    description: >
+      Oignon blanc hâtif à bulbe rond, doux, récolté jeune en oignon de printemps
+      « en botte » (cébette) ou à maturité. Ne se conserve pas : à consommer
+      frais. Peut se semer à l'automne sous climat doux.
+  en:
+    nom_commun: White Paris Onion
+    description: >
+      Early white onion with a round, mild bulb, harvested young as a spring
+      bunching onion or at maturity. Does not keep; eat fresh.
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "Réfrigérateur (usage frais)", en: "Refrigerator (fresh use)" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en botte (cébette), cuit, en pissaladière]
+  en: [Raw in salad, as spring onion, cooked]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon
+contributeurs:
+  - "@potagerer"

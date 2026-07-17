@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou frisé Cavolo Nero. Hérite de LEG-032.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-032-V002
+parent_id: LEG-032
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. sabellica 'Nero di Toscana'"
+
+i18n:
+  fr:
+    nom_commun: Chou frisé Cavolo Nero
+    noms_alternatifs: [Noir de Toscane, Kale toscan, Lacinato]
+    description: >
+      Kale italien à longues feuilles étroites, bosselées et vert très foncé,
+      dressées en palmier. Saveur douce et fine, très appréciée en cuisine ;
+      rustique et décoratif.
+  en:
+    nom_commun: Cavolo Nero (Tuscan Kale)
+    description: >
+      Italian kale with long, narrow, bumpy, very dark-green leaves held upright
+      like a palm. Mild, fine flavour, prized in cooking; hardy and decorative.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur ; ou récolte au fur et à mesure sur pied", en: "Refrigerator; or pick from the standing plant" }
+utilisations_culinaires_i18n:
+  fr: [En soupe (ribollita), sauté, en chips, braisé]
+  en: [In soup (ribollita), sautéed, chips, braised]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_fris%C3%A9
+contributeurs:
+  - "@potagerer"

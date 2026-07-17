@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Carotte Marché de Paris. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V008
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Marché de Paris'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Marché de Paris
+    noms_alternatifs: [Marché de Paris, Ronde de Paris]
+    description: >
+      Petite carotte ronde à globe orange, précoce et sucrée. Idéale en sols
+      lourds, caillouteux ou peu profonds, et en pot ou jardinière grâce à sa
+      forme ; à récolter jeune.
+  en:
+    nom_commun: Paris Market Carrot
+    description: >
+      Small round, globe-shaped orange carrot, early and sweet. Ideal for heavy,
+      stony or shallow soils and for pots thanks to its shape; harvest young.
+
+cycle:
+  duree_avant_recolte_jours: [60, 80]
+  hauteur_adulte_cm: [15, 25]
+  profondeur_sol_min_cm: 15
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue croquée, glacée entière, vapeur]
+  en: [Raw whole, glazed whole, steamed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

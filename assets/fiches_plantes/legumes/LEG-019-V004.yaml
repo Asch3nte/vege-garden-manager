@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Poivron Doux d'Espagne. Hérite de LEG-019.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-019-V004
+parent_id: LEG-019
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum 'Doux d'Espagne'"
+
+i18n:
+  fr:
+    nom_commun: Poivron Doux d'Espagne
+    noms_alternatifs: [Long doux d'Espagne]
+    description: >
+      Variété à longs fruits coniques jaune-vert virant au rouge, à chair fine et
+      très douce. Précoce et productive, elle mûrit bien même en saison courte.
+  en:
+    nom_commun: Sweet Spanish Pepper
+    description: >
+      Variety with long conical fruits, yellow-green turning red, with thin, very
+      sweet flesh. Early and productive, it ripens well even in a short season.
+
+conservation:
+  - methode: frais
+    duree_jours: 8
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Grillé, poêlé, en salade, farci]
+  en: [Grilled, sautéed, in salad, stuffed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poivron
+contributeurs:
+  - "@potagerer"

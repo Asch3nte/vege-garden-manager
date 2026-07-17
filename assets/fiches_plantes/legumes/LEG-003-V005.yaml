@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Betterave Cylindra. Hérite de LEG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-003-V005
+parent_id: LEG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris 'Cylindra'"
+
+i18n:
+  fr:
+    nom_commun: Betterave Cylindra
+    noms_alternatifs: [Cylindra, Crapaudine cylindrique, Longue d'Égypte]
+    description: >
+      Betterave à racine allongée cylindrique s'enfonçant peu dans le sol, à
+      chair rouge sombre sucrée. Pratique en cuisine : les tranches sont
+      régulières et nombreuses. Productive et de bonne conservation.
+  en:
+    nom_commun: Cylindra Beetroot
+    description: >
+      Beetroot with an elongated cylindrical root sitting shallow in the soil and
+      sweet dark-red flesh. Practical in the kitchen: even, plentiful slices.
+cycle:
+  duree_avant_recolte_jours: [70, 100]
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Cuite en salade, en pickles, rôtie]
+  en: [Cooked in salad, pickled, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potag%C3%A8re
+contributeurs:
+  - "@potagerer"

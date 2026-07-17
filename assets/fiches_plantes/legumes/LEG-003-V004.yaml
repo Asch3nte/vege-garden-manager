@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Betterave Burpee's Golden. Hérite de LEG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-003-V004
+parent_id: LEG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris 'Burpee's Golden'"
+
+i18n:
+  fr:
+    nom_commun: Betterave Burpee's Golden
+    noms_alternatifs: [Burpee's Golden, Betterave jaune]
+    description: >
+      Betterave à racine ronde à chair jaune-orangé, douce et sans la coloration
+      salissante des rouges. Les fanes sont également comestibles. Décorative et
+      savoureuse ; germination parfois capricieuse, semer un peu dense.
+  en:
+    nom_commun: Burpee's Golden Beetroot
+    description: >
+      Beetroot with a round root and yellow-orange flesh, sweet and without the
+      staining of red types. The leaves are also edible. Germination can be erratic.
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Rôtie, cuite en salade, crue râpée ; fanes sautées]
+  en: [Roasted, cooked in salad, raw grated; leaves sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potag%C3%A8re
+contributeurs:
+  - "@potagerer"

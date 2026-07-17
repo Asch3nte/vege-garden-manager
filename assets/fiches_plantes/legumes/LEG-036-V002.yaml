@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou-rave Bleu de Vienne. Hérite de LEG-036.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-036-V002
+parent_id: LEG-036
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. gongylodes 'Bleu de Vienne'"
+
+i18n:
+  fr:
+    nom_commun: Chou-rave Bleu de Vienne
+    noms_alternatifs: [Bleu de Vienne, Violet de Vienne]
+    description: >
+      Chou-rave à boule violet-bleuté et chair blanche tendre, un peu plus tardif
+      et plus rustique que le blanc. Décoratif, il tolère mieux le froid pour les
+      récoltes d'automne.
+  en:
+    nom_commun: Purple Vienna Kohlrabi
+    description: >
+      Kohlrabi with a bluish-purple globe and tender white flesh, slightly later
+      and hardier than the white type. Decorative and more cold-tolerant.
+
+conservation:
+  - methode: frais
+    duree_jours: 20
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé, en salade, vapeur, sauté]
+  en: [Raw grated, in salad, steamed, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-rave
+contributeurs:
+  - "@potagerer"

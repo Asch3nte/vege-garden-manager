@@ -1,6 +1,7 @@
-# Fiche mère (espèce) — Capucine (grande capucine).
-# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
-# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+# Fiche mère (espèce) — Capucine.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Fleur compagne (plante-piège à pucerons). Créée au lot « fleurs compagnes »
+# pour résoudre les références d'associations orphelines (ex-id legacy `capucine`).
 id: FLE-001
 version_fiche: 1
 categorie: fleur
@@ -8,10 +9,9 @@ schema_version: 1
 difficulte: 1
 usages:
   - ornementale
-  - compagnonnage
   - alimentaire
+  - compagnonnage
   - mellifere
-  - attire_auxiliaires
 
 rusticite:
   zone_min: zone9
@@ -21,33 +21,29 @@ famille_botanique: Tropaeolaceae
 i18n:
   fr:
     nom_commun: Capucine
-    noms_alternatifs: [Grande capucine, Cresson du Mexique, Capucine grimpante]
+    noms_alternatifs: [Capucine grimpante, Grande capucine]
     description: >
       Plante annuelle de la famille des Tropaéolacées, cultivée pour ses fleurs
-      orangées à rouges et son port grimpant ou retombant. Fleurs et feuilles,
-      au goût poivré, sont comestibles. Grande alliée du potager : plante-piège
-      à pucerons et couvre-sol mellifère.
+      vives et son feuillage arrondi. Fleurs et jeunes feuilles sont comestibles,
+      au goût poivré. Très prisée au potager comme plante-piège à pucerons.
     conseils_culture: >
-      Semer en place après les dernières gelées, en sol pauvre et bien drainé.
-      Un sol trop riche en azote favorise le feuillage au détriment des fleurs.
-      Palisser les variétés grimpantes sur un support léger, ou laisser courir
-      en couvre-sol au pied des cultures à protéger.
+      Semer en place après les dernières gelées, en sol pauvre et bien drainé :
+      un sol trop riche donne beaucoup de feuilles au détriment des fleurs.
+      Installer près des cultures sensibles aux pucerons pour concentrer les
+      colonies sur la capucine.
     conseils_recolte: >
-      Cueillir les fleurs au fur et à mesure de leur ouverture pour prolonger la
-      floraison. Récolter les jeunes feuilles avant qu'elles ne durcissent ;
-      les boutons floraux et graines vertes se conservent au vinaigre (faux
-      câpres).
+      Cueillir les fleurs au fur et à mesure de l'ouverture, le matin. Récolter
+      les jeunes feuilles tendres et les boutons (marinés comme des câpres).
     erreurs_frequentes:
-      - Sol trop riche (beaucoup de feuilles, peu de fleurs)
-      - Semis trop précoce (très sensible au gel)
-      - Oublier qu'elle attire massivement les pucerons (c'est son rôle de piège)
+      - Sol trop riche (feuillage abondant, floraison pauvre)
+      - Semis trop précoce (sensible au moindre gel)
+      - Arrosage excessif (favorise le feuillage et les maladies)
   en:
     nom_commun: Nasturtium
-    noms_alternatifs: [Garden nasturtium, Indian cress]
     description: >
-      An annual of the Tropaeolaceae family grown for its edible peppery flowers
-      and leaves. A key companion plant: aphid trap crop and pollinator-friendly
-      ground cover.
+      Annual plant of the Tropaeolaceae family, grown for its bright edible
+      flowers and peppery leaves. Widely used in the vegetable garden as an
+      aphid trap crop.
 
 besoins:
   ensoleillement: plein_soleil
@@ -55,12 +51,12 @@ besoins:
   arrosage: modere
   qualites_sol:
     - pauvre
-    - leger
     - bien_draine
+    - leger
   ph_min: 6.0
   ph_max: 7.5
   temperature_min_germination: 12
-  temperature_optimale: 20
+  temperature_optimale: 18
   temperature_min_survie: 2
   gele_fatal: true
   tolerance_secheresse: moyenne
@@ -68,9 +64,9 @@ cycle:
   enracinement: moyen
   type: annuelle
   duree_germination_jours: [7, 14]
-  duree_avant_recolte_jours: [50, 60]
+  duree_avant_recolte_jours: [50, 65]
   hauteur_adulte_cm: [30, 300]
-  espacement_cm: 35
+  espacement_cm: 30
   profondeur_semis_cm: 2
   profondeur_sol_min_cm: 20
   compatible_hors_sol: true
@@ -80,40 +76,49 @@ periodes:
   hemisphere_nord:
     oceanique:
       semis_interieur: [3, 4]
-      semis_exterieur: [5, 6]
+      semis_exterieur: [4, 5]
+      plantation: [5, 6]
       recolte: [6, 10]
-    continental:
-      semis_interieur: [3, 4]
-      semis_exterieur: [5, 6]
-      recolte: [7, 10]
     mediterraneen:
-      semis_exterieur: [3, 5]
-      recolte: [5, 11]
+      semis_exterieur: [3, 4]
+      recolte: [5, 10]
   hemisphere_sud:
     oceanique:
-      semis_exterieur: [9, 11]
+      semis_exterieur: [10, 11]
       recolte: [11, 4]
+piege_a:
+  - puceron
 associations:
   beneficies:
     - id: LEG-001
       type: plante_piege
-      raison_i18n: { fr: "Plante-piège à pucerons, détourne les colonies de la tomate", en: "Aphid trap crop, diverts colonies from tomatoes" }
-    - id: LEG-011
-      type: [plante_piege, couvre_sol]
-      raison_i18n: { fr: "Attire pucerons et aleurodes, couvre le sol des cucurbitacées", en: "Attracts aphids and whiteflies, covers cucurbit soil" }
-    - id: LEG-006
+      raison_i18n: { fr: "Plante-piège : concentre les pucerons loin des tomates", en: "Trap crop: draws aphids away from tomatoes" }
+    - id: LEG-002
       type: plante_piege
-      raison_i18n: { fr: "Détourne pucerons et piérides des choux", en: "Diverts aphids and cabbage whites from brassicas" }
+      raison_i18n: { fr: "Détourne les pucerons des aubergines", en: "Lures aphids away from aubergines" }
+    - id: LEG-009
+      type: plante_piege
+      raison_i18n: { fr: "Détourne les pucerons des concombres", en: "Lures aphids away from cucumbers" }
+    - id: LEG-010
+      type: plante_piege
+      raison_i18n: { fr: "Plante-piège à pucerons au pied des courges", en: "Aphid trap crop near squash" }
+    - id: LEG-011
+      type: plante_piege
+      raison_i18n: { fr: "Détourne les pucerons des courgettes", en: "Lures aphids away from courgettes" }
     - id: LEG-020
       type: plante_piege
-      raison_i18n: { fr: "Éloigne les pucerons de la pomme de terre", en: "Draws aphids away from potatoes" }
+      raison_i18n: { fr: "Détourne pucerons et aleurodes des pommes de terre", en: "Draws aphids and whiteflies from potatoes" }
+    - id: LEG-021
+      type: plante_piege
+      raison_i18n: { fr: "Plante-piège à pucerons au pied du potimarron", en: "Aphid trap crop near winter squash" }
+    - id: LEG-023
+      type: plante_piege
+      raison_i18n: { fr: "Concentre les pucerons noirs loin des artichauts", en: "Concentrates black aphids away from artichokes" }
   defavorables: []
 rotation:
   famille: tropaeolaceae
   delai_retour_annees: 1
-  fixe_azote: false
   besoin_azote: faible
-piege_a: [puceron, aleurode]
 
 sources:
   - https://www.gbif.org  # taxonomie

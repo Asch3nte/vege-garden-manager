@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Pois Petit Provençal. Hérite de LEG-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-018-V002
+parent_id: LEG-018
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pisum sativum 'Petit Provençal'"
+
+i18n:
+  fr:
+    nom_commun: Pois Petit Provençal
+    noms_alternatifs: [Petit Provençal]
+    description: >
+      Petit pois nain à grains, très précoce, à grains fins et sucrés. Rustique
+      et productif, idéal pour les premiers semis de printemps. Port bas ne
+      demandant qu'un léger rame.
+  en:
+    nom_commun: Petit Provençal Pea
+    description: >
+      Dwarf shelling pea, very early, with fine, sweet peas. Hardy and
+      productive, ideal for the first spring sowings.
+
+cycle:
+  duree_avant_recolte_jours: [60, 80]
+  hauteur_adulte_cm: [40, 60]
+  charge_tuteur: legere
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled peas, refrigerated" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Écosser et blanchir 1 min", en: "Shell and blanch 1 min" }
+utilisations_culinaires_i18n:
+  fr: [Écossé à la française, en velouté, sauté]
+  en: [Shelled French-style, in velouté, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pois
+contributeurs:
+  - "@potagerer"

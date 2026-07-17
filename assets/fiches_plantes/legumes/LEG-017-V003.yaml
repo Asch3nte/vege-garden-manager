@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Poireau Monstrueux d'Elbeuf. Hérite de LEG-017.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-017-V003
+parent_id: LEG-017
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium ampeloprasum var. porrum 'Monstrueux d'Elbeuf'"
+
+i18n:
+  fr:
+    nom_commun: Poireau Monstrueux d'Elbeuf
+    noms_alternatifs: [Monstrueux d'Elbeuf]
+    description: >
+      Poireau d'automne à très long fût blanc épais, tendre et doux, très
+      productif. Moins rustique que les poireaux d'hiver ; à récolter avant les
+      grands froids pour de belles pièces.
+  en:
+    nom_commun: Monstrueux d'Elbeuf Leek
+    description: >
+      Autumn leek with a very long, thick white shaft, tender and mild, very
+      productive. Less hardy than winter leeks; harvest before hard frosts.
+cycle:
+  duree_avant_recolte_jours: [150, 200]
+conservation:
+  - methode: frais
+    duree_jours: 12
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche", en: "Refrigerator, or cool cellar" }
+utilisations_culinaires_i18n:
+  fr: [En fondue, en soupe, en quiche, vinaigrette]
+  en: [Braised, in soup, in quiche, vinaigrette]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poireau
+contributeurs:
+  - "@potagerer"

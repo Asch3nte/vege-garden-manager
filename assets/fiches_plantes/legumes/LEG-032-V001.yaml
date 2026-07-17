@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou frisé Vert Demi-Nain. Hérite de LEG-032.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-032-V001
+parent_id: LEG-032
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. sabellica 'Vert Demi-Nain'"
+
+i18n:
+  fr:
+    nom_commun: Chou frisé Vert Demi-Nain
+    noms_alternatifs: [Vert demi-nain à collet vert, Frisé nain]
+    description: >
+      Kale vert classique à feuilles très frisées sur plant trapu, facile et très
+      rustique. Récolte étalée des feuilles extérieures de l'automne au printemps ;
+      les feuilles s'adoucissent après les gelées.
+  en:
+    nom_commun: Dwarf Green Curled Kale
+    description: >
+      Classic green kale with very curly leaves on a stocky plant, easy and very
+      hardy. Pick outer leaves from autumn to spring; they sweeten after frost.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur ; ou récolte au fur et à mesure sur pied", en: "Refrigerator; or pick from the standing plant" }
+utilisations_culinaires_i18n:
+  fr: [Sauté, en soupe, en chips, cru en salade émincé]
+  en: [Sautéed, soup, kale chips, raw finely shredded]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_fris%C3%A9
+contributeurs:
+  - "@potagerer"

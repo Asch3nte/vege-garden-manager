@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Poireau Géant d'Hiver. Hérite de LEG-017.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-017-V005
+parent_id: LEG-017
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium ampeloprasum var. porrum 'Géant d'Hiver'"
+
+i18n:
+  fr:
+    nom_commun: Poireau Géant d'Hiver
+    noms_alternatifs: [Géant d'Hiver, d'Hiver Géant]
+    description: >
+      Poireau d'hiver très rustique à fût moyen et feuillage vert-bleuté,
+      supportant les fortes gelées sans dommage. Se récolte au fur et à mesure
+      des besoins tout l'hiver, en le laissant en terre.
+  en:
+    nom_commun: Giant Winter Leek
+    description: >
+      Very hardy winter leek with a medium shaft and blue-green foliage,
+      withstanding hard frosts. Harvested as needed all winter, left in the ground.
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "En terre l'hiver (récolte au besoin)", en: "In the ground over winter (pick as needed)" }
+utilisations_culinaires_i18n:
+  fr: [En fondue, en soupe, en potée, vinaigrette]
+  en: [Braised, in soup, in stew, vinaigrette]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poireau
+contributeurs:
+  - "@potagerer"

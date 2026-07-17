@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Concombre Vert Long Maraîcher. Hérite de LEG-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-009-V002
+parent_id: LEG-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis sativus 'Vert Long Maraîcher'"
+
+i18n:
+  fr:
+    nom_commun: Concombre Vert Long Maraîcher
+    noms_alternatifs: [Long vert maraîcher]
+    description: >
+      Variété ancienne à longs fruits vert foncé, réguliers et croquants, à chair
+      ferme. Rustique et productive en pleine terre comme sous abri ; un
+      classique du potager.
+  en:
+    nom_commun: Long Green Cucumber
+    description: >
+      Old variety with long, dark-green, regular, crunchy fruits and firm flesh.
+      Hardy and productive both outdoors and under cover.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en tzatziki, mariné]
+  en: [Raw in salad, tzatziki, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Concombre
+contributeurs:
+  - "@potagerer"

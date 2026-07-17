@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Coriandre Commune (à graines). Hérite de ARO-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-006-V002
+parent_id: ARO-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Coriandrum sativum 'Commune'"
+
+i18n:
+  fr:
+    nom_commun: Coriandre Commune
+    noms_alternatifs: [Commune, Coriandre à graines]
+    description: >
+      Coriandre à gros fruits, sélectionnée pour la production de graines
+      (condiment) plutôt que pour le feuillage. Elle monte plus vite à fleur que
+      les types à feuilles ; mellifère et facile.
+  en:
+    nom_commun: Common Coriander
+    description: >
+      Large-fruited coriander selected for seed (spice) rather than leaf
+      production. It bolts faster than leaf types; melliferous and easy.
+utilisations_culinaires_i18n:
+  fr: [Graines en condiment, moulues en épice, feuilles jeunes ciselées]
+  en: [Seeds as a spice, ground, young leaves chopped]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Coriandre
+contributeurs:
+  - "@potagerer"

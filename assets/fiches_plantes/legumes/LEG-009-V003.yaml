@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Concombre Blanc Long Parisien. Hérite de LEG-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-009-V003
+parent_id: LEG-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis sativus 'Blanc Long Parisien'"
+
+i18n:
+  fr:
+    nom_commun: Concombre Blanc Long Parisien
+    noms_alternatifs: [Blanc long]
+    description: >
+      Variété ancienne à peau blanc ivoire, à chair douce et digeste, réputée
+      peu amère. Fruits allongés et fins ; original au potager et en salade.
+  en:
+    nom_commun: Long White Cucumber
+    description: >
+      Old variety with ivory-white skin and mild, easily digestible flesh, known
+      for low bitterness. Elongated slender fruits.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, en velouté froid, mariné]
+  en: [Raw in salad, chilled soup, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Concombre
+contributeurs:
+  - "@potagerer"

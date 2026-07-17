@@ -87,7 +87,7 @@ associations:
     - id: LEG-013
       type: fixation_azote
       raison_i18n: { fr: "Fixe l'azote, enrichit le sol", en: "Fixes nitrogen, enriches soil" }
-    - id: ARO-008
+    - id: ARO-007
       type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires, améliore la saveur", en: "Attracts beneficial insects, improves flavor" }
     - id: FLE-001
@@ -97,7 +97,7 @@ associations:
     - id: LEG-020
       type: partage_maladies
       raison_i18n: { fr: "Favorisent mutuellement le mildiou", en: "Mutually promote mildew" }
-    - id: ARO-007
+    - id: LEG-024
       type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:

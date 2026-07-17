@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Chicorée Rouge de Vérone (Trévise). Hérite de LEG-042.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+# Radicchio (non forcé) : la culture diffère de la mère (witloof).
+id: LEG-042-V002
+parent_id: LEG-042
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cichorium intybus var. foliosum 'Rossa di Verona'"
+
+i18n:
+  fr:
+    nom_commun: Chicorée Rouge de Vérone
+    noms_alternatifs: [Trévise, Radicchio de Trévise, Rossa di Verona]
+    description: >
+      Radicchio italien à pomme rouge grenat veinée de blanc, ferme, à la saveur
+      amère caractéristique qui s'adoucit à la cuisson. La couleur s'intensifie
+      avec le froid automnal.
+    conseils_culture: >
+      Semer en été, en place, en sol frais. Ne se force pas ; la pomme rougit et
+      se forme au jardin avec la fraîcheur. Rustique, elle supporte les gelées
+      légères qui rehaussent sa couleur.
+    conseils_recolte: >
+      Récolter les pommes en automne et début d'hiver, après que le froid a
+      intensifié la couleur et adouci l'amertume.
+  en:
+    nom_commun: Radicchio di Verona
+    description: >
+      Italian radicchio with a garnet-red, white-veined firm head and a
+      characteristic bitterness that mellows on cooking. Colour deepens with
+      autumn cold.
+
+cycle:
+  duree_avant_recolte_jours: [90, 120]
+  espacement_cm: 30
+conservation:
+  - methode: frais
+    duree_jours: 12
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, grillée, en risotto, braisée]
+  en: [Raw in salad, grilled, in risotto, braised]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_sauvage
+contributeurs:
+  - "@potagerer"

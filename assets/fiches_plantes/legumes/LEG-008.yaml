@@ -91,7 +91,7 @@ associations:
       type: repulsion_ravageur
       raison_i18n: { fr: "Repousse la piéride du chou", en: "Repels cabbage white butterfly" }
   defavorables:
-    - id: PFR-001
+    - id: fraise
       type: partage_maladies
       raison_i18n: { fr: "Favorisent mutuellement les maladies du sol", en: "Mutually promote soil diseases" }
     - id: ENG-001

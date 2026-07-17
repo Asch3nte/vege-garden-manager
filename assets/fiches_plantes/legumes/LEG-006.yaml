@@ -90,7 +90,7 @@ associations:
     - id: LEG-014
       type: etagement_lumiere
       raison_i18n: { fr: "Profite de l'espace sous les brocolis", en: "Uses space under broccoli" }
-    - id: ARO-008
+    - id: ARO-007
       type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires contre les chenilles", en: "Attracts beneficial insects against caterpillars" }
   defavorables:

@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Tomate Fantasio. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V022
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Fantasio'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Fantasio
+    noms_alternatifs: [Fantasio F1]
+    description: >
+      Hybride (F1) à fruits ronds rouges de taille moyenne, apprécié pour sa
+      bonne tolérance au mildiou, très utile en climat humide et en plein air.
+      Plant indéterminé robuste et régulier. Semences non reproductibles.
+  en:
+    nom_commun: Fantasio Tomato
+    description: >
+      Hybrid (F1) with medium round red fruits, valued for good blight tolerance,
+      very useful in wet climates and outdoors. Robust, consistent indeterminate
+      plant. Seed not true to type.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en sauce, farcie, au four]
+  en: [Raw in salad, in sauce, stuffed, baked]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"
