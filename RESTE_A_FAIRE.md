@@ -11,6 +11,16 @@
 > Mis à jour le 2026-07-17 : **correction de suivi** — **ADR-0009 lot 4**
 > (mini-tutos/teaser de palier) était listé « à faire » alors qu'il était déjà
 > livré et mergé ; entrées rayées.
+> **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
+> **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
+> ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
+> absents : DND (champs domaine présents, UI absente), toggle météo auto (aucun
+> champ), « Transparence des données » (le panneau `donnees` = sauvegarde/reset,
+> **pas** stats DB + journal), favoris catalogue, dimensions littérales de zone
+> (`Parcelle` n'a que `surface`), `ResolveurFamille` non branché dans
+> `RecommanderPlantes` (répulsion/piège left out, cf. `recommander_plantes.dart`),
+> menu ⋮/notifications d'accueil + lien « voir les tâches », sous-routes dédiées
+> détail-tâche/fiche-plante, job CI build/signature APK, icône/splash, packaging.
 
 ## 1. Fonctionnalités « build-then-gate » (ADR-0009 §9)
 
@@ -69,8 +79,10 @@ Réservées par palier mais sans UI ni donnée :
   plante en route dédiée)
 - **Accueil** : écran notifications + menu ⋮ (actions d'en-tête), lien « voir
   les tâches » → Calendrier
-- **Potager** : FAB de création (potager/zone/plantation), métadonnées de
-  zone (besoin eau/dimensions littérales) si on veut les champs réels
+- **Potager** : la **création fonctionne déjà** partout (FAB « ajouter une zone »
+  dans `ecran_potager.dart`, potager via menu ⋮, plantation via détail de zone) ;
+  reste seulement, **optionnel**, les métadonnées de zone (besoin eau/dimensions
+  littérales — `Parcelle` ne porte que `surface`) si on veut les champs réels
 - **Catalogue** : favoris (notion inexistante), gabarit/hauteur de plante
   (champ manquant), vue Réseau — rendu canvas (perf, différé)
 - **Calendrier** : rien de fonctionnel majeur restant (tout ✅)
