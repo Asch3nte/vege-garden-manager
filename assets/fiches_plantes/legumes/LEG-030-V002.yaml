@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Melon Petit Gris de Rennes. Hérite de LEG-030.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-030-V002
+parent_id: LEG-030
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis melo 'Petit Gris de Rennes'"
+
+i18n:
+  fr:
+    nom_commun: Melon Petit Gris de Rennes
+    noms_alternatifs: [Petit Gris de Rennes]
+    description: >
+      Variété ancienne bretonne à petits fruits ronds à écorce gris-vert, à chair
+      orange très sucrée et parfumée. Réputée pour bien mûrir même sous climat
+      frais et peu ensoleillé ; l'une des plus fiables au nord.
+  en:
+    nom_commun: Petit Gris de Rennes Melon
+    description: >
+      Old Breton variety with small round fruits, grey-green rind and very sweet,
+      fragrant orange flesh. Known to ripen well even in cool, dull climates.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur une fois mûr, sous film", en: "Refrigerator once ripe, wrapped" }
+utilisations_culinaires_i18n:
+  fr: [Cru en entrée, en salade de fruits, avec du jambon]
+  en: [Raw as a starter, in fruit salad, with cured ham]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Melon_(plante)
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Poivron Yolo Wonder. Hérite de LEG-019.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-019-V005
+parent_id: LEG-019
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum 'Yolo Wonder'"
+
+i18n:
+  fr:
+    nom_commun: Poivron Yolo Wonder
+    noms_alternatifs: [Yolo]
+    description: >
+      Amélioration du type carré doux, à gros fruits épais à trois-quatre lobes,
+      vert virant au rouge. Feuillage couvrant qui protège les fruits du soleil ;
+      variété robuste et régulière.
+  en:
+    nom_commun: Yolo Wonder Pepper
+    description: >
+      An improved blocky sweet type with large, thick three-to-four-lobed fruits,
+      green turning red. Good leaf cover protects fruit from sun; robust and
+      consistent.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, farci, grillé, en poêlée]
+  en: [Raw in salad, stuffed, grilled, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poivron
+contributeurs:
+  - "@potagerer"

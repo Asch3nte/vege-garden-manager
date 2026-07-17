@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Épinard Matador. Hérite de LEG-012.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-012-V003
+parent_id: LEG-012
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Spinacia oleracea 'Matador'"
+
+i18n:
+  fr:
+    nom_commun: Épinard Matador
+    noms_alternatifs: [Matador]
+    description: >
+      Épinard à feuilles larges épaisses vert foncé, apprécié pour sa relative
+      lenteur à monter à graines, ce qui permet des récoltes de printemps
+      prolongées. Rustique et productif, facile à réussir.
+  en:
+    nom_commun: Matador Spinach
+    description: >
+      Spinach with broad, thick, dark-green leaves, valued for being relatively
+      slow to bolt, allowing prolonged spring harvests. Hardy and productive.
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Blanchir 1 min, presser, puis congeler", en: "Blanch 1 min, press, then freeze" }
+utilisations_culinaires_i18n:
+  fr: [Jeune cru en salade, en branche, en gratin, en quiche]
+  en: [Young raw in salad, sautéed, gratin, quiche]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89pinard
+contributeurs:
+  - "@potagerer"

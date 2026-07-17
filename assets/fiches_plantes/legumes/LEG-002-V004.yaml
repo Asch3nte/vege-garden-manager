@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Aubergine Listada de Gandia. Hérite de LEG-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-002-V004
+parent_id: LEG-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum melongena 'Listada de Gandia'"
+
+i18n:
+  fr:
+    nom_commun: Aubergine Listada de Gandia
+    noms_alternatifs: [Zébrée de Gandia]
+    description: >
+      Variété ancienne espagnole aux fruits ovoïdes zébrés de violet et de blanc,
+      très décoratifs. Chair douce, fine et peu amère. Appréciée en cuisine pour
+      sa tenue et son goût délicat.
+  en:
+    nom_commun: Listada de Gandia Aubergine
+    description: >
+      Old Spanish variety with egg-shaped fruits striped purple and white, very
+      decorative. Sweet, fine, barely bitter flesh.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Grillée, farcie, en ratatouille, poêlée]
+  en: [Grilled, stuffed, ratatouille, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aubergine
+contributeurs:
+  - "@potagerer"

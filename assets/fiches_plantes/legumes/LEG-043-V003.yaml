@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Scarole Géante Maraîchère. Hérite de LEG-043.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-043-V003
+parent_id: LEG-043
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cichorium endivia var. latifolia 'Géante Maraîchère'"
+
+i18n:
+  fr:
+    nom_commun: Scarole Géante Maraîchère
+    noms_alternatifs: [Géante Maraîchère, Grosse Bouclée]
+    description: >
+      Grande scarole à large pomme étalée et feuilles épaisses peu découpées, au
+      cœur volumineux et tendre. Productive et rustique, elle donne de grosses
+      salades d'automne appréciées cuites comme crues.
+  en:
+    nom_commun: Géante Maraîchère Escarole
+    description: >
+      Large escarole with a broad spreading head and thick, barely cut leaves,
+      with a bulky tender heart. Productive and hardy, giving large autumn heads.
+
+cycle:
+  espacement_cm: 35
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, braisée, en soupe]
+  en: [Raw in salad, braised, in soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_endive
+contributeurs:
+  - "@potagerer"

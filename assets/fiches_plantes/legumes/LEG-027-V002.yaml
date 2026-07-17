@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Échalote Longue de Jersey. Hérite de LEG-027.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-027-V002
+parent_id: LEG-027
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa var. aggregatum 'Longue de Jersey'"
+
+i18n:
+  fr:
+    nom_commun: Échalote Longue de Jersey
+    noms_alternatifs: [Longue de Jersey, Rose longue de Jersey]
+    description: >
+      Échalote longue à tunique cuivrée-rosée et chair rose, à la saveur douce.
+      Productive et de bonne conservation, plus facile à cultiver que l'échalote
+      grise ; classique des potagers.
+  en:
+    nom_commun: Jersey Long Shallot
+    description: >
+      Long shallot with coppery-pink skin and pink flesh, mild in flavour.
+      Productive and a good keeper, easier to grow than the grey shallot.
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Local sec et aéré, en cagette ou tresse", en: "Dry, airy room, in a crate or braid" }
+utilisations_culinaires_i18n:
+  fr: [Crue ciselée en vinaigrette, confite, en sauce]
+  en: [Raw chopped in vinaigrette, confit, in sauce]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89chalote
+contributeurs:
+  - "@potagerer"

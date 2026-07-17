@@ -88,7 +88,7 @@ associations:
     - id: LEG-014
       type: etagement_lumiere
       raison_i18n: { fr: "Bon usage de l'espace sous les choux", en: "Good use of space under cabbages" }
-    - id: ARO-008
+    - id: ARO-007
       type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires contre la piéride", en: "Attracts beneficial insects against cabbage white" }
     - id: LEG-005

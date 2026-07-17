@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Laitue Grosse Blonde Paresseuse. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V003
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa 'Grosse Blonde Paresseuse'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Grosse Blonde Paresseuse
+    noms_alternatifs: [Grosse Blonde Paresseuse]
+    description: >
+      Grosse laitue pommée blonde d'été, à pomme volumineuse et tendre. Réputée
+      lente à monter à graines (« paresseuse »), elle résiste bien à la chaleur
+      pour les récoltes estivales.
+  en:
+    nom_commun: Grosse Blonde Paresseuse Lettuce
+    description: >
+      Large blond summer butterhead with a big, tender head. Slow to bolt
+      ("lazy"), it stands well in heat for summer harvests.
+
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade]
+  en: [Raw in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Chicorée Chioggia (Radicchio rond). Hérite de LEG-042.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+# Radicchio rond (non forcé) : la culture diffère de la mère (witloof).
+id: LEG-042-V003
+parent_id: LEG-042
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cichorium intybus var. foliosum 'Chioggia'"
+
+i18n:
+  fr:
+    nom_commun: Chicorée Chioggia
+    noms_alternatifs: [Radicchio de Chioggia, Rouge de Chioggia]
+    description: >
+      Radicchio à pomme ronde et compacte rouge vif veinée de blanc, comme un
+      petit chou. Croquant et légèrement amer, très décoratif cru en salade.
+      Variété productive et régulière.
+    conseils_culture: >
+      Semer de la fin du printemps à l'été, en place, en sol frais et riche.
+      Ne se force pas : la pomme se forme au jardin. Rustique aux gelées légères.
+    conseils_recolte: >
+      Récolter les pommes rondes bien fermes de l'automne au début de l'hiver.
+  en:
+    nom_commun: Chioggia Radicchio
+    description: >
+      Radicchio with a round, compact, bright-red white-veined head, like a small
+      cabbage. Crunchy and slightly bitter, very decorative raw in salad.
+
+cycle:
+  duree_avant_recolte_jours: [80, 110]
+  espacement_cm: 30
+conservation:
+  - methode: frais
+    duree_jours: 12
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, grillée, en risotto]
+  en: [Raw in salad, grilled, in risotto]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_sauvage
+contributeurs:
+  - "@potagerer"

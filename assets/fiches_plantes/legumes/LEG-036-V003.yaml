@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Chou-rave Superschmelz. Hérite de LEG-036.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-036-V003
+parent_id: LEG-036
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. gongylodes 'Superschmelz'"
+
+i18n:
+  fr:
+    nom_commun: Chou-rave Superschmelz
+    noms_alternatifs: [Superschmelz, Géant blanc]
+    description: >
+      Chou-rave géant à boule pâle pouvant dépasser 2 kg tout en restant tendre
+      et sans fils, fait remarquable pour sa taille. Tardif et productif, bonne
+      conservation ; excellent pour les grosses récoltes.
+  en:
+    nom_commun: Superschmelz Kohlrabi
+    description: >
+      Giant kohlrabi with a pale globe that can exceed 2 kg while staying tender
+      and stringless — remarkable for its size. Late and productive, keeps well.
+
+cycle:
+  duree_avant_recolte_jours: [80, 100]
+conservation:
+  - methode: frais
+    duree_jours: 25
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé, en salade, vapeur, sauté, en gratin]
+  en: [Raw grated, in salad, steamed, sautéed, gratin]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-rave
+contributeurs:
+  - "@potagerer"

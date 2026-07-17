@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Poireau de Carentan. Hérite de LEG-017.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-017-V002
+parent_id: LEG-017
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium ampeloprasum var. porrum 'de Carentan'"
+
+i18n:
+  fr:
+    nom_commun: Poireau de Carentan
+    noms_alternatifs: [de Carentan, Monstrueux de Carentan]
+    description: >
+      Poireau d'automne-hiver à gros fût court et large, à feuillage vert foncé,
+      rustique et productif. Variété de référence, résistant au froid, pour les
+      récoltes de la fin d'automne à l'hiver.
+  en:
+    nom_commun: Carentan Leek
+    description: >
+      Autumn–winter leek with a thick, short, broad shaft and dark-green foliage,
+      hardy and productive. A reference cold-resistant variety.
+conservation:
+  - methode: frais
+    duree_jours: 15
+    conditions_i18n: { fr: "En terre l'hiver (récolte au besoin), ou réfrigérateur", en: "In the ground over winter (pick as needed), or refrigerator" }
+utilisations_culinaires_i18n:
+  fr: [En fondue, en soupe, en quiche, vinaigrette]
+  en: [Braised, in soup, in quiche, vinaigrette]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poireau
+contributeurs:
+  - "@potagerer"

@@ -85,7 +85,7 @@ associations:
     - id: FLE-001
       type: plante_piege
       raison_i18n: { fr: "La capucine détourne les pucerons du poirier", en: "Nasturtium draws aphids away from the pear tree" }
-    - id: LEG-024
+    - id: LEG-025
       type: repulsion_ravageur
       raison_i18n: { fr: "L'ail au pied a un effet répulsif et antifongique", en: "Garlic at the base is repellent and antifungal" }
   defavorables:

@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Carotte Touchon. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V003
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Touchon'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Touchon
+    noms_alternatifs: [Touchon]
+    description: >
+      Carotte demi-longue lisse type nantais, précoce, à chair rouge-orangé
+      sucrée et sans cœur dur. Excellente crue, elle convient bien aux semis de
+      printemps et aux récoltes d'été.
+  en:
+    nom_commun: Touchon Carrot
+    description: >
+      Smooth half-long Nantes-type carrot, early, with sweet red-orange flesh and
+      no hard core. Excellent raw; good for spring sowings and summer harvests.
+
+cycle:
+  duree_avant_recolte_jours: [75, 100]
+conservation:
+  - methode: frais
+    duree_jours: 20
+    conditions_i18n: { fr: "Réfrigérateur, ou cave fraîche et humide", en: "Refrigerator, or cool humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [Crue râpée, en jus, glacée, vapeur]
+  en: [Raw grated, juiced, glazed, steamed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

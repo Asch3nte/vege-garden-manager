@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Concombre Lemon. Hérite de LEG-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-009-V004
+parent_id: LEG-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis sativus 'Lemon'"
+
+i18n:
+  fr:
+    nom_commun: Concombre Lemon
+    noms_alternatifs: [Concombre citron, Crystal Lemon]
+    description: >
+      Variété originale à petits fruits ronds jaune citron, à chair douce, fraîche
+      et non amère. Décorative et très productive, elle se récolte jeune, avant
+      que la peau ne durcisse.
+  en:
+    nom_commun: Lemon Cucumber
+    description: >
+      Unusual variety with small, round, lemon-yellow fruits and sweet, fresh,
+      non-bitter flesh. Decorative and very productive; harvest young.
+
+cycle:
+  hauteur_adulte_cm: [150, 200]
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, croqué nature, mariné]
+  en: [Raw in salad, eaten fresh, pickled]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Concombre
+contributeurs:
+  - "@potagerer"

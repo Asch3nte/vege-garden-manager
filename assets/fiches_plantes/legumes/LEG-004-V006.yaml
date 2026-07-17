@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Carotte Blanche des Vosges. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V006
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Blanche des Vosges'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Blanche des Vosges
+    noms_alternatifs: [Blanche des Vosges, Blanche à collet vert]
+    description: >
+      Variété ancienne à grosse racine blanche à collet vert, à chair douce et
+      juteuse. Vigoureuse et productive ; originale au potager, appréciée en
+      soupes et en jus.
+  en:
+    nom_commun: White Vosges Carrot
+    description: >
+      Old variety with a large white, green-shouldered root and mild, juicy flesh.
+      Vigorous and productive; unusual, good in soups and juices.
+
+cycle:
+  duree_avant_recolte_jours: [100, 140]
+  profondeur_sol_min_cm: 30
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [En soupe, en jus, en potée, rôtie]
+  en: [In soup, juiced, in stew, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

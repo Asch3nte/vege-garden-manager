@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Chou frisé Redbor. Hérite de LEG-032.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-032-V003
+parent_id: LEG-032
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. sabellica 'Redbor'"
+
+i18n:
+  fr:
+    nom_commun: Chou frisé Redbor
+    noms_alternatifs: [Redbor F1, Kale rouge]
+    description: >
+      Kale hybride (F1) à feuilles très frisées rouge-pourpre intense, aussi
+      ornemental que comestible. Rustique, il fonce avec le froid. Semences non
+      reproductibles.
+  en:
+    nom_commun: Redbor Kale
+    description: >
+      Hybrid (F1) kale with intensely curly red-purple leaves, as ornamental as it
+      is edible. Hardy; colour deepens with cold. Seed not true to type.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur ; ou récolte au fur et à mesure sur pied", en: "Refrigerator; or pick from the standing plant" }
+utilisations_culinaires_i18n:
+  fr: [Sauté, en chips, cru émincé en salade, en garniture]
+  en: [Sautéed, chips, raw shredded in salad, as garnish]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_fris%C3%A9
+contributeurs:
+  - "@potagerer"

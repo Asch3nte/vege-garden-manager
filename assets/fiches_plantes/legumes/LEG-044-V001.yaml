@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Topinambour Fuseau. Hérite de LEG-044.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-044-V001
+parent_id: LEG-044
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Helianthus tuberosus 'Fuseau'"
+
+i18n:
+  fr:
+    nom_commun: Topinambour Fuseau
+    noms_alternatifs: [Fuseau, Topinambour lisse]
+    description: >
+      Variété à tubercules allongés et fuselés, relativement lisses, plus faciles
+      à éplucher que les formes bosselées. Productive et rustique ; la référence
+      pour une récolte pratique en cuisine.
+  en:
+    nom_commun: Fuseau Jerusalem Artichoke
+    description: >
+      Variety with elongated, spindle-shaped, relatively smooth tubers, easier to
+      peel than knobbly types. Productive and hardy.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "En terre l'hiver, ou cave humide en silo de sable", en: "In the ground over winter, or sand clamp in a humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [En purée, sauté, en velouté, rôti]
+  en: [Mashed, sautéed, velouté, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Topinambour
+contributeurs:
+  - "@potagerer"

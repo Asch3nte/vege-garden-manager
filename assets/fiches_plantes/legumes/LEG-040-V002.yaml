@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pâtisson Panaché Vert et Blanc. Hérite de LEG-040.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-040-V002
+parent_id: LEG-040
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Panaché Vert et Blanc'"
+
+i18n:
+  fr:
+    nom_commun: Pâtisson Panaché Vert et Blanc
+    noms_alternatifs: [Panaché, Vert et blanc]
+    description: >
+      Pâtisson festonné bicolore, vert marbré de blanc, très décoratif. Chair
+      blanche ferme et douce, à récolter jeune. Plant productif, buissonnant à
+      légèrement coureur.
+  en:
+    nom_commun: Green and White Pattypan
+    description: >
+      Bicolour scalloped pattypan, green marbled with white, very decorative.
+      Firm, mild white flesh; harvest young. Productive plant.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, farci, en gratin, poêlé]
+  en: [Steamed, stuffed, gratin, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%A2tisson
+contributeurs:
+  - "@potagerer"

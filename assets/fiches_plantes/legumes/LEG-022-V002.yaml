@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Radis de 18 jours. Hérite de LEG-022.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-022-V002
+parent_id: LEG-022
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Raphanus sativus 'de 18 jours'"
+
+i18n:
+  fr:
+    nom_commun: Radis de 18 jours
+    noms_alternatifs: [de 18 jours, Demi-long rose à bout blanc]
+    description: >
+      Radis demi-long rose à bout blanc, extrêmement rapide (environ trois
+      semaines). Parfait pour les semis échelonnés et les débutants ; à récolter
+      jeune, avant qu'il ne devienne creux et piquant.
+  en:
+    nom_commun: 18-Day Radish
+    description: >
+      Half-long pink radish with a white tip, extremely fast (about three weeks).
+      Perfect for successive sowings and beginners; harvest young.
+
+cycle:
+  duree_avant_recolte_jours: [18, 25]
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, sans les fanes", en: "Refrigerator, tops removed" }
+utilisations_culinaires_i18n:
+  fr: [Cru croqué, en salade, à la croque au sel]
+  en: [Raw, in salad, with butter and salt]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Radis
+contributeurs:
+  - "@potagerer"

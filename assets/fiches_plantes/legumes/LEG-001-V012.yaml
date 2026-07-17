@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tomate Green Zebra. Hérite de LEG-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-001-V012
+parent_id: LEG-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum lycopersicum 'Green Zebra'"
+
+i18n:
+  fr:
+    nom_commun: Tomate Green Zebra
+    noms_alternatifs: [Zèbre verte]
+    description: >
+      Variété à fruits ronds de taille moyenne, vert clair striés de vert foncé,
+      restant verts à maturité (chair vert tendre). Goût acidulé et vif, très
+      décorative en salade. Plant semi-déterminé, productif.
+  en:
+    nom_commun: Green Zebra Tomato
+    description: >
+      Medium round fruits, light green striped with darker green, staying green
+      when ripe. Tangy, lively flavour; very decorative in salads.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Température ambiante, à l'abri de la lumière", en: "Room temperature, away from light" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, en carpaccio, poêlée, en chutney]
+  en: [Raw in salad, carpaccio, sautéed, chutney]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tomate
+contributeurs:
+  - "@potagerer"

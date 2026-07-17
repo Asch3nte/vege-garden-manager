@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Melon Cantaloup de Bellegarde. Hérite de LEG-030.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-030-V003
+parent_id: LEG-030
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis melo 'Cantaloup de Bellegarde'"
+
+i18n:
+  fr:
+    nom_commun: Melon Cantaloup de Bellegarde
+    noms_alternatifs: [Cantaloup de Bellegarde]
+    description: >
+      Variété ancienne à fruits ronds côtelés à écorce verruqueuse vert foncé,
+      à chair orange dense et sucrée. Rustique et parfumée, appréciée en culture
+      de plein champ sous climat chaud.
+  en:
+    nom_commun: Cantaloup de Bellegarde Melon
+    description: >
+      Old variety with round, ribbed fruits, warty dark-green rind and dense,
+      sweet orange flesh. Hardy and fragrant.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur une fois mûr, sous film", en: "Refrigerator once ripe, wrapped" }
+utilisations_culinaires_i18n:
+  fr: [Cru en entrée, en salade de fruits, avec du jambon]
+  en: [Raw as a starter, in fruit salad, with cured ham]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Melon_(plante)
+contributeurs:
+  - "@potagerer"

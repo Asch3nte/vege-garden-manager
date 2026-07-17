@@ -1,0 +1,113 @@
+# Fiche mère (espèce) — Échalote.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Légume-bulbe alliacé, répulsif. Lot « potagères courantes ».
+id: LEG-027
+version_fiche: 1
+categorie: legume
+sous_type: legume_bulbe
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - condimentaire
+  - repulsif
+
+rusticite:
+  zone_min: zone5
+nom_scientifique: Allium cepa var. aggregatum
+famille_botanique: Amaryllidaceae
+
+i18n:
+  fr:
+    nom_commun: Échalote
+    noms_alternatifs: [Échalote traditionnelle, Échalote grise]
+    description: >
+      Légume-bulbe de la famille des Amaryllidacées, proche de l'oignon, cultivé
+      pour ses bulbes en gousses au goût fin. Planté par bulbes. Ses composés
+      soufrés aident à brouiller les odeurs et à éloigner certains ravageurs des
+      cultures voisines, notamment la mouche de la carotte.
+    conseils_culture: >
+      Planter les bulbes en sol léger, bien drainé et non fumé récemment, pointe
+      affleurante. Éviter les excès d'eau. Ne pas cultiver près des légumineuses.
+    conseils_recolte: >
+      Arracher quand le feuillage jaunit et se couche, par temps sec, puis faire
+      sécher les bulbes à l'air avant stockage.
+    erreurs_frequentes:
+      - Sol humide et fraîchement fumé (pourriture des bulbes)
+      - Plantation trop profonde
+  en:
+    nom_commun: Shallot
+    description: >
+      Bulb vegetable of the Amaryllidaceae family, close to the onion, grown from
+      bulbs for its finely flavoured clustered bulbs.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - leger
+    - riche
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 4
+  temperature_optimale: 15
+  temperature_min_survie: -10
+  tolerance_secheresse: forte
+cycle:
+  enracinement: superficiel
+  type: annuelle
+  duree_avant_recolte_jours: [90, 120]
+  hauteur_adulte_cm: [20, 40]
+  espacement_cm: 15
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [2, 4]
+      recolte: [7, 8]
+    continental:
+      plantation: [3, 4]
+      recolte: [7, 9]
+    mediterraneen:
+      plantation: [10, 12]
+      recolte: [5, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [8, 10]
+      recolte: [1, 2]
+repulsif_contre:
+  - puceron
+  - mouche_carotte
+associations:
+  beneficies:
+    - id: LEG-004
+      type: brouillage_olfactif
+      raison_i18n: { fr: "Brouille les odeurs et éloigne la mouche de la carotte", en: "Masks scents and deters carrot fly" }
+  defavorables:
+    - id: LEG-013
+      type: allelopathie
+      raison_i18n: { fr: "Les alliums freinent la croissance des haricots", en: "Alliums slow the growth of beans" }
+    - id: LEG-018
+      type: allelopathie
+      raison_i18n: { fr: "Les alliums freinent la croissance des pois", en: "Alliums slow the growth of peas" }
+    - id: LEG-026
+      type: allelopathie
+      raison_i18n: { fr: "Les alliums freinent la croissance des fèves", en: "Alliums slow the growth of broad beans" }
+rotation:
+  famille: amaryllidaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [amaryllidaceae]
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/%C3%89chalote  # description
+contributeurs:
+  - "@potagerer"

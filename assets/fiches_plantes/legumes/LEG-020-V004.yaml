@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Pomme de terre Vitelotte. Hérite de LEG-020.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-020-V004
+parent_id: LEG-020
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum tuberosum 'Vitelotte'"
+
+i18n:
+  fr:
+    nom_commun: Pomme de terre Vitelotte
+    noms_alternatifs: [Vitelotte noire, Négresse, Truffe de Chine]
+    description: >
+      Variété ancienne très tardive à peau et chair violet foncé, au goût de
+      châtaigne. Peu productive mais spectaculaire ; la couleur tient bien à la
+      cuisson. Riche en antioxydants.
+  en:
+    nom_commun: Vitelotte Potato
+    description: >
+      Old, very late variety with dark-purple skin and flesh and a chestnut
+      flavour. Low-yielding but striking; colour holds well when cooked.
+
+cycle:
+  duree_avant_recolte_jours: [150, 170]
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave sombre, sèche et fraîche (6–10 °C)", en: "Dark, dry, cool cellar (6–10 °C)" }
+utilisations_culinaires_i18n:
+  fr: [En purée colorée, vapeur, en chips, en salade]
+  en: [Coloured mash, steamed, crisps, in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vitelotte
+contributeurs:
+  - "@potagerer"

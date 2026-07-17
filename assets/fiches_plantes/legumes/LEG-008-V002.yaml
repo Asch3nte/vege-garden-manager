@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Chou-fleur Merveille de Toutes Saisons. Hérite de LEG-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-008-V002
+parent_id: LEG-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. botrytis 'Merveille de Toutes Saisons'"
+
+i18n:
+  fr:
+    nom_commun: Chou-fleur Merveille de Toutes Saisons
+    noms_alternatifs: [Merveille de Toutes Saisons]
+    description: >
+      Variété polyvalente à pomme blanche ferme et serrée, adaptée à plusieurs
+      périodes de semis dans l'année. Rustique et régulière, c'est un choix sûr
+      pour étaler la production.
+  en:
+    nom_commun: All-Seasons Cauliflower
+    description: >
+      Versatile variety with a firm, tight white head, suited to several sowing
+      windows through the year. Hardy and consistent.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 8
+    conditions_i18n: { fr: "En bouquets, blanchir 3 min", en: "In florets, blanch 3 min" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, en gratin, en velouté, cru en salade]
+  en: [Steamed, gratin, velouté, raw in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-fleur
+contributeurs:
+  - "@potagerer"

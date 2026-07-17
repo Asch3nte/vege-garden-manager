@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Haricot Coco de Paimpol. Hérite de LEG-013.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-013-V006
+parent_id: LEG-013
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Phaseolus vulgaris 'Coco de Paimpol'"
+
+i18n:
+  fr:
+    nom_commun: Haricot Coco de Paimpol
+    noms_alternatifs: [Coco de Paimpol, Coco blanc]
+    description: >
+      Haricot cultivé pour le grain demi-sec, à gros grain blanc rond dans une
+      cosse jaune marbrée. Bénéficie d'une AOP en Bretagne ; se consomme frais
+      écossé, fondant et rapide à cuire. Port buissonnant à semi-rame.
+  en:
+    nom_commun: Coco de Paimpol Bean
+    description: >
+      Bean grown for its semi-dry grain, a large round white seed in a marbled
+      yellow pod. Eaten fresh-shelled, melting and quick to cook.
+
+cycle:
+  duree_avant_recolte_jours: [80, 100]
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled seeds, refrigerated" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique", en: "Dry seeds, airtight jar" }
+utilisations_culinaires_i18n:
+  fr: [Écossé frais mijoté, en soupe, à la bretonne]
+  en: [Fresh-shelled and stewed, in soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Coco_de_Paimpol
+contributeurs:
+  - "@potagerer"

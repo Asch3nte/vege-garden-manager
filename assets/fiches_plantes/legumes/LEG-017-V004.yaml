@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Poireau Gros Long d'Été. Hérite de LEG-017.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-017-V004
+parent_id: LEG-017
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium ampeloprasum var. porrum 'Gros Long d'Été'"
+
+i18n:
+  fr:
+    nom_commun: Poireau Gros Long d'Été
+    noms_alternatifs: [Gros Long d'Été 2, Long de Mézières]
+    description: >
+      Poireau d'été et début d'automne à long fût fin, tendre et doux, récolté
+      jeune. Croissance rapide pour les premières récoltes ; peu rustique, il ne
+      passe pas l'hiver.
+  en:
+    nom_commun: Long Summer Leek
+    description: >
+      Summer and early-autumn leek with a long, slender, tender, mild shaft,
+      harvested young. Fast-growing for early crops; not winter-hardy.
+cycle:
+  duree_avant_recolte_jours: [120, 160]
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [En fondue, en salade tiède, en quiche]
+  en: [Braised, warm salad, in quiche]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poireau
+contributeurs:
+  - "@potagerer"

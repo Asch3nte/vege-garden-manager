@@ -94,9 +94,6 @@ associations:
       raison_i18n: { fr: "Fixe l'azote, nourrit les carottes", en: "Fixes nitrogen, feeds carrots" }
     - id: LEG-010
       raison_i18n: { fr: "Trio des trois sœurs classique", en: "Classic three sisters trio" }
-    - id: CER-001
-      type: tuteur_structurel
-      raison_i18n: { fr: "Trois sœurs : la tige du maïs sert de tuteur vivant", en: "Three sisters: the corn stalk is a living stake" }
     - id: FLE-002
       type: repulsion_ravageur
       raison_i18n: { fr: "Repousse les nématodes du sol", en: "Repels soil nematodes" }
@@ -104,7 +101,7 @@ associations:
     - id: LEG-016
       type: allelopathie
       raison_i18n: { fr: "Les alliacées inhibent la croissance des légumineuses", en: "Alliums inhibit legume growth" }
-    - id: ARO-007
+    - id: LEG-024
       type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pomme de terre Bintje. Hérite de LEG-020.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-020-V002
+parent_id: LEG-020
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Solanum tuberosum 'Bintje'"
+
+i18n:
+  fr:
+    nom_commun: Pomme de terre Bintje
+    noms_alternatifs: [Bintje]
+    description: >
+      Variété de demi-saison à chair jaune tendre et farineuse, très répandue.
+      Polyvalente et productive, elle est la référence pour les frites, la purée
+      et les potages. Conservation moyenne.
+  en:
+    nom_commun: Bintje Potato
+    description: >
+      Widespread maincrop variety with tender, floury yellow flesh. Versatile and
+      productive, the go-to for chips, mash and soups.
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave sombre, sèche et fraîche (6–10 °C)", en: "Dark, dry, cool cellar (6–10 °C)" }
+utilisations_culinaires_i18n:
+  fr: [En frites, en purée, en potage, au four]
+  en: [Chips, mash, soup, baked]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Bintje
+contributeurs:
+  - "@potagerer"

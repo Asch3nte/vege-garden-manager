@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Chou-fleur Violet de Sicile. Hérite de LEG-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-008-V005
+parent_id: LEG-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. botrytis 'Violet de Sicile'"
+
+i18n:
+  fr:
+    nom_commun: Chou-fleur Violet de Sicile
+    noms_alternatifs: [Violet de Sicile, Violet de Catane]
+    description: >
+      Chou-fleur italien à pomme violette spectaculaire, à saveur douce.
+      La couleur verdit à la cuisson. Rustique et productif, récolte d'automne à
+      hiver ; riche en anthocyanes.
+  en:
+    nom_commun: Sicilian Purple Cauliflower
+    description: >
+      Italian cauliflower with a striking purple head and mild flavour. Colour
+      turns greenish on cooking. Hardy and productive, autumn to winter harvest.
+
+cycle:
+  duree_avant_recolte_jours: [110, 140]
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Vapeur, cru en salade, en gratin, poêlé]
+  en: [Steamed, raw in salad, gratin, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou-fleur
+contributeurs:
+  - "@potagerer"

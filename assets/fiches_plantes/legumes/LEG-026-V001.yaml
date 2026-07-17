@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Fève Aguadulce à très longue cosse. Hérite de LEG-026.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-026-V001
+parent_id: LEG-026
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Vicia faba 'Aguadulce à très longue cosse'"
+
+i18n:
+  fr:
+    nom_commun: Fève Aguadulce à très longue cosse
+    noms_alternatifs: [Aguadulce, Séville à longue cosse]
+    description: >
+      Grande fève à très longues cosses renfermant de nombreux gros grains verts,
+      productive et rustique. Adaptée aux semis d'automne sous climat doux. Plant
+      vigoureux et haut, à butter et éventuellement soutenir.
+  en:
+    nom_commun: Aguadulce Broad Bean
+    description: >
+      Large broad bean with very long pods holding many big green seeds,
+      productive and hardy. Suited to autumn sowing in mild climates.
+
+cycle:
+  hauteur_adulte_cm: [100, 150]
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled seeds, refrigerated" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Grains secs, en bocal hermétique", en: "Dry seeds, airtight jar" }
+utilisations_culinaires_i18n:
+  fr: [Écossée fraîche, crue à la croque, en purée, mijotée]
+  en: [Fresh-shelled, raw, mashed, stewed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/F%C3%A8ve
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,95 @@
+# Fiche mère (espèce) — Oseille.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Vivace potagère acidulée. Lot « courantes restantes ».
+id: LEG-046
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - condimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Rumex acetosa
+famille_botanique: Polygonaceae
+
+i18n:
+  fr:
+    nom_commun: Oseille
+    noms_alternatifs: [Oseille commune, Grande oseille, Surelle]
+    description: >
+      Plante vivace de la famille des Polygonacées, cultivée pour ses feuilles
+      au goût acidulé (soupes, sauces, poissons). Rustique et facile, elle
+      repousse plusieurs années à la même place.
+    conseils_culture: >
+      Semer ou planter en sol frais, au soleil ou à mi-ombre. Supprimer les
+      hampes florales pour prolonger la production de feuilles tendres. Diviser
+      la touffe tous les trois à quatre ans.
+    conseils_recolte: >
+      Cueillir les feuilles jeunes au fur et à mesure des besoins, du printemps à
+      l'automne.
+    erreurs_frequentes:
+      - Laisser monter à graines (feuilles rares et coriaces)
+      - Sol sec (feuilles petites et très acides)
+  en:
+    nom_commun: Sorrel
+    description: >
+      Perennial of the Polygonaceae family, grown for its tart leaves. Hardy and
+      easy, it regrows for several years in the same spot.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - riche
+    - bien_draine
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 8
+  temperature_optimale: 18
+  temperature_min_survie: -20
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: vivace
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [30, 60]
+  espacement_cm: 25
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 5]
+      recolte: [4, 11]
+    continental:
+      semis_exterieur: [4, 6]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [10, 5]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: polygonaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Oseille_commune  # description
+contributeurs:
+  - "@potagerer"

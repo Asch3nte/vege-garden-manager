@@ -94,7 +94,7 @@ associations:
     - id: LEG-014
       raison_i18n: { fr: "Bon usage de l'espace, peu concurrentes", en: "Good use of space, low competition" }
   defavorables:
-    - id: ARO-008
+    - id: ARO-007
       type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille, attire les mêmes ravageurs", en: "Same family, attracts the same pests" }
 rotation:

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Melon Sucrin de Tours. Hérite de LEG-030.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-030-V004
+parent_id: LEG-030
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucumis melo 'Sucrin de Tours'"
+
+i18n:
+  fr:
+    nom_commun: Melon Sucrin de Tours
+    noms_alternatifs: [Sucrin de Tours]
+    description: >
+      Variété ancienne à fruits ronds à écorce vert foncé brodée de liège, à
+      chair orange très sucrée et musquée. Rustique et productive, elle demande
+      une bonne saison chaude pour donner le meilleur.
+  en:
+    nom_commun: Sucrin de Tours Melon
+    description: >
+      Old variety with round fruits, dark-green corky-netted rind and very sweet,
+      musky orange flesh. Hardy and productive; needs a good warm season.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur une fois mûr, sous film", en: "Refrigerator once ripe, wrapped" }
+utilisations_culinaires_i18n:
+  fr: [Cru en entrée, en salade de fruits, avec du jambon]
+  en: [Raw as a starter, in fruit salad, with cured ham]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Melon_(plante)
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Céleri-rave Géant de Prague. Hérite de LEG-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-005-V002
+parent_id: LEG-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Apium graveolens var. rapaceum 'Géant de Prague'"
+
+i18n:
+  fr:
+    nom_commun: Céleri-rave Géant de Prague
+    noms_alternatifs: [Géant de Prague]
+    description: >
+      Variété ancienne à grosse boule ronde blanche, à chair fine et parfumée.
+      Vigoureuse et productive ; demande un sol riche et un arrosage régulier
+      pour grossir sans à-coups. Bonne conservation hivernale.
+  en:
+    nom_commun: Prague Giant Celeriac
+    description: >
+      Old variety with a large, round white bulb and fine, aromatic flesh.
+      Vigorous and productive; needs rich soil and steady watering. Good keeper.
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé en rémoulade, en purée, en gratin, en soupe]
+  en: [Raw grated (rémoulade), mashed, gratin, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/C%C3%A9leri-rave
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Artichaut Blanc Hyérois. Hérite de LEG-023.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-023-V004
+parent_id: LEG-023
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cynara cardunculus var. scolymus 'Blanc Hyérois'"
+
+i18n:
+  fr:
+    nom_commun: Artichaut Blanc Hyérois
+    noms_alternatifs: [Blanc d'Hyères, Macau]
+    description: >
+      Artichaut à gros capitule vert pâle presque blanc, à fond charnu et
+      savoureux. Précoce et productif en climat doux méditerranéen ; sensible au
+      froid, il se cultive surtout dans le Midi.
+  en:
+    nom_commun: Blanc Hyérois Artichoke
+    description: >
+      Artichoke with a large, pale-green almost white head and a fleshy, tasty
+      base. Early and productive in a mild Mediterranean climate; frost-sensitive.
+
+cycle:
+  hauteur_adulte_cm: [90, 130]
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tige dans l'eau", en: "Refrigerator, stem in water" }
+utilisations_culinaires_i18n:
+  fr: [Cuit à la vapeur, fonds farcis, en barigoule]
+  en: [Steamed, stuffed bases, barigoule]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Artichaut
+contributeurs:
+  - "@potagerer"

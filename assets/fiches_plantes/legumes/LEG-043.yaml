@@ -1,0 +1,96 @@
+# Fiche mère (espèce) — Scarole / Chicorée frisée.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Chicorée à salade d'automne. Lot « courantes restantes ».
+id: LEG-043
+version_fiche: 1
+categorie: legume
+sous_type: legume_feuille
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone7
+nom_scientifique: Cichorium endivia
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Scarole
+    noms_alternatifs: [Chicorée scarole, Chicorée frisée, Endive frisée]
+    description: >
+      Salade annuelle à bisannuelle de la famille des Astéracées, aux feuilles
+      larges (scarole) ou finement découpées (frisée), légèrement amères.
+      Salade de fin d'été et d'automne, plus rustique que la laitue.
+    conseils_culture: >
+      Semer de la fin du printemps à l'été, repiquer en sol frais et riche.
+      Blanchir les pommes en fin de culture (voile ou assiette posée au cœur)
+      pour adoucir l'amertume.
+    conseils_recolte: >
+      Récolter les pommes entières après blanchiment, quand le cœur est bien
+      formé et tendre.
+    erreurs_frequentes:
+      - Manque d'eau (feuilles très amères, montée à graines)
+      - Absence de blanchiment (cœur amer)
+  en:
+    nom_commun: Escarole
+    description: >
+      Annual-to-biennial salad of the Asteraceae family, with broad (escarole)
+      or finely cut (frisée) slightly bitter leaves. A late-summer and autumn
+      salad, hardier than lettuce.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - riche
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 10
+  temperature_optimale: 18
+  temperature_min_survie: -6
+  tolerance_secheresse: faible
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [6, 12]
+  duree_avant_recolte_jours: [80, 100]
+  hauteur_adulte_cm: [25, 35]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [6, 8]
+      recolte: [9, 12]
+    continental:
+      semis_exterieur: [6, 7]
+      recolte: [9, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [12, 2]
+      recolte: [3, 6]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 2
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [asteraceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_endive  # description
+contributeurs:
+  - "@potagerer"

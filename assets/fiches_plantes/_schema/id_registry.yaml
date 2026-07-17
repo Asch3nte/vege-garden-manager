@@ -15,7 +15,6 @@
 # Codes catégorie : LEG=legume ARO=aromatique FRU=fruit PFR=petit_fruit
 #                   FLE=fleur CER=cereale ENG=engrais_vert
 # ─────────────────────────────────────────────────────────────────────────────
-
 legumes:
   LEG-001: Tomate
   LEG-001-V001: Tomate Cœur de Bœuf
@@ -29,120 +28,251 @@ legumes:
   LEG-001-V009: Tomate Montfavet
   LEG-001-V010: Tomate Roma
   LEG-001-V011: Tomate Tigerella
+  LEG-001-V012: Tomate Green Zebra
+  LEG-001-V013: Tomate Black Cherry
+  LEG-001-V014: Tomate Beefsteak
+  LEG-001-V015: Tomate Saint-Pierre
+  LEG-001-V016: Tomate Costoluto Fiorentino
+  LEG-001-V017: Tomate Brandywine
+  LEG-001-V018: Tomate Gardener's Delight
+  LEG-001-V019: Tomate Sungold
+  LEG-001-V020: Tomate Téton de Vénus
+  LEG-001-V021: Tomate Poire Jaune
+  LEG-001-V022: Tomate Fantasio
+  LEG-001-V023: Tomate Cœur de Pigeon
   LEG-002: Aubergine
   LEG-002-V001: Aubergine Violette de Florence
+  LEG-002-V002: Aubergine de Barbentane
+  LEG-002-V003: Aubergine Black Beauty
+  LEG-002-V004: Aubergine Listada de Gandia
+  LEG-002-V005: Aubergine Ronde de Valence
   LEG-003: Betterave
   LEG-003-V001: Betterave Chioggia
+  LEG-003-V002: Betterave de Détroit
+  LEG-003-V003: Betterave Crapaudine
+  LEG-003-V004: Betterave Burpee's Golden
+  LEG-003-V005: Betterave Cylindra
+  LEG-003-V006: Betterave Blanche Albina
   LEG-004: Carotte
   LEG-004-V001: Carotte Nantaise Améliorée
+  LEG-004-V002: Carotte de Colmar à cœur rouge
+  LEG-004-V003: Carotte Touchon
+  LEG-004-V004: Carotte Chantenay à cœur rouge
+  LEG-004-V005: Carotte Jaune du Doubs
+  LEG-004-V006: Carotte Blanche des Vosges
+  LEG-004-V007: Carotte Purple Haze
+  LEG-004-V008: Carotte Marché de Paris
   LEG-005: Céleri-rave
   LEG-005-V001: Céleri-rave Brilliant
+  LEG-005-V002: Céleri-rave Géant de Prague
+  LEG-005-V003: Céleri-rave Monarch
   LEG-006: Chou brocoli
-  LEG-006-V001: Chou brocoli Calabrese
+  LEG-006-V001: Brocoli Calabrese
+  LEG-006-V002: Chou brocoli De Cicco
+  LEG-006-V003: Chou brocoli Pourpre du Cap
   LEG-007: Chou cabus
-  LEG-007-V001: Chou cabus rouge
+  LEG-007-V001: Chou Rouge Cabus
+  LEG-007-V002: Chou cabus Cœur de Bœuf des Vertus
+  LEG-007-V003: Chou cabus Quintal d'Alsace
+  LEG-007-V004: Chou cabus Nantais hâtif
   LEG-008: Chou-fleur
-  LEG-008-V001: Chou-fleur de Bretagne
+  LEG-008-V001: Chou-fleur De Bretagne
+  LEG-008-V002: Chou-fleur Merveille de Toutes Saisons
+  LEG-008-V003: Chou-fleur Géant d'Automne
+  LEG-008-V004: Chou Romanesco
+  LEG-008-V005: Chou-fleur Violet de Sicile
   LEG-009: Concombre
   LEG-009-V001: Concombre Marketmore
+  LEG-009-V002: Concombre Vert Long Maraîcher
+  LEG-009-V003: Concombre Blanc Long Parisien
+  LEG-009-V004: Concombre Lemon
   LEG-010: Courge musquée
   LEG-010-V001: Courge Butternut Ponca
+  LEG-010-V002: Courge Butternut Waltham
+  LEG-010-V003: Courge Musquée de Provence
+  LEG-010-V004: Courge Longue de Nice
   LEG-011: Courgette
   LEG-011-V001: Courgette Black Beauty
+  LEG-011-V002: Courgette Ronde de Nice
+  LEG-011-V003: Courgette Gold Rush
+  LEG-011-V004: Courgette Verte des Maraîchers
+  LEG-011-V005: Courgette Costata Romanesca
   LEG-012: Épinard
   LEG-012-V001: Épinard Géant d'Hiver
+  LEG-012-V002: Épinard Monstrueux de Viroflay
+  LEG-012-V003: Épinard Matador
+  LEG-012-V004: Épinard America
   LEG-013: Haricot
   LEG-013-V001: Haricot vert Fin de Bagnols
+  LEG-013-V002: Haricot Contender
+  LEG-013-V003: Haricot Beurre de Rocquencourt
+  LEG-013-V004: Haricot Blue Lake à rames
+  LEG-013-V005: Haricot Tarbais
+  LEG-013-V006: Haricot Coco de Paimpol
+  LEG-013-V007: Haricot Flageolet Chevrier
+  LEG-013-V008: Haricot Borlotto Lingot de Rome
   LEG-014: Laitue
   LEG-014-V001: Laitue Batavia Rouge Grenobloise
+  LEG-014-V002: Laitue Reine de Mai
+  LEG-014-V003: Laitue Grosse Blonde Paresseuse
+  LEG-014-V004: Laitue Merveille des Quatre Saisons
+  LEG-014-V005: Laitue Feuille de Chêne
+  LEG-014-V006: Laitue Lollo Rossa
+  LEG-014-V007: Laitue Sucrine
+  LEG-014-V008: Laitue Romaine Blonde Maraîchère
+  LEG-014-V009: Laitue Batavia Blonde de Paris
   LEG-015: Navet
   LEG-015-V001: Navet Boule d'Or
+  LEG-015-V002: Navet de Nancy
+  LEG-015-V003: Navet des Vertus Marteau
+  LEG-015-V004: Navet Milan Rouge
   LEG-016: Oignon
   LEG-016-V001: Oignon Rouge de Florence
+  LEG-016-V002: Oignon Jaune Paille des Vertus
+  LEG-016-V003: Oignon Blanc de Paris
+  LEG-016-V004: Oignon Rouge de Brunswick
+  LEG-016-V005: Oignon doux des Cévennes
+  LEG-016-V006: Oignon Rosé de Roscoff
+  LEG-016-V007: Oignon Sturon
   LEG-017: Poireau
   LEG-017-V001: Poireau Bleu de Solaise
+  LEG-017-V002: Poireau de Carentan
+  LEG-017-V003: Poireau Monstrueux d'Elbeuf
+  LEG-017-V004: Poireau Gros Long d'Été
+  LEG-017-V005: Poireau Géant d'Hiver
   LEG-018: Pois
-  LEG-018-V001: Pois mangetout Carouby
+  LEG-018-V001: Pois Mange-tout Carouby de Maussane
+  LEG-018-V002: Pois Petit Provençal
+  LEG-018-V003: Pois Merveille de Kelvedon
+  LEG-018-V004: Pois Douce Provence
+  LEG-018-V005: Pois Serpette Guilloteau
+  LEG-018-V006: Pois Corne de Bélier
   LEG-019: Poivron
   LEG-019-V001: Poivron Corno di Toro
+  LEG-019-V002: Poivron California Wonder
+  LEG-019-V003: Poivron Marconi
+  LEG-019-V004: Poivron Doux d'Espagne
+  LEG-019-V005: Poivron Yolo Wonder
   LEG-020: Pomme de terre
-  LEG-020-V001: Pomme de terre Charlotte
+  LEG-020-V001: Pomme de Terre Charlotte
+  LEG-020-V002: Pomme de terre Bintje
+  LEG-020-V003: Pomme de terre Ratte
+  LEG-020-V004: Pomme de terre Vitelotte
+  LEG-020-V005: Pomme de terre Désirée
+  LEG-020-V006: Pomme de terre Belle de Fontenay
   LEG-021: Potimarron
-  LEG-021-V001: Potimarron Rouge Vif d'Étampes
+  LEG-021-V001: Potiron Rouge Vif d'Étampes
+  LEG-021-V002: Potimarron Red Kuri
+  LEG-021-V003: Potimarron Bleu de Hongrie
+  LEG-021-V004: Potimarron Marina di Chioggia
   LEG-022: Radis
   LEG-022-V001: Radis Cherry Belle
+  LEG-022-V002: Radis de 18 jours
+  LEG-022-V003: Radis National 2
+  LEG-022-V004: Radis Flamboyant
+  LEG-022-V005: Radis Glaçon
+  LEG-022-V006: Radis Noir Gros Rond d'Hiver
   LEG-023: Artichaut
   LEG-023-V001: Artichaut Vert de Laon
-  LEG-024: Ail
-  LEG-024-V001: Ail rose de Lautrec
-
+  LEG-023-V002: Artichaut Violet de Provence
+  LEG-023-V003: Artichaut Camus de Bretagne
+  LEG-023-V004: Artichaut Blanc Hyérois
+  LEG-024: Fenouil
+  LEG-024-V001: Fenouil Doux de Florence
+  LEG-024-V002: Fenouil Zefa Fino
+  LEG-024-V003: Fenouil Romanesco
+  LEG-025: Ail
+  LEG-025-V001: Ail Blanc de la Drôme
+  LEG-025-V002: Ail Rose de Lautrec
+  LEG-025-V003: Ail Violet de Cadours
+  LEG-025-V004: Ail Fructidor
+  LEG-026: Fève
+  LEG-026-V001: Fève Aguadulce à très longue cosse
+  LEG-026-V002: Fève de Séville
+  LEG-026-V003: Fève The Sutton
+  LEG-027: Échalote
+  LEG-027-V001: Échalote Grise
+  LEG-027-V002: Échalote Longue de Jersey
+  LEG-027-V003: Échalote Cuisse de Poulet
+  LEG-028: Mâche
+  LEG-029: Bette
+  LEG-029-V001: Bette Verte à cardes blanches
+  LEG-029-V002: Bette Bright Lights
+  LEG-029-V003: Bette à cardes rouges
+  LEG-029-V004: Bette Blonde à couper
+  LEG-030: Melon
+  LEG-030-V001: Melon Charentais
+  LEG-030-V002: Melon Petit Gris de Rennes
+  LEG-030-V003: Melon Cantaloup de Bellegarde
+  LEG-030-V004: Melon Sucrin de Tours
+  LEG-031: Chou de Bruxelles
+  LEG-031-V001: Chou de Bruxelles de Rosny
+  LEG-031-V002: Chou de Bruxelles Long Island
+  LEG-031-V003: Chou de Bruxelles Groninger
+  LEG-032: Chou frisé
+  LEG-032-V001: Chou frisé Vert Demi-Nain
+  LEG-032-V002: Chou frisé Cavolo Nero
+  LEG-032-V003: Chou frisé Redbor
+  LEG-033: Panais
+  LEG-033-V001: Panais Demi-Long de Guernesey
+  LEG-033-V002: Panais Tender and True
+  LEG-034: Céleri branche
+  LEG-034-V001: Céleri branche Vert d'Elne
+  LEG-034-V002: Céleri branche Plein Blanc Pascal
+  LEG-034-V003: Céleri branche Doré Chemin
+  LEG-035: Roquette
+  LEG-036: Chou-rave
+  LEG-036-V001: Chou-rave Blanc de Vienne
+  LEG-036-V002: Chou-rave Bleu de Vienne
+  LEG-036-V003: Chou-rave Superschmelz
+  LEG-037: Rutabaga
+  LEG-037-V001: Rutabaga Wilhelmsburger
+  LEG-037-V002: Rutabaga à collet rouge
+  LEG-038: Pak choï
+  LEG-038-V001: Pak choï de Canton
+  LEG-038-V002: Pak choï de Shanghai
+  LEG-039: Cresson alénois
+  LEG-040: Pâtisson
+  LEG-040-V001: Pâtisson Blanc
+  LEG-040-V002: Pâtisson Panaché Vert et Blanc
+  LEG-040-V003: Pâtisson Jaune
+  LEG-041: Pastèque
+  LEG-041-V001: Pastèque Sugar Baby
+  LEG-041-V002: Pastèque Crimson Sweet
+  LEG-041-V003: Pastèque Charleston Gray
+  LEG-042: Chicorée witloof
+  LEG-042-V001: Chicorée Pain de Sucre
+  LEG-042-V002: Chicorée Rouge de Vérone
+  LEG-042-V003: Chicorée Chioggia
+  LEG-043: Scarole
+  LEG-043-V001: Scarole Cornet d'Anjou
+  LEG-043-V002: Chicorée Frisée de Ruffec
+  LEG-043-V003: Scarole Géante Maraîchère
+  LEG-044: Topinambour
+  LEG-044-V001: Topinambour Fuseau
+  LEG-044-V002: Topinambour Rouge du Limousin
+  LEG-044-V003: Topinambour Patate
+  LEG-045: Rhubarbe
+  LEG-046: Oseille
+  LEG-047: Asperge
+  LEG-048: Patate douce
 aromatiques:
   ARO-001: Basilic
   ARO-002: Persil
-  ARO-002-V001: Persil Frisé
+  ARO-002-V001: Persil frisé
+  ARO-002-V002: Persil Géant d'Italie
+  ARO-002-V003: Persil Frisé Vert Foncé
   ARO-003: Ciboulette
-  ARO-003-V001: Ciboulette ail (Allium tuberosum)
+  ARO-003-V001: Ciboulette ail
+  ARO-003-V002: Ciboulette Commune
   ARO-004: Thym
-  ARO-004-V001: Thym Citron
+  ARO-004-V001: Thym citron
   ARO-005: Menthe poivrée
-  ARO-005-V001: Menthe Verte
+  ARO-005-V001: Menthe verte
   ARO-006: Coriandre
   ARO-006-V001: Coriandre Santos
-  ARO-007: Fenouil
-  ARO-007-V001: Fenouil bronze 'Purpureum'
-  ARO-008: Aneth
-  ARO-008-V001: Aneth 'Bouquet'
-
-petits_fruits:
-  PFR-001: Fraisier
-  PFR-001-V001: Fraisier Gariguette
-  PFR-002: Framboisier
-  PFR-002-V001: Framboisier Heritage
-  PFR-003: Groseillier rouge
-  PFR-003-V001: Groseillier Jonkheer Van Tets
-  PFR-004: Cassis
-  PFR-004-V001: Cassis Noir de Bourgogne
-  PFR-005: Myrtille
-  PFR-005-V001: Myrtille Bluecrop
-
-fleurs:
-  FLE-001: Capucine
-  FLE-001-V001: Capucine naine 'Tom Pouce'
-  FLE-002: Souci
-  FLE-002-V001: Souci 'Orange King'
-  FLE-003: Œillet d'Inde
-  FLE-003-V001: Œillet d'Inde 'Petite Orange'
-  FLE-004: Bourrache
-  FLE-004-V001: Bourrache blanche 'Alba'
-
-engrais_verts:
-  ENG-001: Moutarde blanche
-  ENG-001-V001: Moutarde blanche 'Ludic'
-  ENG-002: Phacélie
-  ENG-002-V001: Phacélie 'Angelia'
-  ENG-003: Trèfle incarnat
-  ENG-003-V001: Trèfle incarnat 'Contea'
-  ENG-004: Luzerne
-  ENG-004-V001: Luzerne 'Europe'
-  ENG-005: Vesce commune
-  ENG-005-V001: Vesce commune 'Topaze'
-  ENG-006: Sarrasin
-  ENG-006-V001: Sarrasin 'La Harpe'
-  ENG-007: Seigle
-  ENG-007-V001: Seigle fourrager 'Dukato'
-  ENG-008: Avoine
-  ENG-008-V001: Avoine de printemps 'Canyon'
-
-cereales:
-  CER-001: Maïs doux
-  CER-001-V001: Maïs doux 'Golden Bantam'
-  CER-002: Blé tendre
-  CER-002-V001: Blé 'Rouge de Bordeaux'
-  CER-003: Quinoa
-  CER-003-V001: Quinoa 'Titicaca'
-  CER-004: Amarante
-  CER-004-V001: Amarante 'Viridis'
-
+  ARO-006-V002: Coriandre Commune
+  ARO-007: Aneth
 fruits:
   FRU-001: Pommier
   FRU-001-V001: Pommier 'Reine des Reinettes'
@@ -160,7 +290,47 @@ fruits:
   FRU-007-V001: Noisetier 'Fertile de Coutard'
   FRU-008: Vigne
   FRU-008-V001: Vigne 'Chasselas doré'
-
-# Toutes les réfs d'associations résolvent désormais vers une fiche réelle
-# (plus aucune espèce citée « en nom » sans fiche). Voir le garde-fou
-# _refsSansFiche dans test/unit/infrastructure/catalogue/catalogue_reel_test.dart.
+petits_fruits:
+  PFR-001: Fraisier
+  PFR-001-V001: Fraisier Gariguette
+  PFR-002: Framboisier
+  PFR-002-V001: Framboisier Heritage
+  PFR-003: Groseillier rouge
+  PFR-003-V001: Groseillier Jonkheer Van Tets
+  PFR-004: Cassis
+  PFR-004-V001: Cassis Noir de Bourgogne
+  PFR-005: Myrtille
+  PFR-005-V001: Myrtille Bluecrop
+fleurs:
+  FLE-001: Capucine
+  FLE-002: Souci
+  FLE-003: Œillet d'Inde
+  FLE-003-V001: Œillet d'Inde 'Petite Orange'
+  FLE-004: Bourrache
+  FLE-004-V001: Bourrache blanche 'Alba'
+cereales:
+  CER-001: Maïs doux
+  CER-001-V001: Maïs doux 'Golden Bantam'
+  CER-002: Blé tendre
+  CER-002-V001: Blé 'Rouge de Bordeaux'
+  CER-003: Quinoa
+  CER-003-V001: Quinoa 'Titicaca'
+  CER-004: Amarante
+  CER-004-V001: Amarante 'Viridis'
+engrais_verts:
+  ENG-001: Moutarde blanche
+  ENG-001-V001: Moutarde blanche 'Ludic'
+  ENG-002: Phacélie
+  ENG-002-V001: Phacélie 'Angelia'
+  ENG-003: Trèfle incarnat
+  ENG-003-V001: Trèfle incarnat 'Contea'
+  ENG-004: Luzerne
+  ENG-004-V001: Luzerne 'Europe'
+  ENG-005: Vesce commune
+  ENG-005-V001: Vesce commune 'Topaze'
+  ENG-006: Sarrasin
+  ENG-006-V001: Sarrasin 'La Harpe'
+  ENG-007: Seigle
+  ENG-007-V001: Seigle fourrager 'Dukato'
+  ENG-008: Avoine
+  ENG-008-V001: Avoine de printemps 'Canyon'

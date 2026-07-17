@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Oignon doux des Cévennes. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V005
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Doux des Cévennes'"
+
+i18n:
+  fr:
+    nom_commun: Oignon doux des Cévennes
+    noms_alternatifs: [Doux des Cévennes]
+    description: >
+      Oignon doux à bulbe blanc-nacré, à chair fondante et très peu piquante,
+      sucrée. Traditionnellement cultivé en terrasses cévenoles (AOP). Se
+      conserve moyennement ; excellent cru comme cuit.
+  en:
+    nom_commun: Sweet Cévennes Onion
+    description: >
+      Sweet onion with a pearly-white bulb and melting, barely pungent, sweet
+      flesh. Traditionally grown on Cévennes terraces (PDO). Moderate keeper.
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Local sec et aéré", en: "Dry, airy room" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, confit, en tarte, farci]
+  en: [Raw in salad, confit, in tart, stuffed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon_doux_des_C%C3%A9vennes
+contributeurs:
+  - "@potagerer"

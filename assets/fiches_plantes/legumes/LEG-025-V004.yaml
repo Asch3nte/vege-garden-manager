@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Ail Fructidor. Hérite de LEG-025.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-025-V004
+parent_id: LEG-025
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium sativum 'Fructidor'"
+
+i18n:
+  fr:
+    nom_commun: Ail Fructidor
+    noms_alternatifs: [Fructidor, Ail blanc de printemps]
+    description: >
+      Ail blanc de printemps à gros bulbe, productif et de très bonne
+      conservation. Sélection fiable et régulière, adaptée à la plantation de fin
+      d'hiver ; largement diffusée en jardinerie.
+    conseils_culture: >
+      Planter les caïeux de fin d'hiver au début du printemps, pointe vers le
+      haut, en sol léger et bien drainé, sans fumure fraîche.
+  en:
+    nom_commun: Fructidor Garlic
+    description: >
+      Spring white garlic with a large bulb, productive and a very good keeper.
+      A reliable, consistent selection suited to late-winter planting.
+conservation:
+  - methode: frais
+    duree_mois: 10
+    conditions_i18n: { fr: "Local sec et aéré, en tresse", en: "Dry, airy room, braided" }
+utilisations_culinaires_i18n:
+  fr: [Cru écrasé, confit, en persillade, rôti en chemise]
+  en: [Raw crushed, confit, in persillade, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ail_cultiv%C3%A9
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Radis National 2. Hérite de LEG-022.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-022-V003
+parent_id: LEG-022
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Raphanus sativus 'National 2'"
+
+i18n:
+  fr:
+    nom_commun: Radis National 2
+    noms_alternatifs: [National 2, Demi-long rose à bout blanc National]
+    description: >
+      Radis demi-long rose à bout blanc, à chair blanche croquante et douce.
+      Variété de référence, régulière et résistante à la montée, adaptée aux
+      semis de printemps comme d'été.
+  en:
+    nom_commun: National 2 Radish
+    description: >
+      Half-long pink radish with a white tip and crisp, mild white flesh. A
+      reference variety, consistent and bolt-resistant.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, sans les fanes", en: "Refrigerator, tops removed" }
+utilisations_culinaires_i18n:
+  fr: [Cru croqué, en salade, à la croque au sel]
+  en: [Raw, in salad, with butter and salt]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Radis
+contributeurs:
+  - "@potagerer"

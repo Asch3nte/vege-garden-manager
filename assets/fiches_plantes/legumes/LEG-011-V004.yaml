@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Courgette Verte des Maraîchers. Hérite de LEG-011.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-011-V004
+parent_id: LEG-011
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Verte des Maraîchers'"
+
+i18n:
+  fr:
+    nom_commun: Courgette Verte des Maraîchers
+    noms_alternatifs: [Verte non coureuse des maraîchers]
+    description: >
+      Variété productive à fruits allongés vert moyen légèrement strié, à chair
+      ferme. Plant non coureur, compact et vigoureux ; une valeur sûre pour une
+      récolte abondante et étalée.
+  en:
+    nom_commun: Verte des Maraîchers Courgette
+    description: >
+      Productive variety with elongated medium-green, lightly striped fruits and
+      firm flesh. Non-trailing, compact and vigorous plant.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Poêlée, gratinée, farcie, en ratatouille, en soupe]
+  en: [Sautéed, gratin, stuffed, ratatouille, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courgette
+contributeurs:
+  - "@potagerer"

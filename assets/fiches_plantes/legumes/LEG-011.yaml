@@ -100,7 +100,7 @@ associations:
     - id: FLE-001
       type: [plante_piege, attraction_pollinisateurs]
       raison_i18n: { fr: "Attire les pollinisateurs, piège à pucerons", en: "Attracts pollinators, aphid trap" }
-    - id: ARO-008
+    - id: ARO-007
       type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires", en: "Attracts beneficial insects" }
   defavorables:

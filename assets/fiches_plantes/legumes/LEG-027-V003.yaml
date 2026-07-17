@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Échalote Cuisse de Poulet. Hérite de LEG-027.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-027-V003
+parent_id: LEG-027
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa var. aggregatum 'Cuisse de Poulet'"
+
+i18n:
+  fr:
+    nom_commun: Échalote Cuisse de Poulet
+    noms_alternatifs: [Cuisse de Poulet du Poitou, Cuisse de Poulet]
+    description: >
+      Échalote allongée à gros bulbes en forme de cuisse de poulet, à tunique
+      cuivrée et chair rosée douce. Très productive et vigoureuse, elle forme peu
+      de bulbes par touffe mais de belle taille.
+  en:
+    nom_commun: Cuisse de Poulet Shallot
+    description: >
+      Elongated shallot with large, drumstick-shaped bulbs, coppery skin and mild
+      pink flesh. Very productive and vigorous, with few but large bulbs per clump.
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Local sec et aéré, en cagette ou tresse", en: "Dry, airy room, in a crate or braid" }
+utilisations_culinaires_i18n:
+  fr: [Crue ciselée en vinaigrette, confite, en sauce]
+  en: [Raw chopped in vinaigrette, confit, in sauce]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89chalote
+contributeurs:
+  - "@potagerer"

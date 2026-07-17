@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Scarole Cornet d'Anjou. Hérite de LEG-043.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-043-V001
+parent_id: LEG-043
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cichorium endivia var. latifolia 'Cornet d'Anjou'"
+
+i18n:
+  fr:
+    nom_commun: Scarole Cornet d'Anjou
+    noms_alternatifs: [Cornet d'Anjou]
+    description: >
+      Scarole à larges feuilles ondulées formant un cornet dressé, à cœur bien
+      pommé et blanchi, tendre et peu amer. Rustique et productive, c'est une
+      salade d'automne de référence.
+  en:
+    nom_commun: Cornet d'Anjou Escarole
+    description: >
+      Escarole with broad wavy leaves forming an upright cone, with a well-hearted,
+      blanched, tender, low-bitterness centre. A reference autumn salad.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade, braisée, en soupe]
+  en: [Raw in salad, braised, in soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chicor%C3%A9e_endive
+contributeurs:
+  - "@potagerer"

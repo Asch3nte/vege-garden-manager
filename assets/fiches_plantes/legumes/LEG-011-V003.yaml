@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Courgette Gold Rush. Hérite de LEG-011.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-011-V003
+parent_id: LEG-011
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Gold Rush'"
+
+i18n:
+  fr:
+    nom_commun: Courgette Gold Rush
+    noms_alternatifs: [Courgette jaune]
+    description: >
+      Variété à fruits cylindriques jaune d'or vif, à chair fine et ferme.
+      Décorative et productive, elle reste tendre et se repère facilement au
+      feuillage. Plant buissonnant compact.
+  en:
+    nom_commun: Gold Rush Courgette
+    description: >
+      Variety with bright golden-yellow cylindrical fruits and fine, firm flesh.
+      Decorative and productive, easy to spot among the foliage.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Poêlée, gratinée, crue en carpaccio, en tarte]
+  en: [Sautéed, gratin, raw carpaccio, in tart]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courgette
+contributeurs:
+  - "@potagerer"

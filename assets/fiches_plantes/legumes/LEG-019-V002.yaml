@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Poivron California Wonder. Hérite de LEG-019.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-019-V002
+parent_id: LEG-019
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum 'California Wonder'"
+
+i18n:
+  fr:
+    nom_commun: Poivron California Wonder
+    noms_alternatifs: [Carré doux]
+    description: >
+      Grand classique à gros fruits carrés à quatre lobes, à parois épaisses,
+      passant du vert au rouge à maturité. Doux et croquant, polyvalent, très
+      apprécié cru en salade comme cuit ou farci.
+  en:
+    nom_commun: California Wonder Pepper
+    description: >
+      Popular classic with large, blocky four-lobed fruits and thick walls,
+      ripening from green to red. Sweet and crunchy, versatile.
+
+conservation:
+  - methode: frais
+    duree_jours: 10
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "En lanières, sans blanchiment", en: "In strips, no blanching" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, farci, grillé, en poêlée]
+  en: [Raw in salad, stuffed, grilled, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poivron
+contributeurs:
+  - "@potagerer"

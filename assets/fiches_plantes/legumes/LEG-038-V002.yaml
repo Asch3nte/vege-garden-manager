@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Pak choï de Shanghai (à côtes vertes). Hérite de LEG-038.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-038-V002
+parent_id: LEG-038
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica rapa subsp. chinensis 'Shanghai'"
+
+i18n:
+  fr:
+    nom_commun: Pak choï de Shanghai
+    noms_alternatifs: [à côtes vertes, Shanghai, Pak choï vert]
+    description: >
+      Pak choï compact à côtes vert pâle et feuilles cuillère vert tendre, souvent
+      récolté en mini-pousse (baby pak choï). Très rapide, tendre et doux ; idéal
+      pour les petites surfaces et la culture serrée.
+  en:
+    nom_commun: Green-stemmed Pak Choi (Shanghai)
+    description: >
+      Compact pak choi with pale-green ribs and tender spoon-shaped leaves, often
+      picked as baby pak choi. Very fast, tender and mild.
+
+conservation:
+  - methode: frais
+    duree_jours: 6
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Sauté au wok, vapeur, en soupe, cru en salade]
+  en: [Stir-fried, steamed, soup, raw in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pak_cho%C3%AF
+contributeurs:
+  - "@potagerer"

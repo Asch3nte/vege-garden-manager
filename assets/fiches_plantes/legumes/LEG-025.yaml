@@ -1,0 +1,114 @@
+# Fiche mère (espèce) — Ail cultivé.
+# Taxonomie & description : GBIF × Wikidata × Wikipédia.
+# Légume-bulbe alliacé, répulsif (pucerons). Créée au lot « fleurs compagnes »
+# pour résoudre les références orphelines (ex-id legacy `ail`).
+id: LEG-025
+version_fiche: 1
+categorie: legume
+sous_type: legume_bulbe
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - condimentaire
+  - repulsif
+
+rusticite:
+  zone_min: zone5
+nom_scientifique: Allium sativum
+famille_botanique: Amaryllidaceae
+
+i18n:
+  fr:
+    nom_commun: Ail
+    noms_alternatifs: [Ail cultivé, Ail commun]
+    description: >
+      Légume-bulbe de la famille des Amaryllidacées, cultivé pour ses gousses au
+      goût puissant, condimentaires et de longue conservation. Planté par
+      caïeux. Ses composés soufrés contribuent à éloigner certains ravageurs
+      des cultures voisines.
+    conseils_culture: >
+      Planter les caïeux pointe vers le haut, en sol bien drainé et plein
+      soleil. L'ail d'automne profite du froid hivernal (vernalisation).
+      Éviter les excès d'eau qui font pourrir les bulbes ; ne pas fumer avec du
+      fumier frais.
+    conseils_recolte: >
+      Arracher quand le feuillage jaunit et se couche, par temps sec. Faire
+      sécher les bulbes à l'ombre et à l'air avant de les stocker.
+    erreurs_frequentes:
+      - Sol lourd et humide (pourriture des bulbes)
+      - Plantation trop profonde ou tête en bas
+      - Fumure fraîche azotée (feuillage au détriment du bulbe)
+  en:
+    nom_commun: Garlic
+    description: >
+      Bulb vegetable of the Amaryllidaceae family, grown from cloves for its
+      pungent, long-keeping cloves used as seasoning. Its sulphur compounds help
+      keep some pests away from neighbouring crops.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - leger
+    - riche
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 4
+  temperature_optimale: 15
+  temperature_min_survie: -12
+  tolerance_secheresse: forte
+cycle:
+  enracinement: superficiel
+  type: annuelle
+  duree_avant_recolte_jours: [240, 270]
+  hauteur_adulte_cm: [30, 60]
+  espacement_cm: 12
+  profondeur_semis_cm: 4
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [10, 11]
+      recolte: [6, 7]
+    continental:
+      plantation: [2, 3]
+      recolte: [7, 8]
+    mediterraneen:
+      plantation: [10, 12]
+      recolte: [5, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [4, 5]
+      recolte: [12, 1]
+repulsif_contre:
+  - puceron
+associations:
+  beneficies:
+    - id: LEG-003
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne les pucerons et parasites de la betterave", en: "Keeps aphids and pests away from beetroot" }
+  defavorables:
+    - id: LEG-013
+      type: allelopathie
+      raison_i18n: { fr: "Freine la croissance des haricots (comme des pois)", en: "Slows the growth of beans (as with peas)" }
+    - id: LEG-018
+      type: allelopathie
+      raison_i18n: { fr: "Freine la croissance des pois", en: "Slows the growth of peas" }
+rotation:
+  famille: amaryllidaceae
+  delai_retour_annees: 3
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [amaryllidaceae]
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Ail_cultivé  # description
+contributeurs:
+  - "@potagerer"

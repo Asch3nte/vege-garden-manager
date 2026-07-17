@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Ail Rose de Lautrec. Hérite de LEG-025.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-025-V002
+parent_id: LEG-025
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium sativum 'Rose de Lautrec'"
+
+i18n:
+  fr:
+    nom_commun: Ail Rose de Lautrec
+    noms_alternatifs: [Rose de Lautrec]
+    description: >
+      Ail rose à caïeux à la tunique rosée, à la saveur douce et fine, bénéficiant
+      d'un Label Rouge et d'une IGP. Excellente conservation. Se plante en fin
+      d'hiver, plus tardivement que les ails blancs d'automne.
+    conseils_culture: >
+      Planter les caïeux de fin d'hiver au début du printemps, en sol léger,
+      drainé et non fumé récemment. Redoute l'excès d'humidité.
+  en:
+    nom_commun: Lautrec Pink Garlic
+    description: >
+      Pink garlic with rosy-skinned cloves, mild and fine in flavour, with a
+      Label Rouge and PGI. Excellent keeping. Planted in late winter, later than
+      autumn white garlic.
+conservation:
+  - methode: frais
+    duree_mois: 10
+    conditions_i18n: { fr: "Local sec et aéré, en tresse ou manouille", en: "Dry, airy room, braided" }
+utilisations_culinaires_i18n:
+  fr: [Cru écrasé, confit, en soupe à l'ail, rôti en chemise]
+  en: [Raw crushed, confit, in garlic soup, roasted]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ail_rose_de_Lautrec
+contributeurs:
+  - "@potagerer"

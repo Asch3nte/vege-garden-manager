@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Oignon Rosé de Roscoff. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V006
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Rosé de Roscoff'"
+
+i18n:
+  fr:
+    nom_commun: Oignon Rosé de Roscoff
+    noms_alternatifs: [Rosé de Roscoff]
+    description: >
+      Oignon rosé breton (AOP) à bulbe rond légèrement aplati, à chair douce et
+      fruitée. Remarquable pour sa très longue conservation (les fameuses tresses
+      des « Johnnies ») tout en gardant sa douceur.
+  en:
+    nom_commun: Roscoff Pink Onion
+    description: >
+      Breton pink onion (PDO) with a round, slightly flattened bulb and sweet,
+      fruity flesh. Remarkable for very long keeping while staying mild.
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Local sec et aéré, en tresse", en: "Dry, airy room, braided" }
+utilisations_culinaires_i18n:
+  fr: [Cru en salade, confit, en soupe, en tarte]
+  en: [Raw in salad, confit, in soup, in tart]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon_de_Roscoff
+contributeurs:
+  - "@potagerer"

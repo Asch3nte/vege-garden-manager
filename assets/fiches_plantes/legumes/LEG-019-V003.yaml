@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Poivron Marconi. Hérite de LEG-019.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-019-V003
+parent_id: LEG-019
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum 'Marconi'"
+
+i18n:
+  fr:
+    nom_commun: Poivron Marconi
+    noms_alternatifs: [Marconi Rouge]
+    description: >
+      Variété italienne à longs fruits effilés (15–20 cm), très doux et sucrés,
+      passant du vert au rouge. Parois fines, parfaits grillés ou poêlés. Plant
+      vigoureux et productif.
+  en:
+    nom_commun: Marconi Pepper
+    description: >
+      Italian variety with long, tapered fruits (15–20 cm), very sweet, ripening
+      from green to red. Thin walls, excellent grilled or sautéed.
+
+conservation:
+  - methode: frais
+    duree_jours: 8
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Grillé, poêlé, mariné à l'huile, en accompagnement]
+  en: [Grilled, sautéed, marinated in oil, as a side]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poivron
+contributeurs:
+  - "@potagerer"

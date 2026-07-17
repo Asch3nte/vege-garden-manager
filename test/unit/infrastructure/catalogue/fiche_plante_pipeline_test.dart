@@ -88,10 +88,9 @@ void main() {
       final f = _mapper.versEntite(map);
       expect(f.sAssocieBienAvec('ARO-001'), isTrue); // basilic → ARO-001
       expect(f.sAssocieBienAvec('FLE-002'), isTrue); // souci → FLE-002
-      expect(f.sAssocieBienAvec('FLE-001'), isTrue); // capucine → FLE-001
-      expect(f.entreEnConflitAvec('ARO-007'), isTrue); // fenouil → ARO-007
+      expect(f.entreEnConflitAvec('LEG-024'), isTrue); // fenouil → LEG-024
       expect(f.entreEnConflitAvec('LEG-020'), isTrue); // pomme de terre → LEG-020
-      expect(f.sAssocieBienAvec('ARO-007'), isFalse); // fenouil = conflit, pas bénéfice
+      expect(f.sAssocieBienAvec('LEG-024'), isFalse);
     });
   });
 

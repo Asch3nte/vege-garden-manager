@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Chou cabus Quintal d'Alsace. Hérite de LEG-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-007-V003
+parent_id: LEG-007
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica oleracea var. capitata 'Quintal d'Alsace'"
+
+i18n:
+  fr:
+    nom_commun: Chou cabus Quintal d'Alsace
+    noms_alternatifs: [Quintal d'Alsace]
+    description: >
+      Gros chou pommé blanc tardif à très grosse pomme aplatie et serrée. C'est
+      le chou à choucroute par excellence, à feuilles fines et bien blanches.
+      Demande une longue saison et un sol riche.
+  en:
+    nom_commun: Quintal d'Alsace Cabbage
+    description: >
+      Large late white head cabbage with a very big, flattened, tight head. The
+      classic sauerkraut cabbage, with fine, well-blanched leaves.
+
+cycle:
+  duree_avant_recolte_jours: [120, 160]
+conservation:
+  - methode: frais
+    duree_jours: 60
+    conditions_i18n: { fr: "Cave fraîche et humide (0–5 °C)", en: "Cool humid cellar (0–5 °C)" }
+  - methode: lactofermentation
+    duree_mois: 8
+    conditions_i18n: { fr: "En choucroute", en: "As sauerkraut" }
+utilisations_culinaires_i18n:
+  fr: [En choucroute, en potée, braisé, cru râpé]
+  en: [Sauerkraut, in stew, braised, raw grated]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chou_cabus
+contributeurs:
+  - "@potagerer"

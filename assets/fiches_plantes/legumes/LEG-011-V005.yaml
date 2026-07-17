@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Courgette Costata Romanesca. Hérite de LEG-011.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-011-V005
+parent_id: LEG-011
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Cucurbita pepo 'Costata Romanesca'"
+
+i18n:
+  fr:
+    nom_commun: Courgette Costata Romanesca
+    noms_alternatifs: [Côtelée romaine, Romanesco]
+    description: >
+      Variété italienne à fruits côtelés gris-vert marbré, à chair dense et
+      savoureuse, réputée l'une des meilleures au goût. Fleurs abondantes très
+      prisées. Plant vigoureux, un peu coureur.
+  en:
+    nom_commun: Costata Romanesca Courgette
+    description: >
+      Italian variety with ribbed, marbled grey-green fruits and dense, flavourful
+      flesh, rated among the best-tasting. Abundant, prized flowers.
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Réfrigérateur, tiroir à légumes", en: "Refrigerator, vegetable drawer" }
+utilisations_culinaires_i18n:
+  fr: [Poêlée, grillée, fleurs farcies, en carpaccio]
+  en: [Sautéed, grilled, stuffed flowers, carpaccio]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Courgette
+contributeurs:
+  - "@potagerer"

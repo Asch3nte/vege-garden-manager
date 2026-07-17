@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Betterave de Détroit. Hérite de LEG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-003-V002
+parent_id: LEG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Beta vulgaris 'de Détroit'"
+
+i18n:
+  fr:
+    nom_commun: Betterave de Détroit
+    noms_alternatifs: [de Détroit, Détroit améliorée, Noire plate d'Égypte]
+    description: >
+      Betterave potagère ronde rouge foncé, à chair uniforme sucrée sans anneaux
+      marqués. Variété de référence, productive et de bonne conservation ; c'est
+      la betterave rouge classique du potager.
+  en:
+    nom_commun: Detroit Beetroot
+    description: >
+      Round dark-red beetroot with uniform, sweet flesh and no marked rings. A
+      reference variety, productive and a good keeper; the classic red beet.
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Cuite en salade, rôtie, en soupe (bortsch), crue râpée]
+  en: [Cooked in salad, roasted, in soup (borscht), raw grated]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Betterave_potag%C3%A8re
+contributeurs:
+  - "@potagerer"

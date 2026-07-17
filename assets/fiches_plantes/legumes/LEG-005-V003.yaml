@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Céleri-rave Monarch. Hérite de LEG-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-005-V003
+parent_id: LEG-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Apium graveolens var. rapaceum 'Monarch'"
+
+i18n:
+  fr:
+    nom_commun: Céleri-rave Monarch
+    noms_alternatifs: [Monarch]
+    description: >
+      Variété à boule lisse et régulière, à peau peu crevassée et chair blanche
+      fine, facile à éplucher. Réputée pour sa régularité et sa résistance à la
+      montaison ; boule qui ne noircit pas à la coupe.
+  en:
+    nom_commun: Monarch Celeriac
+    description: >
+      Variety with a smooth, regular bulb, little-cracked skin and fine white
+      flesh, easy to peel. Known for consistency and bolt resistance.
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé en rémoulade, en purée, en gratin, en soupe]
+  en: [Raw grated (rémoulade), mashed, gratin, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/C%C3%A9leri-rave
+contributeurs:
+  - "@potagerer"

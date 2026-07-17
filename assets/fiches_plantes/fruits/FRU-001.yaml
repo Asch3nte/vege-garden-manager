@@ -90,7 +90,7 @@ associations:
     - id: ARO-003
       type: repulsion_ravageur
       raison_i18n: { fr: "La ciboulette au pied limiterait la tavelure", en: "Chives at the base reportedly reduce apple scab" }
-    - id: LEG-024
+    - id: LEG-025
       type: repulsion_ravageur
       raison_i18n: { fr: "L'ail éloigne pucerons et champignons", en: "Garlic deters aphids and fungi" }
   defavorables:

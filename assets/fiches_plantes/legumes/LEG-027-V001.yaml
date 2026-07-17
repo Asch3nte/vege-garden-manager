@@ -1,0 +1,34 @@
+# Fiche fille (variété) — Échalote Grise. Hérite de LEG-027.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-027-V001
+parent_id: LEG-027
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa var. aggregatum 'Grise'"
+
+i18n:
+  fr:
+    nom_commun: Échalote Grise
+    noms_alternatifs: [Grise, Griselle, de Jersey grise]
+    description: >
+      Échalote grise à tunique gris cendré et chair ferme violacée, à la saveur
+      très fine et puissante, la plus recherchée en cuisine. Rustique mais de
+      conservation plus courte que les échalotes longues ; se plante tôt.
+  en:
+    nom_commun: Grey Shallot
+    description: >
+      Grey shallot with ash-grey skin and firm purplish flesh, with a very fine,
+      strong flavour, the most prized in cooking. Hardy but shorter-keeping.
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Local sec et aéré", en: "Dry, airy room" }
+utilisations_culinaires_i18n:
+  fr: [Crue ciselée en vinaigrette, au beurre blanc, confite]
+  en: [Raw chopped in vinaigrette, in beurre blanc, confit]
+
+sources:
+  - https://fr.wikipedia.org/wiki/%C3%89chalote
+contributeurs:
+  - "@potagerer"

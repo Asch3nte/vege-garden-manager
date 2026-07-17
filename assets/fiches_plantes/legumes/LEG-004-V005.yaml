@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Carotte Jaune du Doubs. Hérite de LEG-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-004-V005
+parent_id: LEG-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Daucus carota 'Jaune du Doubs'"
+
+i18n:
+  fr:
+    nom_commun: Carotte Jaune du Doubs
+    noms_alternatifs: [Jaune du Doubs, Jaune obtuse du Doubs]
+    description: >
+      Variété ancienne à grosse racine longue jaune, à chair douce. Rustique et
+      productive, autrefois cultivée pour le fourrage, elle revient au potager
+      pour sa couleur et sa bonne conservation.
+  en:
+    nom_commun: Yellow Doubs Carrot
+    description: >
+      Old variety with a large, long yellow root and mild flesh. Hardy and
+      productive, once grown as fodder, now back for its colour and good keeping.
+
+cycle:
+  duree_avant_recolte_jours: [110, 150]
+  profondeur_sol_min_cm: 35
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [En potée, en soupe, rôtie, en purée]
+  en: [In stew, soup, roasted, mashed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carotte
+contributeurs:
+  - "@potagerer"

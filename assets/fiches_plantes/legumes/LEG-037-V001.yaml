@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Rutabaga Wilhelmsburger. Hérite de LEG-037.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-037-V001
+parent_id: LEG-037
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Brassica napus var. napobrassica 'Wilhelmsburger'"
+
+i18n:
+  fr:
+    nom_commun: Rutabaga Wilhelmsburger
+    noms_alternatifs: [Wilhelmsburger, à collet vert]
+    description: >
+      Rutabaga rustique à collet vert et chair jaune, très résistant au froid et
+      de longue conservation. Variété de référence pour les cultures d'automne et
+      d'hiver ; chair fondante et sucrée après cuisson.
+  en:
+    nom_commun: Wilhelmsburger Swede
+    description: >
+      Hardy green-topped swede with yellow flesh, very cold-resistant and a long
+      keeper. A reference variety for autumn and winter crops.
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [En potée, en purée, rôti, en soupe]
+  en: [In stew, mashed, roasted, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Rutabaga
+contributeurs:
+  - "@potagerer"

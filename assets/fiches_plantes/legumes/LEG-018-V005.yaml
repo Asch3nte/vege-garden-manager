@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Pois Serpette Guilloteau. Hérite de LEG-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-018-V005
+parent_id: LEG-018
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pisum sativum 'Serpette Guilloteau'"
+
+i18n:
+  fr:
+    nom_commun: Pois Serpette Guilloteau
+    noms_alternatifs: [Serpette Guilloteau]
+    description: >
+      Petit pois à grains à longues cosses courbées en serpette, bien remplies,
+      productif et savoureux. Variété demi-rame vigoureuse à palisser sur rames ou
+      grillage.
+  en:
+    nom_commun: Serpette Guilloteau Pea
+    description: >
+      Shelling pea with long, sickle-curved, well-filled pods, productive and
+      tasty. A vigorous half-tall variety to support on poles or netting.
+
+cycle:
+  duree_avant_recolte_jours: [80, 95]
+  hauteur_adulte_cm: [120, 150]
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Grains frais écossés, au réfrigérateur", en: "Fresh shelled peas, refrigerated" }
+  - methode: congelation
+    duree_mois: 10
+    conditions_i18n: { fr: "Écosser et blanchir 1 min", en: "Shell and blanch 1 min" }
+utilisations_culinaires_i18n:
+  fr: [Écossé à la française, en velouté, sauté]
+  en: [Shelled French-style, in velouté, sautéed]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pois
+contributeurs:
+  - "@potagerer"

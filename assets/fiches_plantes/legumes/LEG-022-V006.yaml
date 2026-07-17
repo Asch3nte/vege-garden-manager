@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Radis Noir Gros Rond d'Hiver. Hérite de LEG-022.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-022-V006
+parent_id: LEG-022
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Raphanus sativus 'Noir Gros Rond d'Hiver'"
+
+i18n:
+  fr:
+    nom_commun: Radis Noir Gros Rond d'Hiver
+    noms_alternatifs: [Noir d'hiver, Gros noir rond]
+    description: >
+      Gros radis d'hiver à peau noire et chair blanche piquante, semé en été pour
+      une récolte d'automne. Se conserve tout l'hiver en cave ou en silo ;
+      apprécié râpé ou en usage médicinal traditionnel.
+  en:
+    nom_commun: Black Winter Radish
+    description: >
+      Large winter radish with black skin and pungent white flesh, sown in summer
+      for an autumn harvest. Keeps all winter in a cellar or clamp.
+
+cycle:
+  type: annuelle
+  duree_avant_recolte_jours: [70, 100]
+  hauteur_adulte_cm: [20, 30]
+  espacement_cm: 15
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide, ou silo de sable", en: "Cool humid cellar, or sand clamp" }
+utilisations_culinaires_i18n:
+  fr: [Cru râpé, en carpaccio, sauté, en soupe]
+  en: [Raw grated, carpaccio, sautéed, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Radis
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Laitue Merveille des Quatre Saisons. Hérite de LEG-014.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-014-V004
+parent_id: LEG-014
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Lactuca sativa 'Merveille des Quatre Saisons'"
+
+i18n:
+  fr:
+    nom_commun: Laitue Merveille des Quatre Saisons
+    noms_alternatifs: [Merveille des Quatre Saisons, Grenobloise]
+    description: >
+      Laitue pommée de type beurre à feuilles teintées de rouge cuivré, tendre et
+      savoureuse. Polyvalente, elle se sème sur une grande partie de l'année,
+      d'où son nom. Décorative au potager.
+  en:
+    nom_commun: Marvel of Four Seasons Lettuce
+    description: >
+      Butterhead lettuce with coppery-red tinged leaves, tender and tasty.
+      Versatile, sown over much of the year, hence its name.
+
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Réfrigérateur, bac à légumes", en: "Refrigerator, crisper drawer" }
+utilisations_culinaires_i18n:
+  fr: [Crue en salade]
+  en: [Raw in salad]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laitue
+contributeurs:
+  - "@potagerer"

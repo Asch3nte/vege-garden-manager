@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Oignon Sturon. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V007
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Sturon'"
+
+i18n:
+  fr:
+    nom_commun: Oignon Sturon
+    noms_alternatifs: [Sturon]
+    description: >
+      Oignon jaune de type conservation, le plus souvent planté sous forme de
+      bulbilles (« sets ») au printemps pour une culture facile et rapide. Bulbe
+      rond régulier, ferme, de bonne conservation ; idéal pour débuter.
+    conseils_culture: >
+      Planter les bulbilles au printemps, pointe affleurante, en sol léger et
+      bien drainé, sans fumure fraîche. Peu d'entretien ; sarcler régulièrement.
+  en:
+    nom_commun: Sturon Onion
+    description: >
+      Keeping-type yellow onion, most often planted as sets in spring for an easy,
+      quick crop. Round, regular, firm bulb with good keeping; ideal for beginners.
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Local sec et aéré, en cagette ou tresse", en: "Dry, airy room, in a crate or braid" }
+utilisations_culinaires_i18n:
+  fr: [En cuisine de base, revenu, en soupe, confit]
+  en: [Everyday cooking, sautéed, in soup, confit]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon
+contributeurs:
+  - "@potagerer"

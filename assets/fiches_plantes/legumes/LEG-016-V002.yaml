@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Oignon Jaune Paille des Vertus. Hérite de LEG-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-016-V002
+parent_id: LEG-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Allium cepa 'Jaune Paille des Vertus'"
+
+i18n:
+  fr:
+    nom_commun: Oignon Jaune Paille des Vertus
+    noms_alternatifs: [Jaune Paille des Vertus]
+    description: >
+      Oignon jaune de conservation par excellence, à bulbe rond aplati couleur
+      paille, à chair ferme et de saveur soutenue. Variété ancienne rustique et
+      productive, gardant tout l'hiver.
+  en:
+    nom_commun: Jaune Paille des Vertus Onion
+    description: >
+      The keeping yellow onion par excellence, with a round, flattened, straw-
+      coloured bulb, firm flesh and full flavour. Old, hardy, productive; stores
+      all winter.
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Local sec et aéré, en cagette ou tresse", en: "Dry, airy room, in a crate or braid" }
+utilisations_culinaires_i18n:
+  fr: [En cuisine de base, revenu, en soupe, confit]
+  en: [Everyday cooking, sautéed, in soup, confit]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Oignon
+contributeurs:
+  - "@potagerer"

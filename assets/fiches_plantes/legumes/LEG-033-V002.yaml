@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Panais Tender and True. Hérite de LEG-033.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-033-V002
+parent_id: LEG-033
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Pastinaca sativa 'Tender and True'"
+
+i18n:
+  fr:
+    nom_commun: Panais Tender and True
+    noms_alternatifs: [Tender and True]
+    description: >
+      Variété anglaise à longue racine régulière à chair fine, tendre et sucrée,
+      réputée peu sensible au chancre du panais. Excellente saveur ; demande un
+      sol profond et meuble pour des racines droites.
+  en:
+    nom_commun: Tender and True Parsnip
+    description: >
+      English variety with a long, regular root and fine, tender, sweet flesh,
+      known for resistance to parsnip canker. Excellent flavour; needs deep soil.
+cycle:
+  duree_avant_recolte_jours: [160, 210]
+  profondeur_sol_min_cm: 45
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "En terre l'hiver, ou cave humide en silo de sable", en: "In the ground over winter, or sand clamp in a humid cellar" }
+utilisations_culinaires_i18n:
+  fr: [En purée, rôti, en potée, en soupe]
+  en: [Mashed, roasted, in stew, soup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Panais
+contributeurs:
+  - "@potagerer"
