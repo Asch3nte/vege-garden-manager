@@ -9,6 +9,7 @@ import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_ouverture_lien_service.dart';
 import '../../domain/repositories/abstract_reinitialisation_service.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
+import '../../domain/repositories/abstract_statistiques_donnees_service.dart';
 import '../../infrastructure/api/nominatim_client.dart';
 import '../../infrastructure/api/open_meteo_client.dart';
 import '../../infrastructure/repositories/meteo_service_impl.dart';
@@ -19,6 +20,7 @@ import '../../infrastructure/services/notification_service_impl.dart';
 import '../../infrastructure/services/ouverture_lien_service_impl.dart';
 import '../../infrastructure/services/reinitialisation_service_impl.dart';
 import '../../infrastructure/services/sauvegarde_service_impl.dart';
+import '../../infrastructure/services/statistiques_donnees_service_impl.dart';
 import 'database_providers.dart';
 
 /// Dependency-injection providers for the domain service interfaces.
@@ -65,6 +67,12 @@ final sauvegardeServiceProvider = Provider<AbstractSauvegardeService>(
 final reinitialisationServiceProvider =
     Provider<AbstractReinitialisationService>(
   (ref) => ReinitialisationServiceImpl(ref.watch(appDatabaseProvider)),
+);
+
+/// Local-storage statistics for the data-transparency panel (docs/11 §6).
+final statistiquesDonneesServiceProvider =
+    Provider<AbstractStatistiquesDonneesService>(
+  (ref) => StatistiquesDonneesServiceImpl(ref.watch(appDatabaseProvider)),
 );
 
 final infoApplicationServiceProvider =

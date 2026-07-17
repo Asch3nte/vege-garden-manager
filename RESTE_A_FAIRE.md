@@ -22,6 +22,11 @@
 > lien « Voir toutes les tâches » ; branche `feat/accueil-notifications`) et
 > **arbitrage des sous-routes go_router** (fiche = modale, détail tâche
 > redondant) ; entrées rayées.
+> Mis à jour le 2026-07-17 (soir, suite 3) : livraison de la **transparence des
+> données** (section « Données stockées » : taille de la base + nb
+> d'enregistrements par table ; branche `feat/transparence-donnees`). **Les 3
+> finitions §2 sont désormais traitées** ; journal d'accès différé, politique de
+> confidentialité (texte) laissée à la rédaction du dev.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
@@ -111,8 +116,20 @@ Réservées par palier mais sans UI ni donnée :
   (champ manquant), vue Réseau — rendu canvas (perf, différé)
 - **Calendrier** : rien de fonctionnel majeur restant (tout ✅)
 - **Paramètres** :
-  - Catégorie « Transparence des données » (stats tailles DB + journal
-    d'accès — n'existe pas)
+  - ~~Catégorie « Transparence des données » (stats tailles DB + journal
+    d'accès — n'existe pas)~~ ✅ **fait** (2026-07-17) : section **« Données
+    stockées »** dans le panneau Données (`_SectionStockage`) — **taille de la
+    base sur l'appareil** (`PRAGMA page_count × page_size`, indépendant de la
+    plateforme) + **nombre d'enregistrements par table** (lecture générique de
+    `AppDatabase.allTables`, apparaît automatiquement pour toute nouvelle table).
+    Couche propre : VO domain `StatistiquesStockage`/`StatistiqueTable`,
+    interface `AbstractStatistiquesDonneesService`, impl infra Drift, provider +
+    FutureProvider applicatif, i18n fr/en, tests (service en mémoire + VO +
+    widget). **Journal d'accès aux données sensibles : volontairement différé**
+    (docs/15 le marquait déjà « (éventuel) » ; nécessiterait un sous-système de
+    journalisation à instrumenter partout, valeur discutable pour une app 100 %
+    locale). **Politique de confidentialité (texte hors-ligne)** : à rédiger par
+    le dev (éditorial) — cf. docs/11 §6.
   - ~~Toggle « récupération météo auto » (champ manquant)~~ ✅ **fait**
     (2026-07-17) : opt-out `meteoAutoActive` (défaut `true`, migration Drift
     v5→v6) — interrupteur panneau Confidentialité + **application effective**
@@ -198,20 +215,22 @@ Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
    ✅ **tranché** (2026-07-17) : **reporté en V1.1** — [ADR-0019](docs/decisions/0019-report-post-recolte-v11.md)
    (Accepté). Périmètre V1 fermé ; docs/13 §1→§2 alignés, docstring
    `ecran_plus.dart` alignée, clés ARB `plusPostRecolte(Sub)` réservées V1.1.
-   Reste, plus léger : finitions §2 (transparence des données ; ~~sous-routes
-   go_router~~ ✅ arbitré, ~~écran notifications d'accueil~~ ✅ livré).
+   Finitions §2 : ~~transparence des données~~ ✅ livré ; ~~sous-routes
+   go_router~~ ✅ arbitré ; ~~écran notifications d'accueil~~ ✅ livré.
+   **Les trois finitions §2 sont désormais traitées.**
 
 Tout le reste se range en :
 
 - **Pré-release / distribution** (groupé avant la sortie) : keystore release +
   job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
   éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
-- **Finitions légères** (docs/15 §2) : toggles paramètres restants (transparence
-  des données — les **« Ne pas déranger »** et **« météo auto » sont ✅ livrés**,
-  cf. § Paramètres) ; ~~sous-routes go_router restantes~~ ✅ **arbitré** (fiche =
-  modale, détail tâche redondant, `/accueil/notifications` ajoutée) ; ~~écran
-  notifications d'accueil~~ ✅ **livré** ; `ResolveurFamille` complet (§11).
-  **Reste vraiment : la « transparence des données ».**
+- **Finitions légères** (docs/15 §2) — **toutes traitées** : ~~toggles
+  paramètres~~ ✅ (« Ne pas déranger », « météo auto ») ; ~~transparence des
+  données~~ ✅ (section « Données stockées » ; journal d'accès différé, cf.
+  § Paramètres) ; ~~sous-routes go_router~~ ✅ **arbitré** (fiche = modale,
+  détail tâche redondant, `/accueil/notifications` ajoutée) ; ~~écran
+  notifications d'accueil~~ ✅ **livré**. Reste hors §2 : `ResolveurFamille`
+  complet (§11).
 - **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
   **post-récolte (conservation, recettes — reporté, ADR-0019)**, conformité
   territoriale, communauté P2P, plan spatial, calendrier lunaire.
