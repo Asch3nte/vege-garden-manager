@@ -35,6 +35,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0016](0016-refonte-ecran-meteo.md) | Refonte de l'écran météo : Nominatim, enrichissement modèle, vue détaillée | Accepté |
 | [0017](0017-glossaire-aide-lexique.md) | Glossaire « Aide & lexique » : la référence du jardinier (chapitres, liens, illustrations) | Accepté |
 | [0018](0018-stade-sensible-urgence-arrosage.md) | Phase sensible × stade de croissance → modulation de l'urgence d'arrosage (cadrage) | **Proposé** |
+| [0019](0019-report-post-recolte-v11.md) | Report de la fonctionnalité « Post-récolte » de V1 vers V1.1 | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

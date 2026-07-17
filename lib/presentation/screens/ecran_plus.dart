@@ -15,8 +15,9 @@ import 'parametres/widgets_parametres.dart';
 ///
 /// Reimplemented from `parametres.jsx`. The settings categories that map to real
 /// `PreferencesUtilisateur` fields (general, privacy/opt-outs, notifications)
-/// and the About page are built and persisted; Post-récolte and Communauté are
-/// marked as upcoming/V2, and Transparency/Sync/Export are deferred (docs/15).
+/// and the About page are built and persisted. Post-récolte is deferred to V1.1
+/// (ADR-0019; its `plusPostRecolte(Sub)` ARB keys are reserved for then) and
+/// Communauté to V2; Transparency/Sync/Export are deferred (docs/15).
 class EcranPlus extends ConsumerWidget {
   const EcranPlus({super.key});
 
