@@ -227,8 +227,8 @@ Polymorphisme dès que pertinent.
 > État réel consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md).
 - **Toutes les features « build-then-gate » de docs/15 §9 sont livrées** (multi-
   potager · équipements/outils · fiches perso · rotation avancée · **besoins en
-  eau détaillés** : ✅). Reste d'ADR-0009 : **lot 4 mini-tutos/teaser** de palier
-  (contenu, pas de nouveau gating)
+  eau détaillés** : ✅). **ADR-0009 est entièrement livré, lot 4 inclus**
+  (mini-tuto « Guide des niveaux » + teaser de montée — vérifié 2026-07-17)
 - maquettes dark mode · Rebrancher **Phosphor Icons** (package cassé sur
   Flutter 3.44.1, Material en substitut — voir `docs/08` §7)
 - Finitions légères (docs/15 §2) : toggles paramètres (transparence des données,
@@ -320,12 +320,12 @@ gatée expert, terme grossier conservé pour tous) ; moteur inchangé ; tests en
 **Toutes les features build-then-gate de §9 sont désormais livrées.** Reste côté
 glossaire : termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
 Prochains chantiers V1 possibles (chacun dans sa propre session, **tests en
-parallèle**) : **ADR-0009 lot 4** (mini-tutos/teaser de palier) · finitions §2
-(toggles paramètres, sous-routes) · arbitrage **post-récolte** (docs/13 §1). Le
-reste (distribution/pré-release, traduction `en` du glossaire) est consolidé
-dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) — multi-potager, équipements, fiches
-perso, rotation avancée, CI analyze+test, version dynamique, liens externes et
-i18n `en` UI sont ✅ livrés.
+parallèle**) : finitions §2 (toggles paramètres, sous-routes) · arbitrage
+**post-récolte** (docs/13 §1). Le reste (distribution/pré-release, traduction
+`en` du glossaire) est consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) —
+multi-potager, équipements, fiches perso, rotation avancée, **ADR-0009 lot 4
+(mini-tutos/teaser de palier)**, CI analyze+test, version dynamique, liens
+externes et i18n `en` UI sont ✅ livrés.
 
 > ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
 > Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**
