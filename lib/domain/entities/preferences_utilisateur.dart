@@ -4,6 +4,7 @@ import '../enums/niveau_experience.dart';
 import '../enums/sens_swipe.dart';
 import '../enums/systeme_unites.dart';
 import '../enums/theme_app.dart';
+import '../value_objects/fenetre_ne_pas_deranger.dart';
 import '../value_objects/profil_ponderation_associations.dart';
 
 /// User settings (language, theme, units, opt-outs, notifications…).
@@ -129,6 +130,11 @@ class PreferencesUtilisateur {
 
   /// Whether a do-not-disturb window is configured.
   bool get nePasDerangerActif => _nePasDerangerDebut != null;
+
+  /// The do-not-disturb window as a typed value object, or `null` when disabled
+  /// (or the stored bounds are malformed — treated as no window, robust read).
+  FenetreNePasDeranger? get fenetreNePasDeranger =>
+      FenetreNePasDeranger.depuisHeures(_nePasDerangerDebut, _nePasDerangerFin);
 
   /// Whether the first-launch onboarding has been completed. While `false`, the
   /// router gates the app on the onboarding flow (position, derived climate…).

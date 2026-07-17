@@ -4,6 +4,7 @@ import 'package:pot_a_gerer/application/use_cases/calculer_besoin_arrosage.dart'
 import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
@@ -16,6 +17,7 @@ import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_notification_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/conseil_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
@@ -30,6 +32,8 @@ class MockPotager extends Mock implements AbstractPotagerRepository {}
 class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class MockNotifications extends Mock implements AbstractNotificationService {}
+
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
 class MockCalculerBesoinArrosage extends Mock
     implements CalculerBesoinArrosage {}
@@ -47,8 +51,16 @@ void main() {
   late MockPotager potager;
   late MockTaches taches;
   late MockNotifications notifications;
+  late MockPreferences preferences;
   late MockCalculerBesoinArrosage calcul;
   late GenererTachesArrosage useCase;
+
+  /// Stubs the preferences repository to return [prefs] (defaults = all
+  /// notifications allowed, no do-not-disturb window).
+  void stubPreferences([PreferencesUtilisateur? prefs]) {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => prefs ?? PreferencesUtilisateur());
+  }
 
   setUpAll(() {
     registerFallbackValue(_FakeLocalisation());
@@ -67,9 +79,11 @@ void main() {
     potager = MockPotager();
     taches = MockTaches();
     notifications = MockNotifications();
+    preferences = MockPreferences();
     calcul = MockCalculerBesoinArrosage();
+    stubPreferences();
     useCase = GenererTachesArrosage(plantations, potager, taches, notifications,
-        calcul, maintenant: () => pinned07h);
+        preferences, calcul, maintenant: () => pinned07h);
   });
 
   Potager unPotager() => Potager(
@@ -337,5 +351,83 @@ void main() {
     // Completed tasks must never be removed, regardless of advice.
     verifyNever(() => taches.supprimer(any()));
     verifyNever(() => taches.sauvegarder(any()));
+  });
+
+  group('notification opt-outs (constraint #3)', () {
+    /// Wires an urgent-watering plantation with no existing task, so a
+    /// notification would be scheduled unless an opt-out suppresses it.
+    void wireUrgent() {
+      when(() => potager.obtenirPotagerActif())
+          .thenAnswer((_) async => unPotager());
+      when(() => plantations.obtenirActives())
+          .thenAnswer((_) async => [unePlantation('p-1')]);
+      when(() => calcul.executer(
+                plantation: any(named: 'plantation'),
+                localisation: any(named: 'localisation'),
+              ))
+          .thenAnswer((_) async => arroserMaintenant());
+      when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+          .thenAnswer((_) async => []);
+      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+      when(() => notifications.programmer(any())).thenAnswer((_) async {});
+    }
+
+    test('master switch off → task still created, no notification', () async {
+      wireUrgent();
+      stubPreferences(
+          PreferencesUtilisateur(notificationsGlobalesActives: false));
+
+      await useCase.executer();
+
+      verify(() => taches.sauvegarder(any())).called(1);
+      verifyNever(() => notifications.programmer(any()));
+    });
+
+    test("'arrosage' category muted → task still created, no notification",
+        () async {
+      wireUrgent();
+      stubPreferences(PreferencesUtilisateur(
+          notificationsParCategorie: const {'arrosage': false}));
+
+      await useCase.executer();
+
+      verify(() => taches.sauvegarder(any())).called(1);
+      verifyNever(() => notifications.programmer(any()));
+    });
+
+    test('another category muted → arrosage notification still scheduled',
+        () async {
+      wireUrgent();
+      stubPreferences(PreferencesUtilisateur(
+          notificationsParCategorie: const {'semis': false}));
+
+      await useCase.executer();
+
+      verify(() => notifications.programmer(any())).called(1);
+    });
+
+    test('do-not-disturb window covers 08:00 → no notification', () async {
+      wireUrgent();
+      // 07:30 → 09:00 contains the 08:00 push.
+      stubPreferences(PreferencesUtilisateur(
+          nePasDerangerDebut: '07:30', nePasDerangerFin: '09:00'));
+
+      await useCase.executer();
+
+      verify(() => taches.sauvegarder(any())).called(1);
+      verifyNever(() => notifications.programmer(any()));
+    });
+
+    test('do-not-disturb window outside 08:00 → notification scheduled',
+        () async {
+      wireUrgent();
+      // 22:00 → 07:00 does not contain the 08:00 push.
+      stubPreferences(PreferencesUtilisateur(
+          nePasDerangerDebut: '22:00', nePasDerangerFin: '07:00'));
+
+      await useCase.executer();
+
+      verify(() => notifications.programmer(any())).called(1);
+    });
   });
 }

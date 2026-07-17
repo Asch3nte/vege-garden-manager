@@ -11,10 +11,14 @@
 > Mis à jour le 2026-07-17 : **correction de suivi** — **ADR-0009 lot 4**
 > (mini-tutos/teaser de palier) était listé « à faire » alors qu'il était déjà
 > livré et mergé ; entrées rayées.
+> Mis à jour le 2026-07-17 (soir) : livraison du **toggle « Ne pas déranger »**
+> (opt-out #3 rendu effectif dans `GenererTachesArrosage` — branche
+> `feat/notifs-opt-outs-fonctionnels`) ; entrées rayées.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
-> absents : DND (champs domaine présents, UI absente), toggle météo auto (aucun
+> absents : ~~DND (champs domaine présents, UI absente)~~ **livré depuis** (voir
+> ci-dessous), toggle météo auto (aucun
 > champ), « Transparence des données » (le panneau `donnees` = sauvegarde/reset,
 > **pas** stats DB + journal), favoris catalogue, dimensions littérales de zone
 > (`Parcelle` n'a que `surface`), `ResolveurFamille` non branché dans
@@ -90,7 +94,13 @@ Réservées par palier mais sans UI ni donnée :
   - Catégorie « Transparence des données » (stats tailles DB + journal
     d'accès — n'existe pas)
   - Toggle « récupération météo auto » (champ manquant)
-  - Toggle « Ne pas déranger » (champs domaine présents, UI absente)
+  - ~~Toggle « Ne pas déranger »~~ ✅ **fait** (2026-07-17) : plage silencieuse
+    fonctionnelle — VO `FenetreNePasDeranger` (fenêtre horaire semi-ouverte,
+    chevauchement de minuit), UI panneau notifications (interrupteur +
+    sélecteurs début/fin), et **application effective** de l'opt-out #3 dans
+    `GenererTachesArrosage` (notification supprimée si master off, catégorie
+    `arrosage` coupée, ou 08:00 dans la fenêtre — la **tâche est toujours
+    créée**). Tests VO + notifier + use case en //.
   - ~~**Version dynamique** (`package_info_plus`), **liens externes**
     (`url_launcher`), **i18n `en`**~~ ✅ **livrés** : version lue au runtime,
     liens externes fonctionnels, ARB `en` + pilotage `locale` (glossaire non
@@ -165,8 +175,9 @@ Tout le reste se range en :
 - **Pré-release / distribution** (groupé avant la sortie) : keystore release +
   job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
   éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
-- **Finitions légères** (docs/15 §2) : toggles paramètres (transparence des
-  données, météo auto, « Ne pas déranger »), sous-routes go_router restantes,
-  écran notifications d'accueil, `ResolveurFamille` complet (§11).
+- **Finitions légères** (docs/15 §2) : toggles paramètres restants (transparence
+  des données, météo auto — le **« Ne pas déranger » est ✅ livré**, cf. §
+  Paramètres), sous-routes go_router restantes, écran notifications d'accueil,
+  `ResolveurFamille` complet (§11).
 - **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
   conformité territoriale, communauté P2P, plan spatial, calendrier lunaire.

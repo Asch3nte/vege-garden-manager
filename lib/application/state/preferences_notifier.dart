@@ -77,6 +77,15 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> terminerOnboarding() =>
       _modifier((p) => p.copierAvec(onboardingTermine: true));
 
+  /// Sets the do-not-disturb window (`HH:MM` bounds); notifications whose time
+  /// falls inside are suppressed by the Application layer (docs/11, opt-out #3).
+  Future<void> definirNePasDeranger(String debut, String fin) =>
+      _modifier((p) => p.avecNePasDeranger(debut, fin));
+
+  /// Clears the do-not-disturb window.
+  Future<void> desactiverNePasDeranger() =>
+      _modifier((p) => p.sansNePasDeranger());
+
   /// Toggles one notification category on/off.
   Future<void> definirNotificationCategorie(String cle, bool actif) {
     return _modifier((p) {
