@@ -1,0 +1,119 @@
+# Fiche mère (espèce) — Souci officinal (calendula).
+# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: FLE-002
+version_fiche: 1
+categorie: fleur
+schema_version: 1
+difficulte: 1
+usages:
+  - ornementale
+  - compagnonnage
+  - medicinale
+  - alimentaire
+  - mellifere
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Calendula officinalis
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Souci
+    noms_alternatifs: [Souci officinal, Calendula, Souci des jardins]
+    description: >
+      Plante annuelle de la famille des Astéracées, à floraison jaune à orangé
+      longue et généreuse. Fleur comestible et médicinale (calendula), elle
+      attire les auxiliaires (syrphes, coccinelles) et éloignerait les
+      nématodes du sol. Se ressème spontanément d'année en année.
+    conseils_culture: >
+      Semer en place au printemps, en tout sol bien drainé et au soleil.
+      Supporte des sols pauvres. Supprimer les fleurs fanées prolonge la
+      floraison ; en laisser quelques-unes monter en graines pour le
+      ressemis spontané.
+    conseils_recolte: >
+      Cueillir les capitules entièrement ouverts, par temps sec, pour un usage
+      alimentaire (pétales en salade) ou médicinal (séchage). Récolter
+      régulièrement stimule de nouvelles fleurs.
+    erreurs_frequentes:
+      - Laisser les fleurs faner sur pied (arrête la floraison)
+      - Excès d'eau ou sol mal drainé (oïdium sur le feuillage)
+  en:
+    nom_commun: Pot marigold
+    noms_alternatifs: [Calendula, English marigold]
+    description: >
+      An annual of the Asteraceae family with long-lasting yellow to orange
+      flowers. Edible and medicinal (calendula); attracts beneficial insects
+      and is reputed to repel soil nematodes. Self-seeds readily.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 10
+  temperature_optimale: 18
+  temperature_min_survie: -5
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [50, 70]
+  hauteur_adulte_cm: [30, 60]
+  espacement_cm: 30
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [4, 6]
+      recolte: [6, 10]
+    continental:
+      semis_interieur: [3, 4]
+      semis_exterieur: [4, 6]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [2, 5]
+      recolte: [4, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [11, 4]
+associations:
+  beneficies:
+    - id: LEG-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne les nématodes et attire les syrphes prédateurs de pucerons", en: "Repels nematodes and attracts aphid-eating hoverflies" }
+    - id: LEG-020
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réduit les nématodes du sol autour de la pomme de terre", en: "Reduces soil nematodes around potatoes" }
+    - id: LEG-002
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne les nématodes de l'aubergine", en: "Repels nematodes from aubergine" }
+    - id: LEG-013
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire pollinisateurs et auxiliaires près des haricots", en: "Attracts pollinators and beneficials near beans" }
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 1
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Souci_officinal  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,32 @@
+# Fiche fille (variété) — Maïs doux 'Golden Bantam'. Hérite de CER-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: CER-001-V001
+parent_id: CER-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Zea mays 'Golden Bantam'"
+
+i18n:
+  fr:
+    nom_commun: Maïs doux 'Golden Bantam'
+    description: >
+      Variété ancienne (début XXe) à grains jaune doré, réputée pour sa saveur
+      sucrée et sa rusticité au jardin. Épis de taille moyenne sur plants de
+      1,5 à 2 m. Variété pollinisation libre, ressemable d'une année sur
+      l'autre. Culture et cycle identiques au maïs doux type.
+    conseils_culture: >
+      Même conduite que le maïs doux. Comme toutes les variétés à
+      pollinisation libre, l'isoler des autres types de maïs (≥ 200 m ou
+      décalage des semis) pour éviter les croisements qui altèrent le goût.
+  en:
+    nom_commun: Sweet corn 'Golden Bantam'
+    description: >
+      A heirloom (early 20th c.) golden-grained sweet corn prized for flavour
+      and garden hardiness. Open-pollinated and seed-saveable. Same culture as
+      the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Ma%C3%AFs_doux
+contributeurs:
+  - "@potagerer"

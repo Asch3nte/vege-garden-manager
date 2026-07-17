@@ -90,7 +90,7 @@ associations:
     - id: LEG-014
       raison_i18n: { fr: "Bon usage de l'espace en début de culture", en: "Good space use at the start of the season" }
   defavorables:
-    - id: persil
+    - id: ARO-002
       type: meme_famille_ravageurs
       raison_i18n: { fr: "Même famille Apiaceae, mêmes maladies et ravageurs", en: "Same Apiaceae family, same diseases and pests" }
 rotation:

@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Figuier 'Violette de Bordeaux'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V001
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Ficus carica 'Violette de Bordeaux'"
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Violette de Bordeaux'
+    noms_alternatifs: [Négronne]
+    description: >
+      Variété à figue allongée violet foncé à noir, chair rouge très sucrée et
+      parfumée. Port compact adapté aux petits jardins et à la culture en pot.
+      Assez rustique pour une figue de qualité. Culture identique au figuier
+      type ; unifère à bifère selon le climat.
+    conseils_culture: >
+      Même conduite que le figuier commun. Son port compact la rend idéale en
+      grand pot à hiverner sous climat froid.
+  en:
+    nom_commun: Fig 'Violette de Bordeaux'
+    noms_alternatifs: [Negronne]
+    description: >
+      An elongated dark-purple to black fig with very sweet, aromatic red flesh.
+      Compact habit suited to small gardens and container growing. Same culture
+      as the type.
+
+cycle:
+  hauteur_adulte_cm: [180, 300]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

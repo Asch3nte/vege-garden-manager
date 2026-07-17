@@ -88,7 +88,7 @@ associations:
     - id: LEG-013
       type: fixation_azote
       raison_i18n: { fr: "Trio des trois sœurs, fixe l'azote", en: "Three sisters trio, fixes nitrogen" }
-    - id: capucine
+    - id: FLE-001
       type: attraction_pollinisateurs
       raison_i18n: { fr: "Attire les pollinisateurs nécessaires à la nouaison", en: "Attracts pollinators needed for fruit set" }
   defavorables:

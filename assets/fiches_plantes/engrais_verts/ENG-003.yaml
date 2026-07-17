@@ -1,0 +1,110 @@
+# Fiche mère (espèce) — Trèfle incarnat.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-003
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 1
+usages:
+  - engrais_vert
+  - couvre_sol
+  - mellifere
+  - fourrage
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Trifolium incarnatum
+famille_botanique: Fabaceae
+
+i18n:
+  fr:
+    nom_commun: Trèfle incarnat
+    noms_alternatifs: [Trèfle du Roussillon, Farouch]
+    description: >
+      Légumineuse annuelle de la famille des Fabacées, cultivée comme engrais
+      vert fixateur d'azote. Ses nodosités racinaires captent l'azote de l'air
+      et l'enrichissent au sol. Épis rouge vif très mellifères. Bon couvre-sol
+      d'automne, il passe l'hiver et redémarre au printemps.
+    conseils_culture: >
+      Semer de la fin d'été au début d'automne, ou au printemps, sur sol
+      ratissé. Supporte les sols pauvres. Faucher et enfouir à la floraison,
+      quand l'azote fixé est maximal, avant une culture gourmande (chou,
+      courge). Peu résistant aux très fortes gelées prolongées.
+    conseils_recolte: >
+      « Récolte » = fauchage à la floraison (azote fixé maximal). Enfouir
+      superficiellement 3–4 semaines avant la culture suivante.
+    erreurs_frequentes:
+      - Enfouir trop tard (azote reparti dans la montée à graines)
+      - Semer sur sol battant ou détrempé (levée irrégulière)
+  en:
+    nom_commun: Crimson clover
+    noms_alternatifs: [Italian clover]
+    description: >
+      An annual Fabaceae grown as a nitrogen-fixing green manure. Root nodules
+      capture atmospheric nitrogen and enrich the soil. Bright-red bee-friendly
+      flower heads. A good autumn ground cover that overwinters.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+    - pauvre
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 5
+  temperature_optimale: 15
+  temperature_min_survie: -12
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [90, 150]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 8
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [8, 9]
+      recolte: [4, 6]
+    continental:
+      semis_exterieur: [8, 9]
+      recolte: [5, 6]
+    mediterraneen:
+      semis_exterieur: [9, 10]
+      recolte: [3, 5]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [2, 3]
+      recolte: [10, 12]
+associations:
+  beneficies:
+    - id: LEG-006
+      type: [fixation_azote, couvre_sol]
+      raison_i18n: { fr: "Enrichit le sol en azote pour les choux gourmands", en: "Enriches soil nitrogen for hungry brassicas" }
+    - id: LEG-010
+      type: fixation_azote
+      raison_i18n: { fr: "Prépare un sol azoté avant les courges", en: "Builds nitrogen for squashes" }
+  defavorables: []
+rotation:
+  famille: fabaceae
+  delai_retour_annees: 2
+  precedents_defavorables: [fabaceae]
+  fixe_azote: true
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Tr%C3%A8fle_incarnat  # description
+contributeurs:
+  - "@potagerer"

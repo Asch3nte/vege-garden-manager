@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Cerisier 'Bigarreau Burlat'. Hérite de FRU-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-003-V001
+parent_id: FRU-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Prunus avium 'Bigarreau Burlat'"
+
+i18n:
+  fr:
+    nom_commun: Cerisier 'Bigarreau Burlat'
+    noms_alternatifs: [Burlat]
+    description: >
+      Variété précoce parmi les plus cultivées, à grosse cerise rouge foncé,
+      chair ferme, sucrée et juteuse. Récolte dès le début de l'été.
+      Autostérile : à associer à un pollinisateur compatible (par ex.
+      'Napoléon', 'Van'). Culture identique au cerisier type.
+    conseils_culture: >
+      Même conduite que le cerisier doux. Sa précocité l'expose aux gelées de
+      floraison dans les régions froides : éviter les fonds de vallée gélifs.
+  en:
+    nom_commun: Cherry 'Bigarreau Burlat'
+    description: >
+      An early, widely grown variety with large dark-red cherries, firm, sweet
+      and juicy. Self-sterile — pair with a compatible pollinator. Same culture
+      as the type.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [5, 6]
+    continental:
+      plantation: [11, 3]
+      recolte: [6, 6]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Burlat
+contributeurs:
+  - "@potagerer"

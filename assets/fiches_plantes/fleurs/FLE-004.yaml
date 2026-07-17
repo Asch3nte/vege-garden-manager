@@ -1,0 +1,118 @@
+# Fiche mère (espèce) — Bourrache officinale.
+# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: FLE-004
+version_fiche: 1
+categorie: fleur
+schema_version: 1
+difficulte: 1
+usages:
+  - mellifere
+  - pollinisateur
+  - compagnonnage
+  - alimentaire
+  - medicinale
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Borago officinalis
+famille_botanique: Boraginaceae
+
+i18n:
+  fr:
+    nom_commun: Bourrache
+    noms_alternatifs: [Bourrache officinale, Herbe à la suette]
+    description: >
+      Plante annuelle de la famille des Boraginacées, aux fleurs bleues
+      étoilées très mellifères. Excellente pour attirer abeilles et
+      bourdons près des cultures à polliniser. Fleurs et jeunes feuilles
+      (goût de concombre) sont comestibles. Se ressème très généreusement.
+    conseils_culture: >
+      Semer en place au printemps, en plein soleil ou mi-ombre, en sol
+      ordinaire bien drainé. Sa racine pivotante ameublit le sol et remonte
+      les minéraux. Prévoir de l'espace : elle devient volumineuse et se
+      ressème d'elle-même chaque année.
+    conseils_recolte: >
+      Cueillir les fleurs à pleine ouverture pour décorer salades et desserts.
+      Récolter les jeunes feuilles avant qu'elles ne deviennent trop rêches et
+      piquantes. Consommer avec modération (alcaloïdes).
+    erreurs_frequentes:
+      - Sous-estimer son volume et son ressemis (peut devenir envahissante)
+      - Récolter des feuilles trop âgées (poils urticants, amertume)
+  en:
+    nom_commun: Borage
+    noms_alternatifs: [Starflower]
+    description: >
+      An annual of the Boraginaceae family with star-shaped blue flowers highly
+      attractive to bees. Excellent for drawing pollinators to crops; flowers
+      and young leaves (cucumber flavour) are edible. Self-seeds freely.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - pauvre
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 10
+  temperature_optimale: 20
+  temperature_min_survie: -5
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: pivotant
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [50, 60]
+  hauteur_adulte_cm: [40, 80]
+  espacement_cm: 40
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [4, 6]
+      recolte: [6, 10]
+    continental:
+      semis_exterieur: [4, 6]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [3, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [11, 4]
+associations:
+  beneficies:
+    - id: LEG-001
+      type: [attraction_pollinisateurs, repulsion_ravageur]
+      raison_i18n: { fr: "Attire les pollinisateurs et gênerait la sphinx de la tomate", en: "Attracts pollinators and reportedly deters tomato hornworm" }
+    - id: PFR-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Compagne classique du fraisier, améliore pollinisation et vigueur", en: "Classic strawberry companion, boosts pollination and vigour" }
+    - id: LEG-011
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire les abeilles vers les fleurs de courgette", en: "Draws bees to courgette flowers" }
+    - id: LEG-009
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Améliore la pollinisation du concombre", en: "Improves cucumber pollination" }
+  defavorables: []
+rotation:
+  famille: boraginaceae
+  delai_retour_annees: 1
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Bourrache_officinale  # description
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,30 @@
+# Fiche fille (variété) — Trèfle incarnat 'Contea'. Hérite de ENG-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ENG-003-V001
+parent_id: ENG-003
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Trifolium incarnatum 'Contea'"
+
+i18n:
+  fr:
+    nom_commun: Trèfle incarnat 'Contea'
+    description: >
+      Sélection couramment employée en couvert végétal, à développement rapide
+      et bonne production de biomasse. Culture et cycle identiques au trèfle
+      incarnat type.
+    conseils_culture: >
+      Même conduite que le trèfle incarnat commun. Apprécié en mélange avec une
+      graminée (seigle, avoine) pour un couvert plus dense et équilibré en
+      carbone/azote.
+  en:
+    nom_commun: Crimson clover 'Contea'
+    description: >
+      A selection commonly used as a cover crop, quick to establish with good
+      biomass. Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tr%C3%A8fle_incarnat
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,121 @@
+# Fiche mère (espèce) — Cerisier.
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-003
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Prunus avium
+famille_botanique: Rosaceae
+
+i18n:
+  fr:
+    nom_commun: Cerisier
+    noms_alternatifs: [Cerisier doux, Merisier (forme sauvage)]
+    description: >
+      Arbre fruitier vivace de la famille des Rosacées (genre Prunus),
+      vigoureux et souvent grand. Floraison blanche précoce très mellifère,
+      récolte des cerises en début d'été. Beaucoup de variétés de cerisier
+      doux sont autostériles et exigent un pollinisateur compatible.
+    conseils_culture: >
+      Planter en sol profond, drainé et non détrempé (craint l'excès d'eau).
+      Tailler le moins possible et uniquement en été (« taille en vert ») pour
+      éviter les écoulements de gomme et la propagation des maladies. Protéger
+      la récolte des oiseaux (filet).
+    conseils_recolte: >
+      Cueillir les cerises bien colorées et fermes, avec leur pédoncule pour
+      une meilleure conservation. La récolte est concentrée sur 2–3 semaines.
+      Éviter de récolter par temps de pluie (fruits éclatés).
+    erreurs_frequentes:
+      - Tailler en hiver (gommose, chancre)
+      - Sol lourd et humide (asphyxie racinaire, court la vie de l'arbre)
+      - Oublier le pollinisateur (floraison abondante mais peu de fruits)
+  en:
+    nom_commun: Cherry tree
+    noms_alternatifs: [Sweet cherry]
+    description: >
+      A vigorous perennial Rosaceae (genus Prunus), often large. Early white
+      bee-friendly bloom, early-summer harvest. Many sweet cherries are
+      self-sterile and need a compatible pollinator.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_survie: -30
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [1095, 1825]
+  hauteur_adulte_cm: [300, 800]
+  espacement_cm: 600
+  profondeur_sol_min_cm: 60
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [6, 7]
+    continental:
+      plantation: [11, 3]
+      recolte: [6, 7]
+    mediterraneen:
+      plantation: [11, 2]
+      recolte: [5, 6]
+  hemisphere_sud:
+    oceanique:
+      plantation: [5, 9]
+      recolte: [12, 1]
+associations:
+  beneficies:
+    - id: LEG-024
+      type: repulsion_ravageur
+      raison_i18n: { fr: "L'ail au pied a un effet répulsif et antifongique", en: "Garlic at the base is repellent and antifungal" }
+  defavorables:
+    - id: FRU-004
+      type: partage_maladies
+      raison_i18n: { fr: "Même genre Prunus que le prunier : partage moniliose et sharka", en: "Same Prunus genus as plum: shares brown rot and sharka" }
+    - id: FRU-005
+      type: partage_maladies
+      raison_i18n: { fr: "Même genre Prunus que le pêcher : maladies communes", en: "Same Prunus genus as peach: shared diseases" }
+rotation:
+  famille: rosaceae
+  delai_retour_annees: 5
+  precedents_defavorables: [rosaceae]
+  fixe_azote: false
+  besoin_azote: modere
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Réfrigérateur, avec pédoncule, non lavées", en: "Refrigerator, with stalk, unwashed" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Dénoyautées, sur plateau puis en sachet", en: "Pitted, on tray then bagged" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, cerises au sirop, à l'eau-de-vie", en: "Jam, cherries in syrup or spirit" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, clafoutis, confiture, cerises au sirop, séchée]
+  en: [Fresh, clafoutis, jam, cherries in syrup, dried]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Prunus_avium  # description
+contributeurs:
+  - "@potagerer"

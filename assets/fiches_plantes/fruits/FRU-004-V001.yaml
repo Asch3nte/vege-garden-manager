@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Prunier 'Reine-Claude dorée'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V001
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Prunus domestica 'Reine-Claude dorée'"
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Reine-Claude dorée'
+    noms_alternatifs: [Reine-Claude, Reine-Claude de Bavay]
+    description: >
+      Variété ancienne de référence, à petite prune ronde vert-doré, chair
+      fondante, très sucrée et parfumée — l'une des meilleures prunes de
+      bouche. Récolte fin d'été. Partiellement autofertile, mieux fructifiée
+      avec un pollinisateur. Culture identique au prunier type.
+    conseils_culture: >
+      Même conduite que le prunier commun. Variété appréciant les situations
+      chaudes et ensoleillées pour bien développer ses sucres.
+  en:
+    nom_commun: Plum 'Reine-Claude dorée'
+    noms_alternatifs: [Greengage]
+    description: >
+      A reference heirloom: small round golden-green plum with melting, very
+      sweet, aromatic flesh — one of the finest dessert plums. Late-summer
+      harvest. Partly self-fertile. Same culture as the type.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [8, 9]
+    continental:
+      plantation: [11, 3]
+      recolte: [8, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Reine-claude
+contributeurs:
+  - "@potagerer"

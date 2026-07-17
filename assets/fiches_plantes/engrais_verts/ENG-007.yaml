@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Seigle.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-007
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 1
+usages:
+  - engrais_vert
+  - couvre_sol
+  - fourrage
+
+rusticite:
+  zone_min: zone3
+nom_scientifique: Secale cereale
+famille_botanique: Poaceae
+
+i18n:
+  fr:
+    nom_commun: Seigle
+    noms_alternatifs: [Seigle forestier, Seigle fourrager]
+    description: >
+      Céréale de la famille des Poacées, employée comme engrais vert d'hiver
+      très rustique. Son puissant système racinaire fasciculé structure le sol
+      en profondeur et capte l'azote résiduel, évitant son lessivage. Ses
+      exsudats racinaires freinent la germination des adventices (allélopathie).
+    conseils_culture: >
+      Semer à l'automne, sur sol nu ratissé. Passe l'hiver même rigoureux et
+      redémarre vigoureusement au printemps. Se marie très bien avec une vesce
+      qu'il tuteure. Broyer et enfouir au printemps ; laisser 3–4 semaines
+      avant de semer (l'allélopathie gêne les semis fins juste après).
+    conseils_recolte: >
+      « Récolte » = broyage/roulage au stade épiaison, avant durcissement des
+      tiges. Enfouir superficiellement ou laisser en paillage roulé (couvert
+      permanent).
+    erreurs_frequentes:
+      - Semer une culture à petites graines juste après l'enfouissement (allélopathie)
+      - Broyer trop tard (tiges lignifiées, décomposition lente)
+  en:
+    nom_commun: Rye
+    noms_alternatifs: [Cereal rye, Winter rye]
+    description: >
+      A very hardy Poaceae used as a winter green manure. Its powerful fibrous
+      roots structure the soil deeply and capture residual nitrogen, preventing
+      leaching. Root exudates suppress weed germination (allelopathy).
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - pauvre
+    - leger
+  ph_min: 5.0
+  ph_max: 7.5
+  temperature_min_germination: 4
+  temperature_optimale: 12
+  temperature_min_survie: -25
+  gele_fatal: false
+  tolerance_secheresse: forte
+cycle:
+  enracinement: profond
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [180, 220]
+  hauteur_adulte_cm: [100, 150]
+  espacement_cm: 10
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [4, 5]
+    continental:
+      semis_exterieur: [9, 10]
+      recolte: [4, 6]
+    mediterraneen:
+      semis_exterieur: [10, 11]
+      recolte: [3, 5]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [3, 5]
+      recolte: [10, 11]
+associations:
+  beneficies:
+    - id: ENG-005
+      type: tuteur_structurel
+      raison_i18n: { fr: "Sert de tuteur vivant à la vesce grimpante", en: "Acts as a living stake for the climbing vetch" }
+  defavorables: []
+rotation:
+  famille: poaceae
+  delai_retour_annees: 2
+  precedents_defavorables: [poaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Seigle_cultiv%C3%A9  # description
+contributeurs:
+  - "@potagerer"

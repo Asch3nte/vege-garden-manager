@@ -1,0 +1,107 @@
+# Fiche mère (espèce) — Blé tendre.
+# Rédigée à la main (lot « céréales »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: CER-002
+version_fiche: 1
+categorie: cereale
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Triticum aestivum
+famille_botanique: Poaceae
+
+i18n:
+  fr:
+    nom_commun: Blé tendre
+    noms_alternatifs: [Froment, Blé]
+    description: >
+      Céréale de la famille des Poacées, cultivée pour ses grains panifiables.
+      Au potager, une petite planche de blé se cultive à but pédagogique ou
+      pour la paille et la farine maison. Existe en blé d'hiver (semé en
+      automne, très rustique) et blé de printemps (semé au printemps, cycle
+      plus court).
+    conseils_culture: >
+      Semer à la volée puis enfouir légèrement, en sol riche et bien préparé.
+      Le blé d'hiver, semé en octobre-novembre, tallent en hiver et se récolte
+      l'été suivant. Peu exigeant en eau une fois installé. Désherber les
+      premières semaines, le temps que le couvert se referme.
+    conseils_recolte: >
+      Récolter à maturité complète, quand les épis sont secs et dorés et que le
+      grain est dur (ne se marque plus à l'ongle). Battre puis vanner pour
+      séparer le grain de la balle ; stocker au sec.
+    erreurs_frequentes:
+      - Semis trop dense (verse et maladies foliaires)
+      - Récolte prématurée (grains mous, mauvaise conservation)
+      - Excès d'azote (verse des tiges)
+  en:
+    nom_commun: Bread wheat
+    noms_alternatifs: [Common wheat]
+    description: >
+      A Poaceae grown for its bread-making grain. In the garden, a small wheat
+      bed is grown for teaching, straw or home flour. Available as hardy winter
+      wheat and shorter-cycle spring wheat.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - lourd
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 4
+  temperature_optimale: 18
+  temperature_min_survie: -20
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [120, 300]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 10
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [10, 11]
+      recolte: [7, 8]
+    continental:
+      semis_exterieur: [10, 11]
+      recolte: [7, 8]
+    mediterraneen:
+      semis_exterieur: [11, 12]
+      recolte: [6, 7]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [4, 5]
+      recolte: [1, 2]
+associations:
+  beneficies: []
+  defavorables:
+    - id: CER-001
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Poacées communes, ravageurs et maladies partagés", en: "Both Poaceae, shared pests and diseases" }
+rotation:
+  famille: poaceae
+  delai_retour_annees: 2
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [poaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Bl%C3%A9_tendre  # description
+contributeurs:
+  - "@potagerer"

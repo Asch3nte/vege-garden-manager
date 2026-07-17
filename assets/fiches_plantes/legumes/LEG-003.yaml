@@ -85,7 +85,7 @@ associations:
     - id: LEG-014
       type: succession_temporelle
       raison_i18n: { fr: "Bon usage de l'espace, cycles complémentaires", en: "Good space use, complementary cycles" }
-    - id: ail
+    - id: LEG-024
       type: repulsion_ravageur
       raison_i18n: { fr: "L'ail repousse certains ravageurs racinaires", en: "Garlic repels certain root pests" }
   defavorables:

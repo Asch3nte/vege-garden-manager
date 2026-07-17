@@ -1,0 +1,31 @@
+# Fiche fille (variété) — Bourrache blanche 'Alba'. Hérite de FLE-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FLE-004-V001
+parent_id: FLE-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Borago officinalis 'Alba'"
+
+i18n:
+  fr:
+    nom_commun: Bourrache blanche 'Alba'
+    noms_alternatifs: [Bourrache à fleurs blanches]
+    description: >
+      Variété à fleurs blanc pur, identique au type pour la culture et les
+      usages. Appréciée pour éclairer les massifs et varier les bouquets ; tout
+      aussi mellifère que la bourrache bleue.
+    conseils_culture: >
+      Culture identique à la bourrache officinale. Le ressemis peut donner un
+      mélange de sujets blancs et bleus au fil des années si les deux
+      cohabitent.
+  en:
+    nom_commun: White borage 'Alba'
+    description: >
+      A pure-white-flowered variety, identical to the type in culture and uses,
+      and just as attractive to bees.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Bourrache_officinale
+contributeurs:
+  - "@potagerer"

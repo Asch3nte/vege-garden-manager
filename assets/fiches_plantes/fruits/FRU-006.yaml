@@ -1,0 +1,114 @@
+# Fiche mère (espèce) — Figuier.
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-006
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - ornementale
+
+rusticite:
+  zone_min: zone7
+nom_scientifique: Ficus carica
+famille_botanique: Moraceae
+
+i18n:
+  fr:
+    nom_commun: Figuier
+    noms_alternatifs: [Figuier commun]
+    description: >
+      Arbre fruitier vivace de la famille des Moracées, au feuillage ample et
+      découpé, très ornemental. Rustique et peu exigeant une fois installé, il
+      supporte la sécheresse et se plaît en situation chaude. Les variétés
+      cultivées en Europe (type « commun ») fructifient sans pollinisation.
+      Selon la variété : une récolte (figues d'automne) ou deux (figues-fleurs
+      au début de l'été, puis figues d'automne).
+    conseils_culture: >
+      Planter au printemps, en situation chaude et abritée (contre un mur au
+      sud en climat frais). Limiter les arrosages et l'azote, qui favorisent le
+      feuillage au détriment des fruits. En zone froide, cultiver en grand pot
+      à rentrer, ou protéger la souche l'hiver : il peut geler en surface et
+      repartir de la base.
+    conseils_recolte: >
+      Récolter les figues à pleine maturité, quand elles s'infléchissent au
+      collet, deviennent souples et qu'une goutte de nectar perle à l'œil. Elles
+      ne mûrissent plus après cueillette et se conservent très peu.
+    erreurs_frequentes:
+      - Excès d'eau et d'azote (beaucoup de feuilles, peu de figues)
+      - Récolte trop précoce (figue ferme, insipide)
+      - En climat froid, exposition non abritée (gel des rameaux)
+  en:
+    nom_commun: Fig tree
+    description: >
+      A perennial Moraceae with large, lobed, highly ornamental leaves. Hardy
+      and undemanding once established, drought-tolerant and heat-loving.
+      European "common" types fruit without pollination.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - pauvre
+    - sec
+  ph_min: 6.0
+  ph_max: 7.8
+  temperature_min_survie: -15
+  gele_fatal: false
+  tolerance_secheresse: forte
+cycle:
+  enracinement: profond
+  type: vivace
+  duree_avant_recolte_jours: [730, 1095]
+  hauteur_adulte_cm: [200, 500]
+  espacement_cm: 500
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [3, 4]
+      recolte: [8, 10]
+    continental:
+      plantation: [3, 4]
+      recolte: [8, 9]
+    mediterraneen:
+      plantation: [2, 4]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 10]
+      recolte: [2, 4]
+associations:
+  beneficies: []
+  defavorables: []
+rotation:
+  famille: moraceae
+  delai_retour_annees: 4
+  precedents_defavorables: [moraceae]
+  fixe_azote: false
+  besoin_azote: faible
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Réfrigérateur, à consommer très vite (fruit fragile)", en: "Refrigerator, eat quickly (fragile fruit)" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Figues séchées entières, au soleil ou au séchoir", en: "Whole dried figs, sun- or dehydrator-dried" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture de figues", en: "Fig jam" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, confiture, séchée, rôtie, tarte, accord salé (fromage, jambon)]
+  en: [Fresh, jam, dried, roasted, tart, savoury pairing (cheese, ham)]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Figuier_commun  # description
+contributeurs:
+  - "@potagerer"

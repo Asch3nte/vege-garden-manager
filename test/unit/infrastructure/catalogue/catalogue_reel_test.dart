@@ -13,10 +13,10 @@ import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_repu
 /// a later content lot). An association ref outside this set must resolve to a
 /// real fiche id — otherwise it is a dead reference (a typo or a missed
 /// migration), and this test fails.
-const _refsSansFiche = {
-  'capucine', 'fenouil', 'aneth', 'moutarde', 'soucis', 'persil', 'fraise',
-  'ail',
-};
+///
+/// Now empty: every association ref resolves to a real fiche id. When a future
+/// content lot cites a not-yet-authored species, add its bare name here.
+const _refsSansFiche = <String>{};
 
 void main() {
   test('the embedded catalogue loads with zero errors', () async {

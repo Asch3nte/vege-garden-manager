@@ -1,0 +1,123 @@
+# Fiche mère (espèce) — Capucine (grande capucine).
+# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: FLE-001
+version_fiche: 1
+categorie: fleur
+schema_version: 1
+difficulte: 1
+usages:
+  - ornementale
+  - compagnonnage
+  - alimentaire
+  - mellifere
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Tropaeolum majus
+famille_botanique: Tropaeolaceae
+
+i18n:
+  fr:
+    nom_commun: Capucine
+    noms_alternatifs: [Grande capucine, Cresson du Mexique, Capucine grimpante]
+    description: >
+      Plante annuelle de la famille des Tropaéolacées, cultivée pour ses fleurs
+      orangées à rouges et son port grimpant ou retombant. Fleurs et feuilles,
+      au goût poivré, sont comestibles. Grande alliée du potager : plante-piège
+      à pucerons et couvre-sol mellifère.
+    conseils_culture: >
+      Semer en place après les dernières gelées, en sol pauvre et bien drainé.
+      Un sol trop riche en azote favorise le feuillage au détriment des fleurs.
+      Palisser les variétés grimpantes sur un support léger, ou laisser courir
+      en couvre-sol au pied des cultures à protéger.
+    conseils_recolte: >
+      Cueillir les fleurs au fur et à mesure de leur ouverture pour prolonger la
+      floraison. Récolter les jeunes feuilles avant qu'elles ne durcissent ;
+      les boutons floraux et graines vertes se conservent au vinaigre (faux
+      câpres).
+    erreurs_frequentes:
+      - Sol trop riche (beaucoup de feuilles, peu de fleurs)
+      - Semis trop précoce (très sensible au gel)
+      - Oublier qu'elle attire massivement les pucerons (c'est son rôle de piège)
+  en:
+    nom_commun: Nasturtium
+    noms_alternatifs: [Garden nasturtium, Indian cress]
+    description: >
+      An annual of the Tropaeolaceae family grown for its edible peppery flowers
+      and leaves. A key companion plant: aphid trap crop and pollinator-friendly
+      ground cover.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - pauvre
+    - leger
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 12
+  temperature_optimale: 20
+  temperature_min_survie: 2
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [50, 60]
+  hauteur_adulte_cm: [30, 300]
+  espacement_cm: 35
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: true
+  charge_tuteur: legere
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 6]
+      recolte: [6, 10]
+    continental:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 6]
+      recolte: [7, 10]
+    mediterraneen:
+      semis_exterieur: [3, 5]
+      recolte: [5, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 11]
+      recolte: [11, 4]
+associations:
+  beneficies:
+    - id: LEG-001
+      type: plante_piege
+      raison_i18n: { fr: "Plante-piège à pucerons, détourne les colonies de la tomate", en: "Aphid trap crop, diverts colonies from tomatoes" }
+    - id: LEG-011
+      type: [plante_piege, couvre_sol]
+      raison_i18n: { fr: "Attire pucerons et aleurodes, couvre le sol des cucurbitacées", en: "Attracts aphids and whiteflies, covers cucurbit soil" }
+    - id: LEG-006
+      type: plante_piege
+      raison_i18n: { fr: "Détourne pucerons et piérides des choux", en: "Diverts aphids and cabbage whites from brassicas" }
+    - id: LEG-020
+      type: plante_piege
+      raison_i18n: { fr: "Éloigne les pucerons de la pomme de terre", en: "Draws aphids away from potatoes" }
+  defavorables: []
+rotation:
+  famille: tropaeolaceae
+  delai_retour_annees: 1
+  fixe_azote: false
+  besoin_azote: faible
+piege_a: [puceron, aleurode]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Capucine_(plante)  # description
+contributeurs:
+  - "@potagerer"

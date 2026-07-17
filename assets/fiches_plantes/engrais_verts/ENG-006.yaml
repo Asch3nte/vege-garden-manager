@@ -1,0 +1,103 @@
+# Fiche mère (espèce) — Sarrasin.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-006
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 1
+usages:
+  - engrais_vert
+  - couvre_sol
+  - mellifere
+
+rusticite:
+  zone_min: zone8
+nom_scientifique: Fagopyrum esculentum
+famille_botanique: Polygonaceae
+
+i18n:
+  fr:
+    nom_commun: Sarrasin
+    noms_alternatifs: [Blé noir, Renouée à trois angles]
+    description: >
+      Engrais vert d'été de la famille des Polygonacées, sans parenté avec les
+      légumes courants. Croissance foudroyante qui étouffe les adventices ;
+      capable de mobiliser le phosphore peu disponible du sol. Floraison
+      blanche mellifère. Très gélif : culture strictement estivale.
+    conseils_culture: >
+      Semer après les dernières gelées et jusqu'en été, sur sol nu. Lève et
+      couvre en quelques semaines. Faucher dès la pleine floraison (avant les
+      premières graines) car il se ressème très facilement. Idéal pour occuper
+      une planche libre entre deux cultures.
+    conseils_recolte: >
+      « Récolte » = fauchage à la floraison, impérativement avant grainaison.
+      Enfouir tendre ou laisser en paillage ; se décompose vite.
+    erreurs_frequentes:
+      - Semer trop tôt au printemps (détruit par le moindre gel)
+      - Le laisser grainer (ressemis abondant l'année suivante)
+  en:
+    nom_commun: Buckwheat
+    description: >
+      A summer green manure of the Polygonaceae family, unrelated to common
+      vegetables. Extremely fast-growing, smothers weeds and mobilises poorly
+      available soil phosphorus. Bee-friendly white flowers. Very frost-tender.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - pauvre
+    - leger
+  ph_min: 5.5
+  ph_max: 7.0
+  temperature_min_germination: 10
+  temperature_optimale: 20
+  temperature_min_survie: 2
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [3, 8]
+  duree_avant_recolte_jours: [40, 70]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 10
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [5, 7]
+      recolte: [7, 9]
+    continental:
+      semis_exterieur: [5, 7]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_exterieur: [4, 8]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [11, 1]
+      recolte: [1, 3]
+associations:
+  beneficies:
+    - id: LEG-011
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Sa floraison attire abeilles et syrphes près des courgettes", en: "Its bloom attracts bees and hoverflies near courgettes" }
+  defavorables: []
+rotation:
+  famille: polygonaceae
+  delai_retour_annees: 1
+  fixe_azote: false
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Sarrasin_commun  # description
+contributeurs:
+  - "@potagerer"

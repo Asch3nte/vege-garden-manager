@@ -1,0 +1,108 @@
+# Fiche mère (espèce) — Vesce commune.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-005
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 1
+usages:
+  - engrais_vert
+  - couvre_sol
+  - fourrage
+
+rusticite:
+  zone_min: zone6
+nom_scientifique: Vicia sativa
+famille_botanique: Fabaceae
+
+i18n:
+  fr:
+    nom_commun: Vesce commune
+    noms_alternatifs: [Vesce cultivée, Vesce de printemps]
+    description: >
+      Légumineuse annuelle grimpante de la famille des Fabacées, fixatrice
+      d'azote et productrice d'une biomasse abondante. Ses vrilles s'accrochent
+      à un support : on l'associe classiquement à une graminée (seigle, avoine)
+      qui lui sert de tuteur et équilibre le mélange.
+    conseils_culture: >
+      Semer à l'automne (couvert hivernal) ou au printemps, souvent en mélange
+      avec une céréale. Faucher et enfouir à la floraison, avant que les tiges
+      ne durcissent, juste avant une culture exigeante en azote.
+    conseils_recolte: >
+      « Récolte » = fauchage à la floraison. Le mélange vesce + céréale
+      s'enfouit ensemble, la céréale apportant le carbone et la vesce l'azote.
+    erreurs_frequentes:
+      - La semer seule sans tuteur (elle se couche et pourrit au sol)
+      - Enfouir des tiges trop lignifiées (faucher jeune)
+  en:
+    nom_commun: Common vetch
+    noms_alternatifs: [Spring vetch]
+    description: >
+      An annual climbing Fabaceae, nitrogen-fixing and high-biomass. Its
+      tendrils cling to a support, so it is classically mixed with a grass (rye,
+      oats) that acts as a living stake.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 5
+  temperature_optimale: 15
+  temperature_min_survie: -10
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [120, 180]
+  hauteur_adulte_cm: [40, 100]
+  espacement_cm: 8
+  profondeur_semis_cm: 3
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: false
+  culture_verticale: true
+  charge_tuteur: legere
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [9, 10]
+      recolte: [4, 6]
+    continental:
+      semis_exterieur: [3, 4]
+      recolte: [6, 7]
+    mediterraneen:
+      semis_exterieur: [9, 11]
+      recolte: [3, 5]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [3, 4]
+      recolte: [10, 12]
+associations:
+  beneficies:
+    - id: ENG-007
+      type: tuteur_structurel
+      raison_i18n: { fr: "Le seigle sert de tuteur vivant à la vesce grimpante", en: "Rye acts as a living stake for the climbing vetch" }
+    - id: LEG-006
+      type: fixation_azote
+      raison_i18n: { fr: "Restitue de l'azote pour les choux suivants", en: "Returns nitrogen for following brassicas" }
+  defavorables: []
+rotation:
+  famille: fabaceae
+  delai_retour_annees: 3
+  precedents_defavorables: [fabaceae]
+  fixe_azote: true
+  besoin_azote: faible
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Vesce_commune  # description
+contributeurs:
+  - "@potagerer"

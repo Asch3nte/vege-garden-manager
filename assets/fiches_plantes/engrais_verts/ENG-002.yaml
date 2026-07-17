@@ -1,0 +1,111 @@
+# Fiche mère (espèce) — Phacélie.
+# Rédigée à la main (lot « engrais verts »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: ENG-002
+version_fiche: 1
+categorie: engrais_vert
+schema_version: 1
+difficulte: 1
+usages:
+  - engrais_vert
+  - couvre_sol
+  - mellifere
+  - pollinisateur
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone7
+nom_scientifique: Phacelia tanacetifolia
+famille_botanique: Boraginaceae
+
+i18n:
+  fr:
+    nom_commun: Phacélie
+    noms_alternatifs: [Phacélie à feuilles de tanaisie]
+    description: >
+      Engrais vert de la famille des Boraginacées, sans parenté avec les
+      légumes cultivés : elle s'insère donc dans toutes les rotations sans
+      contrainte. Croissance rapide, biomasse abondante, floraison bleu-mauve
+      extrêmement mellifère qui attire abeilles et auxiliaires.
+    conseils_culture: >
+      Semer à la volée du printemps à la fin de l'été, sur sol nu ; recouvrir
+      légèrement (germe à l'obscurité). Étouffe efficacement les adventices.
+      Faucher à la floraison pour un enfouissement tendre. Gélive : détruite
+      par les fortes gelées, elle fait aussi un bon mulch hivernal.
+    conseils_recolte: >
+      « Récolte » = fauchage à la floraison (compromis biomasse / azote). Pour
+      favoriser les pollinisateurs, laisser fleurir quelques semaines avant de
+      couper, sans laisser grainer.
+    erreurs_frequentes:
+      - Semer trop clair (adventices non étouffées)
+      - Semer en surface sans recouvrir (germination à l'obscurité)
+      - Attendre la montée à graines (ressemis)
+  en:
+    nom_commun: Phacelia
+    noms_alternatifs: [Lacy phacelia]
+    description: >
+      A Boraginaceae green manure unrelated to any common vegetable, so it fits
+      any rotation. Fast-growing with abundant biomass and highly bee-friendly
+      blue-mauve flowers.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+  ph_min: 5.5
+  ph_max: 7.5
+  temperature_min_germination: 5
+  temperature_optimale: 15
+  temperature_min_survie: -6
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [7, 14]
+  duree_avant_recolte_jours: [60, 90]
+  hauteur_adulte_cm: [40, 90]
+  espacement_cm: 10
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [4, 8]
+      recolte: [6, 10]
+    continental:
+      semis_exterieur: [4, 8]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_exterieur: [3, 9]
+      recolte: [5, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [10, 2]
+      recolte: [12, 4]
+associations:
+  beneficies:
+    - id: LEG-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire pollinisateurs et auxiliaires près de la tomate", en: "Attracts pollinators and beneficials near tomatoes" }
+    - id: LEG-011
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Ses fleurs améliorent la pollinisation des courgettes", en: "Its flowers improve courgette pollination" }
+  defavorables: []
+rotation:
+  famille: boraginaceae
+  delai_retour_annees: 1
+  fixe_azote: false
+  besoin_azote: modere
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Phacelia_tanacetifolia  # description
+contributeurs:
+  - "@potagerer"

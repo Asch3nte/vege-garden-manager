@@ -1,0 +1,37 @@
+# Fiche fille (variété) — Capucine naine 'Tom Pouce'. Hérite de FLE-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FLE-001-V001
+parent_id: FLE-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Tropaeolum majus 'Tom Pouce'"
+
+i18n:
+  fr:
+    nom_commun: Capucine naine 'Tom Pouce'
+    noms_alternatifs: [Capucine naine, Capucine compacte]
+    description: >
+      Variété naine et non grimpante formant des touffes compactes de 25 à
+      30 cm, idéale en bordure, en pot ou en jardinière. Floraison abondante et
+      précoce, dans les mêmes tons orangés à rouges que le type. Conserve le
+      rôle de plante-piège à pucerons sans envahir l'espace.
+    conseils_culture: >
+      Même culture que la grande capucine, sans support : pas de palissage
+      nécessaire. Parfaite pour border un carré potager ou garnir une
+      jardinière au pied des légumes-fruits.
+  en:
+    nom_commun: Dwarf nasturtium 'Tom Thumb'
+    description: >
+      A dwarf, non-climbing variety forming compact 25–30 cm mounds. Ideal for
+      edging, pots and window boxes; keeps the aphid-trap role without spreading.
+
+cycle:
+  culture_verticale: false
+  hauteur_adulte_cm: [25, 30]
+  espacement_cm: 25
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capucine_(plante)
+contributeurs:
+  - "@potagerer"

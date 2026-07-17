@@ -1,0 +1,32 @@
+# Fiche fille (variété) — Blé 'Rouge de Bordeaux'. Hérite de CER-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: CER-002-V001
+parent_id: CER-002
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Triticum aestivum 'Rouge de Bordeaux'"
+
+i18n:
+  fr:
+    nom_commun: Blé 'Rouge de Bordeaux'
+    noms_alternatifs: [Blé ancien Rouge de Bordeaux]
+    description: >
+      Blé d'hiver ancien (population), à paille haute et épi barbu, apprécié en
+      agriculture paysanne pour sa rusticité, sa tolérance aux sols pauvres et
+      la qualité de sa farine. Variété à pollinisation libre, ressemable.
+      Culture et cycle identiques au blé tendre type.
+    conseils_culture: >
+      Même conduite que le blé tendre d'hiver. Sa paille haute le rend plus
+      sensible à la verse en sol trop riche : éviter les excès d'azote.
+  en:
+    nom_commun: Wheat 'Rouge de Bordeaux'
+    description: >
+      An old winter wheat landrace with tall straw and bearded ears, valued for
+      hardiness, tolerance of poor soils and flour quality. Open-pollinated.
+      Same culture as the type.
+
+sources:
+  - https://fr.wikipedia.org/wiki/Bl%C3%A9_tendre
+contributeurs:
+  - "@potagerer"

@@ -91,7 +91,7 @@ associations:
     - id: LEG-016
       type: allelopathie
       raison_i18n: { fr: "Les alliacées inhibent les légumineuses", en: "Alliums inhibit legumes" }
-    - id: fenouil
+    - id: ARO-007
       type: allelopathie
       raison_i18n: { fr: "Inhibe la croissance des plantes voisines", en: "Inhibits growth of nearby plants" }
 rotation:

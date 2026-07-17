@@ -1,0 +1,119 @@
+# Fiche mère (espèce) — Œillet d'Inde.
+# Rédigée à la main (lot « fleurs & aromatiques de compagnonnage »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références permacoles.
+id: FLE-003
+version_fiche: 1
+categorie: fleur
+schema_version: 1
+difficulte: 1
+usages:
+  - ornementale
+  - compagnonnage
+  - repulsif
+  - mellifere
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone9
+nom_scientifique: Tagetes patula
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Œillet d'Inde
+    noms_alternatifs: [Tagète, Petit œillet d'Inde]
+    description: >
+      Plante annuelle de la famille des Astéracées, à floraison jaune-orangé
+      dense tout l'été. Réputée pour éloigner les nématodes du sol (sécrétions
+      racinaires) et les aleurodes, c'est une compagne classique des
+      solanacées. À ne pas confondre avec la rose d'Inde (Tagetes erecta).
+    conseils_culture: >
+      Semer sous abri en mars-avril ou en place après les gelées, en plein
+      soleil. Peu exigeante sur le sol pourvu qu'il soit drainé. Planter en
+      bordure ou en intercalaire entre tomates, aubergines et poivrons.
+    conseils_recolte: >
+      Fleur essentiellement ornementale et de compagnonnage : supprimer les
+      capitules fanés entretient une floraison continue jusqu'aux gelées.
+    erreurs_frequentes:
+      - Semis trop précoce en extérieur (gélif)
+      - Confusion avec la rose d'Inde (Tagetes erecta), plus haute
+      - Arrosage sur le feuillage le soir (favorise l'oïdium)
+  en:
+    nom_commun: French marigold
+    noms_alternatifs: [Tagetes]
+    description: >
+      An annual of the Asteraceae family flowering densely all summer in yellow
+      and orange. Reputed to repel soil nematodes (root exudates) and
+      whiteflies; a classic companion to solanaceous crops.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: 2
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: annuelle
+  duree_germination_jours: [5, 10]
+  duree_avant_recolte_jours: [50, 60]
+  hauteur_adulte_cm: [25, 40]
+  espacement_cm: 25
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: true
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 10]
+    mediterraneen:
+      semis_interieur: [2, 3]
+      plantation: [4, 5]
+      recolte: [5, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [10, 11]
+      recolte: [11, 4]
+associations:
+  beneficies:
+    - id: LEG-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne nématodes et aleurodes de la tomate", en: "Repels nematodes and whiteflies from tomatoes" }
+    - id: LEG-019
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Protège le poivron des aleurodes", en: "Protects peppers from whiteflies" }
+    - id: LEG-002
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réduit nématodes et aleurodes sur l'aubergine", en: "Reduces nematodes and whiteflies on aubergine" }
+    - id: LEG-020
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Assainit le sol des nématodes avant/avec la pomme de terre", en: "Cleanses soil of nematodes for potatoes" }
+  defavorables: []
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 1
+  fixe_azote: false
+  besoin_azote: faible
+repulsif_contre: [aleurode]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/%C5%92illet_d%27Inde  # description
+contributeurs:
+  - "@potagerer"

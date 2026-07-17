@@ -1,0 +1,113 @@
+# Fiche mère (espèce) — Noisetier.
+# Rédigée à la main (lot « fruits »).
+# Taxonomie vérifiée GBIF × Wikidata ; agronomie de références horticoles.
+id: FRU-007
+version_fiche: 1
+categorie: fruit
+schema_version: 1
+difficulte: 1
+usages:
+  - alimentaire
+  - brise_vent
+  - mellifere
+
+rusticite:
+  zone_min: zone4
+nom_scientifique: Corylus avellana
+famille_botanique: Betulaceae
+
+i18n:
+  fr:
+    nom_commun: Noisetier
+    noms_alternatifs: [Coudrier, Avelinier]
+    description: >
+      Arbuste fruitier vivace de la famille des Bétulacées, souvent conduit en
+      cépée (touffe multi-troncs). Floraison hivernale : chatons mâles jaunes
+      dès janvier–février, pollinisés par le vent. Autostérile en pratique :
+      planter au moins deux variétés différentes pour une bonne fécondation.
+      Fait aussi une excellente haie brise-vent nourricière.
+    conseils_culture: >
+      Planter à racines nues en hiver, en sol frais et drainé. Tailler pour
+      aérer la cépée et supprimer les rejets en excès. Peu exigeant, rustique
+      et vigoureux. Protéger la récolte des écureuils et du balanin (charançon)
+      dont la larve creuse la noisette.
+    conseils_recolte: >
+      Récolter à l'automne quand les noisettes brunissent et tombent de leur
+      involucre. Les ramasser rapidement au sol, faire sécher à l'air quelques
+      semaines avant stockage au sec.
+    erreurs_frequentes:
+      - Planter une seule variété (pollinisation insuffisante, peu de fruits)
+      - Laisser les noisettes au sol (balanin, moisissures)
+      - Négliger le rajeunissement de la cépée (vieux bois peu productif)
+  en:
+    nom_commun: Hazel
+    noms_alternatifs: [Cobnut, Filbert]
+    description: >
+      A perennial Betulaceae shrub, often grown as a multi-stemmed stool.
+      Winter bloom: yellow male catkins wind-pollinated from January. Plant at
+      least two different varieties for good fruit set. Also an excellent
+      productive windbreak hedge.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - bien_draine
+    - riche
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_survie: -30
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+cycle:
+  enracinement: moyen
+  type: vivace
+  duree_avant_recolte_jours: [1095, 1460]
+  hauteur_adulte_cm: [200, 500]
+  espacement_cm: 400
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: false
+  culture_verticale: false
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [11, 3]
+      recolte: [9, 10]
+    continental:
+      plantation: [11, 3]
+      recolte: [9, 10]
+    mediterraneen:
+      plantation: [11, 2]
+      recolte: [8, 9]
+  hemisphere_sud:
+    oceanique:
+      plantation: [5, 9]
+      recolte: [3, 4]
+associations:
+  beneficies:
+    - id: PFR-005
+      type: brise_vent
+      raison_i18n: { fr: "En haie, protège du vent les cultures basses comme la myrtille", en: "As a hedge, shelters low crops such as blueberry from wind" }
+  defavorables: []
+rotation:
+  famille: betulaceae
+  delai_retour_annees: 4
+  precedents_defavorables: [betulaceae]
+  fixe_azote: false
+  besoin_azote: faible
+conservation:
+  - methode: frais
+    duree_mois: 8
+    conditions_i18n: { fr: "Séchées en coque, au sec et à l'abri des rongeurs", en: "Dried in shell, kept dry and rodent-proof" }
+utilisations_culinaires_i18n:
+  fr: [Crue nature, grillée, pâtisserie, praliné, purée, huile]
+  en: [Fresh, roasted, baking, praline, butter, oil]
+
+sources:
+  - https://www.gbif.org  # taxonomie
+  - https://www.wikidata.org  # vérification famille
+  - https://fr.wikipedia.org/wiki/Noisetier_commun  # description
+contributeurs:
+  - "@potagerer"

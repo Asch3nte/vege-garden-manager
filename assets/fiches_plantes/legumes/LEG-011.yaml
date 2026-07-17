@@ -97,10 +97,10 @@ associations:
     - id: LEG-013
       type: couvre_sol
       raison_i18n: { fr: "Trio des trois sœurs : couvre le sol", en: "Three sisters trio: covers the soil" }
-    - id: capucine
+    - id: FLE-001
       type: [plante_piege, attraction_pollinisateurs]
       raison_i18n: { fr: "Attire les pollinisateurs, piège à pucerons", en: "Attracts pollinators, aphid trap" }
-    - id: aneth
+    - id: ARO-008
       type: attraction_auxiliaires
       raison_i18n: { fr: "Attire les insectes auxiliaires", en: "Attracts beneficial insects" }
   defavorables:
