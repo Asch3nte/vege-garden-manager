@@ -13,7 +13,6 @@ Toutes les fonctionnalités décrites dans [01](01-vision-et-perimetre.md) et
 - Calendrier personnalisé, rappels, tâches.
 - Catalogue de fiches YAML + **éditeur de fiches perso** (création locale +
   export YAML + soumission GitHub via URL).
-- Post-récolte (conservation, recettes).
 - Export/import des données, **mode sombre**, architecture multilingue.
 - Aide contextuelle in-app.
 
@@ -26,6 +25,7 @@ Toutes les fonctionnalités décrites dans [01](01-vision-et-perimetre.md) et
 | Réconciliation `TypeEquipement` | Revue fonctionnelle fine de l'enum équipements |
 | Seuils météo configurables | `risque_gel`/`risque_canicule` paramétrables (figés en V1) |
 | Déduction du type de sol | Depuis API géologique / heuristique climat |
+| **Post-récolte** (conservation, recettes) | Reportée de V1 vers V1.1 — [ADR-0019](decisions/0019-report-post-recolte-v11.md) (Accepté). Greenfield sans spec au moment du report ; un ADR de cadrage (modèle, source de données, périmètre conservation vs recettes) précédera toute implémentation. Clés ARB `plusPostRecolte(Sub)` déjà en place, réservées |
 | **Sensibilité météo par plante** (fiche) | Alertes gel/canicule/forte-pluie ciblées par plante — voir §2.1 ci-dessous |
 | **Arrosage : phase sensible → urgence** | Coupler `phasesSensibles` (livré, affichage seul) × stade de croissance pour moduler l'urgence d'arrosage — [ADR-0018](decisions/0018-stade-sensible-urgence-arrosage.md) (**Proposé**, cadrage figé). Prérequis : corpus renseigné + recalibration moteur |
 

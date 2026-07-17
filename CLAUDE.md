@@ -240,8 +240,10 @@ Polymorphisme dès que pertinent.
 - **Juste avant release** : relecture éditoriale de **tous** les chapitres du
   glossaire avec le dev, **puis** sa traduction `en` (le reste de l'i18n `en`
   UI + pilotage `locale` est ✅ livré) ; vérification dev Android (docs/15 §7)
-- À arbitrer : **post-récolte** (scope V1 selon docs/13 §1, rien en code —
-  reporter officiellement ou planifier) *(éditeur de fiches perso ✅ livré)*
+- ~~À arbitrer : **post-récolte** (scope V1 selon docs/13 §1, rien en code —
+  reporter officiellement ou planifier)~~ ✅ **tranché** (2026-07-17) :
+  **reporté en V1.1** (ADR-0019) — périmètre V1 fermé, docs/13 §1→§2 alignés
+  *(éditeur de fiches perso ✅ livré)*
 
 ---
 
@@ -320,8 +322,9 @@ gatée expert, terme grossier conservé pour tous) ; moteur inchangé ; tests en
 **Toutes les features build-then-gate de §9 sont désormais livrées.** Reste côté
 glossaire : termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
 Prochains chantiers V1 possibles (chacun dans sa propre session, **tests en
-parallèle**) : finitions §2 (toggles paramètres, sous-routes) · arbitrage
-**post-récolte** (docs/13 §1). Le reste (distribution/pré-release, traduction
+parallèle**) : finitions §2 restantes (transparence des données, sous-routes
+go_router, écran notifications d'accueil). L'**arbitrage post-récolte est
+tranché** — reporté en V1.1 (ADR-0019). Le reste (distribution/pré-release, traduction
 `en` du glossaire) est consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) —
 multi-potager, équipements, fiches perso, rotation avancée, **ADR-0009 lot 4
 (mini-tutos/teaser de palier)**, CI analyze+test, version dynamique, liens

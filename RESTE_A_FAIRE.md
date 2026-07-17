@@ -177,8 +177,12 @@ Livré depuis la dernière révision : ~~Multi-potager + F2~~ ✅ · ~~Équipeme
 Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
 (ADR-0009), tout est livré.** Reste, plus léger :
 
-1. Arbitrage **post-récolte** (docs/13 §1) : reporter ou planifier.
-   (+ finitions §2 : toggles paramètres, sous-routes go_router.)
+1. ~~Arbitrage **post-récolte** (docs/13 §1) : reporter ou planifier.~~
+   ✅ **tranché** (2026-07-17) : **reporté en V1.1** — [ADR-0019](docs/decisions/0019-report-post-recolte-v11.md)
+   (Accepté). Périmètre V1 fermé ; docs/13 §1→§2 alignés, docstring
+   `ecran_plus.dart` alignée, clés ARB `plusPostRecolte(Sub)` réservées V1.1.
+   Reste, plus léger : finitions §2 (transparence des données, sous-routes
+   go_router, écran notifications d'accueil).
 
 Tout le reste se range en :
 
@@ -190,4 +194,5 @@ Tout le reste se range en :
   cf. § Paramètres), sous-routes go_router restantes, écran notifications d'accueil,
   `ResolveurFamille` complet (§11).
 - **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
-  conformité territoriale, communauté P2P, plan spatial, calendrier lunaire.
+  **post-récolte (conservation, recettes — reporté, ADR-0019)**, conformité
+  territoriale, communauté P2P, plan spatial, calendrier lunaire.
