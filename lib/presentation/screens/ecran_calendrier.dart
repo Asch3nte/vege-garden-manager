@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -201,6 +203,7 @@ class _VueAgenda extends ConsumerWidget {
                         onCocher: notifier.cocher,
                         onModifier: (t) => _modifierTache(context, ref, t),
                         onSupprimer: (t) => _supprimerTache(context, ref, t),
+                        onOuvrir: (t) => context.go(RoutesApp.tacheDetail(t.id)),
                       ),
                   ],
                 ),
@@ -315,6 +318,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
               onCocher: notifier.cocher,
               onModifier: (t) => _modifierTache(context, ref, t),
               onSupprimer: (t) => _supprimerTache(context, ref, t),
+              onOuvrir: (t) => context.go(RoutesApp.tacheDetail(t.id)),
             ),
             const SizedBox(height: EspacementsApp.s2),
           ],
@@ -901,6 +905,7 @@ class _GroupeJour extends StatelessWidget {
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
+  final ValueChanged<Tache> onOuvrir;
 
   const _GroupeJour({
     required this.groupe,
@@ -908,6 +913,7 @@ class _GroupeJour extends StatelessWidget {
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
+    required this.onOuvrir,
   });
 
   @override
@@ -933,6 +939,7 @@ class _GroupeJour extends StatelessWidget {
             onCocher: onCocher,
             onModifier: onModifier,
             onSupprimer: onSupprimer,
+            onOuvrir: onOuvrir,
           ),
           const SizedBox(height: EspacementsApp.s2),
         ],
@@ -950,6 +957,7 @@ class _CarteTache extends StatelessWidget {
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
+  final ValueChanged<Tache> onOuvrir;
 
   const _CarteTache({
     required this.tache,
@@ -957,6 +965,7 @@ class _CarteTache extends StatelessWidget {
     required this.onCocher,
     required this.onModifier,
     required this.onSupprimer,
+    required this.onOuvrir,
   });
 
   @override
@@ -968,12 +977,25 @@ class _CarteTache extends StatelessWidget {
     return Card(
       child: InkWell(
         borderRadius: RayonsApp.brLg,
-        // Tapping toggles completion (check ↔ uncheck via Tache.rouvrir).
-        onTap: () => onCocher(tache),
+        // Tapping the row opens the task detail (revisit / edit notes, priority,
+        // reschedule…); the leading check button toggles completion.
+        onTap: () => onOuvrir(tache),
         child: Padding(
           padding: const EdgeInsets.all(EspacementsApp.s3),
           child: Row(
             children: [
+              // Check button — toggles completion without opening the detail.
+              IconButton(
+                tooltip: l10n.tacheMarquerFaite,
+                onPressed: () => onCocher(tache),
+                icon: Icon(
+                  fait ? Icons.check_circle : Icons.radio_button_unchecked,
+                  color: fait
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outline,
+                ),
+              ),
+              const SizedBox(width: EspacementsApp.s1),
               Container(
                 width: 36,
                 height: 36,
@@ -1035,10 +1057,6 @@ class _CarteTache extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: EspacementsApp.s2),
-              Icon(
-                fait ? Icons.check_circle : Icons.radio_button_unchecked,
-                color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
-              ),
               PopupMenuButton<_ActionTache>(
                 tooltip: l10n.actionsTache,
                 onSelected: (action) => switch (action) {

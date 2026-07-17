@@ -232,7 +232,8 @@ void main() {
 
     await monter(tester, NiveauExperience.intermediaire);
 
-    await tester.tap(find.text('Arroser les tomates'));
+    // The check button toggles completion (the row tap now opens the detail).
+    await tester.tap(find.byTooltip('Marquer comme faite'));
     await tester.pumpAndSettle();
 
     final tache =

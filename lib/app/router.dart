@@ -22,6 +22,7 @@ import '../presentation/screens/ecran_fiches_personnelles.dart';
 import '../presentation/screens/ecran_plus.dart';
 import '../presentation/screens/ecran_equipements.dart';
 import '../presentation/screens/ecran_potager.dart';
+import '../presentation/screens/ecran_tache_detail.dart';
 import '../presentation/screens/ecran_zone_detail.dart';
 import '../presentation/screens/parametres/panneau_a_propos.dart';
 import '../presentation/screens/parametres/panneau_confidentialite.dart';
@@ -85,6 +86,15 @@ abstract final class RoutesApp {
   static const String accueilNotificationsSegment = 'notifications';
   static const String accueilNotifications =
       '$accueil/$accueilNotificationsSegment';
+
+  /// Path segment of the task-detail sub-route (under [calendrier]).
+  static const String tacheDetailSegment = 'tache/:id';
+
+  /// Absolute location of a task's detail, under the **Calendrier** branch
+  /// (keeps the bottom bar / rail; re-tapping the Calendrier tab pops back).
+  /// Opened from the agenda, the dashboard task list, and the watering
+  /// notification.
+  static String tacheDetail(String id) => '$calendrier/tache/$id';
 
   // Settings sub-panels, as go_router sub-routes of [plus] (so re-tapping the
   // Plus tab pops back to the settings root — imperative pushes would not).
@@ -410,6 +420,17 @@ final routeurProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutesApp.calendrier,
                 builder: (context, state) => const EcranCalendrier(),
+                routes: [
+                  // Task detail, pushed on top of the Calendrier branch.
+                  GoRoute(
+                    path: RoutesApp.tacheDetailSegment,
+                    builder: (context, state) => _RetourGlobal(
+                      child: EcranTacheDetail(
+                        tacheId: state.pathParameters['id']!,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

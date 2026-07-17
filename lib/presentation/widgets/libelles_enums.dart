@@ -35,6 +35,8 @@ import '../../domain/enums/type_emplacement.dart';
 import '../../domain/enums/type_equipement.dart';
 import '../../domain/enums/type_observation.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/enums/etat_tache.dart';
+import '../../domain/enums/priorite_tache.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/value_objects/effet_equipement.dart';
@@ -194,6 +196,22 @@ extension LibellesEnums on AppLocalizations {
         TypeTache.entretienEquipement => tacheEntretienEquipement,
         TypeTache.nettoyage => tacheNettoyage,
         TypeTache.autre => tacheAutre,
+      };
+
+  /// Label for a task priority.
+  String prioriteTache(PrioriteTache p) => switch (p) {
+        PrioriteTache.basse => prioriteBasse,
+        PrioriteTache.normale => prioriteNormale,
+        PrioriteTache.haute => prioriteHaute,
+        PrioriteTache.urgente => prioriteUrgente,
+      };
+
+  /// Label for a task state (lifecycle).
+  String etatTache(EtatTache e) => switch (e) {
+        EtatTache.aFaire => etatAFaire,
+        EtatTache.enCours => etatEnCours,
+        EtatTache.terminee => etatTerminee,
+        EtatTache.annulee => etatAnnulee,
       };
 
   /// Label for a garden location type.

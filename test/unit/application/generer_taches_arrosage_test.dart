@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/application/use_cases/calculer_besoin_arrosage.dart';
 import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
+import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
@@ -14,6 +15,7 @@ import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/domain/enums/urgence_arrosage.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_notification_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
@@ -35,6 +37,10 @@ class MockNotifications extends Mock implements AbstractNotificationService {}
 
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
+class MockFiches extends Mock implements AbstractFichePlanteRepository {}
+
+class MockFiche extends Mock implements FichePlante {}
+
 class MockCalculerBesoinArrosage extends Mock
     implements CalculerBesoinArrosage {}
 
@@ -52,8 +58,25 @@ void main() {
   late MockTaches taches;
   late MockNotifications notifications;
   late MockPreferences preferences;
+  late MockFiches fiches;
   late MockCalculerBesoinArrosage calcul;
   late GenererTachesArrosage useCase;
+
+  /// Stubs the catalogue so any plant sheet resolves to a common name derived
+  /// from its id ("tomate" → "Tomate"), unless [nomsParPlanteId] overrides it.
+  /// Pass `null` for a given id to simulate a missing sheet.
+  void stubFiches([Map<String, String?>? nomsParPlanteId]) {
+    when(() => fiches.obtenirParId(any())).thenAnswer((invocation) async {
+      final id = invocation.positionalArguments.first as String;
+      final String? nom = nomsParPlanteId != null && nomsParPlanteId.containsKey(id)
+          ? nomsParPlanteId[id]
+          : '${id[0].toUpperCase()}${id.substring(1)}';
+      if (nom == null) return null;
+      final fiche = MockFiche();
+      when(() => fiche.nomLocalise(any())).thenReturn(nom);
+      return fiche;
+    });
+  }
 
   /// Stubs the preferences repository to return [prefs] (defaults = all
   /// notifications allowed, no do-not-disturb window).
@@ -80,10 +103,12 @@ void main() {
     taches = MockTaches();
     notifications = MockNotifications();
     preferences = MockPreferences();
+    fiches = MockFiches();
     calcul = MockCalculerBesoinArrosage();
     stubPreferences();
+    stubFiches();
     useCase = GenererTachesArrosage(plantations, potager, taches, notifications,
-        preferences, calcul, maintenant: () => pinned07h);
+        preferences, fiches, calcul, maintenant: () => pinned07h);
   });
 
   Potager unPotager() => Potager(
@@ -94,9 +119,10 @@ void main() {
         dateCreation: DateTime(2026, 1, 1),
       );
 
-  Plantation unePlantation(String id) => Plantation(
+  Plantation unePlantation(String id, {String planteId = 'tomate'}) =>
+      Plantation(
         id: id,
-        planteId: 'tomate',
+        planteId: planteId,
         parcelleId: 'z-1',
         dateMiseEnPlace: DateTime(2026, 4, 1),
         methode: MethodeMiseEnPlace.semisDirect,
@@ -184,16 +210,109 @@ void main() {
     expect(tache.cible, CibleTache.plantation);
     expect(tache.cibleId, 'p-1');
     expect(tache.priorite, PrioriteTache.urgente);
+    // The task names its crop (from the catalogue) rather than a generic chore.
+    expect(tache.titre, 'Arroser : Tomate');
 
     final notifCaptured =
         verify(() => notifications.programmer(captureAny())).captured;
     expect(notifCaptured, hasLength(1));
     final notif = notifCaptured.first as NotificationLocale;
     expect(notif.categorie, 'arrosage');
-    expect(notif.id, startsWith('arrosage_p-1_'));
+    // One daily recap notification, naming the crop in its title.
+    expect(notif.id, startsWith('arrosage_recap_'));
+    expect(notif.titre, 'Arroser Tomate');
+    expect(notif.cibleRoute, '/calendrier');
   });
 
-  test('existing uncompleted task today → no duplicate created', () async {
+  test('several urgent crops → a SINGLE recap notification naming them all',
+      () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async => [
+          unePlantation('p-1', planteId: 'tomate'),
+          unePlantation('p-2', planteId: 'basilic'),
+        ]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    // Two tasks, but a single notification (spam kept to one).
+    verify(() => taches.sauvegarder(any())).called(2);
+    final notifs =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(notifs, hasLength(1));
+    final notif = notifs.single as NotificationLocale;
+    expect(notif.titre, 'Arroser Tomate, Basilic');
+    // Full list in the body (maximum detail).
+    expect(notif.corps, "Cultures à arroser aujourd'hui : Tomate, Basilic.");
+  });
+
+  test('more crops than fit the title → first names + "+N", full list in body',
+      () async {
+    final noms = ['tomate', 'basilic', 'courgette', 'poivron'];
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async => [
+          for (var i = 0; i < noms.length; i++)
+            unePlantation('p-$i', planteId: noms[i]),
+        ]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    final notif = (verify(() => notifications.programmer(captureAny())).captured
+        .single) as NotificationLocale;
+    expect(notif.titre, 'Arroser Tomate, Basilic, Courgette +1');
+    expect(notif.corps,
+        "Cultures à arroser aujourd'hui : Tomate, Basilic, Courgette, Poivron.");
+  });
+
+  test('missing sheet → the unnamed crop still counts in the "+N" overflow',
+      () async {
+    stubFiches({'tomate': 'Tomate', 'basilic': null});
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async => [
+          unePlantation('p-1', planteId: 'tomate'),
+          unePlantation('p-2', planteId: 'basilic'),
+        ]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    final notif = (verify(() => notifications.programmer(captureAny())).captured
+        .single) as NotificationLocale;
+    // Tomate named, the unresolved basilic folded into "+1".
+    expect(notif.titre, 'Arroser Tomate +1');
+  });
+
+  test(
+      'existing uncompleted task today → no duplicate task, recap still scheduled',
+      () async {
     when(() => potager.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
     when(() => plantations.obtenirActives())
@@ -205,11 +324,15 @@ void main() {
         .thenAnswer((_) async => arroserMaintenant());
     when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
         .thenAnswer((_) async => [uneTacheArrosageAuj('p-1')]);
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
 
     await useCase.executer();
 
+    // The task is not duplicated, but the crop still needs watering today, so
+    // the daily recap must still fire (its stable per-day id just replaces any
+    // pending one — no stacking).
     verifyNever(() => taches.sauvegarder(any()));
-    verifyNever(() => notifications.programmer(any()));
+    verify(() => notifications.programmer(any())).called(1);
   });
 
   test('pasNecessaire + existing pending task → task deleted', () async {

@@ -67,6 +67,8 @@ class EcranAccueil extends ConsumerWidget {
                 ref.read(accueilProvider.notifier).basculerTache(t),
             // "See all tasks" jumps to the Calendrier tab (its full agenda).
             onVoirTaches: () => context.go(RoutesApp.calendrier),
+            // A task row opens its detail (revisit / edit notes, priority…).
+            onOuvrirTache: (t) => context.go(RoutesApp.tacheDetail(t.id)),
           ),
         ),
       ),
@@ -80,12 +82,14 @@ class _Contenu extends StatelessWidget {
   final void Function(String zoneId) onZoneTap;
   final void Function(Tache tache) onToggleTache;
   final VoidCallback onVoirTaches;
+  final void Function(Tache tache) onOuvrirTache;
 
   const _Contenu({
     required this.vue,
     required this.onZoneTap,
     required this.onToggleTache,
     required this.onVoirTaches,
+    required this.onOuvrirTache,
   });
 
   @override
@@ -106,6 +110,7 @@ class _Contenu extends StatelessWidget {
           taches: vue.tachesDuJour,
           onToggle: onToggleTache,
           onVoirTaches: onVoirTaches,
+          onOuvrir: onOuvrirTache,
         ),
         const SizedBox(height: EspacementsApp.s5),
         _GrilleStats(
@@ -326,11 +331,13 @@ class _SectionTaches extends StatelessWidget {
   final List<Tache> taches;
   final void Function(Tache tache) onToggle;
   final VoidCallback onVoirTaches;
+  final void Function(Tache tache) onOuvrir;
 
   const _SectionTaches({
     required this.taches,
     required this.onToggle,
     required this.onVoirTaches,
+    required this.onOuvrir,
   });
 
   @override
@@ -363,6 +370,7 @@ class _SectionTaches extends StatelessWidget {
                         _LigneTache(
                           tache: taches[i],
                           onToggle: () => onToggle(taches[i]),
+                          onOuvrir: () => onOuvrir(taches[i]),
                         ),
                       ],
                     ],
@@ -383,29 +391,41 @@ class _SectionTaches extends StatelessWidget {
   }
 }
 
-/// One task row: tappable to toggle completion; check indicator + title.
+/// One task row: the check button toggles completion; tapping the row opens the
+/// task detail.
 class _LigneTache extends StatelessWidget {
   final Tache tache;
   final VoidCallback onToggle;
+  final VoidCallback onOuvrir;
 
-  const _LigneTache({required this.tache, required this.onToggle});
+  const _LigneTache({
+    required this.tache,
+    required this.onToggle,
+    required this.onOuvrir,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final fait = tache.estFaite;
     return InkWell(
-      onTap: onToggle,
+      onTap: onOuvrir,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s3),
+        padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s1),
         child: Row(
           children: [
-            Icon(
-              fait ? Icons.check_circle : Icons.radio_button_unchecked,
-              size: TaillesIconesApp.lg,
-              color: fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+            IconButton(
+              tooltip: l10n.tacheMarquerFaite,
+              onPressed: onToggle,
+              icon: Icon(
+                fait ? Icons.check_circle : Icons.radio_button_unchecked,
+                size: TaillesIconesApp.lg,
+                color:
+                    fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+              ),
             ),
-            const SizedBox(width: EspacementsApp.s3),
+            const SizedBox(width: EspacementsApp.s2),
             Expanded(
               child: Text(
                 tache.titre,
@@ -415,6 +435,7 @@ class _LigneTache extends StatelessWidget {
                 ),
               ),
             ),
+            Icon(Icons.chevron_right, color: theme.colorScheme.outline),
           ],
         ),
       ),

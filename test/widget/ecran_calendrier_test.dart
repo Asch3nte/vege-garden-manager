@@ -172,7 +172,8 @@ void main() {
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
     await monter(tester);
-    await tester.tap(find.text('Arroser les tomates'));
+    // The check button toggles completion (the row tap now opens the detail).
+    await tester.tap(find.byTooltip('Marquer comme faite'));
     await tester.pumpAndSettle();
 
     expect(tache.estFaite, isTrue);
@@ -187,7 +188,8 @@ void main() {
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
     await monter(tester);
-    await tester.tap(find.text('Arroser les tomates'));
+    // The check button toggles completion (the row tap now opens the detail).
+    await tester.tap(find.byTooltip('Marquer comme faite'));
     await tester.pumpAndSettle();
 
     expect(tache.estFaite, isFalse);

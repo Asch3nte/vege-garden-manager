@@ -234,9 +234,14 @@ Polymorphisme dès que pertinent.
 - Finitions légères (docs/15 §2) — **toutes traitées** : toggles paramètres
   (**« météo auto » ✅**, **« Ne pas déranger » ✅**) ; **transparence des
   données ✅** (section « Données stockées » : taille base + nb enregistrements
-  par table ; journal d'accès différé) ; **sous-routes go_router ✅ arbitré**
-  (fiche = modale, détail tâche redondant) ; **écran notifications d'accueil ✅
-  livré** (`/accueil/notifications`).
+  par table ; journal d'accès différé) ; **sous-routes go_router ✅** (fiche =
+  modale ; **détail tâche `/calendrier/tache/:id` livré** — édition
+  notes/priorité + cycle de vie + navigation vers la cible) ; **écran
+  notifications d'accueil ✅ livré** (`/accueil/notifications`).
+- **Tâches & notifications d'arrosage** ✅ (2026-07-18) : tâches nommant leur
+  culture (« Arroser : Tomate ») + **une seule** notification récap/jour (noms
+  en titre + « +N », liste complète en corps ; anti-spam). Dette : libellés de
+  notif/tâche générés hors UI codés en dur `fr` (i18n notifs = chantier séparé).
 - Distribution / **pré-release** : CI ✅ analyze+test (reste le job
   build/signature d'APK), keystore release réel, icône & splash, packaging
   multiplateforme (Linux AppImage/Flatpak, .exe, .dmg, .ipa)
@@ -324,13 +329,17 @@ chiffres laissés vides à sourcer par le dev) + UI (`_SectionArrosageDetaille`
 gatée expert, terme grossier conservé pour tous) ; moteur inchangé ; tests en //.
 **Toutes les features build-then-gate de §9 sont désormais livrées.** Reste côté
 glossaire : termes cliquables sur les surfaces restantes (docs/15 §8 #4bis).
-Les **3 finitions §2 sont désormais traitées** : **écran notifications d'accueil
-livré** (`/accueil/notifications` : alertes météo + cloche + lien « Voir toutes
-les tâches »), **sous-routes go_router arbitrées** (fiche = modale, détail tâche
-redondant), **transparence des données livrée** (section « Données stockées » :
-taille base + nb d'enregistrements par table ; journal d'accès différé, politique
-de confidentialité à rédiger par le dev). L'**arbitrage post-récolte est
-tranché** — reporté en V1.1 (ADR-0019). Le reste (distribution/pré-release, traduction
+Les **3 finitions §2 sont traitées** : **écran notifications d'accueil livré**
+(`/accueil/notifications` : alertes météo + cloche + lien « Voir toutes les
+tâches »), **sous-routes go_router** (fiche = modale ; **détail tâche
+`/calendrier/tache/:id` livré** — édition notes/priorité, cycle de vie,
+navigation vers la cible ; révision du 2026-07-18 de l'ancien « redondant »),
+**transparence des données livrée** (section « Données stockées » : taille base +
+nb d'enregistrements par table ; journal d'accès différé). En prime :
+**tâches/notifications d'arrosage précisées** (nom de culture en titre + 1 récap
+anti-spam) et **brouillon de politique de confidentialité**
+(`docs/politique-confidentialite.md`, à finaliser par le dev). L'**arbitrage
+post-récolte est tranché** — reporté en V1.1 (ADR-0019). Le reste (distribution/pré-release, traduction
 `en` du glossaire) est consolidé dans [`RESTE_A_FAIRE.md`](RESTE_A_FAIRE.md) —
 multi-potager, équipements, fiches perso, rotation avancée, **ADR-0009 lot 4
 (mini-tutos/teaser de palier)**, CI analyze+test, version dynamique, liens
