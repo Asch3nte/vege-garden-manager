@@ -14,6 +14,9 @@
 > Mis à jour le 2026-07-17 (soir) : livraison du **toggle « Ne pas déranger »**
 > (opt-out #3 rendu effectif dans `GenererTachesArrosage` — branche
 > `feat/notifs-opt-outs-fonctionnels`) ; entrées rayées.
+> Mis à jour le 2026-07-17 (soir, suite) : livraison du **toggle « Météo
+> automatique »** (opt-out docs/11 rendu effectif — aucun appel Open-Meteo
+> automatique quand off ; branche `feat/toggle-meteo-auto`) ; entrées rayées.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
@@ -93,7 +96,14 @@ Réservées par palier mais sans UI ni donnée :
 - **Paramètres** :
   - Catégorie « Transparence des données » (stats tailles DB + journal
     d'accès — n'existe pas)
-  - Toggle « récupération météo auto » (champ manquant)
+  - ~~Toggle « récupération météo auto » (champ manquant)~~ ✅ **fait**
+    (2026-07-17) : opt-out `meteoAutoActive` (défaut `true`, migration Drift
+    v5→v6) — interrupteur panneau Confidentialité + **application effective**
+    (aucun appel Open-Meteo automatique quand off : carte météo d'accueil
+    masquée/muette, alertes = 0, conseil arrosage & `GenererTachesArrosage`
+    dégradés en demande-seule ; l'écran détail météo reste rafraîchi à la main).
+    Domain→infra→app→UI + i18n fr/en, tests par couche en //. Branche
+    `feat/toggle-meteo-auto`.
   - ~~Toggle « Ne pas déranger »~~ ✅ **fait** (2026-07-17) : plage silencieuse
     fonctionnelle — VO `FenetreNePasDeranger` (fenêtre horaire semi-ouverte,
     chevauchement de minuit), UI panneau notifications (interrupteur +
@@ -176,8 +186,8 @@ Tout le reste se range en :
   job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
   éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
 - **Finitions légères** (docs/15 §2) : toggles paramètres restants (transparence
-  des données, météo auto — le **« Ne pas déranger » est ✅ livré**, cf. §
-  Paramètres), sous-routes go_router restantes, écran notifications d'accueil,
+  des données — les **« Ne pas déranger »** et **« météo auto » sont ✅ livrés**,
+  cf. § Paramètres), sous-routes go_router restantes, écran notifications d'accueil,
   `ResolveurFamille` complet (§11).
 - **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
   conformité territoriale, communauté P2P, plan spatial, calendrier lunaire.
