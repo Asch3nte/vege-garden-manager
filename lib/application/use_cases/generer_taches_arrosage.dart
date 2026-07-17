@@ -6,6 +6,7 @@ import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/urgence_arrosage.dart';
+import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
@@ -26,20 +27,25 @@ import 'package:riverpod/riverpod.dart';
 /// tasks for plantations whose urgency has dropped below
 /// [UrgenceArrosage.arroserMaintenant] (e.g. after rain).
 ///
-/// Also schedules a local push notification (category `'arrosage'`) at 08:00
-/// on the task day — does nothing if 08:00 has already passed (ADR-0015).
+/// Each generated task names its crop ("Arroser : Tomate") so the plan says
+/// *what* to water, not a generic chore. To water today, a **single** recap
+/// notification (category `'arrosage'`) is scheduled at 08:00 — never one per
+/// plant (minimise spam) — carrying the crop names in its title (with a "+N"
+/// overflow marker) and the full list in its body (maximum detail). It does
+/// nothing if 08:00 has already passed (ADR-0015).
 ///
 /// The push notification honours the user's notification **opt-outs** (docs/11,
 /// absolute constraint #3): it is suppressed when the master switch is off, when
 /// the `'arrosage'` category is muted, or when 08:00 falls inside the
-/// do-not-disturb window. The **task itself is always created** — opt-outs mute
-/// notifications, not the gardening plan.
+/// do-not-disturb window. The **tasks themselves are always created** — opt-outs
+/// mute notifications, not the gardening plan.
 class GenererTachesArrosage {
   final AbstractPlantationRepository _plantations;
   final AbstractPotagerRepository _potager;
   final AbstractTacheRepository _taches;
   final AbstractNotificationService _notifications;
   final AbstractPreferencesRepository _preferences;
+  final AbstractFichePlanteRepository _fiches;
   final CalculerBesoinArrosage _calcul;
 
   GenererTachesArrosage(
@@ -48,6 +54,7 @@ class GenererTachesArrosage {
     this._taches,
     this._notifications,
     this._preferences,
+    this._fiches,
     this._calcul, {
     DateTime Function()? maintenant,
   }) : _maintenant = maintenant ?? DateTime.now;
@@ -82,6 +89,11 @@ class GenererTachesArrosage {
     final arrosageNotifiable = prefs.notificationsGlobalesActives &&
         (prefs.notificationsParCategorie['arrosage'] ?? true);
     final fenetreNpd = prefs.fenetreNePasDeranger;
+
+    // Cultures that still need watering **today** — collected across the loop so
+    // a **single** recap notification is scheduled (never one per plant: minimise
+    // notification spam), yet carries the maximum of detail (the crop names).
+    final aArroserAujourdhui = <String?>[];
 
     for (final plantation in plantations) {
       final conseil = await _calcul.executer(
@@ -119,6 +131,12 @@ class GenererTachesArrosage {
         await _taches.supprimer(t.id);
       }
 
+      // Resolve the crop's common name so the task (and the recap notification)
+      // names *which* plant to water — "Arroser : Tomate" rather than a generic
+      // "Arroser" that reads like a whole-garden chore. Null when the sheet is
+      // missing; the title then falls back to the generic verb.
+      final nom = await _nomPlante(plantation);
+
       // Create only if no task on the target day (completed or not).
       // A completed task on the target day means the user already watered — skip.
       final tousAuTarget = toutesExistantes
@@ -127,19 +145,28 @@ class GenererTachesArrosage {
       if (tousAuTarget.isEmpty) {
         await _taches.sauvegarder(Tache(
           id: _uuid.v4(),
-          titre: 'Arroser',
+          titre: nom == null ? 'Arroser' : 'Arroser : $nom',
           type: TypeTache.arrosage,
           cible: CibleTache.plantation,
           cibleId: plantation.id,
           datePrevue: targetDate,
           priorite: priorite,
         ));
-        // Push notifications only for truly urgent cases (today), and only when
-        // the user's notification opt-outs allow it.
-        if (urgence == UrgenceArrosage.arroserMaintenant && arrosageNotifiable) {
-          await _programmerNotification(plantation, targetDate, fenetreNpd);
-        }
       }
+
+      // Recap the notification only for what is urgent **today** and not already
+      // watered (a completed task on the target day means the user watered it).
+      if (urgence == UrgenceArrosage.arroserMaintenant &&
+          !tousAuTarget.any((t) => t.estFaite)) {
+        aArroserAujourdhui.add(nom);
+      }
+    }
+
+    // A single push notification for everything urgent today, honouring the
+    // notification opt-outs (constraint #3). The tasks themselves are always
+    // created above — opt-outs mute the notification, not the gardening plan.
+    if (aArroserAujourdhui.isNotEmpty && arrosageNotifiable) {
+      await _programmerRecap(aArroserAujourdhui, debutJour, fenetreNpd);
     }
   }
 
@@ -150,11 +177,25 @@ class GenererTachesArrosage {
     return debutJour.add(Duration(days: conseil.joursAvantArrosage ?? 2));
   }
 
-  /// Schedules a push notification at 08:00 on [debutJour].
-  /// Does nothing if 08:00 has already passed on that day, or if 08:00 falls
-  /// inside the do-not-disturb window [fenetreNpd] (when set).
-  Future<void> _programmerNotification(
-    Plantation plantation,
+  /// The plant's French common name for [plantation], or `null` when its sheet
+  /// cannot be resolved. French is used deliberately (a stored task title / OS
+  /// notification, generated without a UI locale — the app is French-first; the
+  /// notification-i18n debt is tracked separately, docs/15).
+  Future<String?> _nomPlante(Plantation plantation) async {
+    final fiche = await _fiches.obtenirParId(plantation.planteId);
+    return fiche?.nomLocalise('fr');
+  }
+
+  /// Schedules **one** recap notification at 08:00 on [debutJour] for all the
+  /// cultures to water today ([noms], `null` = an unresolved crop). Does nothing
+  /// if 08:00 has already passed, or if 08:00 falls inside the do-not-disturb
+  /// window [fenetreNpd].
+  ///
+  /// To limit spam to a single notification while still being specific, the crop
+  /// names go **in the title** (truncated with a "+N" overflow marker) and the
+  /// **full list** in the body.
+  Future<void> _programmerRecap(
+    List<String?> noms,
     DateTime debutJour,
     FenetreNePasDeranger? fenetreNpd,
   ) async {
@@ -163,21 +204,53 @@ class GenererTachesArrosage {
     if (!heure.isAfter(_maintenant())) return;
     // Do-not-disturb: suppress a notification whose time is inside the window.
     if (fenetreNpd != null && fenetreNpd.contient(heure)) return;
+
+    final connus = noms.whereType<String>().toList();
+    final total = noms.length;
     final dateStr =
         '${debutJour.year.toString().padLeft(4, '0')}'
         '-${debutJour.month.toString().padLeft(2, '0')}'
         '-${debutJour.day.toString().padLeft(2, '0')}';
+
     await _notifications.programmer(
       NotificationLocale(
-        id: 'arrosage_${plantation.id}_$dateStr',
-        titre: 'Arrosage à prévoir',
-        corps: "Une de vos cultures a besoin d'eau aujourd'hui.",
+        // Stable per-day id → re-runs replace the pending notification rather
+        // than stacking duplicates.
+        id: 'arrosage_recap_$dateStr',
+        titre: _titreRecap(connus, total),
+        corps: _corpsRecap(connus, total),
         dateProgrammee: heure,
         categorie: 'arrosage',
-        cibleRoute: '/potager',
+        cibleRoute: '/calendrier',
       ),
     );
   }
+
+  /// Notification title: the named crops (up to [_maxNomsTitre]) after the verb,
+  /// with a "+N" marker for the rest — e.g. "Arroser Tomate, Courgette +2".
+  /// Falls back to a generic title when no crop name could be resolved.
+  static String _titreRecap(List<String> connus, int total) {
+    if (connus.isEmpty) return 'Arrosage à prévoir';
+    final visibles = connus.take(_maxNomsTitre).join(', ');
+    final restants = total - connus.take(_maxNomsTitre).length;
+    return restants > 0 ? 'Arroser $visibles +$restants' : 'Arroser $visibles';
+  }
+
+  /// Notification body: the full crop list (max detail), or a count when names
+  /// are unavailable.
+  static String _corpsRecap(List<String> connus, int total) {
+    if (connus.isEmpty) {
+      return total == 1
+          ? "Une culture a besoin d'eau aujourd'hui."
+          : "$total cultures ont besoin d'eau aujourd'hui.";
+    }
+    if (total == 1) return "${connus.first} a besoin d'eau aujourd'hui.";
+    return "Cultures à arroser aujourd'hui : ${connus.join(', ')}.";
+  }
+
+  /// How many crop names to spell out in the notification title before the
+  /// "+N" overflow marker (the body always lists them all).
+  static const int _maxNomsTitre = 3;
 
   bool _memeJour(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
@@ -193,6 +266,7 @@ final genererTachesArrosageProvider = FutureProvider<GenererTachesArrosage>(
     ref.read(tacheRepositoryProvider),
     ref.read(notificationServiceProvider),
     ref.read(preferencesRepositoryProvider),
+    await ref.read(fichePlanteRepositoryProvider.future),
     await ref.read(calculerBesoinArrosageProvider.future),
   ),
 );

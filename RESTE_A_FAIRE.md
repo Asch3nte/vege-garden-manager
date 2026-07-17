@@ -27,6 +27,14 @@
 > d'enregistrements par table ; branche `feat/transparence-donnees`). **Les 3
 > finitions §2 sont désormais traitées** ; journal d'accès différé, politique de
 > confidentialité (texte) laissée à la rédaction du dev.
+> Mis à jour le 2026-07-18 : **révision de l'arbitrage « détail tâche »** (retour
+> dev) — finalement **livré** (route `/calendrier/tache/:id`, édition
+> notes/priorité + cycle de vie + navigation vers la cible). En parallèle,
+> **précision des tâches & notifications d'arrosage** : les tâches nomment leur
+> culture (« Arroser : Tomate ») et **une seule** notification récap regroupe
+> tout (noms dans le titre + « +N », liste complète dans le corps) — anti-spam,
+> détail maximal. Brouillon **politique de confidentialité**
+> (`docs/politique-confidentialite.md`) livré. Branche `feat/detail-tache`.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
@@ -93,11 +101,19 @@ Réservées par palier mais sans UI ni donnée :
 ## 2. Éléments différés docs/15 — non-design
 
 - ~~**Navigation** : sous-routes go_router restantes (détail tâche, fiche
-  plante en route dédiée)~~ ✅ **arbitré** (2026-07-17) : **fiche plante gardée
+  plante en route dédiée)~~ ✅ **fait** (2026-07-18) : **fiche plante gardée
   en modale** (`showModalBottomSheet`, bien intégrée + meilleure UX — décision
-  dev) ; **détail tâche jugé redondant** (une tâche est déjà cochable + éditable
-  via `ouvrirFormulaireTache` + supprimable → pas de route dédiée). Seule
-  sous-route ajoutée : `/accueil/notifications` (voir Accueil ci-dessous).
+  dev, inchangée). **Détail tâche : LIVRÉ** (révision de l'arbitrage du 2026-07-17
+  après retour dev — l'ancien « redondant » était faux : le formulaire rapide ne
+  couvre ni notes, ni priorité, ni le cycle de vie) : route `/calendrier/tache/:id`
+  → `EcranTacheDetail` (VO+notifier `detailTacheProvider`) — vue complète (type,
+  état, priorité, date, cible résolue **avec navigation** vers la zone/culture,
+  description en lecture seule) + **édition des notes** (« ajouter des détails »),
+  **choix de priorité**, **marquer fait/rouvrir**, **reporter**, **annuler**,
+  modifier (formulaire) / supprimer. Ouverte depuis la carte du calendrier et les
+  lignes d'accueil (le corps ouvre le détail, le bouton ☑ coche). Sous-routes
+  ajoutées : `/accueil/notifications` + `/calendrier/tache/:id`. Tests notifier +
+  widget + navigation en //.
 - ~~**Accueil** : écran notifications + menu ⋮ (actions d'en-tête), lien « voir
   les tâches » → Calendrier~~ ✅ **fait** (2026-07-17) : écran
   `EcranNotifications` (route `/accueil/notifications`) surfaçant les **alertes
@@ -114,7 +130,14 @@ Réservées par palier mais sans UI ni donnée :
   littérales — `Parcelle` ne porte que `surface`) si on veut les champs réels
 - **Catalogue** : favoris (notion inexistante), gabarit/hauteur de plante
   (champ manquant), vue Réseau — rendu canvas (perf, différé)
-- **Calendrier** : rien de fonctionnel majeur restant (tout ✅)
+- **Calendrier** : rien de fonctionnel majeur restant (tout ✅). **Détail
+  tâche livré** (2026-07-18) : `/calendrier/tache/:id`, cf. § Navigation.
+- **Tâches & notifications d'arrosage** ✅ (2026-07-18) : `GenererTachesArrosage`
+  nomme la culture dans le titre de la tâche (« Arroser : Tomate ») et n'émet
+  qu'**une** notification récap par jour (anti-spam), noms dans le titre (avec
+  « +N » si débordement) + liste complète dans le corps. **Dette connue** :
+  ces libellés de notification/tâche générés hors UI restent **codés en dur en
+  français** (i18n des notifications = chantier séparé, docs/15).
 - **Paramètres** :
   - ~~Catégorie « Transparence des données » (stats tailles DB + journal
     d'accès — n'existe pas)~~ ✅ **fait** (2026-07-17) : section **« Données
