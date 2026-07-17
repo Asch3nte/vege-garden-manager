@@ -8,6 +8,7 @@ import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
+import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/entities/recolte.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
@@ -247,6 +248,38 @@ void main() {
 
     expect(vue.nombreRecoltesSaison, 1);
     expect(vue.nombreAlertes, 0); // garden has no position → no alerts
+  });
+
+  test('auto weather-fetch off → no alerts, no forecast fetched (opt-out)',
+      () async {
+    when(() => preferences.charger()).thenAnswer(
+        (_) async => PreferencesUtilisateur(meteoAutoActive: false));
+    // A positioned garden with a plantation would normally trigger the alert
+    // fetch; the opt-out must short-circuit it.
+    final potagerPositionne = Potager(
+      id: 'pot-1',
+      nom: 'Mon potager',
+      zoneClimatique:
+          const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+      dateCreation: DateTime(2026, 1, 1),
+      localisation: Localisation.gps(latitude: 48.85, longitude: 2.35),
+    );
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => potagerPositionne);
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+    when(() => plantations.obtenirParParcelle('z-1'))
+        .thenAnswer((_) async => [unePlantation('p-1', 'z-1')]);
+    when(() => recoltes.obtenirParPlantation('p-1'))
+        .thenAnswer((_) async => []);
+
+    final vue = await conteneur().read(accueilProvider.future);
+
+    expect(vue.nombreAlertes, 0);
+    verifyNever(
+        () => meteo.obtenirPrevisions(potagerPositionne.localisation, any()));
   });
 
   test('no active garden → empty overview, null name', () async {

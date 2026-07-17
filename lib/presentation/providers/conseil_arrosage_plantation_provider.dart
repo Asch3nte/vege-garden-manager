@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../application/providers/repository_providers.dart';
+import '../../application/state/preferences_notifier.dart';
 import '../../application/use_cases/calculer_besoin_arrosage.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 
@@ -28,11 +29,17 @@ final conseilArrosagePlantationProvider =
         await ref.watch(potagerRepositoryProvider).obtenirPotagerActif();
     if (potager == null) return null;
 
+    // Honour the auto weather-fetch opt-out (docs/11): with it off, the advice
+    // degrades to demand-only rather than hitting Open-Meteo automatically.
+    final meteoAuto =
+        ref.watch(preferencesProvider).value?.meteoAutoActive ?? true;
+
     final useCase =
         await ref.watch(calculerBesoinArrosageProvider.future);
     return useCase.executer(
       plantation: plantation,
       localisation: potager.localisation,
+      meteoAutoActive: meteoAuto,
     );
   },
 );

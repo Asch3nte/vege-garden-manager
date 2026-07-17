@@ -87,6 +87,7 @@ class GenererTachesArrosage {
       final conseil = await _calcul.executer(
         plantation: plantation,
         localisation: potager.localisation,
+        meteoAutoActive: prefs.meteoAutoActive,
       );
 
       // All watering tasks for this plantation regardless of day.

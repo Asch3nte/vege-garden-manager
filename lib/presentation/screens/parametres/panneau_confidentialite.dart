@@ -182,6 +182,15 @@ class PanneauConfidentialite extends ConsumerWidget {
             ),
             ...groupePotager,
             for (final p in autresPotagers) _GroupePotagerAutre(potager: p),
+            // Auto weather-fetch opt-out (docs/11): off → no automatic Open-Meteo
+            // call, home weather card hidden, detail screen refreshes manually.
+            RangeeInterrupteur(
+              icone: Icons.cloud_outlined,
+              label: l10n.confidMeteoAuto,
+              sousTitre: l10n.confidMeteoAutoSub,
+              valeur: prefs.meteoAutoActive,
+              onChanged: notifier.definirMeteoAuto,
+            ),
             RangeeInterrupteur(
               icone: Icons.wifi,
               label: l10n.confidSync,

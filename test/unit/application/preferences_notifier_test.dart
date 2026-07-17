@@ -81,6 +81,17 @@ void main() {
     expect(c.read(preferencesProvider).value!.syncLocaleActive, isTrue);
   });
 
+  test('definirMeteoAuto persists the auto weather-fetch opt-out', () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+
+    await c.read(preferencesProvider.notifier).definirMeteoAuto(false);
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.last as PreferencesUtilisateur).meteoAutoActive, isFalse);
+    expect(c.read(preferencesProvider).value!.meteoAutoActive, isFalse);
+  });
+
   test('terminerOnboarding marks the flag and persists it', () async {
     final c = conteneur();
     await c.read(preferencesProvider.future);

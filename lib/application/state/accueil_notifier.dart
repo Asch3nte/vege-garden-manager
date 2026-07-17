@@ -57,7 +57,8 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
       niveau: prefs.niveauExperience,
       zones: [for (final p in parcelles) ZoneApercu(id: p.id, nom: p.nom)],
       tachesDuJour: await _tachesDuJour(maintenant),
-      nombreAlertes: await _compterAlertes(potager, toutesPlantations),
+      nombreAlertes:
+          await _compterAlertes(potager, toutesPlantations, prefs.meteoAutoActive),
       nombreRecoltesSaison:
           await _compterRecoltes(toutesPlantations, maintenant().year),
     );
@@ -86,11 +87,14 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
   }
 
   /// Number of active weather alerts (0 without a position; degrades to 0 when
-  /// the weather is unavailable — the use case handles both).
+  /// the weather is unavailable — the use case handles both). Returns 0 without
+  /// any fetch when the auto weather opt-out is off ([meteoAutoActive] false).
   Future<int> _compterAlertes(
     Potager potager,
     List<Plantation> toutes,
+    bool meteoAutoActive,
   ) async {
+    if (!meteoAutoActive) return 0;
     final actives = toutes.where((p) => !p.statut.estTerminal).toList();
     final alertes = await ref.read(detecterAlertesMeteoProvider).executer(
           localisation: potager.localisation,
