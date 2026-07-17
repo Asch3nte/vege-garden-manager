@@ -98,6 +98,12 @@ Polymorphisme dès que pertinent.
 
 ### Versioning
 - Conventional Commits · branches `main` (stable) + `develop` + feature branches
+- **Chaque nouvelle feature se développe sur sa propre branche dédiée**
+  (`feat/...`, `content/...`, etc.) créée depuis `main`, **avant** d'être mergée
+  dans `main`. Ne jamais committer une feature directement sur `main`. Une
+  branche = un chantier ; merge une fois `flutter analyze` + `flutter test`
+  verts. Vaut aussi pour les sessions parallèles (contenu, etc.) : chacune sur
+  sa branche, pour éviter les divergences d'historique et les doublons.
 - README maintenu à jour
 
 ---
