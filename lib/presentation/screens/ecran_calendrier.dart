@@ -7,6 +7,7 @@ import '../../application/providers/horloge_provider.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/calendrier_notifier.dart';
 import '../../application/state/calendrier_vue.dart';
+import '../../application/state/geste_groupe.dart';
 import '../../application/state/saison_notifier.dart';
 import '../../application/state/saison_vue.dart';
 import '../../domain/entities/tache.dart';
@@ -199,6 +200,7 @@ class _VueAgenda extends ConsumerWidget {
                         groupe: groupe,
                         cibleLabelDe: vue.cibleNom,
                         onCocher: notifier.cocher,
+                        onCocherGroupe: notifier.cocherGroupe,
                         onModifier: (t) => _modifierTache(context, ref, t),
                         onSupprimer: (t) => _supprimerTache(context, ref, t),
                       ),
@@ -308,11 +310,14 @@ class _VueMoisState extends ConsumerState<_VueMois> {
             ),
           )
         else
-          for (final tache in tachesSel) ...[
-            _CarteTache(
-              tache: tache,
-              cibleLabel: vue.cibleNom(tache),
+          for (final geste in groupeSel!.gestes) ...[
+            _CarteGeste(
+              key: ValueKey('mois-${jourSel.toIso8601String()}'
+                  '-${geste.type.name}'),
+              geste: geste,
+              cibleLabelDe: vue.cibleNom,
               onCocher: notifier.cocher,
+              onCocherGroupe: notifier.cocherGroupe,
               onModifier: (t) => _modifierTache(context, ref, t),
               onSupprimer: (t) => _supprimerTache(context, ref, t),
             ),
@@ -496,7 +501,8 @@ class _CelluleJour extends StatelessWidget {
               child: toutFait
                   ? Icon(Icons.check,
                       size: 10, color: theme.colorScheme.primary)
-                  : _Pastilles(taches: taches),
+                  : _Pastilles(
+                      types: groupe?.typesPresents ?? const <TypeTache>[]),
             ),
           ],
         ),
@@ -505,30 +511,32 @@ class _CelluleJour extends StatelessWidget {
   }
 }
 
-/// Up to three coloured dots for a day's tasks, then a "+N" overflow.
+/// One coloured dot per gesture type planned that day — see
+/// [GroupeJour.typesPresents]. Capped at three dots, then a "+N" overflow
+/// counting the remaining *types*.
 class _Pastilles extends StatelessWidget {
-  final List<Tache> taches;
+  final List<TypeTache> types;
 
-  const _Pastilles({required this.taches});
+  const _Pastilles({required this.types});
 
   @override
   Widget build(BuildContext context) {
-    if (taches.isEmpty) return const SizedBox.shrink();
+    if (types.isEmpty) return const SizedBox.shrink();
     final theme = Theme.of(context);
-    final montrees = taches.take(3).toList();
-    final reste = taches.length - montrees.length;
+    final montrees = types.take(3).toList();
+    final reste = types.length - montrees.length;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        for (final t in montrees)
+        for (final type in montrees)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 1),
             child: Container(
               width: 6,
               height: 6,
               decoration: BoxDecoration(
-                color: couleurTypeTache(t.type),
+                color: couleurTypeTache(type),
                 shape: BoxShape.circle,
               ),
             ),
@@ -899,6 +907,7 @@ class _GroupeJour extends StatelessWidget {
   /// Resolves a task's target display name (zone / crop / garden).
   final String? Function(Tache) cibleLabelDe;
   final ValueChanged<Tache> onCocher;
+  final ValueChanged<GesteGroupe> onCocherGroupe;
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
 
@@ -906,6 +915,7 @@ class _GroupeJour extends StatelessWidget {
     required this.groupe,
     required this.cibleLabelDe,
     required this.onCocher,
+    required this.onCocherGroupe,
     required this.onModifier,
     required this.onSupprimer,
   });
@@ -926,17 +936,250 @@ class _GroupeJour extends StatelessWidget {
             ],
           ),
         ),
-        for (final tache in groupe.taches) ...[
-          _CarteTache(
-            tache: tache,
-            cibleLabel: cibleLabelDe(tache),
+        for (final geste in groupe.gestes) ...[
+          _CarteGeste(
+            key: ValueKey('${groupe.jour.toIso8601String()}-${geste.type.name}'),
+            geste: geste,
+            cibleLabelDe: cibleLabelDe,
             onCocher: onCocher,
+            onCocherGroupe: onCocherGroupe,
             onModifier: onModifier,
             onSupprimer: onSupprimer,
           ),
           const SizedBox(height: EspacementsApp.s2),
         ],
       ],
+    );
+  }
+}
+
+/// A gesture group as a card: a single tickable line when it holds one task, an
+/// expandable summary + subtask list when it holds several.
+///
+/// Stateful only for the expand/collapse flag; a [ValueKey] on `(day, type)`
+/// keeps that flag across the notifier reloads triggered by ticking.
+class _CarteGeste extends StatefulWidget {
+  final GesteGroupe geste;
+  final String? Function(Tache) cibleLabelDe;
+  final ValueChanged<Tache> onCocher;
+  final ValueChanged<GesteGroupe> onCocherGroupe;
+  final ValueChanged<Tache> onModifier;
+  final ValueChanged<Tache> onSupprimer;
+
+  const _CarteGeste({
+    super.key,
+    required this.geste,
+    required this.cibleLabelDe,
+    required this.onCocher,
+    required this.onCocherGroupe,
+    required this.onModifier,
+    required this.onSupprimer,
+  });
+
+  @override
+  State<_CarteGeste> createState() => _CarteGesteState();
+}
+
+class _CarteGesteState extends State<_CarteGeste> {
+  bool _deplie = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final geste = widget.geste;
+    // A lone task keeps the exact card it had before grouping existed.
+    if (geste.estSeule) {
+      final tache = geste.tacheUnique;
+      return _CarteTache(
+        tache: tache,
+        cibleLabel: widget.cibleLabelDe(tache),
+        onCocher: widget.onCocher,
+        onModifier: widget.onModifier,
+        onSupprimer: widget.onSupprimer,
+      );
+    }
+
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final fait = geste.toutesFaites;
+
+    return Card(
+      child: Column(
+        children: [
+          InkWell(
+            borderRadius: RayonsApp.brLg,
+            // Tapping the summary expands: ticking is an explicit target, so a
+            // mis-tap never completes several crops at once.
+            onTap: () => setState(() => _deplie = !_deplie),
+            child: Padding(
+              padding: const EdgeInsets.all(EspacementsApp.s3),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.secondary.withValues(alpha: 0.3),
+                      borderRadius: const BorderRadius.all(RayonsApp.md),
+                    ),
+                    child: Icon(
+                      iconeTypeTache(geste.type),
+                      size: TaillesIconesApp.md,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: EspacementsApp.s3),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.typeTache(geste.type),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color:
+                                fait ? theme.colorScheme.onSurfaceVariant : null,
+                            decoration:
+                                fait ? TextDecoration.lineThrough : null,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              l10n.gesteGroupeCompte(geste.nombre),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                            Text(
+                              ' · ',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                            Text(
+                              l10n.calendrierProgression(
+                                  geste.nombreFaites, geste.nombre),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: EspacementsApp.s2),
+                  IconButton(
+                    tooltip: fait
+                        ? l10n.gesteGroupeToutRouvrir
+                        : l10n.gesteGroupeToutCocher,
+                    onPressed: () => widget.onCocherGroupe(geste),
+                    icon: Icon(
+                      fait
+                          ? Icons.check_circle
+                          : geste.partiellementFaite
+                              ? Icons.incomplete_circle
+                              : Icons.radio_button_unchecked,
+                      color: fait || geste.partiellementFaite
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline,
+                    ),
+                  ),
+                  Icon(
+                    _deplie ? Icons.expand_less : Icons.expand_more,
+                    color: theme.colorScheme.onSurfaceVariant,
+                    semanticLabel: _deplie
+                        ? l10n.gesteGroupeReplier
+                        : l10n.gesteGroupeDeplier,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_deplie)
+            for (final tache in geste.taches) ...[
+              const Divider(height: 1),
+              _LigneSousTache(
+                tache: tache,
+                cibleLabel: widget.cibleLabelDe(tache),
+                onCocher: widget.onCocher,
+                onModifier: widget.onModifier,
+                onSupprimer: widget.onSupprimer,
+              ),
+            ],
+        ],
+      ),
+    );
+  }
+}
+
+/// One subtask row inside an expanded [_CarteGeste]: its own check, target and
+/// overflow actions, so a single crop can be ticked without the others.
+class _LigneSousTache extends StatelessWidget {
+  final Tache tache;
+  final String? cibleLabel;
+  final ValueChanged<Tache> onCocher;
+  final ValueChanged<Tache> onModifier;
+  final ValueChanged<Tache> onSupprimer;
+
+  const _LigneSousTache({
+    required this.tache,
+    required this.cibleLabel,
+    required this.onCocher,
+    required this.onModifier,
+    required this.onSupprimer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final fait = tache.estFaite;
+
+    return InkWell(
+      onTap: () => onCocher(tache),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          EspacementsApp.s5,
+          EspacementsApp.s2,
+          EspacementsApp.s3,
+          EspacementsApp.s2,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              fait ? Icons.check_circle : Icons.radio_button_unchecked,
+              size: TaillesIconesApp.md,
+              color:
+                  fait ? theme.colorScheme.primary : theme.colorScheme.outline,
+            ),
+            const SizedBox(width: EspacementsApp.s3),
+            Expanded(
+              child: Text(
+                cibleLabel ?? tache.titre,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: fait ? theme.colorScheme.onSurfaceVariant : null,
+                  decoration: fait ? TextDecoration.lineThrough : null,
+                ),
+              ),
+            ),
+            PopupMenuButton<_ActionTache>(
+              tooltip: l10n.actionsTache,
+              onSelected: (action) => switch (action) {
+                _ActionTache.modifier => onModifier(tache),
+                _ActionTache.supprimer => onSupprimer(tache),
+              },
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: _ActionTache.modifier,
+                  child: Text(l10n.actionModifier),
+                ),
+                PopupMenuItem(
+                  value: _ActionTache.supprimer,
+                  child: Text(l10n.actionSupprimer),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

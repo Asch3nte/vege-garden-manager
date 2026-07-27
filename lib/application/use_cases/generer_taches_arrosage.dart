@@ -1,6 +1,5 @@
 import 'package:uuid/uuid.dart';
 
-import '../../domain/entities/plantation.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
@@ -24,8 +23,9 @@ import 'package:riverpod/riverpod.dart';
 /// tasks for plantations whose urgency has dropped below
 /// [UrgenceArrosage.arroserMaintenant] (e.g. after rain).
 ///
-/// Also schedules a local push notification (category `'arrosage'`) at 08:00
-/// on the task day — does nothing if 08:00 has already passed (ADR-0015).
+/// Also schedules **one** local push notification per day (category
+/// `'arrosage'`) at 08:00, covering every crop that needs water — not one per
+/// crop. Does nothing if 08:00 has already passed (ADR-0015).
 class GenererTachesArrosage {
   final AbstractPlantationRepository _plantations;
   final AbstractPotagerRepository _potager;
@@ -48,7 +48,8 @@ class GenererTachesArrosage {
   /// Generates or removes watering tasks according to the current advice for
   /// every active plantation. Safe to call multiple times on the same day.
   ///
-  /// - `arroserMaintenant` → task due **today** (priority: urgente) + push notification.
+  /// - `arroserMaintenant` → task due **today** (priority: urgente), counted in
+  ///   the day's single push notification.
   /// - `bientot` → task due **today + joursAvantArrosage** (priority: normale, no notification).
   /// - `pasNecessaire` / null → all pending watering tasks are removed.
   ///
@@ -63,6 +64,11 @@ class GenererTachesArrosage {
     final plantations = await _plantations.obtenirActives();
     final n = _maintenant();
     final debutJour = DateTime(n.year, n.month, n.day);
+
+    // Crops still waiting for water *today* — already-ticked ones excluded. The
+    // day's single notification is derived from this count on every run, so it
+    // always reflects what is actually left to do.
+    var urgentesAujourdhui = 0;
 
     for (final plantation in plantations) {
       final conseil = await _calcul.executer(
@@ -92,7 +98,6 @@ class GenererTachesArrosage {
       final priorite = urgence == UrgenceArrosage.arroserMaintenant
           ? PrioriteTache.urgente
           : PrioriteTache.normale;
-
       // Remove uncompleted tasks on wrong days (urgency or timing shifted).
       for (final t in toutesExistantes
           .where((t) => !t.estFaite && !_memeJour(t.datePrevue, targetDate))) {
@@ -104,6 +109,14 @@ class GenererTachesArrosage {
       final tousAuTarget = toutesExistantes
           .where((t) => _memeJour(t.datePrevue, targetDate))
           .toList();
+
+      // Counted for today's notification only while the crop is still thirsty:
+      // a crop the user already ticked off must not be pinged about at 08:00.
+      if (urgence == UrgenceArrosage.arroserMaintenant &&
+          !tousAuTarget.any((t) => t.estFaite)) {
+        urgentesAujourdhui++;
+      }
+
       if (tousAuTarget.isEmpty) {
         await _taches.sauvegarder(Tache(
           id: _uuid.v4(),
@@ -114,12 +127,11 @@ class GenererTachesArrosage {
           datePrevue: targetDate,
           priorite: priorite,
         ));
-        // Push notifications only for truly urgent cases (today).
-        if (urgence == UrgenceArrosage.arroserMaintenant) {
-          await _programmerNotification(plantation, targetDate);
-        }
       }
     }
+
+    // One notification for the whole day — not one per crop.
+    await _programmerNotification(debutJour, urgentesAujourdhui);
   }
 
   /// Target day for a watering task: today for [UrgenceArrosage.arroserMaintenant],
@@ -129,24 +141,41 @@ class GenererTachesArrosage {
     return debutJour.add(Duration(days: conseil.joursAvantArrosage ?? 2));
   }
 
-  /// Schedules a push notification at 08:00 on [debutJour].
-  /// Does nothing if 08:00 has already passed on that day.
+  /// Schedules **the** watering notification for [debutJour] at 08:00, covering
+  /// the [nombreCultures] crops that need water that day.
+  ///
+  /// One notification per day, not one per crop: five thirsty crops used to
+  /// mean five identical pings. The id is day-scoped so re-running simply
+  /// rewrites it with an up-to-date count, and a day that no longer needs any
+  /// watering cancels it.
+  ///
+  /// Does nothing if 08:00 has already passed on that day — except for the
+  /// cancellation, which must go through regardless.
   Future<void> _programmerNotification(
-    Plantation plantation,
     DateTime debutJour,
+    int nombreCultures,
   ) async {
+    final dateStr = '${debutJour.year.toString().padLeft(4, '0')}'
+        '-${debutJour.month.toString().padLeft(2, '0')}'
+        '-${debutJour.day.toString().padLeft(2, '0')}';
+    final id = 'arrosage_$dateStr';
+
+    if (nombreCultures == 0) {
+      await _notifications.annuler(id);
+      return;
+    }
+
     final heure = debutJour.copyWith(
         hour: 8, minute: 0, second: 0, millisecond: 0, microsecond: 0);
     if (!heure.isAfter(_maintenant())) return;
-    final dateStr =
-        '${debutJour.year.toString().padLeft(4, '0')}'
-        '-${debutJour.month.toString().padLeft(2, '0')}'
-        '-${debutJour.day.toString().padLeft(2, '0')}';
+
     await _notifications.programmer(
       NotificationLocale(
-        id: 'arrosage_${plantation.id}_$dateStr',
+        id: id,
         titre: 'Arrosage à prévoir',
-        corps: "Une de vos cultures a besoin d'eau aujourd'hui.",
+        corps: nombreCultures == 1
+            ? "Une de vos cultures a besoin d'eau aujourd'hui."
+            : "$nombreCultures de vos cultures ont besoin d'eau aujourd'hui.",
         dateProgrammee: heure,
         categorie: 'arrosage',
         cibleRoute: '/potager',

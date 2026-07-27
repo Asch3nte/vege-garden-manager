@@ -114,17 +114,37 @@ void main() {
             .overrideWith((ref) async => _StubGenererTachesArrosage()),
       ];
 
-  Tache uneTache(String id, String titre, DateTime quand, {bool faite = false}) =>
+  Tache uneTache(String id, String titre, DateTime quand,
+          {bool faite = false, TypeTache type = TypeTache.arrosage}) =>
       Tache(
         id: id,
         titre: titre,
-        type: TypeTache.arrosage,
+        type: type,
         cible: CibleTache.parcelle,
         cibleId: 'z-1',
         datePrevue: quand,
         etat: faite ? EtatTache.terminee : EtatTache.aFaire,
         dateRealisation: faite ? quand : null,
       );
+
+  /// Number of coloured dots drawn in the month grid cell of day [jour].
+  ///
+  /// The cell is the `InkWell` holding the day number; a dot is a 6×6 circular
+  /// [Container] inside it.
+  int pastillesDuJour(WidgetTester tester, String jour) {
+    final cellule = find
+        .ancestor(of: find.text(jour), matching: find.byType(InkWell))
+        .first;
+    return tester
+        .widgetList<Container>(
+          find.descendant(of: cellule, matching: find.byType(Container)),
+        )
+        .where((c) {
+          final d = c.decoration;
+          return d is BoxDecoration && d.shape == BoxShape.circle;
+        })
+        .length;
+  }
 
   Future<void> monter(WidgetTester tester) async {
     await tester.pumpWidget(
@@ -250,6 +270,41 @@ void main() {
     expect(find.text('Rien de prévu — profitez du jardin.'), findsOneWidget);
   });
 
+  testWidgets('a month day shows one dot per gesture type, not per task',
+      (tester) async {
+    // Regression: a day watering several crops used to draw one dot per task.
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        for (var i = 0; i < 5; i++)
+          uneTache('eau$i', 'Arroser $i', DateTime(2026, 6, 9, 8 + i)),
+      ],
+    );
+
+    await monter(tester);
+    await tester.tap(find.text('Mois'));
+    await tester.pumpAndSettle();
+
+    expect(pastillesDuJour(tester, '9'), 1); // 5 watering tasks → a single dot
+  });
+
+  testWidgets('a month day with mixed gestures shows one dot per type',
+      (tester) async {
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        uneTache('eau1', 'Arroser', DateTime(2026, 6, 9, 8)),
+        uneTache('eau2', 'Arroser encore', DateTime(2026, 6, 9, 9)),
+        uneTache('semis', 'Semer', DateTime(2026, 6, 9, 14),
+            type: TypeTache.semis),
+      ],
+    );
+
+    await monter(tester);
+    await tester.tap(find.text('Mois'));
+    await tester.pumpAndSettle();
+
+    expect(pastillesDuJour(tester, '9'), 2); // arrosage + semis
+  });
+
   testWidgets('the season view charts the cultivated plants', (tester) async {
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);
@@ -279,5 +334,86 @@ void main() {
     expect(find.text('Tomate'), findsOneWidget);
     expect(find.text('Semis'), findsWidgets); // band label + legend
     expect(find.textContaining('Hémisphère nord supposé'), findsOneWidget);
+  });
+
+  /// Three watering tasks + one sowing task, all planned today (8 June).
+  void plusieursTaches() {
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        uneTache('t-1', 'Arroser les tomates', DateTime(2026, 6, 8, 8)),
+        uneTache('t-2', 'Arroser les courgettes', DateTime(2026, 6, 8, 9)),
+        uneTache('t-3', 'Arroser le basilic', DateTime(2026, 6, 8, 10)),
+        uneTache('t-4', 'Semer les radis', DateTime(2026, 6, 8, 14),
+            type: TypeTache.semis),
+      ],
+    );
+  }
+
+  testWidgets('same-gesture tasks collapse into one agenda card',
+      (tester) async {
+    plusieursTaches();
+
+    await monter(tester);
+
+    expect(find.text('Arroser les tomates'), findsNothing);
+    expect(find.textContaining('3 tâches'), findsOneWidget);
+    // A lone task keeps its ordinary card, title and all.
+    expect(find.text('Semer les radis'), findsOneWidget);
+  });
+
+  testWidgets('expanding an agenda group lists its targets', (tester) async {
+    plusieursTaches();
+
+    await monter(tester);
+    await tester.tap(find.textContaining('3 tâches'));
+    await tester.pumpAndSettle();
+
+    // Subtask rows show the resolved target, falling back to the title: 3 for
+    // the expanded watering group + 1 on the lone sowing card.
+    expect(find.text('Carré nord'), findsNWidgets(4));
+  });
+
+  testWidgets('the agenda group check button completes every task at once',
+      (tester) async {
+    plusieursTaches();
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await monter(tester);
+    await tester.tap(find.byTooltip('Tout marquer comme fait'));
+    await tester.pumpAndSettle();
+
+    final captured = verify(() => taches.sauvegarder(captureAny())).captured;
+    expect(captured, hasLength(3));
+    expect(captured.map((t) => (t as Tache).id), ['t-1', 't-2', 't-3']);
+    expect(captured.map((t) => (t as Tache).estFaite), everyElement(isTrue));
+  });
+
+  testWidgets('a subtask can be ticked without the rest of its group',
+      (tester) async {
+    plusieursTaches();
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await monter(tester);
+    await tester.tap(find.textContaining('3 tâches'));
+    await tester.pumpAndSettle();
+    // Second subtask row = 'Arroser les courgettes' (t-2), ordered by time.
+    await tester.tap(find.text('Carré nord').at(1));
+    await tester.pumpAndSettle();
+
+    final captured = verify(() => taches.sauvegarder(captureAny())).captured;
+    expect(captured, hasLength(1));
+    expect((captured.single as Tache).id, 't-2');
+  });
+
+  testWidgets('the month view groups the selected day the same way',
+      (tester) async {
+    plusieursTaches();
+
+    await monter(tester);
+    await tester.tap(find.text('Mois'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('3 tâches'), findsOneWidget);
+    expect(find.text('Arroser les tomates'), findsNothing);
   });
 }

@@ -9,6 +9,7 @@ import '../providers/repository_providers.dart';
 import '../use_cases/detecter_alertes_meteo.dart';
 import '../use_cases/generer_taches_arrosage.dart';
 import 'accueil_vue.dart';
+import 'geste_groupe.dart';
 
 /// Assembles the **Accueil** dashboard view-model from the repositories.
 ///
@@ -66,13 +67,34 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
   /// Toggles [tache]'s completion (check ↔ uncheck), persists it and reloads
   /// the dashboard so the change shows immediately.
   Future<void> basculerTache(Tache tache) async {
+    _basculer(tache, ref.read(horlogeProvider)());
+    await ref.read(tacheRepositoryProvider).sauvegarder(tache);
+    ref.invalidateSelf();
+  }
+
+  /// Ticks a whole [groupe] off in one go, then reloads the dashboard.
+  ///
+  /// Same rule as the Calendrier: a partially done group is **completed**, only
+  /// a fully done one reopens — so a single tap never undoes work already
+  /// ticked crop by crop.
+  Future<void> basculerGeste(GesteGroupe groupe) async {
+    final maintenant = ref.read(horlogeProvider)();
+    final aBasculer = groupe.toutesFaites ? groupe.taches : groupe.tachesAFaire;
+    final depot = ref.read(tacheRepositoryProvider);
+    for (final tache in aBasculer) {
+      _basculer(tache, maintenant);
+      await depot.sauvegarder(tache);
+    }
+    ref.invalidateSelf();
+  }
+
+  /// Flips a single task's completion through the domain transitions.
+  static void _basculer(Tache tache, DateTime maintenant) {
     if (tache.estFaite) {
       tache.rouvrir();
     } else {
-      tache.marquerFaite(ref.read(horlogeProvider)());
+      tache.marquerFaite(maintenant);
     }
-    await ref.read(tacheRepositoryProvider).sauvegarder(tache);
-    ref.invalidateSelf();
   }
 
   /// Today's tasks across the whole garden, ordered (undone first).

@@ -1,6 +1,7 @@
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/services/acces_niveau.dart';
+import 'geste_groupe.dart';
 
 /// One garden zone, reduced to what the Accueil overview tiles display.
 ///
@@ -39,6 +40,7 @@ class AccueilVue {
   final NiveauExperience _niveau;
   final List<ZoneApercu> _zones;
   final List<Tache> _tachesDuJour;
+  final List<GesteGroupe> _gestesDuJour;
   final int _nombreAlertes;
   final int _nombreRecoltesSaison;
 
@@ -50,7 +52,8 @@ class AccueilVue {
     this._nombreAlertes,
     this._nombreRecoltesSaison,
   )   : _zones = List.unmodifiable(zones),
-        _tachesDuJour = List.unmodifiable(tachesDuJour);
+        _tachesDuJour = List.unmodifiable(tachesDuJour),
+        _gestesDuJour = List.unmodifiable(GesteGroupe.grouper(tachesDuJour));
 
   /// Assembles the dashboard view-model. Lists are copied as unmodifiable.
   factory AccueilVue({
@@ -75,6 +78,10 @@ class AccueilVue {
 
   /// Today's tasks across the whole garden (immutable), most relevant first.
   List<Tache> get tachesDuJour => _tachesDuJour;
+
+  /// Today's tasks folded into one entry per gesture type (immutable) — what
+  /// the dashboard list renders, so it matches the Calendrier agenda.
+  List<GesteGroupe> get gestesDuJour => _gestesDuJour;
 
   /// Number of zones in the active garden.
   int get nombreZones => _zones.length;

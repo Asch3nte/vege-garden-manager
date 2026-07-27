@@ -9,6 +9,7 @@ import '../../app/theme/theme_app.dart';
 import '../../application/providers/service_providers.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/accueil_vue.dart';
+import '../../application/state/geste_groupe.dart';
 import '../../application/state/meteo_accueil_notifier.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
@@ -48,6 +49,8 @@ class EcranAccueil extends ConsumerWidget {
             onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
             onToggleTache: (t) =>
                 ref.read(accueilProvider.notifier).basculerTache(t),
+            onToggleGeste: (g) =>
+                ref.read(accueilProvider.notifier).basculerGeste(g),
           ),
         ),
       ),
@@ -60,11 +63,13 @@ class _Contenu extends StatelessWidget {
   final AccueilVue vue;
   final void Function(String zoneId) onZoneTap;
   final void Function(Tache tache) onToggleTache;
+  final void Function(GesteGroupe geste) onToggleGeste;
 
   const _Contenu({
     required this.vue,
     required this.onZoneTap,
     required this.onToggleTache,
+    required this.onToggleGeste,
   });
 
   @override
@@ -81,7 +86,12 @@ class _Contenu extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s4),
         const _CarteMeteo(),
         const SizedBox(height: EspacementsApp.s5),
-        _SectionTaches(taches: vue.tachesDuJour, onToggle: onToggleTache),
+        _SectionTaches(
+          gestes: vue.gestesDuJour,
+          nombreAFaire: vue.nombreTachesAFaire,
+          onToggle: onToggleTache,
+          onToggleGeste: onToggleGeste,
+        ),
         const SizedBox(height: EspacementsApp.s5),
         _GrilleStats(
           nombreAlertes: vue.nombreAlertes,
@@ -289,27 +299,38 @@ class _CarteMeteo extends ConsumerWidget {
 }
 
 /// "Tasks of the day" labelled section with a card list.
+///
+/// Rows are gesture groups, not raw tasks: a day watering five crops reads as
+/// one expandable line. A group of one renders as a plain task row.
 class _SectionTaches extends StatelessWidget {
-  final List<Tache> taches;
-  final void Function(Tache tache) onToggle;
+  final List<GesteGroupe> gestes;
 
-  const _SectionTaches({required this.taches, required this.onToggle});
+  /// Tasks still to do today, across every group (drives the section counter).
+  final int nombreAFaire;
+  final void Function(Tache tache) onToggle;
+  final void Function(GesteGroupe geste) onToggleGeste;
+
+  const _SectionTaches({
+    required this.gestes,
+    required this.nombreAFaire,
+    required this.onToggle,
+    required this.onToggleGeste,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final aFaire = taches.where((t) => !t.estFaite).length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _LabelSection(texte: l10n.accueilTachesDuJour, compteur: aFaire),
+        _LabelSection(texte: l10n.accueilTachesDuJour, compteur: nombreAFaire),
         const SizedBox(height: EspacementsApp.s2),
         Card(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s3),
-            child: taches.isEmpty
+            child: gestes.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s4),
                     child: Text(
@@ -320,17 +341,127 @@ class _SectionTaches extends StatelessWidget {
                   )
                 : Column(
                     children: [
-                      for (var i = 0; i < taches.length; i++) ...[
+                      for (var i = 0; i < gestes.length; i++) ...[
                         if (i > 0) const Divider(height: 1),
-                        _LigneTache(
-                          tache: taches[i],
-                          onToggle: () => onToggle(taches[i]),
+                        _LigneGeste(
+                          key: ValueKey('accueil-${gestes[i].type.name}'),
+                          geste: gestes[i],
+                          onToggle: onToggle,
+                          onToggleGeste: onToggleGeste,
                         ),
                       ],
                     ],
                   ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+/// One dashboard row for a gesture group: a plain task row when the group holds
+/// a single task, an expandable summary + subtask rows otherwise.
+class _LigneGeste extends StatefulWidget {
+  final GesteGroupe geste;
+  final void Function(Tache tache) onToggle;
+  final void Function(GesteGroupe geste) onToggleGeste;
+
+  const _LigneGeste({
+    super.key,
+    required this.geste,
+    required this.onToggle,
+    required this.onToggleGeste,
+  });
+
+  @override
+  State<_LigneGeste> createState() => _LigneGesteState();
+}
+
+class _LigneGesteState extends State<_LigneGeste> {
+  bool _deplie = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final geste = widget.geste;
+    if (geste.estSeule) {
+      final tache = geste.tacheUnique;
+      return _LigneTache(tache: tache, onToggle: () => widget.onToggle(tache));
+    }
+
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final fait = geste.toutesFaites;
+
+    return Column(
+      children: [
+        InkWell(
+          // Tapping the summary expands; ticking the whole group is the
+          // explicit check button, so a mis-tap never completes several crops.
+          onTap: () => setState(() => _deplie = !_deplie),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: EspacementsApp.s2),
+            child: Row(
+              children: [
+                IconButton(
+                  tooltip: fait
+                      ? l10n.gesteGroupeToutRouvrir
+                      : l10n.gesteGroupeToutCocher,
+                  onPressed: () => widget.onToggleGeste(geste),
+                  icon: Icon(
+                    fait
+                        ? Icons.check_circle
+                        : geste.partiellementFaite
+                            ? Icons.incomplete_circle
+                            : Icons.radio_button_unchecked,
+                    size: TaillesIconesApp.lg,
+                    color: fait || geste.partiellementFaite
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outline,
+                  ),
+                ),
+                const SizedBox(width: EspacementsApp.s1),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.typeTache(geste.type),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color:
+                              fait ? theme.colorScheme.onSurfaceVariant : null,
+                          decoration: fait ? TextDecoration.lineThrough : null,
+                        ),
+                      ),
+                      Text(
+                        '${l10n.gesteGroupeCompte(geste.nombre)} · '
+                        '${l10n.calendrierProgression(geste.nombreFaites, geste.nombre)}',
+                        style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  _deplie ? Icons.expand_less : Icons.expand_more,
+                  color: theme.colorScheme.onSurfaceVariant,
+                  semanticLabel: _deplie
+                      ? l10n.gesteGroupeReplier
+                      : l10n.gesteGroupeDeplier,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_deplie)
+          for (final tache in geste.taches)
+            Padding(
+              padding: const EdgeInsets.only(left: EspacementsApp.s5),
+              child: _LigneTache(
+                tache: tache,
+                onToggle: () => widget.onToggle(tache),
+              ),
+            ),
       ],
     );
   }

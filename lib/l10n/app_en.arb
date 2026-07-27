@@ -252,6 +252,27 @@
   "calendrierPorteeMois": "This month",
   "calendrierResume": "{count, plural, =0{Nothing to do} =1{1 task to do} other{{count} tasks to do}}",
   "calendrierProgression": "{faites} / {total}",
+  "gesteGroupeCompte": "{count, plural, =1{1 task} other{{count} tasks}}",
+  "@gesteGroupeCompte": {
+    "description": "Number of tasks grouped under one gesture on a single day.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "gesteGroupeToutCocher": "Mark all as done",
+  "@gesteGroupeToutCocher": {
+    "description": "Tooltip of the button ticking every task of the group at once."
+  },
+  "gesteGroupeToutRouvrir": "Reopen all",
+  "@gesteGroupeToutRouvrir": {
+    "description": "Tooltip of the button reopening a fully completed group."
+  },
+  "gesteGroupeDeplier": "Show details",
+  "@gesteGroupeDeplier": {
+    "description": "Tooltip of the chevron expanding a group's subtasks."
+  },
+  "gesteGroupeReplier": "Hide details",
+  "@gesteGroupeReplier": {
+    "description": "Tooltip of the chevron collapsing a group's subtasks."
+  },
   "calendrierVide": "Nothing planned — enjoy the garden.",
   "calendrierErreurChargement": "Couldn't load the calendar.",
   "calendrierVueAgenda": "Agenda",

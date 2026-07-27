@@ -359,4 +359,79 @@ void main() {
     expect(find.widgetWithText(AppBar, 'Carré nord'), findsOneWidget);
     expect(find.text('Cultures'), findsOneWidget);
   });
+
+  /// Three watering tasks + one sowing task, all planned today.
+  void plusieursTaches() {
+    Tache t(String id, String titre, TypeTache type) => Tache(
+          id: id,
+          titre: titre,
+          type: type,
+          cible: CibleTache.parcelle,
+          cibleId: 'z-1',
+          datePrevue: maintenant,
+        );
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        t('t-1', 'Arroser les tomates', TypeTache.arrosage),
+        t('t-2', 'Arroser les courgettes', TypeTache.arrosage),
+        t('t-3', 'Arroser le basilic', TypeTache.arrosage),
+        t('t-4', 'Semer les radis', TypeTache.semis),
+      ],
+    );
+  }
+
+  testWidgets('same-gesture tasks collapse into one dashboard line',
+      (tester) async {
+    plusieursTaches();
+
+    await monter(tester, NiveauExperience.intermediaire);
+
+    // The three watering tasks are folded away behind a single summary line.
+    expect(find.text('Arroser les tomates'), findsNothing);
+    expect(find.textContaining('3 tâches'), findsOneWidget);
+    // The lone sowing task keeps its plain row.
+    expect(find.text('Semer les radis'), findsOneWidget);
+  });
+
+  testWidgets('expanding a group reveals its subtasks', (tester) async {
+    plusieursTaches();
+
+    await monter(tester, NiveauExperience.intermediaire);
+    await tester.tap(find.textContaining('3 tâches'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Arroser les tomates'), findsOneWidget);
+    expect(find.text('Arroser les courgettes'), findsOneWidget);
+    expect(find.text('Arroser le basilic'), findsOneWidget);
+  });
+
+  testWidgets('ticking a subtask completes only that one', (tester) async {
+    plusieursTaches();
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await monter(tester, NiveauExperience.intermediaire);
+    await tester.tap(find.textContaining('3 tâches'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Arroser les courgettes'));
+    await tester.pumpAndSettle();
+
+    final captured = verify(() => taches.sauvegarder(captureAny())).captured;
+    expect(captured, hasLength(1));
+    expect((captured.single as Tache).id, 't-2');
+  });
+
+  testWidgets('the group check button completes every task at once',
+      (tester) async {
+    plusieursTaches();
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await monter(tester, NiveauExperience.intermediaire);
+    await tester.tap(find.byTooltip('Tout marquer comme fait'));
+    await tester.pumpAndSettle();
+
+    final captured = verify(() => taches.sauvegarder(captureAny())).captured;
+    expect(captured, hasLength(3));
+    expect(captured.map((t) => (t as Tache).id), ['t-1', 't-2', 't-3']);
+    expect(captured.map((t) => (t as Tache).estFaite), everyElement(isTrue));
+  });
 }
