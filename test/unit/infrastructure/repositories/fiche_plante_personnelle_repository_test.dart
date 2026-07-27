@@ -64,7 +64,8 @@ void main() {
     expect(f.contenu.categorie, CategoriePlante.legume);
     expect(f.contenu.sousType, SousTypeLegume.legumeFruit);
     expect(f.contenu.qualitesSol, {QualiteSol.riche});
-    expect(f.dateCreation, DateTime.utc(2026, 5, 1));
+    // Dates come back in local time (see `DateIso`) — compare instants.
+    expect(f.dateCreation.isAtSameMomentAs(DateTime.utc(2026, 5, 1)), isTrue);
   });
 
   test('denormalizes columns for querying without parsing YAML', () async {
@@ -91,7 +92,9 @@ void main() {
     final all = await repo.obtenirToutes();
     expect(all, hasLength(1));
     expect(all.single.contenu.nomCommunFr, 'Tomate cerise');
-    expect(all.single.dateModification, DateTime.utc(2026, 6, 1));
+    expect(
+        all.single.dateModification.isAtSameMomentAs(DateTime.utc(2026, 6, 1)),
+        isTrue);
   });
 
   test('obtenirToutes orders by most recently modified first', () async {

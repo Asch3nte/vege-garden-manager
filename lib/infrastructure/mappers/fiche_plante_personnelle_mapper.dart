@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/fiche_plante_personnelle.dart';
 import '../catalogue/serialiseur_fiche_personnelle.dart';
 import '../database/app_database.dart';
@@ -24,8 +25,8 @@ class FichePlantePersonnelleMapper {
     return FichePlantePersonnelle(
       id: r.id,
       contenu: _serialiseur.depuisMap(map),
-      dateCreation: DateTime.parse(r.dateCreation),
-      dateModification: DateTime.parse(r.updatedAt),
+      dateCreation: DateIso.depuisStockage(r.dateCreation),
+      dateModification: DateIso.depuisStockage(r.updatedAt),
     );
   }
 
@@ -46,9 +47,9 @@ class FichePlantePersonnelleMapper {
       nomCommunFr: Value(m.nomCommunFr),
       nomCommunEn: Value(m.nomCommunEn),
       familleBotanique: Value(m.familleBotanique),
-      dateCreation: Value(f.dateCreation.toUtc().toIso8601String()),
-      createdAt: Value(f.dateCreation.toUtc().toIso8601String()),
-      updatedAt: Value(f.dateModification.toUtc().toIso8601String()),
+      dateCreation: Value(DateIso.versStockage(f.dateCreation)),
+      createdAt: Value(DateIso.versStockage(f.dateCreation)),
+      updatedAt: Value(DateIso.versStockage(f.dateModification)),
     );
   }
 }

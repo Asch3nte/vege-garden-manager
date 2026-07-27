@@ -172,7 +172,11 @@ void main() {
 
     final reloaded = await container.read(tachesProvider(scope).future);
     expect(reloaded.single.estFaite, isTrue);
-    expect(reloaded.single.dateRealisation, DateTime.utc(2026, 6, 11));
+    // Dates come back in local time (see `DateIso`) — compare instants.
+    expect(
+        reloaded.single.dateRealisation!
+            .isAtSameMomentAs(DateTime.utc(2026, 6, 11)),
+        isTrue);
   });
 
   test('equipements: modify (changerEtat) then persist', () async {

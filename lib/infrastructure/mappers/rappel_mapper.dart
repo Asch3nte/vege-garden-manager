@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/rappel.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/etat_rappel.dart';
@@ -36,8 +37,8 @@ class RappelMapper {
       priorite: PrioriteTache.values.byName(r.priorite),
       cible: cible,
       cibleId: cibleId,
-      dateDebut: DateTime.parse(r.dateDebut),
-      dateFin: r.dateFin == null ? null : DateTime.parse(r.dateFin!),
+      dateDebut: DateIso.depuisStockage(r.dateDebut),
+      dateFin: DateIso.depuisStockageNullable(r.dateFin),
       typeRecurrence: TypeRecurrence.values.byName(r.typeRecurrence),
       intervalleJours: r.intervalleJours,
       joursSemaine: _decoderJours(r.joursSemaine),
@@ -49,7 +50,7 @@ class RappelMapper {
   }
 
   RappelsCompanion versCompanion(Rappel r) {
-    final maintenant = DateTime.now().toUtc().toIso8601String();
+    final maintenant = DateIso.maintenant();
     return RappelsCompanion(
       id: Value(r.id),
       titre: Value(r.titre),
@@ -60,8 +61,8 @@ class RappelMapper {
       parcelleId: Value(r.cible == CibleTache.parcelle ? r.cibleId : null),
       plantationId: Value(r.cible == CibleTache.plantation ? r.cibleId : null),
       equipementId: Value(r.cible == CibleTache.equipement ? r.cibleId : null),
-      dateDebut: Value(r.dateDebut.toUtc().toIso8601String()),
-      dateFin: Value(r.dateFin?.toUtc().toIso8601String()),
+      dateDebut: Value(DateIso.versStockage(r.dateDebut)),
+      dateFin: Value(DateIso.versStockageNullable(r.dateFin)),
       typeRecurrence: Value(r.typeRecurrence.name),
       intervalleJours: Value(r.intervalleJours),
       joursSemaine: Value(_encoderJours(r.joursSemaine)),
