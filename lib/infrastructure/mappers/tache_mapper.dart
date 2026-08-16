@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/etat_tache.dart';
@@ -32,10 +33,8 @@ class TacheMapper {
       priorite: PrioriteTache.values.byName(r.priorite),
       cible: cible,
       cibleId: cibleId,
-      datePrevue: DateTime.parse(r.datePrevue),
-      dateRealisation: r.dateRealisation == null
-          ? null
-          : DateTime.parse(r.dateRealisation!),
+      datePrevue: DateIso.depuisStockage(r.datePrevue),
+      dateRealisation: DateIso.depuisStockageNullable(r.dateRealisation),
       dureeReelleMinutes: r.dureeReelleMinutes,
       rappelOrigineId: r.rappelOrigineId,
       notes: r.notes,
@@ -43,7 +42,7 @@ class TacheMapper {
   }
 
   TachesCompanion versCompanion(Tache t) {
-    final maintenant = DateTime.now().toUtc().toIso8601String();
+    final maintenant = DateIso.maintenant();
     return TachesCompanion(
       id: Value(t.id),
       titre: Value(t.titre),
@@ -55,8 +54,8 @@ class TacheMapper {
       parcelleId: Value(t.cible == CibleTache.parcelle ? t.cibleId : null),
       plantationId: Value(t.cible == CibleTache.plantation ? t.cibleId : null),
       equipementId: Value(t.cible == CibleTache.equipement ? t.cibleId : null),
-      datePrevue: Value(t.datePrevue.toUtc().toIso8601String()),
-      dateRealisation: Value(t.dateRealisation?.toUtc().toIso8601String()),
+      datePrevue: Value(DateIso.versStockage(t.datePrevue)),
+      dateRealisation: Value(DateIso.versStockageNullable(t.dateRealisation)),
       dureeReelleMinutes: Value(t.dureeReelleMinutes),
       rappelOrigineId: Value(t.rappelOrigineId),
       dateCreation: Value(maintenant),

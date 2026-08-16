@@ -1,4 +1,6 @@
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/type_tache.dart';
+import 'geste_groupe.dart';
 
 /// Window covered by the agenda: the next 7 days, or the rest of the month.
 enum PorteeAgenda { semaine, mois }
@@ -7,9 +9,11 @@ enum PorteeAgenda { semaine, mois }
 class GroupeJour {
   final DateTime _jour;
   final List<Tache> _taches;
+  final List<GesteGroupe> _gestes;
 
   GroupeJour._(this._jour, List<Tache> taches)
-      : _taches = List.unmodifiable(taches);
+      : _taches = List.unmodifiable(taches),
+        _gestes = List.unmodifiable(GesteGroupe.grouper(taches));
 
   /// Creates a day group. [jour] is the local date (midnight).
   factory GroupeJour({required DateTime jour, required List<Tache> taches}) =>
@@ -21,8 +25,30 @@ class GroupeJour {
   /// Tasks planned that day (immutable).
   List<Tache> get taches => _taches;
 
+  /// The day's tasks folded into one entry per gesture type (immutable).
+  ///
+  /// This is what the agenda renders: a day watering five crops is a single
+  /// expandable line. Groups of one render as an ordinary task row, so the
+  /// display is unchanged when nothing actually repeats.
+  List<GesteGroupe> get gestes => _gestes;
+
   /// Number of tasks still to do that day.
   int get nombreAFaire => _taches.where((t) => !t.estFaite).length;
+
+  /// The **distinct** gesture types planned that day, in [TypeTache]
+  /// declaration order (immutable).
+  ///
+  /// This is what the monthly grid renders as coloured dots: one dot per kind of
+  /// gesture, never one per task — a day watering five crops is still a single
+  /// "watering" marker. The stable ordering keeps a given colour in the same
+  /// slot from one day to the next.
+  List<TypeTache> get typesPresents {
+    final presents = _taches.map((t) => t.type).toSet();
+    return List.unmodifiable([
+      for (final type in TypeTache.values)
+        if (presents.contains(type)) type,
+    ]);
+  }
 }
 
 /// Immutable view-model for the **Calendrier** screen.

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/potager.dart';
 import '../../domain/enums/source_localisation.dart';
 import '../../domain/enums/type_climat.dart';
@@ -26,12 +27,12 @@ class PotagerMapper {
           TypeClimat.values.byName(r.climatType),
           ZoneRusticite.values.byName(r.zoneRusticite),
         ),
-        dateCreation: DateTime.parse(r.dateCreation),
+        dateCreation: DateIso.depuisStockage(r.dateCreation),
         notes: r.notes,
       );
 
   PotagersCompanion versCompanion(Potager p) {
-    final maintenant = DateTime.now().toUtc().toIso8601String();
+    final maintenant = DateIso.maintenant();
     return PotagersCompanion(
       id: Value(p.id),
       nom: Value(p.nom),
@@ -42,7 +43,7 @@ class PotagerMapper {
       localisationSource: Value(p.localisation.source.name),
       climatType: Value(p.zoneClimatique.type.name),
       zoneRusticite: Value(p.zoneClimatique.rusticite.name),
-      dateCreation: Value(p.dateCreation.toUtc().toIso8601String()),
+      dateCreation: Value(DateIso.versStockage(p.dateCreation)),
       notes: Value(p.notes),
       createdAt: Value(maintenant),
       updatedAt: Value(maintenant),

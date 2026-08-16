@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/observation.dart';
 import '../../domain/enums/cible_observation.dart';
 import '../../domain/enums/gravite_observation.dart';
@@ -23,25 +24,23 @@ class ObservationMapper {
       id: r.id,
       cible: cible,
       cibleId: cibleId,
-      date: DateTime.parse(r.dateObservation),
+      date: DateIso.depuisStockage(r.dateObservation),
       type: TypeObservation.values.byName(r.type),
       titre: r.titre,
       gravite: GraviteObservation.values.byName(r.gravite),
       description: r.description,
       resolu: r.resolu,
-      dateResolution: r.dateResolution == null
-          ? null
-          : DateTime.parse(r.dateResolution!),
+      dateResolution: DateIso.depuisStockageNullable(r.dateResolution),
       actionsRealisees: r.actionsRealisees,
       notes: r.notes,
     );
   }
 
   ObservationsCompanion versCompanion(Observation o) {
-    final maintenant = DateTime.now().toUtc().toIso8601String();
+    final maintenant = DateIso.maintenant();
     return ObservationsCompanion(
       id: Value(o.id),
-      dateObservation: Value(o.date.toUtc().toIso8601String()),
+      dateObservation: Value(DateIso.versStockage(o.date)),
       type: Value(o.type.name),
       gravite: Value(o.gravite.name),
       titre: Value(o.titre),
@@ -53,7 +52,7 @@ class ObservationMapper {
       plantationId:
           Value(o.cible == CibleObservation.plantation ? o.cibleId : null),
       resolu: Value(o.resolu),
-      dateResolution: Value(o.dateResolution?.toUtc().toIso8601String()),
+      dateResolution: Value(DateIso.versStockageNullable(o.dateResolution)),
       actionsRealisees: Value(o.actionsRealisees),
       dateCreation: Value(maintenant),
       notes: Value(o.notes),

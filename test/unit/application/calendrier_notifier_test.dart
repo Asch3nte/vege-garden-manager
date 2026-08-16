@@ -75,11 +75,13 @@ void main() {
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
   });
 
-  Tache uneTache(String id, DateTime quand, {EtatTache etat = EtatTache.aFaire}) =>
+  Tache uneTache(String id, DateTime quand,
+          {EtatTache etat = EtatTache.aFaire,
+          TypeTache type = TypeTache.arrosage}) =>
       Tache(
         id: id,
         titre: 'Tâche $id',
-        type: TypeTache.arrosage,
+        type: type,
         cible: CibleTache.parcelle,
         cibleId: 'z-1',
         datePrevue: quand,
@@ -249,6 +251,86 @@ void main() {
     verify(() => taches.sauvegarder(tache)).called(1);
   });
 
+  test('ticking a group completes every task left to do', () async {
+    final a = uneTache('a', DateTime(2026, 6, 8, 8));
+    final b = uneTache('b', DateTime(2026, 6, 8, 9));
+    final c = uneTache('c', DateTime(2026, 6, 8, 10));
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [a, b, c]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    final conteneurTest = conteneur();
+    final vue = await conteneurTest.read(calendrierProvider.future);
+    final geste = vue.groupes.single.gestes.single;
+
+    await conteneurTest.read(calendrierProvider.notifier).cocherGroupe(geste);
+
+    expect([a, b, c].map((t) => t.estFaite), everyElement(isTrue));
+    expect(a.dateRealisation, maintenant);
+    verify(() => taches.sauvegarder(any())).called(3);
+  });
+
+  test('ticking a partially done group completes it without undoing the rest',
+      () async {
+    // A half-finished line must never toggle back what the user already ticked.
+    final dejaFaite =
+        uneTache('a', DateTime(2026, 6, 8, 8), etat: EtatTache.terminee);
+    final restante = uneTache('b', DateTime(2026, 6, 8, 9));
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [dejaFaite, restante]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    final conteneurTest = conteneur();
+    final vue = await conteneurTest.read(calendrierProvider.future);
+    final geste = vue.groupes.single.gestes.single;
+    expect(geste.partiellementFaite, isTrue);
+
+    await conteneurTest.read(calendrierProvider.notifier).cocherGroupe(geste);
+
+    expect(dejaFaite.estFaite, isTrue); // untouched
+    expect(restante.estFaite, isTrue);
+    verify(() => taches.sauvegarder(restante)).called(1);
+    verifyNever(() => taches.sauvegarder(dejaFaite));
+  });
+
+  test('ticking a fully done group reopens all of it', () async {
+    final a = uneTache('a', DateTime(2026, 6, 8, 8), etat: EtatTache.terminee);
+    final b = uneTache('b', DateTime(2026, 6, 8, 9), etat: EtatTache.terminee);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [a, b]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    final conteneurTest = conteneur();
+    final vue = await conteneurTest.read(calendrierProvider.future);
+    final geste = vue.groupes.single.gestes.single;
+    expect(geste.toutesFaites, isTrue);
+
+    await conteneurTest.read(calendrierProvider.notifier).cocherGroupe(geste);
+
+    expect([a, b].map((t) => t.estFaite), everyElement(isFalse));
+    expect(a.dateRealisation, isNull);
+    verify(() => taches.sauvegarder(any())).called(2);
+  });
+
+  test('a day folds its tasks into one group per gesture', () async {
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        uneTache('eau1', DateTime(2026, 6, 8, 8)),
+        uneTache('eau2', DateTime(2026, 6, 8, 9)),
+        uneTache('semis', DateTime(2026, 6, 8, 14), type: TypeTache.semis),
+      ],
+    );
+
+    final vue = await conteneur().read(calendrierProvider.future);
+    final gestes = vue.groupes.single.gestes;
+
+    expect(gestes, hasLength(2));
+    expect(gestes.first.type, TypeTache.arrosage);
+    expect(gestes.first.nombre, 2);
+    expect(gestes.last.type, TypeTache.semis);
+    expect(gestes.last.estSeule, isTrue);
+  });
+
   test('deleting a task removes it and reloads', () async {
     final tache = uneTache('t1', DateTime(2026, 6, 8, 10));
     var taches_ = [tache];
@@ -340,6 +422,58 @@ void main() {
     expect(vue.cibleNom(tCulture), 'Tomate'); // crop / variety, via its fiche
     expect(vue.cibleNom(tJardin), 'Mon potager');
     expect(vue.cibleNom(tInconnu), isNull); // equipment has no screen yet
+  });
+
+  test('a day exposes one entry per gesture type, not one per task', () async {
+    // The monthly grid draws a dot per `typesPresents` entry: five watering
+    // tasks the same day must stay a single watering dot.
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        for (var i = 0; i < 5; i++)
+          uneTache('eau$i', DateTime(2026, 6, 8, 8 + i)),
+        uneTache('semis', DateTime(2026, 6, 8, 14), type: TypeTache.semis),
+        uneTache('recolte', DateTime(2026, 6, 8, 16),
+            type: TypeTache.recolte, etat: EtatTache.terminee),
+      ],
+    );
+
+    final vue = await conteneur().read(calendrierProvider.future);
+    final jour = vue.groupes.single;
+
+    expect(jour.taches, hasLength(7));
+    expect(jour.typesPresents,
+        [TypeTache.arrosage, TypeTache.semis, TypeTache.recolte]);
+  });
+
+  test('typesPresents keeps the TypeTache declaration order', () async {
+    // Stable slot per colour: the same types always come out in the same order,
+    // whatever order the tasks arrive in.
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        uneTache('c', DateTime(2026, 6, 8, 16), type: TypeTache.recolte),
+        uneTache('a', DateTime(2026, 6, 8, 8), type: TypeTache.arrosage),
+        uneTache('b', DateTime(2026, 6, 8, 12), type: TypeTache.semis),
+      ],
+    );
+
+    final vue = await conteneur().read(calendrierProvider.future);
+    final attendu = [
+      for (final t in TypeTache.values)
+        if (const {TypeTache.semis, TypeTache.arrosage, TypeTache.recolte}
+            .contains(t))
+          t,
+    ];
+    expect(vue.groupes.single.typesPresents, attendu);
+  });
+
+  test('typesPresents is unmodifiable', () async {
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [uneTache('t1', DateTime(2026, 6, 8, 10))]);
+
+    final vue = await conteneur().read(calendrierProvider.future);
+
+    expect(() => vue.groupes.single.typesPresents.add(TypeTache.semis),
+        throwsUnsupportedError);
   });
 
   test('empty window is flagged', () async {

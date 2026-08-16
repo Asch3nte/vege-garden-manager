@@ -83,7 +83,9 @@ void main() {
     ));
     final t = (await repo.obtenirParId('t1'))!;
     expect(t.estFaite, isTrue);
-    expect(t.dateRealisation, DateTime.utc(2026, 6, 11));
+    // Dates come back in local time (see `DateIso`), so compare instants.
+    expect(t.dateRealisation!.isAtSameMomentAs(DateTime.utc(2026, 6, 11)),
+        isTrue);
   });
 
   test('obtenirEntreDates filters by planned date inclusively', () async {
@@ -101,6 +103,27 @@ void main() {
     await repo.sauvegarder(tache(id: 'standalone'));
     final list = await repo.obtenirParRappel('rap1');
     expect(list.map((t) => t.id), ['gen']);
+  });
+
+  test('a local planned date round-trips to the same local day', () async {
+    // Regression: dates are stored as UTC ISO-8601; reading them back without
+    // converting to local returned the previous (or next) calendar day for any
+    // non-zero timezone offset, which broke every day-level comparison.
+    final local = DateTime(2026, 6, 10);
+    await repo.sauvegarder(tache(datePrevue: local));
+    final t = (await repo.obtenirParId('t1'))!;
+    expect(t.datePrevue, local);
+    expect(t.datePrevue.day, local.day);
+  });
+
+  test('a local completion date round-trips to the same local day', () async {
+    final local = DateTime(2026, 6, 10, 18, 30);
+    await repo.sauvegarder(tache(
+      datePrevue: local,
+      etat: EtatTache.terminee,
+      dateRealisation: local,
+    ));
+    expect((await repo.obtenirParId('t1'))!.dateRealisation, local);
   });
 
   test('supprimer soft-deletes', () async {

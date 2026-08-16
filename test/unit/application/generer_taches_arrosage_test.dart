@@ -109,7 +109,17 @@ void main() {
     stubFiches();
     useCase = GenererTachesArrosage(plantations, potager, taches, notifications,
         preferences, fiches, calcul, maintenant: () => pinned07h);
+    // The day's single watering notification is (re)scheduled or cancelled on
+    // every run, so both calls must be stubbed everywhere.
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
+    when(() => notifications.annuler(any())).thenAnswer((_) async {});
   });
+
+
+  /// `yyyy-MM-dd` of [d], as used in the day-scoped notification id.
+  String jourIso(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
+      '-${d.month.toString().padLeft(2, '0')}'
+      '-${d.day.toString().padLeft(2, '0')}';
 
   Potager unPotager() => Potager(
         id: 'pot-1',
@@ -199,7 +209,6 @@ void main() {
     when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
         .thenAnswer((_) async => []);
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
-    when(() => notifications.programmer(any())).thenAnswer((_) async {});
 
     await useCase.executer();
 
@@ -218,9 +227,12 @@ void main() {
     expect(notifCaptured, hasLength(1));
     final notif = notifCaptured.first as NotificationLocale;
     expect(notif.categorie, 'arrosage');
-    // One daily recap notification, naming the crop in its title.
-    expect(notif.id, startsWith('arrosage_recap_'));
+    // Day-scoped id (not per plantation): one notification covers the day, and
+    // re-running rewrites it instead of stacking duplicates.
+    expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
+    // That single recap names the crop rather than counting anonymously.
     expect(notif.titre, 'Arroser Tomate');
+    expect(notif.corps, contains('Tomate'));
     expect(notif.cibleRoute, '/calendrier');
   });
 
@@ -332,6 +344,8 @@ void main() {
     // the daily recap must still fire (its stable per-day id just replaces any
     // pending one — no stacking).
     verifyNever(() => taches.sauvegarder(any()));
+    // The crop is still thirsty and its task still pending → the day's single
+    // notification is (re)scheduled, even though no task was created.
     verify(() => notifications.programmer(any())).called(1);
   });
 
@@ -552,5 +566,154 @@ void main() {
 
       verify(() => notifications.programmer(any())).called(1);
     });
+  });
+
+  test('several thirsty crops schedule a single notification, counted',
+      () async {
+    // Regression: one notification per plantation meant five pings for five
+    // crops. One per day now, carrying the count.
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async =>
+        [unePlantation('p-1'), unePlantation('p-2'), unePlantation('p-3')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    final captured =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(captured, hasLength(1)); // not one per crop
+    final notif = captured.single as NotificationLocale;
+    expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
+    // The body lists the crops themselves rather than counting anonymously.
+    expect(notif.corps, contains('Cultures à arroser'));
+    expect('Tomate'.allMatches(notif.corps).length, 3);
+    verifyNever(() => notifications.annuler(any()));
+  });
+
+  test('a day needing no watering cancels its notification', () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+
+    await useCase.executer();
+
+    verify(() => notifications.annuler('arrosage_${jourIso(pinned07h)}'))
+        .called(1);
+    verifyNever(() => notifications.programmer(any()));
+  });
+
+  test('re-running rewrites the same day notification, never adds one',
+      () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    // Tasks already exist: nothing is created, but the notification stays exact.
+    when(() => taches.obtenirParCible(CibleTache.plantation, any())).thenAnswer(
+        (invocation) async =>
+            [uneTacheArrosageAuj(invocation.positionalArguments[1] as String)]);
+
+    await useCase.executer();
+    await useCase.executer();
+
+    final captured =
+        verify(() => notifications.programmer(captureAny())).captured;
+    // One per run, always the same id → the OS replaces it rather than stacking.
+    expect(captured, hasLength(2));
+    expect(
+        captured.map((n) => (n as NotificationLocale).id).toSet(), hasLength(1));
+    expect('Tomate'
+        .allMatches((captured.first as NotificationLocale).corps)
+        .length, 2);
+    verifyNever(() => taches.sauvegarder(any()));
+  });
+
+  test('a crop already ticked off today is left out of the notification',
+      () async {
+    // Watering done and ticked at 07:00 → no 08:00 ping about it.
+    final faite = Tache(
+      id: 'ta-done',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day),
+      etat: EtatTache.terminee,
+      dateRealisation: pinned07h,
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [faite]);
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-2'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await useCase.executer();
+
+    final captured =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(captured, hasLength(1));
+    // Only p-2 remains thirsty → singular wording, p-1 not counted.
+    expect((captured.single as NotificationLocale).corps,
+        "Tomate a besoin d'eau aujourd'hui.");
+  });
+
+  test('every crop ticked off today cancels the notification', () async {
+    final faite = Tache(
+      id: 'ta-done',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day),
+      etat: EtatTache.terminee,
+      dateRealisation: pinned07h,
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [faite]);
+
+    await useCase.executer();
+
+    verify(() => notifications.annuler('arrosage_${jourIso(pinned07h)}'))
+        .called(1);
+    verifyNever(() => notifications.programmer(any()));
   });
 }

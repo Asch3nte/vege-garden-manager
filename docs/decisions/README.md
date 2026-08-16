@@ -36,6 +36,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0017](0017-glossaire-aide-lexique.md) | Glossaire « Aide & lexique » : la référence du jardinier (chapitres, liens, illustrations) | Accepté |
 | [0018](0018-stade-sensible-urgence-arrosage.md) | Phase sensible × stade de croissance → modulation de l'urgence d'arrosage (cadrage) | **Proposé** |
 | [0019](0019-report-post-recolte-v11.md) | Report de la fonctionnalité « Post-récolte » de V1 vers V1.1 | Accepté |
+| [0020](0020-regroupement-taches-par-geste.md) | Regroupement des tâches par geste (agrégation d'affichage, notification unique par jour) | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

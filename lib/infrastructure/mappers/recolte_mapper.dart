@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/recolte.dart';
 import '../../domain/enums/destination_recolte.dart';
 import '../../domain/enums/qualite_recolte.dart';
@@ -14,7 +15,7 @@ class RecolteMapper {
   Recolte versEntite(RecolteRow r) => Recolte(
         id: r.id,
         plantationId: r.plantationId,
-        date: DateTime.parse(r.dateRecolte),
+        date: DateIso.depuisStockage(r.dateRecolte),
         quantite: Quantite(r.quantite, UniteQuantite.values.byName(r.unite)),
         destination: DestinationRecolte.values.byName(r.destination),
         qualite:
@@ -23,11 +24,11 @@ class RecolteMapper {
       );
 
   RecoltesCompanion versCompanion(Recolte r) {
-    final maintenant = DateTime.now().toUtc().toIso8601String();
+    final maintenant = DateIso.maintenant();
     return RecoltesCompanion(
       id: Value(r.id),
       plantationId: Value(r.plantationId),
-      dateRecolte: Value(r.date.toUtc().toIso8601String()),
+      dateRecolte: Value(DateIso.versStockage(r.date)),
       quantite: Value(r.quantite.valeur),
       unite: Value(r.quantite.unite.name),
       qualite: Value(r.qualite?.name),

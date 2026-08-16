@@ -54,7 +54,11 @@ class _StubGenererTachesArrosage implements GenererTachesArrosage {
   Future<void> executer() async {}
 }
 
+class _FakeTache extends Fake implements Tache {}
+
 void main() {
+  setUpAll(() => registerFallbackValue(_FakeTache()));
+
   // Pinned "now" so the today-window is deterministic.
   final maintenant = DateTime(2026, 6, 9, 8, 24);
 
@@ -95,11 +99,12 @@ void main() {
         exposition: NiveauSoleil.pleinSoleil,
       );
 
-  Tache uneTache(String id, String titre, EtatTache etat, DateTime quand) =>
+  Tache uneTache(String id, String titre, EtatTache etat, DateTime quand,
+          {TypeTache type = TypeTache.arrosage}) =>
       Tache(
         id: id,
         titre: titre,
-        type: TypeTache.arrosage,
+        type: type,
         cible: CibleTache.parcelle,
         cibleId: 'z-1',
         datePrevue: quand,
@@ -296,5 +301,101 @@ void main() {
     expect(vue.potagerVide, isTrue);
     // The parcelle repo is never queried without an active garden.
     verifyNever(() => parcelles.obtenirParPotager(any()));
+  });
+
+  test('today\'s tasks are folded into one group per gesture', () async {
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => taches.obtenirEntreDates(any(), any())).thenAnswer(
+      (_) async => [
+        uneTache('eau1', 'Arroser', EtatTache.aFaire, DateTime(2026, 6, 9, 8)),
+        uneTache('eau2', 'Arroser', EtatTache.aFaire, DateTime(2026, 6, 9, 9)),
+        uneTache('semis', 'Semer', EtatTache.aFaire, DateTime(2026, 6, 9, 14),
+            type: TypeTache.semis),
+      ],
+    );
+
+    final vue = await conteneur().read(accueilProvider.future);
+
+    expect(vue.tachesDuJour, hasLength(3)); // raw list untouched
+    expect(vue.gestesDuJour, hasLength(2)); // one line per gesture
+    expect(vue.gestesDuJour.first.type, TypeTache.arrosage);
+    expect(vue.gestesDuJour.first.nombre, 2);
+    expect(vue.gestesDuJour.last.estSeule, isTrue);
+    expect(vue.nombreTachesAFaire, 3); // counter still counts real tasks
+  });
+
+  test('ticking a geste completes every task left to do', () async {
+    final a =
+        uneTache('a', 'Arroser', EtatTache.aFaire, DateTime(2026, 6, 9, 8));
+    final b =
+        uneTache('b', 'Arroser', EtatTache.aFaire, DateTime(2026, 6, 9, 9));
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [a, b]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    final c = conteneur();
+    final vue = await c.read(accueilProvider.future);
+
+    await c.read(accueilProvider.notifier).basculerGeste(vue.gestesDuJour.single);
+
+    expect([a, b].map((t) => t.estFaite), everyElement(isTrue));
+    expect(a.dateRealisation, maintenant);
+    verify(() => taches.sauvegarder(any())).called(2);
+  });
+
+  test('ticking a partially done geste spares the tasks already ticked',
+      () async {
+    final dejaFaite =
+        uneTache('a', 'Arroser', EtatTache.terminee, DateTime(2026, 6, 9, 8));
+    final restante =
+        uneTache('b', 'Arroser', EtatTache.aFaire, DateTime(2026, 6, 9, 9));
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [dejaFaite, restante]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    final c = conteneur();
+    final vue = await c.read(accueilProvider.future);
+
+    await c.read(accueilProvider.notifier).basculerGeste(vue.gestesDuJour.single);
+
+    expect(dejaFaite.estFaite, isTrue);
+    expect(restante.estFaite, isTrue);
+    verifyNever(() => taches.sauvegarder(dejaFaite));
+  });
+
+  test('ticking a fully done geste reopens all of it', () async {
+    final a =
+        uneTache('a', 'Arroser', EtatTache.terminee, DateTime(2026, 6, 9, 8));
+    final b =
+        uneTache('b', 'Arroser', EtatTache.terminee, DateTime(2026, 6, 9, 9));
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => [a, b]);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    final c = conteneur();
+    final vue = await c.read(accueilProvider.future);
+
+    await c.read(accueilProvider.notifier).basculerGeste(vue.gestesDuJour.single);
+
+    expect([a, b].map((t) => t.estFaite), everyElement(isFalse));
   });
 }

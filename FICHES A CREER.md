@@ -171,10 +171,12 @@ Créées : ✅ `V001` Corno di Toro · ✅ `V002` California Wonder ·
 - ⬜ Topepo Rosso (tomate-poivron)
 
 ### Piment — *Capsicum* spp. ⬜ *(id à attribuer)* 🔡
-> ⚠️ **Arbitrage non tranché** : une fiche mère « Piment » (*C. annuum* piquants)
-> avec fiches sœurs pour *C. chinense* / *C. frutescens* / *C. baccatum*, ou une
-> mère par espèce botanique. **Recommandation** : une mère par espèce botanique
-> (cohérent avec le reste de la base, qui suit l'espèce), donc 4 mères ci-dessous.
+> ✅ **Arbitrage tranché (2026-08-16)** : **une fiche mère par espèce botanique**
+> — *C. annuum*, *C. chinense*, *C. frutescens*, *C. baccatum*. Cohérent avec le
+> reste de la base, qui suit l'espèce ; les quatre diffèrent réellement en
+> rusticité, durée de cycle et conduite. Le poivron doux (`LEG-019`) reste une
+> mère distincte bien qu'également *C. annuum* : usage culinaire et conduite
+> assez éloignés pour que le jardinier les cherche séparément.
 
 **⬜ Piment — *Capsicum annuum* (mère)**
 - ⬜ Piment d'Espelette (Gorria)
@@ -1645,12 +1647,13 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
    - ✅ tranchés à la fusion : quinoa/amarante → `CER` · maïs doux → `CER-001` ·
      phacélie → `ENG-002` · raisin de table → `FRU-008` · avoine/seigle/sarrasin
      → `ENG`.
-   - ⬜ encore ouverts : **piment** (recommandation : une mère par espèce
-     botanique — *annuum*, *chinense*, *frutescens*, *baccatum*) · **potiron vs
-     potimarron** (`LEG-021-V001` est un potiron sous une mère « Potimarron ») ·
-     **cornichon** (recommandation : mère distincte) · **pop-corn** (variété de
-     `CER-001` ou mère) · **fraisier des bois** (*F. vesca* : mère distincte ou
-     filles de `PFR-001`).
+   - ✅ tranché le 2026-08-16 : **piment** → **une mère par espèce botanique**
+     (*annuum*, *chinense*, *frutescens*, *baccatum*), le poivron doux
+     `LEG-019` restant à part.
+   - ⬜ encore ouverts : **potiron vs potimarron** (`LEG-021-V001` est un potiron
+     sous une mère « Potimarron ») · **cornichon** (recommandation : mère
+     distincte) · **pop-corn** (variété de `CER-001` ou mère) · **fraisier des
+     bois** (*F. vesca* : mère distincte ou filles de `PFR-001`).
 5. Les listes marquées 🔡 sont **ouvertes par construction** : y ajouter une
    ligne dès qu'une variété notable est identifiée, sans attendre un batch.
 6. **Ordre de bataille proposé** (du plus gros manque au plus fin) :
