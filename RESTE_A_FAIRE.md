@@ -39,6 +39,12 @@
 > le texte UI encore codé en français en dur (résumé météo, tâches/notifs
 > d'arrosage, `_moisFr` ×4, 1 placeholder). **Borné** (pas un chantier
 > global) ; à corriger avec/avant la traduction `en`.
+> Mis à jour le 2026-08-16 : **correction de suivi** — le fichier de route du
+> contenu (`FICHES A CREER.md`) avait été **perdu lors de la fusion des fiches**
+> du 2026-07-18 et n'existait plus sur `main`. Restauré, réconcilié contre
+> `_schema/id_registry.yaml` (312 fiches réelles) et **étoffé** à la cible
+> « maximum de fiches, mères ET filles ». Nouvelle entrée « Contenu du
+> catalogue » en fin de document.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
@@ -294,6 +300,14 @@ Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
 
 Tout le reste se range en :
 
+- **Contenu du catalogue** (chantier long, parallèle au dev — feuille de route
+  [`FICHES A CREER.md`](FICHES%20A%20CREER.md)) : **312 fiches livrées sur une
+  cible décrite de ~1 259** (235 mères + 1 024 variétés), objectif « maximum de
+  fiches, mères ET filles ». Dernier lot : **lot 11** (amaranthacées, 2026-07-15),
+  suivi de la **fusion des deux efforts divergents** (2026-07-18). Priorité :
+  **aromatiques** (7 mères, romarin/sauge/origan/mélisse/estragon/laurier
+  absents), puis piment (arbitrage à trancher), fruits/petits fruits (1 variété
+  par espèce aujourd'hui).
 - **Pré-release / distribution** (groupé avant la sortie) : keystore release +
   job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
   éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
