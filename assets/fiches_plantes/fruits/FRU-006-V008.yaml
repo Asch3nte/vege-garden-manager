@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Figuier 'Noire de Caromb'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V008
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Noire de Caromb'
+    noms_alternatifs: [Figue de Caromb, Noire de Provence]
+    description: >
+      Variété emblématique de Caromb, au pied du mont Ventoux, où la figue
+      séchée fait l'objet d'une production traditionnelle. Fruit violet foncé
+      à chair rouge, ferme, sucrée et parfumée, de bonne tenue — ce qui la
+      distingue des figues trop fondantes pour être manipulées.
+    conseils_culture: >
+      Bifère, adaptée au climat méditerranéen et aux terrains caillouteux secs.
+      Elle supporte bien la sécheresse une fois installée. Taille d'hiver légère
+      pour conserver les figues-fleurs ; éviter les sols lourds et humides.
+    conseils_recolte: >
+      Figues-fleurs en juin–juillet, récolte principale en août–septembre. La
+      fermeté de la chair permet de la transporter et de la sécher entière.
+  en:
+    nom_commun: Fig 'Noire de Caromb'
+    description: >
+      The emblematic variety of Caromb, at the foot of Mont Ventoux, where dried
+      figs are a traditional product. Deep purple fruit with firm, sweet,
+      aromatic red flesh that holds together well — unlike figs too melting to
+      handle. Biferous and drought-tolerant once established.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 9]
+    mediterraneen:
+      recolte: [6, 9]
+
+conservation:
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Séchée entière au soleil, usage traditionnel", en: "Sun-dried whole, the traditional use" }
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 jours, chair ferme qui se manipule bien", en: "2–3 days, firm flesh that handles well" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

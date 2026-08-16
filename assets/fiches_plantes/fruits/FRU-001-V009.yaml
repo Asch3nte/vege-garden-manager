@@ -1,0 +1,49 @@
+# Fiche fille (variété) — Pommier 'Chantecler'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V009
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Chantecler'
+    noms_alternatifs: [Belchard, Belchard Chantecler]
+    description: >
+      Variété française obtenue à l'INRA d'Angers dans les années 1960, croisement
+      de 'Golden Delicious' et 'Reinette Clochard'. Pomme jaune doré légèrement
+      russetée, chair ferme, croquante, sucrée et bien parfumée, plus fine que
+      celle de Golden. Production régulière et généreuse.
+    conseils_culture: >
+      Bonne rusticité et sensibilité aux maladies modérée, ce qui en fait une des
+      variétés modernes les plus recommandables au jardin. Éclaircir les fruits
+      pour éviter l'alternance. Prévoir un pollinisateur à floraison concomitante.
+    conseils_recolte: >
+      Récolter en octobre. Elle atteint son meilleur goût après quelques semaines
+      de cave et se garde jusqu'en mars.
+  en:
+    nom_commun: Apple 'Chantecler'
+    noms_alternatifs: [Belchard]
+    description: >
+      French variety bred at INRA Angers in the 1960s from 'Golden Delicious' ×
+      'Reinette Clochard'. Golden, lightly russeted skin with firm, crisp, sweet
+      and aromatic flesh. Regular, generous cropper with moderate disease
+      susceptibility.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche ; meilleure après quelques semaines", en: "Cool cellar; best after a few weeks" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Chantecler_(pomme)
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

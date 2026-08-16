@@ -1,0 +1,59 @@
+# Fiche fille (variété) — Prunier 'Mirabelle de Metz'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V003
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Mirabelle de Metz'
+    noms_alternatifs: [Petite mirabelle, Mirabelle précoce]
+    description: >
+      Seconde grande mirabelle lorraine, plus petite que celle de Nancy mais plus
+      précoce et souvent jugée plus sucrée et plus parfumée. Fruit jaune doré,
+      finement ponctué de rouge, à chair fondante. Traditionnellement destinée à
+      la distillation et à la confiture.
+    conseils_culture: >
+      Arbre autofertile, rustique et très drageonnant sur ses propres racines :
+      supprimer les rejets chaque année. Craint la moniliose par été humide.
+      Production abondante mais alternante sur les sujets âgés.
+    conseils_recolte: >
+      Récolter fin juillet à août, une à deux semaines avant la Mirabelle de
+      Nancy. Le fruit tombe naturellement à pleine maturité : étendre une bâche
+      au sol facilite le ramassage.
+  en:
+    nom_commun: Plum 'Mirabelle de Metz'
+    description: >
+      The second great Lorraine mirabelle — smaller than 'de Nancy' but earlier,
+      and often judged sweeter and more aromatic. Golden fruit finely dotted red,
+      with melting flesh. Traditionally used for distilling and jam. Self-fertile
+      and hardy, but suckers freely.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 8]
+    continental:
+      recolte: [8, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 jours, fruit très périssable", en: "2–3 days, highly perishable" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, eau-de-vie de mirabelle", en: "Jam, mirabelle eau-de-vie" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Dénoyautées", en: "Stoned" }
+
+utilisations_culinaires_i18n:
+  fr: [Confiture, eau-de-vie, tarte, crue nature]
+  en: [Jam, eau-de-vie, tart, fresh]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Mirabelle_de_Lorraine
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

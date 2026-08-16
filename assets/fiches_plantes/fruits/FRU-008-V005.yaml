@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Vigne 'Danlas'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V005
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Danlas'
+    description: >
+      Cépage de table français obtenu par croisement, à grains ronds jaune doré,
+      à peau fine et chair juteuse, sucrée et rafraîchissante, sans arôme muscaté
+      marqué. Sa précocité et sa fiabilité en font l'un des raisins de treille les
+      plus recommandés au nord de la Loire.
+    conseils_culture: >
+      Vigueur moyenne, taille courte ou longue selon la conduite. Elle mûrit
+      correctement en climat océanique, sur un mur exposé au sud, là où les
+      cépages méridionaux échouent. Assez sensible au mildiou par été humide :
+      dégager le feuillage autour des grappes.
+    conseils_recolte: >
+      Récolter en septembre, dès que les grains prennent une teinte dorée et se
+      détachent facilement. Consommer rapidement, la peau fine se conserve peu.
+  en:
+    nom_commun: Grape 'Danlas'
+    description: >
+      French bred table grape with round golden berries, thin skin and juicy,
+      sweet, refreshing flesh without a marked muscat note. Early and dependable
+      — one of the best trellis grapes for northern France, ripening on a
+      south-facing wall where southern varieties fail.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 semaines, peau fine", en: "1–2 weeks, thin-skinned" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

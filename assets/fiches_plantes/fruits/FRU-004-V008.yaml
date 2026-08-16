@@ -1,0 +1,58 @@
+# Fiche fille (variété) — Prunier 'Sainte-Catherine'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V008
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Sainte-Catherine'
+    description: >
+      Très ancienne variété française, à fruit ovale jaune doré légèrement
+      ambré, à chair jaune, ferme, sucrée et peu juteuse. Cette faible teneur en
+      eau la destine au séchage : c'est historiquement, avec la prune d'Ente,
+      l'une des grandes prunes à pruneaux du Sud-Ouest et de Touraine.
+    conseils_culture: >
+      Arbre rustique et autofertile, de vigueur moyenne, bien adapté aux climats
+      chauds et secs qui favorisent la concentration en sucres. Peu exigeant sur
+      le sol pourvu qu'il soit drainé.
+    conseils_recolte: >
+      Récolter en août–septembre, à pleine maturité, quand le fruit se ride
+      légèrement au pédoncule. Sécher aussitôt, entier ou dénoyauté.
+  en:
+    nom_commun: Plum 'Sainte-Catherine'
+    description: >
+      Very old French variety with oval golden-amber fruit and firm, sweet,
+      low-juice yellow flesh. Its low water content suits it to drying — with
+      'Prune d'Ente' it is one of the historic prune varieties of south-west
+      France and Touraine. Hardy and self-fertile.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [8, 9]
+    mediterraneen:
+      recolte: [8, 8]
+
+conservation:
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "En pruneaux, séchage lent au four doux ou au soleil", en: "As prunes, slow-dried in a low oven or in the sun" }
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Une semaine au frais", en: "About a week chilled" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+utilisations_culinaires_i18n:
+  fr: [Séchée en pruneau, confiture, tarte, crue nature]
+  en: [Dried as prunes, jam, tart, fresh]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

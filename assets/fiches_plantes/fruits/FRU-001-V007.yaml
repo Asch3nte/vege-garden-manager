@@ -1,0 +1,54 @@
+# Fiche fille (variété) — Pommier 'Granny Smith'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V007
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Granny Smith'
+    noms_alternatifs: [Granny]
+    description: >
+      Pomme australienne à peau vert franc, chair très ferme, croquante et
+      nettement acidulée. Obtenue par semis fortuit chez Maria Ann Smith en
+      Nouvelle-Galles du Sud vers 1868. Sa fermeté en fait une pomme de longue
+      garde qui ne brunit que lentement une fois coupée.
+    conseils_culture: >
+      Variété tardive et gourmande en chaleur : elle a besoin d'une longue
+      arrière-saison pour mûrir et ne réussit vraiment qu'au sud de la Loire ou
+      en situation abritée. Assez sensible à l'oïdium. Prévoir un pollinisateur.
+    conseils_recolte: >
+      Récolter tardivement, en octobre–novembre, quand le vert s'éclaircit.
+      Excellente conservation, jusqu'à cinq ou six mois en cave fraîche.
+    erreurs_frequentes:
+      - La planter en région froide ou tardive (fruits qui ne mûrissent jamais)
+  en:
+    nom_commun: Apple 'Granny Smith'
+    description: >
+      Australian variety with bright green skin and very firm, crisp, markedly
+      tart flesh. A late, heat-demanding apple that needs a long autumn to ripen,
+      but keeps for months once picked.
+
+rusticite:
+  zone_min: zone5
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 11]
+    continental:
+      recolte: [10, 11]
+    mediterraneen:
+      recolte: [10, 11]
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Cave fraîche ; chair très ferme, garde longue", en: "Cool cellar; very firm flesh, long keeping" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Granny_Smith
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Cerisier 'Napoléon'. Hérite de FRU-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-003-V002
+parent_id: FRU-003
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Cerisier 'Napoléon'
+    noms_alternatifs: [Bigarreau Napoléon, Royale, Lauermann]
+    description: >
+      Vieux bigarreau à chair blanche très ferme et croquante, dont le fruit
+      jaune crème se colore de rouge vif du côté du soleil. Saveur sucrée et
+      acidulée, équilibrée. C'est la cerise traditionnelle des confiseurs et de
+      la mise en bocal.
+    conseils_culture: >
+      Arbre vigoureux et productif, de floraison mi-tardive. Autostérile :
+      prévoir un pollinisateur compatible à floraison concomitante. La chair
+      ferme la rend moins sujette à l'éclatement que les variétés molles, mais
+      les pluies de récolte restent à surveiller.
+    conseils_recolte: >
+      Récolter en juin–juillet, quand la joue rouge est bien marquée. Cueillir
+      avec le pédoncule pour la conservation.
+  en:
+    nom_commun: Cherry 'Napoléon'
+    noms_alternatifs: [Napoleon bigarreau, Royal Ann]
+    description: >
+      An old bigarreau with very firm, crisp white flesh; cream-yellow fruit
+      brightly flushed red on the sunny side, sweet and pleasantly tart. The
+      traditional cherry for confectionery and bottling. Self-sterile — plant a
+      compatible pollinator.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 7]
+    continental:
+      recolte: [6, 7]
+    mediterraneen:
+      recolte: [6, 6]
+
+utilisations_culinaires_i18n:
+  fr: [Crue nature, au sirop, confite, clafoutis, eau-de-vie]
+  en: [Fresh, in syrup, candied, clafoutis, brandy]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunus_avium
+contributeurs:
+  - "@potagerer"

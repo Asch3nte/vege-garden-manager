@@ -224,14 +224,20 @@ Polymorphisme dès que pertinent.
 - **Contenu du catalogue — chantier ouvert et long** : feuille de route dans
   [`FICHES A CREER.md`](FICHES%20A%20CREER.md) (remise à niveau le 2026-08-16
   contre `_schema/id_registry.yaml`). Objectif assumé : **le maximum de fiches,
-  mères ET filles**. Cible décrite ≈ **1 287 fiches** (239 mères + 1 048
-  variétés) → la base est **à ~29 %** (375 fiches). Derniers lots livrés :
-  **lot 12 — aromatiques** (38 fiches, catégorie portée de 7 à 19 mères) et
+  mères ET filles**. Cible décrite ≈ **1 288 fiches** (239 mères + 1 049
+  variétés) → la base est **à ~35 %** (445 fiches). Derniers lots livrés :
+  **lot 12 — aromatiques** (38 fiches, catégorie portée de 7 à 19 mères),
   **lot 13 — piments** (25 fiches, arbitrage « une mère par espèce botanique »
   appliqué : `LEG-049` *annuum*, `LEG-050` *chinense*, `LEG-051` *frutescens*,
-  `LEG-052` *baccatum* ; le poivron doux `LEG-019` reste distinct). Priorité
-  suivante : les **filles des fruitiers** (1 variété par espèce aujourd'hui) et
-  les **petits fruits**.
+  `LEG-052` *baccatum* ; le poivron doux `LEG-019` reste distinct) et
+  **lot 14 — fruitiers, filles** (70 fiches sur les 8 mères existantes :
+  pommier +18, poirier +10, prunier +9, cerisier +7, pêcher/nectarinier +7,
+  figuier +7, vigne +7, noisetier +5 ; la catégorie `FRU` passe de 16 à
+  86 fiches). Priorité suivante : les **mères fruitières manquantes**
+  (abricotier, griottier, cognassier, kaki, noyer, agrumes…) puis les
+  **petits fruits**. Arbitrage laissé ouvert : la vigne **'Isabelle'**
+  (hybride *V. labrusca*) demande une mère distincte, le `nom_scientifique`
+  n'étant pas surchargeable par une fille.
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
   (procédure : [docs/17](docs/17-illustrations-glossaire.md)). Termes cliquables :
   **toutes les surfaces branchées** (vue Associations, bandeau + faits fiche,

@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Pommier 'Reinette grise du Canada'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V004
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Reinette grise du Canada'
+    noms_alternatifs: [Reinette du Canada, Reinette grise]
+    description: >
+      Ancienne variété à grosse pomme aplatie, entièrement recouverte d'une peau
+      grise et rugueuse (russeting). Chair ferme, acidulée, très parfumée, riche
+      en sucre. Excellente à couteau comme à cuire ; longtemps la pomme de garde
+      de référence des vergers français.
+    conseils_culture: >
+      Arbre vigoureux et rustique, peu sensible à la tavelure. Variété triploïde
+      au pollen stérile : lui associer deux autres variétés diploïdes. Sensible
+      au calcaire actif, qui provoque des chloroses.
+    conseils_recolte: >
+      Récolter en octobre. La pomme s'améliore en cave et se garde jusqu'au
+      printemps ; son aspect rustique ne préjuge pas de sa qualité.
+  en:
+    nom_commun: Apple 'Reinette grise du Canada'
+    description: >
+      Heirloom apple, large and flat, fully covered with grey russeted skin.
+      Firm, tart, highly aromatic flesh. Excellent for eating and cooking, and a
+      classic long-keeping variety. Triploid — needs two other pollinators.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Cave fraîche et aérée, jusqu'au printemps", en: "Cool airy cellar, keeps into spring" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Compote, tarte, jus", en: "Compote, tart, juice" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Reinette_grise_du_Canada
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,61 @@
+# Fiche fille (variété) — Pêcher 'Sanguine de Savoie'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V002
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pêcher 'Sanguine de Savoie'
+    noms_alternatifs: [Pêche sanguine, Sanguine tardive]
+    description: >
+      Vieille variété de montagne à chair rouge sang veinée de pourpre, très
+      parfumée, acidulée et fondante, sous une peau duveteuse rouge sombre.
+      Variété très tardive, elle mûrit quand toutes les autres pêches sont
+      passées, et donne des confitures et des vins de pêche d'une couleur
+      spectaculaire.
+    conseils_culture: >
+      Nettement plus rustique que les pêchers de plaine, elle supporte les
+      hivers froids des vallées alpines et se montre moins sensible à la cloque
+      que les variétés modernes. Autofertile. Réclame un sol drainé et une
+      taille annuelle des rameaux fructifères.
+    conseils_recolte: >
+      Récolter tardivement, de fin septembre à octobre, quand la chair cède au
+      toucher. Fruit fragile à consommer ou transformer aussitôt.
+  en:
+    nom_commun: Peach 'Sanguine de Savoie'
+    noms_alternatifs: [Blood peach]
+    description: >
+      An old mountain variety with blood-red, purple-veined flesh: melting, tart
+      and highly aromatic under a downy dark red skin. Very late ripening, after
+      all other peaches, and prized for vividly coloured jams and peach wine.
+      Hardier and less leaf-curl-prone than modern varieties.
+
+besoins:
+  temperature_min_survie: -25
+
+rusticite:
+  zone_min: zone5
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 10]
+    continental:
+      recolte: [9, 10]
+    mediterraneen:
+      recolte: [9, 9]
+
+conservation:
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, vin de pêche, au sirop", en: "Jam, peach wine, in syrup" }
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 jours, chair fragile", en: "2–3 days, fragile flesh" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

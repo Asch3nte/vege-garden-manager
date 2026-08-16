@@ -1,0 +1,55 @@
+# Fiche fille (variété) — Vigne 'Perlette'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V007
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Perlette'
+    noms_alternatifs: [Perlette sans pépins]
+    description: >
+      Cépage de table apyrène — c'est-à-dire sans pépins — obtenu en Californie.
+      Petits grains ronds vert clair à jaune, à peau très fine et chair
+      croquante, sucrée et peu acide. Sa précocité, la plus marquée des raisins
+      sans pépins, en fait une variété de choix pour les jardins.
+    conseils_culture: >
+      Vigueur moyenne, taille courte. L'absence de pépins s'accompagne de grains
+      petits et de grappes très compactes : éclaircir à la nouaison est
+      indispensable, sinon les grains éclatent et pourrissent. Exposition chaude
+      et aérée.
+    conseils_recolte: >
+      Récolter dès la fin juillet ou en août selon la région, à la première
+      coloration jaune. Consommer rapidement, la peau très fine se conserve peu.
+    erreurs_frequentes:
+      - Ne pas éclaircir les grappes (grains tassés, éclatement, botrytis)
+  en:
+    nom_commun: Grape 'Perlette'
+    description: >
+      Seedless (apyrenous) table grape bred in California. Small round berries,
+      pale green to yellow, with very thin skin and crisp, sweet, low-acid flesh.
+      The earliest of the seedless grapes — an excellent garden choice, provided
+      its very compact bunches are thinned.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [8, 9]
+    mediterraneen:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1 semaine, peau très fine", en: "About a week, very thin skin" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "En raisins secs (variété sans pépins)", en: "As raisins (seedless variety)" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

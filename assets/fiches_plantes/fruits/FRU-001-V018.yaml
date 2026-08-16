@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Pommier à cidre 'Binet Rouge'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V018
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier à cidre 'Binet Rouge'
+    noms_alternatifs: [Binet rouge, Binet]
+    description: >
+      Variété normande à cidre, classée douce-amère : petit fruit rouge sombre,
+      riche en sucres et en tanins, peu acide. Elle donne des cidres charpentés,
+      corsés et de bonne garde, et entre traditionnellement dans les assemblages
+      des cidres de Normandie. Fruit trop tannique pour être mangé cru.
+    conseils_culture: >
+      Arbre vigoureux, de longue vie, conduit en haute tige dans les prés-vergers.
+      Floraison tardive, ce qui la protège des gelées. Variété alternante :
+      la production est forte une année sur deux.
+    conseils_recolte: >
+      Récolter tardivement, en octobre–novembre, en ramassant les fruits tombés au
+      sol. Laisser mûrir en tas quelques semaines avant le pressage.
+    erreurs_frequentes:
+      - Espérer une pomme de bouche (fruit très tannique, réservé au cidre)
+  en:
+    nom_commun: Cider apple 'Binet Rouge'
+    description: >
+      Norman cider variety in the bittersweet class: small dark red fruit, rich
+      in sugars and tannins, low in acid. Yields full-bodied, well-keeping ciders
+      and is a traditional component of Normandy blends. Too tannic to eat fresh.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 11]
+    continental:
+      recolte: [10, 11]
+
+conservation:
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Cidre ; les fruits se mûrissent en tas avant pressage", en: "Cider; fruit is sweated in heaps before pressing" }
+
+utilisations_culinaires_i18n:
+  fr: [Cidre, eau-de-vie]
+  en: [Cider, brandy]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cidre
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

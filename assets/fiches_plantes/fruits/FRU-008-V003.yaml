@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Vigne 'Cardinal'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V003
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Cardinal'
+    description: >
+      Cépage de table américain obtenu en Californie, à très gros grains ronds
+      rouge violacé recouverts d'une pruine épaisse. Chair ferme et croquante,
+      juteuse, au goût franc et légèrement muscaté. C'est l'un des raisins de
+      table les plus précoces.
+    conseils_culture: >
+      Vigne vigoureuse à conduire en taille longue, sur treille ou pergola où
+      elle donne de grandes grappes. Sa précocité permet de la réussir dans des
+      régions où les cépages tardifs ne mûrissent pas, mais elle reste exigeante
+      en chaleur estivale. Sensible à l'oïdium.
+    conseils_recolte: >
+      Récolter dès la fin août, quand les grains se détachent facilement et que
+      la pruine est intacte. Ne pas frotter les grappes : la pruine protège les
+      grains.
+  en:
+    nom_commun: Grape 'Cardinal'
+    description: >
+      American table grape bred in California, with very large round
+      purple-red berries under a thick bloom. Firm, crisp, juicy flesh with a
+      clean, lightly muscat flavour. One of the earliest table grapes — a good
+      choice where late varieties fail to ripen.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [9, 9]
+    mediterraneen:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2 semaines en cave fraîche, grappes suspendues", en: "2 weeks in a cool cellar, bunches hung" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

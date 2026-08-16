@@ -1,0 +1,57 @@
+# Fiche fille (variété) — Poirier 'Doyenné du Comice'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V003
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+difficulte: 3
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Doyenné du Comice'
+    noms_alternatifs: [Comice, Doyenné Comice]
+    description: >
+      Obtenue au comice horticole d'Angers en 1849, elle est considérée comme la
+      meilleure poire de bouche : gros fruit jaune-vert légèrement roussi, chair
+      blanche extrêmement fondante, juteuse, sucrée et finement parfumée, sans
+      aucune granulosité.
+    conseils_culture: >
+      Variété exigeante, à réserver aux bonnes situations : sol profond et frais,
+      exposition chaude et abritée, de préférence en espalier au nord de la
+      Loire. Autostérile et de pollinisation difficile — lui associer 'Williams'
+      ou 'Louise Bonne d'Avranches'. Fertilité irrégulière les premières années.
+    conseils_recolte: >
+      Cueillir en octobre, encore ferme, et finir la maturation en fruitier
+      pendant deux à trois semaines. Se consomme d'octobre à décembre.
+    erreurs_frequentes:
+      - La planter en situation froide ou ventée (fruits petits et granuleux)
+      - La laisser seule (autostérile, pollinisation exigeante)
+  en:
+    nom_commun: Pear 'Doyenné du Comice'
+    noms_alternatifs: [Comice]
+    description: >
+      Raised at the Angers horticultural society in 1849 and widely regarded as
+      the finest dessert pear: large greenish-yellow fruit, lightly russeted,
+      with exceptionally melting, juicy, sweet and finely perfumed flesh.
+      Demanding — needs deep soil and a warm, sheltered spot.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+    mediterraneen:
+      recolte: [9, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 2
+    conditions_i18n: { fr: "Fruitier frais ; finit de mûrir 2–3 semaines après cueillette", en: "Cool fruit store; finishes ripening 2–3 weeks after picking" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Doyenn%C3%A9_du_comice
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Pommier 'Court-Pendu Gris'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V016
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Court-Pendu Gris'
+    noms_alternatifs: [Court-pendu, Courtpendu gris]
+    description: >
+      Variété très ancienne, connue en Europe depuis plusieurs siècles, à fruit
+      aplati et court-pédonculé (d'où son nom), à peau grise et russetée lavée de
+      rouge terne. Chair ferme, fine et acidulée, très parfumée après quelques
+      mois de garde.
+    conseils_culture: >
+      Sa floraison très tardive lui permet d'échapper aux gelées de printemps :
+      c'est la variété de référence pour les vergers d'altitude et les fonds de
+      vallée gélifs. Arbre rustique et de longue vie. Attention : cette floraison
+      décalée limite le choix des pollinisateurs — associer une variété également
+      tardive.
+    conseils_recolte: >
+      Récolter tard, en octobre–novembre. Garde très longue, jusqu'au printemps.
+    erreurs_frequentes:
+      - Lui associer un pollinisateur précoce (floraisons décalées, pas de fruits)
+  en:
+    nom_commun: Apple 'Court-Pendu Gris'
+    description: >
+      Very old European variety with flat, short-stalked fruit and grey russeted
+      skin flushed dull red. Firm, fine, tart flesh that becomes highly aromatic
+      after some months in store. Its very late bloom escapes spring frosts,
+      making it the reference for upland and frost-pocket orchards.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 11]
+    continental:
+      recolte: [10, 11]
+
+conservation:
+  - methode: frais
+    duree_mois: 7
+    conditions_i18n: { fr: "Cave fraîche ; qualité optimale en fin d'hiver", en: "Cool cellar; at its best in late winter" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

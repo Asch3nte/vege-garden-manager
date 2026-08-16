@@ -1,0 +1,62 @@
+# Fiche fille (variété) — Prunier "Quetsche d'Alsace". Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V004
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier "Quetsche d'Alsace"
+    noms_alternatifs: [Quetsche, Quetsche commune, Zwetschge]
+    description: >
+      Prune allongée bleu-violet foncé couverte de pruine, à chair jaune-vert
+      ferme, sucrée et acidulée, se détachant nettement du noyau. C'est la prune
+      à tarte de l'Est de la France et de l'Europe centrale, aussi séchée en
+      pruneau et distillée en quetsche.
+    conseils_culture: >
+      Arbre rustique et autofertile, très résistant au froid — c'est le prunier
+      des régions continentales. Floraison assez tardive, ce qui le protège des
+      gelées. Surveiller le carpocapse des prunes et ramasser les fruits véreux.
+    conseils_recolte: >
+      Récolter fin août à septembre, quand la pruine est bien blanche et le fruit
+      légèrement mou au toucher. Se prête particulièrement bien au séchage.
+  en:
+    nom_commun: Plum "Quetsche d'Alsace"
+    noms_alternatifs: [Zwetschge, Damson-type plum]
+    description: >
+      Elongated deep blue-purple plum with a heavy bloom, and firm, sweet-tart
+      greenish-yellow freestone flesh. The tart plum of eastern France and
+      central Europe, also dried and distilled. Hardy, self-fertile and late
+      flowering.
+
+besoins:
+  temperature_min_survie: -32
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [9, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Une semaine au frais", en: "About a week chilled" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Dénoyautées, au four doux ou au déshydrateur", en: "Stoned, in a low oven or dehydrator" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop, eau-de-vie", en: "Jam, in syrup, eau-de-vie" }
+
+utilisations_culinaires_i18n:
+  fr: [Tarte, confiture, séchée, eau-de-vie, crue nature]
+  en: [Tart, jam, dried, eau-de-vie, fresh]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Quetsche
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

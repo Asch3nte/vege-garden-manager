@@ -1,0 +1,66 @@
+# Fiche fille (variété) — Prunier 'Mirabelle de Nancy'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V002
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Mirabelle de Nancy'
+    noms_alternatifs: [Mirabelle grosse, Mirabelle de Lorraine]
+    description: >
+      La grande mirabelle lorraine : petit fruit rond jaune doré ponctué de roux,
+      à chair jaune, ferme, très sucrée et parfumée, se détachant bien du noyau.
+      Emblème fruitier de la Lorraine, protégée par une IGP, elle se mange crue,
+      en tarte, en confiture et en eau-de-vie.
+    conseils_culture: >
+      Arbre rustique, autofertile — un seul sujet suffit à produire — et de bonne
+      longévité. Il craint surtout les gelées de fin d'hiver sur fleurs et la
+      moniliose par temps humide. Éclaircir les années de forte charge, la
+      variété a tendance à surproduire.
+    conseils_recolte: >
+      Récolter en août, en plusieurs passages, quand le fruit se colore de roux et
+      se détache au moindre contact. Très périssable : transformer sous deux ou
+      trois jours.
+  en:
+    nom_commun: Plum 'Mirabelle de Nancy'
+    noms_alternatifs: [Nancy mirabelle]
+    description: >
+      The large Lorraine mirabelle: small round golden fruit speckled russet,
+      with firm, very sweet, aromatic yellow freestone flesh. A protected
+      regional emblem (PGI), eaten fresh, in tarts, jam and eau-de-vie.
+      Self-fertile and hardy.
+
+cycle:
+  hauteur_adulte_cm: [300, 600]
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 8]
+    continental:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 jours seulement, fruit très périssable", en: "2–3 days only, highly perishable" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop, eau-de-vie", en: "Jam, in syrup, eau-de-vie" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Dénoyautées, à plat puis en sachet", en: "Stoned, frozen flat then bagged" }
+
+utilisations_culinaires_i18n:
+  fr: [Crue nature, tarte, confiture, eau-de-vie, séchée]
+  en: [Fresh, tart, jam, eau-de-vie, dried]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Mirabelle_de_Lorraine
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

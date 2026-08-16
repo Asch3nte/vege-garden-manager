@@ -1,0 +1,58 @@
+# Fiche fille (variété) — Pêcher de vigne. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V003
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pêcher de vigne
+    noms_alternatifs: [Pêche de vigne, Pêcher franc de semis]
+    description: >
+      Ensemble de pêchers traditionnellement plantés en bout de rang de vigne, où
+      ils servaient de sentinelles à l'oïdium — les symptômes y apparaissant
+      avant la vigne. Petits fruits duveteux à chair blanche ou rouge, très
+      parfumés et juteux, souvent adhérant au noyau. Reproduits par semis, ils
+      forment une population plutôt qu'une variété fixée.
+    conseils_culture: >
+      Issus de semis de noyau, ces pêchers sont plus rustiques et plus vigoureux
+      que les variétés greffées, et supportent mieux la cloque du pêcher.
+      Autofertiles. Chaque semis donne un arbre légèrement différent : c'est le
+      choix du jardinier qui aime la diversité plus que la régularité.
+    conseils_recolte: >
+      Récolter en septembre, tardivement, quand le fruit s'arrache sans effort.
+      Chair très juteuse, à consommer sur place ou à transformer aussitôt.
+    erreurs_frequentes:
+      - Attendre des fruits identiques d'un arbre à l'autre (population de semis)
+  en:
+    nom_commun: Vineyard peach
+    noms_alternatifs: [Pêche de vigne, seedling peach]
+    description: >
+      A group of peaches traditionally planted at the ends of vine rows, where
+      they acted as sentinels for powdery mildew. Small downy fruit with white or
+      red, very aromatic, juicy, usually clingstone flesh. Raised from seed, they
+      form a population rather than a fixed cultivar — hardier and more
+      leaf-curl-tolerant than grafted varieties.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 jours, chair très juteuse", en: "2–3 days, very juicy flesh" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop, vin de pêche", en: "Jam, in syrup, peach wine" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

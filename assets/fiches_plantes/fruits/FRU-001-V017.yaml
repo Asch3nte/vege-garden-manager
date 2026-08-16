@@ -1,0 +1,55 @@
+# Fiche fille (variété) — Pommier 'Transparente de Croncels'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V017
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Transparente de Croncels'
+    noms_alternatifs: [Croncels, Transparente]
+    description: >
+      Variété française obtenue à Troyes au XIXᵉ siècle, à gros fruit jaune pâle
+      presque translucide, parfois lavé de rose. Chair blanche, tendre, fondante
+      et juteuse, d'un parfum délicat. C'est une pomme d'été, l'une des premières
+      disponibles au verger.
+    conseils_culture: >
+      Arbre vigoureux, rustique et très fertile, adapté au verger de plein vent
+      et aux régions fraîches. La chair très tendre se marque au moindre choc :
+      cueillir à la main, ne jamais gauler.
+    conseils_recolte: >
+      Récolter en août, dès que la peau jaunit. Ne se garde pas : à consommer ou
+      à transformer dans les dix jours. Excellente en compote.
+    erreurs_frequentes:
+      - Vouloir la stocker (variété d'été sans aptitude à la garde)
+  en:
+    nom_commun: Apple 'Transparente de Croncels'
+    description: >
+      French variety raised at Troyes in the 19th century: large, pale yellow,
+      almost translucent fruit, sometimes pink-flushed, with tender, melting,
+      juicy white flesh. A summer apple — one of the first of the season — that
+      does not keep.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 8]
+    continental:
+      recolte: [8, 9]
+    mediterraneen:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Quelques jours seulement, chair fragile", en: "A few days only, fragile flesh" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Compote, jus", en: "Compote, juice" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Transparente_de_Croncels
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

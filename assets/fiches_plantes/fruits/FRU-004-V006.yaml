@@ -1,0 +1,57 @@
+# Fiche fille (variété) — Prunier "Reine-Claude d'Oullins". Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V006
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier "Reine-Claude d'Oullins"
+    noms_alternatifs: [Oullins, Golden Gage]
+    description: >
+      Grosse reine-claude jaune doré parfois marbrée de vert, à chair jaune,
+      tendre, juteuse et sucrée, d'un parfum plus discret que la Reine-Claude
+      dorée mais d'un calibre bien supérieur. Variété précoce parmi les prunes
+      d'été.
+    conseils_culture: >
+      Arbre vigoureux, autofertile et de mise à fruit rapide : c'est souvent le
+      prunier conseillé pour un premier verger. Il sert aussi de bon
+      pollinisateur aux variétés autostériles. Éclaircir les années chargées, la
+      chair devient sinon aqueuse.
+    conseils_recolte: >
+      Récolter en août, dès que le jaune se réchauffe et que le fruit cède
+      légèrement. À consommer rapidement, la chair tendre supporte mal l'attente.
+  en:
+    nom_commun: Plum "Reine-Claude d'Oullins"
+    noms_alternatifs: [Oullins Golden Gage]
+    description: >
+      Large golden-yellow gage, sometimes marbled green, with tender, juicy,
+      sweet yellow flesh — less perfumed than the true green gage but much
+      larger. An early summer plum, self-fertile and quick to bear, and a good
+      pollinator for self-sterile varieties.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 8]
+    continental:
+      recolte: [8, 8]
+    mediterraneen:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Quelques jours, chair tendre", en: "A few days, tender flesh" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Reine-claude
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

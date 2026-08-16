@@ -1,0 +1,57 @@
+# Fiche fille (variété) — Vigne 'Muscat de Hambourg'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V002
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Muscat de Hambourg'
+    noms_alternatifs: [Muscat noir de Hambourg, Black Muscat]
+    description: >
+      Cépage de table noir à grains ovoïdes bleu-violet, à chair juteuse et
+      fondante, au muscat prononcé et persistant. C'est le raisin de table
+      muscaté de référence en France, cultivé aussi bien en plein champ dans le
+      Midi qu'en serre froide plus au nord.
+    conseils_culture: >
+      Vigueur moyenne, à conduire en taille courte sur cordon ou en treille.
+      Réclame de la chaleur pour développer son arôme : au nord de la Loire, la
+      cultiver contre un mur plein sud ou sous serre. Sensible à l'oïdium et au
+      mildiou, surveiller le feuillage dès la floraison.
+    conseils_recolte: >
+      Récolter en septembre, quand les grains sont uniformément colorés et que
+      l'arôme muscaté se sent au toucher. Couper la grappe entière au sécateur.
+    erreurs_frequentes:
+      - La récolter à la couleur seule (le muscat se forme après la coloration)
+  en:
+    nom_commun: Grape 'Muscat of Hamburg'
+    noms_alternatifs: [Black Muscat]
+    description: >
+      Black table grape with oval blue-purple berries and juicy, melting flesh
+      carrying a pronounced, lasting muscat aroma. The reference muscat table
+      grape in France, grown outdoors in the south and under cold glass further
+      north.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 10]
+    continental:
+      recolte: [9, 10]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 semaines en cave fraîche, grappes suspendues", en: "2–3 weeks in a cool cellar, bunches hung" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Jus, gelée", en: "Juice, jelly" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Muscat_de_Hambourg
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

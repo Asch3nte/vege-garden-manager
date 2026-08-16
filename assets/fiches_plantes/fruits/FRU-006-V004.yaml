@@ -1,0 +1,62 @@
+# Fiche fille (variété) — Figuier 'Ronde de Bordeaux'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V004
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Ronde de Bordeaux'
+    description: >
+      Figue unifère de petit calibre, à peau noire violacée et chair rouge sombre,
+      d'une densité de sucre remarquable — c'est l'une des figues les plus sucrées
+      qui soient. Variété précoce et très rustique, particulièrement adaptée aux
+      régions à été court.
+    conseils_culture: >
+      Unifère : la récolte se fait uniquement sur les pousses de l'année, ce qui
+      autorise une taille d'hiver franche sans perte de production. Sa rusticité
+      lui permet de repartir de souche après un hiver sévère. Excellente en pot.
+    conseils_recolte: >
+      Récolter en août, dès que la figue noircit et s'incline. Les fruits sont
+      petits mais nombreux ; étaler la cueillette sur plusieurs semaines.
+  en:
+    nom_commun: Fig 'Ronde de Bordeaux'
+    description: >
+      A small uniferous fig with dark purple-black skin and deep red flesh of
+      remarkable sugar density — one of the sweetest figs there is. Early and
+      very hardy, particularly suited to regions with a short summer, and it
+      takes a hard winter prune without loss of crop.
+
+besoins:
+  temperature_min_survie: -18
+
+rusticite:
+  zone_min: zone6
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [8, 9]
+    mediterraneen:
+      recolte: [7, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 jours, fruit fragile", en: "1–2 days, fragile fruit" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Petites figues qui sèchent bien entières", en: "Small figs that dry well whole" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture", en: "Jam" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

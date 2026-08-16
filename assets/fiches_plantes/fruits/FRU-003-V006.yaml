@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Cerisier 'Hedelfingen'. Hérite de FRU-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-003-V006
+parent_id: FRU-003
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Cerisier 'Hedelfingen'
+    noms_alternatifs: [Géante d'Hedelfingen, Bigarreau Hedelfingen]
+    description: >
+      Bigarreau allemand ancien, à fruit allongé rouge très foncé, presque noir à
+      pleine maturité, chair ferme, juteuse et sucrée. Variété tardive, elle
+      prolonge la saison des cerises de deux à trois semaines après les variétés
+      précoces.
+    conseils_culture: >
+      Arbre vigoureux, à port un peu étalé, rustique et régulier. Réputée peu
+      sensible à l'éclatement, elle convient bien aux régions à étés humides.
+      Autostérile : prévoir un pollinisateur compatible.
+    conseils_recolte: >
+      Récolter en juillet, quand le fruit vire au rouge très sombre. La maturité
+      tardive expose davantage à la mouche de la cerise : ramasser tous les
+      fruits, y compris véreux, pour casser le cycle.
+  en:
+    nom_commun: Cherry 'Hedelfingen'
+    description: >
+      Old German bigarreau with elongated, very dark red — almost black — fruit
+      and firm, juicy, sweet flesh. A late variety that extends the cherry season
+      by two or three weeks, and is notably resistant to rain cracking.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 7]
+    continental:
+      recolte: [7, 7]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunus_avium
+contributeurs:
+  - "@potagerer"

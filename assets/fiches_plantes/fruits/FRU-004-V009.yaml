@@ -1,0 +1,61 @@
+# Fiche fille (variété) — Prunier "Prune d'Ente". Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V009
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier "Prune d'Ente"
+    noms_alternatifs: [Prune d'Agen, Pruneau d'Agen]
+    description: >
+      Variété du Sud-Ouest, à fruit ovale violet foncé couvert de pruine, à chair
+      jaune ambré, très sucrée et peu acide. Séchée, elle donne le pruneau
+      d'Agen, protégé par une IGP. Le nom « d'Ente » vient de l'ancien français
+      « enter », greffer : c'est littéralement la prune greffée.
+    conseils_culture: >
+      Arbre vigoureux, autofertile, qui réclame de la chaleur en fin d'été pour
+      concentrer les sucres — au nord de la Loire, les fruits restent aqueux.
+      Sensible au carpocapse et à la moniliose. Se conduit traditionnellement en
+      demi-tige, à large espacement.
+    conseils_recolte: >
+      Récolter en août–septembre, à surmaturité : le fruit doit être mou et prêt
+      à tomber. Sécher immédiatement pour éviter la fermentation.
+    erreurs_frequentes:
+      - La cueillir ferme (pruneau fade, sucres insuffisamment concentrés)
+  en:
+    nom_commun: Plum "Prune d'Ente"
+    noms_alternatifs: [Agen plum, Agen prune]
+    description: >
+      A south-west French variety with oval, deep purple, bloom-covered fruit and
+      very sweet, low-acid amber flesh. Dried, it yields the PGI-protected
+      pruneau d'Agen. Self-fertile, but needs late-summer heat to concentrate
+      its sugars.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [9, 9]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "En pruneaux, séchage lent (four doux 70 °C ou déshydrateur)", en: "As prunes, slow-dried (low oven 70 °C or dehydrator)" }
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Quelques jours, fruit cueilli à surmaturité", en: "A few days, picked overripe" }
+
+utilisations_culinaires_i18n:
+  fr: [Séchée en pruneau, confiture, lapin aux pruneaux, far breton]
+  en: [Dried as prunes, jam, savoury braises, custard cakes]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pruneau_d%27Agen
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

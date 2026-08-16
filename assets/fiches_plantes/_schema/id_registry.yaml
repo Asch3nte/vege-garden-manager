@@ -339,20 +339,90 @@ aromatiques:
 fruits:
   FRU-001: Pommier
   FRU-001-V001: Pommier 'Reine des Reinettes'
+  FRU-001-V002: Pommier 'Golden Delicious'
+  FRU-001-V003: Pommier 'Belle de Boskoop'
+  FRU-001-V004: Pommier 'Reinette grise du Canada'
+  FRU-001-V005: Pommier 'Reinette Clochard'
+  FRU-001-V006: Pommier "Cox's Orange Pippin"
+  FRU-001-V007: Pommier 'Granny Smith'
+  FRU-001-V008: Pommier "Calville Blanc d'Hiver"
+  FRU-001-V009: Pommier 'Chantecler'
+  FRU-001-V010: Pommier 'Elstar'
+  FRU-001-V011: Pommier 'Gala'
+  FRU-001-V012: Pommier 'Jonagold'
+  FRU-001-V013: Pommier 'Melrose'
+  FRU-001-V014: Pommier 'Patte de Loup'
+  FRU-001-V015: Pommier 'Api étoilé'
+  FRU-001-V016: Pommier 'Court-Pendu Gris'
+  FRU-001-V017: Pommier 'Transparente de Croncels'
+  FRU-001-V018: Pommier à cidre 'Binet Rouge'
+  FRU-001-V019: Pommier à cidre 'Douce Moën'
   FRU-002: Poirier
   FRU-002-V001: Poirier 'Conférence'
+  FRU-002-V002: Poirier 'Williams'
+  FRU-002-V003: Poirier 'Doyenné du Comice'
+  FRU-002-V004: Poirier 'Beurré Hardy'
+  FRU-002-V005: Poirier "Louise Bonne d'Avranches"
+  FRU-002-V006: Poirier 'Docteur Jules Guyot'
+  FRU-002-V007: Poirier 'Passe-Crassane'
+  FRU-002-V008: Poirier 'Curé'
+  FRU-002-V009: Poirier 'Général Leclerc'
+  FRU-002-V010: Poirier 'Beurré Giffard'
+  FRU-002-V011: Poirier à poiré 'Plant de Blanc'
   FRU-003: Cerisier
   FRU-003-V001: Cerisier 'Bigarreau Burlat'
+  FRU-003-V002: Cerisier 'Napoléon'
+  FRU-003-V003: Cerisier 'Reverchon'
+  FRU-003-V004: Cerisier 'Summit'
+  FRU-003-V005: Cerisier 'Van'
+  FRU-003-V006: Cerisier 'Hedelfingen'
+  FRU-003-V007: Cerisier 'Cœur de Pigeon'
+  FRU-003-V008: Cerisier 'Bigarreau Noir de Meched'
   FRU-004: Prunier
   FRU-004-V001: Prunier 'Reine-Claude dorée'
+  FRU-004-V002: Prunier 'Mirabelle de Nancy'
+  FRU-004-V003: Prunier 'Mirabelle de Metz'
+  FRU-004-V004: Prunier "Quetsche d'Alsace"
+  FRU-004-V005: Prunier 'Président'
+  FRU-004-V006: Prunier "Reine-Claude d'Oullins"
+  FRU-004-V007: Prunier 'Reine-Claude de Bavay'
+  FRU-004-V008: Prunier 'Sainte-Catherine'
+  FRU-004-V009: Prunier "Prune d'Ente"
+  FRU-004-V010: Prunier 'Stanley'
   FRU-005: Pêcher
   FRU-005-V001: Pêcher 'Reine des vergers'
+  FRU-005-V002: Pêcher 'Sanguine de Savoie'
+  FRU-005-V003: Pêcher de vigne
+  FRU-005-V004: Pêcher 'Amsden'
+  FRU-005-V005: Pêcher 'Redhaven'
+  FRU-005-V006: Nectarinier 'Fantasia'
+  FRU-005-V007: Nectarinier 'Nectarose'
+  FRU-005-V008: Pêcher plat 'Saturne'
   FRU-006: Figuier
   FRU-006-V001: Figuier 'Violette de Bordeaux'
+  FRU-006-V002: Figuier "Goutte d'Or"
+  FRU-006-V003: Figuier 'Madeleine des Deux Saisons'
+  FRU-006-V004: Figuier 'Ronde de Bordeaux'
+  FRU-006-V005: Figuier 'Dalmatie'
+  FRU-006-V006: Figuier 'Col de Dame'
+  FRU-006-V007: Figuier 'Brown Turkey'
+  FRU-006-V008: Figuier 'Noire de Caromb'
   FRU-007: Noisetier
   FRU-007-V001: Noisetier 'Fertile de Coutard'
+  FRU-007-V002: Noisetier 'Merveille de Bollwiller'
+  FRU-007-V003: Noisetier "Longue d'Espagne"
+  FRU-007-V004: Noisetier 'Butler'
+  FRU-007-V005: Noisetier 'Ennis'
+  FRU-007-V006: Noisetier pourpre
   FRU-008: Vigne
   FRU-008-V001: Vigne 'Chasselas doré'
+  FRU-008-V002: Vigne 'Muscat de Hambourg'
+  FRU-008-V003: Vigne 'Cardinal'
+  FRU-008-V004: Vigne 'Italia'
+  FRU-008-V005: Vigne 'Danlas'
+  FRU-008-V006: Vigne 'Alphonse Lavallée'
+  FRU-008-V007: Vigne 'Perlette'
+  FRU-008-V008: Vigne 'Centennial Seedless'
 petits_fruits:
   PFR-001: Fraisier
   PFR-001-V001: Fraisier Gariguette

@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Pommier 'Reinette Clochard'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V005
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Reinette Clochard'
+    noms_alternatifs: [Clochard, Pomme de Poitou]
+    description: >
+      Variété ancienne du Poitou, à petite ou moyenne pomme jaune verdâtre
+      légèrement russetée. Chair ferme, fine et sucrée, d'un parfum discret qui
+      se développe en cave. Réputée pour sa très longue conservation : elle se
+      mange encore au printemps suivant.
+    conseils_culture: >
+      Arbre rustique et peu exigeant, bien adapté aux vergers de plein vent.
+      Mise à fruit un peu lente ; production ensuite régulière. Peu sensible aux
+      maladies du feuillage.
+    conseils_recolte: >
+      Récolter tard, en octobre–novembre. Le fruit est immangeable à la cueillette
+      et ne prend sa qualité qu'après deux à trois mois de cave.
+    erreurs_frequentes:
+      - La goûter à la récolte et la juger sans intérêt (elle se bonifie en cave)
+  en:
+    nom_commun: Apple 'Reinette Clochard'
+    description: >
+      Heirloom apple from Poitou, small to medium, greenish-yellow and lightly
+      russeted, with firm, fine, sweet flesh. Renowned for exceptionally long
+      keeping — still edible the following spring.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 11]
+    continental:
+      recolte: [10, 11]
+
+conservation:
+  - methode: frais
+    duree_mois: 7
+    conditions_i18n: { fr: "Cave fraîche : qualité optimale de janvier à avril", en: "Cool cellar: at its best from January to April" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

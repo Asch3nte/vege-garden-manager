@@ -1,0 +1,55 @@
+# Fiche fille (variété) — Poirier 'Curé'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V008
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Curé'
+    noms_alternatifs: [Belle Angevine, Poire de Curé, Monsieur le Curé]
+    description: >
+      Variété découverte en Vendée au début du XIXᵉ siècle par un curé de
+      campagne, d'où son nom. Très gros fruit allongé, vert-jaune souvent marqué
+      d'une ligne rouille sur toute sa longueur. Chair blanche, ferme et peu
+      juteuse, sans grand intérêt crue : c'est une poire à cuire, qui prend à la
+      cuisson une belle couleur rouge et un parfum remarquable.
+    conseils_culture: >
+      Arbre très vigoureux, rustique et productif, l'un des poiriers les plus
+      faciles en verger de plein vent. Supporte les sols moyens et les climats
+      froids. Prévoir un pollinisateur.
+    conseils_recolte: >
+      Récolter en octobre. Se conserve plusieurs mois en fruitier frais et
+      s'utilise tout l'hiver, pochée au vin ou au sirop.
+    erreurs_frequentes:
+      - La juger sur sa qualité crue (variété destinée à la cuisson)
+  en:
+    nom_commun: Pear 'Curé'
+    noms_alternatifs: [Belle Angevine, Vicar of Winkfield]
+    description: >
+      Found in the Vendée in the early 19th century by a country priest, hence
+      its name. Very large elongated greenish-yellow fruit, often with a russet
+      line down its length. Firm, dryish white flesh of little interest raw — a
+      cooking pear that turns deep red and highly aromatic when poached.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Fruitier frais, tout l'hiver", en: "Cool fruit store, through the winter" }
+
+utilisations_culinaires_i18n:
+  fr: [Pochée au vin, au sirop, tarte, compote]
+  en: [Poached in wine, in syrup, tart, compote]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

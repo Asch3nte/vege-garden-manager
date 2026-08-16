@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Poirier 'Général Leclerc'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V009
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Général Leclerc'
+    description: >
+      Variété française obtenue au XXᵉ siècle, apparue comme mutation du 'Doyenné
+      du Comice' dont elle a hérité la finesse. Gros fruit entièrement roussi de
+      bronze doré, à chair blanche, très fondante, juteuse et sucrée. Poire
+      d'automne de haute qualité gustative.
+    conseils_culture: >
+      Arbre de vigueur moyenne, moins exigeant que le 'Comice' et plus régulier
+      en production, ce qui en fait un bon choix de remplacement au jardin.
+      Prévoir un pollinisateur.
+    conseils_recolte: >
+      Cueillir début octobre, ferme, et finir la maturation deux à trois semaines
+      en fruitier. Se consomme d'octobre à décembre.
+  en:
+    nom_commun: Pear 'Général Leclerc'
+    description: >
+      20th-century French variety, a sport of 'Doyenné du Comice' whose fineness
+      it inherits. Large fruit fully covered in golden-bronze russet, with very
+      melting, juicy, sweet white flesh. Less demanding and more regular than its
+      parent — a good garden substitute.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Fruitier frais ; consommable d'octobre à décembre", en: "Cool fruit store; eaten October to December" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

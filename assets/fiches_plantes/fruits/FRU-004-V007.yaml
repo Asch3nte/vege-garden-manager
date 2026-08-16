@@ -1,0 +1,52 @@
+# Fiche fille (variété) — Prunier 'Reine-Claude de Bavay'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V007
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Reine-Claude de Bavay'
+    noms_alternatifs: [Bavay, Reine-Claude tardive de Bavay]
+    description: >
+      Obtenue en Belgique au XIXᵉ siècle par le major Esperen, c'est la
+      reine-claude tardive de référence : gros fruit vert-jaune marbré, à chair
+      ferme, très sucrée et parfumée, adhérant un peu au noyau. Elle prolonge la
+      saison des reines-claudes jusqu'en septembre.
+    conseils_culture: >
+      Arbre de vigueur moyenne, autofertile et régulier, adapté aux formes
+      palissées comme au plein vent. Floraison tardive, utile dans les secteurs
+      gélifs. Sensible à la moniliose : supprimer les fruits momifiés en hiver.
+    conseils_recolte: >
+      Récolter en septembre, quand le fond vert vire au jaune et que le fruit
+      devient souple. Se conserve un peu mieux que les reines-claudes d'été.
+  en:
+    nom_commun: Plum 'Reine-Claude de Bavay'
+    noms_alternatifs: [Bavay's Green Gage]
+    description: >
+      Raised in Belgium in the 19th century by Major Esperen, the reference late
+      gage: large marbled greenish-yellow fruit with firm, very sweet, aromatic
+      flesh that clings slightly to the stone. Extends the gage season into
+      September. Self-fertile and late flowering.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 semaines au frais", en: "1–2 weeks chilled" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Reine-claude
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

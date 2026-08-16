@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Pommier à cidre 'Douce Moën'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V019
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier à cidre 'Douce Moën'
+    noms_alternatifs: [Douce Moen, Doux Moën]
+    description: >
+      Variété à cidre bretonne parmi les plus répandues du Finistère, classée
+      douce : fruit de petit calibre, jaune verdâtre lavé de rouge, peu acide et
+      modérément tannique. Elle donne des moûts sucrés et souples, utilisés en
+      assemblage pour arrondir des cidres plus amers.
+    conseils_culture: >
+      Arbre rustique et productif, bien adapté au climat océanique breton, conduit
+      traditionnellement en haute tige. Floraison de mi-saison. Prévoir un
+      pollinisateur ; alternance possible sur les sujets âgés.
+    conseils_recolte: >
+      Récolter en octobre, au sol, une fois les fruits tombés à pleine maturité.
+      Mûrir en tas une à deux semaines avant le pressage.
+  en:
+    nom_commun: Cider apple 'Douce Moën'
+    description: >
+      One of the most widely planted Breton cider varieties, in the sweet class:
+      small greenish-yellow fruit flushed red, low in acid and moderately tannic.
+      Yields sweet, supple musts used in blends to round out bitterer ciders.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Cidre ; mûrissement en tas avant pressage", en: "Cider; sweated in heaps before pressing" }
+
+utilisations_culinaires_i18n:
+  fr: [Cidre, jus]
+  en: [Cider, juice]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cidre
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

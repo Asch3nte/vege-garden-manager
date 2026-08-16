@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Nectarinier 'Nectarose'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V007
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Nectarinier 'Nectarose'
+    noms_alternatifs: [Nectarine Nectarose]
+    description: >
+      Nectarine française à chair blanche, à peau lisse rouge carmin lavée de
+      crème. Chair fine, très juteuse, sucrée et délicatement parfumée, moins
+      acidulée que les nectarines à chair jaune. Variété de mi-saison appréciée
+      pour sa finesse gustative.
+    conseils_culture: >
+      Autofertile, de vigueur moyenne. La chair blanche est plus fragile que la
+      jaune : la variété demande une situation abritée du vent et une cueillette
+      soigneuse. Même conduite que le pêcher — taille annuelle des rameaux et
+      protection contre la cloque.
+    conseils_recolte: >
+      Récolter en juillet–août, en plusieurs passages, dès que la chair cède
+      sous une pression légère. Consommer sous deux ou trois jours.
+  en:
+    nom_commun: Nectarine 'Nectarose'
+    description: >
+      French white-fleshed nectarine, smooth-skinned, carmine over cream. Fine,
+      very juicy, sweet and delicately perfumed flesh, less acidic than
+      yellow-fleshed nectarines. Self-fertile; the tender white flesh calls for a
+      sheltered spot and careful picking.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 8]
+    continental:
+      recolte: [8, 8]
+    mediterraneen:
+      recolte: [7, 7]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 jours, chair blanche fragile", en: "2–3 days, tender white flesh" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Nectarine
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

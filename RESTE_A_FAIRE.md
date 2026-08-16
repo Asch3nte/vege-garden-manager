@@ -46,7 +46,12 @@
 > « maximum de fiches, mères ET filles ». Nouvelle entrée « Contenu du
 > catalogue » en fin de document.
 > Mis à jour le 2026-08-16 (fin de session) : **lots de contenu 12 (aromatiques,
-> 38 fiches) et 13 (piments, 25 fiches)** livrés → **375 fiches**. Merge de
+> 38 fiches) et 13 (piments, 25 fiches)** livrés → **375 fiches**. **Lot 14
+> (fruitiers — filles, 70 fiches)** livré ensuite → **445 fiches** : les 8 mères
+> `FRU` n'avaient qu'une variété chacune, elles sont désormais toutes pourvues.
+> Un arbitrage a été laissé au dev : vigne **'Isabelle'** (hybride
+> *V. labrusca* × *vinifera*) demande une **mère distincte**, le
+> `nom_scientifique` n'étant pas surchargeable par une fille (ADR-0005). Merge de
 > `fix/dates-et-regroupement-taches` (correctif dates UTC↔local + regroupement
 > des tâches par geste, **ADR-0020** après renumérotation). **Nettoyage des
 > branches** : toutes les branches mergées supprimées (locales + distantes) ;
@@ -324,13 +329,15 @@ Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
 Tout le reste se range en :
 
 - **Contenu du catalogue** (chantier long, parallèle au dev — feuille de route
-  [`FICHES A CREER.md`](FICHES%20A%20CREER.md)) : **312 fiches livrées sur une
-  cible décrite de ~1 259** (235 mères + 1 024 variétés), objectif « maximum de
-  fiches, mères ET filles ». Dernier lot : **lot 11** (amaranthacées, 2026-07-15),
-  suivi de la **fusion des deux efforts divergents** (2026-07-18). Priorité :
-  **aromatiques** (7 mères, romarin/sauge/origan/mélisse/estragon/laurier
-  absents), puis piment (arbitrage à trancher), fruits/petits fruits (1 variété
-  par espèce aujourd'hui).
+  [`FICHES A CREER.md`](FICHES%20A%20CREER.md)) : **445 fiches livrées sur une
+  cible décrite de ~1 288** (239 mères + 1 049 variétés), objectif « maximum de
+  fiches, mères ET filles ». Derniers lots : **12** (aromatiques, +38), **13**
+  (piments, +25) et **14** (fruitiers — filles, +70, 2026-08-16). Priorité
+  suivante : les **mères fruitières manquantes** (abricotier, griottier,
+  cognassier, kaki, noyer, châtaignier, amandier, kiwi, agrumes…, ~21 mères),
+  puis les **petits fruits** (10 mères + ~45 filles sur les 5 mères existantes).
+  Arbitrages encore ouverts : vigne **'Isabelle'** (hybride *V. labrusca* →
+  mère distincte), potiron/potimarron, cornichon, pop-corn, fraisier des bois.
 - **Pré-release / distribution** (groupé avant la sortie) : keystore release +
   job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
   éditoriale du glossaire puis sa traduction `en`, vérification dev Android.

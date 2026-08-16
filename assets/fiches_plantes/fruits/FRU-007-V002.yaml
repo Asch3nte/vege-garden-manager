@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Noisetier 'Merveille de Bollwiller'. Hérite de FRU-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-007-V002
+parent_id: FRU-007
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Noisetier 'Merveille de Bollwiller'
+    noms_alternatifs: [Hallesche Riesennuss, Merveille de Bolwiller]
+    description: >
+      Variété alsacienne ancienne, à très grosse noisette arrondie à coque épaisse
+      et amande bien remplie, de saveur douce. C'est l'une des variétés les plus
+      rustiques du genre, réputée pour sa régularité de production même en climat
+      rude.
+    conseils_culture: >
+      Floraison tardive : elle échappe aux gelées qui détruisent les chatons des
+      variétés précoces, ce qui en fait le choix des régions froides et des fonds
+      de vallée. Comme tous les noisetiers, elle demande une seconde variété pour
+      être fécondée — associer 'Fertile de Coutard' ou 'Longue d'Espagne'.
+    conseils_recolte: >
+      Récolter en septembre, quand l'involucre brunit et libère la noisette.
+      Sécher trois semaines à l'air avant stockage.
+  en:
+    nom_commun: Hazel 'Merveille de Bollwiller'
+    noms_alternatifs: [Hall's Giant]
+    description: >
+      Old Alsatian variety with very large round nuts, a thick shell and a
+      well-filled, mild kernel. One of the hardiest hazels and a reliable cropper
+      even in harsh climates; its late flowering escapes the frosts that ruin
+      early catkins.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Noisetier_commun
+contributeurs:
+  - "@potagerer"

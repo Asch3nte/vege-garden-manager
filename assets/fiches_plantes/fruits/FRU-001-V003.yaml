@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Pommier 'Belle de Boskoop'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V003
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Belle de Boskoop'
+    noms_alternatifs: [Boskoop, Reinette de Montfort]
+    description: >
+      Grosse pomme néerlandaise à peau rugueuse (russetée) vert-brun lavé de
+      rouge, chair ferme, acidulée et parfumée. Pomme à cuire par excellence :
+      elle tient à la cuisson et donne des tartes et compotes très typées. Arbre
+      vigoureux et rustique, adapté aux régions fraîches.
+    conseils_culture: >
+      Variété triploïde : son pollen est stérile. Elle a besoin d'un
+      pollinisateur, et ne peut elle-même en servir — prévoir deux autres
+      variétés diploïdes à floraison concomitante. Vigueur forte : préférer un
+      porte-greffe faible si la place manque.
+    conseils_recolte: >
+      Récolter en octobre. La chair s'adoucit après quelques semaines de garde ;
+      se conserve jusqu'en mars–avril en cave fraîche.
+    erreurs_frequentes:
+      - Compter dessus comme pollinisateur (pollen stérile, variété triploïde)
+      - La cueillir trop tôt (acidité excessive, arôme absent)
+  en:
+    nom_commun: Apple 'Belle de Boskoop'
+    description: >
+      Large Dutch apple with rough russeted skin and firm, tart, aromatic flesh —
+      a classic cooking apple that holds its shape. Vigorous, hardy tree.
+      Triploid: its pollen is sterile, so it needs two other pollinators.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+utilisations_culinaires_i18n:
+  fr: [Tarte, compote, pomme au four, jus, cidre]
+  en: [Tart, compote, baked apple, juice, cider]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Belle_de_Boskoop
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

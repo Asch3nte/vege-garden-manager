@@ -1,0 +1,61 @@
+# Fiche fille (variété) — Poirier à poiré 'Plant de Blanc'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V011
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier à poiré 'Plant de Blanc'
+    noms_alternatifs: [Plant de blanc]
+    description: >
+      Variété à poiré du bocage domfrontais, en Normandie, où elle entre dans les
+      assemblages de l'appellation Poiré Domfront. Petit fruit astringent et
+      tannique, impropre à la consommation crue, mais riche en sucres et en
+      composés aromatiques qui donnent au poiré sa finesse et son effervescence
+      naturelle.
+    conseils_culture: >
+      Poirier de haute tige, très vigoureux et de très longue vie — les sujets
+      centenaires sont courants dans les prés-vergers normands. Mise à fruit
+      lente (souvent dix ans et plus). Réclame de la place et un climat
+      océanique frais.
+    conseils_recolte: >
+      Récolter tardivement, en octobre, en ramassant les fruits tombés au sol.
+      Laisser mûrir en tas quelques jours avant le pressage.
+    erreurs_frequentes:
+      - L'attendre productive rapidement (mise à fruit très lente en haute tige)
+  en:
+    nom_commun: Perry pear 'Plant de Blanc'
+    description: >
+      A perry pear of the Domfront bocage in Normandy, used in the Poiré
+      Domfront appellation blends. Small astringent, tannic fruit, inedible raw,
+      but rich in sugars and aromatics that give perry its finesse and natural
+      sparkle. Grown as a very long-lived standard tree, slow to come into bear.
+
+cycle:
+  duree_avant_recolte_jours: [2555, 3650]
+  hauteur_adulte_cm: [600, 1500]
+  espacement_cm: 1000
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Poiré ; mûrissement en tas avant pressage", en: "Perry; sweated in heaps before pressing" }
+
+utilisations_culinaires_i18n:
+  fr: [Poiré, jus fermenté]
+  en: [Perry, fermented juice]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poir%C3%A9
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

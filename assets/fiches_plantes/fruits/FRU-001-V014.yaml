@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Pommier 'Patte de Loup'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V014
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Patte de Loup'
+    description: >
+      Variété ancienne de l'Ouest de la France, reconnaissable à la crevasse
+      liégeuse en forme de griffe qui marque chaque fruit et lui a donné son nom.
+      Petite pomme jaune-vert lavée de rouge sombre, à chair ferme, sucrée et
+      très parfumée, d'un goût acidulé caractéristique.
+    conseils_culture: >
+      Arbre rustique et vigoureux, réputé peu sensible à la tavelure : c'est une
+      des variétés anciennes les plus faciles à conduire sans traitement. Adaptée
+      au verger de plein vent. Prévoir un pollinisateur.
+    conseils_recolte: >
+      Récolter en octobre. Le fruit se garde bien tout l'hiver ; la crevasse
+      caractéristique n'est pas un défaut mais la marque de la variété.
+    erreurs_frequentes:
+      - Écarter les fruits crevassés en les croyant abîmés (c'est le trait variétal)
+  en:
+    nom_commun: Apple 'Patte de Loup'
+    description: >
+      Heirloom variety from western France, recognisable by the claw-shaped
+      russet crack that marks every fruit and gives it its name. Small
+      greenish-yellow apple flushed deep red, with firm, sweet, highly aromatic
+      flesh. Notably scab-resistant.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche, tout l'hiver", en: "Cool cellar, through the winter" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"
