@@ -74,7 +74,8 @@ void main() {
     await repo.sauvegarder(equip(dateRetrait: DateTime.utc(2026, 4, 30)));
     final e = (await repo.obtenirParId('eq1'))!;
     expect(e.estEnService, isFalse);
-    expect(e.dateRetrait, DateTime.utc(2026, 4, 30));
+    // Dates come back in local time (see `DateIso`) — compare instants.
+    expect(e.dateRetrait!.isAtSameMomentAs(DateTime.utc(2026, 4, 30)), isTrue);
   });
 
   test('sauvegarder updates an existing equipment', () async {

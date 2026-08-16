@@ -92,7 +92,9 @@ void main() {
     final o = (await repo.obtenirParCible(CibleObservation.plantation, 'pl1'))
         .single;
     expect(o.resolu, isTrue);
-    expect(o.dateResolution, DateTime.utc(2026, 5, 20));
+    // Dates come back in local time (see `DateIso`) — compare instants.
+    expect(
+        o.dateResolution!.isAtSameMomentAs(DateTime.utc(2026, 5, 20)), isTrue);
   });
 
   test('obtenirNonResolues returns only unresolved', () async {

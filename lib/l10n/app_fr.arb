@@ -310,6 +310,10 @@
   "@actionSupprimer": {
     "description": "Action générique : supprimer."
   },
+  "actionOuvrirTache": "Ouvrir la tâche",
+  "@actionOuvrirTache": {
+    "description": "Action de menu : ouvrir le détail d'une tâche groupée (le tap sur la ligne la coche)."
+  },
   "actionModifier": "Modifier",
   "@actionModifier": {
     "description": "Action générique : modifier."
@@ -1006,6 +1010,27 @@
       "faites": { "type": "int" },
       "total": { "type": "int" }
     }
+  },
+  "gesteGroupeCompte": "{count, plural, =1{1 tâche} other{{count} tâches}}",
+  "@gesteGroupeCompte": {
+    "description": "Nombre de tâches regroupées sous un même geste, sur une même journée.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "gesteGroupeToutCocher": "Tout marquer comme fait",
+  "@gesteGroupeToutCocher": {
+    "description": "Infobulle du bouton qui coche d'un coup toutes les tâches du groupe."
+  },
+  "gesteGroupeToutRouvrir": "Tout rouvrir",
+  "@gesteGroupeToutRouvrir": {
+    "description": "Infobulle du bouton qui rouvre d'un coup un groupe entièrement fait."
+  },
+  "gesteGroupeDeplier": "Voir le détail",
+  "@gesteGroupeDeplier": {
+    "description": "Infobulle du chevron qui déplie les sous-tâches d'un groupe."
+  },
+  "gesteGroupeReplier": "Masquer le détail",
+  "@gesteGroupeReplier": {
+    "description": "Infobulle du chevron qui replie les sous-tâches d'un groupe."
   },
   "calendrierVide": "Rien de prévu — profitez du jardin.",
   "@calendrierVide": { "description": "État vide de l'agenda." },

@@ -87,7 +87,8 @@ void main() {
     ));
     final p = (await repo.obtenirParParcelle('par1')).single;
     expect(p.statut, StatutPlantation.recoltee);
-    expect(p.dateFinReelle, DateTime.utc(2026, 9, 1));
+    // Dates come back in local time (see `DateIso`) — compare instants.
+    expect(p.dateFinReelle!.isAtSameMomentAs(DateTime.utc(2026, 9, 1)), isTrue);
   });
 
   test('obtenirActives returns only enCours plantations', () async {

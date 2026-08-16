@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/utils/date_iso.dart';
 import '../../domain/entities/equipement.dart';
 import '../../domain/enums/etat_equipement.dart';
 import '../../domain/enums/type_equipement.dart';
@@ -21,18 +22,16 @@ class EquipementMapper {
       type: TypeEquipement.values.byName(r.type),
       etat: EtatEquipement.values.byName(r.etat),
       marqueModele: r.marqueModele,
-      dateInstallation: DateTime.parse(r.dateInstallation),
-      dateRemplacementPrevue: r.dateRemplacementPrevue == null
-          ? null
-          : DateTime.parse(r.dateRemplacementPrevue!),
-      dateRetrait:
-          r.dateRetrait == null ? null : DateTime.parse(r.dateRetrait!),
+      dateInstallation: DateIso.depuisStockage(r.dateInstallation),
+      dateRemplacementPrevue:
+          DateIso.depuisStockageNullable(r.dateRemplacementPrevue),
+      dateRetrait: DateIso.depuisStockageNullable(r.dateRetrait),
       notes: r.notes,
     );
   }
 
   EquipementsCompanion versCompanion(Equipement e) {
-    final maintenant = DateTime.now().toUtc().toIso8601String();
+    final maintenant = DateIso.maintenant();
     return EquipementsCompanion(
       id: Value(e.id),
       nom: Value(e.nom),
@@ -41,10 +40,10 @@ class EquipementMapper {
       type: Value(e.type.name),
       etat: Value(e.etat.name),
       marqueModele: Value(e.marqueModele),
-      dateInstallation: Value(e.dateInstallation.toUtc().toIso8601String()),
+      dateInstallation: Value(DateIso.versStockage(e.dateInstallation)),
       dateRemplacementPrevue:
-          Value(e.dateRemplacementPrevue?.toUtc().toIso8601String()),
-      dateRetrait: Value(e.dateRetrait?.toUtc().toIso8601String()),
+          Value(DateIso.versStockageNullable(e.dateRemplacementPrevue)),
+      dateRetrait: Value(DateIso.versStockageNullable(e.dateRetrait)),
       dateCreation: Value(maintenant),
       notes: Value(e.notes),
       createdAt: Value(maintenant),

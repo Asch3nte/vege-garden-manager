@@ -13,6 +13,7 @@ import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/generer_taches_arrosage.dart';
 import 'calendrier_vue.dart';
+import 'geste_groupe.dart';
 
 /// Locale used to resolve crop display names (French-first app).
 const String _locale = 'fr';
@@ -101,13 +102,36 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
 
   /// Toggles [tache]'s completion (check ↔ uncheck), persists it, then reloads.
   Future<void> cocher(Tache tache) async {
+    _basculer(tache, ref.read(horlogeProvider)());
+    await ref.read(tacheRepositoryProvider).sauvegarder(tache);
+    await _recharger();
+  }
+
+  /// Ticks a whole [groupe] off in one go, then reloads.
+  ///
+  /// A partially done group is **completed** (the remaining tasks are marked
+  /// done) rather than toggled — tapping "done" on a half-finished line must
+  /// never undo what the user already ticked. Only a fully completed group
+  /// reopens, so the action stays reversible.
+  Future<void> cocherGroupe(GesteGroupe groupe) async {
+    final maintenant = ref.read(horlogeProvider)();
+    final aBasculer =
+        groupe.toutesFaites ? groupe.taches : groupe.tachesAFaire;
+    final depot = ref.read(tacheRepositoryProvider);
+    for (final tache in aBasculer) {
+      _basculer(tache, maintenant);
+      await depot.sauvegarder(tache);
+    }
+    await _recharger();
+  }
+
+  /// Flips a single task's completion through the domain transitions.
+  static void _basculer(Tache tache, DateTime maintenant) {
     if (tache.estFaite) {
       tache.rouvrir();
     } else {
-      tache.marquerFaite(ref.read(horlogeProvider)());
+      tache.marquerFaite(maintenant);
     }
-    await ref.read(tacheRepositoryProvider).sauvegarder(tache);
-    await _recharger();
   }
 
   Future<void> _recharger() async {
