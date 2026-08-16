@@ -45,6 +45,28 @@
 > `_schema/id_registry.yaml` (312 fiches réelles) et **étoffé** à la cible
 > « maximum de fiches, mères ET filles ». Nouvelle entrée « Contenu du
 > catalogue » en fin de document.
+> Mis à jour le 2026-08-16 (fin de session) : **lots de contenu 12 (aromatiques,
+> 38 fiches) et 13 (piments, 25 fiches)** livrés → **375 fiches**. Merge de
+> `fix/dates-et-regroupement-taches` (correctif dates UTC↔local + regroupement
+> des tâches par geste, **ADR-0020** après renumérotation). **Nettoyage des
+> branches** : toutes les branches mergées supprimées (locales + distantes) ;
+> deux branches obsolètes supprimées après vérification qu'elles ne contenaient
+> rien d'unique — `feat/fiches-plantes-courantes` (`c523120`, contenu déjà
+> intégré par la fusion du 2026-07-18 : 0 fichier absent de `main`) et
+> `feat/finitions-parametres-accueil` (`9d415f3`, refaite sur `main` sous
+> d'autres noms : `ecran_notifications`, `statistiques_donnees_service_impl`,
+> `ecran_tache_detail`, `fenetre_ne_pas_deranger`). Les SHA permettent de les
+> restaurer si besoin (`git checkout -b <nom> <sha>`). **Conservées** : `main`,
+> `develop` (convention du repo) et **`feat/catalogue-reseau`** — voir ci-dessous.
+> **⚠️ `feat/catalogue-reseau` (`9c433e7`, wip du 2026-06-13) est la seule
+> branche non mergée restante.** Elle porte 29 fichiers absents de `main`, dont
+> tout le dossier `vege-garden-export/` (maquettes React/HTML/CSS de référence
+> des 5 écrans + `spec/00-design-system.md` … `05-parametres.md`). Ces maquettes
+> **n'existent nulle part ailleurs dans le repo**. Les tokens couleur en ont déjà
+> été remontés dans `docs/08` (source de vérité), donc rien n'est bloquant — mais
+> supprimer la branche ferait disparaître les maquettes d'origine. **Décision à
+> prendre par le dev** : merger les maquettes dans `main` pour les archiver, ou
+> supprimer la branche en connaissance de cause.
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
