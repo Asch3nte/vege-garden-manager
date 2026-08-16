@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Habanero orange. Hérite de LEG-050.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-050-V001
+parent_id: LEG-050
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Habanero orange
+    noms_alternatifs: [Habanero, Habanero Yucatan]
+    description: >
+      Le habanero de référence : fruits lanternés et fripés de 3 à 5 cm, orange
+      vif à maturité, à peau fine. Piquant de 100 000 à 350 000 SHU, doublé d'un arôme
+      fruité et floral très reconnaissable qui persiste après le feu. Originaire de la
+      péninsule du Yucatán, où il est la base de la cuisine locale.
+    conseils_recolte: >
+      Attendre l'orange franc : cueilli vert, il n'a ni l'arôme ni le plein
+      piquant. Gants obligatoires.
+  en:
+    nom_commun: Orange habanero
+    noms_alternatifs: [Habanero]
+    description: >
+      The reference habanero: wrinkled lantern-shaped fruits ripening bright
+      orange, 100,000–350,000 SHU, with the fruity floral aroma that lingers after the
+      heat. From the Yucatán peninsula.
+
+utilisations_culinaires_i18n:
+  fr: [Sauce habanero, cochinita pibil, salsas yucatèques, marinades]
+  en: [Habanero sauce, cochinita pibil, Yucatán salsas, marinades]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Habanero
+contributeurs:
+  - "@potagerer"

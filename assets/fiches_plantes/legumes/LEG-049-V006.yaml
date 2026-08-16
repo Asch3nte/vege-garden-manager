@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Padrón. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V006
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Padrón
+    noms_alternatifs: [Pimientos de Padrón, Piment de Padrón]
+    description: >
+      Petit piment galicien de 4 à 6 cm, récolté jeune et vert, poêlé entier à
+      l'huile d'olive et salé — la tapa espagnole par excellence. Sa particularité
+      tient à son piquant imprévisible : la plupart des fruits sont doux (500 à
+      2 500 SHU), mais un sur dix environ se révèle nettement fort, d'où le dicton
+      local « unos pican y otros no ».
+    conseils_culture: >
+      Cycle court et production continue si l'on récolte jeune, ce qui en
+      fait l'un des piments les plus faciles au potager. La proportion de fruits forts
+      augmente avec la chaleur, le stress hydrique et la maturité.
+    conseils_recolte: >
+      Récolter très jeune, à 4-5 cm et encore vert : c'est le stade de la
+      tapa. Passé ce stade, la proportion de fruits piquants augmente nettement.
+    erreurs_frequentes:
+      - Laisser grossir les fruits (ils deviennent majoritairement piquants)
+  en:
+    nom_commun: Padrón pepper
+    noms_alternatifs: [Pimientos de Padrón]
+    description: >
+      Small Galician chilli picked young and green, fried whole in olive
+      oil and salted — the classic Spanish tapa. Famous for unpredictable heat: most
+      fruits are mild, roughly one in ten distinctly hot.
+
+cycle:
+  duree_avant_recolte_jours: [65, 85]
+  hauteur_adulte_cm: [50, 80]
+
+utilisations_culinaires_i18n:
+  fr: [Pimientos de Padrón poêlés, tapas, grillades, friture]
+  en: [Fried Padrón peppers, tapas, grills, frying]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Piment_de_Padr%C3%B3n
+contributeurs:
+  - "@potagerer"

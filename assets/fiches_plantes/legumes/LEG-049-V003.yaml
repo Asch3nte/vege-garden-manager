@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Jalapeño. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V003
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Jalapeño
+    noms_alternatifs: [Piment jalapeño]
+    description: >
+      Piment mexicain trapu de 5 à 9 cm, à chair épaisse et croquante, récolté
+      le plus souvent vert. Piquant modéré de 2 500 à 8 000 SHU, doux à l'échelle des
+      piments forts, ce qui explique sa popularité mondiale. Sa chair charnue le rend
+      impropre au séchage direct : fumé, il devient le chipotle.
+    conseils_culture: >
+      L'un des piments forts les plus faciles et les plus productifs sous
+      climat tempéré, avec un cycle plus court que la moyenne. Bon choix pour une
+      première culture de piment.
+    conseils_recolte: >
+      Récolter vert et ferme pour l'usage classique, ou laisser rougir pour
+      un goût plus sucré. Les craquelures liégeuses (« corking ») sur la peau sont un
+      signe de maturité recherché au Mexique, pas un défaut.
+    erreurs_frequentes:
+      - Chercher à le sécher à l'air comme un cayenne (chair trop épaisse, il pourrit)
+  en:
+    nom_commun: Jalapeño
+    noms_alternatifs: [Jalapeno]
+    description: >
+      Stocky Mexican chilli 5–9 cm long with thick crisp flesh, usually
+      picked green. Moderate heat (2,500–8,000 SHU). Too fleshy to air-dry — smoked,
+      it becomes chipotle.
+
+cycle:
+  duree_avant_recolte_jours: [70, 90]
+  hauteur_adulte_cm: [60, 90]
+
+utilisations_culinaires_i18n:
+  fr: [Nachos, salsa verde, chipotle (fumé), conserves au vinaigre, poppers farcis]
+  en: [Nachos, salsa verde, chipotle (smoked), pickles, stuffed poppers]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Jalape%C3%B1o
+contributeurs:
+  - "@potagerer"

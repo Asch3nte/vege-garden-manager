@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Aji Amarillo. Hérite de LEG-052.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-052-V001
+parent_id: LEG-052
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Aji Amarillo
+    noms_alternatifs: [Ají amarillo, Aji mirasol (séché)]
+    description: >
+      Le piment national péruvien, présent dans une grande partie de la cuisine
+      du pays. Fruits allongés de 10 à 15 cm, jaune vif virant à l'orange profond à
+      pleine maturité, à chair épaisse. Piquant de 30 000 à 50 000 SHU porté par un
+      arôme fruité marqué, souvent décrit comme abricoté. Séché, il prend le nom d'aji
+      mirasol et devient un autre ingrédient.
+    conseils_recolte: >
+      Attendre l'orange profond : l'arôme fruité, principal intérêt de la
+      variété, n'apparaît qu'à pleine maturité.
+  en:
+    nom_commun: Aji Amarillo
+    noms_alternatifs: [Aji mirasol (dried)]
+    description: >
+      Peru's national chilli, present throughout the country's cooking.
+      Long fruits ripening deep orange, thick-fleshed, 30,000–50,000 SHU with a
+      pronounced apricot-like aroma. Dried, it is renamed aji mirasol.
+
+utilisations_culinaires_i18n:
+  fr: [Purée d'aji amarillo, papa a la huancaína, causa, ceviche, ají de gallina]
+  en: [Aji amarillo paste, papa a la huancaína, causa, ceviche, ají de gallina]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_baccatum
+contributeurs:
+  - "@potagerer"

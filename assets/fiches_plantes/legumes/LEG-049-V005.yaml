@@ -1,0 +1,43 @@
+# Fiche fille (variété) — Poblano. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V005
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poblano
+    noms_alternatifs: [Ancho (séché), Piment de Puebla]
+    description: >
+      Gros piment mexicain en forme de cœur allongé, de 10 à 15 cm, à chair
+      épaisse et peau lisse vert très foncé. Piquant faible (1 000 à 2 000 SHU) et
+      goût profond, presque fumé. Séché, il change de nom et devient l'« ancho », base
+      des moles mexicains — c'est le même fruit à deux stades.
+    conseils_culture: >
+      Plant vigoureux et large, à espacer davantage que les piments fins.
+      Chair épaisse : la maturation complète demande une saison chaude.
+    conseils_recolte: >
+      Récolter vert foncé et brillant pour les chiles rellenos, ou laisser
+      brunir-rougir puis sécher pour obtenir l'ancho.
+  en:
+    nom_commun: Poblano
+    noms_alternatifs: [Ancho (dried)]
+    description: >
+      Large heart-shaped Mexican chilli with thick flesh and very dark
+      green skin. Mild (1,000–2,000 SHU) with a deep, almost smoky taste. Dried, it
+      is renamed ancho, the base of Mexican moles — the same fruit at two stages.
+
+cycle:
+  duree_avant_recolte_jours: [90, 120]
+  espacement_cm: 55
+  hauteur_adulte_cm: [70, 100]
+
+utilisations_culinaires_i18n:
+  fr: [Chiles rellenos, mole poblano, rajas, soupes mexicaines, ancho séché]
+  en: [Chiles rellenos, mole poblano, rajas, Mexican soups, dried ancho]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poblano
+contributeurs:
+  - "@potagerer"

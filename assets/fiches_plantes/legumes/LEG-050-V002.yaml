@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Habanero chocolat. Hérite de LEG-050.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-050-V002
+parent_id: LEG-050
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Habanero chocolat
+    noms_alternatifs: [Congo Black, Black Habanero]
+    description: >
+      Sélection à maturité brun chocolat profond, un peu plus grosse et plus
+      forte que l'orange (jusqu'à 450 000 SHU). Arôme plus dense, moins floral et
+      nettement plus terreux, apprécié dans les sauces sombres et les marinades.
+      Maturation plus tardive que l'habanero orange.
+    conseils_culture: >
+      Cycle encore plus long que celui de l'habanero orange : semis en
+      janvier impératif, culture sous abri fortement conseillée.
+  en:
+    nom_commun: Chocolate habanero
+    noms_alternatifs: [Congo Black]
+    description: >
+      Selection ripening deep chocolate brown, slightly larger and hotter
+      than the orange type (up to 450,000 SHU). Denser, earthier aroma, valued in dark
+      sauces. Ripens later than orange habanero.
+
+cycle:
+  duree_avant_recolte_jours: [110, 150]
+
+utilisations_culinaires_i18n:
+  fr: [Sauces sombres, jerk, marinades, purées fermentées]
+  en: [Dark sauces, jerk, marinades, fermented pastes]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Habanero
+contributeurs:
+  - "@potagerer"

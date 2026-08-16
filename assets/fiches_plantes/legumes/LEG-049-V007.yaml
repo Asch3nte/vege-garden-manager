@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Piment de Bresse. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V007
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Piment de Bresse
+    noms_alternatifs: [Piment doux de Bresse]
+    description: >
+      Variété française ancienne cultivée dans l'Ain, à fruits coniques rouges
+      de 8 à 10 cm et piquant très modéré. Longtemps réservée à la consommation
+      locale, elle fait partie des variétés paysannes réintroduites par les
+      conservatoires de semences. Bonne rusticité relative au froid pour un piment,
+      ce qui la rend intéressante en climat continental.
+    conseils_culture: >
+      Mieux adaptée que la moyenne aux étés moyennement chauds. Bon choix
+      en climat continental ou océanique frais, où les variétés mexicaines peinent.
+    conseils_recolte: >
+      Récolter rouge, à partir de fin août.
+  en:
+    nom_commun: Bresse pepper
+    description: >
+      Old French variety from the Ain with conical red fruits and very
+      moderate heat. Long a purely local crop, now reintroduced by seed
+      conservatories, and comparatively tolerant of cool conditions.
+
+cycle:
+  duree_avant_recolte_jours: [80, 105]
+
+utilisations_culinaires_i18n:
+  fr: [Conserves au vinaigre, poêlées, charcuterie, poudre douce]
+  en: [Pickles, pan-fried dishes, charcuterie, mild powder]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_annuum
+contributeurs:
+  - "@potagerer"

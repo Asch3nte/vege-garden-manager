@@ -1,0 +1,32 @@
+# Fiche fille (variété) — Scotch Bonnet. Hérite de LEG-050.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-050-V003
+parent_id: LEG-050
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Scotch Bonnet
+    noms_alternatifs: [Bonnet écossais, Piment antillais]
+    description: >
+      Piment emblématique de la Jamaïque et des Petites Antilles, de forme
+      aplatie et plissée évoquant un béret — d'où son nom. Piquant comparable au
+      habanero (100 000 à 350 000 SHU), avec un arôme plus sucré, presque de fruit
+      mûr. Ingrédient obligé du jerk jamaïcain et des sauces créoles.
+  en:
+    nom_commun: Scotch Bonnet
+    noms_alternatifs: [Bonnet pepper]
+    description: >
+      The emblematic chilli of Jamaica and the Lesser Antilles, flattened
+      and pleated like a bonnet. Heat comparable to habanero, with a sweeter, riper
+      aroma. Essential to Jamaican jerk and Creole sauces.
+
+utilisations_culinaires_i18n:
+  fr: [Jerk jamaïcain, sauce créole, rougail, marinades, achards]
+  en: [Jamaican jerk, Creole sauce, rougail, marinades, achards]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Scotch_bonnet
+contributeurs:
+  - "@potagerer"

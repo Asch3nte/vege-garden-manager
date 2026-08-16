@@ -1,0 +1,33 @@
+# Fiche fille (variété) — Aji Limón. Hérite de LEG-052.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-052-V002
+parent_id: LEG-052
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Aji Limón
+    noms_alternatifs: [Lemon Drop, Qillu uchu]
+    description: >
+      Variété péruvienne à fruits jaune citron effilés de 5 à 8 cm, au parfum
+      franchement citronné qui lui vaut son nom. Piquant de 30 000 à 50 000 SHU.
+      Plante très productive et décorative, portant simultanément des dizaines de
+      fruits jaune vif. L'une des variétés de baccatum les plus faciles à réussir sous
+      climat tempéré.
+  en:
+    nom_commun: Aji Limón
+    noms_alternatifs: [Lemon Drop]
+    description: >
+      Peruvian variety with lemon-yellow tapering fruits and a markedly
+      citrus scent. 30,000–50,000 SHU. Very productive and ornamental, and one of the
+      easier baccatum varieties in temperate climates.
+
+utilisations_culinaires_i18n:
+  fr: [Sauces citronnées, ceviche, poisson, salsas jaunes, poudre]
+  en: [Citrus hot sauces, ceviche, fish, yellow salsas, powder]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_baccatum
+contributeurs:
+  - "@potagerer"

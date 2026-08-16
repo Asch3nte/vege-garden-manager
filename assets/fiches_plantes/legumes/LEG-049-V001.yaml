@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Piment d'Espelette. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V001
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum 'Gorria'"
+
+i18n:
+  fr:
+    nom_commun: Piment d'Espelette
+    noms_alternatifs: [Gorria, Ezpeletako biperra]
+    description: >
+      Variété basque cultivée dans dix communes du Labourd, seule à bénéficier
+      d'une AOP depuis 2000. Fruits coniques de 7 à 14 cm, virant du vert au rouge
+      vif, à chair épaisse et parfumée. Piquant modéré — environ 4 000 SHU, à peine
+      plus qu'un poblano — qui en fait un piment de saveur plus que de force : on
+      l'utilise là où d'autres cuisines mettraient du poivre.
+    conseils_culture: >
+      Exige une saison chaude et longue : sous climat océanique frais, la
+      culture réussit surtout en situation abritée et bien exposée. Semis en février
+      au chaud, repiquage début juin. Tuteurage utile, les plants chargés de fruits
+      versant facilement.
+    conseils_recolte: >
+      Récolter rouge vif à partir d'août. Les fruits se conservent
+      traditionnellement en cordes (ristras) suspendues aux façades, puis séchés et
+      moulus en poudre.
+    erreurs_frequentes:
+      - Le croire très fort (il est modérément piquant, c'est un piment d'assaisonnement)
+      - Culture en situation fraîche et ombragée (fruits qui ne colorent pas)
+  en:
+    nom_commun: Espelette pepper
+    noms_alternatifs: [Gorria]
+    description: >
+      Basque variety grown in ten communes of the Labourd, PDO since 2000.
+      Conical thick-fleshed fruits ripening bright red. Moderate heat (around
+      4,000 SHU) — a chilli of flavour rather than fire, used where other cuisines
+      would use pepper.
+
+utilisations_culinaires_i18n:
+  fr: [Poudre d'Espelette, piperade, axoa, poulet basquaise, charcuterie, omelette]
+  en: [Espelette powder, piperade, axoa, Basque chicken, charcuterie, omelette]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Piment_d%27Espelette
+contributeurs:
+  - "@potagerer"

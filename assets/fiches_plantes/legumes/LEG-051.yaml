@@ -1,0 +1,143 @@
+# Fiche mère (espèce) — Piment oiseau (Capsicum frutescens).
+# Arbitrage 2026-08-16 : une fiche mère par espèce botanique de Capsicum.
+id: LEG-051
+varietes_connues:
+  - LEG-051-V001
+  - LEG-051-V002
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+  - condimentaire
+  - ornementale
+
+rusticite:
+  zone_min: zone10
+
+nom_scientifique: Capsicum frutescens
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Piment oiseau
+    noms_alternatifs: [Capsicum frutescens, Piment enragé, Malagueta, Piment-café]
+    description: >
+      Espèce tropicale au port buissonnant très ramifié, portant de très petits
+      fruits allongés, dressés vers le ciel — d'où leur consommation par les
+      oiseaux, qui ne perçoivent pas la capsaïcine et en dispersent les graines,
+      à l'origine du nom. Piquant élevé et franc, de 50 000 à 100 000 SHU, sans
+      la note fruitée des habaneros. C'est l'espèce du tabasco et des piments de
+      table antillais et réunionnais. Plante réellement vivace et ligneuse à la
+      base, qui peut vivre plusieurs années hors gel.
+    conseils_culture: >
+      Mêmes exigences de chaleur que le habanero : semis précoce à 25 °C, culture
+      sous abri au nord de la Loire. Sa ramification très dense en fait un
+      excellent sujet de pot, décoratif par ses fruits dressés colorés. Tailler
+      légèrement à la sortie de l'hiver sur les pieds conservés. La production
+      s'étale longuement, avec des fruits à tous les stades sur le même plant.
+    conseils_recolte: >
+      Récolter au fur et à mesure de la coloration, les fruits mûrissant de façon
+      échelonnée. Très petits, ils se sèchent entiers sans préparation. Gants
+      recommandés malgré leur taille.
+    erreurs_frequentes:
+      - Sous-estimer le piquant à cause de la petite taille des fruits
+      - Culture en extérieur non abrité au nord (cycle trop long pour mûrir)
+      - Jeter le pied en fin de saison (vivace ligneux, très productif en 2e année)
+  en:
+    nom_commun: Bird's eye chilli
+    noms_alternatifs: [Capsicum frutescens, Malagueta]
+    description: >
+      Tropical, densely branched species with tiny upward-pointing fruits eaten
+      and spread by birds, which do not perceive capsaicin. Sharply hot without
+      the fruity note of habaneros — the species behind Tabasco sauce.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 24
+  temperature_optimale: 28
+  temperature_min_survie: 8
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [14, 28]
+  duree_avant_recolte_jours: [100, 130]
+  hauteur_adulte_cm: [60, 150]
+  espacement_cm: 50
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [1, 2]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    continental:
+      semis_interieur: [1, 2]
+      plantation: [5, 6]
+      recolte: [9, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [7, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [7, 8]
+      plantation: [11, 12]
+      recolte: [2, 4]
+
+associations:
+  beneficies:
+    - id: ARO-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Le basilic éloigne les pucerons sous abri", en: "Basil deters aphids under cover" }
+    - id: FLE-003
+      type: plante_piege
+      raison_i18n: { fr: "L'œillet d'Inde détourne nématodes et aleurodes", en: "French marigold diverts nematodes and whitefly" }
+  defavorables:
+    - id: LEG-024
+      type: allelopathie
+      raison_i18n: { fr: "Le fenouil inhibe la croissance des solanacées voisines", en: "Fennel inhibits neighbouring nightshades" }
+
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Fruits séchés entiers, très petits : séchage rapide et sans découpe", en: "Dried whole — the fruits are small enough to dry fast without cutting" }
+  - methode: conserves
+    duree_mois: 18
+    conditions_i18n: { fr: "Au vinaigre, ou fermentés en purée (base de la sauce tabasco)", en: "In vinegar, or fermented into a mash (the basis of Tabasco sauce)" }
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Sauce tabasco, rougail, sambal, huile pimentée, achards, rhum arrangé]
+  en: [Tabasco sauce, rougail, sambal, chilli oil, achards, spiced rum]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_frutescens
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

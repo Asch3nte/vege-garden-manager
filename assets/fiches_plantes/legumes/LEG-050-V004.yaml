@@ -1,0 +1,31 @@
+# Fiche fille (variété) — Fatalii. Hérite de LEG-050.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-050-V004
+parent_id: LEG-050
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Fatalii
+    noms_alternatifs: [Piment africain]
+    description: >
+      Variété d'Afrique centrale à fruits jaune vif, effilés et pointus de 5 à
+      8 cm, portés bien visibles au-dessus du feuillage. Piquant élevé (125 000 à
+      325 000 SHU) accompagné d'un arôme franchement citronné, plus vif et moins sucré
+      que celui des habaneros antillais. Plante productive et très décorative.
+  en:
+    nom_commun: Fatalii
+    description: >
+      Central African variety with bright yellow tapering fruits held above
+      the foliage. High heat (125,000–325,000 SHU) with a distinctly citrus aroma,
+      sharper and less sweet than Caribbean habaneros.
+
+utilisations_culinaires_i18n:
+  fr: [Sauces jaunes, marinades citronnées, poudre, huile pimentée]
+  en: [Yellow hot sauces, citrus marinades, powder, chilli oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_chinense
+contributeurs:
+  - "@potagerer"

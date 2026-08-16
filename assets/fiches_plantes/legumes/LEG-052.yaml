@@ -1,0 +1,152 @@
+# Fiche mère (espèce) — Piment aji (Capsicum baccatum).
+# Arbitrage 2026-08-16 : une fiche mère par espèce botanique de Capsicum.
+id: LEG-052
+varietes_connues:
+  - LEG-052-V001
+  - LEG-052-V002
+  - LEG-052-V003
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+  - condimentaire
+  - ornementale
+
+rusticite:
+  zone_min: zone10
+
+nom_scientifique: Capsicum baccatum
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Piment aji
+    noms_alternatifs: [Capsicum baccatum, Aji, Piment péruvien]
+    description: >
+      Espèce andine, pilier des cuisines péruvienne et bolivienne, où « ají »
+      désigne le piment en général. Elle se reconnaît immédiatement à ses fleurs
+      blanches marquées de taches jaune-vert à la gorge, caractère unique dans le
+      genre. Port très vigoureux et élancé, pouvant dépasser 1,50 m et prendre un
+      aspect de petit arbuste. Piquant moyen à élevé (30 000 à 50 000 SHU pour
+      l'aji amarillo) associé à un net arôme fruité, souvent décrit comme abricoté
+      ou citronné, qui fait toute la valeur culinaire de l'espèce.
+    conseils_culture: >
+      Cycle long et besoins de chaleur proches de ceux du habanero : semis en
+      janvier-février au chaud, culture sous abri conseillée au nord de la Loire.
+      Prévoir de la place et un tuteur : sa vigueur et sa hauteur en font la plus
+      encombrante des quatre espèces cultivées, mal adaptée aux petits pots.
+      Vivace, elle se conserve d'une année sur l'autre hors gel et devient alors
+      très productive.
+    conseils_recolte: >
+      Récolter à pleine coloration, généralement orange vif à rouge selon la
+      variété : c'est à ce stade que l'arôme fruité, principal intérêt de
+      l'espèce, est développé. Les fruits, allongés et charnus, se prêtent bien à
+      la purée et au séchage.
+    erreurs_frequentes:
+      - Ne pas prévoir la place ni le tuteurage (plants de 1,50 m qui versent)
+      - Récolter avant pleine maturité (arôme fruité absent, seul le piquant reste)
+      - Semis tardif (fruits encore verts aux premières gelées)
+  en:
+    nom_commun: Aji pepper
+    noms_alternatifs: [Capsicum baccatum, Peruvian pepper]
+    description: >
+      Andean species central to Peruvian and Bolivian cooking, recognisable by
+      its white flowers spotted yellow-green in the throat — unique in the genus.
+      Very vigorous, often over 1.5 m, with medium to high heat and a distinct
+      fruity, apricot-like aroma.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 22
+  temperature_optimale: 27
+  temperature_min_survie: 8
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [14, 28]
+  duree_avant_recolte_jours: [100, 140]
+  hauteur_adulte_cm: [100, 180]
+  espacement_cm: 70
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 40
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [1, 2]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    continental:
+      semis_interieur: [1, 2]
+      plantation: [5, 6]
+      recolte: [9, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [7, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [7, 8]
+      plantation: [11, 12]
+      recolte: [2, 4]
+
+associations:
+  beneficies:
+    - id: ARO-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Le basilic éloigne les pucerons sous abri", en: "Basil deters aphids under cover" }
+    - id: FLE-003
+      type: plante_piege
+      raison_i18n: { fr: "L'œillet d'Inde détourne nématodes et pucerons des solanacées", en: "French marigold diverts nematodes and aphids from nightshades" }
+    - id: LEG-014
+      type: etagement_lumiere
+      raison_i18n: { fr: "Sa hauteur abrite les salades de la brûlure du soleil d'été", en: "Its height shelters lettuces from summer sun scorch" }
+  defavorables:
+    - id: LEG-024
+      type: allelopathie
+      raison_i18n: { fr: "Le fenouil inhibe la croissance des solanacées voisines", en: "Fennel inhibits neighbouring nightshades" }
+
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Séché entier ou en lanières ; l'aji amarillo séché (« aji mirasol ») est un ingrédient à part entière", en: "Dried whole or in strips; dried aji amarillo (aji mirasol) is an ingredient in its own right" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "En purée, forme sous laquelle il s'emploie le plus souvent en cuisine péruvienne", en: "As a paste, the form most used in Peruvian cooking" }
+  - methode: conserves
+    duree_mois: 12
+  - methode: frais
+    duree_jours: 14
+utilisations_culinaires_i18n:
+  fr: [Purée d'aji amarillo, ceviche, causa, papa a la huancaína, sauces fruitées, marinades]
+  en: [Aji amarillo paste, ceviche, causa, papa a la huancaína, fruity sauces, marinades]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_baccatum
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Hungarian Hot Wax. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V009
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Hungarian Hot Wax
+    noms_alternatifs: [Piment hongrois, Piment cire]
+    description: >
+      Piment hongrois conique de 10 à 15 cm, passant du jaune cireux à
+      l'orange puis au rouge en mûrissant. Piquant modéré (5 000 à 10 000 SHU) et
+      chair épaisse. C'est l'une des variétés les plus précoces et les plus tolérantes
+      au froid du genre, ce qui en fait un excellent choix pour les climats où les
+      piments mexicains ne mûrissent pas.
+    conseils_culture: >
+      Précoce et rustique pour un piment : elle mûrit en pleine terre au
+      nord de la Loire, là où beaucoup d'autres variétés restent vertes. Semis
+      possible un peu plus tard que la moyenne.
+    conseils_recolte: >
+      Se récolte à tous les stades : jaune pour le vinaigre, rouge pour un
+      goût plus sucré et plus fort.
+  en:
+    nom_commun: Hungarian Hot Wax
+    noms_alternatifs: [Hungarian wax pepper]
+    description: >
+      Hungarian conical chilli 10–15 cm long, ripening from waxy yellow
+      through orange to red. Moderate heat (5,000–10,000 SHU) and thick flesh. One of
+      the earliest and most cold-tolerant chillies — a good choice where Mexican
+      varieties fail to ripen.
+
+besoins:
+  temperature_min_germination: 18
+  temperature_optimale: 22
+
+cycle:
+  duree_avant_recolte_jours: [65, 85]
+
+utilisations_culinaires_i18n:
+  fr: [Conserves au vinaigre, paprika, goulasch, poêlées, farcis]
+  en: [Pickles, paprika, goulash, pan-fried dishes, stuffed peppers]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_annuum
+contributeurs:
+  - "@potagerer"

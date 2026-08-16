@@ -1,0 +1,173 @@
+# Fiche mère (espèce) — Piment (Capsicum annuum).
+# Arbitrage 2026-08-16 : une fiche mère par espèce botanique de Capsicum.
+# Le poivron doux, également C. annuum, garde sa fiche distincte (LEG-019) :
+# usage culinaire et conduite assez éloignés pour être cherchés séparément.
+id: LEG-049
+varietes_connues:
+  - LEG-049-V001
+  - LEG-049-V002
+  - LEG-049-V003
+  - LEG-049-V004
+  - LEG-049-V005
+  - LEG-049-V006
+  - LEG-049-V007
+  - LEG-049-V008
+  - LEG-049-V009
+  - LEG-049-V010
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 2
+usages:
+  - alimentaire
+  - condimentaire
+  - medicinale
+  - ornementale
+
+rusticite:
+  zone_min: zone9
+
+nom_scientifique: Capsicum annuum
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Piment
+    noms_alternatifs: [Piment fort, Piment doux, Chile]
+    description: >
+      Espèce de loin la plus cultivée du genre Capsicum : elle rassemble la
+      quasi-totalité des piments du bassin méditerranéen et du Mexique, du
+      piment d'Espelette au jalapeño en passant par le cayenne. Plante buissonnante
+      annuelle sous nos climats (vivace dans son aire d'origine), de 50 à 90 cm,
+      à fleurs blanches solitaires. Le piquant, dû à la capsaïcine concentrée dans
+      les placentas blancs qui portent les graines, se mesure en unités Scoville
+      (SHU) et va, chez cette seule espèce, du quasi nul (piquillo, 500 SHU) au
+      très relevé (cayenne, 50 000 SHU).
+    conseils_culture: >
+      Semer au chaud (22–25 °C) de février à mars, la germination étant lente et
+      exigeante en chaleur : sans tapis chauffant ou pièce à 22 °C, les levées
+      sont très irrégulières. Repiquer en pleine terre seulement quand les nuits
+      dépassent 12 °C, mi-mai à juin. Sol riche, drainé, plein soleil et
+      situation abritée. Arroser régulièrement sans détremper. Un stress hydrique
+      ou thermique augmente le piquant — utile ou non selon l'usage recherché.
+      Excellent en pot de 10 L sur une terrasse chaude.
+    conseils_recolte: >
+      Cueillir vert pour un goût plus végétal et un piquant moindre, ou attendre
+      la coloration complète (rouge, jaune, chocolat selon variété) pour le
+      maximum de saveur et de capsaïcine. La récolte régulière stimule la
+      production. Porter des gants pour manipuler les variétés fortes, et ne
+      jamais se toucher les yeux après.
+    erreurs_frequentes:
+      - Semis dans une pièce trop fraîche (germination erratique ou nulle sous 18 °C)
+      - Repiquage trop précoce en sol froid (plant bloqué pour toute la saison)
+      - Excès d'azote (feuillage abondant, peu de fruits)
+      - Manipuler les variétés fortes sans gants (brûlures durables aux mains et aux yeux)
+  en:
+    nom_commun: Chilli pepper
+    noms_alternatifs: [Chile, Hot pepper]
+    description: >
+      By far the most widely grown Capsicum species, covering nearly all
+      Mediterranean and Mexican chillies from Espelette to jalapeño and cayenne.
+      Heat, from capsaicin in the white placenta, ranges within this one species
+      from almost none to distinctly hot.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 20
+  temperature_optimale: 25
+  temperature_min_survie: 5
+  gele_fatal: true
+  temperature_max_tolerance: 35
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: annuelle
+  enracinement: moyen
+  duree_germination_jours: [10, 21]
+  duree_avant_recolte_jours: [80, 120]
+  hauteur_adulte_cm: [50, 90]
+  espacement_cm: 45
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_interieur: [2, 3]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [6, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [8, 9]
+      plantation: [11, 12]
+      recolte: [1, 4]
+
+associations:
+  beneficies:
+    - id: ARO-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Le basilic éloigne les pucerons et améliore la saveur des fruits", en: "Basil deters aphids and improves fruit flavour" }
+    - id: FLE-003
+      type: plante_piege
+      raison_i18n: { fr: "L'œillet d'Inde détourne les nématodes et les pucerons des solanacées", en: "French marigold diverts nematodes and aphids from nightshades" }
+    - id: LEG-004
+      raison_i18n: { fr: "Voisinage favorable : enracinements complémentaires, pas de concurrence directe", en: "Favourable neighbour: complementary rooting, no direct competition" }
+    - id: ARO-008
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Le romarin gêne plusieurs ravageurs par son odeur camphrée", en: "Rosemary hampers several pests with its camphor scent" }
+  defavorables:
+    - id: LEG-024
+      type: allelopathie
+      raison_i18n: { fr: "Le fenouil inhibe la croissance de la plupart de ses voisins, dont les solanacées", en: "Fennel inhibits the growth of most neighbours, nightshades included" }
+    - id: LEG-007
+      type: competition_azote
+      raison_i18n: { fr: "Les choux, très gourmands en azote, concurrencent directement les piments", en: "Brassicas, heavy nitrogen feeders, compete directly with chillies" }
+
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Enfilés en chapelet (ristra) et suspendus dans un local sec et aéré — méthode traditionnelle basque et mexicaine", en: "Threaded into a ristra and hung in a dry airy room — the traditional Basque and Mexican method" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "Entiers, sans blanchiment ; la texture se ramollit mais le piquant est intact", en: "Whole, without blanching; texture softens but heat is unaffected" }
+  - methode: conserves
+    duree_mois: 12
+    conditions_i18n: { fr: "Au vinaigre ou à l'huile, après stérilisation", en: "In vinegar or oil, after sterilising" }
+  - methode: frais
+    duree_jours: 14
+utilisations_culinaires_i18n:
+  fr: [Piment en poudre, piperade, sauce piquante, chorizo, marinades, huile pimentée, conserves au vinaigre]
+  en: [Chilli powder, piperade, hot sauce, chorizo, marinades, chilli oil, pickles]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_annuum
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"
