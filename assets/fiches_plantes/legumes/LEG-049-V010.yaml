@@ -1,0 +1,54 @@
+# Fiche fille (variété) — Chiltepin. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V010
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Capsicum annuum var. glabriusculum"
+
+i18n:
+  fr:
+    nom_commun: Chiltepin
+    noms_alternatifs: [Piment sauvage, Chile tepin, Bird pepper]
+    description: >
+      Forme sauvage ancestrale de Capsicum annuum, dont dérivent toutes les
+      variétés cultivées de l'espèce. Minuscules fruits ronds de 5 à 8 mm, dressés,
+      d'un piquant élevé et très bref en bouche (50 000 à 100 000 SHU). Arbrisseau
+      vivace poussant spontanément dans le nord du Mexique et le sud des États-Unis,
+      où il est récolté à l'état sauvage plus que cultivé.
+    conseils_culture: >
+      Germination lente et irrégulière, typique des formes sauvages :
+      compter jusqu'à un mois. Croissance lente mais plante très longévive, à
+      conserver en pot hors gel où elle produit des années durant.
+    conseils_recolte: >
+      Récolter les petits fruits rouges à maturité ; ils se sèchent
+      entiers et se conservent des années.
+    erreurs_frequentes:
+      - Attendre une germination rapide (jusqu'à 30 jours, ne pas jeter le semis trop tôt)
+  en:
+    nom_commun: Chiltepin
+    noms_alternatifs: [Chile tepin]
+    description: >
+      The ancestral wild form of Capsicum annuum, from which every
+      cultivated variety of the species derives. Tiny round upright fruits with sharp,
+      short-lived heat (50,000–100,000 SHU). A perennial shrub still gathered wild in
+      northern Mexico.
+
+besoins:
+  temperature_min_germination: 24
+
+cycle:
+  type: vivace
+  duree_germination_jours: [15, 35]
+  duree_avant_recolte_jours: [110, 150]
+  hauteur_adulte_cm: [40, 100]
+
+utilisations_culinaires_i18n:
+  fr: [Salsas mexicaines, bouillons, vinaigre pimenté, poudre sauvage]
+  en: [Mexican salsas, broths, chilli vinegar, wild chilli powder]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_annuum
+contributeurs:
+  - "@potagerer"

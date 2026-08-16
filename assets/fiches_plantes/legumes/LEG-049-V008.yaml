@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Piquillo. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V008
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Piquillo
+    noms_alternatifs: [Piment du piquillo, Piquillo de Lodosa]
+    description: >
+      Petit piment navarrais en forme de bec — piquillo signifie « petit bec » —
+      de 7 à 10 cm, rouge vif, à chair fine et douce (500 à 1 000 SHU). Sa
+      particularité est culinaire : il se grille au feu de bois, se pèle et se met en
+      conserve, opération qui lui donne son goût sucré et fumé caractéristique.
+    conseils_culture: >
+      Culture classique de piment doux. Sa chair fine se prête mal au
+      séchage mais parfaitement au grillage.
+    conseils_recolte: >
+      Récolter rouge vif et ferme. Griller au feu vif puis peler à chaud :
+      la peau se retire alors sans effort.
+  en:
+    nom_commun: Piquillo pepper
+    noms_alternatifs: [Piquillo de Lodosa]
+    description: >
+      Small beak-shaped chilli from Navarre, bright red with thin, sweet
+      flesh (500–1,000 SHU). Traditionally wood-fire roasted, peeled and canned,
+      which gives it its sweet smoky character.
+
+cycle:
+  duree_avant_recolte_jours: [80, 100]
+
+utilisations_culinaires_i18n:
+  fr: [Piquillos farcis à la morue, conserves grillées, tapas, purées]
+  en: [Piquillos stuffed with cod, roasted preserves, tapas, purées]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Piquillo
+contributeurs:
+  - "@potagerer"

@@ -256,6 +256,31 @@ legumes:
   LEG-046: Oseille
   LEG-047: Asperge
   LEG-048: Patate douce
+  LEG-049: Piment
+  LEG-049-V001: Piment d'Espelette
+  LEG-049-V002: Piment de Cayenne
+  LEG-049-V003: Jalapeño
+  LEG-049-V004: Serrano
+  LEG-049-V005: Poblano
+  LEG-049-V006: Padrón
+  LEG-049-V007: Piment de Bresse
+  LEG-049-V008: Piquillo
+  LEG-049-V009: Hungarian Hot Wax
+  LEG-049-V010: Chiltepin
+  LEG-050: Piment habanero
+  LEG-050-V001: Habanero orange
+  LEG-050-V002: Habanero chocolat
+  LEG-050-V003: Scotch Bonnet
+  LEG-050-V004: Fatalii
+  LEG-050-V005: Aji Dulce
+  LEG-050-V006: Carolina Reaper
+  LEG-051: Piment oiseau
+  LEG-051-V001: Tabasco
+  LEG-051-V002: Malagueta
+  LEG-052: Piment aji
+  LEG-052-V001: Aji Amarillo
+  LEG-052-V002: Aji Limón
+  LEG-052-V003: Bishop's Crown
 aromatiques:
   ARO-001: Basilic
   ARO-001-V001: Basilic Grand Vert

@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Piment de Cayenne. Hérite de LEG-049.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-049-V002
+parent_id: LEG-049
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Piment de Cayenne
+    noms_alternatifs: [Cayenne, Piment enragé]
+    description: >
+      Le piment fort classique des cuisines européennes, à fruits fins et
+      allongés de 10 à 15 cm, souvent recourbés, séchant très facilement. Piquant
+      franc de 30 000 à 50 000 SHU. Sa chair mince et sa forme effilée en font le
+      meilleur candidat au séchage et à la mouture : la « poudre de Cayenne » du
+      commerce en est issue.
+    conseils_culture: >
+      Variété productive et peu exigeante pour un piment fort, qui réussit
+      en pleine terre au nord de la Loire dans une bonne exposition. Un seul plant
+      fournit largement une famille pour l'année.
+    conseils_recolte: >
+      Récolter rouge. Les fruits se sèchent entiers en chapelet sans
+      préparation, grâce à leur chair mince.
+  en:
+    nom_commun: Cayenne pepper
+    noms_alternatifs: [Cayenne]
+    description: >
+      The classic European hot chilli: slender curved fruits 10–15 cm long
+      that dry very easily. Sharp heat of 30,000–50,000 SHU. Its thin flesh makes it
+      the best candidate for drying and grinding.
+
+cycle:
+  duree_avant_recolte_jours: [85, 110]
+  hauteur_adulte_cm: [60, 90]
+
+utilisations_culinaires_i18n:
+  fr: [Poudre de Cayenne, sauce piquante, harissa, plats créoles, huile pimentée]
+  en: [Cayenne powder, hot sauce, harissa, Creole dishes, chilli oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Piment_de_Cayenne
+contributeurs:
+  - "@potagerer"

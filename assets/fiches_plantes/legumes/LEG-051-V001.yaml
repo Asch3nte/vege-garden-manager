@@ -1,0 +1,35 @@
+# Fiche fille (variété) — Tabasco. Hérite de LEG-051.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-051-V001
+parent_id: LEG-051
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Tabasco
+    noms_alternatifs: [Piment tabasco]
+    description: >
+      Variété rendue mondialement célèbre par la sauce du même nom, produite en
+      Louisiane depuis 1868. Petits fruits dressés de 3 à 5 cm, passant du vert au
+      jaune-orange puis au rouge, à chair juteuse — particularité rare chez les
+      piments fins, qui permet la fermentation en purée. Piquant de 30 000 à
+      50 000 SHU.
+    conseils_recolte: >
+      Récolter rouge vif. La chair juteuse se prête à la purée fermentée
+      plutôt qu'au séchage, contrairement au cayenne.
+  en:
+    nom_commun: Tabasco
+    description: >
+      The variety behind the famous Louisiana sauce, made since 1868. Small
+      upright fruits ripening green to orange to red, unusually juicy for a slim
+      chilli, which is what allows the mash to ferment. 30,000–50,000 SHU.
+
+utilisations_culinaires_i18n:
+  fr: [Sauce tabasco, purée fermentée, vinaigre pimenté, cuisine cajun]
+  en: [Tabasco sauce, fermented mash, chilli vinegar, Cajun cooking]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Tabasco_(piment)
+contributeurs:
+  - "@potagerer"

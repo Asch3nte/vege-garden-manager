@@ -11,25 +11,25 @@
 > très cultivarisée. Elles restent extensibles : ajouter une ligne ⬜ dès qu'une
 > variété notable est identifiée.
 
-## État au 2026-08-16 (après le lot 12 — aromatiques)
+## État au 2026-08-16 (après le lot 13 — piments)
 
-**350 fiches** en base : **96 espèces mères + 254 variétés**, 0 doublon,
+**375 fiches** en base : **100 espèces mères + 275 variétés**, 0 doublon,
 0 référence d'association orpheline, registre et fichiers concordants.
 
 | Catégorie | Mères ✅ | Variétés ✅ | Total ✅ | Mères ⬜ | Variétés ⬜ |
 |---|---|---|---|---|---|
-| 🥕 Légumes (`LEG`) | 48 | 192 | 240 | 54 | 478 |
+| 🥕 Légumes (`LEG`) | **52** | **213** | **265** | 54 | 480 |
 | 🌿 Aromatiques (`ARO`) | **19** | **35** | **54** | 22 | 43 |
 | 🍎 Fruits (`FRU`) | 8 | 8 | 16 | 19 | 115 |
 | 🌱 Engrais verts (`ENG`) | 8 | 8 | 16 | 11 | 19 |
 | 🍓 Petits fruits (`PFR`) | 5 | 5 | 10 | 10 | 69 |
 | 🌾 Céréales (`CER`) | 4 | 4 | 8 | 6 | 12 |
 | 🌸 Fleurs (`FLE`) | 4 | 2 | 6 | 17 | 35 |
-| **Total** | **96** | **254** | **350** | **139** | **771** |
+| **Total** | **100** | **275** | **375** | **139** | **773** |
 
-Soit une **cible de 1 259 fiches** (235 mères + 1 024 variétés) telle que ce
+Soit une **cible de 1 287 fiches** (239 mères + 1 048 variétés) telle que ce
 document la décrit aujourd'hui — les listes 🔡 restant ouvertes, le total réel
-sera plus élevé. **La base est à ~28 % de la feuille de route.**
+sera plus élevé. **La base est à ~29 % de la feuille de route.**
 
 **Historique.** Les lots 1→11 (par famille botanique) ont été fusionnés le
 2026-07-18 avec un second effort de contenu mené en parallèle sur `main`
@@ -44,6 +44,11 @@ mélisse, sarriette des jardins, sarriette vivace, hysope, estragon,
 laurier-sauce, cerfeuil, livèche) et 26 variétés, dont les **8 premières
 variétés de basilic** (la mère 🔡 n'en avait aucune), 4 menthes, 2 thyms,
 2 aneths et les filles des nouvelles mères.
+
+**Lot 13 — piments (2026-08-16)** : 25 fiches appliquant l'arbitrage « une mère
+par espèce botanique » — `LEG-049` *C. annuum* (10 variétés), `LEG-050`
+*C. chinense* (6), `LEG-051` *C. frutescens* (2), `LEG-052` *C. baccatum* (3).
+Le poivron doux `LEG-019` reste distinct.
 
 ## Légende
 
@@ -177,44 +182,58 @@ Créées : ✅ `V001` Corno di Toro · ✅ `V002` California Wonder ·
 - ⬜ Nocera Giallo
 - ⬜ Topepo Rosso (tomate-poivron)
 
-### Piment — *Capsicum* spp. ⬜ *(id à attribuer)* 🔡
-> ✅ **Arbitrage tranché (2026-08-16)** : **une fiche mère par espèce botanique**
-> — *C. annuum*, *C. chinense*, *C. frutescens*, *C. baccatum*. Cohérent avec le
-> reste de la base, qui suit l'espèce ; les quatre diffèrent réellement en
-> rusticité, durée de cycle et conduite. Le poivron doux (`LEG-019`) reste une
-> mère distincte bien qu'également *C. annuum* : usage culinaire et conduite
-> assez éloignés pour que le jardinier les cherche séparément.
+### Piment — *Capsicum annuum* ✅ `LEG-049` 🔡
+> ✅ **Arbitrage tranché (2026-08-16), appliqué au lot 13** : **une fiche mère par
+> espèce botanique**. Le poivron doux (`LEG-019`) reste une mère distincte bien
+> qu'également *C. annuum* : usage culinaire et conduite assez éloignés pour que
+> le jardinier les cherche séparément.
 
-**⬜ Piment — *Capsicum annuum* (mère)**
-- ⬜ Piment d'Espelette (Gorria)
-- ⬜ Piment de Cayenne
-- ⬜ Jalapeño
-- ⬜ Serrano
-- ⬜ Poblano / Ancho
-- ⬜ Padrón
-- ⬜ Doux long des Landes
-- ⬜ Piment de Bresse
+Créées (lot 13) : ✅ `V001` d'Espelette (Gorria) · ✅ `V002` de Cayenne ·
+✅ `V003` Jalapeño · ✅ `V004` Serrano · ✅ `V005` Poblano (ancho séché) ·
+✅ `V006` Padrón · ✅ `V007` de Bresse · ✅ `V008` Piquillo ·
+✅ `V009` Hungarian Hot Wax · ✅ `V010` Chiltepin (var. *glabriusculum*)
 - ⬜ Corne de Bouc
-- ⬜ Piquillo
-- ⬜ Chiltepin
-- ⬜ Hungarian Hot Wax
+- ⬜ Anaheim / New Mexico
+- ⬜ Guajillo (mirasol séché)
+- ⬜ Pasilla / Chilaca
+- ⬜ Piment de Rocamadour
+- ⬜ Piment Doux Long des Landes
+- ⬜ Numex Big Jim
+- ⬜ Piment Long de Nice
 
-**⬜ Piment habanero — *Capsicum chinense* (mère)**
-- ⬜ Habanero orange
-- ⬜ Habanero chocolat
-- ⬜ Scotch Bonnet
-- ⬜ Fatalii
-- ⬜ Aji Dulce (doux)
-- ⬜ Carolina Reaper
+### Piment habanero — *Capsicum chinense* ✅ `LEG-050` 🔡
+Créées (lot 13) : ✅ `V001` Habanero orange · ✅ `V002` Habanero chocolat ·
+✅ `V003` Scotch Bonnet · ✅ `V004` Fatalii · ✅ `V005` Aji Dulce (sans piquant) ·
+✅ `V006` Carolina Reaper
+- ⬜ Habanero blanc (Peruvian White)
+- ⬜ Habanero Red Savina
+- ⬜ Trinidad Scorpion
+- ⬜ Bhut Jolokia (Ghost pepper)
+- ⬜ Madame Jeanette
+- ⬜ Datil
+- ⬜ 7 Pot Douglah
 
-**⬜ Piment oiseau — *Capsicum frutescens* (mère)**
-- ⬜ Tabasco
-- ⬜ Piment oiseau / Malagueta
+### Piment oiseau — *Capsicum frutescens* ✅ `LEG-051`
+Créées (lot 13) : ✅ `V001` Tabasco · ✅ `V002` Malagueta
+- ⬜ Piment oiseau de Cayenne
+- ⬜ Siling Labuyo
+- ⬜ Kambuzi
 
-**⬜ Piment *Capsicum baccatum* (mère)**
-- ⬜ Aji Amarillo
-- ⬜ Aji Limón / Lemon Drop
-- ⬜ Bishop's Crown
+### Piment aji — *Capsicum baccatum* ✅ `LEG-052`
+Créées (lot 13) : ✅ `V001` Aji Amarillo · ✅ `V002` Aji Limón (Lemon Drop) ·
+✅ `V003` Bishop's Crown
+- ⬜ Aji Panca
+- ⬜ Aji Cristal
+- ⬜ Brazilian Starfish
+- ⬜ Peppadew / Juanita
+
+### Piment rocoto — *Capsicum pubescens* ⬜ *(5e espèce cultivée, mère à créer)*
+> Seule espèce du genre à graines noires et à fleurs violettes, et la plus
+> tolérante au froid (cultivée jusqu'à 3 000 m dans les Andes) — d'où son
+> intérêt réel sous climat tempéré frais.
+- ⬜ Rocoto rouge
+- ⬜ Rocoto Manzano jaune
+- ⬜ Locoto bolivien
 
 ### Pomme de terre — *Solanum tuberosum* ✅ `LEG-020` 🔡
 Créées : ✅ `V001` Charlotte · ✅ `V002` Bintje · ✅ `V003` Ratte ·
@@ -1638,7 +1657,7 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
    lythraceae, oleaceae, rutaceae, iridaceae, geraniaceae, linaceae…) : elles
    attendent leurs espèces, signalées ci-dessus par *(famille déjà présente)*.
 2. **Attribuer les IDs** en continuité stricte du `_schema/id_registry.yaml` —
-   **prochains numéros libres : `LEG-049`, `ARO-020`, `FRU-009`, `PFR-006`,
+   **prochains numéros libres : `LEG-053`, `ARO-020`, `FRU-009`, `PFR-006`,
    `FLE-005`, `CER-005`, `ENG-009`**. Ne jamais réutiliser un numéro.
 3. **Héritage sparse** (ADR-0005) : une fiche variété ne déclare que ce qui
    diffère de la mère. C'est ce qui rend soutenable l'objectif « toutes variétés
@@ -1647,9 +1666,11 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
    - ✅ tranchés à la fusion : quinoa/amarante → `CER` · maïs doux → `CER-001` ·
      phacélie → `ENG-002` · raisin de table → `FRU-008` · avoine/seigle/sarrasin
      → `ENG`.
-   - ✅ tranché le 2026-08-16 : **piment** → **une mère par espèce botanique**
-     (*annuum*, *chinense*, *frutescens*, *baccatum*), le poivron doux
-     `LEG-019` restant à part.
+   - ✅ tranché le 2026-08-16 et **appliqué (lot 13)** : **piment** → **une mère
+     par espèce botanique** (`LEG-049` *annuum*, `LEG-050` *chinense*,
+     `LEG-051` *frutescens*, `LEG-052` *baccatum*), le poivron doux `LEG-019`
+     restant à part. La 5e espèce cultivée, le rocoto (*C. pubescens*), suivra
+     la même règle.
    - ⬜ encore ouverts : **potiron vs potimarron** (`LEG-021-V001` est un potiron
      sous une mère « Potimarron ») · **cornichon** (recommandation : mère
      distincte) · **pop-corn** (variété de `CER-001` ou mère) · **fraisier des
@@ -1666,8 +1687,10 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
    2. ~~**Aromatiques — filles** (basilic, menthe, thym, aneth)~~ ✅ **fait —
       lot 12** (26 variétés). Restent : persil (3), coriandre (3), ciboulette
       (2), + les filles des mères de second rang.
-   3. **Piment** (arbitrage ✅ tranché : une mère par espèce botanique) :
-      4 mères + ~25 filles. **Candidat n°1 pour le lot 13.**
+   3. ~~**Piment** (arbitrage ✅ tranché : une mère par espèce botanique)~~
+      ✅ **fait — lot 13 (2026-08-16)** : 4 mères + 21 filles. Reste la 5e
+      espèce cultivée, le **rocoto** (*C. pubescens*), et ~22 variétés
+      supplémentaires sur les quatre mères existantes.
    4. **Fruits — filles** : pommier (18), poirier (10), prunier (9), vigne (8),
       figuier (7), pêcher (7), cerisier (7) → ~66 filles sur des mères existantes.
    5. **Fruits — mères** : abricotier, cognassier, néflier (×2), kaki, noyer,
@@ -1691,11 +1714,11 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
       trémière, mauve, pélargonium, safran) + filles.
    10. **Céréales & engrais verts** : ~14 mères restantes + filles.
 
-> **Ordre de grandeur de la cible.** Le document décrit **235 espèces mères** et
-> **1 025 variétés**, créées + à créer, soit **1 260 fiches**. À 350 fiches
-> livrées, la base est **à ~28 %** de la feuille de route. Les listes 🔡 étant
+> **Ordre de grandeur de la cible.** Le document décrit **239 espèces mères** et
+> **1 048 variétés**, créées + à créer, soit **1 287 fiches**. À 375 fiches
+> livrées, la base est **à ~29 %** de la feuille de route. Les listes 🔡 étant
 > ouvertes par construction, la cible réelle est un plancher, pas un plafond.
 >
 > **Rythme observé** : les lots 1→11 ont produit 269 fiches, le lot 12 en a
-> ajouté 38. À ce rythme, la feuille de route complète représente une
-> vingtaine de lots supplémentaires.
+> ajouté 38 et le lot 13 en a ajouté 25. À ce rythme, la feuille de route
+> complète représente une vingtaine de lots supplémentaires.

@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Carolina Reaper. Hérite de LEG-050.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-050-V006
+parent_id: LEG-050
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Carolina Reaper
+    noms_alternatifs: [HP22B]
+    description: >
+      Hybride américain créé en Caroline du Sud, détenteur du record du piment
+      le plus fort du monde de 2013 à 2023, avec une moyenne de 1 640 000 SHU et des
+      pointes au-delà de 2 200 000. Fruits rouges bosselés terminés par une petite
+      queue en forme de dard. À manipuler avec des précautions réelles : gants, pièce
+      ventilée, et jamais à portée d'enfants.
+    conseils_culture: >
+      Le plus exigeant du lot : germination jusqu'à 5 semaines, cycle de
+      150 jours, culture sous abri indispensable hors régions méditerranéennes.
+    conseils_recolte: >
+      Gants et lunettes recommandés. Ne jamais broyer sans ventilation : les
+      vapeurs provoquent une irritation respiratoire immédiate.
+    erreurs_frequentes:
+      - Le cultiver à portée d'enfants sans signalisation claire
+      - Le manipuler ou le cuisiner sans gants ni ventilation
+  en:
+    nom_commun: Carolina Reaper
+    noms_alternatifs: [HP22B]
+    description: >
+      American hybrid bred in South Carolina, holder of the world's hottest
+      chilli record from 2013 to 2023, averaging 1,640,000 SHU. Bumpy red fruits with
+      a scorpion-like tail. Requires genuine handling precautions.
+
+besoins:
+  temperature_min_germination: 26
+  temperature_optimale: 30
+
+cycle:
+  duree_germination_jours: [21, 40]
+  duree_avant_recolte_jours: [120, 160]
+
+utilisations_culinaires_i18n:
+  fr: [Sauces extrêmes, poudre (dosage à la pointe de couteau), défis culinaires]
+  en: [Extreme hot sauces, powder (knife-tip doses), chilli challenges]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Carolina_Reaper
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,38 @@
+# Fiche fille (variété) — Aji Dulce. Hérite de LEG-050.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-050-V005
+parent_id: LEG-050
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Aji Dulce
+    noms_alternatifs: [Ají dulce, Piment doux vénézuélien, Cachucha]
+    description: >
+      Curiosité de l'espèce : un Capsicum chinense pratiquement sans piquant
+      (0 à 500 SHU) qui conserve intégralement l'arôme fruité et floral du habanero.
+      Petits fruits plissés passant du vert au rouge ou à l'orange. Base du sofrito
+      vénézuélien et cubain, il permet le parfum du habanero dans un plat destiné à
+      tous.
+    conseils_culture: >
+      Culture identique aux autres chinense, mêmes exigences de chaleur et
+      de précocité de semis malgré l'absence de piquant.
+    erreurs_frequentes:
+      - Le confondre avec un habanero à la récolte (fruits très ressemblants, à étiqueter au semis)
+  en:
+    nom_commun: Aji Dulce
+    noms_alternatifs: [Cachucha]
+    description: >
+      The oddity of the species: a Capsicum chinense with virtually no heat
+      (0–500 SHU) that keeps the full fruity, floral habanero aroma. The base of
+      Venezuelan and Cuban sofrito.
+
+utilisations_culinaires_i18n:
+  fr: [Sofrito, riz vénézuélien, haricots noirs, sauces douces parfumées]
+  en: [Sofrito, Venezuelan rice, black beans, mild aromatic sauces]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_chinense
+contributeurs:
+  - "@potagerer"

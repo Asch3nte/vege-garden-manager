@@ -1,0 +1,36 @@
+# Fiche fille (variété) — Bishop's Crown. Hérite de LEG-052.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-052-V003
+parent_id: LEG-052
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Bishop's Crown
+    noms_alternatifs: [Couronne d'évêque, Chapeau d'évêque, Ají flor]
+    description: >
+      Variété reconnaissable entre toutes par sa forme en soucoupe à trois ou
+      quatre lobes évasés, évoquant une mitre — d'où son nom. Particularité rare : le
+      piquant est très inégalement réparti dans le fruit, les ailes plates étant douces
+      et croquantes tandis que le cœur, près des graines, est nettement fort (5 000 à
+      30 000 SHU). Plante vigoureuse et très productive.
+    conseils_recolte: >
+      Récolter rouge. Les ailes se consomment crues en salade, le cœur se
+      réserve pour relever un plat : un même fruit fournit les deux usages.
+  en:
+    nom_commun: Bishop's Crown
+    noms_alternatifs: [Christmas Bell]
+    description: >
+      Instantly recognisable for its three- or four-lobed saucer shape,
+      like a mitre. Unusually, heat is very unevenly distributed: the flat wings are
+      mild and crisp while the core near the seeds is distinctly hot.
+
+utilisations_culinaires_i18n:
+  fr: [Salades (ailes), sauces (cœur), conserves au vinaigre, décor]
+  en: [Salads (wings), sauces (core), pickles, garnish]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_baccatum
+contributeurs:
+  - "@potagerer"

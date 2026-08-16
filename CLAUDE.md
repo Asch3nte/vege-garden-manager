@@ -224,12 +224,14 @@ Polymorphisme dès que pertinent.
 - **Contenu du catalogue — chantier ouvert et long** : feuille de route dans
   [`FICHES A CREER.md`](FICHES%20A%20CREER.md) (remise à niveau le 2026-08-16
   contre `_schema/id_registry.yaml`). Objectif assumé : **le maximum de fiches,
-  mères ET filles**. Cible décrite ≈ **1 260 fiches** (235 mères + 1 025
-  variétés) → la base est **à ~28 %**. Dernier lot livré : **lot 12 —
-  aromatiques** (2026-08-16, 38 fiches : 12 mères + 26 variétés, catégorie
-  portée de 7 à 19 mères). Priorité suivante : **piment** (arbitrage tranché —
-  une mère par espèce botanique : *annuum*, *chinense*, *frutescens*,
-  *baccatum*), puis les filles des fruitiers (1 variété par espèce aujourd'hui).
+  mères ET filles**. Cible décrite ≈ **1 287 fiches** (239 mères + 1 048
+  variétés) → la base est **à ~29 %** (375 fiches). Derniers lots livrés :
+  **lot 12 — aromatiques** (38 fiches, catégorie portée de 7 à 19 mères) et
+  **lot 13 — piments** (25 fiches, arbitrage « une mère par espèce botanique »
+  appliqué : `LEG-049` *annuum*, `LEG-050` *chinense*, `LEG-051` *frutescens*,
+  `LEG-052` *baccatum* ; le poivron doux `LEG-019` reste distinct). Priorité
+  suivante : les **filles des fruitiers** (1 variété par espèce aujourd'hui) et
+  les **petits fruits**.
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
   (procédure : [docs/17](docs/17-illustrations-glossaire.md)). Termes cliquables :
   **toutes les surfaces branchées** (vue Associations, bandeau + faits fiche,

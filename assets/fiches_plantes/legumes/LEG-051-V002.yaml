@@ -1,0 +1,32 @@
+# Fiche fille (variété) — Malagueta. Hérite de LEG-051.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: LEG-051-V002
+parent_id: LEG-051
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Malagueta
+    noms_alternatifs: [Piment malagueta, Piment oiseau brésilien]
+    description: >
+      Piment brésilien à très petits fruits effilés de 2 à 3 cm, dressés,
+      rouge vif à maturité. Piquant élevé (60 000 à 100 000 SHU) et goût net, sans
+      note fruitée. Pilier de la cuisine bahianaise, où il est employé frais, en
+      conserve dans l'huile de palme ou en sauce.
+  en:
+    nom_commun: Malagueta
+    noms_alternatifs: [Brazilian bird pepper]
+    description: >
+      Brazilian chilli with tiny upright tapering fruits, bright red when
+      ripe. High heat (60,000–100,000 SHU) and a clean taste. A pillar of Bahian
+      cooking, used fresh, preserved in palm oil, or as sauce.
+
+utilisations_culinaires_i18n:
+  fr: [Moqueca, acarajé, conserve à l'huile, sauce piquante brésilienne]
+  en: [Moqueca, acarajé, oil preserves, Brazilian hot sauce]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_frutescens
+contributeurs:
+  - "@potagerer"

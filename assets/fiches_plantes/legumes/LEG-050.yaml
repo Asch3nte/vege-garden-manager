@@ -1,0 +1,158 @@
+# Fiche mère (espèce) — Piment habanero (Capsicum chinense).
+# Arbitrage 2026-08-16 : une fiche mère par espèce botanique de Capsicum.
+id: LEG-050
+varietes_connues:
+  - LEG-050-V001
+  - LEG-050-V002
+  - LEG-050-V003
+  - LEG-050-V004
+  - LEG-050-V005
+  - LEG-050-V006
+version_fiche: 1
+categorie: legume
+sous_type: legume_fruit
+schema_version: 1
+difficulte: 3
+usages:
+  - alimentaire
+  - condimentaire
+  - ornementale
+
+rusticite:
+  zone_min: zone10
+
+nom_scientifique: Capsicum chinense
+famille_botanique: Solanaceae
+
+i18n:
+  fr:
+    nom_commun: Piment habanero
+    noms_alternatifs: [Capsicum chinense, Piment antillais, Piment-bonnet]
+    description: >
+      Espèce des Caraïbes et du bassin amazonien — son épithète chinense est une
+      erreur historique de son descripteur, elle n'a rien de chinois. Elle
+      rassemble les piments les plus forts du monde, du habanero classique
+      (100 000 à 350 000 SHU) au Carolina Reaper (plus de 1 500 000 SHU), mais
+      aussi des variétés sans piquant comme l'aji dulce. Fruits typiquement
+      lanternés ou fripés, à la peau fine, portés par plusieurs fleurs par nœud.
+      Son parfum fruité et floral, très reconnaissable, la distingue autant que
+      sa force.
+    conseils_culture: >
+      La plus exigeante des espèces de Capsicum sous climat tempéré : germination
+      lente et capricieuse (jusqu'à 4 semaines à 25–28 °C), cycle long de 100 à
+      140 jours. Semer dès janvier-février avec chaleur de fond, et prévoir une
+      serre, une véranda ou un mur exposé au sud — en plein champ au nord de la
+      Loire, les fruits n'ont souvent pas le temps de mûrir. Rentrer un pied en
+      pot l'hiver permet de le conserver plusieurs années : la plante est vivace
+      et produit bien mieux en deuxième année.
+    conseils_recolte: >
+      Attendre la coloration complète : un habanero vert n'a ni son arôme fruité
+      ni son plein piquant. Gants obligatoires — la capsaïcine de cette espèce
+      reste sur la peau et brûle plusieurs heures. Ne jamais broyer ces piments
+      sans ventilation, les vapeurs sont irritantes.
+    erreurs_frequentes:
+      - Semer trop tard (cycle trop long, aucune récolte mûre avant les gelées)
+      - Attendre les mêmes délais qu'un piment annuum (germination et maturation bien plus lentes)
+      - Manipuler à mains nues (brûlures durables, accidents oculaires)
+      - Jeter le pied à l'automne (rentré hors gel, il produit davantage l'année suivante)
+  en:
+    nom_commun: Habanero pepper
+    noms_alternatifs: [Capsicum chinense, Bonnet pepper]
+    description: >
+      Caribbean and Amazonian species — the epithet chinense is a historical
+      mistake, it is not Chinese. It holds the world's hottest chillies as well
+      as heatless ones like aji dulce, and is recognisable by its fruity, floral
+      aroma. Slow to germinate and long to ripen.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - bien_draine
+    - frais
+  ph_min: 6.0
+  ph_max: 7.0
+  temperature_min_germination: 25
+  temperature_optimale: 28
+  temperature_min_survie: 8
+  gele_fatal: true
+  temperature_max_tolerance: 38
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [14, 30]
+  duree_avant_recolte_jours: [100, 140]
+  hauteur_adulte_cm: [60, 120]
+  espacement_cm: 50
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 35
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [1, 2]
+      plantation: [5, 6]
+      recolte: [8, 10]
+    continental:
+      semis_interieur: [1, 2]
+      plantation: [5, 6]
+      recolte: [9, 10]
+    mediterraneen:
+      semis_interieur: [1, 2]
+      plantation: [4, 5]
+      recolte: [7, 11]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [7, 8]
+      plantation: [11, 12]
+      recolte: [2, 4]
+
+associations:
+  beneficies:
+    - id: ARO-001
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Le basilic éloigne les pucerons, très présents sous abri", en: "Basil deters aphids, a common problem under cover" }
+    - id: FLE-003
+      type: plante_piege
+      raison_i18n: { fr: "L'œillet d'Inde détourne nématodes et aleurodes des solanacées de serre", en: "French marigold diverts nematodes and whitefly from greenhouse nightshades" }
+    - id: ARO-002
+      raison_i18n: { fr: "Voisinage favorable en serre : occupe le sol au pied sans concurrencer", en: "A favourable greenhouse neighbour: covers the ground without competing" }
+  defavorables:
+    - id: LEG-024
+      type: allelopathie
+      raison_i18n: { fr: "Le fenouil inhibe la croissance des solanacées voisines", en: "Fennel inhibits neighbouring nightshades" }
+
+rotation:
+  famille: solanaceae
+  delai_retour_annees: 4
+  precedents_favorables: [legumineuses, engrais_verts]
+  precedents_defavorables: [solanaceae]
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Peau fine : sécher au déshydrateur ou au four très doux, le séchage à l'air libre moisit souvent", en: "Thin-skinned: use a dehydrator or very low oven — air drying often goes mouldy" }
+  - methode: congelation
+    duree_mois: 12
+  - methode: conserves
+    duree_mois: 12
+    conditions_i18n: { fr: "Base des sauces piquantes antillaises, fermentées ou au vinaigre", en: "The base of Caribbean hot sauces, fermented or in vinegar" }
+  - methode: frais
+    duree_jours: 10
+utilisations_culinaires_i18n:
+  fr: [Sauce piquante antillaise, jerk jamaïcain, colombo, marinades, rhum arrangé pimenté]
+  en: [Caribbean hot sauce, Jamaican jerk, colombo, marinades, spiced rum]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Capsicum_chinense
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"
