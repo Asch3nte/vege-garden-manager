@@ -1,0 +1,119 @@
+/* ============================================================
+   potager.css — écran « Mon potager »
+   Plan vu de dessus, tapable + détail de zone.
+   Écrans internes : base .phone (crème, en-tête clair, sans
+   arche ni grimpante). S'appuie sur bg-directions.css pour
+   tokens + chrome phone (pstatus / pbar / pscreen / bnav /
+   card / tag / weather). Palette A.
+   ============================================================ */
+
+/* — en-tête interne (titre + saison + actions) — */
+.phone .pbar > div:first-child { flex:1; min-width:0; }
+.phone .pbar h1 { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.phone .pbar .season { font-size:12px; color:var(--c-ink-2); display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.phone .pbar .season i { font-size:13px; color:var(--c-ocre); }
+.phone .pbar.back h1 { display:flex; align-items:center; gap:var(--sp-2); }
+.phone .backbtn { width:38px; height:38px; flex:0 0 auto; display:grid; place-items:center; border:none;
+  background:var(--c-alt); border-radius:var(--r-full); color:var(--c-ink); font-size:20px; cursor:default; }
+
+/* ============================================================
+   PLAN — vue de dessus
+   ============================================================ */
+.phone .plan { position:relative; border-radius:var(--r-lg); overflow:hidden;
+  background:
+    radial-gradient(120% 80% at 30% 0%, color-mix(in srgb,var(--c-terre) 14%,transparent), transparent 70%),
+    color-mix(in srgb,var(--c-terre) 18%,var(--c-alt));
+  border:1px solid var(--c-border); box-shadow:var(--e-1) inset; }
+/* allées / sol entre les planches */
+.phone .plan::before { content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(90deg, transparent 0 22px, color-mix(in srgb,var(--c-terre) 10%,transparent) 22px 23px);
+  opacity:.6; pointer-events:none; }
+
+/* planche (bed) */
+.phone .bed { position:relative; border-radius:10px; overflow:hidden; cursor:default;
+  background:color-mix(in srgb, var(--bed,var(--c-primary)) 9%, var(--c-surface));
+  border:1.5px solid color-mix(in srgb, var(--bed,var(--c-primary)) 34%, var(--c-border));
+  box-shadow:var(--e-1); padding:8px 9px; display:flex; flex-direction:column; gap:6px; min-width:0; }
+/* rangs plantés vus de dessus (texture) */
+.phone .bed::before { content:""; position:absolute; inset:0; opacity:.5; pointer-events:none;
+  background:repeating-linear-gradient(0deg, transparent 0 6px,
+    color-mix(in srgb, var(--bed,var(--c-primary)) 26%, transparent) 6px 7px); }
+.phone .bed > * { position:relative; }
+.phone .bed .bedtop { display:block; }
+.phone .bed .bedname { font-family:var(--font-title); font-weight:700; font-size:12.5px; color:var(--c-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.phone .bed .bedcrops { display:flex; flex-wrap:wrap; gap:4px; }
+.phone .bed .cchip { display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:600; color:var(--c-ink);
+  background:rgba(255,253,247,.82); border-radius:var(--r-full); padding:2px 7px 2px 5px; box-shadow:var(--e-1); }
+.phone .bed .cchip .cd { width:7px; height:7px; border-radius:var(--r-full); flex:0 0 auto; }
+.phone .bed .beddue { position:absolute; top:6px; right:6px; z-index:2; width:18px; height:18px; border-radius:var(--r-full);
+  display:grid; place-items:center; background:var(--c-warm); color:#FBF8F1; font-size:11px; box-shadow:var(--e-1); }
+
+/* — A · plan en grille (potager carré) — */
+.phone .plan.grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; padding:11px; }
+.phone .plan.grid .bed.span { grid-column:1 / -1; }
+.phone .plan.grid .bed { min-height:96px; }
+
+/* — B · plan spatial (maquette du jardin) — */
+.phone .plan.map { height:400px; }
+.phone .plan.map .bed { position:absolute; }
+
+/* — C · mini-plan + liste — */
+.phone .plan.mini { height:150px; display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:9px; }
+.phone .plan.mini .bed { min-height:0; padding:6px 7px; }
+.phone .plan.mini .bed.span { grid-column:1 / -1; }
+.phone .plan.mini .bed .bedname { font-size:11px; }
+
+.phone .zonelist { display:flex; flex-direction:column; gap:var(--sp-2); }
+.phone .zrow { display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-3); border-radius:var(--r-lg);
+  background:var(--c-surface); border:1px solid var(--c-border); box-shadow:var(--e-1); cursor:default; }
+.phone .zrow .zbar { width:5px; align-self:stretch; border-radius:var(--r-full); background:var(--bed,var(--c-primary)); flex:0 0 auto; }
+.phone .zrow .zmain { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.phone .zrow .zname { font-family:var(--font-title); font-weight:700; font-size:13.5px; }
+.phone .zrow .zmeta { font-size:11.5px; color:var(--c-ink-2); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.phone .zrow .ztask { font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:var(--r-full);
+  background:color-mix(in srgb,var(--c-warm) 14%,transparent); color:var(--c-warm); white-space:nowrap; }
+.phone .zrow .ztask.ok { background:color-mix(in srgb,var(--c-primary) 14%,transparent); color:var(--c-primary); }
+.phone .zrow .chev { color:var(--c-ink-2); opacity:.5; font-size:17px; flex:0 0 auto; }
+
+/* légende */
+.phone .legend { display:flex; flex-wrap:wrap; gap:8px 12px; padding:2px 2px 0; }
+.phone .legend .li { display:inline-flex; align-items:center; gap:5px; font-size:10.5px; color:var(--c-ink-2); }
+.phone .legend .li .cd { width:9px; height:9px; border-radius:3px; }
+
+/* ============================================================
+   STADE de croissance (semis → récolte)
+   ============================================================ */
+.phone .stage { display:flex; align-items:center; gap:3px; }
+.phone .stage .seg { width:16px; height:5px; border-radius:2px; background:color-mix(in srgb,var(--c-border) 80%,transparent); }
+.phone .stage .seg.on { background:var(--c-primary); }
+.phone .stage .slab { font-size:11px; font-weight:700; color:var(--c-primary); margin-left:5px; white-space:nowrap; }
+
+/* ============================================================
+   DÉTAIL de zone
+   ============================================================ */
+.phone .zhero { position:relative; border-radius:var(--r-lg); overflow:hidden; padding:11px; min-height:128px;
+  display:flex; flex-direction:column; justify-content:flex-end; gap:8px;
+  background:color-mix(in srgb, var(--bed,var(--c-primary)) 12%, var(--c-surface));
+  border:1.5px solid color-mix(in srgb, var(--bed,var(--c-primary)) 32%, var(--c-border)); box-shadow:var(--e-2); }
+.phone .zhero::before { content:""; position:absolute; inset:0; opacity:.5; pointer-events:none;
+  background:repeating-linear-gradient(0deg, transparent 0 8px, color-mix(in srgb, var(--bed,var(--c-primary)) 24%, transparent) 8px 9px); }
+.phone .zhero > * { position:relative; }
+.phone .zhero .zinfo { display:flex; flex-wrap:wrap; gap:6px; }
+.phone .zhero .ichip { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--c-ink); white-space:nowrap;
+  background:rgba(255,253,247,.88); border-radius:var(--r-full); padding:4px 10px; box-shadow:var(--e-1); }
+.phone .zhero .ichip i { font-size:13px; color:var(--c-primary); }
+
+.phone .culture { display:flex; flex-direction:column; gap:8px; padding:var(--sp-3) var(--sp-4);
+  background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--r-lg); box-shadow:var(--e-1); }
+.phone .culture .ctop { display:flex; align-items:center; gap:var(--sp-3); }
+.phone .culture .cmark { width:34px; height:34px; flex:0 0 auto; border-radius:var(--r-md); display:grid; place-items:center;
+  color:#FBF8F1; font-size:18px; box-shadow:var(--e-1); }
+.phone .culture .cnames { flex:1; min-width:0; }
+.phone .culture .cname { font-family:var(--font-title); font-weight:700; font-size:14.5px; }
+.phone .culture .cvar { font-size:11.5px; color:var(--c-ink-2); font-style:italic; }
+.phone .culture .crow { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3); }
+.phone .culture .ctask { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--c-ink);
+  background:color-mix(in srgb,var(--c-warm) 13%,transparent); border-radius:var(--r-full); padding:5px 11px; }
+.phone .culture .ctask i { font-size:14px; color:var(--c-warm); }
+.phone .culture .ctask.ok { background:color-mix(in srgb,var(--c-primary) 12%,transparent); }
+.phone .culture .ctask.ok i { color:var(--c-primary); }

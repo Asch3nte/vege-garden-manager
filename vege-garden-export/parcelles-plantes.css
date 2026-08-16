@@ -1,0 +1,50 @@
+/* parcelles-plantes.css — positionnement des massifs + layout comparé
+   (s'appuie sur bg-directions.css pour les tokens + chrome phone t2) */
+
+/* wrapper de plante dans le massif */
+.phone[data-variant="t2"] .field.plants { z-index:0; }
+.phone[data-variant="t2"] .field.plants .plant { position:absolute; pointer-events:none; }
+.phone[data-variant="t2"] .field.plants .plant svg { display:block; width:100%; height:100%; }
+
+/* bande « terre » qui ancre le massif en bas */
+.phone[data-variant="t2"] .field.plants .soil {
+  position:absolute; left:0; right:0; bottom:0; height:170px; z-index:0;
+  background:linear-gradient(to top,
+    color-mix(in srgb, var(--c-terre) 26%, transparent),
+    color-mix(in srgb, var(--c-terre) 8%, transparent) 60%, transparent);
+}
+
+/* cartes/alertes légèrement translucides → le massif transparaît derrière */
+.phone[data-variant="t2"] .field.plants ~ .pscreen .card,
+.phone[data-variant="t2"] .field.plants ~ .pscreen .alert {
+  background:color-mix(in srgb, var(--c-surface) 90%, transparent);
+  backdrop-filter:blur(3px);
+}
+.phone[data-variant="t2"] .field.plants ~ .bnav {
+  background:color-mix(in srgb, var(--c-surface) 88%, transparent);
+  backdrop-filter:blur(4px);
+}
+
+/* — comparatif 3 phones — */
+.plant-row { margin-top:var(--sp-6); display:flex; flex-wrap:wrap; gap:clamp(20px,3vw,40px); justify-content:center; }
+.pcol { display:flex; flex-direction:column; align-items:center; gap:var(--sp-3); width:344px; }
+.pcol .ptitle { display:flex; align-items:center; gap:var(--sp-2); font-family:var(--font-title); font-weight:800; font-size:18px; }
+.pcol .ptitle .pn { width:26px; height:26px; border-radius:7px; display:grid; place-items:center; color:#FBF8F1; font-size:13px; flex:0 0 auto; }
+.pcol .pdesc { font-size:13px; color:var(--page-ink2); text-align:center; max-width:300px; line-height:1.5; min-height:54px; }
+.pcol .pdesc b { color:var(--page-ink); font-weight:600; }
+.pcol .pchips { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+.pcol .pchip { font-size:11px; font-weight:600; padding:4px 10px; border-radius:var(--r-full); background:var(--page-card); border:1px solid var(--page-line); color:var(--page-ink2); display:inline-flex; align-items:center; gap:5px; }
+.pcol .pchip i { font-size:13px; color:var(--c-primary); }
+
+/* — kept / changed note — */
+.keepchange { margin-top:var(--sp-6); display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); }
+@media (max-width:680px){ .keepchange { grid-template-columns:1fr; } }
+.kc { border-radius:var(--r-lg); padding:var(--sp-5); box-shadow:var(--e-1); }
+.kc h4 { font-family:var(--font-title); font-size:14px; font-weight:700; margin:0 0 var(--sp-3); display:flex; align-items:center; gap:var(--sp-2); }
+.kc ul { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+.kc li { font-size:13.5px; display:flex; gap:var(--sp-2); align-items:baseline; color:var(--page-ink2); }
+.kc li i { flex:0 0 auto; font-size:14px; }
+.kc.keep { background:color-mix(in srgb,var(--c-primary) 8%,var(--page-card)); border:1px solid color-mix(in srgb,var(--c-primary) 22%,transparent); }
+.kc.keep h4 { color:var(--c-green-deep); } .kc.keep li i { color:var(--c-primary); }
+.kc.change { background:color-mix(in srgb,var(--c-aubergine) 8%,var(--page-card)); border:1px solid color-mix(in srgb,var(--c-aubergine) 22%,transparent); }
+.kc.change h4 { color:var(--c-aubergine); } .kc.change li i { color:var(--c-aubergine); }

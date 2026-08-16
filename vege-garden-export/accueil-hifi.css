@@ -1,0 +1,108 @@
+/* ============================================================
+   accueil-hifi.css — composants hi-fi de l'Accueil
+   Posés sur le décor validé .phone[data-variant="t2"]
+   (en-tête arche verte + cartes flottantes + tapis aromates
+   + grimpante). S'appuie sur bg-directions.css pour tokens
+   et chrome phone.
+   ============================================================ */
+
+/* le phone hi-fi vit dans une colonne legendée */
+.acol { display:flex; flex-direction:column; align-items:center; gap:var(--sp-4); }
+
+/* — garde-fous flex : libellés sur une ligne, en-tête compact — */
+.phone .pbar > div:first-child { flex:1; min-width:0; }
+.phone .pbar h1 { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.phone .pbar .greet { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.phone .slabel { white-space:nowrap; }
+.phone .slabel .count { flex:0 0 auto; }
+.phone .tag { white-space:nowrap; }
+
+/* — sous-titre de tâche (enrichissement hi-fi) — */
+.phone .task .tx { display:flex; flex-direction:column; gap:2px; }
+.phone .task .tx .sub { font-size:11.5px; color:var(--c-ink-2); margin-top:0; line-height:1.3; }
+.phone .task .chev { color:var(--c-ink-2); opacity:.5; font-size:16px; flex:0 0 auto; }
+
+/* tâche cochée (état "fait") */
+.phone .task.done .lab { color:var(--c-ink-2); text-decoration:line-through; }
+.phone .task.done .check { background:var(--c-primary); border-color:var(--c-primary); display:grid; place-items:center; }
+.phone .task.done .check::after { content:"\2713"; color:#FBF8F1; font-size:12px; font-weight:700; }
+
+/* lien "voir tout" en pied de carte */
+.phone .seeall { display:flex; align-items:center; justify-content:center; gap:6px;
+  font-size:12px; font-weight:600; color:var(--c-primary); padding:var(--sp-2) 0 var(--sp-1); }
+.phone .seeall i { font-size:14px; }
+
+/* ============================================================
+   Variante B — niveau / progression + tuiles statistiques
+   ============================================================ */
+.phone .levelrow { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3); }
+.phone .levelpill { display:inline-flex; align-items:center; gap:var(--sp-2);
+  padding:6px 8px 6px 12px; border-radius:var(--r-full);
+  background:rgba(255,253,247,.92); box-shadow:var(--e-1); backdrop-filter:blur(3px);
+  font-size:12px; font-weight:700; color:var(--c-green-deep); }
+.phone .levelpill > i { font-size:15px; color:var(--c-primary); }
+.phone .levelpill .prog { width:42px; height:5px; border-radius:var(--r-full);
+  background:color-mix(in srgb,var(--c-primary) 20%,transparent); overflow:hidden; }
+.phone .levelpill .prog > span { display:block; height:100%; background:var(--c-primary); border-radius:inherit; }
+.phone .zones { font-size:12px; font-weight:600; color:#FBF8F1; opacity:.92;
+  display:inline-flex; align-items:center; gap:5px; }
+.phone .zones i { font-size:14px; }
+
+.phone .statgrid { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3); }
+.phone .stat { border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-4);
+  box-shadow:var(--e-2); display:flex; flex-direction:column; gap:5px;
+  background:rgba(255,253,247,.92); backdrop-filter:blur(3px); }
+.phone .stat .row { display:flex; align-items:center; gap:6px; }
+.phone .stat i { font-size:20px; flex:0 0 auto; }
+.phone .stat .big { font-family:var(--font-title); font-weight:800; font-size:20px; line-height:1; }
+.phone .stat .lbl { font-size:11.5px; color:var(--c-ink-2); line-height:1.3; }
+.phone .stat.warn { background:color-mix(in srgb,var(--c-warm) 13%,var(--c-surface)); }
+.phone .stat.warn i, .phone .stat.warn .big { color:var(--c-warm); }
+.phone .stat.harvest i, .phone .stat.harvest .big { color:var(--c-aubergine); }
+
+/* tuile verrouillée (divulgation progressive selon le niveau) */
+.phone .stat.lock { align-items:flex-start; justify-content:center; color:var(--c-ink-2);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 9px,
+      color-mix(in srgb,var(--c-aubergine) 12%,transparent) 9px 10px),
+    rgba(255,253,247,.78);
+  border:1px dashed color-mix(in srgb,var(--c-aubergine) 40%,var(--c-border)); box-shadow:none; }
+.phone .stat.lock i { color:var(--c-aubergine); }
+.phone .stat.lock .big { font-size:13px; font-family:var(--font-title); color:var(--c-ink); }
+.phone .stat.lock .lbl { color:var(--c-ink-2); }
+
+/* ============================================================
+   Variante C — action focus + "ensuite"
+   ============================================================ */
+.phone .hero-action { background:rgba(255,253,247,.95); border-radius:var(--r-xl);
+  box-shadow:var(--e-3); padding:var(--sp-5) var(--sp-4) var(--sp-4);
+  display:flex; flex-direction:column; align-items:center; gap:var(--sp-3);
+  text-align:center; backdrop-filter:blur(4px); }
+.phone .hero-action .ring { width:82px; height:82px; border-radius:var(--r-full);
+  display:grid; place-items:center; font-size:36px; color:var(--c-primary);
+  background:color-mix(in srgb,var(--c-primary-2) 32%,var(--c-surface));
+  border:1px solid color-mix(in srgb,var(--c-primary) 22%,transparent); }
+.phone .hero-action .zone { font-size:11px; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--c-primary); }
+.phone .hero-action h2 { font-family:var(--font-title); font-weight:800; font-size:22px;
+  margin:0; letter-spacing:-.01em; line-height:1.1; }
+.phone .hero-action p { font-size:13px; color:var(--c-ink-2); margin:0; line-height:1.45; max-width:30ch; }
+.phone .btnrow { display:flex; flex-direction:column; gap:var(--sp-2); width:100%; margin-top:var(--sp-1); }
+.phone .btn { appearance:none; border:none; font-family:var(--font-body); font-weight:700;
+  font-size:14px; padding:13px var(--sp-5); border-radius:var(--r-md); width:100%;
+  min-height:48px; cursor:default; }
+.phone .btn.primary { background:var(--c-primary); color:#FBF8F1; box-shadow:var(--e-1); }
+.phone .btn.ghost { background:transparent; color:var(--c-green-deep);
+  border:1px solid color-mix(in srgb,var(--c-primary) 38%,transparent); min-height:44px; }
+
+.phone .ensuite { background:rgba(255,253,247,.9); border-radius:var(--r-lg);
+  box-shadow:var(--e-2); padding:var(--sp-1) var(--sp-4) var(--sp-2); backdrop-filter:blur(3px); }
+.phone .minirow { display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-3) 0; font-size:14px; }
+.phone .minirow + .minirow { border-top:1px solid color-mix(in srgb,var(--c-border) 70%,transparent); }
+.phone .minirow > i:first-child { font-size:19px; color:var(--c-primary); flex:0 0 auto; }
+.phone .minirow .grow { flex:1; min-width:0; }
+.phone .minirow .mtag { font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:var(--r-sm); flex:0 0 auto; }
+.phone .minirow .chev { color:var(--c-ink-2); opacity:.55; font-size:16px; flex:0 0 auto; }
+.phone .weatherlink { display:flex; align-items:center; justify-content:center; gap:var(--sp-2);
+  font-size:13px; font-weight:600; color:var(--c-green-deep); padding:var(--sp-1) 0; }
+.phone .weatherlink i { font-size:18px; color:var(--c-info); }
