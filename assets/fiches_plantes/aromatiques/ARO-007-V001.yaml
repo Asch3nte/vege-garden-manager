@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Aneth Bouquet. Hérite de ARO-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-007-V001
+parent_id: ARO-007
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Aneth Bouquet
+    noms_alternatifs: [Bouquet dill, Aneth commun]
+    description: >
+      Variété la plus répandue, cultivée aussi bien pour son feuillage que pour
+      ses graines. Grandes ombelles jaunes abondantes, montée à graine rapide,
+      ce qui la rend idéale pour la production de semences à condiment et pour
+      les conserves de cornichons, où l'on utilise l'ombelle entière.
+    conseils_culture: >
+      Semer en place, l'aneth ne se repiquant pas. Sa montaison rapide en fait
+      une variété à semer de façon échelonnée si l'on vise le feuillage.
+      Laisser quelques pieds monter en graine : ils se ressèment seuls et
+      nourrissent syrphes et micro-guêpes.
+    conseils_recolte: >
+      Feuillage jeune avant montaison ; ombelles vertes pour les conserves ;
+      graines mûres quand elles brunissent, en coupant l'ombelle entière
+      au-dessus d'un sac.
+  en:
+    nom_commun: Bouquet dill
+    description: >
+      The most widely grown dill, for both foliage and seed. Bolts quickly and
+      produces abundant umbels — the classic choice for pickling, where the
+      whole umbel is used.
+
+utilisations_culinaires_i18n:
+  fr: [Cornichons au vinaigre, saumon gravlax, marinades, sauce blanche, pommes de terre]
+  en: [Pickled gherkins, gravlax salmon, marinades, white sauce, potatoes]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aneth
+contributeurs:
+  - "@potagerer"

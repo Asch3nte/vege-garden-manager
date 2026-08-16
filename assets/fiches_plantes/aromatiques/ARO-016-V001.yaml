@@ -1,0 +1,69 @@
+# Fiche fille (variété) — Estragon de Russie. Hérite de ARO-016.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-016-V001
+parent_id: ARO-016
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Artemisia dracunculus subsp. dracunculoides"
+
+i18n:
+  fr:
+    nom_commun: Estragon de Russie
+    noms_alternatifs: [Estragon russe, Russian tarragon, Estragon de semis]
+    description: >
+      Sous-espèce fertile de l'estragon, la seule que l'on puisse semer — c'est
+      donc elle que contiennent tous les sachets de graines vendus sous le nom
+      d'« estragon ». Plus haute, plus vigoureuse et bien plus rustique que
+      l'estragon français, mais au parfum nettement plus faible, presque
+      herbacé, parfois légèrement amer. À choisir pour un climat rude ou une
+      culture en grande quantité, jamais pour la finesse aromatique.
+    conseils_culture: >
+      Se sème facilement au printemps, contrairement à l'estragon français
+      stérile. Très rustique et peu exigeant, il tolère des sols et des hivers
+      qui feraient périr le type français. Diviser tous les 3 ans. Le parfum
+      s'améliore un peu en sol pauvre et sec, mais ne rejoint jamais celui de
+      l'estragon français.
+    conseils_recolte: >
+      Récolter jeune : les feuilles âgées deviennent franchement amères. Doser
+      plus généreusement que l'estragon français, l'arôme étant plus faible.
+    erreurs_frequentes:
+      - L'acheter en croyant obtenir l'estragon français (déception aromatique garantie)
+      - Récolter des feuilles âgées (amertume marquée)
+  en:
+    nom_commun: Russian tarragon
+    description: >
+      Fertile subspecies of tarragon, the only one that can be raised from seed
+      — so it is what every "tarragon" seed packet contains. Taller, tougher
+      and far hardier than French tarragon, but distinctly weaker in flavour.
+
+rusticite:
+  zone_min: zone3
+
+besoins:
+  temperature_min_germination: 15
+  temperature_min_survie: -30
+  tolerance_secheresse: forte
+
+cycle:
+  duree_germination_jours: [10, 21]
+  hauteur_adulte_cm: [90, 150]
+  espacement_cm: 60
+  profondeur_semis_cm: 0.5
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 5]
+      plantation: [4, 6]
+      recolte: [5, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Estragon
+contributeurs:
+  - "@potagerer"

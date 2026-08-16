@@ -1,0 +1,40 @@
+# Fiche fille (variété) — Menthe Chocolat. Hérite de ARO-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-005-V005
+parent_id: ARO-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Mentha × piperita 'Chocolate'"
+
+i18n:
+  fr:
+    nom_commun: Menthe Chocolat
+    noms_alternatifs: [Chocolate mint, Menthe After Eight]
+    description: >
+      Sélection de menthe poivrée aux tiges brun pourpre et aux feuilles vert
+      foncé, dont le parfum mentholé s'accompagne d'une note cacaotée qui
+      rappelle l'association menthe-chocolat. Vigueur et port identiques à ceux
+      de la menthe poivrée. Très appréciée en infusion et en pâtisserie.
+    conseils_culture: >
+      Identique à la menthe poivrée : sol frais, mi-ombre, rhizomes à contenir.
+      La note chocolatée est plus marquée sur les plants cultivés en sol riche
+      et frais qu'en situation sèche.
+    conseils_recolte: >
+      Cueillir avant floraison. Les feuilles fraîches expriment nettement mieux
+      la note cacaotée que les feuilles séchées.
+  en:
+    nom_commun: Chocolate mint
+    description: >
+      Peppermint selection with purple-brown stems whose menthol scent carries
+      a cocoa note recalling mint-chocolate. Same vigour and habit as
+      peppermint.
+
+utilisations_culinaires_i18n:
+  fr: [Tisane, chocolat chaud, glace, mousse au chocolat, cocktails, sirop]
+  en: [Herbal tea, hot chocolate, ice cream, chocolate mousse, cocktails, syrup]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Menthe_poivr%C3%A9e
+contributeurs:
+  - "@potagerer"

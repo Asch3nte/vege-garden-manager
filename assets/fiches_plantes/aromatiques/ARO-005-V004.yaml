@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Menthe Pomme. Hérite de ARO-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-005-V004
+parent_id: ARO-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: Mentha suaveolens
+
+i18n:
+  fr:
+    nom_commun: Menthe Pomme
+    noms_alternatifs: [Menthe à feuilles rondes, Menthe velue, Mentha suaveolens]
+    description: >
+      Menthe aux larges feuilles rondes, épaisses et duveteuses, d'un vert
+      grisâtre, au parfum doux mêlant la menthe à une note fruitée de pomme.
+      Sa saveur très peu mentholée et sans amertume en fait la menthe préférée
+      des enfants et la plus polyvalente en dessert. Son feuillage velu la rend
+      aussi moins appétente pour les limaces que les autres menthes.
+    conseils_culture: >
+      Plus tolérante à la sécheresse et au plein soleil que les autres menthes,
+      grâce à son feuillage duveteux. Contenir les rhizomes comme toujours.
+      Une variété panachée de crème (Variegata) existe, tout aussi comestible.
+    conseils_recolte: >
+      Récolter les feuilles jeunes ; les feuilles âgées deviennent coriaces et
+      leur duvet plus perceptible en bouche.
+  en:
+    nom_commun: Apple mint
+    noms_alternatifs: [Round-leaved mint, Woolly mint]
+    description: >
+      Mint with broad, thick, downy round leaves and a soft scent blending mint
+      with apple. Barely mentholated and never bitter — the most child-friendly
+      mint, and more drought-tolerant than the others.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  tolerance_secheresse: moyenne
+
+utilisations_culinaires_i18n:
+  fr: [Salade de fruits, tisane, sorbet, taboulé, sirop, crumble, gelée de menthe]
+  en: [Fruit salad, herbal tea, sorbet, tabbouleh, syrup, crumble, mint jelly]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Menthe_%C3%A0_feuilles_rondes
+contributeurs:
+  - "@potagerer"

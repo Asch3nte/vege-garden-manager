@@ -1,0 +1,56 @@
+# Fiche fille (variété) — Romarin rampant. Hérite de ARO-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-008-V001
+parent_id: ARO-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Salvia rosmarinus 'Prostratus'"
+
+i18n:
+  fr:
+    nom_commun: Romarin rampant
+    noms_alternatifs: [Romarin Prostratus, Romarin retombant, Creeping rosemary]
+    description: >
+      Forme prostrée du romarin, ne dépassant guère 30 cm de haut mais
+      s'étalant sur 1 m et plus, les rameaux retombant en cascade. Feuillage et
+      arôme identiques au romarin dressé. Parfait en couvre-sol sur talus sec,
+      en muret ou en potée retombante ; sa floraison précoce en fait l'une des
+      premières ressources de nectar de l'année.
+    conseils_culture: >
+      Un peu plus frileux que le romarin dressé : réserver une exposition
+      chaude et abritée, ou cultiver en pot à protéger sous 0 °C en zone 7.
+      Drainage impératif, il craint l'eau stagnante plus encore que le type.
+      Ne pas tailler court, il repart mal du vieux bois.
+    conseils_recolte: >
+      Récolte identique au romarin commun, en prélevant les extrémités des
+      rameaux retombants.
+  en:
+    nom_commun: Creeping rosemary
+    noms_alternatifs: [Prostrate rosemary]
+    description: >
+      Prostrate form of rosemary, barely 30 cm tall but spreading over a metre,
+      with cascading stems. Same foliage and aroma as the upright type. Ideal
+      as ground cover on dry banks or spilling over walls.
+
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - couvre_sol
+  - ornementale
+
+rusticite:
+  zone_min: zone8
+
+besoins:
+  temperature_min_survie: -8
+
+cycle:
+  hauteur_adulte_cm: [20, 30]
+  espacement_cm: 100
+
+sources:
+  - https://fr.wikipedia.org/wiki/Romarin
+contributeurs:
+  - "@potagerer"

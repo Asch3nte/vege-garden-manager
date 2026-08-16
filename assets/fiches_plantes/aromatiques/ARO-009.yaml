@@ -1,0 +1,151 @@
+# Fiche mère (espèce) — Sauge officinale.
+# Taxonomie : Salvia officinalis. Agronomie : références horticoles.
+id: ARO-009
+varietes_connues: [ARO-009-V001, ARO-009-V002, ARO-009-V003]
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - compagnonnage
+  - ornementale
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Salvia officinalis
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Sauge officinale
+    noms_alternatifs: [Sauge, Herbe sacrée, Thé de Grèce]
+    description: >
+      Sous-arbuste vivace méditerranéen au feuillage gris-vert duveteux et
+      gaufré, très aromatique (thuyone, cinéole, camphre). Son nom vient du
+      latin salvare, « sauver », en référence à sa réputation médicinale
+      millénaire. Fleurs violettes en épis de mai à juillet, très recherchées
+      des bourdons. Touffe de 60 cm de haut et autant de large, durable 5 à 8
+      ans avant de se dégarnir de la base.
+    conseils_culture: >
+      Plein soleil, sol drainé, plutôt calcaire, sans excès d'eau ni d'azote.
+      Rabattre d'un tiers au printemps pour conserver un port compact et
+      retarder le boisement ; ne pas tailler à l'automne, la plante entre alors
+      en hiver affaiblie. Rajeunir la touffe par marcottage ou bouturage tous
+      les 4 à 5 ans. Supporte bien la culture en grand pot.
+    conseils_recolte: >
+      Cueillir les feuilles au fur et à mesure des besoins, toute l'année sous
+      climat doux. Les feuilles sont les plus parfumées avant la floraison. Une
+      récolte importante se fait le matin, par temps sec.
+    erreurs_frequentes:
+      - Sol humide en hiver (pourriture du collet)
+      - Taille automnale (affaiblit la plante avant le froid)
+      - Touffe jamais rajeunie (elle se dégarnit et devient ligneuse et improductive)
+  en:
+    nom_commun: Common sage
+    noms_alternatifs: [Garden sage]
+    description: >
+      Hardy Mediterranean sub-shrub with velvety grey-green leaves, highly
+      aromatic and long used medicinally. Purple flower spikes are much visited
+      by bumblebees.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - sec
+    - pauvre
+  ph_min: 6.0
+  ph_max: 8.0
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -18
+  gele_fatal: false
+  tolerance_secheresse: forte
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [10, 21]
+  duree_avant_recolte_jours: [120, 240]
+  hauteur_adulte_cm: [40, 70]
+  espacement_cm: 60
+  profondeur_semis_cm: 0.5
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 5]
+      plantation: [4, 6]
+      recolte: [4, 11]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [5, 10]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [1, 12]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [10, 5]
+
+associations:
+  beneficies:
+    - id: LEG-007
+      type: [repulsion_ravageur, brouillage_olfactif]
+      raison_i18n: { fr: "Association classique du potager : son odeur détourne la piéride du chou", en: "A classic garden pairing: its scent diverts cabbage white butterflies" }
+    - id: LEG-006
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réduit les pontes de piéride sur les brocolis voisins", en: "Reduces cabbage white egg-laying on neighbouring broccoli" }
+    - id: LEG-004
+      type: brouillage_olfactif
+      raison_i18n: { fr: "Brouille la piste olfactive de la mouche de la carotte", en: "Disrupts the carrot root fly's scent trail" }
+    - id: LEG-032
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Protège les choux frisés des chenilles défoliatrices", en: "Protects kale from defoliating caterpillars" }
+  defavorables:
+    - id: LEG-009
+      type: allelopathie
+      raison_i18n: { fr: "Voisinage traditionnellement déconseillé : le concombre supporte mal la proximité de la sauge", en: "Traditionally discouraged: cucumber fares poorly next to sage" }
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: faible
+
+repulsif_contre:
+  - pieride
+  - mouche_chou
+  - mouche_carotte
+  - limace
+
+conservation:
+  - methode: frais
+    duree_jours: 7
+    conditions_i18n: { fr: "Feuilles au réfrigérateur dans une boîte hermétique", en: "Leaves refrigerated in an airtight box" }
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Séchage rapide à l'ombre ; feuilles épaisses, à bien sécher pour éviter les moisissures", en: "Dry quickly in the shade; thick leaves must dry thoroughly to avoid mould" }
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Saltimbocca, beurre de sauge, farces, porc, haricots blancs, tisane digestive, vinaigre parfumé]
+  en: [Saltimbocca, sage butter, stuffings, pork, white beans, digestive tea, flavoured vinegar]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sauge_officinale
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

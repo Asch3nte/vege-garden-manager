@@ -1,0 +1,138 @@
+# Fiche mère (espèce) — Marjolaine.
+# Taxonomie : Origanum majorana. Distincte de l'origan (ARO-010) : plus douce,
+# non rustique ssous nos climats, cultivée en annuelle.
+id: ARO-011
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 2
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+
+rusticite:
+  zone_min: zone9
+
+nom_scientifique: Origanum majorana
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Marjolaine
+    noms_alternatifs: [Marjolaine à coquilles, Origan des jardins, Grand origan]
+    description: >
+      Vivace d'origine méditerranéenne orientale, gélive sous nos climats et de
+      ce fait cultivée en annuelle au nord de la Loire. Feuilles petites, ovales
+      et grises, au parfum nettement plus doux, sucré et floral que celui de
+      l'origan. Ses inflorescences en petites « coquilles » vert pâle, d'où son
+      nom, s'épanouissent en fleurs blanches de juillet à septembre. Plante
+      délicate, de 30 à 40 cm, qui demande chaleur et lumière.
+    conseils_culture: >
+      Semer au chaud (18–20 °C) en mars-avril, repiquer après les dernières
+      gelées : la marjolaine ne supporte pas le froid et fond au premier gel.
+      Sol léger, drainé, plutôt riche — contrairement à l'origan, elle apprécie
+      un sol fertile. Arrosages modérés mais réguliers en pot, où elle réussit
+      très bien. Sous climat doux (zone 9+), elle passe l'hiver et devient
+      vivace ; ailleurs, rentrer un pied en pot pour le conserver.
+    conseils_recolte: >
+      Couper les tiges avant la pleine floraison, quand les « coquilles » sont
+      formées mais les fleurs à peine ouvertes. Deux à trois coupes possibles
+      dans la saison. Son parfum délicat s'évapore à la cuisson : l'ajouter en
+      fin de préparation.
+    erreurs_frequentes:
+      - Semis ou plantation trop tôt (la moindre gelée est fatale)
+      - La confondre avec l'origan et la croire rustique (elle ne passe pas l'hiver)
+      - Cuisson prolongée (l'arôme, plus volatil que celui de l'origan, disparaît)
+  en:
+    nom_commun: Sweet marjoram
+    noms_alternatifs: [Knotted marjoram]
+    description: >
+      Tender Mediterranean perennial, grown as an annual in temperate gardens.
+      Sweeter and more floral than oregano, and — unlike it — killed by the
+      first frost.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+    - riche
+  ph_min: 6.0
+  ph_max: 8.0
+  temperature_min_germination: 18
+  temperature_optimale: 22
+  temperature_min_survie: 0
+  gele_fatal: true
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: vivace
+  enracinement: superficiel
+  duree_germination_jours: [10, 20]
+  duree_avant_recolte_jours: [80, 120]
+  hauteur_adulte_cm: [25, 45]
+  espacement_cm: 25
+  profondeur_semis_cm: 0.2
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [7, 9]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_interieur: [2, 3]
+      semis_exterieur: [4, 4]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_interieur: [9, 10]
+      plantation: [11, 12]
+      recolte: [1, 3]
+
+associations:
+  beneficies:
+    - id: LEG-004
+      type: brouillage_olfactif
+      raison_i18n: { fr: "Son parfum couvre celui des carottes et gêne la mouche de la carotte", en: "Its scent covers the carrots' and hampers carrot root fly" }
+    - id: LEG-016
+      raison_i18n: { fr: "Voisinage favorable, sans concurrence racinaire notable", en: "Favourable neighbour with no significant root competition" }
+    - id: LEG-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Sa floraison estivale attire les pollinisateurs près des tomates", en: "Its summer flowering draws pollinators near tomatoes" }
+  defavorables: []
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 2
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Séchage rapide à l'ombre ; parfum plus fragile que celui de l'origan, à consommer dans l'année", en: "Dry quickly in the shade; more fragile than oregano, best used within the year" }
+  - methode: frais
+    duree_jours: 5
+  - methode: congelation
+    duree_mois: 6
+utilisations_culinaires_i18n:
+  fr: [Farces, terrines, omelettes, légumes d'été, soupes, bouquet garni, tisane apaisante]
+  en: [Stuffings, terrines, omelettes, summer vegetables, soups, bouquet garni, calming tea]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Marjolaine
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

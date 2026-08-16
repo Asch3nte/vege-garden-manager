@@ -224,10 +224,12 @@ Polymorphisme dès que pertinent.
 - **Contenu du catalogue — chantier ouvert et long** : feuille de route dans
   [`FICHES A CREER.md`](FICHES%20A%20CREER.md) (remise à niveau le 2026-08-16
   contre `_schema/id_registry.yaml`). Objectif assumé : **le maximum de fiches,
-  mères ET filles**. Cible décrite ≈ **1 259 fiches** (235 mères + 1 024
-  variétés) → la base est **à ~25 %**. Dernier lot livré : **lot 11**
-  (variétés des amaranthacées). Priorité suivante : **aromatiques** (7 mères
-  seulement, romarin/sauge/origan/mélisse/estragon/laurier absents).
+  mères ET filles**. Cible décrite ≈ **1 260 fiches** (235 mères + 1 025
+  variétés) → la base est **à ~28 %**. Dernier lot livré : **lot 12 —
+  aromatiques** (2026-08-16, 38 fiches : 12 mères + 26 variétés, catégorie
+  portée de 7 à 19 mères). Priorité suivante : **piment** (arbitrage tranché —
+  une mère par espèce botanique : *annuum*, *chinense*, *frutescens*,
+  *baccatum*), puis les filles des fruitiers (1 variété par espèce aujourd'hui).
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
   (procédure : [docs/17](docs/17-illustrations-glossaire.md)). Termes cliquables :
   **toutes les surfaces branchées** (vue Associations, bandeau + faits fiche,

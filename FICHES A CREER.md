@@ -11,25 +11,25 @@
 > très cultivarisée. Elles restent extensibles : ajouter une ligne ⬜ dès qu'une
 > variété notable est identifiée.
 
-## État au 2026-08-16
+## État au 2026-08-16 (après le lot 12 — aromatiques)
 
-**312 fiches** en base : **84 espèces mères + 228 variétés**, 0 doublon,
-0 référence d'association orpheline.
+**350 fiches** en base : **96 espèces mères + 254 variétés**, 0 doublon,
+0 référence d'association orpheline, registre et fichiers concordants.
 
 | Catégorie | Mères ✅ | Variétés ✅ | Total ✅ | Mères ⬜ | Variétés ⬜ |
 |---|---|---|---|---|---|
 | 🥕 Légumes (`LEG`) | 48 | 192 | 240 | 54 | 478 |
-| 🌿 Aromatiques (`ARO`) | 7 | 9 | 16 | 34 | 68 |
+| 🌿 Aromatiques (`ARO`) | **19** | **35** | **54** | 22 | 43 |
 | 🍎 Fruits (`FRU`) | 8 | 8 | 16 | 19 | 115 |
 | 🌱 Engrais verts (`ENG`) | 8 | 8 | 16 | 11 | 19 |
 | 🍓 Petits fruits (`PFR`) | 5 | 5 | 10 | 10 | 69 |
 | 🌾 Céréales (`CER`) | 4 | 4 | 8 | 6 | 12 |
 | 🌸 Fleurs (`FLE`) | 4 | 2 | 6 | 17 | 35 |
-| **Total** | **84** | **228** | **312** | **151** | **796** |
+| **Total** | **96** | **254** | **350** | **139** | **771** |
 
 Soit une **cible de 1 259 fiches** (235 mères + 1 024 variétés) telle que ce
 document la décrit aujourd'hui — les listes 🔡 restant ouvertes, le total réel
-sera plus élevé. **La base est à ~25 % de la feuille de route.**
+sera plus élevé. **La base est à ~28 % de la feuille de route.**
 
 **Historique.** Les lots 1→11 (par famille botanique) ont été fusionnés le
 2026-07-18 avec un second effort de contenu mené en parallèle sur `main`
@@ -37,6 +37,13 @@ sera plus élevé. **La base est à ~25 % de la feuille de route.**
 Ce document avait été perdu lors de cette fusion et **remis à niveau le
 2026-08-16** contre `_schema/id_registry.yaml`, qui reste la source de vérité
 des IDs.
+
+**Lot 12 — aromatiques (2026-08-16)** : 38 fiches, la catégorie passe de 7 à
+19 mères. Créées — 12 mères (romarin, sauge officinale, origan, marjolaine,
+mélisse, sarriette des jardins, sarriette vivace, hysope, estragon,
+laurier-sauce, cerfeuil, livèche) et 26 variétés, dont les **8 premières
+variétés de basilic** (la mère 🔡 n'en avait aucune), 4 menthes, 2 thyms,
+2 aneths et les filles des nouvelles mères.
 
 ## Légende
 
@@ -952,34 +959,29 @@ Créées : ✅ `V001` Bleu de Solaise · ✅ `V002` de Carentan ·
 
 # 🌿 AROMATIQUES & CONDIMENTAIRES (`ARO`)
 
-> ⚠️ **Catégorie la plus incomplète** : 7 espèces mères seulement, et les
-> absentes sont des basiques (romarin, sauge, origan, mélisse, estragon,
-> laurier, sarriette). **Candidate n°1 pour le prochain lot.**
+> ✅ **Lot 12 livré (2026-08-16)** : la catégorie passe de 7 à **19 mères** et
+> de 9 à **35 variétés**. Les basiques manquants (romarin, sauge, origan,
+> marjolaine, mélisse, sarriette ×2, hysope, estragon, laurier-sauce, cerfeuil,
+> livèche) sont désormais fichés, et le basilic a enfin ses variétés.
+> Restent surtout des aromatiques de second rang et les exotiques.
 
 ## Lamiaceae — Lamiacées
 
 ### Basilic — *Ocimum basilicum* ✅ `ARO-001` 🔡
-> Fiche mère seule — **aucune variété créée** malgré le 🔡.
-- ⬜ Grand Vert (à grandes feuilles)
-- ⬜ Genovese
-- ⬜ Fin Vert Compact (à petites feuilles)
-- ⬜ Pourpre / Dark Opal
-- ⬜ Red Rubin
-- ⬜ Citron (*O. × africanum*)
-- ⬜ Cannelle
-- ⬜ Thaï (var. *thyrsiflora*)
+Créées (lot 12) : ✅ `V001` Grand Vert · ✅ `V002` Genovese ·
+✅ `V003` Fin Vert Compact (basilic grec en boule) · ✅ `V004` Pourpre (Dark Opal) ·
+✅ `V005` Citron (*O. × africanum*) · ✅ `V006` Cannelle ·
+✅ `V007` Thaï (var. *thyrsiflora*) · ✅ `V008` Marseillais (feuille de laitue)
+- ⬜ Red Rubin (si distingué du Dark Opal)
 - ⬜ Sacré / Tulsi (*O. tenuiflorum*, mère possible)
-- ⬜ Basilic à feuille de laitue (Mammouth)
-- ⬜ Basilic Marseillais
-- ⬜ Basilic grec / à petites feuilles en boule
 - ⬜ Basilic perpétuel / Africain (*O.* × hybride)
+- ⬜ Basilic Napolitain
+- ⬜ Basilic Réglisse
 
 ### Menthe — *Mentha* spp. ✅ `ARO-005` (menthe poivrée *M. × piperita*) 🔡
-Créée : ✅ `V001` Menthe Verte (*M. spicata*)
-- ⬜ Menthe Marocaine
-- ⬜ Menthe Bergamote
-- ⬜ Menthe Pomme
-- ⬜ Menthe Chocolat
+Créées : ✅ `V001` Menthe Verte (*M. spicata*) · ✅ `V002` Marocaine (lot 12) ·
+✅ `V003` Bergamote (lot 12) · ✅ `V004` Pomme (*M. suaveolens*, lot 12) ·
+✅ `V005` Chocolat (lot 12)
 - ⬜ Menthe Gingembre
 - ⬜ Menthe Ananas (panachée)
 - ⬜ Menthe Fraise
@@ -988,53 +990,49 @@ Créée : ✅ `V001` Menthe Verte (*M. spicata*)
 - ⬜ Menthe des champs (*M. arvensis*)
 
 ### Thym — *Thymus vulgaris* ✅ `ARO-004`
-Créée : ✅ `V001` Thym Citron (*T. × citriodorus*)
+Créées : ✅ `V001` Thym Citron (*T. × citriodorus*) ·
+✅ `V002` Serpolet (*T. serpyllum*, lot 12) · ✅ `V003` Doré (Aureus, lot 12)
 - ⬜ Thym commun compact
-- ⬜ Thym serpolet (*T. serpyllum*, mère possible)
 - ⬜ Thym d'hiver / Faustini
 - ⬜ Thym Orange
-- ⬜ Thym doré (Aureus)
 - ⬜ Thym laineux
 
-### Romarin — *Salvia rosmarinus* ⬜ *(id à attribuer)*
-- ⬜ Officinal dressé
-- ⬜ Rampant / Prostratus
-- ⬜ Miss Jessopp's Upright
+### Romarin — *Salvia rosmarinus* ✅ `ARO-008`
+Créées (lot 12) : ✅ `V001` Rampant (Prostratus) · ✅ `V002` Miss Jessopp's Upright
 - ⬜ Tuscan Blue
 - ⬜ Corse / à fleurs blanches
+- ⬜ Officinal dressé commun (si distingué de Miss Jessopp's)
 
-### Sauge officinale — *Salvia officinalis* ⬜ *(id à attribuer)*
-- ⬜ Officinale commune
-- ⬜ Purpurascens (pourpre)
-- ⬜ Tricolor
-- ⬜ Icterina (dorée)
+### Sauge officinale — *Salvia officinalis* ✅ `ARO-009`
+Créées (lot 12) : ✅ `V001` Pourpre (Purpurascens) · ✅ `V002` Tricolore ·
+✅ `V003` Dorée (Icterina)
 - ⬜ Berggarten (à larges feuilles)
+- ⬜ Albiflora (à fleurs blanches)
 
 ### Sauge ananas — *Salvia elegans* ⬜ *(id à attribuer)*
 
 ### Sauge sclarée — *Salvia sclarea* ⬜ *(id à attribuer)*
 
-### Origan — *Origanum vulgare* ⬜ *(id à attribuer)*
-- ⬜ Commun
-- ⬜ Doré (Aureum)
+### Origan — *Origanum vulgare* ✅ `ARO-010`
+Créées (lot 12) : ✅ `V001` Doré (Aureum) · ✅ `V002` Grec (subsp. *hirtum*)
 - ⬜ Compact / nain
-- ⬜ Origan grec (subsp. *hirtum*)
+- ⬜ Origan de Crète (*O. dictamnus*, mère possible)
 
-### Marjolaine — *Origanum majorana* ⬜ *(id à attribuer)*
-- ⬜ à coquilles
+### Marjolaine — *Origanum majorana* ✅ `ARO-011`
+- ⬜ à coquilles (si distinguée du type)
 
-### Mélisse — *Melissa officinalis* ⬜ *(id à attribuer)*
-- ⬜ Citronnelle
-- ⬜ Panachée (Aurea)
-- ⬜ Quedlinburger
+### Mélisse — *Melissa officinalis* ✅ `ARO-012`
+Créée (lot 12) : ✅ `V001` Panachée (Aurea)
+- ⬜ Quedlinburger (à haute teneur en huile essentielle)
 
-### Sarriette des jardins — *Satureja hortensis* ⬜ *(id à attribuer)*
+### Sarriette des jardins — *Satureja hortensis* ✅ `ARO-013`
 
-### Sarriette vivace (des montagnes) — *Satureja montana* ⬜ *(id à attribuer)*
+### Sarriette vivace (des montagnes) — *Satureja montana* ✅ `ARO-014`
+- ⬜ Naine / compacte
 
-### Hysope — *Hyssopus officinalis* ⬜ *(id à attribuer)*
-- ⬜ à fleurs bleues
-- ⬜ à fleurs roses / blanches
+### Hysope — *Hyssopus officinalis* ✅ `ARO-015`
+- ⬜ à fleurs roses
+- ⬜ à fleurs blanches (Albus)
 
 ### Lavande → voir § Fleurs (`FLE`)
 
@@ -1063,14 +1061,13 @@ Créées : ✅ `V001` Santos (montaison lente) · ✅ `V002` Commune
 - ⬜ Coriandre vietnamienne (*Persicaria odorata*, mère distincte)
 
 ### Aneth — *Anethum graveolens* ✅ `ARO-007`
-- ⬜ Commun
-- ⬜ Bouquet
-- ⬜ Mammouth
+Créées (lot 12) : ✅ `V001` Bouquet · ✅ `V002` Mammouth
 - ⬜ Vierling / Tetra
+- ⬜ Dukat
 
-### Cerfeuil — *Anthriscus cerefolium* ⬜ *(id à attribuer)*
-- ⬜ Commun
-- ⬜ Frisé (Vertissimo)
+### Cerfeuil — *Anthriscus cerefolium* ✅ `ARO-018`
+Créée (lot 12) : ✅ `V001` Frisé (Vertissimo)
+- ⬜ Commun à feuille plate (si distingué du type)
 
 ### Cerfeuil tubéreux — *Chaerophyllum bulbosum* ⬜ *(id à attribuer)*
 
@@ -1078,7 +1075,7 @@ Créées : ✅ `V001` Santos (montaison lente) · ✅ `V002` Commune
 
 ### Carvi — *Carum carvi* ⬜ *(id à attribuer)*
 
-### Livèche (ache des montagnes) — *Levisticum officinale* ⬜ *(id à attribuer)*
+### Livèche (ache des montagnes) — *Levisticum officinale* ✅ `ARO-019`
 
 ### Anis vert — *Pimpinella anisum* ⬜ *(id à attribuer)*
 
@@ -1095,13 +1092,16 @@ Créées : ✅ `V001` Ciboulette ail (*Allium tuberosum*) · ✅ `V002` Commune
 - ⬜ Ciboulette à grosses touffes (Staro)
 - ⬜ Ciboulette fine de Nice
 
-### Estragon — *Artemisia dracunculus* (Asteraceae) ⬜ *(id à attribuer)*
-- ⬜ Français / vrai (bouturé)
-- ⬜ de Russie (semis)
+### Estragon — *Artemisia dracunculus* (Asteraceae) ✅ `ARO-016`
+> La mère décrit l'estragon **français** (stérile, bouturé) — le seul
+> intéressant en cuisine.
+Créée (lot 12) : ✅ `V001` de Russie (subsp. *dracunculoides*, semis)
 
 ### Absinthe / Armoise — *Artemisia absinthium* ⬜ *(id à attribuer)*
 
-### Laurier-sauce — *Laurus nobilis* (Lauraceae) ⬜ *(id à attribuer)*
+### Laurier-sauce — *Laurus nobilis* (Lauraceae) ✅ `ARO-017`
+- ⬜ Angustifolia (à feuilles étroites)
+- ⬜ Aurea (feuillage doré)
 
 ### Verveine citronnelle — *Aloysia citrodora* (Verbenaceae) ⬜ *(id à attribuer)*
 
@@ -1638,7 +1638,7 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
    lythraceae, oleaceae, rutaceae, iridaceae, geraniaceae, linaceae…) : elles
    attendent leurs espèces, signalées ci-dessus par *(famille déjà présente)*.
 2. **Attribuer les IDs** en continuité stricte du `_schema/id_registry.yaml` —
-   **prochains numéros libres : `LEG-049`, `ARO-008`, `FRU-009`, `PFR-006`,
+   **prochains numéros libres : `LEG-049`, `ARO-020`, `FRU-009`, `PFR-006`,
    `FLE-005`, `CER-005`, `ENG-009`**. Ne jamais réutiliser un numéro.
 3. **Héritage sparse** (ADR-0005) : une fiche variété ne déclare que ce qui
    diffère de la mère. C'est ce qui rend soutenable l'objectif « toutes variétés
@@ -1657,13 +1657,17 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
 5. Les listes marquées 🔡 sont **ouvertes par construction** : y ajouter une
    ligne dès qu'une variété notable est identifiée, sans attendre un batch.
 6. **Ordre de bataille proposé** (du plus gros manque au plus fin) :
-   1. **Aromatiques — mères** : romarin, sauge, origan, marjolaine, mélisse,
-      estragon, laurier-sauce, sarriette (×2), hysope, cerfeuil, livèche,
-      camomille (×2), verveine, monarde, perilla → ~18 mères. La catégorie
-      passerait de 7 à ~25 mères.
-   2. **Aromatiques — filles** : basilic (13), menthe (10), thym (6), persil (3),
-      les nouvelles mères ci-dessus.
-   3. **Piment** : trancher l'arbitrage, puis 4 mères + ~25 filles.
+   1. ~~**Aromatiques — mères** (romarin, sauge, origan, marjolaine, mélisse,
+      estragon, laurier-sauce, sarriette ×2, hysope, cerfeuil, livèche)~~
+      ✅ **fait — lot 12 (2026-08-16)**. Restent : camomille (×2), verveine,
+      monarde, perilla, agastache, népéta, angélique, cerfeuil tubéreux, anis,
+      carvi, cumin, sauge ananas/sclarée, citronnelle, gingembre, curcuma,
+      stévia → ~18 mères de second rang.
+   2. ~~**Aromatiques — filles** (basilic, menthe, thym, aneth)~~ ✅ **fait —
+      lot 12** (26 variétés). Restent : persil (3), coriandre (3), ciboulette
+      (2), + les filles des mères de second rang.
+   3. **Piment** (arbitrage ✅ tranché : une mère par espèce botanique) :
+      4 mères + ~25 filles. **Candidat n°1 pour le lot 13.**
    4. **Fruits — filles** : pommier (18), poirier (10), prunier (9), vigne (8),
       figuier (7), pêcher (7), cerisier (7) → ~66 filles sur des mères existantes.
    5. **Fruits — mères** : abricotier, cognassier, néflier (×2), kaki, noyer,
@@ -1688,9 +1692,10 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
    10. **Céréales & engrais verts** : ~14 mères restantes + filles.
 
 > **Ordre de grandeur de la cible.** Le document décrit **235 espèces mères** et
-> **1 024 variétés**, créées + à créer, soit **1 259 fiches**. À 312 fiches
-> livrées, la base est **à ~25 %** de la feuille de route. Les listes 🔡 étant
+> **1 025 variétés**, créées + à créer, soit **1 260 fiches**. À 350 fiches
+> livrées, la base est **à ~28 %** de la feuille de route. Les listes 🔡 étant
 > ouvertes par construction, la cible réelle est un plancher, pas un plafond.
 >
-> **Rythme observé** : les lots 1→11 ont produit 269 fiches. À ce rythme, la
-> feuille de route complète représente une trentaine de lots supplémentaires.
+> **Rythme observé** : les lots 1→11 ont produit 269 fiches, le lot 12 en a
+> ajouté 38. À ce rythme, la feuille de route complète représente une
+> vingtaine de lots supplémentaires.

@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Sauge pourpre. Hérite de ARO-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-009-V001
+parent_id: ARO-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Salvia officinalis 'Purpurascens'"
+
+i18n:
+  fr:
+    nom_commun: Sauge pourpre
+    noms_alternatifs: [Sauge Purpurascens, Purple sage]
+    description: >
+      Sélection au jeune feuillage teinté de pourpre violacé, virant au
+      gris-vert pourpré en vieillissant. Arôme identique à celui de la sauge
+      officinale, peut-être légèrement plus doux. Port un peu plus compact et
+      floraison plus rare que le type. Très employée en bordure décorative,
+      où son feuillage contraste avec les verts du potager.
+    conseils_culture: >
+      Comme la sauge officinale, avec une exigence de soleil un peu plus
+      marquée : à l'ombre, le pourpre s'efface. Légèrement moins rustique que
+      le type ; pailler le pied en zone 5. Rabattre au printemps.
+    conseils_recolte: >
+      Récolte identique à la sauge officinale ; les jeunes feuilles pourpres
+      sont décoratives en garniture.
+  en:
+    nom_commun: Purple sage
+    description: >
+      Selection whose young leaves are flushed purple, ageing to purple-grey.
+      Same aroma as common sage, slightly milder, with a more compact habit and
+      sparse flowering.
+
+rusticite:
+  zone_min: zone6
+
+besoins:
+  temperature_min_survie: -15
+
+cycle:
+  hauteur_adulte_cm: [35, 55]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sauge_officinale
+contributeurs:
+  - "@potagerer"

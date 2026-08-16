@@ -1,0 +1,144 @@
+# Fiche mère (espèce) — Sarriette des jardins (annuelle).
+# Taxonomie : Satureja hortensis. Distincte de la sarriette vivace (ARO-014).
+id: ARO-013
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - compagnonnage
+  - repulsif
+
+rusticite:
+  zone_min: zone9
+
+nom_scientifique: Satureja hortensis
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Sarriette des jardins
+    noms_alternatifs: [Sarriette annuelle, Sarriette commune, Herbe de Saint-Julien, Poivre d'âne]
+    description: >
+      Annuelle méditerranéenne de 30 à 40 cm, aux tiges fines et rougeâtres
+      portant d'étroites feuilles vert sombre au goût poivré et chaud, proche
+      du thym mais plus piquant. Petites fleurs blanc rosé de juillet à
+      septembre, très visitées par les abeilles. C'est la sarriette
+      traditionnellement semée au pied des fèves et des haricots, réputée en
+      éloigner les pucerons noirs — l'une des associations les mieux ancrées
+      dans la pratique potagère.
+    conseils_culture: >
+      Semer en place en avril-mai, en sol léger, drainé et pauvre, au plein
+      soleil : la sarriette ne se repique pas volontiers. Éclaircir à 20 cm.
+      Aucun arrosage sauf sécheresse marquée, aucun apport d'azote. Semer
+      directement entre les rangs de fèves et de haricots pour bénéficier de
+      son effet répulsif. Se ressème seule d'une année sur l'autre en sol léger.
+    conseils_recolte: >
+      Récolter les tiges avant ou pendant la floraison, moment où l'arôme est
+      le plus puissant. Couper la plante entière en fin d'été et la sécher en
+      bouquets : la sarriette séchée conserve très bien son goût poivré.
+    erreurs_frequentes:
+      - Semis en godet puis repiquage (la plante supporte mal le déplacement)
+      - Sol trop riche ou trop arrosé (végétation molle, arôme fade)
+      - La confondre avec la sarriette vivace, plus dure et plus camphrée
+  en:
+    nom_commun: Summer savory
+    noms_alternatifs: [Annual savory]
+    description: >
+      Mediterranean annual with a peppery, thyme-like flavour. Traditionally
+      sown among broad beans and beans, where it is reputed to keep blackfly
+      away. Best sown in place — it dislikes being transplanted.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - leger
+    - pauvre
+    - sec
+  ph_min: 6.0
+  ph_max: 8.0
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: 0
+  gele_fatal: true
+  tolerance_secheresse: forte
+
+cycle:
+  type: annuelle
+  enracinement: superficiel
+  duree_germination_jours: [10, 20]
+  duree_avant_recolte_jours: [70, 100]
+  hauteur_adulte_cm: [25, 40]
+  espacement_cm: 20
+  profondeur_semis_cm: 0.5
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [4, 6]
+      plantation: [5, 6]
+      recolte: [7, 10]
+    continental:
+      semis_exterieur: [5, 6]
+      plantation: [5, 6]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_exterieur: [3, 5]
+      plantation: [4, 5]
+      recolte: [6, 10]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [10, 12]
+      recolte: [1, 4]
+
+associations:
+  beneficies:
+    - id: LEG-013
+      type: [repulsion_ravageur, brouillage_olfactif]
+      raison_i18n: { fr: "Association traditionnelle : semée entre les rangs, elle éloigne le puceron noir du haricot", en: "A traditional pairing: sown between rows, it keeps blackfly off beans" }
+    - id: LEG-026
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Protège les fèves du puceron noir, leur ravageur le plus constant", en: "Protects broad beans from blackfly, their most persistent pest" }
+    - id: LEG-018
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Éloigne les pucerons des pois", en: "Deters aphids from peas" }
+    - id: LEG-016
+      raison_i18n: { fr: "Voisinage favorable avec les alliacées", en: "Favourable neighbour to alliums" }
+  defavorables: []
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 2
+  fixe_azote: false
+  besoin_azote: faible
+
+repulsif_contre:
+  - puceron
+  - puceron_noir
+
+conservation:
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Bouquets séchés à l'ombre ; le goût poivré se conserve très bien", en: "Bunches dried in the shade; the peppery taste keeps very well" }
+  - methode: frais
+    duree_jours: 7
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Fèves, haricots secs, lentilles, grillades, fromage de chèvre, farces, vinaigre parfumé]
+  en: [Broad beans, dried beans, lentils, grilled meats, goat cheese, stuffings, flavoured vinegar]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sarriette_des_jardins
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Romarin Miss Jessopp's Upright. Hérite de ARO-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-008-V002
+parent_id: ARO-008
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Salvia rosmarinus 'Miss Jessopp's Upright'"
+
+i18n:
+  fr:
+    nom_commun: Romarin Miss Jessopp's Upright
+    noms_alternatifs: [Romarin dressé, Romarin colonnaire]
+    description: >
+      Sélection anglaise à port strictement dressé et colonnaire, atteignant
+      1,50 m sans s'étaler. Rameaux rigides et droits, feuillage dense, arôme
+      franc. C'est le romarin des haies basses et des topiaires, et le plus
+      pratique quand la place au sol manque. Un peu plus rustique que le type,
+      il est souvent recommandé au nord de la Loire.
+    conseils_culture: >
+      Même exigence de drainage que le romarin commun. Son port dressé se
+      maintient seul ; une taille légère après floraison suffit à densifier.
+      Se conduit très bien en haie basse le long d'une planche permanente.
+    conseils_recolte: >
+      Prélever les extrémités des rameaux dressés ; sa rigidité rend les tiges
+      idéales comme brochettes parfumées pour les grillades.
+  en:
+    nom_commun: Miss Jessopp's Upright rosemary
+    description: >
+      English selection with a strictly upright, columnar habit reaching 1.5 m
+      without spreading. The rosemary for low hedges and tight spaces, and
+      slightly hardier than the type.
+
+rusticite:
+  zone_min: zone7
+
+besoins:
+  temperature_min_survie: -15
+
+cycle:
+  hauteur_adulte_cm: [100, 150]
+  espacement_cm: 60
+
+sources:
+  - https://fr.wikipedia.org/wiki/Romarin
+contributeurs:
+  - "@potagerer"

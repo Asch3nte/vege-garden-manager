@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Sauge dorée. Hérite de ARO-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-009-V003
+parent_id: ARO-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Salvia officinalis 'Icterina'"
+
+i18n:
+  fr:
+    nom_commun: Sauge dorée
+    noms_alternatifs: [Sauge Icterina, Golden sage, Sauge panachée jaune]
+    description: >
+      Sauge au feuillage marginé de jaune d'or sur fond vert tendre, formant un
+      coussin bas et régulier de 30 à 40 cm. Comestible comme la sauge verte,
+      d'arôme un peu plus doux. Elle fleurit rarement, ce qui prolonge la
+      production de feuillage. Excellente en bordure ou en potée, où elle
+      apporte de la lumière toute l'année.
+    conseils_culture: >
+      Plein soleil pour maintenir la panachure. Un peu moins rustique que la
+      sauge verte mais plus que la Tricolor. Rabattre légèrement au printemps ;
+      supprimer les rameaux revenus au vert uni, plus vigoureux, qui
+      étoufferaient les panachés.
+    conseils_recolte: >
+      Récolte au fil des besoins toute l'année sous climat doux, le feuillage
+      étant persistant.
+  en:
+    nom_commun: Golden sage
+    noms_alternatifs: [Icterina sage]
+    description: >
+      Sage with gold-margined leaves forming a low, even cushion. Edible like
+      green sage, with a slightly milder aroma, and rarely flowers — which
+      extends leaf production.
+
+usages:
+  - condimentaire
+  - medicinale
+  - ornementale
+
+rusticite:
+  zone_min: zone6
+
+besoins:
+  temperature_min_survie: -12
+
+cycle:
+  hauteur_adulte_cm: [30, 40]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sauge_officinale
+contributeurs:
+  - "@potagerer"

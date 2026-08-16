@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Basilic Thaï. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V007
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Ocimum basilicum var. thyrsiflora"
+
+i18n:
+  fr:
+    nom_commun: Basilic Thaï
+    noms_alternatifs: [Horapha, Basilic anisé, Thai basil]
+    description: >
+      Basilic à tiges et boutons floraux violet foncé, feuilles vert sombre
+      étroites et fermes, au parfum puissant d'anis et de réglisse. Contrairement
+      aux basilics méditerranéens, il supporte très bien la cuisson et garde son
+      arôme dans les plats sautés ou mijotés — c'est l'ingrédient des currys
+      thaïs et des soupes vietnamiennes. Port dressé et compact, floraison en
+      épis pourpres décoratifs.
+    conseils_culture: >
+      Plus exigeant en chaleur que le basilic commun : ne pas sortir avant que
+      les nuits dépassent 12 °C. Réussit particulièrement bien en serre ou en
+      pot contre un mur exposé au sud. Pincer pour ramifier.
+    conseils_recolte: >
+      Récolter les tiges entières avec leurs boutons floraux, qui sont eux aussi
+      parfumés et se consomment. La cuisson ne détruit pas son arôme.
+  en:
+    nom_commun: Thai basil
+    noms_alternatifs: [Horapha]
+    description: >
+      Purple-stemmed basil with firm narrow leaves and a strong anise-liquorice
+      scent. Unlike Mediterranean basils it holds its aroma through cooking,
+      making it the basil of Thai curries and Vietnamese soups.
+
+besoins:
+  temperature_min_germination: 18
+  temperature_optimale: 25
+
+cycle:
+  hauteur_adulte_cm: [35, 50]
+
+utilisations_culinaires_i18n:
+  fr: [Curry thaï, pho, sautés au wok, nems, salades vietnamiennes, bœuf sauté]
+  en: [Thai curry, pho, stir-fries, spring rolls, Vietnamese salads, beef stir-fry]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_thaï
+contributeurs:
+  - "@potagerer"

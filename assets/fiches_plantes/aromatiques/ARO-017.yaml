@@ -1,0 +1,134 @@
+# Fiche mère (espèce) — Laurier-sauce.
+# Taxonomie : Laurus nobilis. Seul « laurier » comestible : ne pas confondre
+# avec le laurier-rose ou le laurier-cerise, tous deux toxiques.
+id: ARO-017
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - ornementale
+  - brise_vent
+
+rusticite:
+  zone_min: zone8
+
+nom_scientifique: Laurus nobilis
+famille_botanique: Lauraceae
+
+i18n:
+  fr:
+    nom_commun: Laurier-sauce
+    noms_alternatifs: [Laurier noble, Laurier d'Apollon, Laurier vrai]
+    description: >
+      Arbre ou grand arbuste méditerranéen à feuillage persistant, pouvant
+      atteindre 10 m en pleine terre mais se conduisant très bien taillé à 2 m
+      ou en bac. Feuilles coriaces, vert sombre et luisantes, au parfum
+      balsamique caractéristique, base du bouquet garni. C'est le laurier des
+      couronnes de l'Antiquité — et le seul laurier comestible du jardin :
+      le laurier-rose (Nerium) et le laurier-cerise (Prunus laurocerasus) sont
+      toxiques et ne doivent jamais être utilisés en cuisine.
+    conseils_culture: >
+      Sol ordinaire bien drainé, exposition chaude et abritée des vents froids.
+      Rustique jusqu'à environ –10 °C une fois adulte ; les jeunes sujets sont
+      plus fragiles et méritent un voile hivernal les premières années. Au nord
+      de la Loire, la culture en bac à rentrer en hiver est la plus sûre.
+      Tailler au printemps, il supporte très bien la taille (topiaire, haie).
+      Surveiller le psylle du laurier, qui enroule et déforme les jeunes feuilles.
+    conseils_recolte: >
+      Cueillir les feuilles toute l'année, en préférant les plus âgées, plus
+      parfumées que les jeunes pousses tendres. Une feuille fraîche est plus
+      amère qu'une feuille séchée : le séchage adoucit et affine l'arôme.
+    erreurs_frequentes:
+      - Confondre avec le laurier-rose ou le laurier-cerise, toxiques
+      - Planter en situation froide et venteuse sans protection (dégâts à -10 °C)
+      - Utiliser les jeunes feuilles fraîches en grande quantité (amertume)
+  en:
+    nom_commun: Bay laurel
+    noms_alternatifs: [Sweet bay, True laurel]
+    description: >
+      Evergreen Mediterranean tree or large shrub, easily kept clipped or grown
+      in a pot. The only edible laurel in the garden — oleander and cherry
+      laurel are toxic and must never be used in cooking.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - riche
+    - frais
+  ph_min: 6.0
+  ph_max: 8.0
+  temperature_optimale: 22
+  temperature_min_survie: -10
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: vivace
+  enracinement: profond
+  duree_germination_jours: [30, 90]
+  duree_avant_recolte_jours: [365, 730]
+  hauteur_adulte_cm: [200, 800]
+  espacement_cm: 200
+  profondeur_semis_cm: 2
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [4, 5]
+      recolte: [1, 12]
+    continental:
+      plantation: [5, 6]
+      recolte: [1, 12]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [1, 12]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [1, 12]
+
+associations:
+  beneficies:
+    - id: LEG-007
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Feuilles disposées au pied des choux, réputées gêner la piéride", en: "Leaves laid at the foot of brassicas are reputed to hamper cabbage whites" }
+    - id: LEG-013
+      type: brise_vent
+      raison_i18n: { fr: "Conduit en haie, il abrite les rames de haricots des vents desséchants", en: "Trained as a hedge, it shelters climbing beans from drying winds" }
+  defavorables:
+    - id: LEG-014
+      type: competition_lumiere
+      raison_i18n: { fr: "Son ombre dense et ses racines traçantes pénalisent les salades plantées trop près", en: "Its dense shade and spreading roots penalise lettuces planted too close" }
+
+rotation:
+  famille: lauraceae
+  delai_retour_annees: 5
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Feuilles séchées à plat, à l'ombre ; le séchage adoucit l'amertume et affine l'arôme", en: "Leaves dried flat in the shade; drying softens the bitterness and refines the aroma" }
+  - methode: frais
+    duree_jours: 30
+utilisations_culinaires_i18n:
+  fr: [Bouquet garni, court-bouillon, daubes, marinades, sauce béchamel, riz au lait, brochettes]
+  en: [Bouquet garni, court-bouillon, stews, marinades, béchamel sauce, rice pudding, skewers]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Laurier_noble
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

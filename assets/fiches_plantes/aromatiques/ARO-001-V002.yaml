@@ -1,0 +1,43 @@
+# Fiche fille (variété) — Basilic Genovese. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V002
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Basilic Genovese
+    noms_alternatifs: [Basilico Genovese, Basilic de Gênes]
+    description: >
+      Variété italienne de référence, seule autorisée dans le pesto alla
+      genovese AOP. Feuilles moyennes, très bombées en cuillère, d'un vert
+      profond, au parfum intense et sans la note mentholée que prennent
+      certains basilics. Port compact de 30 à 40 cm, floraison plus tardive
+      que le Grand Vert, ce qui allonge la période de récolte.
+    conseils_culture: >
+      Comme le basilic commun, avec une exigence de chaleur un peu plus
+      marquée. Pincer très tôt et régulièrement. Sa montée à fleur tardive
+      permet une récolte prolongée jusqu'en septembre en climat doux.
+    conseils_recolte: >
+      Récolter les feuilles jeunes, avant qu'elles ne dépassent 5 cm : c'est à
+      ce stade que le parfum est le plus fin, exigence du pesto traditionnel.
+  en:
+    nom_commun: Genovese basil
+    description: >
+      The Italian reference variety, the only one permitted in PDO pesto alla
+      genovese. Deep green spoon-shaped leaves, intense scent without the minty
+      note some basils develop. Flowers later, extending the harvest.
+
+cycle:
+  hauteur_adulte_cm: [30, 40]
+  espacement_cm: 20
+
+utilisations_culinaires_i18n:
+  fr: [Pesto alla genovese, pâtes, salade caprese, minestrone, huile parfumée]
+  en: [Pesto alla genovese, pasta, caprese salad, minestrone, infused oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

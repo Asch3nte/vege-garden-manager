@@ -1,0 +1,149 @@
+# Fiche mère (espèce) — Mélisse.
+# Taxonomie : Melissa officinalis. Agronomie : références horticoles.
+id: ARO-012
+varietes_connues: [ARO-012-V001]
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Melissa officinalis
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Mélisse
+    noms_alternatifs: [Mélisse officinale, Citronnelle, Piment des abeilles, Thé de France]
+    description: >
+      Vivace herbacée très rustique formant une touffe dense de 50 à 80 cm, aux
+      feuilles gaufrées vert tendre dégageant au froissement une odeur
+      citronnée franche (citral, citronellal). Son nom vient du grec melissa,
+      « abeille » : les apiculteurs frottaient jadis les ruches de ses feuilles
+      pour y fixer les essaims. Fleurs blanches discrètes de juin à septembre,
+      très mellifères. Se ressème abondamment et peut devenir envahissante.
+    conseils_culture: >
+      L'une des rares aromatiques qui préfère la mi-ombre et un sol frais : au
+      plein soleil brûlant, son feuillage jaunit. Sol ordinaire, même lourd,
+      pourvu qu'il reste frais. Rabattre à 10 cm après la floraison pour obtenir
+      une repousse tendre et éviter le semis spontané massif. Diviser la touffe
+      tous les 3 ou 4 ans. À contenir si l'on ne veut pas la voir coloniser :
+      supprimer les fleurs avant montée en graine.
+    conseils_recolte: >
+      Cueillir les feuilles jeunes, avant la floraison — ensuite, le parfum
+      citronné faiblit nettement. Utiliser de préférence fraîche : la mélisse
+      est l'une des herbes qui perdent le plus à la dessiccation.
+    erreurs_frequentes:
+      - Plein soleil et sol sec (feuillage jauni, parfum médiocre)
+      - Récolte après floraison (arôme citronné très atténué)
+      - La laisser monter en graine (semis spontanés envahissants)
+      - Compter sur la mélisse séchée (parfum largement perdu ; préférer fraîche ou congelée)
+  en:
+    nom_commun: Lemon balm
+    noms_alternatifs: [Common balm, Bee balm]
+    description: >
+      Very hardy herbaceous perennial with crinkled leaves smelling strongly of
+      lemon. One of the few herbs preferring part shade and cool soil. Loved by
+      bees, and a vigorous self-seeder.
+
+besoins:
+  ensoleillement: mi_ombre
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - riche
+    - bien_draine
+  ph_min: 5.5
+  ph_max: 7.5
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -25
+  gele_fatal: false
+  tolerance_secheresse: faible
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [14, 28]
+  duree_avant_recolte_jours: [90, 150]
+  hauteur_adulte_cm: [50, 80]
+  espacement_cm: 45
+  profondeur_semis_cm: 0.2
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 6]
+      plantation: [4, 6]
+      recolte: [5, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 9]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [4, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [11, 4]
+
+associations:
+  beneficies:
+    - id: LEG-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire abeilles et bourdons, améliorant la nouaison des tomates", en: "Draws bees and bumblebees, improving tomato fruit set" }
+    - id: LEG-011
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Renforce la visite des pollinisateurs sur les fleurs de courgette", en: "Increases pollinator visits to courgette flowers" }
+    - id: LEG-007
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Son odeur citronnée gêne la piéride du chou", en: "Its lemon scent hampers cabbage white butterflies" }
+    - id: PFR-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire les pollinisateurs près des fraisiers", en: "Attracts pollinators near strawberries" }
+  defavorables: []
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: modere
+
+repulsif_contre:
+  - pieride
+  - puceron
+
+conservation:
+  - methode: frais
+    duree_jours: 4
+    conditions_i18n: { fr: "Tiges dans l'eau ; feuillage tendre qui flétrit vite", en: "Stems in water; the tender leaves wilt quickly" }
+  - methode: congelation
+    duree_mois: 8
+    conditions_i18n: { fr: "Meilleure méthode de conservation : feuilles ciselées en glaçons, le parfum citronné est bien retenu", en: "Best method: chopped leaves frozen in ice cubes, the lemon scent is well retained" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Possible mais décevant : la mélisse perd beaucoup de son parfum au séchage", en: "Possible but disappointing: lemon balm loses much of its scent when dried" }
+utilisations_culinaires_i18n:
+  fr: [Tisane apaisante, salade de fruits, poisson, sirop, limonade, sorbet, eau de mélisse]
+  en: [Calming herbal tea, fruit salad, fish, syrup, lemonade, sorbet, balm water]
+
+sources:
+  - https://fr.wikipedia.org/wiki/M%C3%A9lisse_officinale
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

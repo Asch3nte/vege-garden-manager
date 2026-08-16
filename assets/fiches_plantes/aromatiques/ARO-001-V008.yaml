@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Basilic Marseillais. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V008
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Basilic Marseillais
+    noms_alternatifs: [Basilic à feuilles de laitue, Basilic Mammouth]
+    description: >
+      Variété provençale à très grandes feuilles gaufrées et cloquées, pouvant
+      atteindre 10 cm de long, d'un vert clair lumineux. Rendement en feuilles
+      le plus élevé de tous les basilics, avec un parfum doux et un peu moins
+      concentré que celui du Genovese. Ses grandes feuilles souples servent
+      traditionnellement à envelopper des préparations, à la manière de feuilles
+      de vigne.
+    conseils_culture: >
+      Sol riche et arrosage suivi : cette variété très foliaire est plus
+      gourmande en eau et en fertilité que les basilics à petites feuilles.
+      Pincer tôt. Un pied bien conduit fournit à lui seul le pistou d'une
+      famille.
+    conseils_recolte: >
+      Prélever les grandes feuilles individuellement au besoin, ou couper des
+      tiges entières pour une récolte de masse destinée au pistou.
+  en:
+    nom_commun: Lettuce-leaf basil
+    noms_alternatifs: [Mammoth basil]
+    description: >
+      Provençal variety with very large crinkled leaves up to 10 cm long. The
+      highest leaf yield of any basil, with a mild scent. The supple leaves are
+      traditionally used as wrappers.
+
+besoins:
+  arrosage: eleve
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+
+cycle:
+  hauteur_adulte_cm: [40, 60]
+  espacement_cm: 30
+
+utilisations_culinaires_i18n:
+  fr: [Pistou, soupe au pistou, salades, feuilles farcies, pesto, sandwichs]
+  en: [Pistou, pistou soup, salads, stuffed leaves, pesto, sandwiches]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

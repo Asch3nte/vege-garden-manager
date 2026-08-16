@@ -1,7 +1,8 @@
 # Fiche mère (espèce) — Menthe poivrée.
 # Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
 id: ARO-005
-version_fiche: 1
+varietes_connues: [ARO-005-V001, ARO-005-V002, ARO-005-V003, ARO-005-V004, ARO-005-V005]
+version_fiche: 2
 categorie: aromatique
 schema_version: 1
 difficulte: 1

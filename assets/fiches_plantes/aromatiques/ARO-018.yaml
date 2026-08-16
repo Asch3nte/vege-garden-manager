@@ -1,0 +1,142 @@
+# Fiche mère (espèce) — Cerfeuil.
+# Taxonomie : Anthriscus cerefolium. Agronomie : références horticoles.
+id: ARO-018
+varietes_connues: [ARO-018-V001]
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - compagnonnage
+
+rusticite:
+  zone_min: zone6
+
+nom_scientifique: Anthriscus cerefolium
+famille_botanique: Apiaceae
+
+i18n:
+  fr:
+    nom_commun: Cerfeuil
+    noms_alternatifs: [Cerfeuil commun, Cerfeuil des jardins, Persil d'Espagne]
+    description: >
+      Annuelle de 30 à 50 cm au feuillage finement découpé, vert tendre,
+      dégageant un parfum délicat d'anis et de persil. C'est l'une des quatre
+      « fines herbes » de la cuisine française, avec le persil, la ciboulette
+      et l'estragon. Plante de mi-ombre à cycle court qui monte très vite en
+      graine dès les chaleurs — d'où l'intérêt de semis échelonnés. Ses
+      ombelles blanches attirent de nombreux insectes auxiliaires.
+    conseils_culture: >
+      Semer en place, à la volée ou en ligne, tous les 15 jours de mars à
+      septembre : le cerfeuil ne se repique pas et file en graine en 6 à 8
+      semaines. Préférer la mi-ombre et un sol frais — au plein soleil d'été,
+      il monte presque immédiatement. Ne pas enterrer les graines (elles ont
+      besoin de lumière) : simple plombage. Garder le sol humide jusqu'à la
+      levée. Semis d'automne possible sous châssis pour une récolte hivernale.
+    conseils_recolte: >
+      Couper les feuilles 6 à 8 semaines après semis, avant l'apparition des
+      tiges florales. Toujours l'utiliser cru ou ajouté en fin de cuisson : la
+      chaleur détruit entièrement son parfum, le plus fragile des fines herbes.
+    erreurs_frequentes:
+      - Semis unique en début de saison (récolte finie en six semaines)
+      - Plein soleil en été (montaison quasi immédiate)
+      - Graines enterrées trop profond (levée très irrégulière)
+      - Cuisson (le parfum disparaît totalement)
+  en:
+    nom_commun: Chervil
+    noms_alternatifs: [Garden chervil, French parsley]
+    description: >
+      Annual with finely cut foliage and a delicate anise-and-parsley flavour,
+      one of the four French fines herbes. Short-cycled and quick to bolt in
+      heat, so it is best sown little and often, in part shade.
+
+besoins:
+  ensoleillement: mi_ombre
+  ensoleillement_min: ombre
+  arrosage: modere
+  qualites_sol:
+    - frais
+    - riche
+    - bien_draine
+    - leger
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 10
+  temperature_optimale: 16
+  temperature_min_survie: -8
+  gele_fatal: false
+  temperature_max_tolerance: 25
+  tolerance_secheresse: faible
+
+cycle:
+  type: annuelle
+  enracinement: superficiel
+  duree_germination_jours: [12, 21]
+  duree_avant_recolte_jours: [45, 60]
+  hauteur_adulte_cm: [30, 50]
+  espacement_cm: 15
+  profondeur_semis_cm: 0.2
+  profondeur_sol_min_cm: 15
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [3, 9]
+      recolte: [4, 11]
+    continental:
+      semis_exterieur: [4, 8]
+      recolte: [5, 10]
+    mediterraneen:
+      semis_exterieur: [2, 4]
+      recolte: [3, 6]
+  hemisphere_sud:
+    oceanique:
+      semis_exterieur: [9, 3]
+      recolte: [10, 5]
+
+associations:
+  beneficies:
+    - id: LEG-022
+      type: [succession_temporelle, etagement_lumiere]
+      raison_i18n: { fr: "Association classique : semé avec les radis, il lève en même temps et occupe l'espace après leur récolte", en: "A classic pairing: sown with radishes, it comes up at the same time and takes over the space after they are pulled" }
+    - id: LEG-014
+      type: etagement_lumiere
+      raison_i18n: { fr: "Profite de l'ombre légère des salades et garde le sol frais", en: "Enjoys the light shade of lettuces and keeps the soil cool" }
+    - id: LEG-013
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réputé éloigner les limaces et les fourmis des rangs de haricots", en: "Reputed to deter slugs and ants from bean rows" }
+    - id: LEG-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Laissé monter en fleur, il attire syrphes et micro-guêpes auxiliaires", en: "Left to flower, it draws hoverflies and parasitic wasps" }
+  defavorables: []
+
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: modere
+
+repulsif_contre:
+  - limace
+
+conservation:
+  - methode: frais
+    duree_jours: 3
+    conditions_i18n: { fr: "Très périssable : tiges dans l'eau au réfrigérateur, à consommer sous trois jours", en: "Highly perishable: stems in water in the fridge, use within three days" }
+  - methode: congelation
+    duree_mois: 6
+    conditions_i18n: { fr: "Seule conservation valable : ciselé en glaçons ; le séchage lui fait perdre tout son parfum", en: "The only worthwhile method: chopped and frozen in ice cubes; drying destroys the flavour" }
+utilisations_culinaires_i18n:
+  fr: [Fines herbes, omelette, potage, sauce gribiche, poisson, salade verte, beurre composé]
+  en: [Fines herbes, omelette, soup, gribiche sauce, fish, green salad, compound butter]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cerfeuil_commun
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,49 @@
+# Fiche fille (variété) — Basilic Cannelle. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V006
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Basilic Cannelle
+    noms_alternatifs: [Basilic mexicain, Cinnamon basil]
+    description: >
+      Variété à tiges pourpres et feuilles vert brillant légèrement dentées,
+      dont le parfum associe le basilic à une note nette de cannelle
+      (méthylcinnamate). Épis floraux roses très décoratifs et remarquablement
+      mellifères. Port dressé de 45 à 60 cm, vigoureux, l'un des basilics les
+      plus ornementaux au potager.
+    conseils_culture: >
+      Culture identique au basilic commun, chaleur exigée. Sa vigueur permet
+      des tailles franches. On peut laisser fleurir une partie des pieds pour
+      les abeilles, en pinçant les autres pour la récolte de feuilles.
+    conseils_recolte: >
+      Cueillir les jeunes pousses avant floraison pour la cuisine ; les épis
+      fleuris se conservent en bouquet sec décoratif.
+  en:
+    nom_commun: Cinnamon basil
+    noms_alternatifs: [Mexican basil]
+    description: >
+      Purple-stemmed variety whose scent combines basil with a clear cinnamon
+      note. Its pink flower spikes are highly ornamental and very attractive to
+      bees.
+
+usages:
+  - condimentaire
+  - repulsif
+  - mellifere
+  - ornementale
+
+cycle:
+  hauteur_adulte_cm: [45, 60]
+
+utilisations_culinaires_i18n:
+  fr: [Desserts aux fruits, compotes, thé glacé, cuisine asiatique, sirop, pain d'épices]
+  en: [Fruit desserts, compotes, iced tea, Asian cooking, syrup, spice bread]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

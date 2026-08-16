@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Menthe Marocaine. Hérite de ARO-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-005-V002
+parent_id: ARO-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Mentha spicata var. crispa 'Marocaine'"
+
+i18n:
+  fr:
+    nom_commun: Menthe Marocaine
+    noms_alternatifs: [Menthe verte marocaine, Nanah]
+    description: >
+      Sélection de menthe verte aux feuilles vert clair, gaufrées et brillantes,
+      au parfum frais et net, sans amertume ni note poivrée. C'est la menthe du
+      thé à la menthe maghrébin, la plus douce et la plus consensuelle des
+      menthes de jardin. Souche traçante vigoureuse, comme toutes les menthes.
+    conseils_culture: >
+      À planter impérativement en pot enterré ou en bac pour contenir ses
+      rhizomes, sous peine de la voir coloniser la planche entière. Sol frais,
+      mi-ombre. Rabattre après floraison pour une repousse tendre.
+    conseils_recolte: >
+      Cueillir les sommités avant floraison, quand le parfum est le plus franc.
+      Les feuilles fraîches sont incomparablement meilleures que séchées.
+  en:
+    nom_commun: Moroccan mint
+    noms_alternatifs: [Nanah]
+    description: >
+      Spearmint selection with bright crinkled leaves and a clean, sweet scent
+      without bitterness — the mint of North African mint tea, and the mildest
+      of the garden mints.
+
+utilisations_culinaires_i18n:
+  fr: [Thé à la menthe, taboulé, salade de fruits, mojito, sirop, yaourt à la menthe]
+  en: [Mint tea, tabbouleh, fruit salad, mojito, syrup, mint yoghurt]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Menthe_verte
+contributeurs:
+  - "@potagerer"

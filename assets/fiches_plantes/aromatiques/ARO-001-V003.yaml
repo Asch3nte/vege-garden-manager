@@ -1,0 +1,45 @@
+# Fiche fille (variété) — Basilic Fin Vert Compact. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V003
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Basilic Fin Vert Compact
+    noms_alternatifs: [Basilic à petites feuilles, Basilic grec, Basilic buisson]
+    description: >
+      Basilic nain formant naturellement une boule dense et régulière de 20 à
+      25 cm, couverte de minuscules feuilles très parfumées. Aucun pincement
+      n'est nécessaire pour obtenir cette forme. Sa compacité en fait le
+      meilleur basilic pour la culture en pot, en jardinière de balcon ou en
+      bordure, et il résiste un peu mieux au vent que les variétés dressées.
+    conseils_culture: >
+      Idéal en pot de 20 cm sur un rebord de fenêtre ensoleillé. Pas de
+      pincement à prévoir : le port en boule est spontané. Arroser
+      régulièrement, le petit volume de terre s'assèche vite.
+    conseils_recolte: >
+      Prélever de petites poignées de feuilles sans dégarnir la boule d'un seul
+      côté, pour conserver la forme et une repousse homogène.
+  en:
+    nom_commun: Greek bush basil
+    noms_alternatifs: [Small-leaved basil]
+    description: >
+      Dwarf basil forming a naturally dense ball of tiny, strongly scented
+      leaves. Needs no pinching to keep its shape — the best basil for pots,
+      window boxes and edging.
+
+cycle:
+  hauteur_adulte_cm: [20, 25]
+  espacement_cm: 20
+  profondeur_sol_min_cm: 15
+
+utilisations_culinaires_i18n:
+  fr: [Salades, pâtes, décor d'assiette, huile parfumée, pizza]
+  en: [Salads, pasta, plating garnish, infused oil, pizza]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

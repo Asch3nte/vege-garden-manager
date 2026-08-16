@@ -1,0 +1,56 @@
+# Fiche fille (variété) — Sauge tricolore. Hérite de ARO-009.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-009-V002
+parent_id: ARO-009
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Salvia officinalis 'Tricolor'"
+
+i18n:
+  fr:
+    nom_commun: Sauge tricolore
+    noms_alternatifs: [Sauge Tricolor, Sauge panachée]
+    description: >
+      Sauge ornementale au feuillage panaché de vert, de crème et de rose
+      pourpré, particulièrement lumineux au printemps. Comestible et
+      parfaitement utilisable en cuisine, avec un arôme un peu plus léger que
+      celui de la sauge verte. Croissance plus lente et rusticité moindre : la
+      panachure réduit la surface chlorophyllienne.
+    conseils_culture: >
+      La plus frileuse des sauges officinales : à réserver aux situations
+      chaudes et abritées, ou à cultiver en pot rentré en hiver au nord de la
+      Loire. Plein soleil impératif pour conserver la panachure. Supprimer les
+      rameaux revenus au vert uni.
+    conseils_recolte: >
+      Prélever modérément : la plante est moins vigoureuse que le type et
+      supporte mal les récoltes sévères.
+    erreurs_frequentes:
+      - Attendre d'elle la rusticité de la sauge verte (elle gèle bien plus tôt)
+      - Ne pas supprimer les rameaux revenus au vert (perte de la panachure)
+  en:
+    nom_commun: Tricolor sage
+    description: >
+      Ornamental sage variegated in green, cream and purple-pink. Fully edible,
+      with a lighter aroma, but slower growing and distinctly less hardy than
+      green sage.
+
+usages:
+  - condimentaire
+  - medicinale
+  - ornementale
+
+rusticite:
+  zone_min: zone7
+
+besoins:
+  temperature_min_survie: -10
+
+cycle:
+  hauteur_adulte_cm: [30, 45]
+  duree_avant_recolte_jours: [150, 270]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sauge_officinale
+contributeurs:
+  - "@potagerer"

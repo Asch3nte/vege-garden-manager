@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Thym doré. Hérite de ARO-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-004-V003
+parent_id: ARO-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Thymus vulgaris 'Aureus'"
+
+i18n:
+  fr:
+    nom_commun: Thym doré
+    noms_alternatifs: [Thym Aureus, Golden thyme, Thym panaché]
+    description: >
+      Sélection ornementale du thym commun au feuillage panaché de jaune d'or,
+      particulièrement lumineux au printemps et en automne. Arôme identique à
+      celui du thym commun, peut-être un peu plus doux. Port compact de 20 à
+      30 cm. Son intérêt est autant décoratif que culinaire : il éclaire une
+      bordure de potager toute l'année, le feuillage étant persistant.
+    conseils_culture: >
+      Comme le thym commun, mais légèrement moins vigoureux du fait de la
+      panachure (moins de chlorophylle) : lui réserver la place la plus
+      ensoleillée. Supprimer les rameaux qui reviennent au vert uni, sans quoi
+      ils prennent le dessus sur les panachés.
+    conseils_recolte: >
+      Récolte identique au thym commun, en préservant l'équilibre du coussin
+      pour l'aspect décoratif.
+    erreurs_frequentes:
+      - Ne pas supprimer les rameaux revenus au vert (la panachure disparaît en deux saisons)
+  en:
+    nom_commun: Golden thyme
+    noms_alternatifs: [Aureus thyme]
+    description: >
+      Ornamental selection of common thyme with gold-variegated evergreen
+      foliage. Same aroma, slightly less vigorous — reverted green shoots must
+      be removed or they take over.
+
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - ornementale
+
+cycle:
+  hauteur_adulte_cm: [20, 30]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Thym_commun
+contributeurs:
+  - "@potagerer"

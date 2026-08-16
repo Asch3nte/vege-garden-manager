@@ -2,7 +2,16 @@
 # Taxonomie & description : tool/scrap_fiche.dart (GBIF × Wikidata × Wikipédia).
 # Agronomie généralisée depuis la variété + références. Généré (Lot 3), relu.
 id: ARO-001
-version_fiche: 1
+varietes_connues:
+  - ARO-001-V001
+  - ARO-001-V002
+  - ARO-001-V003
+  - ARO-001-V004
+  - ARO-001-V005
+  - ARO-001-V006
+  - ARO-001-V007
+  - ARO-001-V008
+version_fiche: 2
 categorie: aromatique
 schema_version: 1
 difficulte: 1

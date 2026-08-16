@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Basilic Pourpre. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V004
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Basilic Pourpre
+    noms_alternatifs: [Dark Opal, Red Rubin, Basilic rouge]
+    description: >
+      Basilic à feuillage pourpre foncé presque noir, aux reflets métalliques,
+      dû à une forte teneur en anthocyanes. Parfum plus corsé et légèrement
+      poivré que celui du basilic vert, avec une note de clou de girofle.
+      Fleurs roses décoratives. Sa croissance est un peu plus lente et son
+      rendement inférieur aux variétés vertes : on le cultive autant pour
+      l'ornement que pour la cuisine.
+    conseils_culture: >
+      Exige un ensoleillement maximal : à l'ombre, le feuillage vire au vert
+      bronze et perd sa couleur. Croissance plus lente, à ne pas confondre avec
+      un problème de culture. Pincer comme les autres basilics.
+    conseils_recolte: >
+      Cueillir jeune, avant floraison. La couleur pourpre teinte joliment les
+      vinaigres et huiles d'infusion, qui prennent une teinte rubis.
+    erreurs_frequentes:
+      - Culture à l'ombre (feuillage qui verdit et perd son intérêt décoratif)
+  en:
+    nom_commun: Purple basil
+    noms_alternatifs: [Dark Opal, Red Rubin]
+    description: >
+      Basil with near-black purple foliage rich in anthocyanins, and a spicier,
+      slightly clove-like scent. Slower growing and less productive than green
+      varieties — grown as much for looks as for the kitchen.
+
+cycle:
+  duree_avant_recolte_jours: [50, 70]
+  hauteur_adulte_cm: [30, 45]
+
+utilisations_culinaires_i18n:
+  fr: [Vinaigre rubis, huile parfumée, salades colorées, décor, sirop, pesto pourpre]
+  en: [Ruby vinegar, infused oil, colourful salads, garnish, syrup, purple pesto]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

@@ -258,6 +258,14 @@ legumes:
   LEG-048: Patate douce
 aromatiques:
   ARO-001: Basilic
+  ARO-001-V001: Basilic Grand Vert
+  ARO-001-V002: Basilic Genovese
+  ARO-001-V003: Basilic Fin Vert Compact
+  ARO-001-V004: Basilic Pourpre
+  ARO-001-V005: Basilic Citron
+  ARO-001-V006: Basilic Cannelle
+  ARO-001-V007: Basilic Thaï
+  ARO-001-V008: Basilic Marseillais
   ARO-002: Persil
   ARO-002-V001: Persil frisé
   ARO-002-V002: Persil Géant d'Italie
@@ -267,12 +275,42 @@ aromatiques:
   ARO-003-V002: Ciboulette Commune
   ARO-004: Thym
   ARO-004-V001: Thym citron
+  ARO-004-V002: Thym serpolet
+  ARO-004-V003: Thym doré
   ARO-005: Menthe poivrée
   ARO-005-V001: Menthe verte
+  ARO-005-V002: Menthe Marocaine
+  ARO-005-V003: Menthe Bergamote
+  ARO-005-V004: Menthe Pomme
+  ARO-005-V005: Menthe Chocolat
   ARO-006: Coriandre
   ARO-006-V001: Coriandre Santos
   ARO-006-V002: Coriandre Commune
   ARO-007: Aneth
+  ARO-007-V001: Aneth Bouquet
+  ARO-007-V002: Aneth Mammouth
+  ARO-008: Romarin
+  ARO-008-V001: Romarin rampant
+  ARO-008-V002: Romarin Miss Jessopp's Upright
+  ARO-009: Sauge officinale
+  ARO-009-V001: Sauge pourpre
+  ARO-009-V002: Sauge tricolore
+  ARO-009-V003: Sauge dorée
+  ARO-010: Origan
+  ARO-010-V001: Origan doré
+  ARO-010-V002: Origan grec
+  ARO-011: Marjolaine
+  ARO-012: Mélisse
+  ARO-012-V001: Mélisse panachée
+  ARO-013: Sarriette des jardins
+  ARO-014: Sarriette vivace
+  ARO-015: Hysope
+  ARO-016: Estragon
+  ARO-016-V001: Estragon de Russie
+  ARO-017: Laurier-sauce
+  ARO-018: Cerfeuil
+  ARO-018-V001: Cerfeuil frisé
+  ARO-019: Livèche
 fruits:
   FRU-001: Pommier
   FRU-001-V001: Pommier 'Reine des Reinettes'
