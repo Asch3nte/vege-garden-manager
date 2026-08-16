@@ -212,8 +212,22 @@ Polymorphisme dès que pertinent.
       délai de retour avec année de libération, opportunités azote), gatée
       expert, lien glossaire `rotation-cultures`, clés ARB fr+en. Tests unitaires
       + widget en // (suite complète 1170 verte).
+26. **Catalogue — contenu réconcilié (312 fiches)** (2026-07-18) : deux efforts de
+    contenu avaient divergé (11 lots par famille botanique côté branche, 4 lots
+    fruits/céréales/engrais verts/fleurs côté `main`) avec des **IDs
+    incompatibles**. Union réconciliée en gardant la branche comme base,
+    réintégration des catégories absentes, repointage des références
+    d'association divergentes, registre régénéré. **84 espèces mères + 228
+    variétés**, 0 doublon, 0 référence orpheline.
 
 ### 🚧 En cours / prochaine étape
+- **Contenu du catalogue — chantier ouvert et long** : feuille de route dans
+  [`FICHES A CREER.md`](FICHES%20A%20CREER.md) (remise à niveau le 2026-08-16
+  contre `_schema/id_registry.yaml`). Objectif assumé : **le maximum de fiches,
+  mères ET filles**. Cible décrite ≈ **1 259 fiches** (235 mères + 1 024
+  variétés) → la base est **à ~25 %**. Dernier lot livré : **lot 11**
+  (variétés des amaranthacées). Priorité suivante : **aromatiques** (7 mères
+  seulement, romarin/sauge/origan/mélisse/estragon/laurier absents).
 - **Glossaire — suite** : illustrations choisies **par le dev** au fil de l'eau
   (procédure : [docs/17](docs/17-illustrations-glossaire.md)). Termes cliquables :
   **toutes les surfaces branchées** (vue Associations, bandeau + faits fiche,
