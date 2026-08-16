@@ -1,0 +1,147 @@
+# Fiche mère (espèce) — Livèche.
+# Taxonomie : Levisticum officinale. Agronomie : références horticoles.
+id: ARO-019
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - attire_auxiliaires
+
+rusticite:
+  zone_min: zone4
+
+nom_scientifique: Levisticum officinale
+famille_botanique: Apiaceae
+
+i18n:
+  fr:
+    nom_commun: Livèche
+    noms_alternatifs: [Ache des montagnes, Céleri perpétuel, Herbe à Maggi]
+    description: >
+      Grande vivace très rustique et très longévive, atteignant 1,50 à 2 m en
+      pleine végétation, aux larges feuilles luisantes découpées rappelant
+      celles du céleri. Son goût, extrêmement puissant, évoque le céleri
+      concentré — d'où son surnom d'« herbe à Maggi », bien que la marque n'en
+      contienne pas. Grandes ombelles jaune verdâtre en juin-juillet, très
+      visitées par les syrphes et les micro-guêpes auxiliaires. Un seul pied
+      suffit largement à un foyer.
+    conseils_culture: >
+      Réserver un emplacement définitif en fond de planche ou en bordure de
+      potager : la livèche est encombrante et vit 10 à 15 ans au même endroit.
+      Sol profond, frais et riche, mi-ombre ou soleil non brûlant. Semer les
+      graines fraîches à l'automne (elles perdent vite leur pouvoir germinatif)
+      ou diviser une touffe au printemps. Rabattre après floraison pour obtenir
+      une repousse de feuilles tendres. Disparaît totalement en hiver et
+      repart de souche en mars.
+    conseils_recolte: >
+      Cueillir les jeunes feuilles de mai à septembre, à la demande. Les tiges
+      creuses se consomment comme du céleri branche, les graines s'utilisent
+      comme condiment. Doser très peu : une seule feuille suffit à parfumer un
+      grand potage.
+    erreurs_frequentes:
+      - Sous-estimer sa taille adulte et la planter au milieu d'une planche (elle ombrage tout)
+      - Dosage culinaire trop généreux (le goût domine entièrement le plat)
+      - Semer des graines anciennes (pouvoir germinatif perdu en un an)
+  en:
+    nom_commun: Lovage
+    noms_alternatifs: [Garden lovage, Maggi herb]
+    description: >
+      Very hardy, long-lived perennial reaching up to 2 m, with a powerful
+      concentrated celery flavour. One plant is ample for a household. Its
+      umbels are much visited by hoverflies and parasitic wasps.
+
+besoins:
+  ensoleillement: mi_ombre
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - riche
+    - frais
+    - bien_draine
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_min_germination: 12
+  temperature_optimale: 18
+  temperature_min_survie: -25
+  gele_fatal: false
+  tolerance_secheresse: faible
+
+cycle:
+  type: vivace
+  enracinement: profond
+  duree_germination_jours: [14, 30]
+  duree_avant_recolte_jours: [120, 365]
+  hauteur_adulte_cm: [150, 200]
+  espacement_cm: 100
+  profondeur_semis_cm: 1
+  profondeur_sol_min_cm: 50
+  compatible_hors_sol: false
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_exterieur: [9, 10]
+      semis_interieur: [3, 4]
+      plantation: [4, 5]
+      recolte: [5, 10]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 9]
+    mediterraneen:
+      semis_exterieur: [9, 10]
+      plantation: [3, 4]
+      recolte: [4, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [11, 4]
+
+associations:
+  beneficies:
+    - id: LEG-020
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réputée fortifier les pommes de terre voisines et gêner leurs ravageurs", en: "Reputed to strengthen neighbouring potatoes and hamper their pests" }
+    - id: LEG-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Ses larges ombelles attirent syrphes et micro-guêpes, auxiliaires contre les pucerons", en: "Its broad umbels draw hoverflies and parasitic wasps, allies against aphids" }
+    - id: LEG-013
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Réservoir d'auxiliaires en bordure des rangs de haricots", en: "A reservoir of beneficial insects at the edge of bean rows" }
+  defavorables:
+    - id: LEG-014
+      type: competition_lumiere
+      raison_i18n: { fr: "Son ombre portée est trop dense pour des salades installées à moins d'un mètre", en: "Its shade is too dense for lettuces planted within a metre" }
+    - id: LEG-004
+      type: meme_famille_ravageurs
+      raison_i18n: { fr: "Même famille que la carotte : partage la mouche de la carotte et les maladies des apiacées", en: "Same family as carrot: shares carrot root fly and apiaceae diseases" }
+
+rotation:
+  famille: apiaceae
+  delai_retour_annees: 4
+  fixe_azote: false
+  besoin_azote: eleve
+
+conservation:
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Feuilles séchées à l'ombre ; le goût reste très puissant après séchage", en: "Leaves dried in the shade; the flavour stays very strong" }
+  - methode: congelation
+    duree_mois: 12
+  - methode: frais
+    duree_jours: 5
+utilisations_culinaires_i18n:
+  fr: [Potages, bouillons, pot-au-feu, farces, sel aromatisé, salades (à très petite dose), légumes secs]
+  en: [Soups, broths, stews, stuffings, herb salt, salads (very sparingly), pulses]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Liv%C3%A8che
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

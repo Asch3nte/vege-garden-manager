@@ -1,0 +1,60 @@
+# Fiche fille (variété) — Thym Serpolet. Hérite de ARO-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-004-V002
+parent_id: ARO-004
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: Thymus serpyllum
+
+i18n:
+  fr:
+    nom_commun: Thym serpolet
+    noms_alternatifs: [Serpolet, Thym sauvage, Thym rampant, Farigoulette]
+    description: >
+      Thym sauvage rampant, formant un tapis ras de 5 à 10 cm qui s'étale
+      lentement et fleurit en nappes roses à mauves de juin à août, envahies
+      d'abeilles. Arôme plus léger et plus fleuri que celui du thym commun.
+      Supporte le piétinement léger, ce qui en fait un excellent couvre-sol de
+      bordure, entre les dalles ou en rebord de planche permanente.
+    conseils_culture: >
+      Plus rustique et plus tolérant à l'humidité que le thym commun, mais
+      exige toujours un sol drainé. Ne se taille pas : on le laisse s'étaler.
+      Idéal en rocaille, en joint de dallage ou en bordure de planche, où sa
+      floraison sert de réservoir de pollinisateurs.
+    conseils_recolte: >
+      Cueillir les sommités fleuries en début de floraison. L'arôme, plus fin
+      que celui du thym commun, s'accorde mieux aux préparations délicates.
+  en:
+    nom_commun: Wild thyme
+    noms_alternatifs: [Creeping thyme, Breckland thyme]
+    description: >
+      Creeping wild thyme forming a low mat that flowers in pink sheets covered
+      with bees. Lighter, more floral aroma than common thyme, and tolerant of
+      light foot traffic — an excellent ground cover.
+
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - couvre_sol
+  - ornementale
+
+rusticite:
+  zone_min: zone4
+
+besoins:
+  temperature_min_survie: -25
+
+cycle:
+  hauteur_adulte_cm: [5, 15]
+  espacement_cm: 25
+
+utilisations_culinaires_i18n:
+  fr: [Tisane, poisson, légumes vapeur, miel de serpolet, marinades légères]
+  en: [Herbal tea, fish, steamed vegetables, wild thyme honey, light marinades]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Serpolet
+contributeurs:
+  - "@potagerer"

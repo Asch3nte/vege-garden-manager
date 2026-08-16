@@ -1,0 +1,147 @@
+# Fiche mère (espèce) — Origan.
+# Taxonomie : Origanum vulgare. Agronomie : références horticoles.
+id: ARO-010
+varietes_connues: [ARO-010-V001, ARO-010-V002]
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - attire_auxiliaires
+  - couvre_sol
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Origanum vulgare
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Origan
+    noms_alternatifs: [Marjolaine sauvage, Origan commun, Thé rouge]
+    description: >
+      Vivace herbacée à souche traçante, spontanée sur les coteaux calcaires
+      d'Europe. Tiges dressées de 30 à 60 cm portant de petites feuilles ovales
+      et des bouquets de fleurs roses à pourpres de juillet à septembre —
+      l'une des plantes les plus visitées du potager par les abeilles, papillons
+      et syrphes. Sa teneur en carvacrol, donc son parfum, dépend fortement de
+      l'ensoleillement : un origan cultivé à l'ombre est fade.
+    conseils_culture: >
+      Plein soleil impératif pour le parfum, sol drainé même pauvre et
+      caillouteux. Très rustique et sobre en eau une fois installé. La souche
+      s'étend doucement : diviser tous les 3 ans pour rajeunir. Rabattre les
+      tiges sèches en fin d'hiver. Excellent en bordure ou en rocaille, où il
+      joue aussi le rôle de couvre-sol et de réservoir d'auxiliaires.
+    conseils_recolte: >
+      Récolter les tiges juste au début de la floraison, moment où la
+      concentration en huiles essentielles est maximale — c'est le seul moment
+      qui donne l'arôme puissant de l'origan séché du commerce. Couper à 10 cm
+      du sol ; une seconde pousse suit en fin d'été.
+    erreurs_frequentes:
+      - Culture à l'ombre ou en sol trop riche (feuillage abondant mais sans parfum)
+      - Récolte trop tardive après la pleine floraison (arôme retombé)
+      - Confusion avec la marjolaine (Origanum majorana), plus douce et non rustique
+  en:
+    nom_commun: Oregano
+    noms_alternatifs: [Wild marjoram]
+    description: >
+      Hardy herbaceous perennial of European limestone hillsides. Its flavour
+      depends strongly on sunlight — oregano grown in shade is bland. Its
+      summer flowers are among the most visited by pollinators in the garden.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - sec
+    - pauvre
+    - leger
+  ph_min: 6.0
+  ph_max: 8.0
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -20
+  gele_fatal: false
+  tolerance_secheresse: forte
+
+cycle:
+  type: vivace
+  enracinement: superficiel
+  duree_germination_jours: [10, 20]
+  duree_avant_recolte_jours: [90, 150]
+  hauteur_adulte_cm: [30, 60]
+  espacement_cm: 35
+  profondeur_semis_cm: 0.2
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 5]
+      plantation: [4, 6]
+      recolte: [6, 9]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [6, 9]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [12, 3]
+
+associations:
+  beneficies:
+    - id: LEG-001
+      type: [attraction_pollinisateurs, repulsion_ravageur]
+      raison_i18n: { fr: "Attire syrphes et abeilles près des tomates tout en gênant les pucerons", en: "Draws hoverflies and bees near tomatoes while deterring aphids" }
+    - id: LEG-011
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Sa longue floraison assure la pollinisation des fleurs de courgette", en: "Its long flowering season helps pollinate courgette flowers" }
+    - id: LEG-007
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Gêne la piéride du chou par son odeur puissante", en: "Its strong scent hampers cabbage white butterflies" }
+    - id: LEG-009
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire les pollinisateurs indispensables aux concombres", en: "Attracts the pollinators cucumbers depend on" }
+  defavorables: []
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: faible
+
+repulsif_contre:
+  - puceron
+  - pieride
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Séché en bouquets à l'ombre — l'origan est l'une des rares aromatiques dont le parfum gagne au séchage", en: "Dried in bunches in the shade — one of the few herbs whose flavour improves when dried" }
+  - methode: frais
+    duree_jours: 7
+  - methode: congelation
+    duree_mois: 8
+utilisations_culinaires_i18n:
+  fr: [Pizza, sauce tomate, grillades, salade grecque, farces, huile parfumée, tisane]
+  en: [Pizza, tomato sauce, grilled meats, Greek salad, stuffings, infused oil, herbal tea]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Origan
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

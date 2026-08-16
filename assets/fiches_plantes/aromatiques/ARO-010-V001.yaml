@@ -1,0 +1,54 @@
+# Fiche fille (variété) — Origan doré. Hérite de ARO-010.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-010-V001
+parent_id: ARO-010
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Origanum vulgare 'Aureum'"
+
+i18n:
+  fr:
+    nom_commun: Origan doré
+    noms_alternatifs: [Origan Aureum, Golden oregano, Origan jaune]
+    description: >
+      Sélection à feuillage entièrement jaune d'or au printemps, verdissant
+      légèrement en été. Port bas et étalé de 20 à 25 cm, formant un tapis
+      lumineux. Arôme identique à l'origan commun mais plus discret. Sa couleur
+      vive en fait une bordure remarquable, et sa floraison rose reste tout
+      aussi mellifère que celle du type.
+    conseils_culture: >
+      Soleil non brûlant : contrairement à l'origan vert, le feuillage doré
+      peut se marquer par temps très chaud aux heures les plus fortes. La
+      mi-ombre légère lui convient et préserve mieux sa couleur qu'une
+      exposition brûlante. Diviser tous les 3 ans.
+    conseils_recolte: >
+      Cueillir les jeunes pousses au fil des besoins ; son arôme plus léger
+      convient aux préparations où l'origan commun serait trop dominant.
+  en:
+    nom_commun: Golden oregano
+    noms_alternatifs: [Aureum oregano]
+    description: >
+      Selection with entirely golden foliage in spring, forming a low bright
+      mat. Same aroma as common oregano but more discreet, with equally
+      bee-friendly pink flowers.
+
+usages:
+  - condimentaire
+  - mellifere
+  - attire_auxiliaires
+  - couvre_sol
+  - ornementale
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+
+cycle:
+  hauteur_adulte_cm: [20, 25]
+  espacement_cm: 30
+
+sources:
+  - https://fr.wikipedia.org/wiki/Origan
+contributeurs:
+  - "@potagerer"

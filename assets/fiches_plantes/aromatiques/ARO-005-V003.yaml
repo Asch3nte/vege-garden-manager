@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Menthe Bergamote. Hérite de ARO-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-005-V003
+parent_id: ARO-005
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Mentha × piperita var. citrata"
+
+i18n:
+  fr:
+    nom_commun: Menthe Bergamote
+    noms_alternatifs: [Menthe orange, Menthe citrus, Eau de Cologne]
+    description: >
+      Variété de menthe poivrée au feuillage arrondi vert sombre teinté de
+      pourpre, dégageant un parfum d'agrumes et de bergamote très différent de
+      la menthe classique, presque parfumé. Port un peu plus étalé, moins
+      envahissant que la menthe verte. Excellente en infusion et en dessert,
+      plus délicate qu'une menthe ordinaire en cuisine salée.
+    conseils_culture: >
+      Mêmes exigences que la menthe poivrée : sol frais, mi-ombre, contention
+      des rhizomes. Un peu moins vigoureuse, elle se conduit bien en pot de
+      30 cm sur un balcon ombragé.
+    conseils_recolte: >
+      Cueillir les jeunes pousses, dont le parfum d'agrume est le plus marqué.
+      La note bergamote s'atténue nettement après la floraison.
+  en:
+    nom_commun: Bergamot mint
+    noms_alternatifs: [Orange mint, Eau de Cologne mint]
+    description: >
+      Peppermint variety with rounded purple-tinged leaves and a citrus,
+      bergamot scent quite unlike ordinary mint. Slightly less invasive, and
+      excellent in teas and desserts.
+
+utilisations_culinaires_i18n:
+  fr: [Tisane, salade de fruits, sorbet, cocktails, sirop, chocolat, thé glacé]
+  en: [Herbal tea, fruit salad, sorbet, cocktails, syrup, chocolate, iced tea]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Menthe_poivr%C3%A9e
+contributeurs:
+  - "@potagerer"

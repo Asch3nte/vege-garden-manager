@@ -1,0 +1,136 @@
+# Fiche mère (espèce) — Estragon.
+# Taxonomie : Artemisia dracunculus. Attention : l'estragon français est stérile
+# et se multiplie uniquement par division/bouturage (voir conseils_culture).
+id: ARO-016
+varietes_connues: [ARO-016-V001]
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 2
+usages:
+  - condimentaire
+  - medicinale
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Artemisia dracunculus
+famille_botanique: Asteraceae
+
+i18n:
+  fr:
+    nom_commun: Estragon
+    noms_alternatifs: [Estragon français, Herbe dragon, Serpentine]
+    description: >
+      Vivace herbacée de 60 à 100 cm, aux longues feuilles étroites vert
+      brillant, au parfum anisé et légèrement réglissé caractéristique
+      (estragol). L'estragon dit « français », le seul intéressant en cuisine,
+      est stérile : il ne produit pas de graines viables et se multiplie
+      exclusivement par division de touffe ou bouturage. Tout sachet de graines
+      d'« estragon » vendu dans le commerce est en réalité de l'estragon de
+      Russie, plus rustique mais nettement moins parfumé.
+    conseils_culture: >
+      Acheter un plant, jamais des graines, si l'on veut l'estragon français.
+      Sol léger, drainé, plutôt pauvre, exposition chaude et abritée. Craint
+      l'humidité hivernale bien plus que le froid : pailler le pied en sol
+      lourd, ou cultiver en pot. Diviser la touffe tous les 3 ans, sans quoi
+      elle s'épuise et le parfum faiblit. Rabattre les tiges sèches en fin
+      d'hiver ; la végétation redémarre tard, en avril.
+    conseils_recolte: >
+      Cueillir les jeunes tiges feuillées de mai à septembre, avant la
+      floraison. Le parfum est maximal en début d'été. Utiliser de préférence
+      frais ou conservé au vinaigre : le séchage lui va mal.
+    erreurs_frequentes:
+      - Semer des graines en croyant obtenir l'estragon français (on récolte l'estragon de Russie, fade)
+      - Sol lourd et humide en hiver (pourriture des racines, principale cause de perte)
+      - Touffe jamais divisée (épuisement, perte de parfum au bout de 3-4 ans)
+      - Séchage (l'arôme anisé s'évapore presque entièrement)
+  en:
+    nom_commun: Tarragon
+    noms_alternatifs: [French tarragon]
+    description: >
+      Herbaceous perennial with narrow glossy leaves and a distinctive anise
+      flavour. True French tarragon is sterile and can only be propagated by
+      division or cuttings — seed always yields the blander Russian type.
+
+besoins:
+  ensoleillement: plein_soleil
+  ensoleillement_min: mi_ombre
+  arrosage: modere
+  qualites_sol:
+    - bien_draine
+    - leger
+    - pauvre
+  ph_min: 6.0
+  ph_max: 7.5
+  temperature_optimale: 22
+  temperature_min_survie: -18
+  gele_fatal: false
+  tolerance_secheresse: moyenne
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_avant_recolte_jours: [90, 150]
+  hauteur_adulte_cm: [60, 100]
+  espacement_cm: 50
+  profondeur_sol_min_cm: 30
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      plantation: [4, 5]
+      recolte: [5, 10]
+    continental:
+      plantation: [4, 6]
+      recolte: [6, 9]
+    mediterraneen:
+      plantation: [3, 5]
+      recolte: [4, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [11, 4]
+
+associations:
+  beneficies:
+    - id: LEG-002
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réputé éloigner plusieurs ravageurs des solanacées par son odeur anisée", en: "Reputed to deter several nightshade pests with its anise scent" }
+    - id: LEG-014
+      raison_i18n: { fr: "Bon voisin des salades, sans concurrence en surface", en: "A good neighbour to lettuces, with no surface competition" }
+    - id: LEG-001
+      type: brouillage_olfactif
+      raison_i18n: { fr: "Masque l'odeur des tomates auprès des insectes en quête d'hôtes", en: "Masks the tomato smell from host-seeking insects" }
+  defavorables: []
+
+rotation:
+  famille: asteraceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: modere
+
+conservation:
+  - methode: frais
+    duree_jours: 5
+    conditions_i18n: { fr: "Tiges au réfrigérateur dans un linge humide", en: "Stems refrigerated in a damp cloth" }
+  - methode: conserves
+    duree_mois: 12
+    conditions_i18n: { fr: "Meilleure conservation : branches entières dans du vinaigre blanc — le vinaigre à l'estragon est un classique", en: "Best method: whole sprigs in white vinegar — tarragon vinegar is a classic" }
+  - methode: congelation
+    duree_mois: 6
+  - methode: sechage
+    duree_mois: 6
+    conditions_i18n: { fr: "Déconseillé : l'arôme anisé disparaît presque entièrement", en: "Not recommended: the anise aroma is almost entirely lost" }
+utilisations_culinaires_i18n:
+  fr: [Sauce béarnaise, poulet à l'estragon, vinaigre parfumé, poisson, œufs, moutarde, salades]
+  en: [Béarnaise sauce, tarragon chicken, flavoured vinegar, fish, eggs, mustard, salads]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Estragon
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

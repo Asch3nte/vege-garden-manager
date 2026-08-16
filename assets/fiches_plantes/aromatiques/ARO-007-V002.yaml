@@ -1,0 +1,41 @@
+# Fiche fille (variété) — Aneth Mammouth. Hérite de ARO-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-007-V002
+parent_id: ARO-007
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Aneth Mammouth
+    noms_alternatifs: [Mammoth dill, Aneth géant]
+    description: >
+      Variété vigoureuse pouvant dépasser 1,50 m, à très grandes ombelles et
+      feuillage abondant. Sa haute taille en fait une plante de fond de planche
+      ou de bordure nord, à ne pas placer devant des cultures basses qu'elle
+      ombragerait. Rendement en graines le plus élevé des variétés courantes.
+    conseils_culture: >
+      Semer en place au fond d'une planche ou en bordure, à l'abri du vent :
+      sa hauteur la rend sensible à la verse, un tuteur léger peut être utile
+      en situation exposée. Éclaircir généreusement, à 30 cm.
+    conseils_recolte: >
+      Récolter le feuillage jeune sur les pieds destinés à la cuisine, et
+      laisser monter les autres pour les graines, très abondantes.
+    erreurs_frequentes:
+      - La planter devant des cultures basses (ombre portée importante)
+      - Semis trop serré (verse au premier coup de vent)
+  en:
+    nom_commun: Mammoth dill
+    description: >
+      Vigorous variety exceeding 1.5 m, with very large umbels and abundant
+      foliage. Best at the back of a bed — it will shade lower crops, and may
+      need staking in exposed sites.
+
+cycle:
+  hauteur_adulte_cm: [120, 160]
+  espacement_cm: 30
+
+sources:
+  - https://fr.wikipedia.org/wiki/Aneth
+contributeurs:
+  - "@potagerer"

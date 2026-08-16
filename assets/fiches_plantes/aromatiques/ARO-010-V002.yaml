@@ -1,0 +1,58 @@
+# Fiche fille (variété) — Origan grec. Hérite de ARO-010.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-010-V002
+parent_id: ARO-010
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Origanum vulgare subsp. hirtum"
+
+i18n:
+  fr:
+    nom_commun: Origan grec
+    noms_alternatifs: [Rigani, Origan à fleurs blanches, Greek oregano]
+    description: >
+      Sous-espèce méditerranéenne à feuilles duveteuses vert grisâtre et fleurs
+      blanches, nettement plus riche en carvacrol que l'origan commun : c'est
+      l'origan puissant et poivré des tavernes grecques et du commerce, le
+      « rigani ». Port un peu plus bas et plus compact. Sa teneur en huiles
+      essentielles est la plus élevée du genre.
+    conseils_culture: >
+      Exige plus de chaleur et de sécheresse que l'origan commun, et un
+      drainage parfait ; il est légèrement moins rustique. Sol pauvre et
+      caillouteux impératif pour développer son arôme caractéristique — en sol
+      riche il pousse mais devient banal.
+    conseils_recolte: >
+      Récolter impérativement au tout début de la floraison, moment où la
+      concentration en carvacrol culmine. Se sèche remarquablement bien.
+    erreurs_frequentes:
+      - Sol riche et arrosé (perte de la puissance aromatique qui fait tout son intérêt)
+  en:
+    nom_commun: Greek oregano
+    noms_alternatifs: [Rigani]
+    description: >
+      Mediterranean subspecies with downy grey leaves and white flowers, far
+      richer in carvacrol than common oregano — the pungent oregano of Greek
+      cooking and of commerce. Needs poor stony soil to express its aroma.
+
+rusticite:
+  zone_min: zone6
+
+besoins:
+  temperature_min_survie: -15
+  qualites_sol:
+    - bien_draine
+    - sec
+    - pauvre
+
+cycle:
+  hauteur_adulte_cm: [25, 45]
+
+utilisations_culinaires_i18n:
+  fr: [Salade grecque, feta grillée, souvlaki, sauce tomate, pizza, huile parfumée]
+  en: [Greek salad, grilled feta, souvlaki, tomato sauce, pizza, infused oil]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Origan
+contributeurs:
+  - "@potagerer"

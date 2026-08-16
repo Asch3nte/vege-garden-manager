@@ -1,0 +1,141 @@
+# Fiche mère (espèce) — Sarriette vivace.
+# Taxonomie : Satureja montana. Distincte de la sarriette annuelle (ARO-013).
+id: ARO-014
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - compagnonnage
+  - ornementale
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Satureja montana
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Sarriette vivace
+    noms_alternatifs: [Sarriette des montagnes, Sarriette d'hiver, Pèbre d'ai]
+    description: >
+      Sous-arbuste vivace des garrigues et des pentes calcaires, formant un
+      coussin dense et persistant de 30 à 40 cm. Feuilles étroites, coriaces et
+      pointues, au goût nettement plus fort, camphré et poivré que celui de la
+      sarriette annuelle. Floraison blanche tardive, d'août à octobre, qui en
+      fait une ressource nectarifère précieuse en fin de saison, quand peu de
+      plantes fleurissent encore. Très rustique et très longévive.
+    conseils_culture: >
+      Plein soleil, sol caillouteux, sec et calcaire, drainage impératif.
+      Ne demande ni arrosage ni fertilisation une fois installée. Tailler
+      légèrement au printemps pour maintenir le coussin compact, sans entamer
+      le vieux bois. Excellente en bordure de planche permanente, en rocaille
+      ou au pied d'un mur exposé au sud, où elle reste verte tout l'hiver.
+    conseils_recolte: >
+      Récolter toute l'année, le feuillage étant persistant, avec un maximum
+      d'arôme juste avant la floraison d'août. Prélever les jeunes pousses de
+      l'extrémité des rameaux.
+    erreurs_frequentes:
+      - Sol lourd et humide en hiver (pourriture du collet)
+      - Taille dans le vieux bois (pas de reprise)
+      - L'utiliser en même quantité que la sarriette annuelle (son goût est bien plus puissant)
+  en:
+    nom_commun: Winter savory
+    noms_alternatifs: [Mountain savory]
+    description: >
+      Hardy evergreen sub-shrub of limestone scrubland, with a stronger, more
+      camphorous flavour than summer savory. Its late flowering is a valuable
+      nectar source at the end of the season.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - sec
+    - pauvre
+  ph_min: 6.5
+  ph_max: 8.5
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -20
+  gele_fatal: false
+  tolerance_secheresse: forte
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [15, 30]
+  duree_avant_recolte_jours: [120, 240]
+  hauteur_adulte_cm: [25, 40]
+  espacement_cm: 30
+  profondeur_semis_cm: 0.3
+  profondeur_sol_min_cm: 20
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      plantation: [4, 6]
+      recolte: [1, 12]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [1, 12]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [1, 12]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [1, 12]
+
+associations:
+  beneficies:
+    - id: LEG-013
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Comme la sarriette annuelle, elle éloigne le puceron noir des haricots", en: "Like summer savory, it keeps blackfly off beans" }
+    - id: LEG-026
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Bordure vivace protectrice pour les fèves de printemps", en: "A perennial protective border for spring broad beans" }
+    - id: LEG-016
+      raison_i18n: { fr: "Voisinage favorable avec les oignons", en: "Favourable neighbour to onions" }
+    - id: LEG-025
+      raison_i18n: { fr: "Partage les mêmes exigences de sol sec et drainé que l'ail", en: "Shares garlic's need for dry, well-drained soil" }
+  defavorables: []
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: faible
+
+repulsif_contre:
+  - puceron
+  - puceron_noir
+
+conservation:
+  - methode: sechage
+    duree_mois: 24
+    conditions_i18n: { fr: "Séchage en bouquets à l'ombre ; arôme puissant très durable", en: "Dried in bunches in the shade; the powerful aroma lasts a long time" }
+  - methode: frais
+    duree_jours: 10
+  - methode: congelation
+    duree_mois: 12
+utilisations_culinaires_i18n:
+  fr: [Légumes secs, gibier, grillades, fromage de chèvre, liqueurs, huile parfumée, tisane]
+  en: [Pulses, game, grilled meats, goat cheese, liqueurs, infused oil, herbal tea]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Sarriette_vivace
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

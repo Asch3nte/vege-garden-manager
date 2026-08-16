@@ -1,0 +1,149 @@
+# Fiche mère (espèce) — Hysope.
+# Taxonomie : Hyssopus officinalis. Agronomie : références horticoles.
+id: ARO-015
+version_fiche: 1
+categorie: aromatique
+schema_version: 1
+difficulte: 1
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - attire_auxiliaires
+  - compagnonnage
+  - ornementale
+
+rusticite:
+  zone_min: zone5
+
+nom_scientifique: Hyssopus officinalis
+famille_botanique: Lamiaceae
+
+i18n:
+  fr:
+    nom_commun: Hysope
+    noms_alternatifs: [Hysope officinale, Herbe sacrée, Herbe de Joseph]
+    description: >
+      Sous-arbuste vivace méditerranéen au port dressé et compact, de 40 à
+      60 cm, aux feuilles étroites vert foncé et au parfum camphré, amer et
+      pénétrant. Longs épis de fleurs bleu vif de juillet à septembre,
+      littéralement couverts d'abeilles, de bourdons et de papillons — c'est
+      l'une des meilleures plantes à auxiliaires du potager. Plante de bordure
+      classique des jardins monastiques, taillable en petite haie basse.
+    conseils_culture: >
+      Plein soleil et sol drainé, calcaire, pauvre ; l'hysope redoute
+      l'humidité stagnante bien plus que le froid. Aucun arrosage une fois
+      installée. Tailler d'un tiers au printemps pour garder un port dense et
+      éviter le boisement. Vit 6 à 8 ans, puis se remplace par bouture ou
+      semis. Idéale en bordure de planche, où sa floraison attire les syrphes
+      dont les larves consomment les pucerons.
+    conseils_recolte: >
+      Cueillir les sommités fleuries en début de floraison, ou les jeunes
+      feuilles avant floraison pour un usage culinaire. Le goût est très
+      prononcé et amer : à doser avec parcimonie, contrairement aux autres
+      aromatiques de la même famille.
+    erreurs_frequentes:
+      - Sol humide en hiver (pourriture)
+      - Dosage culinaire excessif (amertume dominante)
+      - Tailler trop bas dans le bois (repousse compromise)
+  en:
+    nom_commun: Hyssop
+    noms_alternatifs: [Common hyssop]
+    description: >
+      Hardy Mediterranean sub-shrub with narrow leaves and a camphorous, bitter
+      flavour. Its vivid blue flower spikes are among the very best in the
+      garden for bees, bumblebees and hoverflies.
+
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: faible
+  qualites_sol:
+    - bien_draine
+    - sec
+    - pauvre
+  ph_min: 6.5
+  ph_max: 8.5
+  temperature_min_germination: 15
+  temperature_optimale: 20
+  temperature_min_survie: -20
+  gele_fatal: false
+  tolerance_secheresse: forte
+
+cycle:
+  type: vivace
+  enracinement: moyen
+  duree_germination_jours: [14, 28]
+  duree_avant_recolte_jours: [120, 240]
+  hauteur_adulte_cm: [40, 60]
+  espacement_cm: 40
+  profondeur_semis_cm: 0.3
+  profondeur_sol_min_cm: 25
+  compatible_hors_sol: true
+  culture_verticale: false
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      semis_interieur: [3, 4]
+      semis_exterieur: [5, 5]
+      plantation: [4, 6]
+      recolte: [6, 9]
+    continental:
+      semis_interieur: [3, 4]
+      plantation: [5, 6]
+      recolte: [7, 9]
+    mediterraneen:
+      semis_exterieur: [3, 4]
+      plantation: [3, 5]
+      recolte: [5, 10]
+  hemisphere_sud:
+    oceanique:
+      plantation: [9, 11]
+      recolte: [12, 3]
+
+associations:
+  beneficies:
+    - id: LEG-007
+      type: [repulsion_ravageur, plante_piege]
+      raison_i18n: { fr: "Bordure classique des choux : détourne la piéride, dont elle attire les pontes à l'écart", en: "A classic brassica border: it diverts cabbage whites, drawing egg-laying away" }
+    - id: LEG-006
+      type: repulsion_ravageur
+      raison_i18n: { fr: "Réduit la pression de piéride sur les brocolis", en: "Reduces cabbage white pressure on broccoli" }
+    - id: FRU-008
+      raison_i18n: { fr: "Association traditionnelle en bordure de vigne, réputée favorable au rendement", en: "A traditional vineyard-edge pairing, reputed to favour yield" }
+    - id: LEG-001
+      type: attraction_pollinisateurs
+      raison_i18n: { fr: "Attire syrphes et abeilles, auxiliaires des tomates contre les pucerons", en: "Attracts hoverflies and bees, allies of tomatoes against aphids" }
+  defavorables:
+    - id: LEG-022
+      type: allelopathie
+      raison_i18n: { fr: "Voisinage traditionnellement déconseillé avec les radis", en: "Traditionally discouraged next to radishes" }
+
+rotation:
+  famille: lamiaceae
+  delai_retour_annees: 3
+  fixe_azote: false
+  besoin_azote: faible
+
+repulsif_contre:
+  - pieride
+  - altise
+piege_a:
+  - pieride
+
+conservation:
+  - methode: sechage
+    duree_mois: 18
+    conditions_i18n: { fr: "Sommités fleuries séchées à l'ombre, pour tisane et liqueurs", en: "Flowering tops dried in the shade, for teas and liqueurs" }
+  - methode: frais
+    duree_jours: 7
+utilisations_culinaires_i18n:
+  fr: [Tisane, liqueurs (chartreuse), farces, gibier, soupes de légumes secs, salades (à petite dose)]
+  en: [Herbal tea, liqueurs (chartreuse), stuffings, game, pulse soups, salads (sparingly)]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Hysope_officinale
+  - https://www.gbif.org
+  - https://www.wikidata.org
+contributeurs:
+  - "@potagerer"

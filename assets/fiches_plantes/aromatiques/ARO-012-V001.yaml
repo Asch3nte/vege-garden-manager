@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Mélisse panachée. Hérite de ARO-012.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-012-V001
+parent_id: ARO-012
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Melissa officinalis 'Aurea'"
+
+i18n:
+  fr:
+    nom_commun: Mélisse panachée
+    noms_alternatifs: [Mélisse Aurea, Mélisse dorée, Variegated lemon balm]
+    description: >
+      Sélection au feuillage largement marbré et marginé de jaune d'or, très
+      lumineux au printemps ; la panachure s'estompe en été après la floraison.
+      Parfum citronné identique à celui de la mélisse verte. Touffe un peu
+      moins vigoureuse, ce qui la rend paradoxalement plus facile à contenir au
+      potager, la mélisse verte se ressemant beaucoup.
+    conseils_culture: >
+      Mi-ombre, comme la mélisse verte : au plein soleil la panachure brûle.
+      Rabattre après floraison pour provoquer une repousse de feuillage
+      redevenu bien panaché. Supprimer les pousses revenues au vert uni.
+    conseils_recolte: >
+      Cueillir les jeunes feuilles panachées avant floraison, aussi décoratives
+      qu'aromatiques en infusion ou dans une salade de fruits.
+  en:
+    nom_commun: Variegated lemon balm
+    noms_alternatifs: [Golden lemon balm]
+    description: >
+      Selection with foliage marbled and margined in gold, brightest in spring.
+      Same lemon scent as green lemon balm, slightly less vigorous — and
+      therefore easier to keep in bounds.
+
+usages:
+  - condimentaire
+  - medicinale
+  - mellifere
+  - ornementale
+
+cycle:
+  hauteur_adulte_cm: [40, 60]
+
+sources:
+  - https://fr.wikipedia.org/wiki/M%C3%A9lisse_officinale
+contributeurs:
+  - "@potagerer"

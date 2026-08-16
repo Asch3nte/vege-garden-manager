@@ -1,0 +1,42 @@
+# Fiche fille (variété) — Basilic Grand Vert. Hérite de ARO-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-001-V001
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Basilic Grand Vert
+    noms_alternatifs: [Basilic à grandes feuilles, Grand Vert à feuilles de laitue]
+    description: >
+      La variété la plus répandue dans les jardins français : grandes feuilles
+      vert clair, larges et légèrement gaufrées, au parfum doux et classique.
+      Port dressé de 40 à 50 cm, très productif. C'est le basilic « par
+      défaut », celui qu'on trouve en godet dans toutes les jardineries, et le
+      plus tolérant pour un débutant.
+    conseils_culture: >
+      Culture classique du basilic. Pincer la tête dès 6 feuilles pour forcer
+      la ramification : un plant pincé produit deux à trois fois plus qu'un
+      plant laissé filer. Supprimer les boutons floraux au fur et à mesure.
+    conseils_recolte: >
+      Cueillir en coupant la tige au-dessus d'une paire de feuilles, jamais
+      feuille à feuille : la plante repart en deux tiges à chaque coupe.
+  en:
+    nom_commun: Sweet basil
+    description: >
+      The most widely grown basil in French gardens: large, pale green,
+      slightly crinkled leaves with a mild classic scent. Forgiving and very
+      productive — the best choice for a first attempt.
+
+cycle:
+  hauteur_adulte_cm: [40, 50]
+
+utilisations_culinaires_i18n:
+  fr: [Salade de tomates, pesto, pistou, pâtes, huile parfumée, farces]
+  en: [Tomato salad, pesto, pistou, pasta, infused oil, stuffings]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

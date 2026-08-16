@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Basilic Citron. Hérite de ARO-001.
+# Espèce hybride distincte (Ocimum × africanum) mais conduite au jardin comme
+# une variété de basilic — rattachée à ARO-001 pour l'usage.
+id: ARO-001-V005
+parent_id: ARO-001
+version_fiche: 1
+schema_version: 1
+
+nom_scientifique: "Ocimum × africanum"
+
+i18n:
+  fr:
+    nom_commun: Basilic Citron
+    noms_alternatifs: [Basilic citronné, Lemon basil, Ocimum × citriodorum]
+    description: >
+      Hybride naturel entre Ocimum basilicum et Ocimum americanum, aux feuilles
+      étroites vert clair dégageant un franc parfum de citron (citral) sur fond
+      de basilic. Port plus élancé et plus ramifié que le basilic commun,
+      montant à fleur plus rapidement. Très apprécié dans les cuisines
+      thaïlandaise et indonésienne, ainsi qu'en infusion et en desserts.
+    conseils_culture: >
+      Mêmes exigences que le basilic commun, avec une tendance marquée à monter
+      en graine : pincer très régulièrement les hampes florales pour prolonger
+      la production. Semis un peu plus lent à lever.
+    conseils_recolte: >
+      Récolter avant floraison, le parfum citronné faiblissant nettement une
+      fois les fleurs ouvertes.
+    erreurs_frequentes:
+      - Laisser fleurir (perte rapide du parfum citronné)
+  en:
+    nom_commun: Lemon basil
+    description: >
+      Natural hybrid with narrow pale leaves and a clear lemon scent over a
+      basil base. Bolts faster than common basil, so needs frequent pinching.
+      A staple of Thai and Indonesian cooking.
+
+cycle:
+  duree_avant_recolte_jours: [45, 65]
+  hauteur_adulte_cm: [30, 50]
+
+utilisations_culinaires_i18n:
+  fr: [Cuisine thaïe, poisson, salade de fruits, tisane, sorbet, sirop, poulet]
+  en: [Thai cooking, fish, fruit salad, herbal tea, sorbet, syrup, chicken]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Basilic_commun
+contributeurs:
+  - "@potagerer"

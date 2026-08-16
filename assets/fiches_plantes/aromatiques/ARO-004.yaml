@@ -1,7 +1,8 @@
 # Fiche mère (espèce) — Thym.
 # Taxonomie : tool/scrap_fiche.dart (GBIF × Wikidata). Agronomie : références horticoles.
 id: ARO-004
-version_fiche: 1
+varietes_connues: [ARO-004-V001, ARO-004-V002, ARO-004-V003]
+version_fiche: 2
 categorie: aromatique
 schema_version: 1
 difficulte: 1

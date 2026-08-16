@@ -1,0 +1,39 @@
+# Fiche fille (variété) — Cerfeuil frisé. Hérite de ARO-018.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: ARO-018-V001
+parent_id: ARO-018
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Cerfeuil frisé
+    noms_alternatifs: [Vertissimo, Cerfeuil double, Curled chervil]
+    description: >
+      Sélection au feuillage très découpé et frisé, vert soutenu, plus dense et
+      plus décoratif que le cerfeuil commun. Parfum identique. Sa frisure le
+      rend plus facile à distinguer de la petite ciguë, plante toxique dont les
+      jeunes pousses ressemblent au cerfeuil commun — un argument de sécurité
+      pour les jardiniers débutants qui sèment à la volée.
+    conseils_culture: >
+      Identique au cerfeuil commun : semis échelonnés en place, mi-ombre, sol
+      frais. Légèrement plus lent à monter en graine que le type, ce qui
+      allonge un peu la période de récolte.
+    conseils_recolte: >
+      Couper les feuilles frisées jeunes ; elles tiennent mieux en garniture
+      que celles du cerfeuil commun, plus souples.
+  en:
+    nom_commun: Curled chervil
+    noms_alternatifs: [Vertissimo]
+    description: >
+      Selection with tightly curled, deep green foliage — denser and more
+      decorative than plain chervil, with the same flavour. Its curl also makes
+      it easier to tell apart from toxic fool's parsley.
+
+cycle:
+  duree_avant_recolte_jours: [50, 70]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cerfeuil_commun
+contributeurs:
+  - "@potagerer"

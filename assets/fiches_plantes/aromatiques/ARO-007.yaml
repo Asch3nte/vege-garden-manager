@@ -3,7 +3,8 @@
 # Aromatique ombellifère, attire les auxiliaires. Créée au lot « fleurs
 # compagnes » pour résoudre les références orphelines (ex-id legacy `aneth`).
 id: ARO-007
-version_fiche: 1
+varietes_connues: [ARO-007-V001, ARO-007-V002]
+version_fiche: 2
 categorie: aromatique
 schema_version: 1
 difficulte: 1
