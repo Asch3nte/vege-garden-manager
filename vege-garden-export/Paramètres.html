@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Plus & Paramètres — Carnet vivant</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css" />
+
+<link rel="stylesheet" href="bg-directions.css" />
+<link rel="stylesheet" href="parcelles-plantes.css" />
+<link rel="stylesheet" href="parametres.css" />
+<style>
+  html, body { height: 100%; }
+  body { background:
+    radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--c-green-mid) 9%, var(--page)), var(--page) 60%); }
+  #root { min-height: 100vh; display: grid; place-items: center; padding: clamp(16px, 4vw, 48px); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#2F7D4F"/>
+    <circle cx="50" cy="38" r="15" fill="none" stroke="#FFFDF7" stroke-width="5"/>
+    <circle cx="50" cy="38" r="4" fill="#FFFDF7"/>
+    <rect x="34" y="64" width="32" height="6" rx="3" fill="#FFFDF7"/>
+    <rect x="34" y="76" width="22" height="6" rx="3" fill="#B98AAC"/>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="aromates-grimpantes.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="parametres.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "openStyle": "popover",
+  "density": "dense",
+  "climberCount": "1",
+  "climberColor": "var(--c-aubergine)"
+}/*EDITMODE-END*/;
+
+function buildClimbers(count, color) {
+  if (count === "0") return [];
+  const right = { side: "right", type: "vigne", color, pos: 91, vert: 0 };
+  if (count === "1") return [right];
+  const left = { side: "left", type: "haricot", color: "var(--c-terre)", pos: 9, vert: 0 };
+  return [right, left];
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const scene = { density: t.density, climbers: buildClimbers(t.climberCount, t.climberColor) };
+
+  return (
+    <>
+      <div className="stagewrap">
+        <PlusApp scene={scene} openStyle={t.openStyle} />
+        <span className="cap"><i className="ph-fill ph-hand-tap"></i>Touche l'onglet <b>Plus</b> &nbsp;·&nbsp; ouvre <b>Paramètres</b> &nbsp;·&nbsp; explore les 6 catégories</span>
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="Menu Plus" />
+        <TweakRadio label="Style d'ouverture" value={t.openStyle}
+          options={[{ value: "popover", label: "Popover" }, { value: "sheet", label: "Bottom sheet" }]}
+          onChange={(v) => setTweak("openStyle", v)} />
+        <TweakSection label="Décor végétal" />
+        <TweakRadio label="Densité du tapis" value={t.density}
+          options={["normal", "dense", "luxuriant"]}
+          onChange={(v) => setTweak("density", v)} />
+        <TweakRadio label="Grimpantes" value={t.climberCount}
+          options={["0", "1", "2"]}
+          onChange={(v) => setTweak("climberCount", v)} />
+        <TweakColor label="Couleur grimpante" value={t.climberColor}
+          options={["var(--c-aubergine)", "var(--c-green-mid)", "var(--c-bordeaux)", "var(--c-ocre)"]}
+          onChange={(v) => setTweak("climberColor", v)} />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

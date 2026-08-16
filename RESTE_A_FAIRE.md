@@ -58,15 +58,16 @@
 > `ecran_tache_detail`, `fenetre_ne_pas_deranger`). Les SHA permettent de les
 > restaurer si besoin (`git checkout -b <nom> <sha>`). **Conservées** : `main`,
 > `develop` (convention du repo) et **`feat/catalogue-reseau`** — voir ci-dessous.
-> **⚠️ `feat/catalogue-reseau` (`9c433e7`, wip du 2026-06-13) est la seule
-> branche non mergée restante.** Elle porte 29 fichiers absents de `main`, dont
-> tout le dossier `vege-garden-export/` (maquettes React/HTML/CSS de référence
-> des 5 écrans + `spec/00-design-system.md` … `05-parametres.md`). Ces maquettes
-> **n'existent nulle part ailleurs dans le repo**. Les tokens couleur en ont déjà
-> été remontés dans `docs/08` (source de vérité), donc rien n'est bloquant — mais
-> supprimer la branche ferait disparaître les maquettes d'origine. **Décision à
-> prendre par le dev** : merger les maquettes dans `main` pour les archiver, ou
-> supprimer la branche en connaissance de cause.
+> ~~**⚠️ `feat/catalogue-reseau` : décision à prendre** — archiver les maquettes
+> ou supprimer la branche.~~ ✅ **tranché (2026-08-16)** : les maquettes sont
+> **archivées dans `main`** (`vege-garden-export/`, 28 fichiers, 314 Ko : les 5
+> panneaux HTML/CSS/JSX + `spec/00-design-system.md` … `05-parametres.md`),
+> dossier **gelé** et documenté comme tel dans son README. Seules les maquettes
+> ont été reprises : le **wip de code** de la branche (juin — `ecran_catalogue`,
+> `position_potager_actions` et leurs tests) a été **écarté**, `main` ayant
+> beaucoup évolué depuis ; le test `navigation_globale_test.dart` est couvert par
+> `navigation_test.dart`. Branche supprimée ensuite (`9c433e7` si restauration
+> nécessaire). **Plus aucune branche non mergée : il reste `main` et `develop`.**
 > **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
 > **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
 > ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement

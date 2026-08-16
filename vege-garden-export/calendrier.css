@@ -1,0 +1,144 @@
+/* ============================================================
+   calendrier.css — écran « Calendrier » unifié du Carnet vivant
+   Vue unique avec sélecteur Agenda · Mois · Saison.
+   S'appuie sur bg-directions.css (tokens + chrome .phone). Palette A.
+   ============================================================ */
+
+/* — en-tête — */
+.phone .pbar > div:first-child { flex:1; min-width:0; }
+.phone .pbar .season { font-size:12px; color:var(--c-ink-2); display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.phone .pbar .season i { font-size:13px; color:var(--c-ocre); }
+
+/* — sélecteur de vue (segmented) — */
+.phone .viewswitch { flex:0 0 auto; display:flex; gap:4px; margin:0 var(--sp-4) var(--sp-2); padding:4px;
+  background:var(--c-alt); border-radius:var(--r-full); }
+.phone .vs-btn { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  border:none; background:transparent; border-radius:var(--r-full); padding:8px 4px; cursor:default;
+  font-family:var(--font-title); font-size:12.5px; font-weight:700; color:var(--c-ink-2); }
+.phone .vs-btn i { font-size:15px; }
+.phone .vs-btn.on { background:var(--c-surface); color:var(--c-primary); box-shadow:var(--e-1); }
+
+/* — zone d'écran scrollable — */
+.phone .calscreen { overflow-y:auto; overflow-x:hidden; gap:var(--sp-3); padding-top:0;
+  scrollbar-width:thin; scrollbar-color:color-mix(in srgb,var(--c-border) 90%,transparent) transparent; }
+.phone .calscreen::-webkit-scrollbar { width:6px; }
+.phone .calscreen::-webkit-scrollbar-thumb { background:color-mix(in srgb,var(--c-border) 90%,transparent); border-radius:3px; }
+
+/* ============================================================
+   CARTE DE TÂCHE — unifiée & cochable
+   ============================================================ */
+.phone .taskcard { display:flex; align-items:center; gap:var(--sp-3); width:100%; text-align:left;
+  padding:9px var(--sp-3); border-radius:var(--r-lg); background:var(--c-surface);
+  border:1px solid var(--c-border); box-shadow:var(--e-1); cursor:default; font:inherit; color:inherit; }
+.phone .taskcard .tc-ic { width:34px; height:34px; flex:0 0 auto; border-radius:var(--r-md); display:grid; place-items:center;
+  color:#FBF8F1; font-size:17px; box-shadow:var(--e-1); transition:filter .15s, opacity .15s; }
+.phone .taskcard .tc-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.phone .taskcard .tc-task { font-family:var(--font-title); font-weight:700; font-size:13.5px; color:var(--c-ink); }
+.phone .taskcard .tc-meta { font-size:11.5px; color:var(--c-ink-2); display:flex; align-items:center; gap:6px; min-width:0; }
+.phone .taskcard .tc-meta .zdot { width:7px; height:7px; border-radius:2px; flex:0 0 auto; }
+.phone .taskcard .tc-meta .var { font-style:italic; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.phone .taskcard .tc-check { width:24px; height:24px; flex:0 0 auto; border-radius:var(--r-full);
+  border:2px solid color-mix(in srgb,var(--c-primary) 45%,var(--c-border)); display:grid; place-items:center;
+  color:transparent; font-size:13px; transition:background .15s, border-color .15s, color .15s; }
+.phone .taskcard .tc-check.done { background:var(--c-primary); border-color:var(--c-primary); color:#FBF8F1; }
+.phone .taskcard.is-done { background:color-mix(in srgb,var(--c-alt) 50%,var(--c-surface)); }
+.phone .taskcard.is-done .tc-ic { filter:grayscale(.5); opacity:.55; }
+.phone .taskcard.is-done .tc-task { text-decoration:line-through; color:var(--c-ink-2); }
+
+/* ============================================================
+   AGENDA
+   ============================================================ */
+.phone .summ { display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-3) var(--sp-4); border-radius:var(--r-lg);
+  background:color-mix(in srgb,var(--c-primary) 10%,var(--c-surface)); border:1px solid color-mix(in srgb,var(--c-primary) 24%,transparent); flex:0 0 auto; }
+.phone .summ-ring { width:42px; height:42px; flex:0 0 auto; border-radius:var(--r-full); display:grid; place-items:center; position:relative;
+  background:conic-gradient(var(--c-primary) calc(var(--p,0) * 1%), color-mix(in srgb,var(--c-primary) 22%,transparent) 0); }
+.phone .summ-ring::before { content:""; position:absolute; inset:4px; border-radius:var(--r-full); background:color-mix(in srgb,var(--c-primary) 10%,var(--c-surface)); }
+.phone .summ-ring b { position:relative; font-family:var(--font-title); font-size:10.5px; font-weight:800; color:var(--c-primary); font-variant-numeric:tabular-nums; }
+.phone .summ .st { font-size:12.5px; line-height:1.35; color:var(--c-ink); }
+.phone .summ .st b { font-family:var(--font-title); font-weight:800; }
+.phone .summ .st-sub { display:block; font-size:11px; color:var(--c-ink-2); margin-top:1px; }
+
+.phone .timeline { display:flex; flex-direction:column; gap:var(--sp-3); }
+.phone .tlgroup { display:flex; flex-direction:column; gap:var(--sp-2); }
+.phone .tlhead { display:flex; align-items:center; gap:var(--sp-2); padding-bottom:1px; }
+.phone .tlhead .th-day { font-family:var(--font-title); font-weight:800; font-size:13px; color:var(--c-ink); white-space:nowrap; flex:0 0 auto; }
+.phone .tlhead .th-day.now { color:var(--c-primary); }
+.phone .tlhead .th-rest { font-size:11px; color:var(--c-ink-2); white-space:nowrap; flex:0 0 auto; }
+.phone .tlhead .th-line { flex:1; height:1px; background:var(--c-border); }
+
+/* ============================================================
+   MOIS
+   ============================================================ */
+.phone .monthbar { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); padding:0 1px var(--sp-1); flex:0 0 auto; }
+.phone .monthnav { display:flex; align-items:center; gap:var(--sp-2); }
+.phone .monthnav .mlabel { font-family:var(--font-title); font-weight:800; font-size:16px; letter-spacing:-.01em; min-width:104px; text-align:center; }
+.phone .monthnav .marrow { width:30px; height:30px; flex:0 0 auto; display:grid; place-items:center; border:none; border-radius:var(--r-full);
+  background:var(--c-alt); color:var(--c-ink); font-size:15px; cursor:default; }
+.phone .todaypill { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; color:var(--c-primary);
+  background:color-mix(in srgb,var(--c-primary) 13%,transparent); border:none; border-radius:var(--r-full); padding:6px 12px; cursor:default; }
+.phone .todaypill i { font-size:13px; }
+
+.phone .calgrid { background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--r-lg); box-shadow:var(--e-1);
+  padding:var(--sp-3) var(--sp-3) var(--sp-2); flex:0 0 auto; }
+.phone .calgrid .wkhead { display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:6px; }
+.phone .calgrid .wkhead span { text-align:center; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--c-ink-2); }
+.phone .calgrid .days { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.phone .day { aspect-ratio:1/1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  border:none; background:transparent; border-radius:var(--r-md); font:inherit; font-size:13px; font-weight:600;
+  font-variant-numeric:tabular-nums; color:var(--c-ink); position:relative; cursor:default; }
+.phone .day.out { color:color-mix(in srgb,var(--c-ink-2) 45%,transparent); font-weight:500; }
+.phone .day .dnum { line-height:1; }
+.phone .day .dots { display:flex; gap:2px; height:6px; align-items:center; }
+.phone .day .dots i { width:5px; height:5px; border-radius:var(--r-full); display:block; }
+.phone .day .dots .chk { width:auto; height:auto; border-radius:0; font-size:9px; color:var(--c-primary); }
+.phone .day .dots .more { font-size:8px; font-weight:700; color:var(--c-ink-2); line-height:1; margin-left:1px; }
+.phone .day.today { box-shadow:inset 0 0 0 2px var(--c-primary); }
+.phone .day.sel { background:var(--c-primary); color:#FBF8F1; }
+.phone .day.sel .dots i { box-shadow:0 0 0 1.5px rgba(255,253,247,.65); }
+.phone .day.sel .dots .chk, .phone .day.sel .dots .more { color:#FBF8F1; }
+.phone .day.sel.today { box-shadow:inset 0 0 0 2px var(--c-green-deep); }
+.phone .day.alldone:not(.sel) { background:color-mix(in srgb,var(--c-primary) 9%,transparent); }
+
+.phone .agday { display:flex; align-items:baseline; justify-content:space-between; gap:var(--sp-2); margin:var(--sp-1) 0 0; flex:0 0 auto; }
+.phone .agday .ad-date { font-family:var(--font-title); font-weight:800; font-size:15px; white-space:nowrap; }
+.phone .agday .ad-count { flex:0 0 auto; font-size:11px; font-weight:700; color:var(--c-primary);
+  background:color-mix(in srgb,var(--c-primary) 13%,transparent); padding:2px 8px; border-radius:var(--r-full); font-variant-numeric:tabular-nums; }
+.phone .agenda { display:flex; flex-direction:column; gap:var(--sp-2); }
+.phone .agempty { display:flex; flex-direction:column; align-items:center; gap:6px; padding:var(--sp-5) 0; color:var(--c-ink-2); text-align:center; }
+.phone .agempty i { font-size:30px; color:var(--c-aubergine-2); }
+.phone .agempty span { font-size:12.5px; }
+
+/* ============================================================
+   SAISON (semis → récolte)
+   ============================================================ */
+.phone .sectlabel { font-family:var(--font-title); font-size:13px; font-weight:700; display:flex; align-items:center; gap:var(--sp-2); margin:0; flex:0 0 auto; white-space:nowrap; }
+.phone .sectlabel i { color:var(--c-aubergine); font-size:15px; }
+
+.phone .seasonwrap { background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--r-lg); box-shadow:var(--e-1);
+  padding:var(--sp-3); overflow:hidden; display:flex; flex-direction:column; flex:0 0 auto; }
+.phone .seasonwrap .sw-head { display:grid; grid-template-columns:64px 1fr; align-items:end; gap:6px; margin-bottom:7px; }
+.phone .seasonwrap .sw-head .corner { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--c-ink-2); }
+.phone .seasonwrap .sw-months { display:grid; grid-template-columns:repeat(12,1fr); }
+.phone .seasonwrap .sw-months span { text-align:center; font-size:9px; font-weight:700; color:var(--c-ink-2); }
+.phone .seasonwrap .sw-months span.on { color:var(--c-primary); }
+
+.phone .srow { display:grid; grid-template-columns:64px 1fr; align-items:center; gap:6px; }
+.phone .srow + .srow { margin-top:5px; }
+.phone .srow .croplab { font-size:11.5px; font-weight:700; color:var(--c-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.phone .srow .croplab small { display:block; font-weight:500; font-size:9.5px; color:var(--c-ink-2); font-style:italic; }
+.phone .track { position:relative; display:grid; grid-template-columns:repeat(12,1fr); align-items:center;
+  height:18px; border-radius:var(--r-sm); background:color-mix(in srgb,var(--c-alt) 55%,transparent); }
+.phone .track .nowband { grid-row:1; align-self:stretch; z-index:0; border-radius:var(--r-sm);
+  background:color-mix(in srgb,var(--c-primary) 16%,transparent); }
+.phone .track .sband { grid-row:1; align-self:center; margin:0; height:11px; border-radius:var(--r-full); z-index:1; }
+.phone .track .sband.semis { background:var(--c-green-mid); }
+.phone .track .sband.plant { background:var(--c-primary); }
+.phone .track .sband.recolte { background:var(--c-aubergine); }
+
+.phone .seasonleg { display:flex; flex-wrap:wrap; gap:8px 14px; padding-top:2px; flex:0 0 auto; }
+.phone .seasonleg .li { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:var(--c-ink-2); }
+.phone .seasonleg .li .bar { width:18px; height:8px; border-radius:var(--r-full); }
+.phone .seasonleg .li .bar.semis { background:var(--c-green-mid); }
+.phone .seasonleg .li .bar.plant { background:var(--c-primary); }
+.phone .seasonleg .li .bar.recolte { background:var(--c-aubergine); }
+.phone .seasonleg .li .bar.now { background:color-mix(in srgb,var(--c-primary) 22%,var(--c-alt)); }

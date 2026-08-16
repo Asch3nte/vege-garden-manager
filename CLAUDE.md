@@ -363,10 +363,14 @@ multi-potager, équipements, fiches perso, rotation avancée, **ADR-0009 lot 4
 (mini-tutos/teaser de palier)**, CI analyze+test, version dynamique, liens
 externes et i18n `en` UI sont ✅ livrés.
 
-> ⚠️ Rappel : les exports `vege-garden-export/` sont des maquettes React/HTML/CSS.
-> Aucun fichier n'est transférable tel quel ; chaque écran est **réimplémenté**
-> en Flutter d'après la maquette. Les tokens couleur de la maquette sont déjà
-> remontés dans `docs/08` §2 (source de vérité).
+> ⚠️ Rappel : les exports [`vege-garden-export/`](vege-garden-export/README.md)
+> sont des maquettes React/HTML/CSS, **archivées dans `main` le 2026-08-16**
+> (depuis `feat/catalogue-reseau`, avant suppression de la branche). Dossier
+> **gelé, en lecture seule** : on n'y développe pas. Aucun fichier n'est
+> transférable tel quel ; chaque écran est **réimplémenté** en Flutter d'après la
+> maquette. Les tokens couleur en sont déjà remontés dans `docs/08` §2, qui
+> **fait foi** en cas d'écart. Rien dans le build n'en dépend (non déclaré dans
+> `pubspec.yaml`).
 
 Le développeur guide étape par étape. **Tu n'agis pas seul sur des décisions
 structurantes.**

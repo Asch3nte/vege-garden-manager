@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Accueil · Carnet vivant</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css" />
+
+<link rel="stylesheet" href="bg-directions.css" />
+<link rel="stylesheet" href="parcelles-plantes.css" />
+<link rel="stylesheet" href="accueil-hifi.css" />
+<style>
+  html, body { height: 100%; }
+  body {
+    margin: 0; min-height: 100vh; background: var(--page);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 22px; padding: 40px 20px;
+  }
+  .stage-cap {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-title); font-size: 13px; font-weight: 600; color: var(--page-ink2);
+  }
+  .stage-cap .dot { width: 6px; height: 6px; border-radius: 9999px; background: var(--c-aubergine); }
+  .stage-cap b { color: var(--page-ink); font-weight: 700; }
+  #root { display: flex; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="stage-cap"><span class="dot"></span>Accueil — direction <b>B · Tableau modulaire</b></div>
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#2F7D4F"/>
+    <rect x="30" y="20" width="40" height="60" rx="8" fill="#FFFDF7"/>
+    <rect x="30" y="20" width="40" height="22" rx="8" fill="#1E4D33"/>
+    <rect x="36" y="48" width="28" height="6" rx="3" fill="#ECE6D6"/>
+    <rect x="36" y="58" width="13" height="6" rx="3" fill="#E0A82E"/>
+    <rect x="52" y="58" width="12" height="6" rx="3" fill="#6A3D5B"/>
+    <path d="M62 80 C58 66 64 54 60 42" stroke="#6A3D5B" stroke-width="2.5" fill="none"/>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="aromates-grimpantes.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="accueil-final.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "density": "dense",
+  "climberCount": "2",
+  "climberType": "vigne",
+  "climberColor": "var(--c-aubergine)",
+  "niveau": "Expert"
+}/*EDITMODE-END*/;
+
+function buildClimbers(count, type, color) {
+  if (count === "0") return [];
+  const right = { side: "right", type, color, pos: 91, vert: 0 };
+  if (count === "1") return [right];
+  const left = { side: "left", type: "haricot", color: "var(--c-terre)", pos: 9, vert: 0 };
+  return [right, left];
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const scene = {
+    density: t.density,
+    climbers: buildClimbers(t.climberCount, t.climberType, t.climberColor),
+  };
+
+  return (
+    <>
+      <PhoneAccueil scene={scene} niveau={t.niveau} />
+
+      <TweaksPanel>
+        <TweakSection label="Décor végétal" />
+        <TweakRadio label="Densité du tapis" value={t.density}
+          options={["normal", "dense", "luxuriant"]}
+          onChange={(v) => setTweak("density", v)} />
+        <TweakRadio label="Grimpantes" value={t.climberCount}
+          options={["0", "1", "2"]}
+          onChange={(v) => setTweak("climberCount", v)} />
+        <TweakSelect label="Type de grimpante" value={t.climberType}
+          options={["vigne", "haricot", "capucine"]}
+          onChange={(v) => setTweak("climberType", v)} />
+        <TweakColor label="Couleur grimpante" value={t.climberColor}
+          options={["var(--c-aubergine)", "var(--c-green-mid)", "var(--c-bordeaux)", "var(--c-ocre)"]}
+          onChange={(v) => setTweak("climberColor", v)} />
+        <TweakSection label="Progression" />
+        <TweakSelect label="Niveau d'expérience" value={t.niveau}
+          options={["Découverte", "Apprenti", "Jardinier", "Expert"]}
+          onChange={(v) => setTweak("niveau", v)} />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

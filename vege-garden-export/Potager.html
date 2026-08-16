@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mon potager — Plan & détail · Carnet vivant</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css" />
+
+<link rel="stylesheet" href="bg-directions.css" />
+<link rel="stylesheet" href="potager.css" />
+<style>
+  html, body { height: 100%; background: var(--page); }
+  #root { height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#A9744B"/>
+    <rect x="14" y="14" width="34" height="34" rx="5" fill="#2F7D4F"/>
+    <rect x="54" y="14" width="32" height="34" rx="5" fill="#6A3D5B"/>
+    <rect x="14" y="54" width="34" height="32" rx="5" fill="#D6573D"/>
+    <rect x="54" y="54" width="32" height="32" rx="5" fill="#4FA06A"/>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="potager.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "detailZone": "bordure"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  return (
+    <>
+      <DesignCanvas>
+        <DCSection id="overview" title="Mon potager — Vue d'ensemble"
+          subtitle="Plan retenu : B · plan spatial (maquette du jardin). Chaque planche tapable → détail. La goutte = tâche du jour.">
+          <DCArtboard id="map" label="✓ Plan retenu — spatial (maquette du jardin)" width={344} height={716}>
+            <PotagerMap />
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="detail" title="Détail d'une zone"
+          subtitle="Ce qui s'ouvre au tap sur une planche. Par culture : stade (semis → récolte), variété, prochaine tâche. Choisis la zone dans Tweaks.">
+          <DCArtboard id="zone" label="Détail de zone" width={344} height={716}>
+            <ZoneDetail zoneId={t.detailZone} />
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel>
+        <TweakSection label="Détail de zone" />
+        <TweakSelect label="Zone affichée" value={t.detailZone}
+          options={["nord", "serre", "sud", "aromates", "bordure"]}
+          onChange={(v) => setTweak("detailZone", v)} />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
