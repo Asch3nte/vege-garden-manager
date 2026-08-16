@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Noisetier "Longue d'Espagne". Hérite de FRU-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-007-V003
+parent_id: FRU-007
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Noisetier "Longue d'Espagne"
+    noms_alternatifs: [Longue d'Espagne, Aveline de Piémont]
+    description: >
+      Variété à noisette nettement allongée, à coque fine et amande longue,
+      croquante et parfumée, se détachant bien de sa pellicule. C'est une des
+      meilleures noisettes de bouche, appréciée aussi en pâtisserie et en
+      chocolaterie.
+    conseils_culture: >
+      Arbuste vigoureux et productif, pollinisateur reconnu de nombreuses autres
+      variétés grâce à sa floraison étalée — souvent planté à ce titre. Il
+      demande un sol frais et profond ; en terrain sec, les amandes restent
+      creuses.
+    conseils_recolte: >
+      Récolter en septembre, quand les noisettes se détachent de l'involucre.
+      Faire sécher à l'air, puis conserver en coque au sec et au frais.
+  en:
+    nom_commun: Hazel "Longue d'Espagne"
+    noms_alternatifs: [Longue d'Espagne, Piedmont filbert]
+    description: >
+      Variety with distinctly elongated nuts, a thin shell and a long, crisp,
+      aromatic kernel that skins easily. One of the best hazels for eating fresh,
+      and prized in pastry and chocolate work. Its spread-out flowering makes it
+      a recognised pollinator for many other varieties.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Noisetier_commun
+contributeurs:
+  - "@potagerer"

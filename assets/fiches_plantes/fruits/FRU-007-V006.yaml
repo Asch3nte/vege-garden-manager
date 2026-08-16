@@ -1,0 +1,45 @@
+# Fiche fille (variété) — Noisetier pourpre. Hérite de FRU-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-007-V006
+parent_id: FRU-007
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Noisetier pourpre
+    noms_alternatifs: [Corylus avellana 'Purpurea', Noisetier à feuilles pourpres]
+    description: >
+      Forme ornementale du noisetier commun, à feuillage pourpre foncé au
+      débourrement virant au vert bronze en été, chatons et involucres également
+      teintés de rouge. Les noisettes, de calibre moyen, sont parfaitement
+      comestibles : c'est un arbuste doublement utile, décoratif et nourricier.
+    conseils_culture: >
+      Même conduite que le noisetier type. La coloration pourpre est plus
+      intense en plein soleil et s'estompe à l'ombre. Excellent en haie mixte
+      nourricière, où il tranche avec les feuillages verts. Prévoir une seconde
+      variété pour la pollinisation.
+    conseils_recolte: >
+      Récolter en septembre, comme le type. Rendement inférieur aux variétés
+      fruitières sélectionnées : c'est un complément, pas une production
+      principale.
+  en:
+    nom_commun: Purple-leaved hazel
+    noms_alternatifs: [Corylus avellana 'Purpurea']
+    description: >
+      Ornamental form of the common hazel, with deep purple young foliage turning
+      bronze-green in summer, and red-tinted catkins and husks. The medium-sized
+      nuts are perfectly edible — a doubly useful shrub, decorative and
+      productive. Yields less than selected fruiting varieties.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Noisetier_commun
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Pommier 'Calville Blanc d'Hiver'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V008
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+difficulte: 3
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Calville Blanc d'Hiver'
+    noms_alternatifs: [Calville blanc, Calville]
+    description: >
+      Très ancienne variété française, mentionnée dès le XVIᵉ siècle, à gros
+      fruit jaune pâle nettement côtelé. Chair blanche, tendre, parfumée, d'un
+      goût très fin. C'est la pomme classique de la tarte Tatin et des desserts
+      de la cuisine française ; elle est aussi réputée pour sa teneur élevée en
+      vitamine C.
+    conseils_culture: >
+      Variété délicate : sensible à la tavelure, elle demande un sol riche et
+      frais, une exposition abritée et un climat plutôt doux. Production
+      irrégulière et parfois alternante. Prévoir un pollinisateur.
+    conseils_recolte: >
+      Récolter en octobre. Le fruit se bonifie en cave et se garde jusqu'en
+      février ; sa peau fine se marque facilement, manipuler avec précaution.
+  en:
+    nom_commun: Apple "Calville Blanc d'Hiver"
+    description: >
+      Very old French variety, recorded from the 16th century: large, pale
+      yellow, strongly ribbed fruit with tender, fragrant white flesh. The
+      classic French dessert and tarte Tatin apple, and unusually rich in
+      vitamin C. Demanding and scab-prone.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+utilisations_culinaires_i18n:
+  fr: [Tarte Tatin, pomme au four, compote, crue nature]
+  en: [Tarte Tatin, baked apple, compote, fresh]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Calville_blanc_d%27hiver
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

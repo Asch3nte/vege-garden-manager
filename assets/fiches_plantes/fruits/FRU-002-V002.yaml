@@ -1,0 +1,62 @@
+# Fiche fille (variété) — Poirier 'Williams'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V002
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Williams'
+    noms_alternatifs: [Bon-Chrétien Williams, Bartlett]
+    description: >
+      Poire d'été anglaise du XVIIIᵉ siècle, la plus cultivée au monde. Fruit
+      jaune vif à maturité, à chair blanche, fondante, juteuse et très parfumée,
+      au goût musqué caractéristique. C'est la poire de référence pour les
+      conserves au sirop et l'eau-de-vie.
+    conseils_culture: >
+      Arbre de vigueur moyenne, fertile et de mise à fruit rapide. Sensible au
+      feu bactérien et à la tavelure : éviter les excès d'azote et les tailles
+      d'été trop sévères. Prévoir un pollinisateur ; incompatible avec 'Beurré
+      Hardy' pour la pollinisation.
+    conseils_recolte: >
+      Cueillir en août, encore ferme et vert-jaune : la poire mûrit après
+      cueillette, en trois à cinq jours à température ambiante. Laissée sur
+      l'arbre, elle blettit par le cœur.
+    erreurs_frequentes:
+      - Attendre la maturité sur l'arbre (le cœur pourrit avant que la chair fonde)
+  en:
+    nom_commun: Pear 'Williams'
+    noms_alternatifs: [Williams' Bon Chrétien, Bartlett]
+    description: >
+      18th-century English summer pear, the most widely grown in the world.
+      Bright yellow when ripe, with white, melting, juicy flesh and a distinctive
+      musky aroma. The reference pear for canning in syrup and for brandy. Pick
+      firm and ripen off the tree.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [8, 9]
+    mediterraneen:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Mûrit après cueillette ; quelques jours une fois fondante", en: "Ripens off the tree; a few days once melting" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Au sirop, en eau-de-vie (Williams)", en: "In syrup, as brandy (Williams)" }
+
+utilisations_culinaires_i18n:
+  fr: [Crue nature, au sirop, tarte, eau-de-vie, jus]
+  en: [Fresh, in syrup, tart, brandy, juice]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Williams_(poire)
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

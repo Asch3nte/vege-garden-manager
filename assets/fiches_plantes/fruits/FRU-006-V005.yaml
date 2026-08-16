@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Figuier 'Dalmatie'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V005
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Dalmatie'
+    noms_alternatifs: [Dalmatie blanche]
+    description: >
+      Variété bifère d'origine adriatique, remarquable par la taille de ses
+      fruits : de très grosses figues vertes à peau fine, à chair rouge framboise,
+      juteuse et modérément sucrée, au goût frais. Les figues-fleurs de juin sont
+      particulièrement volumineuses.
+    conseils_culture: >
+      Bifère, à tailler légèrement en hiver. Vigoureuse et productive, elle
+      supporte des étés moins chauds que les variétés méridionales, mais les gros
+      fruits à peau fine éclatent si les pluies surviennent à maturité. Préférer
+      une exposition abritée.
+    conseils_recolte: >
+      Figues-fleurs en juin–juillet, récolte principale en août–septembre.
+      Cueillir souple, avec le pédoncule, sans presser la peau fine.
+  en:
+    nom_commun: Fig 'Dalmatie'
+    description: >
+      Biferous variety of Adriatic origin, notable for fruit size: very large
+      green figs with thin skin and juicy, moderately sweet raspberry-red flesh
+      of fresh flavour. The June breba crop is especially large. Tolerates cooler
+      summers, but the thin skin splits in rain.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 9]
+    continental:
+      recolte: [7, 9]
+    mediterraneen:
+      recolte: [6, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 jours, peau fine et fragile", en: "1–2 days, thin fragile skin" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

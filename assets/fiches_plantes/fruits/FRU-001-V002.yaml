@@ -1,0 +1,56 @@
+# Fiche fille (variété) — Pommier 'Golden Delicious'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V002
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Golden Delicious'
+    noms_alternatifs: [Golden, Pomme Golden]
+    description: >
+      Pomme jaune doré à maturité, chair juteuse, sucrée et peu acidulée. La
+      variété la plus plantée au monde, issue d'un semis fortuit découvert en
+      Virginie-Occidentale au XIXᵉ siècle. Mise à fruit rapide, production
+      régulière et abondante ; bon pollinisateur de la plupart des pommiers.
+    conseils_culture: >
+      Variété facile mais sensible à la tavelure et à l'oïdium en climat humide :
+      lui préférer une situation aérée. En été chaud et sec, la peau reste verte
+      et se marque de roussissures sans nuire au goût. Éclaircir les fruits, la
+      variété a tendance à surcharger.
+    conseils_recolte: >
+      Cueillir en octobre, avant complète maturité pour la garde. Se conserve
+      jusqu'en mars en cave fraîche ; se ride si l'air est trop sec.
+  en:
+    nom_commun: Apple 'Golden Delicious'
+    description: >
+      Golden-yellow apple with juicy, sweet, low-acid flesh — the most widely
+      planted variety worldwide. Early to bear, reliably productive, and a good
+      pollinator for most apple trees. Prone to scab and powdery mildew.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+    mediterraneen:
+      recolte: [9, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche et humide (5–8 °C) ; se ride en air trop sec", en: "Cool humid cellar (5–8 °C); shrivels in dry air" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "En anneaux séchés", en: "Dried rings" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Compote, jus", en: "Compote, juice" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Golden_Delicious
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

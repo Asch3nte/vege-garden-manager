@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Pommier 'Melrose'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V013
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Melrose'
+    description: >
+      Variété américaine obtenue dans l'Ohio, croisement de 'Jonathan' et de 'Red
+      Delicious'. Gros fruit aplati, jaune largement lavé de rouge sombre, à chair
+      ferme, acidulée et parfumée. Variété tardive, appréciée pour sa bonne tenue
+      en cuisine autant qu'à couteau.
+    conseils_culture: >
+      Arbre rustique et vigoureux, adapté aux climats frais. Production régulière
+      et généreuse ; éclaircir les années de forte charge. Prévoir un
+      pollinisateur.
+    conseils_recolte: >
+      Récolter en octobre, tardivement. Le fruit se bonifie nettement après un à
+      deux mois de cave et se conserve jusqu'en mars.
+  en:
+    nom_commun: Apple 'Melrose'
+    description: >
+      American variety bred in Ohio from 'Jonathan' × 'Red Delicious'. Large flat
+      fruit, yellow broadly flushed deep red, with firm, tart, aromatic flesh. A
+      late variety, good both for eating and cooking, that improves in store.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Cave fraîche ; se bonifie après 1–2 mois", en: "Cool cellar; improves after 1–2 months" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Melrose_(pomme)
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

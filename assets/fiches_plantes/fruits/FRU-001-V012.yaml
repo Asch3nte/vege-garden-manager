@@ -1,0 +1,47 @@
+# Fiche fille (variété) — Pommier 'Jonagold'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V012
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Jonagold'
+    description: >
+      Variété américaine obtenue dans l'État de New York, croisement de 'Jonathan'
+      et de 'Golden Delicious'. Gros fruit jaune largement lavé de rouge, à chair
+      juteuse, croquante et bien équilibrée entre sucre et acidité. Aussi bonne à
+      croquer qu'à cuire.
+    conseils_culture: >
+      Arbre vigoureux et très productif. Variété triploïde au pollen stérile :
+      elle ne peut pas polliniser ses voisines et exige deux autres variétés
+      diploïdes à floraison concomitante. Éclaircir pour préserver le calibre.
+    conseils_recolte: >
+      Récolter en octobre. Se garde trois à quatre mois en cave fraîche.
+    erreurs_frequentes:
+      - La planter avec une seule autre variété (triploïde, pollen stérile)
+  en:
+    nom_commun: Apple 'Jonagold'
+    description: >
+      American variety bred in New York State from 'Jonathan' × 'Golden
+      Delicious'. Large yellow fruit broadly flushed red, with juicy, crisp,
+      well-balanced flesh. Triploid — needs two other diploid pollinators.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 4
+    conditions_i18n: { fr: "Cave fraîche et humide", en: "Cool humid cellar" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Jonagold
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,54 @@
+# Fiche fille (variété) — Pêcher plat 'Saturne'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V008
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pêcher plat 'Saturne'
+    noms_alternatifs: [Pêche plate, Pêche donut, Paraguayo]
+    description: >
+      Pêche à fruit aplati, en forme de soucoupe, à petit noyau central. Peau
+      duveteuse crème lavée de rouge, chair blanche très sucrée, peu acide et
+      remarquablement parfumée. Sa forme ancienne, d'origine chinoise, connaît un
+      fort regain d'intérêt.
+    conseils_culture: >
+      Autofertile, de vigueur moyenne. Le fruit aplati, à peau fine, éclate
+      facilement par temps humide au moment de la maturité : réserver aux
+      situations chaudes et aérées, ou conduire en espalier sous auvent. Même
+      sensibilité à la cloque que les autres pêchers.
+    conseils_recolte: >
+      Récolter en juillet–août, dès que le fruit s'aplatit encore et cède sous le
+      doigt. Extrêmement fragile : cueillir à pleine main, sans presser.
+    erreurs_frequentes:
+      - La cultiver en zone humide en été (éclatement et pourriture des fruits)
+  en:
+    nom_commun: Flat peach 'Saturne'
+    noms_alternatifs: [Donut peach, Paraguayo]
+    description: >
+      A flat, saucer-shaped peach with a small central stone. Downy cream skin
+      flushed red, and very sweet, low-acid, remarkably aromatic white flesh. An
+      old Chinese form now widely revived. Self-fertile, but the thin skin splits
+      easily in wet weather.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 8]
+    continental:
+      recolte: [8, 8]
+    mediterraneen:
+      recolte: [6, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2 jours, fruit très fragile", en: "2 days, very fragile fruit" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%AAche_plate
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

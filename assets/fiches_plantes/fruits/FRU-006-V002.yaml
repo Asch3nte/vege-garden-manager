@@ -1,0 +1,58 @@
+# Fiche fille (variété) — Figuier "Goutte d'Or". Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V002
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Figuier "Goutte d'Or"
+    noms_alternatifs: [Sultane, Figue blanche]
+    description: >
+      Variété bifère à figue jaune doré, à chair rouge ambré, très sucrée et
+      mielleuse. Elle produit deux récoltes : les figues-fleurs en juin–juillet,
+      sur le bois de l'année précédente, puis les figues d'automne en
+      août–septembre sur les pousses de l'année.
+    conseils_culture: >
+      Bifère : la taille d'hiver doit être légère, sous peine de supprimer les
+      figues-fleurs portées par le bois âgé. Situation chaude et abritée,
+      pied au sec. En pot, rentrer hors gel en région froide.
+    conseils_recolte: >
+      Cueillir quand la figue s'incline sur son pédoncule et qu'une goutte de
+      sirop perle à l'ostiole — c'est ce trait qui lui donne son nom. Fruit très
+      périssable, à consommer le jour même.
+    erreurs_frequentes:
+      - Tailler sévèrement en hiver (suppression de la première récolte)
+  en:
+    nom_commun: Fig "Goutte d'Or"
+    description: >
+      A biferous variety with golden-yellow figs and amber-red, very sweet, honeyed
+      flesh. Two crops a year: breba figs in June–July on last year's wood, then
+      the main crop in August–September on new growth. Prune lightly in winter or
+      the first crop is lost.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 9]
+    continental:
+      recolte: [7, 9]
+    mediterraneen:
+      recolte: [6, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 jours seulement, fruit très fragile", en: "1–2 days only, very fragile fruit" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Fendues, au soleil ou au déshydrateur", en: "Split open, in the sun or a dehydrator" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

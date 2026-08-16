@@ -1,0 +1,55 @@
+# Fiche fille (variété) — Prunier 'Stanley'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V010
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Stanley'
+    description: >
+      Variété américaine obtenue dans l'État de New York, de type quetsche :
+      fruit allongé bleu-violet sombre, à chair jaune ferme, sucrée et acidulée,
+      se détachant du noyau. Très répandue dans le monde pour sa fiabilité et sa
+      polyvalence — fraîche, séchée ou en conserve.
+    conseils_culture: >
+      Arbre autofertile, rustique et très productif, de mise à fruit rapide :
+      c'est l'un des pruniers les plus faciles à réussir. Il pollinise également
+      la plupart des variétés autostériles. Éclaircir les années de forte charge
+      pour éviter le bris de branches.
+    conseils_recolte: >
+      Récolter en août–septembre, quand la pruine est bien blanche. Fruits fermes
+      qui supportent bien la manipulation et le transport.
+  en:
+    nom_commun: Plum 'Stanley'
+    description: >
+      American variety bred in New York State, of the quetsche type: elongated
+      dark blue-purple fruit with firm, sweet-tart yellow freestone flesh. Widely
+      planted for its reliability and versatility — fresh, dried or canned.
+      Self-fertile, hardy and quick to bear.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 9]
+    continental:
+      recolte: [9, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 semaines au frais", en: "1–2 weeks chilled" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Dénoyautées, au déshydrateur", en: "Stoned, in a dehydrator" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

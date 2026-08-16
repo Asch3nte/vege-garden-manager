@@ -1,0 +1,46 @@
+# Fiche fille (variété) — Pommier 'Elstar'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V010
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Elstar'
+    description: >
+      Variété néerlandaise créée dans les années 1950, croisement de 'Golden
+      Delicious' et d''Ingrid Marie'. Pomme moyenne, jaune largement lavée de
+      rouge orangé, à chair croquante, juteuse et franchement acidulée. Très
+      appréciée en Europe du Nord pour sa maturité précoce.
+    conseils_culture: >
+      Variété assez rustique, bien adaptée aux climats frais et humides. Sensible
+      à l'alternance : éclaircir sévèrement les années de forte charge. Prévoir un
+      pollinisateur.
+    conseils_recolte: >
+      Récolter dès la fin septembre, avant que la chair ne devienne farineuse.
+      Garde moyenne, deux à trois mois en cave fraîche.
+  en:
+    nom_commun: Apple 'Elstar'
+    description: >
+      Dutch variety bred in the 1950s from 'Golden Delicious' × 'Ingrid Marie'.
+      Medium fruit, yellow largely flushed orange-red, with crisp, juicy and
+      distinctly tart flesh. Early ripening and well suited to cool climates.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Cave fraîche ; devient farineuse si récoltée trop tard", en: "Cool cellar; turns mealy if picked too late" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Elstar
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

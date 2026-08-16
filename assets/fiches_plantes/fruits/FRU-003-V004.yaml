@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Cerisier 'Summit'. Hérite de FRU-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-003-V004
+parent_id: FRU-003
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Cerisier 'Summit'
+    description: >
+      Variété canadienne obtenue à la station de Summerland, en
+      Colombie-Britannique. Très gros fruit en forme de cœur, rouge brillant,
+      à chair ferme, juteuse et sucrée. Sa taille remarquable en fait une des
+      cerises les plus spectaculaires du verger amateur.
+    conseils_culture: >
+      Arbre vigoureux, de floraison mi-saison. Autostérile : prévoir un
+      pollinisateur compatible ('Van' convient bien). Assez sensible à
+      l'éclatement par temps pluvieux au moment de la maturité — préférer une
+      situation aérée qui sèche vite.
+    conseils_recolte: >
+      Récolter fin juin à début juillet, dès que le rouge devient brillant et
+      profond. Consommer rapidement, la chair juteuse se conserve peu.
+    erreurs_frequentes:
+      - La planter en situation humide et confinée (éclatement des fruits)
+  en:
+    nom_commun: Cherry 'Summit'
+    description: >
+      Canadian variety bred at the Summerland station, British Columbia. Very
+      large heart-shaped, glossy red fruit with firm, juicy, sweet flesh — one of
+      the most striking cherries for a garden orchard. Self-sterile and prone to
+      rain cracking.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 7]
+    continental:
+      recolte: [6, 7]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunus_avium
+contributeurs:
+  - "@potagerer"

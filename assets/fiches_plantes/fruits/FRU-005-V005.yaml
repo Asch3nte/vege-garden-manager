@@ -1,0 +1,54 @@
+# Fiche fille (variété) — Pêcher 'Redhaven'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V005
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Pêcher 'Redhaven'
+    description: >
+      Variété américaine obtenue dans le Michigan en 1940, devenue la référence
+      mondiale des pêches à chair jaune : fruit rouge vif largement coloré, chair
+      jaune ferme, juteuse et sucrée, se détachant bien du noyau. C'est l'étalon
+      auquel on compare les autres variétés de mi-saison.
+    conseils_culture: >
+      Arbre autofertile, rustique, régulier et productif, à floraison
+      mi-précoce — un bon compromis pour un premier pêcher. Sensibilité moyenne
+      à la cloque. Éclaircir sérieusement les fruits en juin : la variété noue
+      abondamment et le calibre en dépend.
+    conseils_recolte: >
+      Récolter en juillet–août, en deux ou trois passages, quand le fond vert
+      vire au jaune. Se tient trois à quatre jours après cueillette.
+  en:
+    nom_commun: Peach 'Redhaven'
+    description: >
+      Bred in Michigan in 1940 and now the world reference for yellow-fleshed
+      peaches: broadly red-coloured fruit with firm, juicy, sweet yellow
+      freestone flesh. Self-fertile, hardy, regular and productive — the
+      benchmark mid-season peach.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 8]
+    continental:
+      recolte: [7, 8]
+    mediterraneen:
+      recolte: [6, 7]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "3–4 jours au frais", en: "3–4 days chilled" }
+  - methode: congelation
+    duree_mois: 12
+    conditions_i18n: { fr: "En quartiers, dénoyautée (chair non adhérente)", en: "In wedges, stoned (freestone flesh)" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

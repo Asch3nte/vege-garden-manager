@@ -1,0 +1,56 @@
+# Fiche fille (variété) — Pêcher 'Amsden'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V004
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pêcher 'Amsden'
+    noms_alternatifs: [Amsden June]
+    description: >
+      Variété américaine du XIXᵉ siècle, l'une des plus précoces du verger :
+      fruit moyen à peau rouge sombre sur fond crème, chair blanche, juteuse,
+      sucrée et parfumée, adhérant au noyau. Elle ouvre la saison des pêches dès
+      la fin juin.
+    conseils_culture: >
+      Arbre autofertile, de vigueur moyenne, à floraison précoce — c'est sa
+      limite : les fleurs sont exposées aux gelées tardives dans les régions
+      froides. Sensible à la cloque du pêcher : traiter à la bouillie bordelaise
+      à la chute des feuilles et au débourrement.
+    conseils_recolte: >
+      Récolter fin juin à début juillet, en plusieurs passages. Fruit à
+      consommer dans les deux jours.
+    erreurs_frequentes:
+      - La planter en fond de vallée gélif (floraison précoce détruite par le gel)
+  en:
+    nom_commun: Peach 'Amsden'
+    noms_alternatifs: [Amsden June]
+    description: >
+      19th-century American variety, one of the earliest peaches: medium fruit
+      with dark red skin over cream, and juicy, sweet, aromatic white clingstone
+      flesh. Opens the peach season in late June. Self-fertile, but its early
+      bloom is frost-exposed.
+
+cycle:
+  duree_avant_recolte_jours: [730, 1095]
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 7]
+    continental:
+      recolte: [7, 7]
+    mediterraneen:
+      recolte: [6, 6]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2 jours au frais, chair très fragile", en: "2 days chilled, very fragile flesh" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

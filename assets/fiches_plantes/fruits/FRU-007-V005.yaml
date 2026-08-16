@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Noisetier 'Ennis'. Hérite de FRU-007.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-007-V005
+parent_id: FRU-007
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Noisetier 'Ennis'
+    description: >
+      Variété américaine réputée pour le calibre exceptionnel de ses noisettes,
+      parmi les plus grosses cultivées. Coque brillante, amande volumineuse et
+      douce, très appréciée comme fruit de table. Production généreuse mais un
+      peu irrégulière d'une année sur l'autre.
+    conseils_culture: >
+      Son pollen étant peu efficace, elle a impérativement besoin d'une
+      pollinisatrice — 'Butler' est la référence, à planter à proximité immédiate.
+      Sensible aux printemps trop humides. Le poids des fruits penche les
+      rameaux : prévoir une taille d'équilibrage.
+    conseils_recolte: >
+      Récolter en septembre. Le gros calibre rend le tri facile, mais attire
+      aussi les écureuils : ramasser quotidiennement en période de chute.
+    erreurs_frequentes:
+      - La planter seule ou sans 'Butler' à proximité (fécondation insuffisante)
+  en:
+    nom_commun: Hazel 'Ennis'
+    description: >
+      American variety renowned for exceptionally large nuts — among the biggest
+      grown — with a glossy shell and a bulky, mild kernel prized for eating.
+      Generous but somewhat irregular cropping. Its own pollen is poor: it needs
+      'Butler' planted close by.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Noisetier_commun
+contributeurs:
+  - "@potagerer"

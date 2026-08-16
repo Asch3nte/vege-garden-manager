@@ -1,0 +1,61 @@
+# Fiche fille (variété) — Figuier 'Brown Turkey'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V007
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Brown Turkey'
+    noms_alternatifs: [Brown Turkey, Figue brune de Turquie]
+    description: >
+      Variété bifère très répandue dans le monde anglo-saxon, à figue brun-violacé
+      de bon calibre, à chair rose ambré, juteuse et moyennement sucrée. Sans être
+      la plus fine gustativement, elle est l'une des plus sûres : rustique,
+      vigoureuse et généreuse.
+    conseils_culture: >
+      Excellente variété de débutant, tolérante au froid et aux tailles maladroites.
+      Elle donne des figues-fleurs en été puis une récolte d'automne, plus ou moins
+      complète selon la chaleur disponible. Convient bien à la culture en grand pot
+      ou en espalier contre un mur.
+    conseils_recolte: >
+      Figues-fleurs en juillet, récolte principale en août–septembre. Cueillir
+      quand le fruit ploie et que la peau se ride légèrement à la base.
+  en:
+    nom_commun: Fig 'Brown Turkey'
+    description: >
+      A biferous variety widely grown in the English-speaking world: good-sized
+      purplish-brown figs with juicy, moderately sweet amber-pink flesh. Not the
+      finest in flavour but among the most dependable — hardy, vigorous and
+      generous, and forgiving of clumsy pruning.
+
+besoins:
+  temperature_min_survie: -17
+
+rusticite:
+  zone_min: zone6
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 9]
+    continental:
+      recolte: [8, 9]
+    mediterraneen:
+      recolte: [6, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2 jours au frais", en: "2 days chilled" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

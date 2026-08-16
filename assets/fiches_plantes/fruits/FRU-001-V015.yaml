@@ -1,0 +1,52 @@
+# Fiche fille (variété) — Pommier 'Api étoilé'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V015
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Api étoilé'
+    noms_alternatifs: [Api étoile, Pomme étoilée]
+    description: >
+      Curiosité fruitière ancienne : très petite pomme dont la section est
+      nettement pentagonale, en forme d'étoile, avec cinq côtes marquées. Peau
+      rouge vif sur fond jaune, chair blanche, ferme et sucrée. Longtemps
+      utilisée comme pomme de table décorative et pour la décoration de Noël.
+    conseils_culture: >
+      Arbre de vigueur modérée, rustique et peu exigeant. Les fruits sont petits
+      par nature : inutile de chercher à les grossir par un éclaircissage sévère.
+      Prévoir un pollinisateur.
+    conseils_recolte: >
+      Récolter en octobre–novembre, tardivement. Malgré sa petite taille, le
+      fruit se conserve remarquablement bien, jusqu'au printemps.
+  en:
+    nom_commun: Apple 'Api étoilé'
+    noms_alternatifs: [Star apple, Étoile]
+    description: >
+      An old ornamental curiosity: a very small apple with a distinctly
+      five-ribbed, star-shaped cross-section. Bright red over yellow skin, firm
+      sweet white flesh. Long used as a decorative table and Christmas apple, and
+      an excellent keeper despite its size.
+
+cycle:
+  hauteur_adulte_cm: [200, 450]
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 11]
+    continental:
+      recolte: [10, 11]
+
+conservation:
+  - methode: frais
+    duree_mois: 6
+    conditions_i18n: { fr: "Cave fraîche ; se garde jusqu'au printemps", en: "Cool cellar; keeps into spring" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Pomme_d%27api
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

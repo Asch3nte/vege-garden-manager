@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Pommier 'Cox's Orange Pippin'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V006
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+difficulte: 3
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Cox's Orange Pippin'
+    noms_alternatifs: [Cox Orange, Reinette Orange de Cox]
+    description: >
+      Variété anglaise du XIXᵉ siècle, considérée comme l'une des pommes les plus
+      fines au goût : peau orangée striée de rouge, chair croquante, très
+      aromatique, à l'équilibre sucre-acidité remarquable. Fruit de taille moyenne,
+      arbre de vigueur modérée.
+    conseils_culture: >
+      Variété exigeante, réservée aux jardiniers avertis : sensible à la tavelure,
+      à l'oïdium et au chancre, elle demande un climat océanique doux et humide et
+      un sol sain. En région chaude ou sèche, elle décline. Prévoir un
+      pollinisateur ; les rendements sont irréguliers.
+    conseils_recolte: >
+      Cueillir fin septembre à début octobre, à maturité juste atteinte. Garde
+      limitée à deux ou trois mois : c'est une pomme à consommer, pas à stocker.
+  en:
+    nom_commun: Apple "Cox's Orange Pippin"
+    description: >
+      19th-century English variety, widely rated among the finest-tasting apples:
+      orange skin flushed red, crisp and highly aromatic flesh with an excellent
+      sugar-acid balance. Demanding — needs a mild, moist oceanic climate.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 10]
+    continental:
+      recolte: [10, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Cave fraîche ; garde courte, variété de bouche", en: "Cool cellar; short keeping, a dessert apple" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Cox%27s_Orange_Pippin
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,54 @@
+# Fiche fille (variété) — Nectarinier 'Fantasia'. Hérite de FRU-005.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-005-V006
+parent_id: FRU-005
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Nectarinier 'Fantasia'
+    noms_alternatifs: [Nectarine Fantasia]
+    description: >
+      Nectarine — c'est-à-dire une pêche à peau lisse, sans duvet, relevant de la
+      variété botanique nucipersica — obtenue en Californie. Gros fruit rouge vif
+      sur fond jaune, à chair jaune ferme, sucrée et acidulée, se détachant bien
+      du noyau. Variété de mi-saison très répandue.
+    conseils_culture: >
+      Autofertile. La peau lisse rend le fruit plus vulnérable aux pluies et aux
+      piqûres d'insectes qu'une pêche duveteuse : préférer une exposition chaude,
+      abritée et bien aérée, en espalier au nord de la Loire. Sensibilité à la
+      cloque comparable au pêcher : traiter à la chute des feuilles.
+    conseils_recolte: >
+      Récolter en août, quand le fond jaune se réchauffe et que la chair cède
+      près du pédoncule. Se conserve trois à quatre jours.
+  en:
+    nom_commun: Nectarine 'Fantasia'
+    description: >
+      A nectarine — a smooth-skinned peach of the botanical variety nucipersica —
+      bred in California. Large fruit, bright red over yellow, with firm, sweet
+      and tart yellow freestone flesh. A widely grown mid-season variety;
+      self-fertile but more rain- and insect-sensitive than a downy peach.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [8, 8]
+    continental:
+      recolte: [8, 8]
+    mediterraneen:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "3–4 jours au frais", en: "3–4 days chilled" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Au sirop, confiture", en: "In syrup, jam" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Nectarine
+  - https://fr.wikipedia.org/wiki/P%C3%AAcher
+contributeurs:
+  - "@potagerer"

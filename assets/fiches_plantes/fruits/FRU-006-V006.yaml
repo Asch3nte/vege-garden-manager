@@ -1,0 +1,56 @@
+# Fiche fille (variété) — Figuier 'Col de Dame'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V006
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+difficulte: 3
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Col de Dame'
+    noms_alternatifs: [Coll de Dama, Col de Dame noire]
+    description: >
+      Groupe de variétés catalanes et roussillonnaises à figue au col allongé,
+      d'où le nom. Peau noire, grise ou blanche selon la souche, chair rouge
+      profond, dense, très sucrée et longuement parfumée : elle est régulièrement
+      citée parmi les meilleures figues gustativement.
+    conseils_culture: >
+      Unifère et nettement tardive : elle réclame un été long et chaud pour mûrir
+      et n'est pas conseillée au nord de la Loire, où les fruits restent verts.
+      Réserver aux climats méditerranéens ou aux murs plein sud très abrités.
+    conseils_recolte: >
+      Récolter en septembre–octobre, tardivement. La figue doit être molle,
+      ridée au col et sur le point de tomber : cueillie ferme, elle est fade.
+    erreurs_frequentes:
+      - La planter en climat frais (fruits qui ne mûrissent jamais)
+  en:
+    nom_commun: Fig 'Col de Dame'
+    noms_alternatifs: [Coll de Dama]
+    description: >
+      A group of Catalan and Roussillon varieties with long-necked figs, hence
+      the name. Black, grey or white skin depending on the strain, with dense,
+      deep red, very sweet and lingering flesh — regularly rated among the finest
+      figs. Uniferous and late: needs a long, hot summer.
+
+rusticite:
+  zone_min: zone8
+
+periodes:
+  hemisphere_nord:
+    mediterraneen:
+      recolte: [9, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 jours, cueillie à pleine maturité", en: "1–2 days, picked fully ripe" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "Chair dense qui sèche très bien", en: "Dense flesh that dries very well" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

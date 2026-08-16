@@ -1,0 +1,48 @@
+# Fiche fille (variété) — Poirier 'Louise Bonne d'Avranches'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V005
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier "Louise Bonne d'Avranches"
+    noms_alternatifs: [Louise Bonne, Bonne de Longueval]
+    description: >
+      Ancienne variété normande, à fruit moyen allongé, vert-jaune vivement lavé
+      de rouge carmin du côté du soleil. Chair blanche, fine, fondante, juteuse et
+      sucrée, légèrement acidulée. Poire d'automne d'une grande régularité de
+      production.
+    conseils_culture: >
+      Variété fertile, précoce à entrer en production et très adaptable, y compris
+      en formes palissées. Bonne affinité avec le cognassier. Sensible à la
+      tavelure en climat humide. Bon pollinisateur pour 'Doyenné du Comice'.
+    conseils_recolte: >
+      Cueillir fin septembre à début octobre, dès que le fond vert commence à
+      jaunir. Se consomme dans le mois qui suit ; garde courte.
+  en:
+    nom_commun: Pear "Louise Bonne d'Avranches"
+    noms_alternatifs: [Louise Bonne of Jersey]
+    description: >
+      Heirloom Norman variety with medium, elongated fruit, greenish-yellow
+      brightly flushed carmine on the sunny side. Fine, melting, juicy, sweet
+      flesh with a light tartness. A very reliable autumn pear, precocious and
+      adaptable, and a good pollinator for 'Doyenné du Comice'.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 10]
+    continental:
+      recolte: [9, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Fruitier frais ; garde courte", en: "Cool fruit store; short keeping" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

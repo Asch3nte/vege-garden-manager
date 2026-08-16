@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Vigne 'Centennial Seedless'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V008
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Centennial Seedless'
+    noms_alternatifs: [Centennial]
+    description: >
+      Cépage de table sans pépins obtenu en Californie, à gros grains ovales
+      jaune doré — un calibre inhabituel pour une variété apyrène. Peau fine,
+      chair croquante et sucrée, au goût franc légèrement muscaté. Grappes
+      longues et bien conformées.
+    conseils_culture: >
+      Vigne vigoureuse à conduire en taille longue sur treille. De maturité
+      mi-saison, elle réclame une bonne exposition chaude ; au nord, la cultiver
+      contre un mur. Éclaircir les grappes trop chargées, comme pour toutes les
+      variétés sans pépins.
+    conseils_recolte: >
+      Récolter en septembre, quand les grains prennent une teinte dorée
+      translucide. Se tient bien deux à trois semaines en cave.
+  en:
+    nom_commun: Grape 'Centennial Seedless'
+    description: >
+      Seedless table grape bred in California, with large oval golden berries —
+      an unusual size for a seedless variety. Thin skin, crisp sweet flesh with a
+      clean, lightly muscat flavour, on long, well-formed bunches. Mid-season and
+      heat-loving.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "2–3 semaines en cave fraîche", en: "2–3 weeks in a cool cellar" }
+  - methode: sechage
+    duree_mois: 12
+    conditions_i18n: { fr: "En raisins secs (variété sans pépins)", en: "As raisins (seedless variety)" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

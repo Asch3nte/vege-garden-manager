@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Poirier 'Docteur Jules Guyot'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V006
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Docteur Jules Guyot'
+    noms_alternatifs: [Guyot, Poire Guyot, Limonera]
+    description: >
+      Variété française obtenue à Troyes à la fin du XIXᵉ siècle, souvent
+      considérée comme une 'Williams' précoce dont elle partage la forme et le
+      parfum musqué. Fruit jaune clair ponctué, à chair blanche, fondante et
+      juteuse. C'est la première poire de bouche de la saison.
+    conseils_culture: >
+      Arbre de vigueur moyenne, fertile et régulier, facile en formes basses.
+      Assez sensible au feu bactérien : proscrire les excès d'azote. Prévoir un
+      pollinisateur.
+    conseils_recolte: >
+      Cueillir dès la fin juillet ou début août, ferme, et laisser mûrir quelques
+      jours au frais. Ne se garde pas : à consommer rapidement.
+  en:
+    nom_commun: Pear 'Docteur Jules Guyot'
+    noms_alternatifs: [Guyot, Limonera]
+    description: >
+      French variety raised at Troyes in the late 19th century, often described
+      as an early 'Williams', with the same shape and musky aroma. Pale yellow
+      dotted skin, white melting juicy flesh. The first dessert pear of the
+      season; it does not keep.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 8]
+    continental:
+      recolte: [8, 8]
+    mediterraneen:
+      recolte: [7, 7]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Quelques jours au frais, variété d'été", en: "A few days chilled, a summer variety" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

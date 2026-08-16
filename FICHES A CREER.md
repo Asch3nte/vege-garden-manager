@@ -11,25 +11,25 @@
 > très cultivarisée. Elles restent extensibles : ajouter une ligne ⬜ dès qu'une
 > variété notable est identifiée.
 
-## État au 2026-08-16 (après le lot 13 — piments)
+## État au 2026-08-16 (après le lot 14 — fruitiers, filles)
 
-**375 fiches** en base : **100 espèces mères + 275 variétés**, 0 doublon,
+**445 fiches** en base : **100 espèces mères + 345 variétés**, 0 doublon,
 0 référence d'association orpheline, registre et fichiers concordants.
 
 | Catégorie | Mères ✅ | Variétés ✅ | Total ✅ | Mères ⬜ | Variétés ⬜ |
 |---|---|---|---|---|---|
 | 🥕 Légumes (`LEG`) | **52** | **213** | **265** | 54 | 480 |
 | 🌿 Aromatiques (`ARO`) | **19** | **35** | **54** | 22 | 43 |
-| 🍎 Fruits (`FRU`) | 8 | 8 | 16 | 19 | 115 |
+| 🍎 Fruits (`FRU`) | 8 | **78** | **86** | 19 | 46 |
 | 🌱 Engrais verts (`ENG`) | 8 | 8 | 16 | 11 | 19 |
 | 🍓 Petits fruits (`PFR`) | 5 | 5 | 10 | 10 | 69 |
 | 🌾 Céréales (`CER`) | 4 | 4 | 8 | 6 | 12 |
 | 🌸 Fleurs (`FLE`) | 4 | 2 | 6 | 17 | 35 |
-| **Total** | **100** | **275** | **375** | **139** | **773** |
+| **Total** | **100** | **345** | **445** | **139** | **704** |
 
-Soit une **cible de 1 287 fiches** (239 mères + 1 048 variétés) telle que ce
+Soit une **cible de 1 288 fiches** (239 mères + 1 049 variétés) telle que ce
 document la décrit aujourd'hui — les listes 🔡 restant ouvertes, le total réel
-sera plus élevé. **La base est à ~29 % de la feuille de route.**
+sera plus élevé. **La base est à ~35 % de la feuille de route.**
 
 **Historique.** Les lots 1→11 (par famille botanique) ont été fusionnés le
 2026-07-18 avec un second effort de contenu mené en parallèle sur `main`
@@ -49,6 +49,17 @@ variétés de basilic** (la mère 🔡 n'en avait aucune), 4 menthes, 2 thyms,
 par espèce botanique » — `LEG-049` *C. annuum* (10 variétés), `LEG-050`
 *C. chinense* (6), `LEG-051` *C. frutescens* (2), `LEG-052` *C. baccatum* (3).
 Le poivron doux `LEG-019` reste distinct.
+
+**Lot 14 — fruitiers, filles (2026-08-16)** : 70 fiches filles réparties sur les
+**8 mères existantes**, qui n'avaient chacune qu'une seule variété — pommier
+(+18), poirier (+10), prunier (+9), cerisier (+7), pêcher & nectarinier (+7),
+figuier (+7), vigne (+7), noisetier (+5). La catégorie passe de 16 à 86 fiches
+et cesse d'être la plus déséquilibrée de la base. Toutes les filles des mères
+`FRU` existantes listées ici sont désormais créées ; ne restent que les **mères
+manquantes** (abricotier, cognassier, kaki, noyer, agrumes…) et leurs filles.
+Un point d'arbitrage a été laissé ouvert : la vigne **'Isabelle'** est un hybride
+*Vitis labrusca* × *vinifera* et ne peut pas hériter du `nom_scientifique` de
+`FRU-008` (*Vitis vinifera*) — voir §Arbitrages.
 
 ## Légende
 
@@ -1145,52 +1156,54 @@ Créée (lot 12) : ✅ `V001` de Russie (subsp. *dracunculoides*, semis)
 # 🍎 FRUITS — arbres fruitiers (`FRU`)
 
 > Section issue de l'effort de contenu mené sur `main` (« 4 lots »), intégrée à
-> la fusion du 2026-07-18. Chaque espèce n'a **qu'une** variété : la catégorie
-> est la plus déséquilibrée de la base au regard du nombre réel de cultivars.
+> la fusion du 2026-07-18, puis **étoffée par le lot 14 (2026-08-16)** : les
+> 8 mères existantes ont reçu 70 filles. Toutes les variétés listées sous une
+> mère `FRU` **déjà créée** sont désormais faites ; il reste les **mères
+> manquantes** (⬜ ci-dessous) et leurs propres variétés.
 
 ### Pommier — *Malus domestica* (Rosaceae) ✅ `FRU-001` 🔡
 Créée : ✅ `V001` Reine des Reinettes
-- ⬜ Golden Delicious
-- ⬜ Belle de Boskoop
-- ⬜ Reinette grise du Canada
-- ⬜ Reinette Clochard
-- ⬜ Cox's Orange Pippin
-- ⬜ Granny Smith
-- ⬜ Calville Blanc d'Hiver
-- ⬜ Chantecler
-- ⬜ Elstar
-- ⬜ Gala
-- ⬜ Jonagold
-- ⬜ Melrose
-- ⬜ Patte de Loup
-- ⬜ Api étoilé
-- ⬜ Court-Pendu Gris
-- ⬜ Transparente de Croncels
-- ⬜ Pomme à cidre Binet Rouge
-- ⬜ Pomme à cidre Douce Moën
+- ✅ `FRU-001-V002` Golden Delicious
+- ✅ `FRU-001-V003` Belle de Boskoop
+- ✅ `FRU-001-V004` Reinette grise du Canada
+- ✅ `FRU-001-V005` Reinette Clochard
+- ✅ `FRU-001-V006` Cox's Orange Pippin
+- ✅ `FRU-001-V007` Granny Smith
+- ✅ `FRU-001-V008` Calville Blanc d'Hiver
+- ✅ `FRU-001-V009` Chantecler
+- ✅ `FRU-001-V010` Elstar
+- ✅ `FRU-001-V011` Gala
+- ✅ `FRU-001-V012` Jonagold
+- ✅ `FRU-001-V013` Melrose
+- ✅ `FRU-001-V014` Patte de Loup
+- ✅ `FRU-001-V015` Api étoilé
+- ✅ `FRU-001-V016` Court-Pendu Gris
+- ✅ `FRU-001-V017` Transparente de Croncels
+- ✅ `FRU-001-V018` Pomme à cidre Binet Rouge
+- ✅ `FRU-001-V019` Pomme à cidre Douce Moën
 
 ### Poirier — *Pyrus communis* (Rosaceae) ✅ `FRU-002` 🔡
 Créée : ✅ `V001` Conférence
-- ⬜ Williams
-- ⬜ Doyenné du Comice
-- ⬜ Beurré Hardy
-- ⬜ Louise Bonne d'Avranches
-- ⬜ Guyot
-- ⬜ Passe-Crassane
-- ⬜ Curé / Belle Angevine
-- ⬜ Général Leclerc
-- ⬜ Beurré Giffard
-- ⬜ Poire à poiré Plant de Blanc
+- ✅ `FRU-002-V002` Williams
+- ✅ `FRU-002-V003` Doyenné du Comice
+- ✅ `FRU-002-V004` Beurré Hardy
+- ✅ `FRU-002-V005` Louise Bonne d'Avranches
+- ✅ `FRU-002-V006` Guyot
+- ✅ `FRU-002-V007` Passe-Crassane
+- ✅ `FRU-002-V008` Curé / Belle Angevine
+- ✅ `FRU-002-V009` Général Leclerc
+- ✅ `FRU-002-V010` Beurré Giffard
+- ✅ `FRU-002-V011` Poire à poiré Plant de Blanc
 
 ### Cerisier — *Prunus avium* (Rosaceae) ✅ `FRU-003`
 Créée : ✅ `V001` Bigarreau Burlat
-- ⬜ Napoléon
-- ⬜ Reverchon
-- ⬜ Summit
-- ⬜ Van
-- ⬜ Hedelfingen
-- ⬜ Cœur de Pigeon
-- ⬜ Bigarreau Noir de Meched
+- ✅ `FRU-003-V002` Napoléon
+- ✅ `FRU-003-V003` Reverchon
+- ✅ `FRU-003-V004` Summit
+- ✅ `FRU-003-V005` Van
+- ✅ `FRU-003-V006` Hedelfingen
+- ✅ `FRU-003-V007` Cœur de Pigeon
+- ✅ `FRU-003-V008` Bigarreau Noir de Meched
 
 ### Griottier — *Prunus cerasus* ⬜ *(mère distincte à créer)*
 - ⬜ Montmorency
@@ -1199,25 +1212,25 @@ Créée : ✅ `V001` Bigarreau Burlat
 
 ### Prunier — *Prunus domestica* (Rosaceae) ✅ `FRU-004` 🔡
 Créée : ✅ `V001` Reine-Claude dorée
-- ⬜ Mirabelle de Nancy
-- ⬜ Mirabelle de Metz
-- ⬜ Quetsche d'Alsace
-- ⬜ Président
-- ⬜ Reine-Claude d'Oullins
-- ⬜ Reine-Claude de Bavay
-- ⬜ Sainte-Catherine
-- ⬜ Prune d'Ente (pruneau d'Agen)
-- ⬜ Stanley
+- ✅ `FRU-004-V002` Mirabelle de Nancy
+- ✅ `FRU-004-V003` Mirabelle de Metz
+- ✅ `FRU-004-V004` Quetsche d'Alsace
+- ✅ `FRU-004-V005` Président
+- ✅ `FRU-004-V006` Reine-Claude d'Oullins
+- ✅ `FRU-004-V007` Reine-Claude de Bavay
+- ✅ `FRU-004-V008` Sainte-Catherine
+- ✅ `FRU-004-V009` Prune d'Ente (pruneau d'Agen)
+- ✅ `FRU-004-V010` Stanley
 
 ### Pêcher — *Prunus persica* (Rosaceae) ✅ `FRU-005`
 Créée : ✅ `V001` Reine des vergers
-- ⬜ Sanguine de Savoie
-- ⬜ Pêcher de vigne
-- ⬜ Amsden
-- ⬜ Redhaven
-- ⬜ Nectarine Fantasia (var. *nucipersica*)
-- ⬜ Nectarine Nectarose
-- ⬜ Pêche plate / Donut
+- ✅ `FRU-005-V002` Sanguine de Savoie
+- ✅ `FRU-005-V003` Pêcher de vigne
+- ✅ `FRU-005-V004` Amsden
+- ✅ `FRU-005-V005` Redhaven
+- ✅ `FRU-005-V006` Nectarine Fantasia (var. *nucipersica*)
+- ✅ `FRU-005-V007` Nectarine Nectarose
+- ✅ `FRU-005-V008` Pêche plate / Donut
 
 ### Abricotier — *Prunus armeniaca* ⬜ *(id à attribuer)*
 - ⬜ Bergeron
@@ -1228,33 +1241,35 @@ Créée : ✅ `V001` Reine des vergers
 
 ### Figuier — *Ficus carica* (Moraceae) ✅ `FRU-006`
 Créée : ✅ `V001` Violette de Bordeaux
-- ⬜ Goutte d'Or
-- ⬜ Madeleine des Deux Saisons
-- ⬜ Ronde de Bordeaux
-- ⬜ Dalmatie
-- ⬜ Col de Dame
-- ⬜ Brown Turkey
-- ⬜ Noire de Caromb
+- ✅ `FRU-006-V002` Goutte d'Or
+- ✅ `FRU-006-V003` Madeleine des Deux Saisons
+- ✅ `FRU-006-V004` Ronde de Bordeaux
+- ✅ `FRU-006-V005` Dalmatie
+- ✅ `FRU-006-V006` Col de Dame
+- ✅ `FRU-006-V007` Brown Turkey
+- ✅ `FRU-006-V008` Noire de Caromb
 
 ### Noisetier — *Corylus avellana* (Betulaceae) ✅ `FRU-007`
 Créée : ✅ `V001` Fertile de Coutard
-- ⬜ Merveille de Bollwiller
-- ⬜ Longue d'Espagne
-- ⬜ Butler
-- ⬜ Ennis
-- ⬜ Noisetier pourpre (Purpurea)
+- ✅ `FRU-007-V002` Merveille de Bollwiller
+- ✅ `FRU-007-V003` Longue d'Espagne
+- ✅ `FRU-007-V004` Butler
+- ✅ `FRU-007-V005` Ennis
+- ✅ `FRU-007-V006` Noisetier pourpre (Purpurea)
 
 ### Vigne (raisin de table) — *Vitis vinifera* (Vitaceae) ✅ `FRU-008` 🔡
 > **Arbitrage tranché** : le raisin de table est un *fruit*, pas un petit-fruit.
 Créée : ✅ `V001` Chasselas doré
-- ⬜ Muscat de Hambourg
-- ⬜ Cardinal
-- ⬜ Italia
-- ⬜ Danlas
-- ⬜ Alphonse Lavallée
-- ⬜ Perlette (sans pépins)
-- ⬜ Centennial Seedless
-- ⬜ Isabelle (raisin de treille)
+- ✅ `FRU-008-V002` Muscat de Hambourg
+- ✅ `FRU-008-V003` Cardinal
+- ✅ `FRU-008-V004` Italia
+- ✅ `FRU-008-V005` Danlas
+- ✅ `FRU-008-V006` Alphonse Lavallée
+- ✅ `FRU-008-V007` Perlette (sans pépins)
+- ✅ `FRU-008-V008` Centennial Seedless
+- ⬜ Isabelle (raisin de treille) — **arbitrage ouvert** : hybride
+  *V. labrusca* × *vinifera*, ne peut pas hériter du `nom_scientifique`
+  de `FRU-008` ⟶ mère distincte à créer
 
 ### Cognassier — *Cydonia oblonga* ⬜ *(id à attribuer)*
 - ⬜ Champion
@@ -1671,6 +1686,10 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
      `LEG-051` *frutescens*, `LEG-052` *baccatum*), le poivron doux `LEG-019`
      restant à part. La 5e espèce cultivée, le rocoto (*C. pubescens*), suivra
      la même règle.
+   - ⬜ ouvert (2026-08-16, lot 14) : **vigne 'Isabelle'** — hybride
+     *V. labrusca* × *vinifera*, incompatible avec le `nom_scientifique`
+     non surchargeable de `FRU-008` (*V. vinifera*) ⟶ mère distincte à créer
+     plutôt que fille. Fiche non créée dans l'attente.
    - ⬜ encore ouverts : **potiron vs potimarron** (`LEG-021-V001` est un potiron
      sous une mère « Potimarron ») · **cornichon** (recommandation : mère
      distincte) · **pop-corn** (variété de `CER-001` ou mère) · **fraisier des
@@ -1691,11 +1710,15 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
       ✅ **fait — lot 13 (2026-08-16)** : 4 mères + 21 filles. Reste la 5e
       espèce cultivée, le **rocoto** (*C. pubescens*), et ~22 variétés
       supplémentaires sur les quatre mères existantes.
-   4. **Fruits — filles** : pommier (18), poirier (10), prunier (9), vigne (8),
-      figuier (7), pêcher (7), cerisier (7) → ~66 filles sur des mères existantes.
-   5. **Fruits — mères** : abricotier, cognassier, néflier (×2), kaki, noyer,
-      châtaignier, amandier, kiwi, kiwaï, sureau, mûrier, grenadier, olivier,
-      agrumes (×4), asiminier, arbousier → ~20 mères.
+   4. ~~**Fruits — filles** : pommier (18), poirier (10), prunier (9), vigne (8),
+      figuier (7), pêcher (7), cerisier (7) → ~66 filles sur des mères existantes.~~
+      ✅ **fait — lot 14 (2026-08-16)** : 70 filles (noisetier +5 inclus, vigne 7
+      livrées + 'Isabelle' laissée en arbitrage). Plus aucune fille en attente
+      sous une mère `FRU` existante.
+   5. **Fruits — mères** (⬅ **priorité suivante**) : abricotier, griottier,
+      cognassier, néflier (×2), kaki, noyer, châtaignier, amandier, kiwi, kiwaï,
+      sureau, mûrier, grenadier, olivier, agrumes (×4), asiminier, arbousier →
+      ~21 mères, plus leurs filles (~46 listées).
    6. **Petits fruits** : groseillier à maquereau, casseille, mûre, mûre-framboise,
       camérisier, argousier, goji, amélanchier, aronia, cornouiller (10 mères) +
       ~45 filles sur les 5 mères existantes.
@@ -1720,5 +1743,6 @@ Créée : ✅ `V001` Canyon (avoine de printemps)
 > ouvertes par construction, la cible réelle est un plancher, pas un plafond.
 >
 > **Rythme observé** : les lots 1→11 ont produit 269 fiches, le lot 12 en a
-> ajouté 38 et le lot 13 en a ajouté 25. À ce rythme, la feuille de route
+> ajouté 38, le lot 13 en a ajouté 25 et le lot 14 en a ajouté 70. À ce rythme,
+> la feuille de route
 > complète représente une vingtaine de lots supplémentaires.

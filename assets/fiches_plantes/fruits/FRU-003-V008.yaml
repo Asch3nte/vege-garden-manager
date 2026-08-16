@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Cerisier 'Bigarreau Noir de Meched'. Hérite de FRU-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-003-V008
+parent_id: FRU-003
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Cerisier 'Bigarreau Noir de Meched'
+    noms_alternatifs: [Noir de Meched, Noire de Meched]
+    description: >
+      Bigarreau d'origine iranienne (Meched, aujourd'hui Mashhad), à très gros
+      fruit rouge presque noir, luisant, à chair ferme, croquante, sucrée et
+      colorée. Variété tardive, appréciée pour son calibre exceptionnel et son
+      goût soutenu.
+    conseils_culture: >
+      Arbre vigoureux, à floraison tardive, ce qui le met à l'abri des gelées de
+      printemps dans les régions à arrière-hiver rigoureux. Autostérile :
+      associer un pollinisateur à floraison également tardive. Sensible à
+      l'éclatement si les pluies surviennent à maturité.
+    conseils_recolte: >
+      Récolter en juillet, à coloration très foncée. Les fruits mûrs restent
+      fermes et se manipulent bien.
+    erreurs_frequentes:
+      - Lui associer un pollinisateur précoce (floraisons décalées)
+  en:
+    nom_commun: Cherry 'Bigarreau Noir de Meched'
+    description: >
+      Bigarreau of Iranian origin (Meched, now Mashhad) with very large, glossy
+      near-black fruit and firm, crisp, sweet, deeply coloured flesh. Late
+      flowering — which shelters it from spring frosts — and late ripening.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 7]
+    continental:
+      recolte: [7, 7]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunus_avium
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Vigne 'Alphonse Lavallée'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V006
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Alphonse Lavallée'
+    noms_alternatifs: [Ribier]
+    description: >
+      Cépage de table français du XIXᵉ siècle, à très gros grains ronds noirs
+      luisants, à peau épaisse et chair ferme, croquante et sucrée, sans arôme
+      muscaté. Ses grappes compactes et spectaculaires en ont fait longtemps le
+      raisin noir de référence des étals.
+    conseils_culture: >
+      Vigne vigoureuse et mi-tardive, à conduire en taille longue. Demande de la
+      chaleur en arrière-saison pour bien colorer. La compacité des grappes
+      favorise la pourriture grise par temps humide : éclaircir les grains après
+      la nouaison et aérer le feuillage.
+    conseils_recolte: >
+      Récolter en septembre–octobre, quand les grains sont uniformément noirs.
+      La peau épaisse autorise une bonne conservation en cave.
+  en:
+    nom_commun: Grape 'Alphonse Lavallée'
+    noms_alternatifs: [Ribier]
+    description: >
+      19th-century French table grape with very large, glossy black round
+      berries, thick skin and firm, crisp, sweet flesh without muscat. Its
+      compact, showy bunches long made it the reference black table grape — but
+      that compactness invites grey mould in wet weather.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 10]
+    continental:
+      recolte: [9, 10]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 2
+    conditions_i18n: { fr: "3–4 semaines en cave fraîche, grappes suspendues", en: "3–4 weeks in a cool cellar, bunches hung" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

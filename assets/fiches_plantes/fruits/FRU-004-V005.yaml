@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Prunier 'Président'. Hérite de FRU-004.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-004-V005
+parent_id: FRU-004
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Prunier 'Président'
+    description: >
+      Variété anglaise du début du XXᵉ siècle, à très gros fruit ovale
+      bleu-violet couvert de pruine, à chair jaune ferme, juteuse et sucrée.
+      C'est l'une des prunes de plus gros calibre du verger, tardive et de bonne
+      tenue après cueillette.
+    conseils_culture: >
+      Arbre vigoureux et très productif, mais autostérile : lui associer
+      impérativement un pollinisateur à floraison concomitante ('Reine-Claude
+      d'Oullins' ou 'Stanley' conviennent). Éclaircir pour préserver le calibre.
+    conseils_recolte: >
+      Récolter en septembre, quand la pruine est bien marquée et la chair cède
+      légèrement sous le doigt. Se conserve une à deux semaines au frais.
+    erreurs_frequentes:
+      - La planter seule (variété autostérile, aucune production)
+  en:
+    nom_commun: Plum 'President'
+    description: >
+      Early 20th-century English variety with very large oval blue-purple fruit
+      under a heavy bloom, and firm, juicy, sweet yellow flesh. One of the
+      largest-fruited plums, late ripening and holding well after picking.
+      Self-sterile — a compatible pollinator is essential.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 semaines au frais", en: "1–2 weeks chilled" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunier
+contributeurs:
+  - "@potagerer"

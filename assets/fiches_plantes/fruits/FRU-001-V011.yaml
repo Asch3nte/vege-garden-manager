@@ -1,0 +1,50 @@
+# Fiche fille (variété) — Pommier 'Gala'. Hérite de FRU-001.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-001-V011
+parent_id: FRU-001
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Pommier 'Gala'
+    noms_alternatifs: [Royal Gala]
+    description: >
+      Variété néo-zélandaise obtenue par J. H. Kidd, croisement de 'Kidd's Orange
+      Red' et de 'Golden Delicious'. Pomme de petit à moyen calibre, jaune striée
+      de rouge vif, à chair croquante, juteuse et très sucrée, peu acide — ce qui
+      la rend particulièrement appréciée des enfants.
+    conseils_culture: >
+      Mise à fruit rapide et production abondante, mais sensibilité marquée à la
+      tavelure : réserver aux situations aérées ou accepter une surveillance
+      régulière. Éclaircir, sinon les fruits restent petits. Prévoir un
+      pollinisateur.
+    conseils_recolte: >
+      Récolter en septembre, à la coloration. Garde moyenne : deux à trois mois,
+      au-delà la chair perd son croquant.
+  en:
+    nom_commun: Apple 'Gala'
+    description: >
+      New Zealand variety bred by J. H. Kidd from 'Kidd's Orange Red' × 'Golden
+      Delicious'. Small to medium fruit, yellow striped bright red, with crisp,
+      juicy, very sweet and low-acid flesh. Heavy cropper but scab-prone.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [9, 9]
+    continental:
+      recolte: [9, 9]
+    mediterraneen:
+      recolte: [8, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 3
+    conditions_i18n: { fr: "Cave fraîche ; perd son croquant au-delà", en: "Cool cellar; loses crispness beyond that" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Gala_(pomme)
+  - https://fr.wikipedia.org/wiki/Pommier_domestique
+contributeurs:
+  - "@potagerer"

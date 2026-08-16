@@ -1,0 +1,53 @@
+# Fiche fille (variété) — Poirier 'Beurré Giffard'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V010
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Beurré Giffard'
+    noms_alternatifs: [Giffard]
+    description: >
+      Variété française du XIXᵉ siècle, obtenue à Angers. Petit fruit vert clair
+      lavé de rouge du côté du soleil, à chair blanche, fine, très fondante et
+      juteuse, d'un parfum délicat. C'est l'une des toutes premières poires de
+      l'été, appréciée pour sa précocité et sa finesse.
+    conseils_culture: >
+      Arbre de vigueur faible à moyenne, à port un peu retombant, qui demande une
+      taille de formation attentive. Fertile et régulier. Prévoir un
+      pollinisateur.
+    conseils_recolte: >
+      Récolter fin juillet, à la couleur, en plusieurs passages : la maturité
+      n'est pas simultanée sur l'arbre. Se consomme dans les jours qui suivent,
+      la chair blettit vite.
+    erreurs_frequentes:
+      - Tout récolter d'un coup (maturité échelonnée sur l'arbre)
+  en:
+    nom_commun: Pear 'Beurré Giffard'
+    description: >
+      19th-century French variety raised at Angers. Small pale green fruit
+      flushed red on the sunny side, with fine, very melting, juicy white flesh
+      and a delicate aroma. One of the earliest summer pears; ripens unevenly and
+      must be picked over several passes.
+
+cycle:
+  hauteur_adulte_cm: [200, 500]
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [7, 8]
+    continental:
+      recolte: [7, 8]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "Quelques jours au frais, chair fragile", en: "A few days chilled, fragile flesh" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"

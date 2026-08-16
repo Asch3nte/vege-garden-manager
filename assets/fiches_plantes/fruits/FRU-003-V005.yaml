@@ -1,0 +1,44 @@
+# Fiche fille (variété) — Cerisier 'Van'. Hérite de FRU-003.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-003-V005
+parent_id: FRU-003
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Cerisier 'Van'
+    description: >
+      Variété canadienne également issue de Summerland, à fruit rouge foncé de
+      bon calibre, chair très ferme, croquante et sucrée. Extrêmement productive
+      et de mise à fruit rapide, c'est l'un des bigarreaux les plus fiables au
+      jardin, et un excellent pollinisateur universel pour les autres cerisiers.
+    conseils_culture: >
+      Arbre vigoureux et rustique, très fertile — parfois trop : la surcharge
+      réduit le calibre, une taille d'entretien régulière est utile. Autostérile
+      mais compatible avec la plupart des variétés, elle est souvent plantée
+      comme pollinisatrice.
+    conseils_recolte: >
+      Récolter en juin, à la coloration bien foncée. Fruits fermes qui supportent
+      bien la manipulation.
+  en:
+    nom_commun: Cherry 'Van'
+    description: >
+      Canadian variety, also from Summerland, with good-sized dark red fruit and
+      very firm, crisp, sweet flesh. Extremely productive and quick to bear — one
+      of the most reliable garden bigarreaus, and a widely compatible pollinator
+      for other cherries.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 6]
+    continental:
+      recolte: [6, 7]
+
+sources:
+  - https://fr.wikipedia.org/wiki/Prunus_avium
+contributeurs:
+  - "@potagerer"

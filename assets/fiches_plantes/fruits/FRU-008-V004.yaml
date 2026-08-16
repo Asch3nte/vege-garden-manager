@@ -1,0 +1,51 @@
+# Fiche fille (variété) — Vigne 'Italia'. Hérite de FRU-008.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-008-V004
+parent_id: FRU-008
+version_fiche: 1
+schema_version: 1
+
+i18n:
+  fr:
+    nom_commun: Vigne 'Italia'
+    noms_alternatifs: [Idéal, Italia Muscat]
+    description: >
+      Cépage de table italien à très gros grains ovales jaune ambré, à peau
+      épaisse et chair croquante, au muscat léger et frais. Les grappes,
+      volumineuses et bien aérées, comptent parmi les plus belles du raisin de
+      table.
+    conseils_culture: >
+      Vigne vigoureuse et tardive, très exigeante en chaleur : elle ne mûrit
+      correctement qu'en climat méditerranéen ou sous serre. Conduire en taille
+      longue sur pergola, où la grosse grappe se développe librement. Éclaircir
+      les grains pour éviter le tassement et la pourriture grise.
+    conseils_recolte: >
+      Récolter en septembre–octobre, tardivement. La peau épaisse permet une
+      bonne conservation et un transport sans dommage.
+    erreurs_frequentes:
+      - La planter en climat frais (maturité jamais atteinte)
+  en:
+    nom_commun: Grape 'Italia'
+    description: >
+      Italian table grape with very large oval amber-yellow berries, thick skin
+      and crisp flesh carrying a light, fresh muscat note. Its big, open bunches
+      are among the handsomest of table grapes. Late and heat-demanding — for
+      Mediterranean climates or under glass.
+
+rusticite:
+  zone_min: zone7
+
+periodes:
+  hemisphere_nord:
+    mediterraneen:
+      recolte: [9, 10]
+
+conservation:
+  - methode: frais
+    duree_mois: 2
+    conditions_i18n: { fr: "1 mois en cave fraîche, peau épaisse", en: "A month in a cool cellar, thick-skinned" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Vigne
+contributeurs:
+  - "@potagerer"

@@ -1,0 +1,61 @@
+# Fiche fille (variété) — Figuier 'Madeleine des Deux Saisons'. Hérite de FRU-006.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-006-V003
+parent_id: FRU-006
+version_fiche: 1
+schema_version: 1
+
+difficulte: 1
+
+i18n:
+  fr:
+    nom_commun: Figuier 'Madeleine des Deux Saisons'
+    noms_alternatifs: [Madeleine, Angélique]
+    description: >
+      Variété bifère française à figue vert-jaune à col allongé, chair rose
+      ambré, juteuse et sucrée. Comme son nom l'indique, elle donne deux récoltes
+      fiables, y compris au nord de la Loire — c'est la variété la plus souvent
+      recommandée pour débuter en climat frais.
+    conseils_culture: >
+      Rustique et peu exigeante, elle tolère mieux le froid que la plupart des
+      figuiers et fructifie même en situation moyennement chaude. Taille d'hiver
+      légère pour préserver les figues-fleurs. Le pied apprécie d'être contenu :
+      un sol pauvre et sec favorise la mise à fruit.
+    conseils_recolte: >
+      Première récolte fin juin–juillet, seconde en août–septembre. Cueillir
+      souple au toucher et pédoncule ployé.
+  en:
+    nom_commun: Fig 'Madeleine des Deux Saisons'
+    description: >
+      French biferous variety with greenish-yellow, long-necked figs and juicy,
+      sweet amber-pink flesh. As the name says, it gives two reliable crops, even
+      in northern France — the variety most often recommended to start with in a
+      cool climate.
+
+besoins:
+  temperature_min_survie: -18
+
+rusticite:
+  zone_min: zone6
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [6, 9]
+    continental:
+      recolte: [7, 9]
+    mediterraneen:
+      recolte: [6, 9]
+
+conservation:
+  - methode: frais
+    duree_mois: 1
+    conditions_i18n: { fr: "1–2 jours, fruit fragile", en: "1–2 days, fragile fruit" }
+  - methode: conserves
+    duree_mois: 24
+    conditions_i18n: { fr: "Confiture, au sirop", en: "Jam, in syrup" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Figuier_commun
+contributeurs:
+  - "@potagerer"

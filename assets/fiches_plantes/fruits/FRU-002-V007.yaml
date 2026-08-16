@@ -1,0 +1,55 @@
+# Fiche fille (variété) — Poirier 'Passe-Crassane'. Hérite de FRU-002.
+# Ne déclare que ce qui diffère de la mère (héritage sparse, ADR-0005).
+id: FRU-002-V007
+parent_id: FRU-002
+version_fiche: 1
+schema_version: 1
+
+difficulte: 3
+
+i18n:
+  fr:
+    nom_commun: Poirier 'Passe-Crassane'
+    noms_alternatifs: [Passe Crassane]
+    description: >
+      Obtenue à Rouen en 1845, c'est la grande poire d'hiver française : gros
+      fruit rond, jaune verdâtre fortement roussi, à chair blanche, fine,
+      fondante, très juteuse et légèrement acidulée. Traditionnellement vendue le
+      pédoncule cacheté de cire rouge, pour la protéger du dessèchement et des
+      champignons.
+    conseils_culture: >
+      Variété très sensible au feu bactérien, ce qui a fait fortement reculer sa
+      culture — la surveiller et supprimer sans attendre tout rameau desséché en
+      crosse. Demande un sol riche et un climat pas trop froid. Autostérile :
+      prévoir un pollinisateur.
+    conseils_recolte: >
+      Cueillir en octobre–novembre, bien ferme. Le fruit ne devient consommable
+      qu'après plusieurs semaines de fruitier ; il se garde de janvier à mars.
+    erreurs_frequentes:
+      - La consommer à la récolte (chair dure, sans arôme avant la garde)
+      - Négliger un rameau flétri en crosse (signe de feu bactérien)
+  en:
+    nom_commun: Pear 'Passe-Crassane'
+    description: >
+      Raised at Rouen in 1845, the great French winter pear: large round fruit,
+      heavily russeted greenish-yellow, with fine, melting, very juicy, lightly
+      tart white flesh. Traditionally sold with its stalk sealed in red wax. Very
+      susceptible to fire blight.
+
+periodes:
+  hemisphere_nord:
+    oceanique:
+      recolte: [10, 11]
+    continental:
+      recolte: [10, 11]
+
+conservation:
+  - methode: frais
+    duree_mois: 5
+    conditions_i18n: { fr: "Fruitier frais ; consommable de janvier à mars", en: "Cool fruit store; edible from January to March" }
+
+sources:
+  - https://fr.wikipedia.org/wiki/Passe-Crassane
+  - https://fr.wikipedia.org/wiki/Poirier_commun
+contributeurs:
+  - "@potagerer"
