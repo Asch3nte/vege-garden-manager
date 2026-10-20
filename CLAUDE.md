@@ -30,8 +30,11 @@ Architecture 4 couches (Presentation → Application → Domain ← Infrastructu
 - Réponses, commentaires, docs, messages de commit : strict minimum, langage impersonnel.
 - Chaque réponse commence par une ligne : `Étape N — fait : … · suite : …`.
 - Code et commentaires en anglais ; UI en français via ARB.
-- dartdoc `///` sur l'API publique : une phrase si possible. Aucun commentaire
-  qui paraphrase le code ; un commentaire interne n'explique qu'un « pourquoi » non évident.
+- Commentaires de l'app (dartdoc `///` sur l'API publique, commentaires internes) :
+  concis, droit au but, une phrase si possible. Ils ne parlent que du code :
+  aucune personne nommée, aucune référence externe (ADR, docs, lot, ticket, date,
+  session). Aucun commentaire qui paraphrase le code ; un commentaire interne
+  n'explique qu'un « pourquoi » non évident.
 
 ## Règles de code
 - Encapsulation (`_field`, getters), abstractions pour tout composant générique.
