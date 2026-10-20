@@ -43,6 +43,7 @@ conservées hors du repo).
 | [15 — Éléments différés](15-elements-differes.md) | Registre des placeholders/fonctions à brancher plus tard : ce qui manque + où revenir |
 | [16 — Enrichissement fiches plantes](16-enrichissement-fiches-plantes.md) | Champs manquants dans les fiches YAML pour le moteur de recommandation (rusticité, gel, difficulté, contenants, ravageurs…) |
 | [17 — Illustrations du glossaire](17-illustrations-glossaire.md) | Procédure pas à pas : ajouter une image à une page du lexique (dossier, format WebP ≤ 800 px, licences PD/CC0, registre, SOURCES.txt, lint) |
+| [Audit 2026-10](audit-2026-10.md) | Audit du code : 44 constats classés gravité/effort, lints stricts, purge des commentaires |
 | [decisions/](decisions/) | ADR — décisions d'architecture |
 
 ## Pour le développement
