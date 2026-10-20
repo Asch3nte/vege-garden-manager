@@ -34,6 +34,3 @@ lib/
 **Règle de dépendance** : `presentation → application → domain ← infrastructure`.
 Le `domain/` ne référence jamais Flutter, drift, http, etc.
 
-> Les dossiers contiennent des `.gitkeep` en attendant le code. Ils seront
-> peuplés au fil du développement (cf. ordre suggéré dans
-> [`../docs/13-roadmap-et-versioning.md`](../docs/13-roadmap-et-versioning.md)).

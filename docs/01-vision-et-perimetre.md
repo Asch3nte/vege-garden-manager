@@ -49,7 +49,7 @@ connaissance en jardinage ou en informatique**. L'application est à la fois :
 | Interface responsive mobile-first                                | Format contributif pour la base de connaissances   |
 
 > Le détail des comportements est dans [02-fonctionnalites-v1.md](02-fonctionnalites-v1.md).
-> La répartition V1 / V1.1 / V2 est dans [13-roadmap-et-versioning.md](13-roadmap-et-versioning.md).
+> La répartition V1 / V1.1 / V2 est dans [RESTE_A_FAIRE.md](../RESTE_A_FAIRE.md).
 
 **Reporté en V2** (opt-in, désactivé par défaut) : communauté P2P locale,
 calendrier lunaire, vue graphique des relations entre plantes.
