@@ -290,5 +290,58 @@ void main() {
       expect(result.map((p) => p.type),
           containsAll([TypeReleveMeteo.observe, TypeReleveMeteo.prevu]));
     });
+
+    test('the offline window drops past forecasts and rows without temperature',
+        () async {
+      // Past day 2026-06-03: forecast only. Day 2026-06-06: no temperature.
+      await insererPrevu(date: '2026-06-03', dateRecuperation: now.toIso8601String());
+      await insererObserve(
+          tempMin: 9,
+          tempMax: 17,
+          date: '2026-06-04',
+          dateRecuperation: now.toIso8601String());
+      await insererPrevu(date: '2026-06-05', dateRecuperation: now.toIso8601String());
+      await db.into(db.meteoCache).insert(MeteoCacheCompanion.insert(
+            id: 'prev-sans-temp',
+            latitude: 45.75,
+            longitude: 4.85,
+            date: '2026-06-06',
+            type: 'prevu',
+            dateRecuperation: now.toIso8601String(),
+          ));
+      when(() => client.obtenirPrevisions(loc, 2, joursPasses: 2))
+          .thenThrow(MeteoIndisponibleException('offline'));
+
+      final result = await service.obtenirPrevisions(loc, 2, joursPasses: 2);
+      expect(result.map((p) => (p.date.day, p.type)), [
+        (4, TypeReleveMeteo.observe),
+        (5, TypeReleveMeteo.prevu),
+      ]);
+    });
+
+    test('the offline window keeps one row per day, of the expected type',
+        () async {
+      when(() => client.obtenirPrevisions(loc, 2, joursPasses: 2))
+          .thenAnswer((_) async => fenetre());
+      await service.obtenirPrevisions(loc, 2, joursPasses: 2); // caches
+      // An older forecast of a past day, and today's observation.
+      await insererPrevu(date: '2026-06-04', dateRecuperation: now.toIso8601String());
+      await insererObserve(
+          tempMin: 11,
+          tempMax: 20,
+          date: '2026-06-05',
+          dateRecuperation: now.toIso8601String());
+
+      when(() => client.obtenirPrevisions(loc, 2, joursPasses: 2))
+          .thenThrow(MeteoIndisponibleException('offline'));
+
+      final result = await service.obtenirPrevisions(loc, 2, joursPasses: 2);
+      expect(result.map((p) => (p.date.day, p.type)), [
+        (3, TypeReleveMeteo.observe),
+        (4, TypeReleveMeteo.observe),
+        (5, TypeReleveMeteo.prevu),
+        (6, TypeReleveMeteo.prevu),
+      ]);
+    });
   });
 }

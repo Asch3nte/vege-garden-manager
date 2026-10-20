@@ -111,7 +111,8 @@ void main() {
     equipements = MockEquipements();
     meteo = MockMeteo();
     useCase = CalculerBesoinArrosage(
-        fiches, parcelles, equipements, meteo, const BilanArrosage());
+        fiches, parcelles, equipements, meteo, const BilanArrosage(),
+        maintenant: () => DateTime(2026, 6, 1, 8));
 
     when(() => fiches.obtenirParId('tomate')).thenAnswer((_) async => tomate);
     when(() => parcelles.obtenirParId('par1'))
@@ -129,16 +130,26 @@ void main() {
     expect(c!.urgence, UrgenceArrosage.arroserMaintenant);
   });
 
-  test('forecast rain defers watering', () async {
+  test('forecast rain today defers watering', () async {
     when(() => meteo.obtenirPrevisions(loc, 3, joursPasses: 5))
         .thenAnswer(
-            (_) async => fenetre(futurPrecip: [0, 20, 0], futurProb: [0, 0.9, 0]));
-    // score at i=1: 20 * 0.9 = 18 >= 6 → deferred
+            (_) async => fenetre(futurPrecip: [20, 0, 0], futurProb: [0.9, 0, 0]));
+    // score at i=0: 20 * 0.9 = 18 >= 6 → deferred
 
     final c = await useCase.executer(plantation: plantation, localisation: loc);
     expect(c!.urgence, UrgenceArrosage.pasNecessaire);
     expect(c.pluiePrevue, isTrue);
-    expect(c.joursAvantArrosage, 1);
+    expect(c.joursAvantArrosage, 0);
+  });
+
+  test('rain tomorrow does not defer an urgent watering', () async {
+    when(() => meteo.obtenirPrevisions(loc, 3, joursPasses: 5))
+        .thenAnswer(
+            (_) async => fenetre(futurPrecip: [0, 20, 0], futurProb: [0, 0.9, 0]));
+
+    final c = await useCase.executer(plantation: plantation, localisation: loc);
+    expect(c!.urgence, UrgenceArrosage.arroserMaintenant);
+    expect(c.pluiePrevue, isTrue);
   });
 
   test('an oya in service lowers the need (equipment modifier applied)',
@@ -274,10 +285,63 @@ void main() {
       nombrePieds: 4,
     );
 
-    final c = await useCase.executer(
+    final le18Juin = CalculerBesoinArrosage(
+        fiches, parcelles, equipements, meteo, const BilanArrosage(),
+        maintenant: () => DateTime(2026, 6, 18, 8));
+    final c = await le18Juin.executer(
         plantation: plantationSalade, localisation: loc);
     expect(c, isNotNull);
     // 0.65 * 1.7 = 1.105 -> clamped to 1.0 -> arroserMaintenant
+    expect(c!.urgence, UrgenceArrosage.arroserMaintenant);
+  });
+
+  group('preloaded weather window', () {
+    test('chargerFenetre fetches the recent + forecast window', () async {
+      when(() => meteo.obtenirPrevisions(loc, 3, joursPasses: 5))
+          .thenAnswer((_) async => fenetre());
+
+      expect(await useCase.chargerFenetre(loc), fenetre());
+    });
+
+    test('chargerFenetre is empty without fetching when auto weather is off',
+        () async {
+      expect(await useCase.chargerFenetre(loc, meteoAutoActive: false),
+          isEmpty);
+      verifyNever(() => meteo.obtenirPrevisions(loc, any(),
+          joursPasses: any(named: 'joursPasses')));
+    });
+
+    test('chargerFenetre is empty when the weather is offline', () async {
+      when(() => meteo.obtenirPrevisions(loc, 3, joursPasses: 5))
+          .thenThrow(MeteoIndisponibleException('offline'));
+
+      expect(await useCase.chargerFenetre(loc), isEmpty);
+    });
+
+    test('executer uses a preloaded window without fetching', () async {
+      final c = await useCase.executer(
+        plantation: plantation,
+        localisation: loc,
+        fenetre: fenetre(),
+      );
+
+      expect(c, isNotNull);
+      verifyNever(() => meteo.obtenirPrevisions(loc, any(),
+          joursPasses: any(named: 'joursPasses')));
+    });
+  });
+
+  test('dates the forecast from today when a cached day is missing', () async {
+    final sansAujourdhui = fenetre(futurPrecip: [0, 20, 0], futurProb: [0, 0.9, 0])
+      ..removeWhere((p) =>
+          p.type == TypeReleveMeteo.prevu && p.date == DateTime.utc(2026, 6, 1));
+
+    final c = await useCase.executer(
+      plantation: plantation,
+      localisation: loc,
+      fenetre: sansAujourdhui,
+    );
+
     expect(c!.urgence, UrgenceArrosage.arroserMaintenant);
   });
 }

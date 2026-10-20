@@ -222,8 +222,8 @@ class OpenMeteoClient {
   }
 
   DonneesMeteo _donneesMeteoDuJour(Map<String, dynamic> daily, int i) {
-    final tempMin = _at(daily, 'temperature_2m_min', i);
-    final tempMax = _at(daily, 'temperature_2m_max', i);
+    final tempMin = _atRequis(daily, 'temperature_2m_min', i);
+    final tempMax = _atRequis(daily, 'temperature_2m_max', i);
     return DonneesMeteo(
       date: DateTime.parse((daily['time'] as List)[i] as String),
       tempMin: tempMin,
@@ -245,8 +245,8 @@ class OpenMeteoClient {
   ) {
     return PrevisionMeteo(
       date: DateTime.parse((daily['time'] as List)[i] as String),
-      tempMin: _at(daily, 'temperature_2m_min', i),
-      tempMax: _at(daily, 'temperature_2m_max', i),
+      tempMin: _atRequis(daily, 'temperature_2m_min', i),
+      tempMax: _atRequis(daily, 'temperature_2m_max', i),
       precipitationsMm: _at(daily, 'precipitation_sum', i),
       // Open-Meteo reports probability as a 0..100 percentage; the DTO is 0..1.
       probabilitePluie: _at(daily, 'precipitation_probability_max', i) / 100,
@@ -305,6 +305,17 @@ class OpenMeteoClient {
         cause: e,
       );
     }
+  }
+
+  /// Reads index [i] of variable [key]; a missing value makes the response
+  /// unusable rather than defaulting to 0.
+  double _atRequis(Map<String, dynamic> data, String key, int i) {
+    final values = data[key];
+    final v = values is List && i < values.length ? values[i] : null;
+    if (v is! num) {
+      throw MeteoIndisponibleException('Open-Meteo returned no "$key" for day $i.');
+    }
+    return v.toDouble();
   }
 
   /// Reads index [i] of variable [key] as a double; absent/null → 0.

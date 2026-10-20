@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/plantation.dart';
+import '../../domain/entities/potager.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
@@ -9,13 +10,16 @@ import '../../domain/enums/urgence_arrosage.dart';
 import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
+import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 import '../../domain/value_objects/fenetre_ne_pas_deranger.dart';
+import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/notification_locale.dart';
+import '../../domain/value_objects/prevision_meteo.dart';
 import '../providers/repository_providers.dart';
 import '../providers/service_providers.dart';
 import 'calculer_besoin_arrosage.dart';
@@ -48,6 +52,7 @@ import 'package:riverpod/riverpod.dart';
 class GenererTachesArrosage {
   final AbstractPlantationRepository _plantations;
   final AbstractPotagerRepository _potager;
+  final AbstractParcelleRepository _parcelles;
   final AbstractTacheRepository _taches;
   final AbstractNotificationService _notifications;
   final AbstractPreferencesRepository _preferences;
@@ -57,6 +62,7 @@ class GenererTachesArrosage {
   GenererTachesArrosage(
     this._plantations,
     this._potager,
+    this._parcelles,
     this._taches,
     this._notifications,
     this._preferences,
@@ -67,6 +73,10 @@ class GenererTachesArrosage {
 
   final DateTime Function() _maintenant;
   static const Uuid _uuid = Uuid();
+
+  /// Last scheduled run; runs are chained so two callers never interleave
+  /// their check-then-create steps.
+  Future<void> _dernierPassage = Future.value();
 
   /// Generates or removes watering tasks according to the current advice for
   /// every active plantation. Safe to call multiple times on the same day.
@@ -80,9 +90,21 @@ class GenererTachesArrosage {
   /// no duplicate is created. A completed task is never deleted — it records that
   /// the user already watered the plant. Pending tasks on the *wrong* day are
   /// cleaned up when urgency or timing shifts.
-  Future<void> executer() async {
-    final potager = await _potager.obtenirPotagerActif();
-    if (potager == null) return;
+  Future<void> executer() {
+    final passage = _dernierPassage.then((_) => _executer());
+    // The failure reaches this run's caller; the chain only has to go on.
+    _dernierPassage = passage.then((_) {}, onError: (Object _) {});
+    return passage;
+  }
+
+  Future<void> _executer() async {
+    final potagers = await _potager.obtenirTous();
+    if (potagers.isEmpty) return;
+    final potagerParZone = <String, Potager>{
+      for (final potager in potagers)
+        for (final zone in await _parcelles.obtenirParPotager(potager.id))
+          zone.id: potager,
+    };
 
     final plantations = await _plantations.obtenirActives();
     final n = _maintenant();
@@ -103,11 +125,29 @@ class GenererTachesArrosage {
     // staying a single ping (never one per plant: minimise notification spam).
     final aArroserAujourdhui = <String?>[];
 
+    // One weather window per garden, shared by its plantations.
+    final fenetres = <String, Future<List<PrevisionMeteo>>>{};
+
     for (final plantation in plantations) {
+      // A plantation outside any garden is still evaluated, without weather,
+      // so its pending tasks keep being maintained.
+      final potager = potagerParZone[plantation.parcelleId];
+      final localisation =
+          potager?.localisation ?? const Localisation.nonDefinie();
+      final fenetre = potager == null
+          ? const <PrevisionMeteo>[]
+          : await fenetres.putIfAbsent(
+              potager.id,
+              () => _calcul.chargerFenetre(
+                localisation,
+                meteoAutoActive: prefs.meteoAutoActive,
+              ),
+            );
       final conseil = await _calcul.executer(
         plantation: plantation,
-        localisation: potager.localisation,
+        localisation: localisation,
         meteoAutoActive: prefs.meteoAutoActive,
+        fenetre: fenetre,
       );
 
       // All watering tasks for this plantation regardless of day.
@@ -128,7 +168,7 @@ class GenererTachesArrosage {
         continue;
       }
 
-      final targetDate = _dateCible(conseil!, debutJour);
+      final targetDate = _dateCible(conseil!, debutJour, toutesExistantes);
       final priorite = urgence == UrgenceArrosage.arroserMaintenant
           ? PrioriteTache.urgente
           : PrioriteTache.normale;
@@ -184,10 +224,26 @@ class GenererTachesArrosage {
   }
 
   /// Target day for a watering task: today for [UrgenceArrosage.arroserMaintenant],
-  /// today + [ConseilArrosage.joursAvantArrosage] for [UrgenceArrosage.bientot].
-  DateTime _dateCible(ConseilArrosage conseil, DateTime debutJour) {
+  /// today + [ConseilArrosage.joursAvantArrosage] for [UrgenceArrosage.bientot],
+  /// unless a pending task is already planned on or before that day — it is
+  /// kept, so a "soon" watering is not pushed back on every run.
+  DateTime _dateCible(
+    ConseilArrosage conseil,
+    DateTime debutJour,
+    List<Tache> existantes,
+  ) {
     if (conseil.urgence == UrgenceArrosage.arroserMaintenant) return debutJour;
-    return debutJour.plusJours(conseil.joursAvantArrosage ?? 2);
+    final cible = debutJour.plusJours(conseil.joursAvantArrosage ?? 2);
+    final dejaPrevues = existantes
+        .where((t) =>
+            !t.estFaite &&
+            !t.datePrevue.isBefore(debutJour) &&
+            !t.datePrevue.isAfter(cible))
+        .map((t) => DateTime(
+            t.datePrevue.year, t.datePrevue.month, t.datePrevue.day))
+        .toList()
+      ..sort();
+    return dejaPrevues.isEmpty ? cible : dejaPrevues.first;
   }
 
   /// The plant's French common name for [plantation], or `null` when its sheet
@@ -293,6 +349,7 @@ final genererTachesArrosageProvider = FutureProvider<GenererTachesArrosage>(
   (ref) async => GenererTachesArrosage(
     ref.read(plantationRepositoryProvider),
     ref.read(potagerRepositoryProvider),
+    ref.read(parcelleRepositoryProvider),
     ref.read(tacheRepositoryProvider),
     ref.read(notificationServiceProvider),
     ref.read(preferencesRepositoryProvider),
