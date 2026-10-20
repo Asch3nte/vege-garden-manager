@@ -66,7 +66,10 @@ L'alerte d'arrosage croise :
 
 **Résultat** : messages contextuels du type *« Vos tomates auront besoin d'eau
 dans 2 jours, aucune pluie prévue »* ou *« Pluie annoncée demain, pas besoin
-d'arroser »*.
+d'arroser »*. Une pluie prévue ne reporte l'arrosage que si elle tombe au plus
+tard le jour où la plante a besoin d'eau (aujourd'hui pour « arroser
+maintenant », d'ici 2 jours pour « bientôt »). Chaque potager est évalué avec
+sa propre position.
 
 ## 7. Alertes et rappels
 

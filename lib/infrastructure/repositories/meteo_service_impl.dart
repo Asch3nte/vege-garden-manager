@@ -150,7 +150,7 @@ class MeteoServiceImpl implements AbstractMeteoService {
     } on MeteoIndisponibleException {
       final debut = _dateStr(DateTime(now.year, now.month, now.day - joursPasses));
       final fin = _dateStr(DateTime(now.year, now.month, now.day + nbJours - 1));
-      final caches = await _lireFenetre(loc, debut, fin);
+      final caches = _unParJour(await _lireFenetre(loc, debut, fin), now);
       if (caches.isNotEmpty) {
         return caches.map(_mapper.versPrevisionMeteo).toList();
       }
@@ -182,19 +182,22 @@ class MeteoServiceImpl implements AbstractMeteoService {
     });
   }
 
-  /// Reads the cached observed-weather row for [loc] on [dateJour], or `null`.
+  /// Reads the cached observed-weather row for [loc] on [dateJour] that carries
+  /// its temperatures, or `null`.
   Future<MeteoCacheRow?> _lireObserve(Localisation loc, String dateJour) {
     return (_db.select(_db.meteoCache)
           ..where((t) =>
               t.latitude.equals(loc.latitude!) &
               t.longitude.equals(loc.longitude!) &
               t.date.equals(dateJour) &
-              t.type.equals('observe')))
+              t.type.equals('observe') &
+              t.tempMin.isNotNull() &
+              t.tempMax.isNotNull()))
         .getSingleOrNull();
   }
 
   /// Reads up to [nbJours] cached forecast rows for [loc] from [dateJour]
-  /// onward, ordered by date ascending.
+  /// onward that carry their temperatures, ordered by date ascending.
   Future<List<MeteoCacheRow>> _lirePrevu(
     Localisation loc,
     String dateJour,
@@ -205,6 +208,8 @@ class MeteoServiceImpl implements AbstractMeteoService {
               t.latitude.equals(loc.latitude!) &
               t.longitude.equals(loc.longitude!) &
               t.type.equals('prevu') &
+              t.tempMin.isNotNull() &
+              t.tempMax.isNotNull() &
               t.date.isBiggerOrEqualValue(dateJour))
           ..orderBy([(t) => OrderingTerm.asc(t.date)])
           ..limit(nbJours))
@@ -227,6 +232,19 @@ class MeteoServiceImpl implements AbstractMeteoService {
           ..orderBy([(t) => OrderingTerm.asc(t.date)]))
         .get();
   }
+
+  /// Keeps, per day, only the row of the expected type (observation before
+  /// today, forecast from today on) that carries its temperatures.
+  List<MeteoCacheRow> _unParJour(List<MeteoCacheRow> rows, DateTime now) {
+    final aujourdhui = _dateStr(now);
+    return rows.where((row) {
+      final attendu = row.date.compareTo(aujourdhui) < 0 ? 'observe' : 'prevu';
+      return row.type == attendu && _temperaturesConnues(row);
+    }).toList();
+  }
+
+  static bool _temperaturesConnues(MeteoCacheRow row) =>
+      row.tempMin != null && row.tempMax != null;
 
   /// Deletes any cached row (forecast or past observation) whose day is older
   /// than [retentionPrevuJours] days — bounds cache growth.

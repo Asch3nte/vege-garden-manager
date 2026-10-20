@@ -80,6 +80,16 @@ void main() {
       expect(meteo.risqueGel, isFalse);
     });
 
+    test('rejects a day without temperature instead of reading 0 °C',
+        () async {
+      final payload =
+          jsonDecode(jsonEncode(dailyPayload())) as Map<String, dynamic>;
+      ((payload['daily'] as Map)['temperature_2m_min'] as List)[0] = null;
+
+      expect(clientReturning(payload).obtenirMeteoActuelle(loc),
+          throwsA(isA<MeteoIndisponibleException>()));
+    });
+
     test('throws when location is undefined', () async {
       final client = clientReturning(dailyPayload());
       expect(
@@ -140,6 +150,16 @@ void main() {
       expect(previsions[0].weathercode, 1);  // mainly clear
       expect(previsions[1].weathercode, 61); // rain
       expect(previsions[2].weathercode, 3);  // overcast
+    });
+
+    test('rejects a day without temperature instead of reading 0 °C',
+        () async {
+      final payload =
+          jsonDecode(jsonEncode(dailyPayload())) as Map<String, dynamic>;
+      ((payload['daily'] as Map)['temperature_2m_min'] as List)[2] = null;
+
+      expect(clientReturning(payload).obtenirPrevisions(loc, 3),
+          throwsA(isA<MeteoIndisponibleException>()));
     });
 
     test('rejects a non-positive horizon', () async {

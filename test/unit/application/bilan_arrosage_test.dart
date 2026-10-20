@@ -39,17 +39,54 @@ void main() {
       expect(c.retentionRenforcee, isFalse);
     });
 
-    test('forecast rain defers watering even on a dry day', () {
+    test('rain forecast today defers watering even on a dry day', () {
+      final c = bilan.calculer(
+        besoinEau: BesoinEau.eleve,
+        pluieRecenteMm: 0,
+        pluiePrevueMm: 20,
+        joursAvantPluie: 0,
+        probabilitePluiePrevu: 0.8, // score = 20 * 0.8 = 16 >= 6 → deferred
+      );
+      expect(c.urgence, UrgenceArrosage.pasNecessaire);
+      expect(c.pluiePrevue, isTrue);
+      expect(c.joursAvantArrosage, 0);
+    });
+
+    test('rain after the plant needs water does not defer an urgent watering',
+        () {
       final c = bilan.calculer(
         besoinEau: BesoinEau.eleve,
         pluieRecenteMm: 0,
         pluiePrevueMm: 20,
         joursAvantPluie: 1,
-        probabilitePluiePrevu: 0.8, // score = 20 * 0.8 = 16 >= 6 → deferred
+        probabilitePluiePrevu: 0.8,
+      );
+      expect(c.urgence, UrgenceArrosage.arroserMaintenant);
+      expect(c.pluiePrevue, isTrue);
+    });
+
+    test('a heatwave is not deferred by rain two days away', () {
+      final c = bilan.calculer(
+        besoinEau: BesoinEau.modere,
+        pluieRecenteMm: 0,
+        pluiePrevueMm: 12,
+        joursAvantPluie: 2,
+        probabilitePluiePrevu: 0.8,
+        tempMax: 38,
+      );
+      expect(c.urgence, UrgenceArrosage.arroserMaintenant);
+    });
+
+    test('rain before a "soon" watering defers it', () {
+      final c = bilan.calculer(
+        besoinEau: BesoinEau.modere,
+        pluieRecenteMm: 0,
+        pluiePrevueMm: 20,
+        joursAvantPluie: BilanArrosage.joursAvantArrosageBientot,
+        probabilitePluiePrevu: 0.8,
       );
       expect(c.urgence, UrgenceArrosage.pasNecessaire);
-      expect(c.pluiePrevue, isTrue);
-      expect(c.joursAvantArrosage, 1);
+      expect(c.joursAvantArrosage, BilanArrosage.joursAvantArrosageBientot);
     });
 
     test('recent rain keeps the soil moist -> no need', () {
@@ -105,7 +142,7 @@ void main() {
         besoinEau: BesoinEau.eleve,
         pluieRecenteMm: 0,
         pluiePrevueMm: 20,
-        joursAvantPluie: 1,
+        joursAvantPluie: 0,
         probabilitePluiePrevu: 0.8, // 20 * 0.8 = 16 >= 6
       );
       expect(c.pluiePrevue, isTrue);

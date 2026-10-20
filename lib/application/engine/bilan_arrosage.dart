@@ -19,8 +19,9 @@ import 'derivation_sol.dart';
 /// `indice = base(BesoinEau) × factTexture × factTechniques × factEquipement
 ///           × factTemperature`
 ///
-/// Decision: forecast rain → defer; otherwise recent rain → no need; otherwise
-/// the demand index maps to *water now / soon / not needed*.
+/// Decision: recent rain → no need; otherwise the demand index maps to *water
+/// now / soon / not needed*, and forecast rain defers the watering only when it
+/// arrives no later than the day the plant needs water.
 class BilanArrosage {
   final DerivationSol _sol;
 
@@ -158,23 +159,32 @@ class BilanArrosage {
     final pluiePrevue = pluiePrevueMm != null &&
         (pluiePrevueMm * probabilitePluiePrevu) >= seuilScorePluie;
 
+    final UrgenceArrosage besoin;
+    final int? delaiBesoin;
+    if (indice >= seuilArroserMaintenant) {
+      besoin = UrgenceArrosage.arroserMaintenant;
+      delaiBesoin = 0;
+    } else if (indice >= seuilBientot) {
+      besoin = UrgenceArrosage.bientot;
+      delaiBesoin = joursAvantArrosageBientot;
+    } else {
+      besoin = UrgenceArrosage.pasNecessaire;
+      delaiBesoin = null;
+    }
+
     final UrgenceArrosage urgence;
     final int? joursAvant;
-    if (pluiePrevue) {
-      urgence = UrgenceArrosage.pasNecessaire; // the rain will water it
-      joursAvant = joursAvantPluie;
-    } else if (pluieRecente) {
+    if (pluieRecente) {
       urgence = UrgenceArrosage.pasNecessaire; // soil still moist
       joursAvant = null;
-    } else if (indice >= seuilArroserMaintenant) {
-      urgence = UrgenceArrosage.arroserMaintenant;
-      joursAvant = 0;
-    } else if (indice >= seuilBientot) {
-      urgence = UrgenceArrosage.bientot;
-      joursAvant = joursAvantArrosageBientot;
+    } else if (pluiePrevue &&
+        delaiBesoin != null &&
+        (joursAvantPluie ?? 0) <= delaiBesoin) {
+      urgence = UrgenceArrosage.pasNecessaire; // rain arrives before the need
+      joursAvant = joursAvantPluie;
     } else {
-      urgence = UrgenceArrosage.pasNecessaire; // low demand
-      joursAvant = null;
+      urgence = besoin;
+      joursAvant = delaiBesoin;
     }
 
     return ConseilArrosage(
