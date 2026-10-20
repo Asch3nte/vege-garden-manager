@@ -15,10 +15,8 @@ import '../app_database.dart';
 /// connection is created in a background isolate
 /// ([NativeDatabase.createInBackground]) to keep the UI smooth.
 ///
-/// The SQLite native libraries are bundled by `sqlite3_flutter_libs` (declared
-/// in `pubspec.yaml`); no Dart-side call is needed for that. This is a bootstrap
-/// concern, kept out of [AppDatabase] itself so the database stays
-/// platform-agnostic and testable with `NativeDatabase.memory()`.
+/// Native SQLite libraries are bundled by `package:sqlite3` build hooks. Kept out
+/// of [AppDatabase] so the database stays testable with `NativeDatabase.memory()`.
 AppDatabase ouvrirBaseAppli() {
   final executor = LazyDatabase(() async {
     final dossier = await getApplicationSupportDirectory();
