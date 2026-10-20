@@ -44,14 +44,10 @@ class GestionnaireSauvegardeFichier
 
   @override
   Future<String?> choisirEtLire() async {
-    // file_picker >=12 exposes static methods (no more `.platform`) and reads
-    // content lazily via `readAsBytes()` (replaces `withData`/`bytes`),
-    // whatever the underlying source (path, bytes or stream).
-    final resultat = await FilePicker.pickFiles(
+    final fichier = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: const ['json'],
     );
-    final fichier = resultat?.files.singleOrNull;
     if (fichier == null) return null;
     return utf8.decode(await fichier.readAsBytes());
   }

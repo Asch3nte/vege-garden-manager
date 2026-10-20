@@ -5,6 +5,12 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # Pinned by flutter_localizations (Flutter SDK).
+      - dependency-name: intl
+    groups:
+      pub-minor:
+        update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /
     schedule:
