@@ -32,6 +32,9 @@ jobs:
         run: flutter analyze
 
       - name: Run tests
+        # A zone with daylight saving time, so calendar-day tests can fail.
+        env:
+          TZ: Europe/Brussels
         run: flutter test
 
   dependencies:
