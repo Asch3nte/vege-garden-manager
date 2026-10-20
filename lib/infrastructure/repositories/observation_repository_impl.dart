@@ -4,6 +4,7 @@ import '../../domain/entities/observation.dart';
 import '../../domain/enums/cible_observation.dart';
 import '../../domain/repositories/abstract_observation_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/observation_mapper.dart';
 
 /// drift-backed implementation of [AbstractObservationRepository].
@@ -44,7 +45,7 @@ class ObservationRepositoryImpl implements AbstractObservationRepository {
   Future<void> sauvegarder(Observation observation) async {
     await _db
         .into(_db.observations)
-        .insertOnConflictUpdate(_mapper.versCompanion(observation));
+        .upsertConservantCreation(_mapper.versCompanion(observation));
   }
 
   @override

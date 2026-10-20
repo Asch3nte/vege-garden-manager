@@ -98,4 +98,105 @@ void main() {
       throwsA(isA<SauvegardeInvalideException>()),
     );
   });
+
+  Map<String, dynamic> enveloppe(Map<String, dynamic> tables) =>
+      {'schemaVersion': db.schemaVersion, 'tables': tables};
+
+  test('rejects a row whose column is not in the table', () async {
+    await insererPotager('pot1', 'Jardin');
+    final backup = jsonDecode(await service.exporterJson())
+        as Map<String, dynamic>;
+    final ligne = ((backup['tables'] as Map<String, dynamic>)['potagers']
+        as List)
+        .single as Map<String, dynamic>;
+    ligne['nom) VALUES (1); DROP TABLE potagers; --'] = 'x';
+
+    await expectLater(
+      service.importerJson(jsonEncode(backup), ModeImport.fusionner),
+      throwsA(isA<SauvegardeInvalideException>()),
+    );
+    expect((await potagers()).single.nom, 'Jardin');
+  });
+
+  test('fusionner updates a parent row that has children', () async {
+    await insererPotager('pot1', 'Jardin');
+    await db.into(db.parcelles).insert(ParcellesCompanion.insert(
+          id: 'par1',
+          nom: 'P',
+          potagerId: 'pot1',
+          type: 'bacSureleve',
+          surfaceValeur: 4,
+          surfaceUnite: 'm2',
+          exposition: 'pleinSoleil',
+          positionOrdre: 0,
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+        ));
+    final backup = await service.exporterJson();
+    await (db.update(db.potagers)..where((t) => t.id.equals('pot1')))
+        .write(const PotagersCompanion(nom: Value('Renommé')));
+
+    await service.importerJson(backup, ModeImport.fusionner);
+
+    expect((await potagers()).single.nom, 'Jardin');
+    expect(await db.select(db.parcelles).get(), hasLength(1));
+  });
+
+  test('fusionner keeps the local row on a secondary unique key conflict',
+      () async {
+    MeteoCacheCompanion meteo(String id) => MeteoCacheCompanion.insert(
+          id: id,
+          latitude: 50,
+          longitude: 4,
+          date: '2026-06-05',
+          type: 'prevu',
+          dateRecuperation: now,
+        );
+    await db.into(db.meteoCache).insert(meteo('m1'));
+    final backup = await service.exporterJson();
+    await db.delete(db.meteoCache).go();
+    await db.into(db.meteoCache).insert(meteo('m2'));
+
+    await service.importerJson(backup, ModeImport.fusionner);
+
+    expect((await db.select(db.meteoCache).get()).single.id, 'm2');
+  });
+
+  test('wraps a constraint violation in a typed exception', () async {
+    final invalide = enveloppe({
+      'potagers': [
+        {'id': 'pot1', 'nom': 'Jardin'},
+      ],
+    });
+
+    await expectLater(
+      service.importerJson(jsonEncode(invalide), ModeImport.remplacer),
+      throwsA(isA<SauvegardeInvalideException>()),
+    );
+  });
+
+  test('rejects an empty row', () async {
+    final invalide = enveloppe({
+      'potagers': [<String, dynamic>{}],
+    });
+
+    await expectLater(
+      service.importerJson(jsonEncode(invalide), ModeImport.fusionner),
+      throwsA(isA<SauvegardeInvalideException>()),
+    );
+  });
+
+  test('rejects a nested value', () async {
+    await insererPotager('pot1', 'Jardin');
+    final backup = jsonDecode(await service.exporterJson())
+        as Map<String, dynamic>;
+    (((backup['tables'] as Map<String, dynamic>)['potagers'] as List).single
+        as Map<String, dynamic>)['nom'] = {'imbrique': true};
+
+    await expectLater(
+      service.importerJson(jsonEncode(backup), ModeImport.fusionner),
+      throwsA(isA<SauvegardeInvalideException>()),
+    );
+  });
 }

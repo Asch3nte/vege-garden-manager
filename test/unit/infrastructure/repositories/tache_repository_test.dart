@@ -131,4 +131,18 @@ void main() {
     await repo.supprimer('t1');
     expect(await repo.obtenirParId('t1'), isNull);
   });
+
+  test('sauvegarder keeps the original creation timestamps', () async {
+    final entite = tache();
+    await repo.sauvegarder(entite);
+    await db.customStatement(
+        "UPDATE taches SET created_at = '2026-09-01T00:00:00.000Z', date_creation = '2026-09-01T00:00:00.000Z' WHERE id = '${entite.id}'");
+
+    await repo.sauvegarder(entite);
+
+    final row = await db
+        .customSelect("SELECT created_at, date_creation FROM taches WHERE id = '${entite.id}'")
+        .getSingle();
+    expect(row.data, {'created_at': '2026-09-01T00:00:00.000Z', 'date_creation': '2026-09-01T00:00:00.000Z'});
+  });
 }

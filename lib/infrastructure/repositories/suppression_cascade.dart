@@ -12,7 +12,7 @@ import '../database/app_database.dart';
 /// applicable target is left untouched (observations carry no equipement
 /// target, so [equipementIds] never applies to them).
 ///
-/// Shared by the potager / parcelle / plantation repositories so that deleting
+/// Shared by the hierarchy and equipement repositories so that deleting
 /// any node of the hierarchy never orphans the rows that reference it. Must be
 /// called inside the deletion transaction.
 Future<void> soustraireLignesDePlanification(

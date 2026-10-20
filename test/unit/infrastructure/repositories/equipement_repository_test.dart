@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/equipement.dart';
@@ -91,5 +92,61 @@ void main() {
     await repo.supprimer('eq1');
     expect(await repo.obtenirParId('eq1'), isNull);
     expect(await repo.obtenirParPotager('pot1'), isEmpty);
+  });
+
+  test('sauvegarder keeps the original creation timestamps', () async {
+    final entite = equip();
+    await repo.sauvegarder(entite);
+    await db.customStatement(
+        "UPDATE equipements SET created_at = '2026-09-01T00:00:00.000Z', date_creation = '2026-09-01T00:00:00.000Z' WHERE id = '${entite.id}'");
+
+    await repo.sauvegarder(entite);
+
+    final row = await db
+        .customSelect("SELECT created_at, date_creation FROM equipements WHERE id = '${entite.id}'")
+        .getSingle();
+    expect(row.data, {'created_at': '2026-09-01T00:00:00.000Z', 'date_creation': '2026-09-01T00:00:00.000Z'});
+  });
+
+  test('supprimer cascades to the tasks and reminders targeting it', () async {
+    await repo.sauvegarder(equip());
+    await repo.sauvegarder(equip(id: 'eq2'));
+    Future<void> tache(String id, String equipementId) =>
+        db.into(db.taches).insert(TachesCompanion.insert(
+              id: id,
+              titre: 'Entretien',
+              type: 'entretienEquipement',
+              datePrevue: now,
+              dateCreation: now,
+              createdAt: now,
+              updatedAt: now,
+              equipementId: Value(equipementId),
+            ));
+    await tache('t_eq1', 'eq1');
+    await tache('t_eq2', 'eq2');
+    await db.into(db.rappels).insert(RappelsCompanion.insert(
+          id: 'r_eq1',
+          titre: 'Remplir',
+          typeTacheGeneree: 'entretienEquipement',
+          dateDebut: now,
+          typeRecurrence: 'quotidien',
+          dateCreation: now,
+          createdAt: now,
+          updatedAt: now,
+          equipementId: const Value('eq1'),
+        ));
+
+    await repo.supprimer('eq1');
+
+    Future<String?> supprimeLe(TableInfo<Table, dynamic> table, String id) async =>
+        (await db
+                .customSelect(
+                    'SELECT deleted_at FROM ${table.actualTableName} WHERE id = ?',
+                    variables: [Variable<String>(id)])
+                .getSingle())
+            .data['deleted_at'] as String?;
+    expect(await supprimeLe(db.taches, 't_eq1'), isNotNull);
+    expect(await supprimeLe(db.rappels, 'r_eq1'), isNotNull);
+    expect(await supprimeLe(db.taches, 't_eq2'), isNull);
   });
 }

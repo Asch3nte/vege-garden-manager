@@ -1,7 +1,7 @@
 import 'potager_exception.dart';
 
 /// Thrown when a backup document cannot be imported: malformed JSON, missing
-/// structure, or an unsupported schema version.
+/// structure, an unsupported schema version, or rows the schema rejects.
 ///
 /// The optional [cause] carries the underlying error for diagnostics.
 ///
