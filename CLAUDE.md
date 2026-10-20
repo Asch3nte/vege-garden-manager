@@ -20,7 +20,7 @@ structurante sans validation du dev.
 APIs externes autorisées : Open-Meteo, Nominatim (ADR-0016). Toute autre : validation.
 
 ## Stack
-Flutter 3.44.1 · drift · Riverpod · go_router · `http` · `flutter_local_notifications`
+Flutter 3.47.7 · drift · Riverpod · go_router · `http` · `flutter_local_notifications`
 · `geolocator` · YAML embarqué · `intl` + ARB · `flutter_test` + `mocktail` ·
 `share_plus` + `file_picker`. Détail : [docs/03](docs/03-stack-technique.md).
 Architecture 4 couches (Presentation → Application → Domain ← Infrastructure) :
