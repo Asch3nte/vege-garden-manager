@@ -133,7 +133,7 @@ depuis la position ; nouveau dataset embarqué + parser/validator ; intégration
 ## 5. Versioning & GitHub
 
 - Repository public, licence **MIT**.
-- Branches : `main` (stable) + `develop` + feature branches.
+- Branches : `main` (stable) + branches courtes par chantier, intégrées par PR.
 - **Conventional Commits** (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`,
   `chore:`…).
 - README maintenu à jour.
