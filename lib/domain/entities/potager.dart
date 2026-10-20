@@ -1,4 +1,5 @@
 import '../enums/type_emplacement.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/localisation.dart';
 import '../value_objects/surface.dart';
 import '../value_objects/zone_climatique.dart';
@@ -36,8 +37,11 @@ class Potager {
     this._dateCreation,
     this._notes,
     this._parcelles,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_nom.isNotEmpty, 'nom must not be empty');
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _nom.isNotEmpty, 'nom must not be empty');
+  }
 
   /// Creates a potager. [localisation] defaults to undefined (opt-out).
   factory Potager({
@@ -100,7 +104,8 @@ class Potager {
       _parcelles.removeWhere((p) => p.id == parcelleId);
 
   void renommer(String nouveauNom) {
-    assert(nouveauNom.isNotEmpty, 'nom must not be empty');
+    InvariantDomaineException.verifier(
+        nouveauNom.isNotEmpty, 'nom must not be empty');
     _nom = nouveauNom;
   }
 

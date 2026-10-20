@@ -5,6 +5,7 @@ import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/qualite_sol.dart';
 import 'package:pot_a_gerer/domain/enums/sous_type_legume.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/modele_fiche_personnelle.dart';
 
 ModeleFichePersonnelle modele({
@@ -64,27 +65,27 @@ void main() {
   group('invariants', () {
     test('rejects an empty required name', () {
       expect(() => modele().copyWith(nomCommunFr: ''),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
     test('rejects an out-of-range pH', () {
-      expect(() => modele(phMax: 15), throwsA(isA<AssertionError>()));
+      expect(() => modele(phMax: 15), throwsA(isA<InvariantDomaineException>()));
     });
     test('rejects phMin > phMax', () {
       expect(() => modele(phMin: 8, phMax: 6),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
     test('rejects an empty usages set', () {
-      expect(() => modele(usages: {}), throwsA(isA<AssertionError>()));
+      expect(() => modele(usages: {}), throwsA(isA<InvariantDomaineException>()));
     });
     test('rejects dureeMin > dureeMax', () {
       expect(() => modele(dureeMin: 90, dureeMax: 60),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
     test('rejects a non-positive espacement', () {
-      expect(() => modele(espacementCm: 0), throwsA(isA<AssertionError>()));
+      expect(() => modele(espacementCm: 0), throwsA(isA<InvariantDomaineException>()));
     });
     test('rejects difficulte outside 1..3', () {
-      expect(() => modele(difficulte: 4), throwsA(isA<AssertionError>()));
+      expect(() => modele(difficulte: 4), throwsA(isA<InvariantDomaineException>()));
     });
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -264,7 +266,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
           onPrecedent: notifier.moisPrecedent,
           onSuivant: notifier.moisSuivant,
           onAujourdhui: () {
-            notifier.revenirMoisActuel();
+            unawaited(notifier.revenirMoisActuel());
             setState(() => _selection = aujourdhui);
           },
         ),

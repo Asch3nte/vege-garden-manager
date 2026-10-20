@@ -9,6 +9,7 @@ import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_emplacement.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 
@@ -61,7 +62,7 @@ void main() {
               const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
           dateCreation: DateTime(2026, 1, 1),
         ),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -100,7 +101,7 @@ void main() {
         surface: Surface.enMetresCarres(1),
         exposition: NiveauSoleil.ombre,
       );
-      expect(() => p.ajouterParcelle(foreign), throwsA(isA<AssertionError>()));
+      expect(() => p.ajouterParcelle(foreign), throwsAssertionError);
     });
 
     test('add then remove a parcelle', () {

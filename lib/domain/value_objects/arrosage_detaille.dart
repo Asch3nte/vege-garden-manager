@@ -1,4 +1,5 @@
 import '../enums/phase_sensible_eau.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 
 /// Immutable, **optional** detailed watering guidance carried by a fiche's
 /// [BesoinsCulture] (the coarse [BesoinEau] term stays for every tier; this
@@ -32,30 +33,26 @@ class ArrosageDetaille {
     this._volumeLitresM2Max,
     this._phasesSensibles,
     this._noteI18n,
-  )   : assert(
-          (_frequenceJoursMin == null) == (_frequenceJoursMax == null),
-          'frequence: provide both bounds or neither',
-        ),
-        assert(
-          _frequenceJoursMin == null || _frequenceJoursMin > 0,
-          'frequence bounds must be strictly positive (days)',
-        ),
-        assert(
-          _frequenceJoursMin == null || _frequenceJoursMin <= _frequenceJoursMax!,
-          'frequence: min must be <= max',
-        ),
-        assert(
-          (_volumeLitresM2Min == null) == (_volumeLitresM2Max == null),
-          'volume: provide both bounds or neither',
-        ),
-        assert(
-          _volumeLitresM2Min == null || _volumeLitresM2Min > 0,
-          'volume bounds must be strictly positive (L/m²)',
-        ),
-        assert(
-          _volumeLitresM2Min == null || _volumeLitresM2Min <= _volumeLitresM2Max!,
-          'volume: min must be <= max',
-        );
+  ) {
+    InvariantDomaineException.verifier(
+        (_frequenceJoursMin == null) == (_frequenceJoursMax == null),
+        'frequence: provide both bounds or neither');
+    InvariantDomaineException.verifier(
+        _frequenceJoursMin == null || _frequenceJoursMin > 0,
+        'frequence bounds must be strictly positive (days)');
+    InvariantDomaineException.verifier(
+        _frequenceJoursMin == null || _frequenceJoursMin <= _frequenceJoursMax!,
+        'frequence: min must be <= max');
+    InvariantDomaineException.verifier(
+        (_volumeLitresM2Min == null) == (_volumeLitresM2Max == null),
+        'volume: provide both bounds or neither');
+    InvariantDomaineException.verifier(
+        _volumeLitresM2Min == null || _volumeLitresM2Min > 0,
+        'volume bounds must be strictly positive (L/m²)');
+    InvariantDomaineException.verifier(
+        _volumeLitresM2Min == null || _volumeLitresM2Min <= _volumeLitresM2Max!,
+        'volume: min must be <= max');
+  }
 
   /// Builds a detailed watering guidance. Provide [frequenceJoursMin]/[Max] as a
   /// pair (or neither) and likewise [volumeLitresM2Min]/[Max]. At least one of
@@ -70,10 +67,12 @@ class ArrosageDetaille {
   }) {
     final aFrequence = frequenceJoursMin != null || frequenceJoursMax != null;
     final aVolume = volumeLitresM2Min != null || volumeLitresM2Max != null;
-    assert(
-      aFrequence || aVolume || phasesSensibles.isNotEmpty || noteI18n.isNotEmpty,
-      'ArrosageDetaille must carry at least one populated aspect',
-    );
+    InvariantDomaineException.verifier(
+        aFrequence ||
+            aVolume ||
+            phasesSensibles.isNotEmpty ||
+            noteI18n.isNotEmpty,
+        'ArrosageDetaille must carry at least one populated aspect');
     return ArrosageDetaille._(
       frequenceJoursMin,
       frequenceJoursMax,

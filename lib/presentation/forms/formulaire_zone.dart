@@ -16,6 +16,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
+import 'enregistrement_formulaire.dart';
 
 /// Opens the zone form for [potagerId] and returns the saved [Parcelle].
 ///
@@ -57,7 +58,8 @@ class FormulaireZone extends ConsumerStatefulWidget {
   ConsumerState<FormulaireZone> createState() => _FormulaireZoneState();
 }
 
-class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
+class _FormulaireZoneState extends ConsumerState<FormulaireZone>
+    with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _nom = TextEditingController();
   final _surface = TextEditingController(text: '1');
@@ -68,7 +70,6 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
   TextureSol? _texture;
   PhSol? _ph;
   final Set<TechniqueSol> _techniques = {};
-  bool _enregistrement = false;
 
   bool get _edition => widget.parcelleInitiale != null;
 
@@ -96,45 +97,44 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
 
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
-    setState(() => _enregistrement = true);
     final surface = Surface.enMetresCarres(
       double.parse(_surface.text.trim().replaceAll(',', '.')),
     );
     final notifier = ref.read(parcellesProvider(widget.potagerId).notifier);
 
-    final Parcelle parcelle;
     final initiale = widget.parcelleInitiale;
-    if (initiale != null) {
-      // Edit: rebuild with the same id, preserving the non-edited fields
-      // (type and surface are final on the entity).
-      parcelle = Parcelle(
-        id: initiale.id,
+    await enregistrer(() async {
+      if (initiale != null) {
+        // Edit: rebuild with the same id, preserving the non-edited fields
+        // (type and surface are final on the entity).
+        final parcelle = Parcelle(
+          id: initiale.id,
+          nom: _nom.text.trim(),
+          potagerId: initiale.potagerId,
+          type: _type,
+          surface: surface,
+          exposition: _exposition,
+          ordre: initiale.ordre,
+          texture: _texture,
+          textureSource: initiale.textureSource,
+          ph: _ph,
+          techniquesSol: _techniques,
+          cultureVerticale: initiale.cultureVerticale,
+          notes: initiale.notes,
+        );
+        await notifier.modifier(parcelle);
+        return parcelle;
+      }
+      return notifier.creer(
         nom: _nom.text.trim(),
-        potagerId: initiale.potagerId,
         type: _type,
         surface: surface,
         exposition: _exposition,
-        ordre: initiale.ordre,
-        texture: _texture,
-        textureSource: initiale.textureSource,
-        ph: _ph,
-        techniquesSol: _techniques,
-        cultureVerticale: initiale.cultureVerticale,
-        notes: initiale.notes,
-      );
-      await notifier.modifier(parcelle);
-    } else {
-      parcelle = await notifier.creer(
-        nom: _nom.text.trim(),
-        type: _type,
-        surface: surface,
-        exposition: _exposition,
         texture: _texture,
         ph: _ph,
         techniquesSol: _techniques,
       );
-    }
-    if (mounted) Navigator.of(context).pop(parcelle);
+    });
   }
 
   static String _formaterSurface(double m2) => m2 == m2.roundToDouble()
@@ -290,7 +290,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone> {
             ],
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(
-              onPressed: _enregistrement ? null : _enregistrer,
+              onPressed: enregistrementEnCours ? null : _enregistrer,
               child: Text(l10n.actionEnregistrer),
             ),
           ],

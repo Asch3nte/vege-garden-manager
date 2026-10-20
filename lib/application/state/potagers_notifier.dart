@@ -6,6 +6,7 @@ import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/creer_potager.dart';
+import 'preferences_notifier.dart';
 
 /// Exposes the list of potagers and the actions that mutate it to the UI.
 ///
@@ -45,9 +46,16 @@ class PotagersNotifier extends AsyncNotifier<List<Potager>> {
     await _recharger();
   }
 
-  /// Soft-deletes the garden [id] (cascade) and reloads the list.
+  /// Soft-deletes the garden [id] (cascade), drops it as the active garden if
+  /// it was, and reloads the list.
   Future<void> supprimer(String id) async {
     await ref.read(potagerRepositoryProvider).supprimer(id);
+    final preferences = ref.read(preferencesRepositoryProvider);
+    final prefs = await preferences.charger();
+    if (prefs.potagerActifId == id) {
+      await preferences.sauvegarder(prefs.sansPotagerActif());
+      ref.invalidate(preferencesProvider);
+    }
     await _recharger();
   }
 

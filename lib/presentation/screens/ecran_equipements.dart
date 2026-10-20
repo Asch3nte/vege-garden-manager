@@ -480,8 +480,19 @@ class _MenuActions extends ConsumerWidget {
       libelleConfirmer: l10n.equipRetirer,
     );
     if (!ok) return;
-    equipement.retirer(ref.read(horlogeProvider)());
-    await ref.read(equipementsProvider(potagerId).notifier).modifier(equipement);
+    try {
+      equipement.retirer(ref.read(horlogeProvider)());
+      await ref
+          .read(equipementsProvider(potagerId).notifier)
+          .modifier(equipement);
+    } on Exception catch (e) {
+      // Reloads the stored state over the entity changed in memory.
+      debugPrint('Retirement failed: $e');
+      ref.invalidate(equipementsProvider(potagerId));
+      messenger.showSnackBar(
+          SnackBar(content: Text(l10n.formEnregistrementErreur)));
+      return;
+    }
     messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackRetire)));
   }
 

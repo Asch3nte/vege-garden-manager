@@ -9,6 +9,7 @@ import '../enums/type_climat.dart';
 import '../enums/type_parcelle.dart';
 import '../enums/usage_plante.dart';
 import '../enums/zone_rusticite.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/association_benefique.dart';
 import '../value_objects/association_conflit.dart';
 import '../value_objects/besoins_culture.dart';
@@ -117,24 +118,31 @@ class FichePlante {
     this._enracinement,
     this._toleranceSecheresse,
     this._temperatureMaxTolerance,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_parentId == null || _parentId.isNotEmpty,
-            'parentId, when set, must not be empty'),
-        assert(_parentId != _id, 'a variety cannot be its own parent'),
-        assert(_nomScientifique.isNotEmpty, 'nomScientifique must not be empty'),
-        assert(_familleBotanique.isNotEmpty, 'familleBotanique must not be empty'),
-        assert(_usages.isNotEmpty, 'a plant must have at least one usage'),
-        assert(_nomsLocalises.containsKey('fr'), 'the French name is mandatory'),
-        assert(_espacementCm > 0, 'espacementCm must be > 0'),
-        assert(
-          _dureeAvantRecolteJoursMin > 0 &&
-              _dureeAvantRecolteJoursMin <= _dureeAvantRecolteJoursMax,
-          'duration must be positive with min <= max',
-        ),
-        assert(
-          _difficulte == null || (_difficulte >= 1 && _difficulte <= 3),
-          'difficulte must be 1, 2 or 3',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _parentId == null || _parentId.isNotEmpty,
+        'parentId, when set, must not be empty');
+    InvariantDomaineException.verifier(
+        _parentId != _id, 'a variety cannot be its own parent');
+    InvariantDomaineException.verifier(
+        _nomScientifique.isNotEmpty, 'nomScientifique must not be empty');
+    InvariantDomaineException.verifier(
+        _familleBotanique.isNotEmpty, 'familleBotanique must not be empty');
+    InvariantDomaineException.verifier(
+        _usages.isNotEmpty, 'a plant must have at least one usage');
+    InvariantDomaineException.verifier(
+        _nomsLocalises.containsKey('fr'), 'the French name is mandatory');
+    InvariantDomaineException.verifier(
+        _espacementCm > 0, 'espacementCm must be > 0');
+    InvariantDomaineException.verifier(
+        _dureeAvantRecolteJoursMin > 0 &&
+            _dureeAvantRecolteJoursMin <= _dureeAvantRecolteJoursMax,
+        'duration must be positive with min <= max');
+    InvariantDomaineException.verifier(
+        _difficulte == null || (_difficulte >= 1 && _difficulte <= 3),
+        'difficulte must be 1, 2 or 3');
+  }
 
   /// Builds a plant sheet. Collections are stored unmodifiable; periods default
   /// to empty. All enrichment fields (§A–H of doc 16) are optional.

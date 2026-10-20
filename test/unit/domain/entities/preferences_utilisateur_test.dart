@@ -4,6 +4,7 @@ import 'package:pot_a_gerer/domain/enums/langue.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/theme_app.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 
 void main() {
   group('PreferencesUtilisateur — smart defaults', () {
@@ -56,6 +57,14 @@ void main() {
       expect(p.potagerActifId, 'pot-2');
     });
 
+    test('sansPotagerActif clears the selection and keeps the rest', () {
+      final p = PreferencesUtilisateur(potagerActifId: 'pot-1')
+          .avecNePasDeranger('22:00', '07:00')
+          .sansPotagerActif();
+      expect(p.potagerActifId, isNull);
+      expect(p.nePasDerangerDebut, '22:00');
+    });
+
     test('copierAvec without the field keeps the previous selection', () {
       final p = PreferencesUtilisateur(potagerActifId: 'pot-1')
           .copierAvec(theme: ThemeApp.sombre);
@@ -99,7 +108,7 @@ void main() {
     test('rejects a half-set window at construction', () {
       expect(
         () => PreferencesUtilisateur(nePasDerangerDebut: '22:00'),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 

@@ -223,6 +223,11 @@ void main() {
       expect(result.first.probabilitePluie, closeTo(0.7, 1e-9));
     });
 
+    test('rejects a non-positive horizon with a typed exception', () async {
+      await expectLater(service.obtenirPrevisions(loc, 0),
+          throwsA(isA<MeteoIndisponibleException>()));
+    });
+
     test('throws when network fails and nothing is cached', () async {
       when(() => client.obtenirPrevisions(loc, 3))
           .thenThrow(MeteoIndisponibleException('offline'));

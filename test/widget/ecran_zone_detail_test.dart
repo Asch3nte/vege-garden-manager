@@ -362,6 +362,22 @@ void main() {
     expect(p.statut, StatutPlantation.arrachee);
   });
 
+  testWidgets('a failed pull-out is reported, the crop stays in place',
+      (tester) async {
+    semerUneCulture();
+    when(() => plantations.sauvegarder(any()))
+        .thenAnswer((_) async => throw Exception('disque plein'));
+    await monter(tester, 'z-1');
+
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Arracher'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+    verify(() => plantations.obtenirParParcelle(any())).called(greaterThan(1));
+  });
+
   testWidgets('removing a crop deletes it after confirmation', (tester) async {
     semerUneCulture();
     await monter(tester, 'z-1');

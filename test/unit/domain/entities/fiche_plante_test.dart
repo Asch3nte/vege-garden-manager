@@ -8,6 +8,7 @@ import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
@@ -76,21 +77,21 @@ void main() {
     });
 
     test('requires at least one usage', () {
-      expect(() => _fiche(usages: {}), throwsA(isA<AssertionError>()));
+      expect(() => _fiche(usages: {}), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('requires a French name', () {
       expect(
         () => _fiche(noms: {'en': 'Tomato'}),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 
     test('rejects invalid spacing or duration range', () {
-      expect(() => _fiche(espacementCm: 0), throwsA(isA<AssertionError>()));
+      expect(() => _fiche(espacementCm: 0), throwsA(isA<InvariantDomaineException>()));
       expect(
         () => _fiche(dureeMin: 90, dureeMax: 70),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -113,7 +114,7 @@ void main() {
     test('a variety cannot be its own parent', () {
       expect(
         () => _fiche(id: 'LEG-001', parentId: 'LEG-001'),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });

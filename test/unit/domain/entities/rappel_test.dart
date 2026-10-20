@@ -6,6 +6,7 @@ import 'package:pot_a_gerer/domain/enums/jour_semaine.dart';
 import 'package:pot_a_gerer/domain/enums/priorite_tache.dart';
 import 'package:pot_a_gerer/domain/enums/type_recurrence.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 
 Rappel _rappel({
   required TypeRecurrence recurrence,
@@ -36,23 +37,23 @@ void main() {
     test('custom needs a positive interval', () {
       expect(
         () => _rappel(recurrence: TypeRecurrence.personnalise),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
     test('weekly needs at least one weekday', () {
       expect(
         () => _rappel(recurrence: TypeRecurrence.hebdomadaire),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
     test('monthly needs a valid day of month', () {
       expect(
         () => _rappel(recurrence: TypeRecurrence.mensuel),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
       expect(
         () => _rappel(recurrence: TypeRecurrence.mensuel, jourDuMois: 32),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });

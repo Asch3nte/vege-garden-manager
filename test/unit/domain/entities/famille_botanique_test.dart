@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 
 FamilleBotanique _famille({
   String id = 'solanaceae',
@@ -35,22 +36,22 @@ void main() {
     });
 
     test('requires at least one category', () {
-      expect(() => _famille(categories: {}), throwsA(isA<AssertionError>()));
+      expect(() => _famille(categories: {}), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('requires a French name', () {
       expect(
         () => _famille(noms: {'en': 'Nightshades'}),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 
     test('rejects a non-lowercase id', () {
-      expect(() => _famille(id: 'Solanaceae'), throwsA(isA<AssertionError>()));
+      expect(() => _famille(id: 'Solanaceae'), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects a non-positive return delay', () {
-      expect(() => _famille(delaiRetour: 0), throwsA(isA<AssertionError>()));
+      expect(() => _famille(delaiRetour: 0), throwsA(isA<InvariantDomaineException>()));
     });
   });
 

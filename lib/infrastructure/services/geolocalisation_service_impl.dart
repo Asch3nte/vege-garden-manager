@@ -26,17 +26,26 @@ class GeolocalisationServiceImpl implements AbstractGeolocalisationService {
       _versPermission(await _geolocator.checkPermission());
 
   @override
-  Future<PermissionLocalisation> demanderPermission() async =>
-      _versPermission(await _geolocator.requestPermission());
+  Future<PermissionLocalisation> demanderPermission() async {
+    try {
+      return _versPermission(await _geolocator.requestPermission());
+    } on Exception catch (e) {
+      throw GeolocalisationIndisponibleException(
+        'Failed to ask for the location permission.',
+        cause: e,
+      );
+    }
+  }
 
   @override
   Future<Localisation> positionActuelle() async {
-    if (!await _geolocator.isLocationServiceEnabled()) {
+    if (!await _lirePlateforme(_geolocator.isLocationServiceEnabled)) {
       throw GeolocalisationIndisponibleException(
         'Location service is disabled on the device.',
       );
     }
-    final permission = _versPermission(await _geolocator.checkPermission());
+    final permission =
+        _versPermission(await _lirePlateforme(_geolocator.checkPermission));
     if (permission != PermissionLocalisation.accordee) {
       throw GeolocalisationIndisponibleException(
         'Location permission not granted (state: ${permission.name}).',
@@ -48,9 +57,21 @@ class GeolocalisationServiceImpl implements AbstractGeolocalisationService {
         latitude: position.latitude,
         longitude: position.longitude,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw GeolocalisationIndisponibleException(
         'Failed to read the device position.',
+        cause: e,
+      );
+    }
+  }
+
+  /// Runs a plugin query, turning its platform failure into a typed exception.
+  Future<T> _lirePlateforme<T>(Future<T> Function() requete) async {
+    try {
+      return await requete();
+    } on Exception catch (e) {
+      throw GeolocalisationIndisponibleException(
+        'Failed to read the location service state.',
         cause: e,
       );
     }

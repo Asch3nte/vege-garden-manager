@@ -1,3 +1,4 @@
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/modele_fiche_personnelle.dart';
 
 /// A plant sheet authored by the user (contribution feature, expert tier —
@@ -22,7 +23,9 @@ class FichePlantePersonnelle {
     this._contenu,
     this._dateCreation,
     this._dateModification,
-  ) : assert(_id.isNotEmpty, 'id must not be empty');
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+  }
 
   /// Creates a personal sheet. [dateModification] defaults to [dateCreation].
   factory FichePlantePersonnelle({

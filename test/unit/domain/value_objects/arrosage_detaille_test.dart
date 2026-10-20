@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/enums/phase_sensible_eau.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/arrosage_detaille.dart';
 
 void main() {
@@ -72,36 +73,36 @@ void main() {
 
   group('ArrosageDetaille — invariants', () {
     test('rejects an entirely empty detail', () {
-      expect(() => ArrosageDetaille(), throwsA(isA<AssertionError>()));
+      expect(() => ArrosageDetaille(), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects a single frequency bound', () {
       expect(() => ArrosageDetaille(frequenceJoursMin: 2),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
       expect(() => ArrosageDetaille(frequenceJoursMax: 2),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects a non-positive frequency', () {
       expect(() => ArrosageDetaille(frequenceJoursMin: 0, frequenceJoursMax: 2),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects an inverted frequency range', () {
       expect(() => ArrosageDetaille(frequenceJoursMin: 4, frequenceJoursMax: 2),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects a single volume bound', () {
       expect(() => ArrosageDetaille(volumeLitresM2Min: 3),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects a non-positive / inverted volume range', () {
       expect(() => ArrosageDetaille(volumeLitresM2Min: 0, volumeLitresM2Max: 3),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
       expect(() => ArrosageDetaille(volumeLitresM2Min: 5, volumeLitresM2Max: 3),
-          throwsA(isA<AssertionError>()));
+          throwsA(isA<InvariantDomaineException>()));
     });
 
     test('accepts equal bounds (single indicative value)', () {

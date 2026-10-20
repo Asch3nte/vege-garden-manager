@@ -37,6 +37,7 @@ import '../../infrastructure/repositories/preferences_repository_impl.dart';
 import '../../infrastructure/repositories/rappel_repository_impl.dart';
 import '../../infrastructure/repositories/recolte_repository_impl.dart';
 import '../../infrastructure/repositories/tache_repository_impl.dart';
+import '../state/journal_erreurs_chargement.dart';
 import 'database_providers.dart';
 
 /// Dependency-injection providers for the domain repository interfaces.
@@ -89,15 +90,23 @@ final preferencesRepositoryProvider = Provider<AbstractPreferencesRepository>(
 
 // --- Plant catalogue (YAML assets, loaded asynchronously) -------------------
 
+/// Source of the embedded YAML plant sheets.
+final ficheAssetSourceProvider =
+    Provider<FicheAssetSource>((ref) => BundleFicheAssetSource());
+
 /// Pipeline that lists/reads/parses/validates the embedded YAML plant sheets.
 final catalogueLoaderProvider = Provider<CatalogueLoader>(
-  (ref) => CatalogueLoader(BundleFicheAssetSource()),
+  (ref) => CatalogueLoader(
+    ref.watch(ficheAssetSourceProvider),
+    ref.watch(journalErreursChargementProvider).signaler,
+  ),
 );
 
 /// Pipeline that loads user-authored sheets from the database (ADR-0002 A6).
 final fichesPersonnellesLoaderProvider = Provider<FichesPersonnellesLoader>(
   (ref) => FichesPersonnellesLoader(
     ref.watch(fichePlantePersonnelleRepositoryProvider),
+    ref.watch(journalErreursChargementProvider).signaler,
   ),
 );
 
@@ -139,7 +148,10 @@ final fichePlanteRepositoryProvider =
 
 /// Pipeline that lists/reads/parses/validates the embedded YAML family sheets.
 final famillesLoaderProvider = Provider<FamillesLoader>(
-  (ref) => FamillesLoader(BundleFamilleAssetSource()),
+  (ref) => FamillesLoader(
+    BundleFamilleAssetSource(),
+    ref.watch(journalErreursChargementProvider).signaler,
+  ),
 );
 
 /// The in-memory family cache, loaded once from the bundled assets.
@@ -158,7 +170,10 @@ final familleBotaniqueRepositoryProvider =
 /// Pipeline that reads/parses/validates the embedded bioaggressor reference
 /// (diseases & pests shared at family level, ADR-0006 Lot 4).
 final bioagresseursLoaderProvider = Provider<BioagresseursLoader>(
-  (ref) => BioagresseursLoader(BundleBioagresseurAssetSource()),
+  (ref) => BioagresseursLoader(
+    BundleBioagresseurAssetSource(),
+    ref.watch(journalErreursChargementProvider).signaler,
+  ),
 );
 
 /// The in-memory bioaggressor cache, loaded once from the bundled reference.

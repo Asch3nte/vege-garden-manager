@@ -1402,6 +1402,8 @@
   "@formPotagerPositionDetectee": { "description": "Confirmation : position détectée, champs suggérés." },
   "formPotagerPositionRefusee": "Autorisation de localisation refusée.",
   "@formPotagerPositionRefusee": { "description": "Erreur : permission géoloc refusée." },
+  "formEnregistrementErreur": "Enregistrement impossible. Réessayez.",
+  "@formEnregistrementErreur": { "description": "Erreur générique : la sauvegarde d'un formulaire a échoué." },
   "formPotagerPositionErreur": "Position indisponible (vérifie le GPS et l'autorisation).",
   "@formPotagerPositionErreur": { "description": "Erreur : impossible d'obtenir la position." },
   "formPotagerChoisirRegion": "Choisir une région",

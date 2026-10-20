@@ -162,6 +162,15 @@ void main() {
           throwsA(isA<MeteoIndisponibleException>()));
     });
 
+    test('rejects a malformed day with a typed exception', () async {
+      final payload =
+          jsonDecode(jsonEncode(dailyPayload())) as Map<String, dynamic>;
+      ((payload['daily'] as Map)['time'] as List)[1] = 'pas une date';
+
+      expect(clientReturning(payload).obtenirPrevisions(loc, 3),
+          throwsA(isA<MeteoIndisponibleException>()));
+    });
+
     test('rejects a non-positive horizon', () async {
       final client = clientReturning(dailyPayload());
       expect(
@@ -242,6 +251,15 @@ void main() {
 
       expect(heures[1].probabilitePluie, closeTo(0.2, 1e-9));
       expect(heures[2].probabilitePluie, closeTo(0.8, 1e-9));
+    });
+
+    test('rejects a malformed hour with a typed exception', () async {
+      final payload =
+          jsonDecode(jsonEncode(hourlyPayload())) as Map<String, dynamic>;
+      ((payload['hourly'] as Map)['time'] as List)[0] = null;
+
+      expect(clientReturning(payload).obtenirPrevisionsHoraires(loc),
+          throwsA(isA<MeteoIndisponibleException>()));
     });
 
     test('rejects a non-positive horizon', () async {

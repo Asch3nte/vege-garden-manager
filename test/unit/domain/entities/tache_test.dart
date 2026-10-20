@@ -4,6 +4,7 @@ import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
 import 'package:pot_a_gerer/domain/enums/priorite_tache.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 
 Tache _tache({
   String id = 't1',
@@ -32,14 +33,14 @@ void main() {
     });
 
     test('rejects empty id/titre/cibleId', () {
-      expect(() => _tache(id: ''), throwsA(isA<AssertionError>()));
-      expect(() => _tache(titre: ''), throwsA(isA<AssertionError>()));
+      expect(() => _tache(id: ''), throwsA(isA<InvariantDomaineException>()));
+      expect(() => _tache(titre: ''), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('a completed task requires a completion date', () {
       expect(
         () => _tache(etat: EtatTache.terminee),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -62,7 +63,7 @@ void main() {
       final t = _tache();
       expect(
         () => t.marquerFaite(DateTime(2026, 6, 20), dureeMinutes: 0),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 

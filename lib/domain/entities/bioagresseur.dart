@@ -1,4 +1,5 @@
 import '../enums/type_bioagresseur.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 
 /// A disease or pest shared at the **botanical-family** level, loaded from the
 /// embedded reference and **not created by the user** (ADR-0006, Lot 4).
@@ -24,11 +25,16 @@ class Bioagresseur {
     this._nomsLocalises,
     this._descriptionsLocalisees,
     this._codeEppo,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_id == _id.toLowerCase(), 'id must be a normalized slug'),
-        assert(_nomsLocalises.containsKey('fr'), 'the French name is mandatory'),
-        assert(_codeEppo == null || _codeEppo.isNotEmpty,
-            'codeEppo, when set, must not be empty');
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _id == _id.toLowerCase(), 'id must be a normalized slug');
+    InvariantDomaineException.verifier(
+        _nomsLocalises.containsKey('fr'), 'the French name is mandatory');
+    InvariantDomaineException.verifier(
+        _codeEppo == null || _codeEppo.isNotEmpty,
+        'codeEppo, when set, must not be empty');
+  }
 
   /// Builds a bioaggressor entry. Maps are stored unmodifiable.
   factory Bioagresseur({

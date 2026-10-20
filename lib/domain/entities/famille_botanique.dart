@@ -1,4 +1,5 @@
 import '../enums/categorie_plante.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 
 /// Botanical family reference, loaded from the YAML catalogue and **not created
 /// by the user**. A *sibling* type of [FichePlante] — **not** a grand-mother in
@@ -37,15 +38,20 @@ class FamilleBotanique {
     this._maladiesCommunes,
     this._ravageursCommuns,
     this._delaiRetourAnnees,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_id == _id.toLowerCase(), 'id must be a normalized slug'),
-        assert(_nomScientifique.isNotEmpty, 'nomScientifique must not be empty'),
-        assert(_categories.isNotEmpty, 'a family must belong to ≥ 1 category'),
-        assert(_nomsLocalises.containsKey('fr'), 'the French name is mandatory'),
-        assert(
-          _delaiRetourAnnees == null || _delaiRetourAnnees > 0,
-          'delaiRetourAnnees, when set, must be > 0',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _id == _id.toLowerCase(), 'id must be a normalized slug');
+    InvariantDomaineException.verifier(
+        _nomScientifique.isNotEmpty, 'nomScientifique must not be empty');
+    InvariantDomaineException.verifier(
+        _categories.isNotEmpty, 'a family must belong to ≥ 1 category');
+    InvariantDomaineException.verifier(
+        _nomsLocalises.containsKey('fr'), 'the French name is mandatory');
+    InvariantDomaineException.verifier(
+        _delaiRetourAnnees == null || _delaiRetourAnnees > 0,
+        'delaiRetourAnnees, when set, must be > 0');
+  }
 
   /// Builds a family sheet. Collections are stored unmodifiable; the structured
   /// agronomic fields default to empty/`null`.

@@ -4,6 +4,7 @@ import '../enums/niveau_experience.dart';
 import '../enums/sens_swipe.dart';
 import '../enums/systeme_unites.dart';
 import '../enums/theme_app.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/fenetre_ne_pas_deranger.dart';
 import '../value_objects/profil_ponderation_associations.dart';
 
@@ -60,10 +61,11 @@ class PreferencesUtilisateur {
     this._onboardingTermine,
     this._ponderationAssociations,
     this._potagerActifId,
-  ) : assert(
-          (_nePasDerangerDebut == null) == (_nePasDerangerFin == null),
-          'do-not-disturb bounds must be both set or both null',
-        );
+  ) {
+    InvariantDomaineException.verifier(
+        (_nePasDerangerDebut == null) == (_nePasDerangerFin == null),
+        'do-not-disturb bounds must be both set or both null');
+  }
 
   /// Creates a preferences object. All defaults are the "smart defaults" of the
   /// spec (privacy-first: geolocation off, sync off, beginner level).
@@ -211,12 +213,21 @@ class PreferencesUtilisateur {
 
   /// Returns a copy with a do-not-disturb window (`HH:MM` bounds).
   PreferencesUtilisateur avecNePasDeranger(String debut, String fin) =>
-      copierAvec()._avecNpd(debut, fin);
+      _copie(debut, fin, _potagerActifId);
 
   /// Returns a copy with the do-not-disturb window cleared.
-  PreferencesUtilisateur sansNePasDeranger() => copierAvec()._avecNpd(null, null);
+  PreferencesUtilisateur sansNePasDeranger() =>
+      _copie(null, null, _potagerActifId);
 
-  PreferencesUtilisateur _avecNpd(String? debut, String? fin) =>
+  /// Returns a copy without an active garden selection.
+  PreferencesUtilisateur sansPotagerActif() =>
+      _copie(_nePasDerangerDebut, _nePasDerangerFin, null);
+
+  PreferencesUtilisateur _copie(
+    String? debut,
+    String? fin,
+    String? potagerActifId,
+  ) =>
       PreferencesUtilisateur(
         langue: _langue,
         theme: _theme,
@@ -236,7 +247,7 @@ class PreferencesUtilisateur {
         nePasDerangerFin: fin,
         onboardingTermine: _onboardingTermine,
         ponderationAssociations: _ponderationAssociations,
-        potagerActifId: _potagerActifId,
+        potagerActifId: potagerActifId,
       );
 
   @override

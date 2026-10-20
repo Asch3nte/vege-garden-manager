@@ -215,6 +215,45 @@ void main() {
     expect(potager.zoneClimatique.type, TypeClimat.mediterraneen); // preserved
   });
 
+  testWidgets('a failed edit leaves the original garden untouched',
+      (tester) async {
+    when(() => repo.obtenirTous()).thenAnswer((_) async => []);
+    when(() => repo.sauvegarder(any()))
+        .thenAnswer((_) async => throw Exception('disque plein'));
+    final initial = Potager(
+      id: 'pot-1',
+      nom: 'Ancien nom',
+      zoneClimatique:
+          const ZoneClimatique(TypeClimat.mediterraneen, ZoneRusticite.zone9),
+      localisation:
+          Localisation.manuelle(ville: 'Nice', latitude: 43.7, longitude: 7.2),
+      dateCreation: DateTime(2026, 1, 1),
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          potagerRepositoryProvider.overrideWithValue(repo),
+          geolocalisationServiceProvider.overrideWithValue(geoloc),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: FormulairePotager(potagerInitial: initial),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Nom du potager'), 'Nouveau nom');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    expect(initial.nom, 'Ancien nom');
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+  });
+
   testWidgets('an empty name blocks saving', (tester) async {
     await monter(tester);
 

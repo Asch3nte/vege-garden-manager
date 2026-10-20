@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -91,7 +93,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   Future<void> _detecterGps() async {
     final loc =
         await capterGps(context, ref.read(geolocalisationServiceProvider));
-    if (loc != null) {
+    if (loc != null && mounted) {
       _appliquerPosition(loc);
       _avancerDepuisPosition();
     }
@@ -99,7 +101,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
 
   Future<void> _choisirSurCarte() async {
     final loc = await choisirSurCarteMonde(context);
-    if (loc != null) {
+    if (loc != null && mounted) {
       _appliquerPosition(loc);
       _avancerDepuisPosition();
     }
@@ -109,7 +111,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   /// "Suivant" tap — test feedback #1).
   void _avancerDepuisPosition() {
     if (mounted && _etape == _etapePositionIndex && _position.estDefinie) {
-      _suivant();
+      unawaited(_suivant());
     }
   }
 
@@ -132,8 +134,8 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
     String id;
     try {
       id = await _assurerPotager();
-    } catch (_) {
-      _signalerErreur();
+    } on Exception catch (e) {
+      _signalerErreur(e);
       return;
     }
     if (mounted) setState(() => _enregistrement = false);
@@ -142,7 +144,8 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
     if (zone != null && mounted) setState(() => _zones.add(zone));
   }
 
-  void _signalerErreur() {
+  void _signalerErreur(Exception erreur) {
+    debugPrint('Onboarding step failed: $erreur');
     if (!mounted) return;
     setState(() => _enregistrement = false);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -173,8 +176,8 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
       ref.read(astucePotagerZonesProvider.notifier).afficher();
       // Lifts the router gate (refreshListenable → redirect to Potager).
       await prefs.terminerOnboarding();
-    } catch (_) {
-      _signalerErreur();
+    } on Exception catch (e) {
+      _signalerErreur(e);
     }
   }
 
@@ -186,8 +189,8 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
       setState(() => _enregistrement = true);
       try {
         await _assurerPotager();
-      } catch (_) {
-        _signalerErreur();
+      } on Exception catch (e) {
+        _signalerErreur(e);
         return;
       }
       if (!mounted) return;

@@ -1,3 +1,4 @@
+import '../exceptions/invariant_domaine_exception.dart';
 import 'dart:math' as math;
 
 import '../enums/cible_tache.dart';
@@ -52,32 +53,31 @@ class Rappel {
     this._etat,
     this._genererXJoursAvance,
     this._notes,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_titre.isNotEmpty, 'titre must not be empty'),
-        assert(_cibleId.isNotEmpty, 'cibleId must not be empty'),
-        assert(
-          _dateFin == null || !_dateFin.isBefore(_dateDebut),
-          'dateFin cannot precede dateDebut',
-        ),
-        assert(
-          _genererXJoursAvance >= 0 && _genererXJoursAvance <= 365,
-          'genererXJoursAvance must be in 0..365',
-        ),
-        assert(
-          _typeRecurrence != TypeRecurrence.personnalise ||
-              (_intervalleJours != null && _intervalleJours > 0),
-          'a custom recurrence requires a positive interval',
-        ),
-        assert(
-          _typeRecurrence != TypeRecurrence.hebdomadaire ||
-              _joursSemaine.isNotEmpty,
-          'a weekly recurrence requires at least one weekday',
-        ),
-        assert(
-          _typeRecurrence != TypeRecurrence.mensuel ||
-              (_jourDuMois != null && _jourDuMois >= 1 && _jourDuMois <= 31),
-          'a monthly recurrence requires a day of month in 1..31',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _titre.isNotEmpty, 'titre must not be empty');
+    InvariantDomaineException.verifier(
+        _cibleId.isNotEmpty, 'cibleId must not be empty');
+    InvariantDomaineException.verifier(
+        !(_dateFin?.isBefore(_dateDebut) ?? false),
+        'dateFin cannot precede dateDebut');
+    InvariantDomaineException.verifier(
+        _genererXJoursAvance >= 0 && _genererXJoursAvance <= 365,
+        'genererXJoursAvance must be in 0..365');
+    InvariantDomaineException.verifier(
+        _typeRecurrence != TypeRecurrence.personnalise ||
+            (_intervalleJours != null && _intervalleJours > 0),
+        'a custom recurrence requires a positive interval');
+    InvariantDomaineException.verifier(
+        _typeRecurrence != TypeRecurrence.hebdomadaire ||
+            _joursSemaine.isNotEmpty,
+        'a weekly recurrence requires at least one weekday');
+    InvariantDomaineException.verifier(
+        _typeRecurrence != TypeRecurrence.mensuel ||
+            (_jourDuMois != null && _jourDuMois >= 1 && _jourDuMois <= 31),
+        'a monthly recurrence requires a day of month in 1..31');
+  }
 
   /// Creates a reminder. Defaults to an active reminder generating tasks 7 days
   /// ahead. Recurrence parameters are required according to [typeRecurrence].
@@ -214,20 +214,21 @@ class Rappel {
   void changerPriorite(PrioriteTache priorite) => _priorite = priorite;
 
   void definirHorizonGeneration(int jours) {
-    assert(jours >= 0 && jours <= 365, 'horizon must be in 0..365');
+    InvariantDomaineException.verifier(
+        jours >= 0 && jours <= 365, 'horizon must be in 0..365');
     _genererXJoursAvance = jours;
   }
 
   void modifierDateFin(DateTime? dateFin) {
-    assert(
-      dateFin == null || !dateFin.isBefore(_dateDebut),
-      'dateFin cannot precede dateDebut',
-    );
+    InvariantDomaineException.verifier(
+        dateFin == null || !dateFin.isBefore(_dateDebut),
+        'dateFin cannot precede dateDebut');
     _dateFin = dateFin;
   }
 
   void renommer(String titre) {
-    assert(titre.isNotEmpty, 'titre must not be empty');
+    InvariantDomaineException.verifier(
+        titre.isNotEmpty, 'titre must not be empty');
     _titre = titre;
   }
 

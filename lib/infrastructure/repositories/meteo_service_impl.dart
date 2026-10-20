@@ -89,6 +89,11 @@ class MeteoServiceImpl implements AbstractMeteoService {
         'Cannot fetch weather: location is undefined (geolocation opt-out).',
       );
     }
+    if (nbJours <= 0) {
+      throw MeteoIndisponibleException(
+        'Forecast horizon must be strictly positive (got $nbJours).',
+      );
+    }
     if (joursPasses > 0) {
       return _obtenirFenetre(loc, nbJours, joursPasses);
     }

@@ -1,5 +1,6 @@
 import '../enums/destination_recolte.dart';
 import '../enums/qualite_recolte.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/quantite.dart';
 
 /// A single harvest event for a plantation. A plantation may have several
@@ -32,7 +33,9 @@ class Recolte {
     this._destination,
     this._qualite,
     this._notes,
-  ) : assert(_id.isNotEmpty, 'id must not be empty');
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+  }
 
   /// Records a harvest. [qualite] is optional (null = not yet assessed) and can
   /// be set later via [definirQualite].

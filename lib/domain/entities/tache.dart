@@ -2,6 +2,7 @@ import '../enums/cible_tache.dart';
 import '../enums/etat_tache.dart';
 import '../enums/priorite_tache.dart';
 import '../enums/type_tache.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 
 /// A concrete, single action to carry out (or already done) on a polymorphic
 /// target: a potager, parcelle, plantation or equipment.
@@ -41,17 +42,18 @@ class Tache {
     this._dureeReelleMinutes,
     this._rappelOrigineId,
     this._notes,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_titre.isNotEmpty, 'titre must not be empty'),
-        assert(_cibleId.isNotEmpty, 'cibleId must not be empty'),
-        assert(
-          _etat != EtatTache.terminee || _dateRealisation != null,
-          'a completed task must have a completion date',
-        ),
-        assert(
-          _dureeReelleMinutes == null || _dureeReelleMinutes > 0,
-          'duration, when set, must be > 0',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _titre.isNotEmpty, 'titre must not be empty');
+    InvariantDomaineException.verifier(
+        _cibleId.isNotEmpty, 'cibleId must not be empty');
+    InvariantDomaineException.verifier(
+        _etat != EtatTache.terminee || _dateRealisation != null,
+        'a completed task must have a completion date');
+    InvariantDomaineException.verifier(
+        (_dureeReelleMinutes ?? 1) > 0, 'duration, when set, must be > 0');
+  }
 
   /// Creates a task. Defaults to a normal-priority, to-do task.
   factory Tache({
@@ -109,10 +111,9 @@ class Tache {
 
   /// Marks the task done on [date], optionally recording the time spent.
   void marquerFaite(DateTime date, {int? dureeMinutes}) {
-    assert(
-      dureeMinutes == null || dureeMinutes > 0,
-      'duration, when set, must be > 0',
-    );
+    InvariantDomaineException.verifier(
+        dureeMinutes == null || dureeMinutes > 0,
+        'duration, when set, must be > 0');
     _etat = EtatTache.terminee;
     _dateRealisation = date;
     _dureeReelleMinutes = dureeMinutes;
@@ -140,7 +141,8 @@ class Tache {
   void changerPriorite(PrioriteTache priorite) => _priorite = priorite;
 
   void renommer(String titre) {
-    assert(titre.isNotEmpty, 'titre must not be empty');
+    InvariantDomaineException.verifier(
+        titre.isNotEmpty, 'titre must not be empty');
     _titre = titre;
   }
 

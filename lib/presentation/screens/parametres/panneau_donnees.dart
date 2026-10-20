@@ -77,7 +77,8 @@ class PanneauDonnees extends ConsumerWidget {
       await ref
           .read(gestionnaireSauvegardeFichierProvider)
           .partager(json, 'potager-export-$horodatage.json');
-    } catch (_) {
+    } on Exception catch (e) {
+      debugPrint('Export failed: $e');
       messenger.showSnackBar(SnackBar(content: Text(l10n.donneesExportErreur)));
     }
   }
@@ -107,9 +108,8 @@ class PanneauDonnees extends ConsumerWidget {
       ref.invalidate(preferencesProvider);
       invaliderVuesDonnees(ref);
       messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportSucces)));
-    } on SauvegardeInvalideException {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportErreur)));
-    } catch (_) {
+    } on Exception catch (e) {
+      debugPrint('Import failed: $e');
       messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportErreur)));
     }
   }
