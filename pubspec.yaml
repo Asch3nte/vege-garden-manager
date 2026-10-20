@@ -60,7 +60,7 @@ dependencies:
   # removal) versions of share_plus (>=13.2) and package_info_plus (>=10.2,
   # transitive via geolocator_linux). The 12 beta migrated to win32 ^6 with an
   # unchanged pickFiles API. Move back to a caret on stable once 12.0.0 ships.
-  file_picker: ^12.0.0-beta.7
+  file_picker: ^13.1.0
   # Runtime app version/build number (À propos screen) — validated with the dev
   # (2026-07-07). Already resolved transitively at 10.2.0 via geolocator_linux,
   # so promoting it to a direct dependency needs no other version bump.
