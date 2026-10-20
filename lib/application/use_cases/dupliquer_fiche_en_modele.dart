@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/fiche_plante.dart';
+import '../../domain/exceptions/invariant_domaine_exception.dart';
 import '../../domain/services/id_fiche_personnelle.dart';
 import '../../domain/value_objects/modele_fiche_personnelle.dart';
 
@@ -18,14 +19,9 @@ class DupliquerFicheEnModele {
 
   /// Builds a draft model from [source].
   ///
-  /// Throws [ArgumentError] when the source carries no soil quality, which the
-  /// personal-sheet model requires (the catalogue itself never emits such a
-  /// sheet in practice).
+  /// Throws [InvariantDomaineException] when the source does not fit the
+  /// personal-sheet model (e.g. no soil quality).
   ModeleFichePersonnelle executer(FichePlante source) {
-    if (source.besoins.qualitesSol.isEmpty) {
-      throw ArgumentError.value(source.id, 'source',
-          'cannot duplicate a sheet without any soil quality');
-    }
     final nomFr = source.nomLocalise('fr');
     return ModeleFichePersonnelle(
       idFiche: IdFichePersonnelle.depuisNom(nomFr),

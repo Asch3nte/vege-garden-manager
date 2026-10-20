@@ -13,6 +13,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
+import 'enregistrement_formulaire.dart';
 
 /// Opens the "new plantation" form for [parcelleId] and returns the created
 /// [Plantation].
@@ -59,14 +60,14 @@ class FormulairePlantation extends ConsumerStatefulWidget {
       _FormulairePlantationState();
 }
 
-class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
+class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
+    with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _pieds = TextEditingController(text: '1');
   final _surface = TextEditingController(text: '0.5');
   FichePlante? _plante;
   DateTime _date = DateTime.now();
   MethodeMiseEnPlace _methode = MethodeMiseEnPlace.semisDirect;
-  bool _enregistrement = false;
   bool _planteManquante = false;
 
   @override
@@ -97,9 +98,8 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
     setState(() => _planteManquante = _plante == null);
     if (!formOk || _plante == null) return;
 
-    setState(() => _enregistrement = true);
-    final plantation =
-        await ref.read(plantationsProvider(widget.parcelleId).notifier).creer(
+    await enregistrer(
+        () => ref.read(plantationsProvider(widget.parcelleId).notifier).creer(
               planteId: _plante!.id,
               dateMiseEnPlace: _date,
               methode: _methode,
@@ -107,8 +107,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
                 double.parse(_surface.text.trim().replaceAll(',', '.')),
               ),
               nombrePieds: int.parse(_pieds.text.trim()),
-            );
-    if (mounted) Navigator.of(context).pop(plantation);
+            ));
   }
 
   @override
@@ -213,7 +212,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation> {
             ),
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(
-              onPressed: _enregistrement ? null : _enregistrer,
+              onPressed: enregistrementEnCours ? null : _enregistrer,
               child: Text(l10n.actionEnregistrer),
             ),
           ],

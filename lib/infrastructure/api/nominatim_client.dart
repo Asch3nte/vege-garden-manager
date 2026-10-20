@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 
 import 'package:http/http.dart' as http;
 
@@ -62,25 +63,28 @@ class NominatimClient {
         'Accept': 'application/json',
         'Accept-Language': 'fr',
       }).timeout(_timeout);
-    } catch (_) {
+    } on Exception catch (e) {
+      developer.log('Reverse geocoding failed', name: 'nominatim', error: e);
       return null;
     }
 
     if (response.statusCode != 200) return null;
 
+    final Object? body;
     try {
-      final body = jsonDecode(response.body) as Map<String, dynamic>;
-      final address = body['address'] as Map<String, dynamic>?;
-      if (address == null) return null;
-
-      for (final key in _adresseFallback) {
-        final value = address[key];
-        if (value is String && value.isNotEmpty) return value;
-      }
-      return null;
-    } catch (_) {
+      body = jsonDecode(response.body);
+    } on FormatException catch (e) {
+      developer.log('Unreadable reverse geocoding response',
+          name: 'nominatim', error: e);
       return null;
     }
+    final address = body is Map ? body['address'] : null;
+    if (address is! Map) return null;
+    for (final key in _adresseFallback) {
+      final value = address[key];
+      if (value is String && value.isNotEmpty) return value;
+    }
+    return null;
   }
 
   /// Releases the underlying [http.Client] when it is owned by this instance.

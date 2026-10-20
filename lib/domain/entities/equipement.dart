@@ -1,5 +1,6 @@
 import '../enums/etat_equipement.dart';
 import '../enums/type_equipement.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/effet_equipement.dart';
 
 /// An installation on a parcelle (oya, voile, tuteur…) or shared across the
@@ -38,18 +39,20 @@ class Equipement {
     this._dateRemplacementPrevue,
     this._dateRetrait,
     this._notes,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_nom.isNotEmpty, 'nom must not be empty'),
-        assert(_potagerId.isNotEmpty, 'potagerId must not be empty'),
-        assert(
-          _dateRetrait == null || !_dateRetrait.isBefore(_dateInstallation),
-          'the retirement date cannot precede the installation date',
-        ),
-        assert(
-          _dateRemplacementPrevue == null ||
-              !_dateRemplacementPrevue.isBefore(_dateInstallation),
-          'the planned replacement date cannot precede the installation date',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _nom.isNotEmpty, 'nom must not be empty');
+    InvariantDomaineException.verifier(
+        _potagerId.isNotEmpty, 'potagerId must not be empty');
+    InvariantDomaineException.verifier(
+        !(_dateRetrait?.isBefore(_dateInstallation) ?? false),
+        'the retirement date cannot precede the installation date');
+    InvariantDomaineException.verifier(
+        _dateRemplacementPrevue == null ||
+            !_dateRemplacementPrevue.isBefore(_dateInstallation),
+        'the planned replacement date cannot precede the installation date');
+  }
 
   /// Registers an equipment. Condition defaults to `bon`; a null [parcelleId]
   /// makes it transverse to the whole potager.
@@ -110,10 +113,9 @@ class Equipement {
   /// Retires the equipment on [date] (kept for history). [date] must not precede
   /// the installation date.
   void retirer(DateTime date) {
-    assert(
-      !date.isBefore(_dateInstallation),
-      'the retirement date cannot precede the installation date',
-    );
+    InvariantDomaineException.verifier(
+        !date.isBefore(_dateInstallation),
+        'the retirement date cannot precede the installation date');
     _dateRetrait = date;
   }
 

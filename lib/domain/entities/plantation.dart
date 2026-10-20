@@ -1,5 +1,6 @@
 import '../enums/methode_mise_en_place.dart';
 import '../enums/statut_plantation.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/quantite.dart';
 import '../value_objects/surface.dart';
 import 'recolte.dart';
@@ -42,13 +43,16 @@ class Plantation {
     this._dateFinReelle,
     this._raisonFin,
     this._recoltes,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_nombrePieds > 0, 'nombrePieds must be > 0'),
-        assert(_surfaceOccupee.enMetresCarres > 0, 'surface must be > 0'),
-        assert(
-          (_statut == StatutPlantation.enCours) == (_dateFinReelle == null),
-          'an end date exists iff the status is terminal',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _nombrePieds > 0, 'nombrePieds must be > 0');
+    InvariantDomaineException.verifier(
+        _surfaceOccupee.enMetresCarres > 0, 'surface must be > 0');
+    InvariantDomaineException.verifier(
+        (_statut == StatutPlantation.enCours) == (_dateFinReelle == null),
+        'an end date exists iff the status is terminal');
+  }
 
   /// Creates a plantation. Defaults to an active (`enCours`) status with no
   /// harvests. When reconstructing from storage, a terminal [statut] must come
@@ -119,7 +123,8 @@ class Plantation {
 
   /// Changes the lifecycle status. Moving to a terminal status requires a
   /// [dateFin] (not before the planting date); moving back to `enCours` clears
-  /// the end date and reason.
+  /// the end date and reason — within a parcelle, go through
+  /// [Parcelle.remettreEnCours], which checks the free surface.
   void changerStatut(
     StatutPlantation nouveau, {
     DateTime? dateFin,
@@ -131,11 +136,11 @@ class Plantation {
       _raisonFin = null;
       return;
     }
-    assert(dateFin != null, 'a terminal status requires an end date');
-    assert(
-      dateFin == null || !dateFin.isBefore(_dateMiseEnPlace),
-      'the end date cannot precede the planting date',
-    );
+    InvariantDomaineException.verifier(
+        dateFin != null, 'a terminal status requires an end date');
+    InvariantDomaineException.verifier(
+        dateFin == null || !dateFin.isBefore(_dateMiseEnPlace),
+        'the end date cannot precede the planting date');
     _statut = nouveau;
     _dateFinReelle = dateFin;
     _raisonFin = raison;

@@ -8,6 +8,7 @@ import 'package:pot_a_gerer/application/state/meteo_detail_notifier.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/exceptions/meteo_indisponible_exception.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_geocodage_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
@@ -260,5 +261,30 @@ void main() {
     verify(() => meteo.obtenirPrevisions(any(), any())).called(1);
     verify(() => meteo.obtenirPrevisionsHoraires(any(), nbJours: any(named: 'nbJours')))
         .called(1);
+  });
+
+  test('several failing sources surface one error, none left unhandled',
+      () async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager(localisation: loc));
+    stubAllServices();
+    when(() => geocodage.obtenirNomLocalite(any()))
+        .thenAnswer((_) async => throw MeteoIndisponibleException('offline'));
+    when(() => meteo.obtenirPrevisions(any(), any()))
+        .thenAnswer((_) async => throw MeteoIndisponibleException('offline'));
+
+    final c = ProviderContainer(
+      overrides: [
+        potagerRepositoryProvider.overrideWithValue(potagers),
+        meteoServiceProvider.overrideWithValue(meteo),
+        geocodageServiceProvider.overrideWithValue(geocodage),
+      ],
+      retry: (_, _) => null,
+    );
+    addTearDown(c.dispose);
+    c.listen(meteoDetailProvider, (_, _) {});
+
+    await expectLater(c.read(meteoDetailProvider.future),
+        throwsA(isA<MeteoIndisponibleException>()));
   });
 }

@@ -10,6 +10,7 @@ import 'package:pot_a_gerer/domain/enums/technique_sol.dart';
 import 'package:pot_a_gerer/domain/enums/texture_sol.dart';
 import 'package:pot_a_gerer/domain/enums/type_equipement.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/exceptions/surface_insuffisante_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 
@@ -71,7 +72,7 @@ void main() {
           surface: Surface.enMetresCarres(1),
           exposition: NiveauSoleil.ombre,
         ),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
       expect(
         () => Parcelle(
@@ -82,7 +83,7 @@ void main() {
           surface: Surface.zero,
           exposition: NiveauSoleil.ombre,
         ),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -112,6 +113,28 @@ void main() {
         () => p.ajouterPlantation(_plantation('b', 1.0)),
         throwsA(isA<SurfaceInsuffisanteException>()),
       );
+    });
+
+    test('remettreEnCours reopens a plantation when there is room', () {
+      final p = _parcelle(surfaceM2: 2);
+      p.ajouterPlantation(_plantation('fini', 1, active: false));
+      p.ajouterPlantation(_plantation('a', 1));
+
+      p.remettreEnCours('fini');
+
+      expect(p.surfaceLibre(), Surface.zero);
+    });
+
+    test('remettreEnCours rejects a plantation that no longer fits', () {
+      final p = _parcelle(surfaceM2: 2);
+      p.ajouterPlantation(_plantation('fini', 1.5, active: false));
+      p.ajouterPlantation(_plantation('a', 1.5));
+
+      expect(
+        () => p.remettreEnCours('fini'),
+        throwsA(isA<SurfaceInsuffisanteException>()),
+      );
+      expect(p.surfaceLibre(), Surface.enMetresCarres(0.5));
     });
 
     test('the exception reports required and available surfaces', () {
@@ -204,7 +227,7 @@ void main() {
   group('Parcelle — mutators & identity', () {
     test('renommer rejects an empty name', () {
       final p = _parcelle();
-      expect(() => p.renommer(''), throwsA(isA<AssertionError>()));
+      expect(() => p.renommer(''), throwsA(isA<InvariantDomaineException>()));
       p.renommer('Planche Sud');
       expect(p.nom, 'Planche Sud');
     });

@@ -234,8 +234,17 @@ class _Contenu extends ConsumerWidget {
               ChoiceChip(
                 label: Text(l10n.prioriteTache(p)),
                 selected: tache.priorite == p,
-                onSelected: (sel) {
-                  if (sel) notifier.changerPriorite(p);
+                onSelected: (sel) async {
+                  if (!sel) return;
+                  final messenger = ScaffoldMessenger.of(context);
+                  try {
+                    await notifier.changerPriorite(p);
+                  } on Exception catch (e) {
+                    debugPrint('Priority change failed: $e');
+                    ref.invalidate(detailTacheProvider(tache.id));
+                    messenger.showSnackBar(SnackBar(
+                        content: Text(l10n.formEnregistrementErreur)));
+                  }
                 },
               ),
           ],

@@ -43,6 +43,13 @@ void main() {
       expect(await service.demanderPermission(),
           PermissionLocalisation.refuseeDefinitivement);
     });
+
+    test('wraps a platform error while asking for permission', () async {
+      when(() => geolocator.requestPermission())
+          .thenThrow(Exception('platform'));
+      expect(service.demanderPermission(),
+          throwsA(isA<GeolocalisationIndisponibleException>()));
+    });
   });
 
   group('positionActuelle', () {
@@ -85,6 +92,13 @@ void main() {
         throwsA(isA<GeolocalisationIndisponibleException>()),
       );
       verifyNever(() => geolocator.getCurrentPosition());
+    });
+
+    test('wraps a platform error while checking the service', () async {
+      when(() => geolocator.isLocationServiceEnabled())
+          .thenThrow(Exception('platform'));
+      expect(service.positionActuelle(),
+          throwsA(isA<GeolocalisationIndisponibleException>()));
     });
 
     test('wraps a platform read error', () async {

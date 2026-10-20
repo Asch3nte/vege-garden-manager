@@ -3,6 +3,7 @@ import 'package:pot_a_gerer/domain/entities/observation.dart';
 import 'package:pot_a_gerer/domain/enums/cible_observation.dart';
 import 'package:pot_a_gerer/domain/enums/gravite_observation.dart';
 import 'package:pot_a_gerer/domain/enums/type_observation.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 
 Observation _obs({
   String id = 'o1',
@@ -35,25 +36,25 @@ void main() {
     });
 
     test('rejects empty id, cibleId or titre', () {
-      expect(() => _obs(id: ''), throwsA(isA<AssertionError>()));
-      expect(() => _obs(cibleId: ''), throwsA(isA<AssertionError>()));
-      expect(() => _obs(titre: ''), throwsA(isA<AssertionError>()));
+      expect(() => _obs(id: ''), throwsA(isA<InvariantDomaineException>()));
+      expect(() => _obs(cibleId: ''), throwsA(isA<InvariantDomaineException>()));
+      expect(() => _obs(titre: ''), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects an inconsistent resolved/date pair', () {
       // resolved without a date
-      expect(() => _obs(resolu: true), throwsA(isA<AssertionError>()));
+      expect(() => _obs(resolu: true), throwsA(isA<InvariantDomaineException>()));
       // a date without being resolved
       expect(
         () => _obs(dateResolution: DateTime(2026, 6, 20)),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 
     test('rejects a resolution date before the observation date', () {
       expect(
         () => _obs(resolu: true, dateResolution: DateTime(2026, 6, 1)),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -79,7 +80,7 @@ void main() {
       final o = _obs();
       expect(
         () => o.resoudre(DateTime(2026, 6, 1)),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 

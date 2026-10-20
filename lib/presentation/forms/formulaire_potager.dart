@@ -10,6 +10,7 @@ import '../../domain/enums/permission_localisation.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/type_emplacement.dart';
 import '../../domain/enums/zone_rusticite.dart';
+import '../../domain/exceptions/geolocalisation_indisponible_exception.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
@@ -17,6 +18,7 @@ import '../widgets/selecteur_carte_monde.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
+import 'enregistrement_formulaire.dart';
 
 /// Opens the garden form as a full-screen route and returns the saved [Potager]
 /// (or `null` if cancelled). When [potagerInitial] is provided, the form opens
@@ -48,7 +50,8 @@ class FormulairePotager extends ConsumerStatefulWidget {
   ConsumerState<FormulairePotager> createState() => _FormulairePotagerState();
 }
 
-class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
+class _FormulairePotagerState extends ConsumerState<FormulairePotager>
+    with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _nom = TextEditingController();
   TypeEmplacement _emplacement = TypeEmplacement.jardin;
@@ -57,7 +60,6 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
   Localisation _position = const Localisation.nonDefinie();
   bool _suggere = false; // climate/hardiness were pre-filled from the position
   bool _detection = false;
-  bool _enregistrement = false;
   bool _positionManquante = false; // save attempted without a position
 
   bool get _edition => widget.potagerInitial != null;
@@ -98,9 +100,11 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
         );
         return;
       }
-      _appliquerPosition(await service.positionActuelle());
+      final position = await service.positionActuelle();
+      if (!mounted) return;
+      _appliquerPosition(position);
       // The inline caption confirms the suggestion; no snackbar needed here.
-    } catch (_) {
+    } on GeolocalisationIndisponibleException {
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.formPotagerPositionErreur)),
       );
@@ -125,7 +129,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
   /// fed through the same climate/hardiness derivation.
   Future<void> _choisirSurCarte() async {
     final choix = await choisirSurCarteMonde(context);
-    if (choix != null) _appliquerPosition(choix);
+    if (choix != null && mounted) _appliquerPosition(choix);
   }
 
   Future<void> _enregistrer() async {
@@ -136,30 +140,32 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
       setState(() => _positionManquante = true);
       return;
     }
-    setState(() => _enregistrement = true);
     final notifier = ref.read(potagersProvider.notifier);
     final zone = ZoneClimatique(_climat, _rusticite);
-
-    final Potager potager;
     final initial = widget.potagerInitial;
-    if (initial != null) {
-      // Edit: mutate the existing entity in place, then persist.
-      initial
-        ..renommer(_nom.text.trim())
-        ..modifierEmplacement(_emplacement)
-        ..mettreAJourZoneClimatique(zone)
-        ..mettreAJourLocalisation(_position);
-      await notifier.modifier(initial);
-      potager = initial;
-    } else {
-      potager = await notifier.creer(
+
+    await enregistrer(() async {
+      if (initial == null) {
+        return notifier.creer(
+          nom: _nom.text.trim(),
+          zoneClimatique: zone,
+          emplacement: _emplacement,
+          localisation: _position,
+        );
+      }
+      // Edit: a copy is saved, so a failure leaves the cached entity intact.
+      final potager = Potager(
+        id: initial.id,
         nom: _nom.text.trim(),
         zoneClimatique: zone,
+        dateCreation: initial.dateCreation,
         emplacement: _emplacement,
         localisation: _position,
+        notes: initial.notes,
       );
-    }
-    if (mounted) Navigator.of(context).pop(potager);
+      await notifier.modifier(potager);
+      return potager;
+    });
   }
 
   @override
@@ -258,7 +264,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager> {
             ),
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(
-              onPressed: _enregistrement ? null : _enregistrer,
+              onPressed: enregistrementEnCours ? null : _enregistrer,
               child: Text(l10n.actionEnregistrer),
             ),
           ],

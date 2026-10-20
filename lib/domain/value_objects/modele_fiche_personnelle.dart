@@ -4,6 +4,7 @@ import '../enums/niveau_soleil.dart';
 import '../enums/qualite_sol.dart';
 import '../enums/sous_type_legume.dart';
 import '../enums/usage_plante.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 
 /// Editable content of a user-authored plant sheet (MVP scope: identity +
 /// basic cultivation).
@@ -57,23 +58,36 @@ class ModeleFichePersonnelle {
     this._dureeAvantRecolteJoursMin,
     this._dureeAvantRecolteJoursMax,
     this._difficulte,
-  )   : assert(_idFiche.isNotEmpty, 'idFiche must not be empty'),
-        assert(_nomScientifique.isNotEmpty, 'nomScientifique must not be empty'),
-        assert(
-            _familleBotanique.isNotEmpty, 'familleBotanique must not be empty'),
-        assert(_nomCommunFr.isNotEmpty, 'nomCommunFr must not be empty'),
-        assert(_usages.isNotEmpty, 'at least one usage is required'),
-        assert(
-            _qualitesSol.isNotEmpty, 'at least one soil quality is required'),
-        assert(_sousType == null || _categorie == CategoriePlante.legume,
-            'sousType is only valid for a legume'),
-        assert(_phMin >= 0 && _phMax <= 14, 'pH must be within 0..14'),
-        assert(_phMin <= _phMax, 'phMin must be <= phMax'),
-        assert(_espacementCm > 0, 'espacementCm must be positive'),
-        assert(_dureeAvantRecolteJoursMin > 0 &&
-            _dureeAvantRecolteJoursMin <= _dureeAvantRecolteJoursMax),
-        assert(_difficulte == null || (_difficulte >= 1 && _difficulte <= 3),
-            'difficulte must be within 1..3');
+  ) {
+    InvariantDomaineException.verifier(
+        _idFiche.isNotEmpty, 'idFiche must not be empty');
+    InvariantDomaineException.verifier(
+        _nomScientifique.isNotEmpty, 'nomScientifique must not be empty');
+    InvariantDomaineException.verifier(
+        _familleBotanique.isNotEmpty, 'familleBotanique must not be empty');
+    InvariantDomaineException.verifier(
+        _nomCommunFr.isNotEmpty, 'nomCommunFr must not be empty');
+    InvariantDomaineException.verifier(
+        _usages.isNotEmpty, 'at least one usage is required');
+    InvariantDomaineException.verifier(
+        _qualitesSol.isNotEmpty, 'at least one soil quality is required');
+    InvariantDomaineException.verifier(
+        _sousType == null || _categorie == CategoriePlante.legume,
+        'sousType is only valid for a legume');
+    InvariantDomaineException.verifier(
+        _phMin >= 0 && _phMax <= 14, 'pH must be within 0..14');
+    InvariantDomaineException.verifier(
+        _phMin <= _phMax, 'phMin must be <= phMax');
+    InvariantDomaineException.verifier(
+        _espacementCm > 0, 'espacementCm must be positive');
+    InvariantDomaineException.verifier(
+        _dureeAvantRecolteJoursMin > 0 &&
+            _dureeAvantRecolteJoursMin <= _dureeAvantRecolteJoursMax,
+        'days-to-harvest must be a positive [min, max] range');
+    InvariantDomaineException.verifier(
+        _difficulte == null || (_difficulte >= 1 && _difficulte <= 3),
+        'difficulte must be within 1..3');
+  }
 
   /// Builds an editable personal-sheet model. String sets are copied and made
   /// immutable; [nomCommunEn] and [descriptionFr] are optional.

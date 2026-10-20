@@ -83,8 +83,9 @@ class Bootstrap {
       // name (e.g. "Europe/Brussels") the `timezone` package expects.
       final info = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(info.identifier));
-    } catch (_) {
+    } on Exception catch (e) {
       // Unknown zone: keep the default (UTC). Non-fatal.
+      debugPrint('Local time zone unavailable, using UTC: $e');
     }
   }
 }

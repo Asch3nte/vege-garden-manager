@@ -1,9 +1,11 @@
 import '../enums/niveau_soleil.dart';
 import '../enums/ph_sol.dart';
 import '../enums/source_type_sol.dart';
+import '../enums/statut_plantation.dart';
 import '../enums/technique_sol.dart';
 import '../enums/texture_sol.dart';
 import '../enums/type_parcelle.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 import '../exceptions/surface_insuffisante_exception.dart';
 import '../value_objects/surface.dart';
 import 'equipement.dart';
@@ -55,10 +57,15 @@ class Parcelle {
     this._notes,
     this._plantations,
     this._equipements,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_nom.isNotEmpty, 'nom must not be empty'),
-        assert(_potagerId.isNotEmpty, 'potagerId must not be empty'),
-        assert(_surface.enMetresCarres > 0, 'surface must be > 0');
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _nom.isNotEmpty, 'nom must not be empty');
+    InvariantDomaineException.verifier(
+        _potagerId.isNotEmpty, 'potagerId must not be empty');
+    InvariantDomaineException.verifier(
+        _surface.enMetresCarres > 0, 'surface must be > 0');
+  }
 
   /// Creates a parcelle. Soil texture is unknown by default; techniques and
   /// contents start empty.
@@ -147,6 +154,21 @@ class Parcelle {
     _plantations.add(plantation);
   }
 
+  /// Moves the plantation [plantationId] back to `enCours`.
+  ///
+  /// Throws [SurfaceInsuffisanteException] when it no longer fits in the free
+  /// surface (no-op if absent or already active).
+  void remettreEnCours(String plantationId) {
+    final plantation =
+        _plantations.where((p) => p.id == plantationId).firstOrNull;
+    if (plantation == null || plantation.estActive()) return;
+    final libre = surfaceLibre();
+    if (plantation.surfaceOccupee > libre) {
+      throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
+    }
+    plantation.changerStatut(StatutPlantation.enCours);
+  }
+
   /// Removes a plantation by its [plantationId] (no-op if absent).
   void retirerPlantation(String plantationId) =>
       _plantations.removeWhere((p) => p.id == plantationId);
@@ -165,7 +187,8 @@ class Parcelle {
       _equipements.removeWhere((e) => e.id == equipementId);
 
   void renommer(String nouveauNom) {
-    assert(nouveauNom.isNotEmpty, 'nom must not be empty');
+    InvariantDomaineException.verifier(
+        nouveauNom.isNotEmpty, 'nom must not be empty');
     _nom = nouveauNom;
   }
 

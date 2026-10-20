@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../domain/enums/permission_localisation.dart';
+import '../../domain/exceptions/geolocalisation_indisponible_exception.dart';
 import '../../domain/repositories/abstract_geolocalisation_service.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../l10n/app_localizations.dart';
@@ -25,7 +26,7 @@ Future<Localisation?> capterGps(
       return null;
     }
     return await service.positionActuelle();
-  } catch (_) {
+  } on GeolocalisationIndisponibleException {
     messenger.showSnackBar(
       SnackBar(content: Text(l10n.formPotagerPositionErreur)),
     );

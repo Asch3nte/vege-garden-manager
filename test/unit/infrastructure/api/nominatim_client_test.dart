@@ -88,6 +88,14 @@ void main() {
       expect(result, isNull);
     });
 
+    test('returns null when the body has unexpected types', () async {
+      final client = NominatimClient(
+        httpClient: MockClient(
+            (_) async => http.Response(jsonEncode(['pas', 'un', 'objet']), 200)),
+      );
+      expect(await client.obtenirNomLocalite(loc), isNull);
+    });
+
     test('returns null on network timeout', () async {
       final client = NominatimClient(
         httpClient: MockClient((_) async {

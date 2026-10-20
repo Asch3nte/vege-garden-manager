@@ -92,9 +92,18 @@ class PanneauGeneral extends ConsumerWidget {
                     (v, l10n.niveauExperience(v)),
                 ],
                 // Reaching a level nudges the user to the guide (ADR-0009 §4b).
-                onChanged: (n) {
-                  notifier.definirNiveau(n);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                onChanged: (n) async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  try {
+                    await notifier.definirNiveau(n);
+                  } on Exception catch (e) {
+                    debugPrint('Level change failed: $e');
+                    messenger.showSnackBar(SnackBar(
+                        content: Text(l10n.formEnregistrementErreur)));
+                    return;
+                  }
+                  if (!context.mounted) return;
+                  messenger.showSnackBar(SnackBar(
                     content: Text(l10n.generalNiveauChangeSnack),
                     action: SnackBarAction(
                       label: l10n.generalNiveauChangeAction,

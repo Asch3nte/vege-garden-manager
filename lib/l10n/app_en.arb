@@ -492,6 +492,7 @@
   "formPotagerDetecter": "Detect my location",
   "formPotagerPositionDetectee": "Climate and hardiness zone pre-filled from your location — adjust if needed.",
   "formPotagerPositionRefusee": "Location permission denied.",
+  "formEnregistrementErreur": "Could not save. Please try again.",
   "formPotagerPositionErreur": "Location unavailable (check GPS and permissions).",
   "formPotagerChoisirRegion": "Choose a region",
   "captureLocalisationTitre": "Set my location",

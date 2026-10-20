@@ -75,6 +75,24 @@ void main() {
     expect(parcelle.exposition, NiveauSoleil.pleinSoleil);
   });
 
+  testWidgets('a failed save reports it and re-enables the form',
+      (tester) async {
+    when(() => repo.sauvegarder(any()))
+        .thenAnswer((_) async => throw Exception('disque plein'));
+    await monter(tester);
+
+    await tester.enterText(find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré nord');
+    await tester.enterText(find.widgetWithText(TextFormField, 'Surface (m²)'), '2.5');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+    expect(
+      tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Enregistrer')).onPressed,
+      isNotNull,
+    );
+  });
+
   group('soil controls gating (ADR-0009)', () {
     testWidgets('a beginner sees no soil controls', (tester) async {
       await monter(tester); // débutant

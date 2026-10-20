@@ -60,6 +60,14 @@ final meteoDetailProvider = FutureProvider<MeteoDetailVue>((ref) async {
   final previsionsFuture = meteo.obtenirPrevisions(loc, 3);
   final horairesFuture = meteo.obtenirPrevisionsHoraires(loc, nbJours: 3);
 
+  // Waits for all of them, so a second failure is not left unhandled.
+  await Future.wait<Object?>([
+    nomVilleFuture,
+    elevationFuture,
+    actuelleFuture,
+    previsionsFuture,
+    horairesFuture,
+  ]);
   final nomVille = await nomVilleFuture;
   final elevation = await elevationFuture;
   final actuelle = await actuelleFuture;

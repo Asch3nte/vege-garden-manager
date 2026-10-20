@@ -3,6 +3,7 @@ import 'package:pot_a_gerer/domain/entities/recolte.dart';
 import 'package:pot_a_gerer/domain/enums/destination_recolte.dart';
 import 'package:pot_a_gerer/domain/enums/qualite_recolte.dart';
 import 'package:pot_a_gerer/domain/enums/unite_quantite.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/quantite.dart';
 
 Recolte _recolte({
@@ -34,7 +35,7 @@ void main() {
     });
 
     test('rejects an empty id', () {
-      expect(() => _recolte(id: ''), throwsA(isA<AssertionError>()));
+      expect(() => _recolte(id: ''), throwsA(isA<InvariantDomaineException>()));
     });
   });
 

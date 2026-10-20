@@ -3,12 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/application/use_cases/creer_fiche_personnelle.dart';
 import 'package:pot_a_gerer/application/use_cases/dupliquer_fiche_en_modele.dart';
 import 'package:pot_a_gerer/application/use_cases/modifier_fiche_personnelle.dart';
+import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/qualite_sol.dart';
 import 'package:pot_a_gerer/domain/enums/sous_type_legume.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
+import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/modele_fiche_personnelle.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fiche_plante_mapper.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fiche_plante_validator.dart';
@@ -123,6 +126,29 @@ void main() {
       expect(draft.phMin, 6);
       expect(draft.espacementCm, 40);
       expect(draft.difficulte, 2);
+    });
+
+    test('rejects a source without soil quality with a typed exception', () {
+      final source = FichePlante(
+        id: 'salade',
+        nomScientifique: 'Lactuca sativa',
+        familleBotanique: 'Asteraceae',
+        categorie: CategoriePlante.legume,
+        usages: const {UsagePlante.alimentaire},
+        nomsLocalises: const {'fr': 'Laitue'},
+        besoins: BesoinsCulture(
+          eau: BesoinEau.modere,
+          soleil: NiveauSoleil.pleinSoleil,
+          phMin: 6,
+          phMax: 7,
+        ),
+        espacementCm: 30,
+        dureeAvantRecolteJoursMin: 45,
+        dureeAvantRecolteJoursMax: 60,
+      );
+
+      expect(() => const DupliquerFicheEnModele().executer(source),
+          throwsA(isA<InvariantDomaineException>()));
     });
   });
 }

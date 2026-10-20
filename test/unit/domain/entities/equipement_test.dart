@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/equipement.dart';
 import 'package:pot_a_gerer/domain/enums/etat_equipement.dart';
 import 'package:pot_a_gerer/domain/enums/type_equipement.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 
 Equipement _equip({
   String id = 'e1',
@@ -33,9 +34,9 @@ void main() {
     });
 
     test('rejects empty id, nom or potagerId', () {
-      expect(() => _equip(id: ''), throwsA(isA<AssertionError>()));
-      expect(() => _equip(nom: ''), throwsA(isA<AssertionError>()));
-      expect(() => _equip(potagerId: ''), throwsA(isA<AssertionError>()));
+      expect(() => _equip(id: ''), throwsA(isA<InvariantDomaineException>()));
+      expect(() => _equip(nom: ''), throwsA(isA<InvariantDomaineException>()));
+      expect(() => _equip(potagerId: ''), throwsA(isA<InvariantDomaineException>()));
     });
 
     test('rejects a retirement date before installation', () {
@@ -48,7 +49,7 @@ void main() {
           dateInstallation: DateTime(2026, 4, 1),
           dateRetrait: DateTime(2026, 3, 1),
         ),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -81,7 +82,7 @@ void main() {
       final e = _equip();
       expect(
         () => e.retirer(DateTime(2026, 3, 1)),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });

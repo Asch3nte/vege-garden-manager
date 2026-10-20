@@ -161,8 +161,17 @@ Future<void> _arracher(
       plantations.where((p) => p.id == culture.plantationId).firstOrNull;
   if (plantation == null) return;
 
-  plantation.changerStatut(StatutPlantation.arrachee, dateFin: maintenant);
-  await ref.read(plantationsProvider(zoneId).notifier).modifier(plantation);
+  try {
+    plantation.changerStatut(StatutPlantation.arrachee, dateFin: maintenant);
+    await ref.read(plantationsProvider(zoneId).notifier).modifier(plantation);
+  } on Exception catch (e) {
+    // Reloads the stored state over the entity changed in memory.
+    debugPrint('Pull-out failed: $e');
+    ref.invalidate(plantationsProvider(zoneId));
+    messenger.showSnackBar(
+        SnackBar(content: Text(l10n.formEnregistrementErreur)));
+    return;
+  }
   ref.invalidate(potagerProvider);
   messenger
       .showSnackBar(SnackBar(content: Text(l10n.snackPlanteArrachee(culture.nom))));

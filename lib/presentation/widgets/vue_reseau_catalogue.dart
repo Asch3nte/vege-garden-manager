@@ -681,7 +681,8 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 
   void _ouvrirFiche(FichePlante fiche) {
-    afficherFichePlanteDetail(context, fiche, onAjouter: widget.onAjouter);
+    unawaited(
+        afficherFichePlanteDetail(context, fiche, onAjouter: widget.onAjouter));
   }
 
   /// The active transform, falling back to the baseline (fit + centered) sized

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -472,7 +473,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
                         final cible = recoit ? widget.centre : n.fiche;
                         final facteurs = facteursAssociation(
                             l10n, n.criteres, source, cible);
-                        afficherFichePlanteDetail(
+                        unawaited(afficherFichePlanteDetail(
                           context,
                           n.fiche,
                           onAjouter: widget.onAjouter,
@@ -487,7 +488,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
                                   confiance: n.confiance,
                                   facteurs: facteurs,
                                 ),
-                        );
+                        ));
                       },
                     ),
                   );

@@ -1,6 +1,7 @@
 import '../enums/cible_observation.dart';
 import '../enums/gravite_observation.dart';
 import '../enums/type_observation.dart';
+import '../exceptions/invariant_domaine_exception.dart';
 
 /// A dated journal entry (disease, pest, growth, flowering…) attached to a
 /// **polymorphic target**: a potager, a parcelle or a plantation.
@@ -37,17 +38,19 @@ class Observation {
     this._dateResolution,
     this._actionsRealisees,
     this._notes,
-  )   : assert(_id.isNotEmpty, 'id must not be empty'),
-        assert(_cibleId.isNotEmpty, 'cibleId must not be empty'),
-        assert(_titre.isNotEmpty, 'titre must not be empty'),
-        assert(
-          _resolu == (_dateResolution != null),
-          'resolu is true iff a resolution date is set',
-        ),
-        assert(
-          _dateResolution == null || !_dateResolution.isBefore(_date),
-          'the resolution date cannot precede the observation date',
-        );
+  ) {
+    InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
+    InvariantDomaineException.verifier(
+        _cibleId.isNotEmpty, 'cibleId must not be empty');
+    InvariantDomaineException.verifier(
+        _titre.isNotEmpty, 'titre must not be empty');
+    InvariantDomaineException.verifier(
+        _resolu == (_dateResolution != null),
+        'resolu is true iff a resolution date is set');
+    InvariantDomaineException.verifier(
+        !(_dateResolution?.isBefore(_date) ?? false),
+        'the resolution date cannot precede the observation date');
+  }
 
   /// Logs an observation. Unresolved by default, severity defaults to `info`.
   factory Observation({
@@ -101,10 +104,9 @@ class Observation {
   /// Marks the observation as resolved on [date], optionally recording the
   /// [actions] taken. [date] must not precede the observation date.
   void resoudre(DateTime date, {String? actions}) {
-    assert(
-      !date.isBefore(_date),
-      'the resolution date cannot precede the observation date',
-    );
+    InvariantDomaineException.verifier(
+        !date.isBefore(_date),
+        'the resolution date cannot precede the observation date');
     _resolu = true;
     _dateResolution = date;
     _actionsRealisees = actions;

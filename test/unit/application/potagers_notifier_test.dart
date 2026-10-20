@@ -1,7 +1,9 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/application/providers/database_providers.dart';
+import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/potagers_notifier.dart';
+import 'package:pot_a_gerer/application/state/preferences_notifier.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
@@ -53,5 +55,25 @@ void main() {
 
     final list = await container.read(potagersProvider.future);
     expect(list.single.nom, 'Nouveau nom');
+  });
+
+  test('supprimer() clears the selection when it was the active garden',
+      () async {
+    final container = makeContainer();
+    await container.read(potagersProvider.future);
+    final notifier = container.read(potagersProvider.notifier);
+    await notifier.creer(nom: 'Premier', zoneClimatique: zone);
+    final second = await notifier.creer(nom: 'Second', zoneClimatique: zone);
+    final prefs = container.read(preferencesRepositoryProvider);
+    await prefs.sauvegarder(
+        (await prefs.charger()).copierAvec(potagerActifId: second.id));
+
+    await container.read(preferencesProvider.future);
+
+    await notifier.supprimer(second.id);
+
+    expect((await prefs.charger()).potagerActifId, isNull);
+    expect((await container.read(preferencesProvider.future)).potagerActifId,
+        isNull);
   });
 }

@@ -11,6 +11,7 @@ import '../../domain/enums/unite_quantite.dart';
 import '../../domain/value_objects/quantite.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
+import 'enregistrement_formulaire.dart';
 
 /// Opens the "record a harvest" form for [plantationId] and returns the created
 /// [Recolte] (or `null` if cancelled).
@@ -43,13 +44,13 @@ class FormulaireRecolte extends ConsumerStatefulWidget {
   ConsumerState<FormulaireRecolte> createState() => _FormulaireRecolteState();
 }
 
-class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte> {
+class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
+    with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _valeur = TextEditingController(text: '1');
   UniteQuantite _unite = UniteQuantite.kg;
   DestinationRecolte _destination = DestinationRecolte.consommationFraiche;
   DateTime? _date;
-  bool _enregistrement = false;
 
   @override
   void dispose() {
@@ -70,8 +71,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte> {
 
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
-    setState(() => _enregistrement = true);
-    final recolte = await ref.read(creerRecolteProvider).executer(
+    await enregistrer(() => ref.read(creerRecolteProvider).executer(
           plantationId: widget.plantationId,
           date: _date ?? ref.read(horlogeProvider)(),
           quantite: Quantite(
@@ -79,8 +79,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte> {
             _unite,
           ),
           destination: _destination,
-        );
-    if (mounted) Navigator.of(context).pop(recolte);
+        ));
   }
 
   @override
@@ -167,7 +166,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte> {
             ),
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(
-              onPressed: _enregistrement ? null : _enregistrer,
+              onPressed: enregistrementEnCours ? null : _enregistrer,
               child: Text(l10n.actionEnregistrer),
             ),
           ],

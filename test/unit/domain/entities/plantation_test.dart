@@ -5,6 +5,7 @@ import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
 import 'package:pot_a_gerer/domain/enums/unite_quantite.dart';
 import 'package:pot_a_gerer/domain/exceptions/conversion_unite_incompatible_exception.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/quantite.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 
@@ -42,11 +43,11 @@ void main() {
     });
 
     test('rejects empty id, non-positive pieds and zero surface', () {
-      expect(() => _plantation(id: ''), throwsA(isA<AssertionError>()));
-      expect(() => _plantation(nombrePieds: 0), throwsA(isA<AssertionError>()));
+      expect(() => _plantation(id: ''), throwsA(isA<InvariantDomaineException>()));
+      expect(() => _plantation(nombrePieds: 0), throwsA(isA<InvariantDomaineException>()));
       expect(
         () => _plantation(surface: Surface.zero),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 
@@ -62,7 +63,7 @@ void main() {
           nombrePieds: 1,
           dateFinReelle: DateTime(2026, 9, 1),
         ),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
   });
@@ -131,7 +132,7 @@ void main() {
       final p = _plantation();
       expect(
         () => p.changerStatut(StatutPlantation.echouee),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 
@@ -142,7 +143,7 @@ void main() {
           StatutPlantation.arrachee,
           dateFin: DateTime(2026, 4, 1),
         ),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<InvariantDomaineException>()),
       );
     });
 

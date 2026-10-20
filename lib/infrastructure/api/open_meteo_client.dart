@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 
 import 'package:http/http.dart' as http;
 
@@ -113,7 +114,7 @@ class OpenMeteoClient {
     return List<PrevisionHoraire>.generate(
       temps.length,
       (i) => PrevisionHoraire(
-        heure: DateTime.parse((hourly['time'] as List)[i] as String),
+        heure: _dateA(hourly, i),
         temperature: _at(hourly, 'temperature_2m', i),
         precipitationsMm: _at(hourly, 'precipitation', i),
         // Open-Meteo reports probability as 0..100; the VO is 0..1.
@@ -225,7 +226,7 @@ class OpenMeteoClient {
     final tempMin = _atRequis(daily, 'temperature_2m_min', i);
     final tempMax = _atRequis(daily, 'temperature_2m_max', i);
     return DonneesMeteo(
-      date: DateTime.parse((daily['time'] as List)[i] as String),
+      date: _dateA(daily, i),
       tempMin: tempMin,
       tempMax: tempMax,
       tempMoyenne: (tempMin + tempMax) / 2,
@@ -244,7 +245,7 @@ class OpenMeteoClient {
     TypeReleveMeteo type,
   ) {
     return PrevisionMeteo(
-      date: DateTime.parse((daily['time'] as List)[i] as String),
+      date: _dateA(daily, i),
       tempMin: _atRequis(daily, 'temperature_2m_min', i),
       tempMax: _atRequis(daily, 'temperature_2m_max', i),
       precipitationsMm: _at(daily, 'precipitation_sum', i),
@@ -266,7 +267,8 @@ class OpenMeteoClient {
       final body = await _fetchMeta(loc);
       final v = body['elevation'];
       return v is num ? v.toDouble() : null;
-    } catch (_) {
+    } on MeteoIndisponibleException catch (e) {
+      developer.log('Elevation unavailable', name: 'open-meteo', error: e);
       return null;
     }
   }
@@ -305,6 +307,18 @@ class OpenMeteoClient {
         cause: e,
       );
     }
+  }
+
+  /// Reads index [i] of the `time` array; a malformed date makes the response
+  /// unusable.
+  DateTime _dateA(Map<String, dynamic> data, int i) {
+    final valeurs = data['time'];
+    final v = valeurs is List && i < valeurs.length ? valeurs[i] : null;
+    final date = v is String ? DateTime.tryParse(v) : null;
+    if (date == null) {
+      throw MeteoIndisponibleException('Open-Meteo returned no valid date at $i.');
+    }
+    return date;
   }
 
   /// Reads index [i] of variable [key]; a missing value makes the response

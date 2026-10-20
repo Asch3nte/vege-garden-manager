@@ -11,6 +11,7 @@ import '../../application/use_cases/dupliquer_fiche_en_modele.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/type_bioagresseur.dart';
+import '../../domain/exceptions/invariant_domaine_exception.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../domain/value_objects/arrosage_detaille.dart';
 import '../../domain/value_objects/modele_fiche_personnelle.dart';
@@ -354,9 +355,8 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
     final ModeleFichePersonnelle modele;
     try {
       modele = ref.read(dupliquerFicheEnModeleProvider).executer(_fiche);
-    } on ArgumentError {
-      // A source sheet without any soil quality cannot become a personal sheet
-      // (the catalogue never emits such a sheet in practice).
+    } on InvariantDomaineException {
+      // e.g. a source sheet without any soil quality.
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.fichePersoDupliquerImpossible)),
       );
