@@ -33,12 +33,10 @@ class CalculateurDatesCulture {
   /// climate, so it is always available.
   EstimationRecolte estimerRecolte(Plantation plantation, FichePlante fiche) {
     return EstimationRecolte(
-      dateMin: plantation.dateMiseEnPlace.plusJours(
-        fiche.dureeAvantRecolteJoursMin,
-      ),
-      dateMax: plantation.dateMiseEnPlace.plusJours(
-        fiche.dureeAvantRecolteJoursMax,
-      ),
+      dateMin:
+          plantation.dateMiseEnPlace.plusJours(fiche.dureeAvantRecolteJoursMin),
+      dateMax:
+          plantation.dateMiseEnPlace.plusJours(fiche.dureeAvantRecolteJoursMax),
     );
   }
 
@@ -65,8 +63,7 @@ class CalculateurDatesCulture {
       stade = StadeCroissance.recolte;
     } else if (fraction >= _seuilMaturation) {
       stade = StadeCroissance.maturation;
-    } else if (_commenceParLevee(plantation.methode) &&
-        fraction < _seuilLevee) {
+    } else if (_commenceParLevee(plantation.methode) && fraction < _seuilLevee) {
       stade = StadeCroissance.levee;
     } else {
       stade = StadeCroissance.croissance;
@@ -87,7 +84,8 @@ class CalculateurDatesCulture {
     FichePlante fiche,
     Hemisphere hemisphere,
     TypeClimat climat,
-  ) => fiche.periodesPour(hemisphere, climat);
+  ) =>
+      fiche.periodesPour(hemisphere, climat);
 
   /// Derives the hemisphere from a location's latitude.
   ///

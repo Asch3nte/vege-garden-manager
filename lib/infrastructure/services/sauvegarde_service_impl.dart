@@ -26,9 +26,8 @@ class SauvegardeServiceImpl implements AbstractSauvegardeService {
   Future<String> exporterJson() async {
     final tables = <String, dynamic>{};
     for (final table in _db.allTables) {
-      final rows = await _db
-          .customSelect('SELECT * FROM ${table.actualTableName}')
-          .get();
+      final rows =
+          await _db.customSelect('SELECT * FROM ${table.actualTableName}').get();
       tables[table.actualTableName] = rows.map((r) => r.data).toList();
     }
     return jsonEncode({

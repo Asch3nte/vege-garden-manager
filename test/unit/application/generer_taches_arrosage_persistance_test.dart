@@ -94,21 +94,18 @@ void main() {
   final unPotager = Potager(
     id: 'pot1',
     nom: 'Mon potager',
-    zoneClimatique: const ZoneClimatique(
-      TypeClimat.oceanique,
-      ZoneRusticite.zone8,
-    ),
+    zoneClimatique:
+        const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
     dateCreation: DateTime(2026, 1, 1),
   );
 
   void repondConseil(ConseilArrosage conseil) {
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => conseil);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => conseil);
   }
 
   setUp(() async {
@@ -123,58 +120,41 @@ void main() {
     // Defaults: notifications allowed, and no catalogue sheet resolves (the
     // task then falls back to its generic title — irrelevant to these
     // persistence round-trip assertions).
-    when(
-      () => preferences.charger(),
-    ).thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
     when(() => fiches.obtenirParId(any())).thenAnswer((_) async => null);
 
     final seed = DateTime.utc(2026, 1, 1).toIso8601String();
-    await db
-        .into(db.potagers)
-        .insert(
-          PotagersCompanion.insert(
-            id: 'pot1',
-            nom: 'Mon potager',
-            climatType: 'oceanique',
-            zoneRusticite: 'zone8',
-            dateCreation: seed,
-            createdAt: seed,
-            updatedAt: seed,
-          ),
-        );
-    await db
-        .into(db.parcelles)
-        .insert(
-          ParcellesCompanion.insert(
-            id: 'par1',
-            nom: 'Zone 1',
-            potagerId: 'pot1',
-            type: 'bacSureleve',
-            surfaceValeur: 4,
-            surfaceUnite: 'm2',
-            exposition: 'pleinSoleil',
-            positionOrdre: 0,
-            dateCreation: seed,
-            createdAt: seed,
-            updatedAt: seed,
-          ),
-        );
+    await db.into(db.potagers).insert(PotagersCompanion.insert(
+        id: 'pot1',
+        nom: 'Mon potager',
+        climatType: 'oceanique',
+        zoneRusticite: 'zone8',
+        dateCreation: seed,
+        createdAt: seed,
+        updatedAt: seed));
+    await db.into(db.parcelles).insert(ParcellesCompanion.insert(
+        id: 'par1',
+        nom: 'Zone 1',
+        potagerId: 'pot1',
+        type: 'bacSureleve',
+        surfaceValeur: 4,
+        surfaceUnite: 'm2',
+        exposition: 'pleinSoleil',
+        positionOrdre: 0,
+        dateCreation: seed,
+        createdAt: seed,
+        updatedAt: seed));
     // Real row so the task's plantation FK resolves.
     await PlantationRepositoryImpl(db).sauvegarder(unePlantation);
 
-    when(
-      () => potager.obtenirPotagerActif(),
-    ).thenAnswer((_) async => unPotager);
+    when(() => potager.obtenirPotagerActif()).thenAnswer((_) async => unPotager);
     when(() => potager.obtenirTous()).thenAnswer((_) async => [unPotager]);
-    when(
-      () => calcul.chargerFenetre(
-        any(),
-        meteoAutoActive: any(named: 'meteoAutoActive'),
-      ),
-    ).thenAnswer((_) async => const <PrevisionMeteo>[]);
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation]);
+    when(() => calcul.chargerFenetre(any(),
+            meteoAutoActive: any(named: 'meteoAutoActive')))
+        .thenAnswer((_) async => const <PrevisionMeteo>[]);
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation]);
     when(() => notifications.programmer(any())).thenAnswer((_) async {});
     when(() => notifications.annuler(any())).thenAnswer((_) async {});
 
@@ -197,11 +177,7 @@ void main() {
 
   test('generates exactly one watering task, on today (local day)', () async {
     repondConseil(
-      ConseilArrosage(
-        urgence: UrgenceArrosage.arroserMaintenant,
-        indiceBesoin: 0.9,
-      ),
-    );
+        ConseilArrosage(urgence: UrgenceArrosage.arroserMaintenant, indiceBesoin: 0.9));
 
     await useCase.executer();
 
@@ -213,11 +189,7 @@ void main() {
 
   test('re-running without any change creates no duplicate', () async {
     repondConseil(
-      ConseilArrosage(
-        urgence: UrgenceArrosage.arroserMaintenant,
-        indiceBesoin: 0.9,
-      ),
-    );
+        ConseilArrosage(urgence: UrgenceArrosage.arroserMaintenant, indiceBesoin: 0.9));
 
     await useCase.executer();
     await useCase.executer();
@@ -230,11 +202,7 @@ void main() {
     // The reported bug: complete a watering task, the next generator run (any
     // dashboard/calendar load) immediately recreated it.
     repondConseil(
-      ConseilArrosage(
-        urgence: UrgenceArrosage.arroserMaintenant,
-        indiceBesoin: 0.9,
-      ),
-    );
+        ConseilArrosage(urgence: UrgenceArrosage.arroserMaintenant, indiceBesoin: 0.9));
     await useCase.executer();
 
     final tache = (await tachesDeLaPlantation()).single;
@@ -250,11 +218,7 @@ void main() {
 
   test('a completed task survives repeated generator runs', () async {
     repondConseil(
-      ConseilArrosage(
-        urgence: UrgenceArrosage.arroserMaintenant,
-        indiceBesoin: 0.9,
-      ),
-    );
+        ConseilArrosage(urgence: UrgenceArrosage.arroserMaintenant, indiceBesoin: 0.9));
     await useCase.executer();
     final tache = (await tachesDeLaPlantation()).single;
     tache.marquerFaite(maintenant);
@@ -268,42 +232,29 @@ void main() {
   });
 
   test('a "bientot" advice plans a single task on today + N days', () async {
-    repondConseil(
-      ConseilArrosage(
+    repondConseil(ConseilArrosage(
         urgence: UrgenceArrosage.bientot,
         joursAvantArrosage: 2,
-        indiceBesoin: 0.5,
-      ),
-    );
+        indiceBesoin: 0.5));
 
     await useCase.executer();
     await useCase.executer();
 
     final liste = await tachesDeLaPlantation();
     expect(liste, hasLength(1));
-    expect(
-      liste.single.datePrevue,
-      DateTime(aujourdhui.year, aujourdhui.month, aujourdhui.day + 2),
-    );
+    expect(liste.single.datePrevue,
+        DateTime(aujourdhui.year, aujourdhui.month, aujourdhui.day + 2));
     verifyNever(() => notifications.programmer(any()));
   });
 
   test('urgency dropping to pasNecessaire removes the pending task', () async {
     repondConseil(
-      ConseilArrosage(
-        urgence: UrgenceArrosage.arroserMaintenant,
-        indiceBesoin: 0.9,
-      ),
-    );
+        ConseilArrosage(urgence: UrgenceArrosage.arroserMaintenant, indiceBesoin: 0.9));
     await useCase.executer();
     expect(await tachesDeLaPlantation(), hasLength(1));
 
     repondConseil(
-      ConseilArrosage(
-        urgence: UrgenceArrosage.pasNecessaire,
-        indiceBesoin: 0.1,
-      ),
-    );
+        ConseilArrosage(urgence: UrgenceArrosage.pasNecessaire, indiceBesoin: 0.1));
     await useCase.executer();
 
     expect(await tachesDeLaPlantation(), isEmpty);
