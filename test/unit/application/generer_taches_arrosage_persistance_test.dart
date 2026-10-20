@@ -234,7 +234,8 @@ void main() {
 
     final liste = await tachesDeLaPlantation();
     expect(liste, hasLength(1));
-    expect(liste.single.datePrevue, aujourdhui.add(const Duration(days: 2)));
+    expect(liste.single.datePrevue,
+        DateTime(aujourdhui.year, aujourdhui.month, aujourdhui.day + 2));
     verifyNever(() => notifications.programmer(any()));
   });
 

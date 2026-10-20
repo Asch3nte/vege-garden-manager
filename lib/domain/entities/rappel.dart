@@ -1,9 +1,12 @@
+import 'dart:math' as math;
+
 import '../enums/cible_tache.dart';
 import '../enums/etat_rappel.dart';
 import '../enums/jour_semaine.dart';
 import '../enums/priorite_tache.dart';
 import '../enums/type_recurrence.dart';
 import '../enums/type_tache.dart';
+import '../extensions/date_calendaire.dart';
 import 'tache.dart';
 
 /// A planning rule that generates tasks. A reminder can be one-off or recurring.
@@ -150,16 +153,15 @@ class Rappel {
         if (apresJour.isBefore(debut)) {
           candidat = debut;
         } else {
-          final k = (apresJour.difference(debut).inDays ~/ interval) + 1;
-          // Built via the constructor (not Duration) to stay DST-safe.
-          candidat = DateTime(debut.year, debut.month, debut.day + k * interval);
+          final k = (debut.joursJusqua(apresJour) ~/ interval) + 1;
+          candidat = debut.plusJours(k * interval);
         }
       case TypeRecurrence.quotidien:
       case TypeRecurrence.hebdomadaire:
       case TypeRecurrence.mensuel:
         final from = debut.isAfter(apresJour)
             ? debut
-            : DateTime(apresJour.year, apresJour.month, apresJour.day + 1);
+            : apresJour.plusJours(1);
         candidat = _premierJourCorrespondant(from);
     }
 
@@ -169,12 +171,9 @@ class Rappel {
   }
 
   DateTime? _premierJourCorrespondant(DateTime from) {
-    final capJours =
-        _dateFin != null ? _jour(_dateFin!).difference(from).inDays : 400;
+    final capJours = _dateFin != null ? from.joursJusqua(_dateFin!) : 400;
     for (var i = 0; i <= capJours; i++) {
-      // Built via the constructor (which normalises day overflow) to stay
-      // DST-safe and always land on midnight.
-      final d = DateTime(from.year, from.month, from.day + i);
+      final d = from.plusJours(i);
       if (_correspond(d)) return d;
     }
     return null;
@@ -183,9 +182,14 @@ class Rappel {
   bool _correspond(DateTime d) => switch (_typeRecurrence) {
         TypeRecurrence.quotidien => true,
         TypeRecurrence.hebdomadaire => _joursSemaine.contains(d.jourSemaine),
-        TypeRecurrence.mensuel => d.day == _jourDuMois,
+        TypeRecurrence.mensuel => d.day == _jourMensuelEffectif(d),
         _ => false,
       };
+
+  /// [jourDuMois], clamped to the last day of [d]'s month.
+  int _jourMensuelEffectif(DateTime d) {
+    return math.min(_jourDuMois!, DateTime(d.year, d.month + 1, 0).day);
+  }
 
   /// Builds a concrete [Tache] for a given occurrence [datePrevue], carrying the
   /// reminder's target, type and priority, and linking back via

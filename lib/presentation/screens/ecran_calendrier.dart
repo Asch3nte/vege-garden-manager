@@ -15,6 +15,7 @@ import '../../application/state/saison_vue.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/type_tache.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_tache.dart';
@@ -1449,7 +1450,7 @@ String _libelleJour(BuildContext context, DateTime jour) {
   final container = ProviderScope.containerOf(context, listen: false);
   final maintenant = container.read(horlogeProvider)();
   final aujourdhui = DateTime(maintenant.year, maintenant.month, maintenant.day);
-  final delta = jour.difference(aujourdhui).inDays;
+  final delta = aujourdhui.joursJusqua(jour);
 
   if (delta == 0) return l10n.jourAujourdhui;
   if (delta == 1) return l10n.jourDemain;

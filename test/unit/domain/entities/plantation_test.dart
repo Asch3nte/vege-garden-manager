@@ -67,12 +67,6 @@ void main() {
     });
   });
 
-  group('Plantation — age', () {
-    test('ageDepuis measures from the planting date', () {
-      final p = _plantation();
-      expect(p.ageDepuis(DateTime(2026, 5, 31)).inDays, 30);
-    });
-  });
 
   group('Plantation — harvests', () {
     test('records harvests and exposes them unmodifiably', () {

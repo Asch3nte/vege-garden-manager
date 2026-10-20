@@ -124,6 +124,17 @@ void main() {
       );
     });
 
+    // 2026-03-29 is 23 hours long in Europe (DST starts); the case only bites
+    // when the suite runs in such a zone.
+    test('counts calendar days across a DST change', () {
+      final p = plantation(DateTime(2026, 3, 1),
+          methode: MethodeMiseEnPlace.repiquage);
+      expect(
+        calc.etatCroissance(p, f, DateTime(2026, 4, 10)).progression,
+        closeTo(0.40, 1e-9),
+      );
+    });
+
     test('progression is the clamped elapsed/min-days-to-harvest ratio', () {
       final p = plantation(mep, methode: MethodeMiseEnPlace.repiquage);
       expect(

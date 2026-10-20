@@ -6,6 +6,7 @@ import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/urgence_arrosage.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
@@ -186,7 +187,7 @@ class GenererTachesArrosage {
   /// today + [ConseilArrosage.joursAvantArrosage] for [UrgenceArrosage.bientot].
   DateTime _dateCible(ConseilArrosage conseil, DateTime debutJour) {
     if (conseil.urgence == UrgenceArrosage.arroserMaintenant) return debutJour;
-    return debutJour.add(Duration(days: conseil.joursAvantArrosage ?? 2));
+    return debutJour.plusJours(conseil.joursAvantArrosage ?? 2);
   }
 
   /// The plant's French common name for [plantation], or `null` when its sheet

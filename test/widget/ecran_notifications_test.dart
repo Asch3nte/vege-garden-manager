@@ -62,4 +62,31 @@ void main() {
     expect(find.text("Aujourd'hui"), findsOneWidget);
     expect(find.textContaining('2 cultures en place concernées'), findsOneWidget);
   });
+
+  // 2026-03-29 is 23 hours long in Europe (DST starts); the case only bites
+  // when the suite runs in such a zone.
+  testWidgets('labels the next day "Demain" across a DST change',
+      (tester) async {
+    final alerte = AlerteCulture(
+      type: TypeAlerteMeteo.gel,
+      date: DateTime(2026, 3, 30),
+      valeurDeclenchante: -1,
+      plantationsConcernees: const ['pl-1'],
+    );
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        horlogeProvider.overrideWithValue(() => DateTime(2026, 3, 29, 9)),
+        alertesMeteoProvider.overrideWith((ref) async => [alerte]),
+      ],
+      child: MaterialApp(
+        locale: const Locale('fr'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const EcranNotifications(),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Demain'), findsOneWidget);
+  });
 }

@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/statut_plantation.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
@@ -114,7 +115,7 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
     final n = maintenant();
     final debut = DateTime(n.year, n.month, n.day);
     final tachesDuJour =
-        await taches.obtenirEntreDates(debut, debut.add(const Duration(days: 1)));
+        await taches.obtenirEntreDates(debut, debut.plusJours(1));
     final result = <String>{};
     for (final t in tachesDuJour) {
       if (t.estFaite) continue;

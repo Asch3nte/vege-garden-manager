@@ -53,7 +53,8 @@ void main() {
   setUpAll(() => registerFallbackValue(_FakeTache()));
 
   // Monday 8 June 2026, 08:24 (matches the mock-up's reference day).
-  final maintenant = DateTime(2026, 6, 8, 8, 24);
+  late DateTime maintenant;
+  setUp(() => maintenant = DateTime(2026, 6, 8, 8, 24));
 
   late MockTaches taches;
   late MockParcelles parcelles;
@@ -484,5 +485,20 @@ void main() {
 
     expect(vue.vide, isTrue);
     expect(vue.groupes, isEmpty);
+  });
+  // 2026-03-29 is 23 hours long in Europe (DST starts); the case only bites
+  // when the suite runs in such a zone.
+  test('the week window ends 7 calendar days later across a DST change',
+      () async {
+    maintenant = DateTime(2026, 3, 23, 8);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+
+    await conteneur().read(calendrierProvider.future);
+
+    final captured =
+        verify(() => taches.obtenirEntreDates(captureAny(), captureAny()))
+            .captured;
+    expect(captured[1], DateTime(2026, 3, 30));
   });
 }

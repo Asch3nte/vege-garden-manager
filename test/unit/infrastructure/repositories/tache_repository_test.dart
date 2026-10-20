@@ -88,7 +88,7 @@ void main() {
         isTrue);
   });
 
-  test('obtenirEntreDates filters by planned date inclusively', () async {
+  test('obtenirEntreDates filters by planned date', () async {
     await repo.sauvegarder(tache(id: 'early', datePrevue: DateTime.utc(2026, 6, 1)));
     await repo.sauvegarder(tache(id: 'mid', datePrevue: DateTime.utc(2026, 6, 10)));
     await repo.sauvegarder(tache(id: 'late', datePrevue: DateTime.utc(2026, 6, 20)));
@@ -144,5 +144,14 @@ void main() {
         .customSelect("SELECT created_at, date_creation FROM taches WHERE id = '${entite.id}'")
         .getSingle();
     expect(row.data, {'created_at': '2026-09-01T00:00:00.000Z', 'date_creation': '2026-09-01T00:00:00.000Z'});
+  });
+
+  test('obtenirEntreDates includes the start and excludes the end', () async {
+    await repo.sauvegarder(tache(id: 'debut', datePrevue: DateTime(2026, 6, 9)));
+    await repo.sauvegarder(tache(id: 'fin', datePrevue: DateTime(2026, 6, 10)));
+
+    final list = await repo.obtenirEntreDates(
+        DateTime(2026, 6, 9), DateTime(2026, 6, 10));
+    expect(list.map((t) => t.id), ['debut']);
   });
 }

@@ -97,13 +97,6 @@ class Plantation {
   /// Whether the plantation is still growing.
   bool estActive() => _statut == StatutPlantation.enCours;
 
-  /// Time elapsed between planting and [reference].
-  ///
-  /// Takes an explicit reference instant (rather than reading the clock) so the
-  /// domain stays pure and the behaviour is deterministic in tests.
-  Duration ageDepuis(DateTime reference) =>
-      reference.difference(_dateMiseEnPlace);
-
   /// Records a [recolte] for this plantation.
   void enregistrerRecolte(Recolte recolte) {
     assert(

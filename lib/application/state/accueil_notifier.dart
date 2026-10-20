@@ -2,6 +2,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/plantation.dart';
 import '../../domain/entities/tache.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/generer_taches_arrosage.dart';
@@ -103,7 +104,7 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
     return _trier(
       await ref
           .read(tacheRepositoryProvider)
-          .obtenirEntreDates(debut, debut.add(const Duration(days: 1))),
+          .obtenirEntreDates(debut, debut.plusJours(1)),
     );
   }
 
