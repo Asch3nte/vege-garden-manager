@@ -94,7 +94,7 @@ void main() {
       expect(r.prochaineRecurrence(debut), DateTime(2026, 6, 17));
     });
 
-    test('mensuel: same day each month, skipping short months', () {
+    test('mensuel: same day each month, last day of shorter months', () {
       final r = _rappel(
         recurrence: TypeRecurrence.mensuel,
         dateDebut: DateTime(2026, 1, 1),
@@ -102,9 +102,45 @@ void main() {
       );
       expect(
           r.prochaineRecurrence(DateTime(2026, 1, 1)), DateTime(2026, 1, 31));
-      // February has no 31st -> next is March 31st.
       expect(
-          r.prochaineRecurrence(DateTime(2026, 2, 1)), DateTime(2026, 3, 31));
+          r.prochaineRecurrence(DateTime(2026, 2, 1)), DateTime(2026, 2, 28));
+      expect(
+          r.prochaineRecurrence(DateTime(2026, 4, 1)), DateTime(2026, 4, 30));
+      expect(
+          r.prochaineRecurrence(DateTime(2026, 4, 30)), DateTime(2026, 5, 31));
+    });
+
+    test('mensuel: day 29 falls on February 29th in a leap year', () {
+      final r = _rappel(
+        recurrence: TypeRecurrence.mensuel,
+        dateDebut: DateTime(2028, 1, 1),
+        jourDuMois: 29,
+      );
+      expect(
+          r.prochaineRecurrence(DateTime(2028, 2, 1)), DateTime(2028, 2, 29));
+    });
+
+    // Daylight saving time starts on 2026-03-29 in Europe: the local day is
+    // 23 hours long, which only matters when the suite runs in such a zone.
+    test('personnalise: strictly after the given day across a DST change', () {
+      final r = _rappel(
+        recurrence: TypeRecurrence.personnalise,
+        dateDebut: DateTime(2026, 3, 1),
+        intervalleJours: 1,
+      );
+      expect(
+          r.prochaineRecurrence(DateTime(2026, 4, 1)), DateTime(2026, 4, 2));
+    });
+
+    test('hebdomadaire: reaches dateFin across a DST change', () {
+      final r = _rappel(
+        recurrence: TypeRecurrence.hebdomadaire,
+        dateDebut: DateTime(2026, 3, 6),
+        joursSemaine: {JourSemaine.vendredi},
+        dateFin: DateTime(2026, 4, 3),
+      );
+      expect(
+          r.prochaineRecurrence(DateTime(2026, 3, 27)), DateTime(2026, 4, 3));
     });
 
     test('respects dateFin', () {

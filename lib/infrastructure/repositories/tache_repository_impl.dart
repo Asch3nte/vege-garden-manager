@@ -46,7 +46,7 @@ class TacheRepositoryImpl implements AbstractTacheRepository {
     final rows = await (_db.select(_db.taches)
           ..where((t) =>
               t.datePrevue.isBiggerOrEqualValue(debutIso) &
-              t.datePrevue.isSmallerOrEqualValue(finIso) &
+              t.datePrevue.isSmallerThanValue(finIso) &
               t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.datePrevue)]))
         .get();

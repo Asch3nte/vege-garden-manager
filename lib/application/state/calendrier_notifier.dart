@@ -4,6 +4,7 @@ import '../../domain/entities/potager.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/type_tache.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
@@ -237,7 +238,7 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   /// Exclusive end of the window: +7 days (week) or first day of next month.
   DateTime _finFenetre(DateTime debut) {
     return switch (_portee) {
-      PorteeAgenda.semaine => debut.add(const Duration(days: 7)),
+      PorteeAgenda.semaine => debut.plusJours(7),
       PorteeAgenda.mois => DateTime(debut.year, debut.month + 1, 1),
     };
   }

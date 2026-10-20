@@ -5,6 +5,7 @@ import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
 import '../../application/state/notifications_notifier.dart';
 import '../../domain/enums/type_alerte_meteo.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/alerte_culture.dart';
 import '../../l10n/app_localizations.dart';
 import '../glossaire/terme_cliquable.dart';
@@ -201,7 +202,7 @@ class _CarteAlerte extends StatelessWidget {
 /// Day label relative to today: "Aujourd'hui" / "Demain" / "12 juillet".
 String _libelleDate(AppLocalizations l10n, DateTime jour, DateTime aujourd) {
   final j = DateTime(jour.year, jour.month, jour.day);
-  final delta = j.difference(aujourd).inDays;
+  final delta = aujourd.joursJusqua(j);
   if (delta == 0) return l10n.jourAujourdhui;
   if (delta == 1) return l10n.jourDemain;
   return l10n.dateJourMois(j.day, _moisFr[j.month - 1]);

@@ -13,7 +13,7 @@ abstract class AbstractTacheRepository {
 
   Future<Tache?> obtenirParId(String id);
 
-  /// Tasks whose planned date falls within `[debut, fin]` (inclusive),
+  /// Tasks whose planned date falls within `[debut, fin)`,
   /// ordered by planned date — feeds the calendar and the daily dashboard.
   Future<List<Tache>> obtenirEntreDates(DateTime debut, DateTime fin);
 

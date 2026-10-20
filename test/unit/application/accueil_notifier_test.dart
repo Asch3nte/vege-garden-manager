@@ -60,7 +60,8 @@ void main() {
   setUpAll(() => registerFallbackValue(_FakeTache()));
 
   // Pinned "now" so the today-window is deterministic.
-  final maintenant = DateTime(2026, 6, 9, 8, 24);
+  late DateTime maintenant;
+  setUp(() => maintenant = DateTime(2026, 6, 9, 8, 24));
 
   late MockPotagers potagers;
   late MockParcelles parcelles;
@@ -397,5 +398,25 @@ void main() {
     await c.read(accueilProvider.notifier).basculerGeste(vue.gestesDuJour.single);
 
     expect([a, b].map((t) => t.estFaite), everyElement(isFalse));
+  });
+  // 2026-03-29 is 23 hours long in Europe (DST starts); the case only bites
+  // when the suite runs in such a zone.
+  test('today\'s window ends at the next local midnight across a DST change',
+      () async {
+    maintenant = DateTime(2026, 3, 29, 8);
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+
+    await conteneur().read(accueilProvider.future);
+
+    final captured =
+        verify(() => taches.obtenirEntreDates(captureAny(), captureAny()))
+            .captured;
+    expect(captured[1], DateTime(2026, 3, 30));
   });
 }

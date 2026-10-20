@@ -6,6 +6,7 @@ import '../../domain/enums/hemisphere.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/enums/stade_croissance.dart';
 import '../../domain/enums/type_climat.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/estimation_recolte.dart';
 import '../../domain/value_objects/etat_croissance.dart';
 import '../../domain/value_objects/localisation.dart';
@@ -32,10 +33,12 @@ class CalculateurDatesCulture {
   /// climate, so it is always available.
   EstimationRecolte estimerRecolte(Plantation plantation, FichePlante fiche) {
     return EstimationRecolte(
-      dateMin:
-          _plusJours(plantation.dateMiseEnPlace, fiche.dureeAvantRecolteJoursMin),
-      dateMax:
-          _plusJours(plantation.dateMiseEnPlace, fiche.dureeAvantRecolteJoursMax),
+      dateMin: plantation.dateMiseEnPlace.plusJours(
+        fiche.dureeAvantRecolteJoursMin,
+      ),
+      dateMax: plantation.dateMiseEnPlace.plusJours(
+        fiche.dureeAvantRecolteJoursMax,
+      ),
     );
   }
 
@@ -53,7 +56,7 @@ class CalculateurDatesCulture {
     FichePlante fiche,
     DateTime reference,
   ) {
-    final jours = plantation.ageDepuis(reference).inDays;
+    final jours = plantation.dateMiseEnPlace.joursJusqua(reference);
     final age = jours < 0 ? 0 : jours;
     final fraction = age / fiche.dureeAvantRecolteJoursMin;
 
@@ -62,7 +65,8 @@ class CalculateurDatesCulture {
       stade = StadeCroissance.recolte;
     } else if (fraction >= _seuilMaturation) {
       stade = StadeCroissance.maturation;
-    } else if (_commenceParLevee(plantation.methode) && fraction < _seuilLevee) {
+    } else if (_commenceParLevee(plantation.methode) &&
+        fraction < _seuilLevee) {
       stade = StadeCroissance.levee;
     } else {
       stade = StadeCroissance.croissance;
@@ -83,8 +87,7 @@ class CalculateurDatesCulture {
     FichePlante fiche,
     Hemisphere hemisphere,
     TypeClimat climat,
-  ) =>
-      fiche.periodesPour(hemisphere, climat);
+  ) => fiche.periodesPour(hemisphere, climat);
 
   /// Derives the hemisphere from a location's latitude.
   ///
@@ -96,12 +99,6 @@ class CalculateurDatesCulture {
     if (latitude == null) return null;
     return latitude < 0 ? Hemisphere.sud : Hemisphere.nord;
   }
-
-  /// Adds [jours] calendar days to [date] via the constructor (which normalises
-  /// day overflow), staying DST-safe and preserving the date's UTC/local kind.
-  DateTime _plusJours(DateTime date, int jours) => date.isUtc
-      ? DateTime.utc(date.year, date.month, date.day + jours)
-      : DateTime(date.year, date.month, date.day + jours);
 }
 
 /// DI provider for the (stateless) [CalculateurDatesCulture].

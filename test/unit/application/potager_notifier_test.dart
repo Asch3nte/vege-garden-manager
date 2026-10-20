@@ -40,7 +40,8 @@ class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 class MockTaches extends Mock implements AbstractTacheRepository {}
 
 void main() {
-  final maintenant = DateTime(2026, 6, 9, 8, 24);
+  late DateTime maintenant;
+  setUp(() => maintenant = DateTime(2026, 6, 9, 8, 24));
 
   late MockPotagers potagers;
   late MockParcelles parcelles;
@@ -284,5 +285,24 @@ void main() {
     expect(vue.zones, isEmpty);
     expect(vue.estVide, isTrue);
     verifyNever(() => parcelles.obtenirParPotager(any()));
+  });
+  // 2026-03-29 is 23 hours long in Europe (DST starts); the case only bites
+  // when the suite runs in such a zone.
+  test('today\'s window ends at the next local midnight across a DST change',
+      () async {
+    maintenant = DateTime(2026, 3, 29, 8);
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Zone')]);
+    when(() => taches.obtenirEntreDates(any(), any()))
+        .thenAnswer((_) async => []);
+
+    await conteneur().read(potagerProvider.future);
+
+    final captured =
+        verify(() => taches.obtenirEntreDates(captureAny(), captureAny()))
+            .captured;
+    expect(captured[1], DateTime(2026, 3, 30));
   });
 }

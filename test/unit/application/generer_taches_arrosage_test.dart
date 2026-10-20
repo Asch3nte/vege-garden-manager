@@ -373,7 +373,7 @@ void main() {
   test('bientot + no existing task → creates task for today+2, no notification',
       () async {
     final aujourd = DateTime(pinned07h.year, pinned07h.month, pinned07h.day);
-    final dansDeuxJours = aujourd.add(const Duration(days: 2));
+    final dansDeuxJours = DateTime(aujourd.year, aujourd.month, aujourd.day + 2);
     when(() => potager.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
     when(() => plantations.obtenirActives())
@@ -398,9 +398,36 @@ void main() {
     verifyNever(() => notifications.programmer(any()));
   });
 
+  // 2026-10-25 is 25 hours long in Europe (DST ends); the case only bites
+  // when the suite runs in such a zone.
+  test('bientot targets the calendar day two days later across a DST change',
+      () async {
+    final avantChangement = GenererTachesArrosage(plantations, potager, taches,
+        notifications, preferences, fiches, calcul,
+        maintenant: () => DateTime(2026, 10, 24, 7));
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+            ))
+        .thenAnswer((_) async => bientot());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+
+    await avantChangement.executer();
+
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.datePrevue, DateTime(2026, 10, 26));
+  });
+
   test('bientot + existing today task → deletes today + creates today+2', () async {
     final aujourd = DateTime(pinned07h.year, pinned07h.month, pinned07h.day);
-    final dansDeuxJours = aujourd.add(const Duration(days: 2));
+    final dansDeuxJours = DateTime(aujourd.year, aujourd.month, aujourd.day + 2);
     final tacheAujourd = uneTacheArrosageJour('p-1', aujourd);
     when(() => potager.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());

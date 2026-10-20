@@ -9,6 +9,7 @@ import '../../application/state/meteo_accueil_vue.dart';
 import '../../application/state/meteo_detail_notifier.dart';
 import '../../application/state/meteo_detail_vue.dart';
 import '../../application/state/jour_meteo_vue.dart';
+import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -68,7 +69,7 @@ class _EcranMeteoDetailState extends ConsumerState<EcranMeteoDetail> {
 
           String libelleJour(int i) {
             final j = vue.jours[i].date;
-            final delta = DateTime(j.year, j.month, j.day).difference(aujourd).inDays;
+            final delta = aujourd.joursJusqua(j);
             if (delta == 0) return l10n.jourAujourdhui;
             if (delta == 1) return l10n.jourDemain;
             return l10n.dateJourMois(j.day, _moisFr[j.month - 1]);

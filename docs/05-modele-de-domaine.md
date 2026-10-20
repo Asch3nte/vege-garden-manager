@@ -128,7 +128,6 @@ class Plantation {
   StatutPlantation _statut; // enCours, recoltee, echouee, arrachee
   final List<Recolte> _recoltes;
 
-  Duration ageDepuisPlantation();
   DateTime? dateRecolteEstimee(FichePlante fiche, ZoneClimatique zone);
   void enregistrerRecolte(Recolte r);
   void changerStatut(StatutPlantation nouveau);
@@ -339,7 +338,7 @@ enum EtatEquipement { neuf, bon, use, aRemplacer, horsService }
 enum TypeTache { arrosage, desherbage, paillage, taille, tuteurage, fertilisation, traitementBio, observation, semis, repiquage, recolte, preparationSol, installationEquipement, entretienEquipement, nettoyage, autre }
 enum EtatTache { aFaire, enCours, terminee, annulee }
 enum PrioriteTache { basse, normale, haute, urgente }
-enum TypeRecurrence { ponctuel, quotidien, hebdomadaire, mensuel, personnalise }
+enum TypeRecurrence { ponctuel, quotidien, hebdomadaire, mensuel, personnalise } // mensuel 29-31 : dernier jour des mois plus courts
 enum EtatRappel { actif, enPause, termine }
 enum JourSemaine { lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche }
 
