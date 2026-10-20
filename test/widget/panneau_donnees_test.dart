@@ -139,6 +139,19 @@ void main() {
       expect(find.text('Fichier de sauvegarde invalide ou incompatible.'),
           findsOneWidget);
     });
+
+    testWidgets('an unreadable file surfaces an error', (tester) async {
+      when(() => gestionnaire.choisirEtLire())
+          .thenThrow(SauvegardeInvalideException('not UTF-8'));
+
+      await monter(tester);
+      await tester.tap(find.text('Importer une sauvegarde'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Fichier de sauvegarde invalide ou incompatible.'),
+          findsOneWidget);
+      expect(find.text('Mode d\'import'), findsNothing);
+    });
   });
 
   group('reset', () {

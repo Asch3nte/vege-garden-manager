@@ -26,8 +26,9 @@ class SauvegardeServiceImpl implements AbstractSauvegardeService {
   Future<String> exporterJson() async {
     final tables = <String, dynamic>{};
     for (final table in _db.allTables) {
-      final rows =
-          await _db.customSelect('SELECT * FROM ${table.actualTableName}').get();
+      final rows = await _db
+          .customSelect('SELECT * FROM ${table.actualTableName}')
+          .get();
       tables[table.actualTableName] = rows.map((r) => r.data).toList();
     }
     return jsonEncode({
@@ -57,38 +58,75 @@ class SauvegardeServiceImpl implements AbstractSauvegardeService {
       throw SauvegardeInvalideException('Backup is missing its "tables" map.');
     }
 
-    await _db.transaction(() async {
-      if (mode == ModeImport.remplacer) {
-        // Delete children before parents to satisfy ON DELETE RESTRICT FKs.
-        for (final table in _db.allTables.toList().reversed) {
-          await _db.customStatement('DELETE FROM ${table.actualTableName}');
-        }
-      }
-      // Insert parents before children (declaration order).
-      for (final table in _db.allTables) {
-        final rows = tables[table.actualTableName];
-        if (rows is! List) continue;
-        for (final row in rows) {
-          if (row is! Map) {
-            throw SauvegardeInvalideException(
-              'Malformed row in table "${table.actualTableName}".',
-            );
+    try {
+      await _db.transaction(() async {
+        if (mode == ModeImport.remplacer) {
+          // Delete children before parents to satisfy ON DELETE RESTRICT FKs.
+          for (final table in _db.allTables.toList().reversed) {
+            await _db.customStatement('DELETE FROM ${table.actualTableName}');
           }
-          await _insererBrut(
-            table.actualTableName,
-            row.cast<String, dynamic>(),
-          );
         }
-      }
-    });
+        // Insert parents before children (declaration order).
+        for (final table in _db.allTables) {
+          final rows = tables[table.actualTableName];
+          if (rows is! List) continue;
+          final connues = {for (final c in table.$columns) c.name};
+          for (final row in rows) {
+            if (row is! Map || row.isEmpty) {
+              throw SauvegardeInvalideException(
+                'Malformed row in table "${table.actualTableName}".',
+              );
+            }
+            await _fusionnerLigne(table, connues, row.cast<String, dynamic>());
+          }
+        }
+      });
+    } on SauvegardeInvalideException {
+      rethrow;
+    } on Exception catch (e) {
+      throw SauvegardeInvalideException(
+        'Backup rows could not be written to the database.',
+        cause: e,
+      );
+    }
   }
 
-  /// Inserts (or replaces, keyed by primary key) one raw row into [table].
-  Future<void> _insererBrut(String table, Map<String, dynamic> row) {
+  /// Upserts one raw row into [table]: a primary-key conflict updates the
+  /// existing row in place (its children keep their parent); a conflict on
+  /// another unique key keeps the local row.
+  ///
+  /// Column names come from the file, so they are checked against [connues]
+  /// before being written into the SQL text.
+  Future<void> _fusionnerLigne(
+    TableInfo<Table, dynamic> table,
+    Set<String> connues,
+    Map<String, dynamic> row,
+  ) {
     final colonnes = row.keys.toList();
+    for (final colonne in colonnes) {
+      if (!connues.contains(colonne)) {
+        throw SauvegardeInvalideException(
+          'Unknown column "$colonne" in table "${table.actualTableName}".',
+        );
+      }
+      final valeur = row[colonne];
+      if (valeur != null &&
+          valeur is! num &&
+          valeur is! String &&
+          valeur is! bool) {
+        throw SauvegardeInvalideException(
+          'Unsupported value for "$colonne" in table "${table.actualTableName}".',
+        );
+      }
+    }
+    final cle = table.$primaryKey.map((c) => '"${c.name}"').join(', ');
     final placeholders = List.filled(colonnes.length, '?').join(', ');
-    final sql = 'INSERT OR REPLACE INTO $table '
-        '(${colonnes.join(', ')}) VALUES ($placeholders)';
+    final affectations = colonnes.map((c) => '"$c" = excluded."$c"').join(', ');
+    final sql =
+        'INSERT INTO "${table.actualTableName}" '
+        '(${colonnes.map((c) => '"$c"').join(', ')}) VALUES ($placeholders) '
+        'ON CONFLICT ($cle) DO UPDATE SET $affectations '
+        'ON CONFLICT DO NOTHING';
     final variables = colonnes.map((c) => Variable<Object>(row[c])).toList();
     return _db.customInsert(sql, variables: variables);
   }

@@ -4,6 +4,7 @@ import '../../domain/entities/plantation.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/plantation_mapper.dart';
 import 'suppression_cascade.dart';
 
@@ -48,7 +49,7 @@ class PlantationRepositoryImpl implements AbstractPlantationRepository {
   Future<void> sauvegarder(Plantation plantation) async {
     await _db
         .into(_db.plantations)
-        .insertOnConflictUpdate(_mapper.versCompanion(plantation));
+        .upsertConservantCreation(_mapper.versCompanion(plantation));
   }
 
   @override

@@ -224,4 +224,18 @@ void main() {
     // A task targeting another potager is untouched.
     expect(await deletedAtTache('t_other'), isNull);
   });
+
+  test('sauvegarder keeps the original creation timestamps', () async {
+    final entite = potager();
+    await repo.sauvegarder(entite);
+    await db.customStatement(
+        "UPDATE potagers SET created_at = '2026-09-01T00:00:00.000Z' WHERE id = '${entite.id}'");
+
+    await repo.sauvegarder(entite);
+
+    final row = await db
+        .customSelect("SELECT created_at FROM potagers WHERE id = '${entite.id}'")
+        .getSingle();
+    expect(row.data, {'created_at': '2026-09-01T00:00:00.000Z'});
+  });
 }

@@ -87,8 +87,14 @@ class PanneauDonnees extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
 
-    final contenu =
-        await ref.read(gestionnaireSauvegardeFichierProvider).choisirEtLire();
+    final String? contenu;
+    try {
+      contenu =
+          await ref.read(gestionnaireSauvegardeFichierProvider).choisirEtLire();
+    } on SauvegardeInvalideException {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportErreur)));
+      return;
+    }
     if (contenu == null || !context.mounted) return; // cancelled
 
     final mode = await _choisirMode(context);

@@ -3,7 +3,9 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/equipement.dart';
 import '../../domain/repositories/abstract_equipement_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/equipement_mapper.dart';
+import 'suppression_cascade.dart';
 
 /// drift-backed implementation of [AbstractEquipementRepository].
 class EquipementRepositoryImpl implements AbstractEquipementRepository {
@@ -42,15 +44,17 @@ class EquipementRepositoryImpl implements AbstractEquipementRepository {
   Future<void> sauvegarder(Equipement equipement) async {
     await _db
         .into(_db.equipements)
-        .insertOnConflictUpdate(_mapper.versCompanion(equipement));
+        .upsertConservantCreation(_mapper.versCompanion(equipement));
   }
 
   @override
   Future<void> supprimer(String id) async {
-    await (_db.update(_db.equipements)..where((t) => t.id.equals(id))).write(
-      EquipementsCompanion(
-        deletedAt: Value(DateTime.now().toUtc().toIso8601String()),
-      ),
-    );
+    final maintenant = DateTime.now().toUtc().toIso8601String();
+    await _db.transaction(() async {
+      await (_db.update(_db.equipements)..where((t) => t.id.equals(id)))
+          .write(EquipementsCompanion(deletedAt: Value(maintenant)));
+      await soustraireLignesDePlanification(_db, maintenant,
+          equipementIds: [id]);
+    });
   }
 }

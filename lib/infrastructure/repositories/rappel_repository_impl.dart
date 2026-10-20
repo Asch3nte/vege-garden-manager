@@ -4,6 +4,7 @@ import '../../domain/entities/rappel.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/repositories/abstract_rappel_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/rappel_mapper.dart';
 
 /// drift-backed implementation of [AbstractRappelRepository].
@@ -51,7 +52,7 @@ class RappelRepositoryImpl implements AbstractRappelRepository {
   Future<void> sauvegarder(Rappel rappel) async {
     await _db
         .into(_db.rappels)
-        .insertOnConflictUpdate(_mapper.versCompanion(rappel));
+        .upsertConservantCreation(_mapper.versCompanion(rappel));
   }
 
   @override

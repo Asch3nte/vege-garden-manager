@@ -195,4 +195,18 @@ void main() {
     expect(await deletedAt('observation', 'obs1'), isNotNull);
     expect(await deletedAt('tache', 't_other'), isNull); // other plantation
   });
+
+  test('sauvegarder keeps the original creation timestamps', () async {
+    final entite = plantation();
+    await repo.sauvegarder(entite);
+    await db.customStatement(
+        "UPDATE plantations SET created_at = '2026-09-01T00:00:00.000Z' WHERE id = '${entite.id}'");
+
+    await repo.sauvegarder(entite);
+
+    final row = await db
+        .customSelect("SELECT created_at FROM plantations WHERE id = '${entite.id}'")
+        .getSingle();
+    expect(row.data, {'created_at': '2026-09-01T00:00:00.000Z'});
+  });
 }

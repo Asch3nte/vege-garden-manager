@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/parcelle_mapper.dart';
 import 'suppression_cascade.dart';
 
@@ -39,7 +40,7 @@ class ParcelleRepositoryImpl implements AbstractParcelleRepository {
   Future<void> sauvegarder(Parcelle parcelle) async {
     await _db
         .into(_db.parcelles)
-        .insertOnConflictUpdate(_mapper.versCompanion(parcelle));
+        .upsertConservantCreation(_mapper.versCompanion(parcelle));
   }
 
   @override

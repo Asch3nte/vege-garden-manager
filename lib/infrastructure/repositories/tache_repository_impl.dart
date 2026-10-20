@@ -4,6 +4,7 @@ import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/tache_mapper.dart';
 
 /// drift-backed implementation of [AbstractTacheRepository].
@@ -66,7 +67,7 @@ class TacheRepositoryImpl implements AbstractTacheRepository {
   Future<void> sauvegarder(Tache tache) async {
     await _db
         .into(_db.taches)
-        .insertOnConflictUpdate(_mapper.versCompanion(tache));
+        .upsertConservantCreation(_mapper.versCompanion(tache));
   }
 
   @override

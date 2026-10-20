@@ -4,6 +4,7 @@ import '../../domain/entities/potager.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../database/app_database.dart';
+import '../database/upsert_conservant_creation.dart';
 import '../mappers/potager_mapper.dart';
 import 'suppression_cascade.dart';
 
@@ -54,7 +55,7 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
   Future<void> sauvegarder(Potager potager) async {
     await _db
         .into(_db.potagers)
-        .insertOnConflictUpdate(_mapper.versCompanion(potager));
+        .upsertConservantCreation(_mapper.versCompanion(potager));
   }
 
   @override
