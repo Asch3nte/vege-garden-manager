@@ -78,9 +78,8 @@ void main() {
     when(() => parcelle.id).thenReturn(parcelleId);
     when(() => parcelle.potagerId).thenReturn(potagerId);
     zonesParJardin.putIfAbsent(potagerId, () => []).add(parcelle);
-    when(
-      () => parcelles.obtenirParPotager(potagerId),
-    ).thenAnswer((_) async => zonesParJardin[potagerId]!);
+    when(() => parcelles.obtenirParPotager(potagerId))
+        .thenAnswer((_) async => zonesParJardin[potagerId]!);
   }
 
   /// Stubs the catalogue so any plant sheet resolves to a common name derived
@@ -89,8 +88,7 @@ void main() {
   void stubFiches([Map<String, String?>? nomsParPlanteId]) {
     when(() => fiches.obtenirParId(any())).thenAnswer((invocation) async {
       final id = invocation.positionalArguments.first as String;
-      final String? nom =
-          nomsParPlanteId != null && nomsParPlanteId.containsKey(id)
+      final String? nom = nomsParPlanteId != null && nomsParPlanteId.containsKey(id)
           ? nomsParPlanteId[id]
           : '${id[0].toUpperCase()}${id.substring(1)}';
       if (nom == null) return null;
@@ -103,9 +101,8 @@ void main() {
   /// Stubs the preferences repository to return [prefs] (defaults = all
   /// notifications allowed, no do-not-disturb window).
   void stubPreferences([PreferencesUtilisateur? prefs]) {
-    when(
-      () => preferences.charger(),
-    ).thenAnswer((_) async => prefs ?? PreferencesUtilisateur());
+    when(() => preferences.charger())
+        .thenAnswer((_) async => prefs ?? PreferencesUtilisateur());
   }
 
   setUpAll(() {
@@ -117,23 +114,16 @@ void main() {
   });
 
   // Pinned clock at 07:00 so the 08:00 notification guard is always in the future.
-  final DateTime pinned07h = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-    7,
-    0,
-  );
+  final DateTime pinned07h = DateTime(DateTime.now().year, DateTime.now().month,
+      DateTime.now().day, 7, 0);
 
   Potager unPotager() => Potager(
-    id: 'pot-1',
-    nom: 'Mon potager',
-    zoneClimatique: const ZoneClimatique(
-      TypeClimat.oceanique,
-      ZoneRusticite.zone8,
-    ),
-    dateCreation: DateTime(2026, 1, 1),
-  );
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+      );
 
   setUp(() {
     plantations = MockPlantations();
@@ -150,32 +140,20 @@ void main() {
     stubFiches();
     stubParcelle('z-1', 'pot-1');
     when(() => potager.obtenirTous()).thenAnswer((_) async => [unPotager()]);
-    when(
-      () => calcul.chargerFenetre(
-        any(),
-        meteoAutoActive: any(named: 'meteoAutoActive'),
-      ),
-    ).thenAnswer((_) async => const <PrevisionMeteo>[]);
-    useCase = GenererTachesArrosage(
-      plantations,
-      potager,
-      parcelles,
-      taches,
-      notifications,
-      preferences,
-      fiches,
-      calcul,
-      maintenant: () => pinned07h,
-    );
+    when(() => calcul.chargerFenetre(any(),
+            meteoAutoActive: any(named: 'meteoAutoActive')))
+        .thenAnswer((_) async => const <PrevisionMeteo>[]);
+    useCase = GenererTachesArrosage(plantations, potager, parcelles, taches,
+        notifications, preferences, fiches, calcul, maintenant: () => pinned07h);
     // The day's single watering notification is (re)scheduled or cancelled on
     // every run, so both calls must be stubbed everywhere.
     when(() => notifications.programmer(any())).thenAnswer((_) async {});
     when(() => notifications.annuler(any())).thenAnswer((_) async {});
   });
 
+
   /// `yyyy-MM-dd` of [d], as used in the day-scoped notification id.
-  String jourIso(DateTime d) =>
-      '${d.year.toString().padLeft(4, '0')}'
+  String jourIso(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
       '-${d.month.toString().padLeft(2, '0')}'
       '-${d.day.toString().padLeft(2, '0')}';
 
@@ -191,51 +169,49 @@ void main() {
       );
 
   Tache uneTacheArrosageAuj(String plantationId) => Tache(
-    id: 'ta-$plantationId',
-    titre: 'Arroser',
-    type: TypeTache.arrosage,
-    cible: CibleTache.plantation,
-    cibleId: plantationId,
-    datePrevue: DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    ),
-    priorite: PrioriteTache.urgente,
-  );
+        id: 'ta-$plantationId',
+        titre: 'Arroser',
+        type: TypeTache.arrosage,
+        cible: CibleTache.plantation,
+        cibleId: plantationId,
+        datePrevue: DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ),
+        priorite: PrioriteTache.urgente,
+      );
 
   ConseilArrosage arroserMaintenant() => ConseilArrosage(
-    urgence: UrgenceArrosage.arroserMaintenant,
-    joursAvantArrosage: 0,
-    indiceBesoin: 0.9,
-  );
+        urgence: UrgenceArrosage.arroserMaintenant,
+        joursAvantArrosage: 0,
+        indiceBesoin: 0.9,
+      );
 
   ConseilArrosage bientot() => ConseilArrosage(
-    urgence: UrgenceArrosage.bientot,
-    joursAvantArrosage: 2,
-    indiceBesoin: 0.5,
-  );
+        urgence: UrgenceArrosage.bientot,
+        joursAvantArrosage: 2,
+        indiceBesoin: 0.5,
+      );
 
   ConseilArrosage pasNecessaire() => ConseilArrosage(
-    urgence: UrgenceArrosage.pasNecessaire,
-    indiceBesoin: 0.1,
-  );
+        urgence: UrgenceArrosage.pasNecessaire,
+        indiceBesoin: 0.1,
+      );
 
-  Tache uneTacheArrosageJour(
-    String plantationId,
-    DateTime datePrevue, {
-    bool faite = false,
-  }) => Tache(
-    id: 'ta-${plantationId}_${datePrevue.day}',
-    titre: 'Arroser',
-    type: TypeTache.arrosage,
-    cible: CibleTache.plantation,
-    cibleId: plantationId,
-    datePrevue: datePrevue,
-    priorite: PrioriteTache.normale,
-    etat: faite ? EtatTache.terminee : EtatTache.aFaire,
-    dateRealisation: faite ? datePrevue : null,
-  );
+  Tache uneTacheArrosageJour(String plantationId, DateTime datePrevue,
+          {bool faite = false}) =>
+      Tache(
+        id: 'ta-${plantationId}_${datePrevue.day}',
+        titre: 'Arroser',
+        type: TypeTache.arrosage,
+        cible: CibleTache.plantation,
+        cibleId: plantationId,
+        datePrevue: datePrevue,
+        priorite: PrioriteTache.normale,
+        etat: faite ? EtatTache.terminee : EtatTache.aFaire,
+        dateRealisation: faite ? datePrevue : null,
+      );
 
   test('no garden → no task created', () async {
     when(() => potager.obtenirTous()).thenAnswer((_) async => []);
@@ -247,220 +223,179 @@ void main() {
   });
 
   test(
-    'arroserMaintenant + no existing task → task saved + notification scheduled',
-    () async {
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+      'arroserMaintenant + no existing task → task saved + notification scheduled',
+      () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      final saved = verify(() => taches.sauvegarder(captureAny())).captured;
-      expect(saved, hasLength(1));
-      final tache = saved.first as Tache;
-      expect(tache.type, TypeTache.arrosage);
-      expect(tache.cible, CibleTache.plantation);
-      expect(tache.cibleId, 'p-1');
-      expect(tache.priorite, PrioriteTache.urgente);
-      // The task names its crop (from the catalogue) rather than a generic chore.
-      expect(tache.titre, 'Arroser : Tomate');
+    final saved = verify(() => taches.sauvegarder(captureAny())).captured;
+    expect(saved, hasLength(1));
+    final tache = saved.first as Tache;
+    expect(tache.type, TypeTache.arrosage);
+    expect(tache.cible, CibleTache.plantation);
+    expect(tache.cibleId, 'p-1');
+    expect(tache.priorite, PrioriteTache.urgente);
+    // The task names its crop (from the catalogue) rather than a generic chore.
+    expect(tache.titre, 'Arroser : Tomate');
 
-      final notifCaptured = verify(
-        () => notifications.programmer(captureAny()),
-      ).captured;
-      expect(notifCaptured, hasLength(1));
-      final notif = notifCaptured.first as NotificationLocale;
-      expect(notif.categorie, 'arrosage');
-      // Day-scoped id (not per plantation): one notification covers the day, and
-      // re-running rewrites it instead of stacking duplicates.
-      expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
-      // That single recap names the crop rather than counting anonymously.
-      expect(notif.titre, 'Arroser Tomate');
-      expect(notif.corps, contains('Tomate'));
-      expect(notif.cibleRoute, '/calendrier');
-    },
-  );
+    final notifCaptured =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(notifCaptured, hasLength(1));
+    final notif = notifCaptured.first as NotificationLocale;
+    expect(notif.categorie, 'arrosage');
+    // Day-scoped id (not per plantation): one notification covers the day, and
+    // re-running rewrites it instead of stacking duplicates.
+    expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
+    // That single recap names the crop rather than counting anonymously.
+    expect(notif.titre, 'Arroser Tomate');
+    expect(notif.corps, contains('Tomate'));
+    expect(notif.cibleRoute, '/calendrier');
+  });
 
-  test(
-    'several urgent crops → a SINGLE recap notification naming them all',
-    () async {
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(() => plantations.obtenirActives()).thenAnswer(
-        (_) async => [
+  test('several urgent crops → a SINGLE recap notification naming them all',
+      () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async => [
           unePlantation('p-1', planteId: 'tomate'),
           unePlantation('p-2', planteId: 'basilic'),
-        ],
-      );
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, any()),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
-      when(() => notifications.programmer(any())).thenAnswer((_) async {});
+        ]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      // Two tasks, but a single notification (spam kept to one).
-      verify(() => taches.sauvegarder(any())).called(2);
-      final notifs = verify(
-        () => notifications.programmer(captureAny()),
-      ).captured;
-      expect(notifs, hasLength(1));
-      final notif = notifs.single as NotificationLocale;
-      expect(notif.titre, 'Arroser Tomate, Basilic');
-      // Full list in the body (maximum detail).
-      expect(notif.corps, "Cultures à arroser aujourd'hui : Tomate, Basilic.");
-    },
-  );
+    // Two tasks, but a single notification (spam kept to one).
+    verify(() => taches.sauvegarder(any())).called(2);
+    final notifs =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(notifs, hasLength(1));
+    final notif = notifs.single as NotificationLocale;
+    expect(notif.titre, 'Arroser Tomate, Basilic');
+    // Full list in the body (maximum detail).
+    expect(notif.corps, "Cultures à arroser aujourd'hui : Tomate, Basilic.");
+  });
 
-  test(
-    'more crops than fit the title → first names + "+N", full list in body',
-    () async {
-      final noms = ['tomate', 'basilic', 'courgette', 'poivron'];
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(() => plantations.obtenirActives()).thenAnswer(
-        (_) async => [
+  test('more crops than fit the title → first names + "+N", full list in body',
+      () async {
+    final noms = ['tomate', 'basilic', 'courgette', 'poivron'];
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async => [
           for (var i = 0; i < noms.length; i++)
             unePlantation('p-$i', planteId: noms[i]),
-        ],
-      );
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, any()),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
-      when(() => notifications.programmer(any())).thenAnswer((_) async {});
+        ]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      final notif =
-          (verify(() => notifications.programmer(captureAny())).captured.single)
-              as NotificationLocale;
-      expect(notif.titre, 'Arroser Tomate, Basilic, Courgette +1');
-      expect(
-        notif.corps,
-        "Cultures à arroser aujourd'hui : Tomate, Basilic, Courgette, Poivron.",
-      );
-    },
-  );
+    final notif = (verify(() => notifications.programmer(captureAny())).captured
+        .single) as NotificationLocale;
+    expect(notif.titre, 'Arroser Tomate, Basilic, Courgette +1');
+    expect(notif.corps,
+        "Cultures à arroser aujourd'hui : Tomate, Basilic, Courgette, Poivron.");
+  });
 
-  test(
-    'missing sheet → the unnamed crop still counts in the "+N" overflow',
-    () async {
-      stubFiches({'tomate': 'Tomate', 'basilic': null});
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(() => plantations.obtenirActives()).thenAnswer(
-        (_) async => [
+  test('missing sheet → the unnamed crop still counts in the "+N" overflow',
+      () async {
+    stubFiches({'tomate': 'Tomate', 'basilic': null});
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async => [
           unePlantation('p-1', planteId: 'tomate'),
           unePlantation('p-2', planteId: 'basilic'),
-        ],
-      );
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, any()),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
-      when(() => notifications.programmer(any())).thenAnswer((_) async {});
+        ]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      final notif =
-          (verify(() => notifications.programmer(captureAny())).captured.single)
-              as NotificationLocale;
-      // Tomate named, the unresolved basilic folded into "+1".
-      expect(notif.titre, 'Arroser Tomate +1');
-    },
-  );
+    final notif = (verify(() => notifications.programmer(captureAny())).captured
+        .single) as NotificationLocale;
+    // Tomate named, the unresolved basilic folded into "+1".
+    expect(notif.titre, 'Arroser Tomate +1');
+  });
 
   test(
-    'existing uncompleted task today → no duplicate task, recap still scheduled',
-    () async {
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => [uneTacheArrosageAuj('p-1')]);
-      when(() => notifications.programmer(any())).thenAnswer((_) async {});
+      'existing uncompleted task today → no duplicate task, recap still scheduled',
+      () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [uneTacheArrosageAuj('p-1')]);
+    when(() => notifications.programmer(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      // The task is not duplicated, but the crop still needs watering today, so
-      // the daily recap must still fire (its stable per-day id just replaces any
-      // pending one — no stacking).
-      verifyNever(() => taches.sauvegarder(any()));
-      // The crop is still thirsty and its task still pending → the day's single
-      // notification is (re)scheduled, even though no task was created.
-      verify(() => notifications.programmer(any())).called(1);
-    },
-  );
+    // The task is not duplicated, but the crop still needs watering today, so
+    // the daily recap must still fire (its stable per-day id just replaces any
+    // pending one — no stacking).
+    verifyNever(() => taches.sauvegarder(any()));
+    // The crop is still thirsty and its task still pending → the day's single
+    // notification is (re)scheduled, even though no task was created.
+    verify(() => notifications.programmer(any())).called(1);
+  });
 
   test('pasNecessaire + existing pending task → task deleted', () async {
     final existante = uneTacheArrosageAuj('p-1');
-    when(
-      () => potager.obtenirPotagerActif(),
-    ).thenAnswer((_) async => unPotager());
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => pasNecessaire());
-    when(
-      () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-    ).thenAnswer((_) async => [existante]);
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [existante]);
     when(() => taches.supprimer(any())).thenAnswer((_) async {});
 
     await useCase.executer();
@@ -469,106 +404,78 @@ void main() {
     verifyNever(() => taches.sauvegarder(any()));
   });
 
-  test(
-    'bientot + no existing task → creates task for today+2, no notification',
-    () async {
-      final aujourd = DateTime(pinned07h.year, pinned07h.month, pinned07h.day);
-      final dansDeuxJours = DateTime(
-        aujourd.year,
-        aujourd.month,
-        aujourd.day + 2,
-      );
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => bientot());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+  test('bientot + no existing task → creates task for today+2, no notification',
+      () async {
+    final aujourd = DateTime(pinned07h.year, pinned07h.month, pinned07h.day);
+    final dansDeuxJours = DateTime(aujourd.year, aujourd.month, aujourd.day + 2);
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => bientot());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      final captured = verify(() => taches.sauvegarder(captureAny())).captured;
-      expect(captured, hasLength(1));
-      final tache = captured.first as Tache;
-      expect(tache.datePrevue, dansDeuxJours);
-      expect(tache.priorite, PrioriteTache.normale);
-      verifyNever(() => notifications.programmer(any()));
-    },
-  );
+    final captured =
+        verify(() => taches.sauvegarder(captureAny())).captured;
+    expect(captured, hasLength(1));
+    final tache = captured.first as Tache;
+    expect(tache.datePrevue, dansDeuxJours);
+    expect(tache.priorite, PrioriteTache.normale);
+    verifyNever(() => notifications.programmer(any()));
+  });
 
   // 2026-10-25 is 25 hours long in Europe (DST ends); the case only bites
   // when the suite runs in such a zone.
-  test(
-    'bientot targets the calendar day two days later across a DST change',
-    () async {
-      final avantChangement = GenererTachesArrosage(
-        plantations,
-        potager,
-        parcelles,
-        taches,
-        notifications,
-        preferences,
-        fiches,
-        calcul,
-        maintenant: () => DateTime(2026, 10, 24, 7),
-      );
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => bientot());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+  test('bientot targets the calendar day two days later across a DST change',
+      () async {
+    final avantChangement = GenererTachesArrosage(plantations, potager,
+        parcelles, taches, notifications, preferences, fiches, calcul,
+        maintenant: () => DateTime(2026, 10, 24, 7));
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => bientot());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
-      await avantChangement.executer();
+    await avantChangement.executer();
 
-      final tache =
-          verify(() => taches.sauvegarder(captureAny())).captured.single
-              as Tache;
-      expect(tache.datePrevue, DateTime(2026, 10, 26));
-    },
-  );
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.datePrevue, DateTime(2026, 10, 26));
+  });
 
   test('bientot keeps a pending task planned before the target day', () async {
     final aujourd = DateTime(pinned07h.year, pinned07h.month, pinned07h.day);
     final tacheAujourd = uneTacheArrosageJour('p-1', aujourd);
-    when(
-      () => potager.obtenirPotagerActif(),
-    ).thenAnswer((_) async => unPotager());
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => bientot());
-    when(
-      () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-    ).thenAnswer((_) async => [tacheAujourd]);
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => bientot());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [tacheAujourd]);
     when(() => taches.supprimer(any())).thenAnswer((_) async {});
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
@@ -580,19 +487,16 @@ void main() {
 
   test('bientot does not push a pending task further each day', () async {
     final demain = DateTime(pinned07h.year, pinned07h.month, pinned07h.day + 1);
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => bientot());
-    when(
-      () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-    ).thenAnswer((_) async => [uneTacheArrosageJour('p-1', demain)]);
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => bientot());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [uneTacheArrosageJour('p-1', demain)]);
     when(() => taches.supprimer(any())).thenAnswer((_) async {});
     when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
@@ -602,73 +506,55 @@ void main() {
     verifyNever(() => taches.sauvegarder(any()));
   });
 
-  test(
-    'each plantation is evaluated with its own garden\'s location',
-    () async {
-      final ici = Localisation.gps(latitude: 50.8, longitude: 4.4);
-      final ailleurs = Localisation.gps(latitude: 43.6, longitude: 3.9);
-      Potager jardin(String id, Localisation loc) => Potager(
-        id: id,
-        nom: id,
-        zoneClimatique: const ZoneClimatique(
-          TypeClimat.oceanique,
-          ZoneRusticite.zone8,
-        ),
-        localisation: loc,
-        dateCreation: DateTime(2026, 1, 1),
-      );
-      when(() => potager.obtenirTous()).thenAnswer(
-        (_) async => [jardin('pot-1', ici), jardin('pot-2', ailleurs)],
-      );
-      stubParcelle('z-2', 'pot-2');
-      final autre = Plantation(
-        id: 'p-2',
-        planteId: 'tomate',
-        parcelleId: 'z-2',
-        dateMiseEnPlace: DateTime(2026, 4, 1),
-        methode: MethodeMiseEnPlace.semisDirect,
-        surfaceOccupee: Surface.enMetresCarres(0.5),
-        nombrePieds: 2,
-      );
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1'), autre]);
-      when(
-        () => calcul.executer(
+  test('each plantation is evaluated with its own garden\'s location',
+      () async {
+    final ici = Localisation.gps(latitude: 50.8, longitude: 4.4);
+    final ailleurs = Localisation.gps(latitude: 43.6, longitude: 3.9);
+    Potager jardin(String id, Localisation loc) => Potager(
+          id: id,
+          nom: id,
+          zoneClimatique:
+              const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+          localisation: loc,
+          dateCreation: DateTime(2026, 1, 1),
+        );
+    when(() => potager.obtenirTous()).thenAnswer(
+        (_) async => [jardin('pot-1', ici), jardin('pot-2', ailleurs)]);
+    stubParcelle('z-2', 'pot-2');
+    final autre = Plantation(
+      id: 'p-2',
+      planteId: 'tomate',
+      parcelleId: 'z-2',
+      dateMiseEnPlace: DateTime(2026, 4, 1),
+      methode: MethodeMiseEnPlace.semisDirect,
+      surfaceOccupee: Surface.enMetresCarres(0.5),
+      nombrePieds: 2,
+    );
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1'), autre]);
+    when(() => calcul.executer(
           plantation: any(named: 'plantation'),
           localisation: any(named: 'localisation'),
           fenetre: any(named: 'fenetre'),
           meteoAutoActive: any(named: 'meteoAutoActive'),
-        ),
-      ).thenAnswer((_) async => pasNecessaire());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, any()),
-      ).thenAnswer((_) async => []);
+        ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
 
-      await useCase.executer();
+    await useCase.executer();
 
-      verify(
-        () => calcul.chargerFenetre(
-          ici,
-          meteoAutoActive: any(named: 'meteoAutoActive'),
-        ),
-      ).called(1);
-      verify(
-        () => calcul.chargerFenetre(
-          ailleurs,
-          meteoAutoActive: any(named: 'meteoAutoActive'),
-        ),
-      ).called(1);
-      verify(
-        () => calcul.executer(
+    verify(() => calcul.chargerFenetre(ici,
+        meteoAutoActive: any(named: 'meteoAutoActive'))).called(1);
+    verify(() => calcul.chargerFenetre(ailleurs,
+        meteoAutoActive: any(named: 'meteoAutoActive'))).called(1);
+    verify(() => calcul.executer(
           plantation: autre,
           localisation: ailleurs,
           fenetre: any(named: 'fenetre'),
           meteoAutoActive: any(named: 'meteoAutoActive'),
-        ),
-      ).called(1);
-    },
-  );
+        )).called(1);
+  });
 
   test('a plantation outside any garden is still evaluated, without weather',
       () async {
@@ -688,7 +574,8 @@ void main() {
           localisation: any(named: 'localisation'),
           fenetre: any(named: 'fenetre'),
           meteoAutoActive: any(named: 'meteoAutoActive'),
-        )).thenAnswer((_) async => pasNecessaire());
+        ))
+        .thenAnswer((_) async => pasNecessaire());
     when(() => taches.obtenirParCible(CibleTache.plantation, any()))
         .thenAnswer((_) async => []);
 
@@ -703,50 +590,40 @@ void main() {
   });
 
   test('loads the weather window once per garden', () async {
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-        meteoAutoActive: any(named: 'meteoAutoActive'),
-      ),
-    ).thenAnswer((_) async => pasNecessaire());
-    when(
-      () => taches.obtenirParCible(CibleTache.plantation, any()),
-    ).thenAnswer((_) async => []);
+    when(() => plantations.obtenirActives()).thenAnswer(
+        (_) async => [unePlantation('p-1'), unePlantation('p-2')]);
+    when(() => calcul.executer(
+          plantation: any(named: 'plantation'),
+          localisation: any(named: 'localisation'),
+          fenetre: any(named: 'fenetre'),
+          meteoAutoActive: any(named: 'meteoAutoActive'),
+        ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
 
     await useCase.executer();
 
-    verify(
-      () => calcul.chargerFenetre(
-        any(),
-        meteoAutoActive: any(named: 'meteoAutoActive'),
-      ),
-    ).called(1);
+    verify(() => calcul.chargerFenetre(any(),
+        meteoAutoActive: any(named: 'meteoAutoActive'))).called(1);
   });
 
   test('concurrent runs never create the same task twice', () async {
     final enBase = <Tache>[];
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => arroserMaintenant());
-    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1')).thenAnswer(
-      (_) async {
-        final instantane = List<Tache>.of(enBase);
-        await Future<void>.delayed(const Duration(milliseconds: 5));
-        return instantane;
-      },
-    );
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async {
+      final instantane = List<Tache>.of(enBase);
+      await Future<void>.delayed(const Duration(milliseconds: 5));
+      return instantane;
+    });
     when(() => taches.sauvegarder(any())).thenAnswer((invocation) async {
       enBase.add(invocation.positionalArguments.first as Tache);
     });
@@ -756,106 +633,90 @@ void main() {
     expect(enBase, hasLength(1));
   });
 
-  test(
-    'completed task today + still urgent → no new task (dedup guards check-off)',
-    () async {
-      final faite = Tache(
-        id: 'ta-done',
-        titre: 'Arroser',
-        type: TypeTache.arrosage,
-        cible: CibleTache.plantation,
-        cibleId: 'p-1',
-        datePrevue: DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
-        ),
-        etat: EtatTache.terminee,
-        dateRealisation: DateTime.now(),
-      );
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => [faite]);
+  test('completed task today + still urgent → no new task (dedup guards check-off)',
+      () async {
+    final faite = Tache(
+      id: 'ta-done',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
+      etat: EtatTache.terminee,
+      dateRealisation: DateTime.now(),
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [faite]);
 
-      await useCase.executer();
+    await useCase.executer();
 
-      // User already watered the plant and ticked the task — must not recreate.
-      verifyNever(() => taches.sauvegarder(any()));
-      verifyNever(() => notifications.programmer(any()));
-    },
-  );
+    // User already watered the plant and ticked the task — must not recreate.
+    verifyNever(() => taches.sauvegarder(any()));
+    verifyNever(() => notifications.programmer(any()));
+  });
 
-  test(
-    'completed task today is not re-deleted on urgency drop (pasNecessaire)',
-    () async {
-      final faite = Tache(
-        id: 'ta-done',
-        titre: 'Arroser',
-        type: TypeTache.arrosage,
-        cible: CibleTache.plantation,
-        cibleId: 'p-1',
-        datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day),
-        etat: EtatTache.terminee,
-        dateRealisation: pinned07h,
-      );
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => pasNecessaire());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => [faite]);
+  test('completed task today is not re-deleted on urgency drop (pasNecessaire)',
+      () async {
+    final faite = Tache(
+      id: 'ta-done',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day),
+      etat: EtatTache.terminee,
+      dateRealisation: pinned07h,
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [faite]);
 
-      await useCase.executer();
+    await useCase.executer();
 
-      // Completed tasks must never be removed, regardless of advice.
-      verifyNever(() => taches.supprimer(any()));
-      verifyNever(() => taches.sauvegarder(any()));
-    },
-  );
+    // Completed tasks must never be removed, regardless of advice.
+    verifyNever(() => taches.supprimer(any()));
+    verifyNever(() => taches.sauvegarder(any()));
+  });
 
   group('notification opt-outs (constraint #3)', () {
     /// Wires an urgent-watering plantation with no existing task, so a
     /// notification would be scheduled unless an opt-out suppresses it.
     void wireUrgent() {
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => []);
+      when(() => potager.obtenirPotagerActif())
+          .thenAnswer((_) async => unPotager());
+      when(() => plantations.obtenirActives())
+          .thenAnswer((_) async => [unePlantation('p-1')]);
+      when(() => calcul.executer(
+                plantation: any(named: 'plantation'),
+                localisation: any(named: 'localisation'),
+                fenetre: any(named: 'fenetre'),
+              ))
+          .thenAnswer((_) async => arroserMaintenant());
+      when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+          .thenAnswer((_) async => []);
       when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
       when(() => notifications.programmer(any())).thenAnswer((_) async {});
     }
@@ -863,8 +724,7 @@ void main() {
     test('master switch off → task still created, no notification', () async {
       wireUrgent();
       stubPreferences(
-        PreferencesUtilisateur(notificationsGlobalesActives: false),
-      );
+          PreferencesUtilisateur(notificationsGlobalesActives: false));
 
       await useCase.executer();
 
@@ -872,48 +732,34 @@ void main() {
       verifyNever(() => notifications.programmer(any()));
     });
 
-    test(
-      "'arrosage' category muted → task still created, no notification",
-      () async {
-        wireUrgent();
-        stubPreferences(
-          PreferencesUtilisateur(
-            notificationsParCategorie: const {'arrosage': false},
-          ),
-        );
+    test("'arrosage' category muted → task still created, no notification",
+        () async {
+      wireUrgent();
+      stubPreferences(PreferencesUtilisateur(
+          notificationsParCategorie: const {'arrosage': false}));
 
-        await useCase.executer();
+      await useCase.executer();
 
-        verify(() => taches.sauvegarder(any())).called(1);
-        verifyNever(() => notifications.programmer(any()));
-      },
-    );
+      verify(() => taches.sauvegarder(any())).called(1);
+      verifyNever(() => notifications.programmer(any()));
+    });
 
-    test(
-      'another category muted → arrosage notification still scheduled',
-      () async {
-        wireUrgent();
-        stubPreferences(
-          PreferencesUtilisateur(
-            notificationsParCategorie: const {'semis': false},
-          ),
-        );
+    test('another category muted → arrosage notification still scheduled',
+        () async {
+      wireUrgent();
+      stubPreferences(PreferencesUtilisateur(
+          notificationsParCategorie: const {'semis': false}));
 
-        await useCase.executer();
+      await useCase.executer();
 
-        verify(() => notifications.programmer(any())).called(1);
-      },
-    );
+      verify(() => notifications.programmer(any())).called(1);
+    });
 
     test('do-not-disturb window covers 08:00 → no notification', () async {
       wireUrgent();
       // 07:30 → 09:00 contains the 08:00 push.
-      stubPreferences(
-        PreferencesUtilisateur(
-          nePasDerangerDebut: '07:30',
-          nePasDerangerFin: '09:00',
-        ),
-      );
+      stubPreferences(PreferencesUtilisateur(
+          nePasDerangerDebut: '07:30', nePasDerangerFin: '09:00'));
 
       await useCase.executer();
 
@@ -921,181 +767,141 @@ void main() {
       verifyNever(() => notifications.programmer(any()));
     });
 
-    test(
-      'do-not-disturb window outside 08:00 → notification scheduled',
-      () async {
-        wireUrgent();
-        // 22:00 → 07:00 does not contain the 08:00 push.
-        stubPreferences(
-          PreferencesUtilisateur(
-            nePasDerangerDebut: '22:00',
-            nePasDerangerFin: '07:00',
-          ),
-        );
-
-        await useCase.executer();
-
-        verify(() => notifications.programmer(any())).called(1);
-      },
-    );
-  });
-
-  test(
-    'several thirsty crops schedule a single notification, counted',
-    () async {
-      // Regression: one notification per plantation meant five pings for five
-      // crops. One per day now, carrying the count.
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(() => plantations.obtenirActives()).thenAnswer(
-        (_) async => [
-          unePlantation('p-1'),
-          unePlantation('p-2'),
-          unePlantation('p-3'),
-        ],
-      );
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, any()),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+    test('do-not-disturb window outside 08:00 → notification scheduled',
+        () async {
+      wireUrgent();
+      // 22:00 → 07:00 does not contain the 08:00 push.
+      stubPreferences(PreferencesUtilisateur(
+          nePasDerangerDebut: '22:00', nePasDerangerFin: '07:00'));
 
       await useCase.executer();
 
-      final captured = verify(
-        () => notifications.programmer(captureAny()),
-      ).captured;
-      expect(captured, hasLength(1)); // not one per crop
-      final notif = captured.single as NotificationLocale;
-      expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
-      // The body lists the crops themselves rather than counting anonymously.
-      expect(notif.corps, contains('Cultures à arroser'));
-      expect('Tomate'.allMatches(notif.corps).length, 3);
-      verifyNever(() => notifications.annuler(any()));
-    },
-  );
+      verify(() => notifications.programmer(any())).called(1);
+    });
+  });
 
-  test('a day needing no watering cancels its notification', () async {
-    when(
-      () => potager.obtenirPotagerActif(),
-    ).thenAnswer((_) async => unPotager());
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => pasNecessaire());
-    when(
-      () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-    ).thenAnswer((_) async => []);
+  test('several thirsty crops schedule a single notification, counted',
+      () async {
+    // Regression: one notification per plantation meant five pings for five
+    // crops. One per day now, carrying the count.
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives()).thenAnswer((_) async =>
+        [unePlantation('p-1'), unePlantation('p-2'), unePlantation('p-3')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, any()))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
     await useCase.executer();
 
-    verify(
-      () => notifications.annuler('arrosage_${jourIso(pinned07h)}'),
-    ).called(1);
+    final captured =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(captured, hasLength(1)); // not one per crop
+    final notif = captured.single as NotificationLocale;
+    expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
+    // The body lists the crops themselves rather than counting anonymously.
+    expect(notif.corps, contains('Cultures à arroser'));
+    expect('Tomate'.allMatches(notif.corps).length, 3);
+    verifyNever(() => notifications.annuler(any()));
+  });
+
+  test('a day needing no watering cancels its notification', () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => []);
+
+    await useCase.executer();
+
+    verify(() => notifications.annuler('arrosage_${jourIso(pinned07h)}'))
+        .called(1);
     verifyNever(() => notifications.programmer(any()));
   });
 
-  test('re-running rewrites the same day notification, never adds one', () async {
-    when(
-      () => potager.obtenirPotagerActif(),
-    ).thenAnswer((_) async => unPotager());
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => arroserMaintenant());
+  test('re-running rewrites the same day notification, never adds one',
+      () async {
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
     // Tasks already exist: nothing is created, but the notification stays exact.
     when(() => taches.obtenirParCible(CibleTache.plantation, any())).thenAnswer(
-      (invocation) async => [
-        uneTacheArrosageAuj(invocation.positionalArguments[1] as String),
-      ],
-    );
+        (invocation) async =>
+            [uneTacheArrosageAuj(invocation.positionalArguments[1] as String)]);
 
     await useCase.executer();
     await useCase.executer();
 
-    final captured = verify(
-      () => notifications.programmer(captureAny()),
-    ).captured;
+    final captured =
+        verify(() => notifications.programmer(captureAny())).captured;
     // One per run, always the same id → the OS replaces it rather than stacking.
     expect(captured, hasLength(2));
     expect(
-      captured.map((n) => (n as NotificationLocale).id).toSet(),
-      hasLength(1),
-    );
-    expect(
-      'Tomate'.allMatches((captured.first as NotificationLocale).corps).length,
-      2,
-    );
+        captured.map((n) => (n as NotificationLocale).id).toSet(), hasLength(1));
+    expect('Tomate'
+        .allMatches((captured.first as NotificationLocale).corps)
+        .length, 2);
     verifyNever(() => taches.sauvegarder(any()));
   });
 
-  test(
-    'a crop already ticked off today is left out of the notification',
-    () async {
-      // Watering done and ticked at 07:00 → no 08:00 ping about it.
-      final faite = Tache(
-        id: 'ta-done',
-        titre: 'Arroser',
-        type: TypeTache.arrosage,
-        cible: CibleTache.plantation,
-        cibleId: 'p-1',
-        datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day),
-        etat: EtatTache.terminee,
-        dateRealisation: pinned07h,
-      );
-      when(
-        () => potager.obtenirPotagerActif(),
-      ).thenAnswer((_) async => unPotager());
-      when(
-        () => plantations.obtenirActives(),
-      ).thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
-      when(
-        () => calcul.executer(
-          plantation: any(named: 'plantation'),
-          localisation: any(named: 'localisation'),
-          fenetre: any(named: 'fenetre'),
-        ),
-      ).thenAnswer((_) async => arroserMaintenant());
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-      ).thenAnswer((_) async => [faite]);
-      when(
-        () => taches.obtenirParCible(CibleTache.plantation, 'p-2'),
-      ).thenAnswer((_) async => []);
-      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+  test('a crop already ticked off today is left out of the notification',
+      () async {
+    // Watering done and ticked at 07:00 → no 08:00 ping about it.
+    final faite = Tache(
+      id: 'ta-done',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day),
+      etat: EtatTache.terminee,
+      dateRealisation: pinned07h,
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1'), unePlantation('p-2')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [faite]);
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-2'))
+        .thenAnswer((_) async => []);
+    when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
 
-      await useCase.executer();
+    await useCase.executer();
 
-      final captured = verify(
-        () => notifications.programmer(captureAny()),
-      ).captured;
-      expect(captured, hasLength(1));
-      // Only p-2 remains thirsty → singular wording, p-1 not counted.
-      expect(
-        (captured.single as NotificationLocale).corps,
-        "Tomate a besoin d'eau aujourd'hui.",
-      );
-    },
-  );
+    final captured =
+        verify(() => notifications.programmer(captureAny())).captured;
+    expect(captured, hasLength(1));
+    // Only p-2 remains thirsty → singular wording, p-1 not counted.
+    expect((captured.single as NotificationLocale).corps,
+        "Tomate a besoin d'eau aujourd'hui.");
+  });
 
   test('every crop ticked off today cancels the notification', () async {
     final faite = Tache(
@@ -1108,28 +914,23 @@ void main() {
       etat: EtatTache.terminee,
       dateRealisation: pinned07h,
     );
-    when(
-      () => potager.obtenirPotagerActif(),
-    ).thenAnswer((_) async => unPotager());
-    when(
-      () => plantations.obtenirActives(),
-    ).thenAnswer((_) async => [unePlantation('p-1')]);
-    when(
-      () => calcul.executer(
-        plantation: any(named: 'plantation'),
-        localisation: any(named: 'localisation'),
-        fenetre: any(named: 'fenetre'),
-      ),
-    ).thenAnswer((_) async => arroserMaintenant());
-    when(
-      () => taches.obtenirParCible(CibleTache.plantation, 'p-1'),
-    ).thenAnswer((_) async => [faite]);
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => arroserMaintenant());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [faite]);
 
     await useCase.executer();
 
-    verify(
-      () => notifications.annuler('arrosage_${jourIso(pinned07h)}'),
-    ).called(1);
+    verify(() => notifications.annuler('arrosage_${jourIso(pinned07h)}'))
+        .called(1);
     verifyNever(() => notifications.programmer(any()));
   });
 }
