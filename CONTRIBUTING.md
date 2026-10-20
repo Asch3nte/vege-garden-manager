@@ -48,7 +48,7 @@ multilingue est imbriqué dans la fiche (`i18n: { fr: …, en: … }`).
 ### Avant de commencer
 - Lisez [`CLAUDE.md`](CLAUDE.md) et [`docs/`](docs/) (architecture, modèle de
   domaine, conventions).
-- Travaillez sur une branche dédiée depuis `develop`.
+- Travaillez sur une branche dédiée depuis `main`.
 - **Génération de code** : les fichiers `*.g.dart` (drift, etc.) ne sont pas
   versionnés. Générez-les avant de compiler/tester :
   `dart run build_runner build` (ou `watch` pendant le développement).
@@ -73,7 +73,7 @@ multilingue est imbriqué dans la fiche (`i18n: { fr: …, en: … }`).
 
 ### Workflow de PR
 1. `dart format .` + `flutter analyze` + `flutter test` passent au vert.
-2. PR vers `develop` avec description claire (quoi / pourquoi).
+2. PR vers `main` avec description claire (quoi / pourquoi) ; CI verte requise.
 3. Une revue est nécessaire avant merge.
 
 ---
