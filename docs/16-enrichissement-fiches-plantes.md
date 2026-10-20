@@ -260,7 +260,7 @@ floraison:
 #### L. Sensibilité météo (pont V1 → V2)
 
 Champs optionnels préparés maintenant pour ne pas casser le schéma en V2. Voir aussi
-[`docs/13 §2.1`](13-roadmap-et-versioning.md) et la mémoire projet.
+[RESTE_A_FAIRE §6.1](../RESTE_A_FAIRE.md).
 
 ```yaml
 sensibilite_meteo:

@@ -60,7 +60,7 @@ Code généré non versionné : `flutter gen-l10n` puis
 
 ## Sources de vérité
 - Documentation : [docs/README.md](docs/README.md) ; `docs/` fait foi.
-- Reste à faire : [RESTE_A_FAIRE.md](RESTE_A_FAIRE.md) (refonte en cours).
+- Reste à faire : [RESTE_A_FAIRE.md](RESTE_A_FAIRE.md) (source unique).
 - Contenu du catalogue : [FICHES A CREER.md](FICHES%20A%20CREER.md) + `assets/fiches_plantes/_schema/id_registry.yaml`.
 - [vege-garden-export/](vege-garden-export/README.md) : maquettes React gelées,
   lecture seule, réimplémentées en Flutter ; `docs/08` fait foi sur les tokens.

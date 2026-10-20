@@ -1,353 +1,109 @@
 # Reste à faire — Pot'à Gérer
 
-> Résumé étendu de ce qu'il reste à faire, **hors design** (dark mode, Phosphor
-> Icons) et **hors revue de contenu** (relecture éditoriale du glossaire,
-> éditorial des familles/bioagresseurs). Généré le 2026-07-07 à partir de
-> [`docs/15-elements-differes.md`](docs/15-elements-differes.md) et
-> [`docs/13-roadmap-et-versioning.md`](docs/13-roadmap-et-versioning.md).
-> Mis à jour le 2026-07-08 après livraison des **fiches plantes perso** et de la
-> **CI analyze+test** (le multi-potager, les équipements, la version dynamique,
-> les liens externes et l'i18n `en` UI étant déjà livrés).
-> Mis à jour le 2026-07-17 : **correction de suivi** — **ADR-0009 lot 4**
-> (mini-tutos/teaser de palier) était listé « à faire » alors qu'il était déjà
-> livré et mergé ; entrées rayées.
-> Mis à jour le 2026-07-17 (soir) : livraison du **toggle « Ne pas déranger »**
-> (opt-out #3 rendu effectif dans `GenererTachesArrosage` — branche
-> `feat/notifs-opt-outs-fonctionnels`) ; entrées rayées.
-> Mis à jour le 2026-07-17 (soir, suite) : livraison du **toggle « Météo
-> automatique »** (opt-out docs/11 rendu effectif — aucun appel Open-Meteo
-> automatique quand off ; branche `feat/toggle-meteo-auto`) ; entrées rayées.
-> Mis à jour le 2026-07-17 (soir, suite 2) : livraison de l'**écran
-> notifications d'accueil** (`/accueil/notifications` : alertes météo + cloche +
-> lien « Voir toutes les tâches » ; branche `feat/accueil-notifications`) et
-> **arbitrage des sous-routes go_router** (fiche = modale, détail tâche
-> redondant) ; entrées rayées.
-> Mis à jour le 2026-07-17 (soir, suite 3) : livraison de la **transparence des
-> données** (section « Données stockées » : taille de la base + nb
-> d'enregistrements par table ; branche `feat/transparence-donnees`). **Les 3
-> finitions §2 sont désormais traitées** ; journal d'accès différé, politique de
-> confidentialité (texte) laissée à la rédaction du dev.
-> Mis à jour le 2026-07-18 : **révision de l'arbitrage « détail tâche »** (retour
-> dev) — finalement **livré** (route `/calendrier/tache/:id`, édition
-> notes/priorité + cycle de vie + navigation vers la cible). En parallèle,
-> **précision des tâches & notifications d'arrosage** : les tâches nomment leur
-> culture (« Arroser : Tomate ») et **une seule** notification récap regroupe
-> tout (noms dans le titre + « +N », liste complète dans le corps) — anti-spam,
-> détail maximal. Brouillon **politique de confidentialité**
-> (`docs/politique-confidentialite.md`) livré. Branche `feat/detail-tache`.
-> Mis à jour le 2026-07-18 (suite) : **audit i18n** — nouveau **§4bis** listant
-> le texte UI encore codé en français en dur (résumé météo, tâches/notifs
-> d'arrosage, `_moisFr` ×4, 1 placeholder). **Borné** (pas un chantier
-> global) ; à corriger avec/avant la traduction `en`.
-> Mis à jour le 2026-08-16 : **correction de suivi** — le fichier de route du
-> contenu (`FICHES A CREER.md`) avait été **perdu lors de la fusion des fiches**
-> du 2026-07-18 et n'existait plus sur `main`. Restauré, réconcilié contre
-> `_schema/id_registry.yaml` (312 fiches réelles) et **étoffé** à la cible
-> « maximum de fiches, mères ET filles ». Nouvelle entrée « Contenu du
-> catalogue » en fin de document.
-> Mis à jour le 2026-08-16 (fin de session) : **lots de contenu 12 (aromatiques,
-> 38 fiches) et 13 (piments, 25 fiches)** livrés → **375 fiches**. **Lot 14
-> (fruitiers — filles, 70 fiches)** livré ensuite → **445 fiches** : les 8 mères
-> `FRU` n'avaient qu'une variété chacune, elles sont désormais toutes pourvues.
-> Un arbitrage a été laissé au dev : vigne **'Isabelle'** (hybride
-> *V. labrusca* × *vinifera*) demande une **mère distincte**, le
-> `nom_scientifique` n'étant pas surchargeable par une fille (ADR-0005). Merge de
-> `fix/dates-et-regroupement-taches` (correctif dates UTC↔local + regroupement
-> des tâches par geste, **ADR-0020** après renumérotation). **Nettoyage des
-> branches** : toutes les branches mergées supprimées (locales + distantes) ;
-> deux branches obsolètes supprimées après vérification qu'elles ne contenaient
-> rien d'unique — `feat/fiches-plantes-courantes` (`c523120`, contenu déjà
-> intégré par la fusion du 2026-07-18 : 0 fichier absent de `main`) et
-> `feat/finitions-parametres-accueil` (`9d415f3`, refaite sur `main` sous
-> d'autres noms : `ecran_notifications`, `statistiques_donnees_service_impl`,
-> `ecran_tache_detail`, `fenetre_ne_pas_deranger`). Les SHA permettent de les
-> restaurer si besoin (`git checkout -b <nom> <sha>`). **Conservées** : `main`,
-> `develop` (convention du repo) et **`feat/catalogue-reseau`** — voir ci-dessous.
-> ~~**⚠️ `feat/catalogue-reseau` : décision à prendre** — archiver les maquettes
-> ou supprimer la branche.~~ ✅ **tranché (2026-08-16)** : les maquettes sont
-> **archivées dans `main`** (`vege-garden-export/`, 28 fichiers, 314 Ko : les 5
-> panneaux HTML/CSS/JSX + `spec/00-design-system.md` … `05-parametres.md`),
-> dossier **gelé** et documenté comme tel dans son README. Seules les maquettes
-> ont été reprises : le **wip de code** de la branche (juin — `ecran_catalogue`,
-> `position_potager_actions` et leurs tests) a été **écarté**, `main` ayant
-> beaucoup évolué depuis ; le test `navigation_globale_test.dart` est couvert par
-> `navigation_test.dart`. Branche supprimée ensuite (`9c433e7` si restauration
-> nécessaire). **Plus aucune branche non mergée : il reste `main` et `develop`.**
-> **Audit intégral 2026-07-17** : chaque item encore listé « à faire » a été
-> **revérifié contre le code**. Résultat — **base saine** : hormis le lot 4
-> ci-dessus (corrigé), tout le reste est bien pendant. Vérifiés réellement
-> absents : ~~DND (champs domaine présents, UI absente)~~ **livré depuis** (voir
-> ci-dessous), toggle météo auto (aucun
-> champ), « Transparence des données » (le panneau `donnees` = sauvegarde/reset,
-> **pas** stats DB + journal), favoris catalogue, dimensions littérales de zone
-> (`Parcelle` n'a que `surface`), `ResolveurFamille` non branché dans
-> `RecommanderPlantes` (répulsion/piège left out, cf. `recommander_plantes.dart`),
-> menu ⋮/notifications d'accueil + lien « voir les tâches », sous-routes dédiées
-> détail-tâche/fiche-plante, job CI build/signature APK, icône/splash, packaging.
+Source unique du reste à faire. Remplace `docs/13-roadmap-et-versioning.md` et
+`docs/15-elements-differes.md` (historique : `git log -- docs/13* docs/15*`).
+Une entrée résolue est retirée dans le commit qui la résout.
 
-## 1. Fonctionnalités « build-then-gate » (ADR-0009 §9)
+Ordre d'exécution : §1 (lots numérotés, une branche par lot), puis §2 et §3.
+§4 avance en parallèle. §5 juste avant la sortie.
 
-Réservées par palier mais sans UI ni donnée :
+## 1. Corrections issues de l'audit
 
-- ~~**Multi-potager** (inter+)~~ ✅ **fait** : sélecteur de potager actif
-  (menu ⋮ Potager) + action « Ajouter un potager » + réglages (F2)
-- ~~**Équipements/outils** (inter+) : toute l'UI manque~~ ✅ **Livré**
-  (liste + formulaire + section détail de zone, gaté `acces.equipements`,
-  entrée menu ⋮ Potager) — voir docs/15 §9
-- ~~**Fiches plantes perso** (expert) : toute l'UI de création/édition~~
-  ✅ **Livré** : couche complète (domain→infra→UI), YAML = source de vérité,
-  fusion au catalogue (surcharge sur collision d'id, ADR-0002 A6), **tag `Perso`**
-  sur les cartes + fiche, dupliquer/éditer depuis le catalogue, gaté
-  `acces.fichesPerso` — voir docs/15 §9
-- ~~**Rotation avancée** (expert) : UI de rotation~~ ✅ **Livré** (Lots 1–4) :
-  **domain** — enum `GroupeCultural`, VO `PrecedentCultural` + normaliseur,
-  `precedentsFavorables/Defavorables` sur `FichePlante` ; **infra** — mapper +
-  intégrité référentielle des précédents-familles ; **moteur** —
-  `EvaluationRotation` (verdict favorable/défavorable/neutre + raisons
-  explicites) ; **UI** — section « Rotation » gatée `acces.rotationAvancee`
-  dans le détail de zone (`syntheseRotationZoneProvider` : historique récent,
-  familles bloquées par délai de retour, opportunités azote), tests en //.
-  - **⚠️ i18n restant (suivi)** : les **noms de famille** s'affichent en FR via
-    `FamilleBotanique.nomsLocalises` (résolu dans le provider), mais c'est figé
-    en `'fr'` → le rendre **locale-aware**. Les **libellés de groupe**
-    (« Légumineuses », « Engrais verts ») + descriptions existent désormais en
-    ARB (`glossaireValGroupeCultural*`, affichés sur la page glossaire
-    `rotation-cultures`) ; reste à exposer les précédents groupes/slugs sur une
-    surface UI (ex. fiche plante) le jour venu, en réutilisant ces libellés.
-  - **Entrée glossaire `rotation-cultures`** enrichie (définition détaillée
-    pourquoi + implémentation, 7 conseils, valeurs `GroupeCultural`, « Voir
-    aussi »). Traduction `en` du glossaire : différée (cf. §7).
-- ~~**Besoins en eau détaillés** (expert) : enrichir d'abord `BesoinsCulture`~~
-  ✅ **Livré** : VO optionnel `ArrosageDetaille` (fréquence/volume/phases
-  sensibles/note, chaque sous-champ optionnel) + enum `PhaseSensibleEau` ;
-  bloc YAML `besoins.arrosage_detaille` (validateur/mapper) ; **6 espèces
-  seedées** (phases sensibles + notes documentées ; **chiffres laissés vides à
-  sourcer par le dev**, jamais inventés) ; section gatée `acces.eauDetaillee`
-  dans le détail de fiche (terme grossier conservé pour tous), **moteur
-  inchangé** — voir docs/15 §9
-  - **Suite envisagée (post-V1)** : [ADR-0018](docs/decisions/0018-stade-sensible-urgence-arrosage.md)
-    (statut **Proposé**) — coupler `phasesSensibles` × stade de croissance pour
-    **moduler l'urgence d'arrosage** ; cadrage figé (mapping fin↔grossier,
-    garde-fou ADR-0009, recalibration). Prérequis : corpus renseigné.
-- ~~**Lot 4 ADR-0009** : mini-tutos par palier + teaser de montée~~ ✅ **Livré**
-  (2026-07-17, vérifié) : **4a** panneau « Guide des niveaux »
-  (`panneau_niveaux.dart`, route `/plus/niveaux`) re-consultable ; **4b** teaser
-  contextuel `CarteTeaserPalier` (Catalogue/Calendrier) + nudge au changement de
-  niveau — commits `59d32ed` / `80de958`. **L'ADR-0009 marquait déjà le lot ✅**
-  (ligne 172) ; ce fichier était périmé.
+Détail, fichiers et gravité : [docs/audit-2026-10.md](docs/audit-2026-10.md) (`#n`).
 
-## 2. Éléments différés docs/15 — non-design
+| Lot | Branche | Contenu |
+|---|---|---|
+| 1 | `fix/sauvegarde-integrite` | Injection SQL à l'import (#1), fusion bloquée par les FK (#4), date de création écrasée (#8), cascade équipement (#16), import non UTF-8 (#36), sauvegarde en clair laissée en temp (#37). |
+| 2 | `fix/dates-dst` | Récurrence personnalisée et `capJours` au changement d'heure (#2, #3), date cible d'arrosage (#6), rappel mensuel 29-31 → dernier jour du mois (#22, arbitré). Tests sous `TZ=Europe/Paris`. |
+| 3 | `fix/moteur-arrosage` | Tâche « bientôt » jamais due (#5), pluie prévue vs canicule (#7), plantations des autres potagers (#13), double génération concurrente (#14), cache `observe`/`prevu` doublé (#17), température absente = 0 °C (#18), prévision rechargée par plantation (#32). |
+| 4 | `fix/robustesse-release` | Invariants en `assert` → exceptions typées (#9), erreurs de chargement YAML remontées (#10), parsing Open-Meteo hors `try` (#19), futures météo attendues en série (#12), `ArgumentError` métier (#23), `catch` silencieux ou génériques (#25), formulaires sans `try` (#38), entité mutée avant sauvegarde (#39), `setState` après `await` (#43), `discarded_futures` (#33), `StateError` sur `nbJours <= 0` (#31), surface libre contournée (#20), `copierAvec` non effaçable (#21). |
+| 5 | `fix/navigation-i18n` | Pile de navigation après reset/suppression (#40, #44), onboarding ignorant les retours arrière (#42), opt-out météo strict sur l'écran détail (#11, arbitré), texte FR en dur : titres de tâches persistés et notifications (#24), `generateur_resume_meteo.dart`, `_moisFr` ×4 → `DateFormat`, `'Mon carnet'`, `'$cle : '` (#26), `nomLocalise('fr')` ×32 (#41), clés de famille non normalisées (#15). |
+| 6 | `refactor/composition-root` | Branchement des implémentations déplacé dans `lib/app/` via `ProviderScope(overrides:)` (schéma de `database_providers.dart` généralisé, arbitré) ; test garde-fou « `application/` n'importe pas `infrastructure/` ». |
+| 7 | `chore/qualite` | Lints de fond (`strict-casts`, `strict-raw-types`, `avoid_dynamic_calls`, `discarded_futures`, `only_throw_errors`, `avoid_catching_errors`, `unawaited_futures`) ; listes des repositories via `List.unmodifiable` (#29) ; `Quantite` égalité à tolérance (#30) ; chemins Windows (#34) ; duplications (#35) ; code mort (#27) ; tap raté du test (#28). |
+| 8 | `chore/purge-commentaires` | Retrait des références ADR/docs/lot/§ (701 lignes), commentaires du domaine en anglais, paraphrases supprimées. |
 
-- ~~**Navigation** : sous-routes go_router restantes (détail tâche, fiche
-  plante en route dédiée)~~ ✅ **fait** (2026-07-18) : **fiche plante gardée
-  en modale** (`showModalBottomSheet`, bien intégrée + meilleure UX — décision
-  dev, inchangée). **Détail tâche : LIVRÉ** (révision de l'arbitrage du 2026-07-17
-  après retour dev — l'ancien « redondant » était faux : le formulaire rapide ne
-  couvre ni notes, ni priorité, ni le cycle de vie) : route `/calendrier/tache/:id`
-  → `EcranTacheDetail` (VO+notifier `detailTacheProvider`) — vue complète (type,
-  état, priorité, date, cible résolue **avec navigation** vers la zone/culture,
-  description en lecture seule) + **édition des notes** (« ajouter des détails »),
-  **choix de priorité**, **marquer fait/rouvrir**, **reporter**, **annuler**,
-  modifier (formulaire) / supprimer. Ouverte depuis la carte du calendrier et les
-  lignes d'accueil (le corps ouvre le détail, le bouton ☑ coche). Sous-routes
-  ajoutées : `/accueil/notifications` + `/calendrier/tache/:id`. Tests notifier +
-  widget + navigation en //.
-- ~~**Accueil** : écran notifications + menu ⋮ (actions d'en-tête), lien « voir
-  les tâches » → Calendrier~~ ✅ **fait** (2026-07-17) : écran
-  `EcranNotifications` (route `/accueil/notifications`) surfaçant les **alertes
-  météo** (gel/canicule/forte pluie de `DetecterAlertesMeteo`, jusqu'ici
-  seulement comptées) via un provider partagé `alertesMeteoProvider` (**source
-  unique** : le badge de la cloche == la liste) ; **cloche** dans l'AppBar
-  d'accueil (badge = nombre d'alertes) ; **lien « Voir toutes les tâches »** →
-  Calendrier en pied de section « Tâches du jour ». Le « menu ⋮ » est résolu par
-  la cloche (le tableau de bord, read-only, n'a pas d'autre action d'en-tête).
-  Provider + widget + navigation testés en //.
-- **Potager** : la **création fonctionne déjà** partout (FAB « ajouter une zone »
-  dans `ecran_potager.dart`, potager via menu ⋮, plantation via détail de zone) ;
-  reste seulement, **optionnel**, les métadonnées de zone (besoin eau/dimensions
-  littérales — `Parcelle` ne porte que `surface`) si on veut les champs réels
-- **Catalogue** : favoris (notion inexistante), gabarit/hauteur de plante
-  (champ manquant), vue Réseau — rendu canvas (perf, différé)
-- **Calendrier** : rien de fonctionnel majeur restant (tout ✅). **Détail
-  tâche livré** (2026-07-18) : `/calendrier/tache/:id`, cf. § Navigation.
-- **Tâches & notifications d'arrosage** ✅ (2026-07-18) : `GenererTachesArrosage`
-  nomme la culture dans le titre de la tâche (« Arroser : Tomate ») et n'émet
-  qu'**une** notification récap par jour (anti-spam), noms dans le titre (avec
-  « +N » si débordement) + liste complète dans le corps. **Dette connue** :
-  ces libellés de notification/tâche générés hors UI restent **codés en dur en
-  français** (i18n des notifications = chantier séparé, docs/15).
-- **Paramètres** :
-  - ~~Catégorie « Transparence des données » (stats tailles DB + journal
-    d'accès — n'existe pas)~~ ✅ **fait** (2026-07-17) : section **« Données
-    stockées »** dans le panneau Données (`_SectionStockage`) — **taille de la
-    base sur l'appareil** (`PRAGMA page_count × page_size`, indépendant de la
-    plateforme) + **nombre d'enregistrements par table** (lecture générique de
-    `AppDatabase.allTables`, apparaît automatiquement pour toute nouvelle table).
-    Couche propre : VO domain `StatistiquesStockage`/`StatistiqueTable`,
-    interface `AbstractStatistiquesDonneesService`, impl infra Drift, provider +
-    FutureProvider applicatif, i18n fr/en, tests (service en mémoire + VO +
-    widget). **Journal d'accès aux données sensibles : volontairement différé**
-    (docs/15 le marquait déjà « (éventuel) » ; nécessiterait un sous-système de
-    journalisation à instrumenter partout, valeur discutable pour une app 100 %
-    locale). **Politique de confidentialité (texte hors-ligne)** : à rédiger par
-    le dev (éditorial) — cf. docs/11 §6.
-  - ~~Toggle « récupération météo auto » (champ manquant)~~ ✅ **fait**
-    (2026-07-17) : opt-out `meteoAutoActive` (défaut `true`, migration Drift
-    v5→v6) — interrupteur panneau Confidentialité + **application effective**
-    (aucun appel Open-Meteo automatique quand off : carte météo d'accueil
-    masquée/muette, alertes = 0, conseil arrosage & `GenererTachesArrosage`
-    dégradés en demande-seule ; l'écran détail météo reste rafraîchi à la main).
-    Domain→infra→app→UI + i18n fr/en, tests par couche en //. Branche
-    `feat/toggle-meteo-auto`.
-  - ~~Toggle « Ne pas déranger »~~ ✅ **fait** (2026-07-17) : plage silencieuse
-    fonctionnelle — VO `FenetreNePasDeranger` (fenêtre horaire semi-ouverte,
-    chevauchement de minuit), UI panneau notifications (interrupteur +
-    sélecteurs début/fin), et **application effective** de l'opt-out #3 dans
-    `GenererTachesArrosage` (notification supprimée si master off, catégorie
-    `arrosage` coupée, ou 08:00 dans la fenêtre — la **tâche est toujours
-    créée**). Tests VO + notifier + use case en //.
-  - ~~**Version dynamique** (`package_info_plus`), **liens externes**
-    (`url_launcher`), **i18n `en`**~~ ✅ **livrés** : version lue au runtime,
-    liens externes fonctionnels, ARB `en` + pilotage `locale` (glossaire non
-    traduit, cf. §7 relecture éditoriale différée)
-  - Appairage d'appareils (réseau local, à concevoir)
+## 2. Dette technique hors audit
 
-## 3. Distribution / packaging (docs/15 §7) — groupé « juste avant release »
+- **Phosphor Icons** : `phosphor_flutter` 2.1.0 ne compile pas (étend `IconData`, devenu `final`). Material en substitut. Options : wrapper local (`.ttf` MIT + `IconData` const) ou version amont compatible. Points de remplacement : `lib/app/router.dart` (`_destinations`), `libelles_enums.dart` (`iconeTypeTache`), icône par catégorie du catalogue.
+- **Dark mode** : valeurs de `CouleursApp.*Sombre` non revalidées (maquettes light uniquement) ; maquetter puis revoir docs/08 §3.
+- **`ResolveurFamille`** non transmis à `afficherVueAssociations` (`ecran_catalogue.dart`) → suggestions répulsion/piège inactives.
 
-- ~~CI/CD GitHub Actions (aucun pipeline)~~ ✅ **partiel** : pipeline
-  `.github/workflows/ci.yml` sur push/PR `main` (pub get → gen-l10n → codegen →
-  `flutter analyze` + `flutter test`). **Reste le job de build/signature d'APK
-  release** — couplé au keystore ci-dessous, donc reporté juste avant release
-  (le commit CI le note : « signing release reste un chantier séparé »)
-- Signing release réel (keystore + `signingConfigs.release` + `key.properties`
-  hors VCS, actuellement clé **debug**) — pré-release
-- Icône & splash screen — pré-release
-- iOS / desktop packaging (Linux AppImage/Flatpak, .exe, .dmg, .ipa) — alpha =
-  Android seul pour l'instant
-- ⚠️ **Vérification développeur Android** (Google, rollout global 2027) —
-  démarche d'identité du **dev**, non-code, à décider avant la sortie grand
-  public (docs/15 §7)
-- **Prérequis à la traduction `en`** : corriger d'abord la **dette i18n**
-  (texte UI codé en FR en dur — voir **§4bis**), sinon ces chaînes resteront en
-  français quelle que soit la langue choisie.
+## 3. Finitions V1
 
-## 4. Backlog UX (docs/15 §8) — restes non-design
+| Élément | Manque | Où |
+|---|---|---|
+| Sections « Bons compagnons / À éviter » dans la fiche | Sections listées avec raison (la vue Associations les affiche déjà) | `fiche_plante_detail.dart` |
+| Difficulté de culture | Champ présent sur `FichePlante`, non affiché au catalogue | `fiche_plante_detail.dart`, cartes catalogue |
+| Gabarit / hauteur de plante | Champ absent | YAML + `FichePlante` |
+| Favoris | Notion absente | Préférences + persistance |
+| Métadonnées de zone | Dimensions L×l, besoin en eau de zone | `Parcelle` (actuellement `surface` seule) |
+| Couleur de zone stable | Couleur dérivée de l'index, non persistée | `Parcelle` + drift |
+| Swipe sur les listes | Préférence `SensSwipe` présente, geste non généralisé | listes tâches/cultures |
+| Visibilité du bloc par potager (Confidentialité) | Surface contrastée ou tranche repliable | `panneau_confidentialite.dart` |
+| Menu « Plus » | Racine Paramètres directe ; menu à ajouter si Post-récolte/Communauté arrivent | `ecran_plus.dart` |
+| Dérivation climat/rusticité fine | Altitude via Open-Meteo | `DerivateurLocalisation` |
+| Vue Réseau | Rendu canvas des nœuds (performance) | `vue_reseau_catalogue.dart` |
+| Liens « documentation » et « signaler un bug » | Lignes absentes de l'UI | `panneau_a_propos.dart` |
+| Appairage d'appareils | Fonction réseau local à concevoir | — |
+| Export CSV | Optionnel (JSON ré-importable déjà livré) | — |
+| Journal d'accès aux données | Différé (valeur faible pour une app 100 % locale) | — |
 
-- ~~**F2** (multi-potager dans réglages)~~ ✅ **fait**
-- **§11** : (a) typer/renseigner le contenu éditorial des paires
-  d'associations (mi-contenu, mi-dev) ; (c) brancher un `ResolveurFamille`
-  complet pour activer les suggestions répulsion/piège (aujourd'hui `null`)
+## 4. Contenu (parallèle au code)
 
-## 4bis. Dette i18n — texte UI codé en français en dur (à corriger)
+- **Catalogue** : 445 fiches sur ~1 288 visées ([FICHES A CREER.md](FICHES%20A%20CREER.md)). Priorité : mères fruitières manquantes (~21), puis petits fruits. Arbitrages ouverts : vigne 'Isabelle' (mère distincte), potiron/potimarron, cornichon, pop-corn, fraisier des bois.
+- **Associations** : typer et renseigner le contenu des paires (`type` + `raison_i18n`).
+- **Référentiels** : `code_eppo` et descriptions des bioagresseurs restants ; prose des familles non utilisées ; traductions `en`. Contrôle : `dart run tool/verifier_referentiels.dart --strict`.
+- **Arrosage détaillé** : chiffres de fréquence/volume des 6 espèces seedées, à sourcer.
+- **Glossaire** : illustrations au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)), DP/CC0 uniquement tant que l'attribution n'est pas câblée.
+- **Politique de confidentialité** : finaliser [docs/politique-confidentialite.md](docs/politique-confidentialite.md).
 
-> ⚠️ **Règle projet** : tout texte visible par l'utilisateur doit passer par
-> l'i18n (ARB `AppLocalizations`), **toujours**. Quelques endroits y ont
-> échappé — à réparer avant la traduction `en` (§3). **Bonne nouvelle : c'est
-> borné** (l'UI est déjà i18n à ~167 endroits `AppLocalizations.of(context)`).
-> Audit du 2026-07-18 : sur 29 littéraux accentués, seuls ceux ci-dessous sont
-> du vrai texte UI (le reste = tables de normalisation d'accents, clés de
-> données, noms de mois — voir plus bas).
+## 5. Pré-release
 
-Vrai texte UI à faire passer en ARB :
+- Keystore release réel (`signingConfigs.release`, `key.properties` hors VCS) ; actuellement clé debug.
+- Job CI de build et signature d'APK.
+- Icône et splash (dépendances à valider ou ressources manuelles).
+- Packaging iOS / Linux / Windows / macOS.
+- Relecture éditoriale de tout le glossaire, puis sa traduction `en`.
+- **Vérification développeur Android** (Google) : en vigueur depuis le 30/09/2026 dans quatre pays, globale en 2027. Décision à prendre : vérification complète, distribution restreinte (≤ 20 appareils) ou hors Play Protect. [Source](https://developer.android.com/developer-verification).
+- README à jour.
 
-- **`application/engine/generateur_resume_meteo.dart`** (~8 chaînes) — **le plus
-  gros** : tout le résumé météo affiché (« Vent très fort », « Pluie prévue
-  prochainement… », « Temps ensoleillé/Ensoleillé », les 4 verdicts d'arrosage).
-  Générateur de la couche **application** → pas de `BuildContext`, d'où le
-  contournement.
-- **`application/use_cases/generer_taches_arrosage.dart`** — titres de tâches
-  (« Arroser : X ») **persistés en base** + textes de notification. ⚠️ cas
-  double : le titre stocké **fige la langue** → la vraie correction est de **ne
-  pas persister de titre localisé** mais de le **dériver à l'affichage** depuis
-  `type` + cible (déjà porté par `Tache`). Notifications = injecter un
-  fournisseur de textes localisés (garde la couche Application sans Flutter).
-- **`presentation/screens/ecran_en_construction.dart`** — « Écran à venir. »
-  (placeholder, trivial).
-- **Tableaux `_moisFr`** dupliqués dans **4** fichiers (`ecran_meteo_detail`,
-  `ecran_notifications`, `ecran_calendrier`, `ecran_tache_detail`) — noms de mois
-  FR en dur ; devraient venir de `intl`/`DateFormat` localisé. **Double dette** :
-  i18n **et** duplication (à factoriser en un helper unique).
+## 6. V1.1
 
-**Non concernés** (à laisser tels quels) : jeux de caractères `àâä…` =
-normalisation d'accents pour la recherche (`bioagresseur`, `famille_botanique`,
-`precedent_cultural`, `vue_reseau_catalogue`, `recherche_glossaire`) ; clé de
-donnée `"défavorable"` (`verificateur_integrite_familles`).
+| Fonctionnalité | Note |
+|---|---|
+| Post-récolte (conservation, recettes) | ADR-0019 ; ADR de cadrage avant implémentation. Clés ARB `plusPostRecolte(Sub)` réservées. |
+| Entité `Traitement` | Interventions naturelles, YAML dédié. |
+| Photos (observations, récoltes) | — |
+| Réconciliation `TypeEquipement` | — |
+| Seuils météo configurables | Gel/canicule figés en V1. |
+| Déduction du type de sol | API géologique ou heuristique (API à valider). |
+| Arrosage : phase sensible → urgence | ADR-0018 (Proposé). Prérequis : corpus renseigné. |
+| Sensibilité météo par plante | Voir §6.1. |
+| Conformité réglementaire par territoire | Voir §6.2. Bloqué par l'absence de source officielle intégrable hors ligne. |
 
-> Racine commune : les **générateurs de la couche application** (résumé météo,
-> tâches d'arrosage) produisent du texte utilisateur **sans `BuildContext`**,
-> alors que la règle « pas de Flutter dans Application » interdit
-> `AppLocalizations.of(context)`. Correctif propre : injecter une petite
-> **interface de textes localisés** (implémentée côté présentation) dans ces
-> use cases — ou, pour les titres de tâches, **dériver à l'affichage** au lieu
-> de persister. À faire **avec/avant la traduction `en`** (§3), pas en urgence.
+### 6.1 Alertes météo ciblées par plante
 
-## 5. V1.1 (docs/13 §2)
+Aujourd'hui l'alerte vise toutes les plantations en place.
 
-- Entité `Traitement` (interventions naturelles, YAML dédié)
-- Photos (observations, récoltes) — reporté pour ne pas alourdir sync/stockage
-- Réconciliation de l'enum `TypeEquipement`
-- Seuils météo configurables (gel/canicule, figés en V1)
-- Déduction du type de sol (API géologique/heuristique)
-- **Sensibilité météo par plante** : nouveaux champs YAML (tolérance
-  gel/chaleur/sécheresse/excès d'eau) + parser/validator/mapper + évaluateur
-  d'alertes plante-par-plante (actuellement générique)
-- **Conformité réglementaire par territoire** (espèces invasives/interdites) :
-  bloquée tant qu'une **source officielle fiable par territoire** n'est pas
-  identifiée (UE/national/régional) ; implique modèle « territoire », dataset
-  embarqué, filtre dans `RecommanderPlantes`, alerte éducative unique
+- Champs YAML sous `besoins:` : `temperature_min_tolerance`, `temperature_max_tolerance` (°C), `tolerance_secheresse`, `sensibilite_exces_eau` (`faible|moyenne|forte`). Variante qualitative : `sensibilite_gel`, `sensibilite_chaleur`.
+- Gain rapide : `temperature_min_germination` et `temperature_optimale`, déjà au schéma, non mappés.
+- Raffinements : sensibilité selon le stade ; protection par équipement (voile, tunnel).
+- Chaîne touchée : schéma, parser, validateur, mapper, `BesoinsCulture`, `tomate.yaml`, docs/07, évaluateur d'alertes.
 
-## 6. V2 (docs/13 §3) — hors scope proche
+### 6.2 Plantes invasives ou interdites par territoire
 
-- Communauté P2P locale
-- Calendrier lunaire (déjà un placeholder « désactivé »)
-- Vue graphique des relations façon Obsidian (au-delà de la vue Réseau
-  actuelle)
-- Vue « plan du potager » spatial (x/y des parcelles, préparé en BDD mais pas
-  exploité)
-- Sync bidirectionnelle avec une base communautaire GitHub
+- Filtrer `RecommanderPlantes` ; alerte éducative unique, non bloquante, à la saisie.
+- Sources candidates : Règlement (UE) n°1143/2014, listes nationales et régionales. Critères : officielle, versionnée, citable, embarquable.
+- À créer : notion de territoire dérivée de la position, dataset embarqué par `nom_scientifique` avec statut et message i18n, suivi « alerte vue », mention de la source et de sa date.
 
-## En résumé — le plus proche/actionnable
+## 7. V2 (opt-in, désactivé par défaut)
 
-Livré depuis la dernière révision : ~~Multi-potager + F2~~ ✅ · ~~Équipements~~ ✅ ·
-~~Version dynamique + liens externes + i18n `en` UI~~ ✅ · ~~CI analyze+test~~ ✅ ·
-~~**Fiches plantes perso**~~ ✅ (2026-07-08) · ~~**Rotation avancée**~~ ✅ ·
-~~**Besoins en eau détaillés**~~ ✅ (2026-07-08) · ~~**Lot 4 ADR-0009**
-(mini-tutos/teaser de palier)~~ ✅ (livré antérieurement, suivi corrigé le
-2026-07-17).
+- Communauté P2P locale.
+- Calendrier lunaire.
+- Vue graphique des relations (type Obsidian).
+- Plan spatial du potager (layout x/y des zones ; sélection de cible de tâche sur le plan, multi-cible).
+- Sync bidirectionnelle avec une base communautaire.
 
-Côté **features V1 build-then-gate (§9) ET l'accompagnement des paliers
-(ADR-0009), tout est livré.** Reste, plus léger :
+## 8. Hors périmètre
 
-1. ~~Arbitrage **post-récolte** (docs/13 §1) : reporter ou planifier.~~
-   ✅ **tranché** (2026-07-17) : **reporté en V1.1** — [ADR-0019](docs/decisions/0019-report-post-recolte-v11.md)
-   (Accepté). Périmètre V1 fermé ; docs/13 §1→§2 alignés, docstring
-   `ecran_plus.dart` alignée, clés ARB `plusPostRecolte(Sub)` réservées V1.1.
-   Finitions §2 : ~~transparence des données~~ ✅ livré ; ~~sous-routes
-   go_router~~ ✅ arbitré ; ~~écran notifications d'accueil~~ ✅ livré.
-   **Les trois finitions §2 sont désormais traitées.**
-
-Tout le reste se range en :
-
-- **Contenu du catalogue** (chantier long, parallèle au dev — feuille de route
-  [`FICHES A CREER.md`](FICHES%20A%20CREER.md)) : **445 fiches livrées sur une
-  cible décrite de ~1 288** (239 mères + 1 049 variétés), objectif « maximum de
-  fiches, mères ET filles ». Derniers lots : **12** (aromatiques, +38), **13**
-  (piments, +25) et **14** (fruitiers — filles, +70, 2026-08-16). Priorité
-  suivante : les **mères fruitières manquantes** (abricotier, griottier,
-  cognassier, kaki, noyer, châtaignier, amandier, kiwi, agrumes…, ~21 mères),
-  puis les **petits fruits** (10 mères + ~45 filles sur les 5 mères existantes).
-  Arbitrages encore ouverts : vigne **'Isabelle'** (hybride *V. labrusca* →
-  mère distincte), potiron/potimarron, cornichon, pop-corn, fraisier des bois.
-- **Pré-release / distribution** (groupé avant la sortie) : keystore release +
-  job CI de build/signature, icône & splash, packaging desktop/iOS, relecture
-  éditoriale du glossaire puis sa traduction `en`, vérification dev Android.
-- **Finitions légères** (docs/15 §2) — **toutes traitées** : ~~toggles
-  paramètres~~ ✅ (« Ne pas déranger », « météo auto ») ; ~~transparence des
-  données~~ ✅ (section « Données stockées » ; journal d'accès différé, cf.
-  § Paramètres) ; ~~sous-routes go_router~~ ✅ **arbitré** (fiche = modale,
-  détail tâche redondant, `/accueil/notifications` ajoutée) ; ~~écran
-  notifications d'accueil~~ ✅ **livré**. Reste hors §2 : `ResolveurFamille`
-  complet (§11).
-- **V1.1 / V2** : `Traitement`, photos, sensibilité météo par plante,
-  **post-récolte (conservation, recettes — reporté, ADR-0019)**, conformité
-  territoriale, communauté P2P, plan spatial, calendrier lunaire.
+- Détection automatique de maladies ou ravageurs (IA, photo).

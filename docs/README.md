@@ -38,9 +38,7 @@ conservées hors du repo).
 |---|---|
 | [11 — Paramètres & opt-outs](11-parametres-et-opt-outs.md) | Préférences, opt-outs, registre des paramètres |
 | [12 — i18n & données](12-internationalisation-et-donnees.md) | Multilingue, stockage, vie privée, contraintes NF |
-| [13 — Roadmap & versioning](13-roadmap-et-versioning.md) | V1 / V1.1 / V2, conventions Git, ordre de dev |
 | [14 — Couverture UI](14-couverture-ui.md) | Matrice fonction → écran : checklist de couverture du moteur par l'UI |
-| [15 — Éléments différés](15-elements-differes.md) | Registre des placeholders/fonctions à brancher plus tard : ce qui manque + où revenir |
 | [16 — Enrichissement fiches plantes](16-enrichissement-fiches-plantes.md) | Champs manquants dans les fiches YAML pour le moteur de recommandation (rusticité, gel, difficulté, contenants, ravageurs…) |
 | [17 — Illustrations du glossaire](17-illustrations-glossaire.md) | Procédure pas à pas : ajouter une image à une page du lexique (dossier, format WebP ≤ 800 px, licences PD/CC0, registre, SOURCES.txt, lint) |
 | [Audit 2026-10](audit-2026-10.md) | Audit du code : 44 constats classés gravité/effort, lints stricts, purge des commentaires |
@@ -50,5 +48,4 @@ conservées hors du repo).
 
 - Conventions de code & contribution : [../CONTRIBUTING.md](../CONTRIBUTING.md)
 - Contexte agent & règles strictes : [../CLAUDE.md](../CLAUDE.md)
-- Prochaine étape : initialiser le projet Flutter sur l'ossature existante
-  (voir « Prochaine action » dans [../CLAUDE.md](../CLAUDE.md)).
+- Reste à faire (lots, V1.1, V2) : [../RESTE_A_FAIRE.md](../RESTE_A_FAIRE.md)
