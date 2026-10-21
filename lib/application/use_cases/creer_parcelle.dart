@@ -9,12 +9,15 @@ import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
+import '../../domain/value_objects/couleur_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../providers/repository_providers.dart';
 
 /// Use case: create a parcelle in a potager.
 ///
 /// Generates the UUID app-side (injectable for tests) and persists the entity.
+/// Without an explicit colour, the zone takes the first tint unused in its
+/// garden.
 class CreerParcelle {
   final AbstractParcelleRepository _repo;
   final String Function() _genererId;
@@ -31,6 +34,7 @@ class CreerParcelle {
     required Surface surface,
     required NiveauSoleil exposition,
     int ordre = 0,
+    CouleurZone? couleur,
     TextureSol? texture,
     SourceTypeSol textureSource = SourceTypeSol.manuelle,
     PhSol? ph,
@@ -46,6 +50,9 @@ class CreerParcelle {
       surface: surface,
       exposition: exposition,
       ordre: ordre,
+      couleur: couleur ??
+          CouleurZone.suivante(
+              (await _repo.obtenirParPotager(potagerId)).map((p) => p.couleur)),
       texture: texture,
       textureSource: textureSource,
       ph: ph,

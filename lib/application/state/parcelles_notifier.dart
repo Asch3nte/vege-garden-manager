@@ -7,6 +7,7 @@ import '../../domain/enums/source_type_sol.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/value_objects/couleur_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/creer_parcelle.dart';
@@ -32,6 +33,7 @@ class ParcellesNotifier extends AsyncNotifier<List<Parcelle>> {
     required Surface surface,
     required NiveauSoleil exposition,
     int ordre = 0,
+    CouleurZone? couleur,
     TextureSol? texture,
     SourceTypeSol textureSource = SourceTypeSol.manuelle,
     PhSol? ph,
@@ -46,6 +48,7 @@ class ParcellesNotifier extends AsyncNotifier<List<Parcelle>> {
           surface: surface,
           exposition: exposition,
           ordre: ordre,
+          couleur: couleur,
           texture: texture,
           textureSource: textureSource,
           ph: ph,

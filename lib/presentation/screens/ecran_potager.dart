@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
-import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../app/theme/theme_app.dart';
 import '../../application/providers/repository_providers.dart';
@@ -22,25 +21,11 @@ import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_potager.dart';
 import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
+import '../widgets/couleur_zone_ui.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/potager_actif_actions.dart';
-
-/// Stable decorative colours assigned to zones by position, so each zone keeps
-/// a
-/// consistent accent across the plan.
-const List<Color> _couleursZones = [
-  CouleursApp.decoVertProfond,
-  CouleursApp.accentChaudClair,
-  CouleursApp.decoAubergine,
-  CouleursApp.decoVertMoyen,
-  CouleursApp.decoBordeaux,
-  CouleursApp.decoTerre,
-];
-
-/// Decorative colour of the zone at [index] in the plan (stable, cyclic).
-Color couleurZone(int index) => _couleursZones[index % _couleursZones.length];
 
 /// Tab 2 — **Potager**: a top-down *plan* of the active garden, one bed per
 /// zone:
@@ -435,7 +420,7 @@ class PlanPotager extends StatelessWidget {
       final zone = zones[i];
       final planche = _Planche(
         zone: zone,
-        couleur: couleurZone(i),
+        couleur: zone.couleur.couleur,
         onTap: () => onZoneTap(zone.id),
       );
       if (zones[i].type == TypeParcelle.serre) {

@@ -6,12 +6,14 @@ import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/source_type_sol.dart';
 import 'package:pot_a_gerer/domain/enums/statut_plantation.dart';
+import 'package:pot_a_gerer/domain/enums/teinte_zone.dart';
 import 'package:pot_a_gerer/domain/enums/technique_sol.dart';
 import 'package:pot_a_gerer/domain/enums/texture_sol.dart';
 import 'package:pot_a_gerer/domain/enums/type_equipement.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/exceptions/surface_insuffisante_exception.dart';
+import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 
 Parcelle _parcelle({double surfaceM2 = 4}) => Parcelle(
@@ -85,6 +87,29 @@ void main() {
         ),
         throwsA(isA<InvariantDomaineException>()),
       );
+    });
+  });
+
+  group('Parcelle — colour', () {
+    test('defaults to the first palette tint', () {
+      expect(_parcelle().couleur,
+          CouleurZone.teinte(TeinteZone.values.first));
+    });
+
+    test('keeps the colour it is given and can change it', () {
+      final p = Parcelle(
+        id: 'par1',
+        nom: 'Planche Nord',
+        potagerId: 'pot1',
+        type: TypeParcelle.bacSureleve,
+        surface: Surface.enMetresCarres(4),
+        exposition: NiveauSoleil.pleinSoleil,
+        couleur: const CouleurZone.teinte(TeinteZone.bordeaux),
+      );
+      expect(p.couleur, const CouleurZone.teinte(TeinteZone.bordeaux));
+
+      p.changerCouleur(CouleurZone.personnalisee(0xAABBCC));
+      expect(p.couleur, CouleurZone.personnalisee(0xAABBCC));
     });
   });
 

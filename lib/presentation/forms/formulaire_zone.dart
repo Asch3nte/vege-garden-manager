@@ -11,9 +11,11 @@ import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/value_objects/couleur_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/selecteur_couleur_zone.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
 import 'enregistrement_formulaire.dart';
@@ -70,6 +72,8 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   TextureSol? _texture;
   PhSol? _ph;
   final Set<TechniqueSol> _techniques = {};
+  // Null until picked on a new zone: the first free tint is shown and saved.
+  CouleurZone? _couleur;
 
   bool get _edition => widget.parcelleInitiale != null;
 
@@ -85,6 +89,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
       _texture = p.texture;
       _ph = p.ph;
       _techniques.addAll(p.techniquesSol);
+      _couleur = p.couleur;
     }
   }
 
@@ -115,6 +120,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
           surface: surface,
           exposition: _exposition,
           ordre: initiale.ordre,
+          couleur: _couleur ?? initiale.couleur,
           texture: _texture,
           textureSource: initiale.textureSource,
           ph: _ph,
@@ -130,6 +136,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
         type: _type,
         surface: surface,
         exposition: _exposition,
+        couleur: _couleur,
         texture: _texture,
         ph: _ph,
         techniquesSol: _techniques,
@@ -148,6 +155,12 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
     // Soil controls are gated by the experience level; hidden values
     // are preserved (reversibility), never wiped.
     final acces = ref.watch(accesNiveauProvider);
+    final couleur = _couleur ??
+        CouleurZone.suivante(ref
+                .watch(parcellesProvider(widget.potagerId))
+                .value
+                ?.map((p) => p.couleur) ??
+            const []);
 
     return Scaffold(
       appBar: AppBar(
@@ -213,6 +226,13 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
                   DropdownMenuItem(value: s, child: Text(l10n.exposition(s))),
               ],
               onChanged: (v) => setState(() => _exposition = v!),
+            ),
+            const SizedBox(height: EspacementsApp.s5),
+            Text(l10n.formZoneCouleur, style: theme.textTheme.titleMedium),
+            const SizedBox(height: EspacementsApp.s2),
+            SelecteurCouleurZone(
+              valeur: couleur,
+              onChanged: (c) => setState(() => _couleur = c),
             ),
             // Soil techniques — intermediate+.
             if (acces.techniquesSol) ...[

@@ -28,6 +28,8 @@ import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
+import 'package:pot_a_gerer/domain/enums/teinte_zone.dart';
+import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
 
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
@@ -162,6 +164,20 @@ void main() {
     expect(vue.zones.single.type, TypeParcelle.bacSureleve);
     expect(vue.zones.single.surfaceM2, 2);
     expect(vue.zones.single.exposition, NiveauSoleil.pleinSoleil);
+    expect(vue.zones.single.couleur, const CouleurZone.teinte(TeinteZone.vertProfond));
+  });
+
+  test('each zone carries its stored colour', () async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    final zone = uneParcelle('z-1', 'Carré nord')
+      ..changerCouleur(CouleurZone.personnalisee(0x3366CC));
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [zone]);
+
+    final vue = await conteneur().read(potagerProvider.future);
+
+    expect(vue.zones.single.couleur, CouleurZone.personnalisee(0x3366CC));
   });
 
   test(

@@ -73,6 +73,7 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
           cultures: await _culturesActives(
               parcelle, plantations, fiches, calculateur, now),
           aTacheAujourdhui: parcellesAvecTache.contains(parcelle.id),
+          couleur: parcelle.couleur,
         ),
       );
     }
