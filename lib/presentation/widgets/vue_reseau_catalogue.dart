@@ -10,6 +10,7 @@ import '../../domain/enums/categorie_plante.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
 import 'fiche_plante_detail.dart';
+import 'langue_contexte.dart';
 import 'reseau/halo_famille.dart';
 import 'reseau/layout_reseau_familles.dart';
 
@@ -453,7 +454,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
       return;
     }
     final idx = widget.fiches.indexWhere(
-      (f) => _normaliser(f.nomLocalise('fr')).contains(terme),
+      (f) => _normaliser(f.nomLocalise(context.langue)).contains(terme),
     );
     if (idx < 0) {
       setState(() => _rechercheSansResultat = true);
@@ -494,7 +495,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     final rects = <Rect>[];
     for (var i = 0; i < widget.fiches.length; i++) {
       final tp = TextPainter(
-        text: TextSpan(text: widget.fiches[i].nomLocalise('fr'), style: style),
+        text: TextSpan(text: widget.fiches[i].nomLocalise(context.langue), style: style),
         textDirection: TextDirection.ltr,
       )..layout();
       final centre = t.versEcran(_positions[i]);
@@ -577,7 +578,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     var maxX = -double.infinity, maxY = -double.infinity;
     for (final i in noeuds) {
       final tp = TextPainter(
-        text: TextSpan(text: widget.fiches[i].nomLocalise('fr'), style: style),
+        text: TextSpan(text: widget.fiches[i].nomLocalise(context.langue), style: style),
         textDirection: TextDirection.ltr,
       )..layout();
       final demiL = math.max(tp.width + 14, _rayonNoeud * 2) / 2;
@@ -597,7 +598,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     var padX = _rayonNoeud, padY = _rayonNoeud;
     for (final i in noeuds) {
       final tp = TextPainter(
-        text: TextSpan(text: widget.fiches[i].nomLocalise('fr'), style: style),
+        text: TextSpan(text: widget.fiches[i].nomLocalise(context.langue), style: style),
         textDirection: TextDirection.ltr,
       )..layout();
       final demiL = math.max(tp.width + 14, _rayonNoeud * 2) / 2 + _ecartLabel;
@@ -628,7 +629,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     final demi = <int, Size>{}; // half-extents (screen)
     for (final i in liste) {
       final tp = TextPainter(
-        text: TextSpan(text: widget.fiches[i].nomLocalise('fr'), style: style),
+        text: TextSpan(text: widget.fiches[i].nomLocalise(context.langue), style: style),
         textDirection: TextDirection.ltr,
       )..layout();
       final labelL = tp.width + 14; // 6px padding ×2 + 1px border ×2
@@ -926,7 +927,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                   child: FractionalTranslation(
                     translation: const Offset(-0.5, 0),
                     child: _EtiquetteNoeud(
-                      nom: widget.fiches[i].nomLocalise('fr'),
+                      nom: widget.fiches[i].nomLocalise(context.langue),
                       couleur: couleurCategorie(widget.fiches[i].categorie),
                     ),
                   ),
@@ -1142,7 +1143,7 @@ class _LigneVarieteReseau extends StatelessWidget {
               const SizedBox(width: EspacementsApp.s3),
               Expanded(
                 child: Text(
-                  fiche.nomLocalise('fr'),
+                  fiche.nomLocalise(context.langue),
                   style: theme.textTheme.titleMedium,
                 ),
               ),
@@ -1204,7 +1205,7 @@ class _Noeud extends StatelessWidget {
           child: rayon < 10
               ? null
               : Text(
-                  fiche.nomLocalise('fr').characters.first.toUpperCase(),
+                  fiche.nomLocalise(context.langue).characters.first.toUpperCase(),
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -1318,7 +1319,7 @@ class _GroupeFocusReseau extends StatelessWidget {
           child: Text(
             especes.length > 1
                 ? '${especes.length}'
-                : especes.first.nomLocalise('fr').characters.first.toUpperCase(),
+                : especes.first.nomLocalise(context.langue).characters.first.toUpperCase(),
             style: theme.textTheme.labelMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,
@@ -1333,7 +1334,7 @@ class _GroupeFocusReseau extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: _EtiquetteNoeud(
-                nom: especes[k].nomLocalise('fr'),
+                nom: especes[k].nomLocalise(context.langue),
                 couleur: couleurCategorie(especes[k].categorie),
                 relation: relations[k],
               ),
@@ -1628,7 +1629,7 @@ class _Panneau extends StatelessWidget {
           CircleAvatar(
             backgroundColor: couleur.withValues(alpha: 0.85),
             child: Text(
-              fiche!.nomLocalise('fr').characters.first.toUpperCase(),
+              fiche!.nomLocalise(context.langue).characters.first.toUpperCase(),
               style: theme.textTheme.labelMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -1641,7 +1642,7 @@ class _Panneau extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  fiche!.nomLocalise('fr'),
+                  fiche!.nomLocalise(context.langue),
                   style: theme.textTheme.titleMedium,
                 ),
                 Text(

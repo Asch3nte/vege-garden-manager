@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -5,10 +7,12 @@ import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../application/providers/database_providers.dart';
+import '../application/providers/langue_provider.dart';
 import '../application/providers/service_providers.dart';
 import '../infrastructure/database/app_database.dart';
 import '../infrastructure/database/connection/connexion_native.dart';
 import '../infrastructure/services/notification_service_impl.dart';
+import '../l10n/app_localizations.dart';
 
 /// Result of a successful [Bootstrap.initialiser]: the opened [database] the app
 /// owns (and must close on shutdown) and a [scopeBuilder] that wraps the app's
@@ -51,6 +55,10 @@ class Bootstrap {
 
     final overrides = [
       appDatabaseProvider.overrideWithValue(database),
+      codeLangueSystemeProvider.overrideWithValue(basicLocaleListResolution(
+              PlatformDispatcher.instance.locales,
+              AppLocalizations.supportedLocales)
+          .languageCode),
     ];
 
     // Initialise the notification plugin via a throwaway container so we use the

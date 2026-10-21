@@ -11,6 +11,7 @@ import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
+import '../widgets/langue_contexte.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
 import 'enregistrement_formulaire.dart';
@@ -133,7 +134,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(widget.planteInitiale!.nomLocalise('fr')),
+                      child: Text(widget.planteInitiale!.nomLocalise(context.langue)),
                     ),
                     const Icon(Icons.lock_outline, size: TaillesIconesApp.sm),
                   ],
@@ -151,7 +152,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
                 ),
                 items: [
                   for (final f in fiches)
-                    DropdownMenuItem(value: f, child: Text(f.nomLocalise('fr'))),
+                    DropdownMenuItem(value: f, child: Text(f.nomLocalise(context.langue))),
                 ],
                 onChanged: (v) => setState(() {
                   _plante = v;

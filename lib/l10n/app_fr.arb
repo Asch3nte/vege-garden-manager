@@ -1231,6 +1231,10 @@
   "@parametresTitre": { "description": "Titre de l'écran Paramètres." },
   "parametresLocal": "100 % local",
   "@parametresLocal": { "description": "Mention que tout est stocké localement." },
+  "parametresMonCarnet": "Mon carnet",
+  "@parametresMonCarnet": { "description": "Écran Plus : titre de la carte de profil." },
+  "libelleCle": "{cle} : ",
+  "@libelleCle": { "description": "Libellé suivi de deux-points devant une valeur (ponctuation propre à la langue).", "placeholders": { "cle": { "type": "String" } } },
   "parametresNiveauMention": "Niveau {niveau}",
   "@parametresNiveauMention": {
     "description": "Mention du niveau d'expérience dans l'en-tête des paramètres.",

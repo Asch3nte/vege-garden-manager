@@ -24,6 +24,7 @@ import '../glossaire/catalogue/notions_associations.dart';
 import '../glossaire/terme_cliquable.dart';
 import 'explication_association.dart';
 import 'fiche_plante_detail.dart';
+import 'langue_contexte.dart';
 import 'libelles_enums.dart';
 import 'reseau/layout_vue_associations.dart';
 import 'vue_reseau_catalogue.dart' show couleurCategorie;
@@ -402,7 +403,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
     return Dialog.fullscreen(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.centre.nomLocalise('fr')),
+          title: Text(widget.centre.nomLocalise(context.langue)),
           leading: IconButton(
             icon: const Icon(Icons.close),
             tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
@@ -1212,7 +1213,7 @@ class _MembreNoeud extends StatelessWidget {
               ),
             ),
             child: Text(
-              fiche.nomLocalise('fr').characters.first.toUpperCase(),
+              fiche.nomLocalise(context.langue).characters.first.toUpperCase(),
               style: theme.textTheme.labelMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -1221,7 +1222,7 @@ class _MembreNoeud extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            fiche.nomLocalise('fr'),
+            fiche.nomLocalise(context.langue),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -1279,7 +1280,7 @@ class _Noeud extends StatelessWidget {
               ),
             ),
             child: Text(
-              fiche.nomLocalise('fr').characters.first.toUpperCase(),
+              fiche.nomLocalise(context.langue).characters.first.toUpperCase(),
               style: theme.textTheme.labelMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -1288,7 +1289,7 @@ class _Noeud extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            fiche.nomLocalise('fr'),
+            fiche.nomLocalise(context.langue),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

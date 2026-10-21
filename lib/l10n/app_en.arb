@@ -414,6 +414,8 @@
   "badgeAVenir": "Coming soon",
   "parametresTitre": "Settings",
   "parametresLocal": "100% local",
+  "parametresMonCarnet": "My notebook",
+  "libelleCle": "{cle}: ",
   "parametresNiveauMention": "{niveau} level",
   "parametresPiedLocal": "All preferences are stored locally on this device and are never synced without your consent.",
   "categGenerale": "General preferences",

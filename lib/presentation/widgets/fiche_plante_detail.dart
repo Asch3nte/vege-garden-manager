@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -22,6 +23,7 @@ import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import 'badge_perso.dart';
 import 'calendrier_semis_recolte.dart';
+import 'langue_contexte.dart';
 import 'libelles_enums.dart';
 
 /// Opens the detail of a plant sheet as a draggable modal bottom sheet.
@@ -196,7 +198,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(_fiche.nomLocalise('fr'),
+                        child: Text(_fiche.nomLocalise(context.langue),
                             style: theme.textTheme.headlineSmall),
                       ),
                       if (estPerso) ...[
@@ -269,10 +271,10 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
             courante: _fiche,
             onChoisir: (v) => setState(() => _fiche = v),
           ),
-        if (_fiche.descriptionLocalisee('fr') != null) ...[
+        if (_fiche.descriptionLocalisee(context.langue) != null) ...[
           const SizedBox(height: EspacementsApp.s4),
           Text(
-            _fiche.descriptionLocalisee('fr')!,
+            _fiche.descriptionLocalisee(context.langue)!,
             style: theme.textTheme.bodyMedium,
           ),
         ],
@@ -343,7 +345,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
 
   /// Localized, alphabetically-sorted names of an iterable of sheets.
   List<String> _noms(Iterable<FichePlante> fiches) =>
-      [for (final f in fiches) f.nomLocalise('fr')]..sort();
+      [for (final f in fiches) f.nomLocalise(context.langue)]..sort();
 
   /// Projects the shown built-in sheet onto an editable draft and opens the
   /// personal-sheet form pre-filled with it (a *copy*, not an override). Closes
@@ -435,7 +437,7 @@ class _SelecteurVariete extends StatelessWidget {
     // variety, show its name.
     final surVariete = courante.id != mere.id;
     final valeur =
-        surVariete ? courante.nomLocalise('fr') : l10n.ficheVarieteChoisir;
+        surVariete ? courante.nomLocalise(context.langue) : l10n.ficheVarieteChoisir;
 
     return InkWell(
       borderRadius: RayonsApp.brMd,
@@ -498,7 +500,7 @@ class _ListeVarietesState extends State<_ListeVarietes> {
     final resultats = [
       for (final v in widget.varietes)
         if (terme.isEmpty ||
-            v.nomLocalise('fr').toLowerCase().contains(terme) ||
+            v.nomLocalise(context.langue).toLowerCase().contains(terme) ||
             v.nomScientifique.toLowerCase().contains(terme))
           v,
     ];
@@ -550,7 +552,7 @@ class _ListeVarietesState extends State<_ListeVarietes> {
                     return ListTile(
                       leading: Icon(Icons.spa_outlined,
                           color: theme.colorScheme.secondary),
-                      title: Text(v.nomLocalise('fr')),
+                      title: Text(v.nomLocalise(context.langue)),
                       subtitle: Text(
                         v.nomScientifique,
                         style: const TextStyle(fontStyle: FontStyle.italic),
@@ -578,11 +580,9 @@ class _Faits extends StatelessWidget {
 
   const _Faits({required this.fiche});
 
-  /// Formats a pH value with a French decimal comma, dropping a trailing `,0`.
-  static String _ph(double v) {
-    final s = v.toStringAsFixed(1).replaceAll('.', ',');
-    return s.endsWith(',0') ? s.substring(0, s.length - 2) : s;
-  }
+  /// Formats a pH value with one optional decimal in the [langue] format.
+  static String _ph(double v, String langue) =>
+      NumberFormat('0.#', langue).format(v);
 
   @override
   Widget build(BuildContext context) {
@@ -629,7 +629,8 @@ class _Faits extends StatelessWidget {
       (
         Icons.science_outlined,
         l10n.fichePh,
-        l10n.fichePhPlage(_ph(b.phMin), _ph(b.phMax)),
+        l10n.fichePhPlage(
+            _ph(b.phMin, l10n.localeName), _ph(b.phMax, l10n.localeName)),
         TermeGlossaire.idNotion('ph-sol'),
       ),
       (
@@ -835,17 +836,15 @@ class _SectionArrosageDetaille extends StatelessWidget {
 
   const _SectionArrosageDetaille({required this.detail});
 
-  /// Formats a volume with a French decimal comma, dropping a trailing ",0".
-  static String _num(double v) {
-    final s = v.toStringAsFixed(1).replaceAll('.', ',');
-    return s.endsWith(',0') ? s.substring(0, s.length - 2) : s;
-  }
+  /// Formats a volume with one optional decimal in the [langue] format.
+  static String _num(double v, String langue) =>
+      NumberFormat('0.#', langue).format(v);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final note = detail.note('fr');
+    final note = detail.note(context.langue);
 
     Widget ligne(IconData icone, String cle, String valeur) => Padding(
           padding: const EdgeInsets.only(bottom: EspacementsApp.s3),
@@ -856,7 +855,7 @@ class _SectionArrosageDetaille extends StatelessWidget {
                   size: TaillesIconesApp.sm,
                   color: theme.colorScheme.onSurfaceVariant),
               const SizedBox(width: EspacementsApp.s3),
-              Text('$cle : ',
+              Text(l10n.libelleCle(cle),
                   style: theme.textTheme.bodyMedium
                       ?.copyWith(fontWeight: FontWeight.w600)),
               Expanded(
@@ -896,10 +895,10 @@ class _SectionArrosageDetaille extends StatelessWidget {
             l10n.ficheArrosageVolume,
             detail.volumeLitresM2Min == detail.volumeLitresM2Max
                 ? l10n.ficheArrosageVolumeLitresUnique(
-                    _num(detail.volumeLitresM2Min!))
+                    _num(detail.volumeLitresM2Min!, l10n.localeName))
                 : l10n.ficheArrosageVolumeLitres(
-                    _num(detail.volumeLitresM2Min!),
-                    _num(detail.volumeLitresM2Max!)),
+                    _num(detail.volumeLitresM2Min!, l10n.localeName),
+                    _num(detail.volumeLitresM2Max!, l10n.localeName)),
           ),
         if (detail.aFrequence || detail.aVolume) ...[
           Text(
@@ -959,11 +958,11 @@ class _SectionFamille extends ConsumerWidget {
       if (bio == null) return Chip(label: Text(slug));
       return PuceTermeGlossaire(
         idTerme: TermeGlossaire.idBioagresseur(bio.id),
-        texte: bio.nomLocalise('fr'),
+        texte: bio.nomLocalise(context.langue),
         type: bio.type == TypeBioagresseur.maladie
             ? TypeTermeGlossaire.maladie
             : TypeTermeGlossaire.ravageur,
-        infobulle: bio.descriptionLocalisee('fr'),
+        infobulle: bio.descriptionLocalisee(context.langue),
       );
     }
 
@@ -972,10 +971,10 @@ class _SectionFamille extends ConsumerWidget {
           child: Text(t, style: theme.textTheme.bodySmall),
         );
 
-    final desc = famille.descriptionLocalisee('fr');
-    final pourquoi = famille.pourquoiRotation('fr');
-    final ennemis = famille.ennemisCommunsNote('fr');
-    final assoc = famille.associationsNote('fr');
+    final desc = famille.descriptionLocalisee(context.langue);
+    final pourquoi = famille.pourquoiRotation(context.langue);
+    final ennemis = famille.ennemisCommunsNote(context.langue);
+    final assoc = famille.associationsNote(context.langue);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -991,7 +990,7 @@ class _SectionFamille extends ConsumerWidget {
                 style: theme.textTheme.titleLarge),
             TermeCliquable(
               idTerme: TermeGlossaire.idFamille(famille.id),
-              texte: famille.nomLocalise('fr'),
+              texte: famille.nomLocalise(context.langue),
               type: TypeTermeGlossaire.famille,
               style: theme.textTheme.titleLarge,
             ),

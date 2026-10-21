@@ -21,6 +21,7 @@ import '../screens/ecran_selection_zone.dart';
 import '../widgets/badge_perso.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/fiche_plante_detail.dart';
+import '../widgets/langue_contexte.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/vue_associations.dart';
 import '../widgets/vue_reseau_catalogue.dart';
@@ -53,7 +54,7 @@ Future<void> _ajouterPlante(
   ref.read(ajoutPlanteProvider.notifier).effacer();
   ref.invalidate(potagerProvider);
   messenger.showSnackBar(
-    SnackBar(content: Text(l10n.snackPlanteAjoutee(fiche.nomLocalise('fr')))),
+    SnackBar(content: Text(l10n.snackPlanteAjoutee(fiche.nomLocalise(l10n.localeName)))),
   );
   if (context.mounted) context.go(RoutesApp.zoneDetail(zoneId));
 }
@@ -402,7 +403,7 @@ class _ChipsFamilles extends StatelessWidget {
           for (final f in familles) ...[
             const SizedBox(width: EspacementsApp.s2),
             _Chip(
-              libelle: f.nomLocalise('fr'),
+              libelle: f.nomLocalise(context.langue),
               selectionne: courante == f.id,
               onTap: () => onChoisir(f.id),
             ),
@@ -548,7 +549,7 @@ class _CarteFiche extends ConsumerWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          fiche.nomLocalise('fr'),
+                          fiche.nomLocalise(context.langue),
                           style: theme.textTheme.titleLarge,
                         ),
                       ),
@@ -671,7 +672,7 @@ class _LigneVariete extends StatelessWidget {
               const SizedBox(width: EspacementsApp.s3),
               Expanded(
                 child: Text(
-                  fiche.nomLocalise('fr'),
+                  fiche.nomLocalise(context.langue),
                   style: theme.textTheme.titleMedium,
                 ),
               ),

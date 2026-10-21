@@ -22,7 +22,7 @@ FichePlante _fiche() => FichePlante(
       familleBotanique: 'Asteraceae',
       categorie: CategoriePlante.legume,
       usages: const {UsagePlante.alimentaire},
-      nomsLocalises: const {'fr': 'Laitue'},
+      nomsLocalises: const {'fr': 'Laitue', 'en': 'Lettuce'},
       besoins: BesoinsCulture(
         eau: BesoinEau.modere,
         soleil: NiveauSoleil.pleinSoleil,
@@ -70,6 +70,7 @@ Future<void> _ouvrir(
   WidgetTester tester,
   FichePlante fiche, {
   required NiveauExperience niveau,
+  Locale? locale,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -77,6 +78,7 @@ Future<void> _ouvrir(
         accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
       ],
       child: MaterialApp(
+        locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
@@ -105,6 +107,15 @@ void main() {
     expect(find.text('Mi-ombre à plein soleil'), findsOneWidget);
     expect(find.text('15–30 cm'), findsOneWidget);
     expect(find.text('6 à 7'), findsOneWidget);
+  });
+
+  testWidgets('the sheet names the plant in the active language',
+      (tester) async {
+    await _ouvrir(tester, _fiche(),
+        niveau: NiveauExperience.debutant, locale: const Locale('en'));
+
+    expect(find.text('Lettuce'), findsOneWidget);
+    expect(find.text('Laitue'), findsNothing);
   });
 
   group('detailed watering section (ADR-0009 acces.eauDetaillee)', () {

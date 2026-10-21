@@ -3,11 +3,9 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'catalogue_vue.dart';
-
-/// Locale used for catalogue search and display (French-first app).
-const String _locale = 'fr';
 
 /// Drives the **Catalogue** screen: loads the plant catalogue once, then applies
 /// the user's text query and category filter in memory.
@@ -17,6 +15,9 @@ const String _locale = 'fr';
 /// notifier keeps the full list privately and rebuilds the [CatalogueVue] on
 /// every filter change.
 class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
+  /// Language of the displayed crop names.
+  String get _locale => ref.read(codeLangueProvider);
+
   List<FichePlante> _toutes = const [];
   Map<String, FamilleBotanique> _famillesParId = const {};
   String _requete = '';
@@ -25,6 +26,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
 
   @override
   Future<CatalogueVue> build() async {
+    ref.watch(codeLangueProvider);
     final repo = await ref.watch(fichePlanteRepositoryProvider.future);
     _toutes = await repo.obtenirToutes();
     final repoFamilles =

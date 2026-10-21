@@ -11,13 +11,11 @@ import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../providers/horloge_provider.dart';
+import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/generer_taches_arrosage.dart';
 import 'calendrier_vue.dart';
 import 'geste_groupe.dart';
-
-/// Locale used to resolve crop display names (French-first app).
-const String _locale = 'fr';
 
 /// Drives the **Calendrier** agenda: the tasks over the current window
 /// ([PorteeAgenda]), grouped by day, with the action to tick a task off.
@@ -27,6 +25,9 @@ const String _locale = 'fr';
 /// Reopening a completed task is **not** offered — the domain has no plain
 /// "reopen" transition (only `reporter`, which reschedules); see docs/15.
 class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
+  /// Language of the displayed crop names.
+  String get _locale => ref.read(codeLangueProvider);
+
   PorteeAgenda _portee = PorteeAgenda.semaine;
 
   /// First day of the month shown by the monthly grid (set on first build).
@@ -40,6 +41,7 @@ class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
 
   @override
   Future<CalendrierVue> build() async {
+    ref.watch(codeLangueProvider);
     final taches = ref.watch(tacheRepositoryProvider);
     final parcelles = ref.watch(parcelleRepositoryProvider);
     final plantations = ref.watch(plantationRepositoryProvider);
