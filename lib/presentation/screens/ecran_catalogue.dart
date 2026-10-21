@@ -4,11 +4,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
+import '../../application/engine/moteur_derivation_associations.dart';
 import '../../application/providers/repository_providers.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/preferences_notifier.dart';
 import '../../application/state/catalogue_vue.dart';
+import '../../application/state/contexte_climat.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
@@ -503,6 +505,19 @@ class _CarteGroupeState extends State<_CarteGroupe> {
 /// One species row: name, category, sun & water needs; trailing chevron, or an
 /// expand toggle (arrow only — the variety count is dropped) when [onToggle]
 /// is set.
+/// Family lookup for the association engine, from the loaded families.
+ResolveurFamille? _resolveurFamille(WidgetRef ref) {
+  final familles = ref.read(famillesParIdProvider).value;
+  if (familles == null) return null;
+  return (brute) => familles[FamilleBotanique.normaliserCle(brute)];
+}
+
+/// Climate context of the active garden, when its hemisphere is known.
+ContexteClimat? _contexte(WidgetRef ref) {
+  final contexte = ref.read(contexteClimatProvider).value;
+  return contexte == null || contexte.hemisphereSuppose ? null : contexte;
+}
+
 class _CarteFiche extends ConsumerWidget {
   final FichePlante fiche;
   final void Function(FichePlante) onAjouter;
@@ -520,6 +535,9 @@ class _CarteFiche extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Kept loaded for the Associations view opened from this card.
+    ref.watch(famillesParIdProvider);
+    ref.watch(contexteClimatProvider);
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     // Personal sheets are merged into the catalogue: tag them so
@@ -593,6 +611,9 @@ class _CarteFiche extends ConsumerWidget {
                 ref.read(catalogueProvider).value?.toutesMeres ??
                     const <FichePlante>[],
                 onAjouter: onAjouter,
+                familles: _resolveurFamille(ref),
+                hemisphere: _contexte(ref)?.hemisphere,
+                climat: _contexte(ref)?.climat,
                 // Derived suggestions appear from intermédiaire+,
                 // ranked by the user's weighting profile.
                 acces: ref.read(accesNiveauProvider),
