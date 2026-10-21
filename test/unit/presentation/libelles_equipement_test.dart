@@ -8,6 +8,10 @@ import 'package:pot_a_gerer/domain/enums/type_equipement.dart';
 import 'package:pot_a_gerer/domain/value_objects/effet_equipement.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/libelles_enums.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
+import 'package:pot_a_gerer/presentation/widgets/formateur_mesures.dart';
+import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 
 void main() {
   late AppLocalizations l10n;
@@ -32,10 +36,41 @@ void main() {
   test('resumeEffet describes a type effect and stays empty when neutral', () {
     // An oya cuts the water need — the summary is non-empty.
     expect(
-      l10n.resumeEffet(EffetEquipement.pourType(TypeEquipement.oya)),
+      l10n.resumeEffet(EffetEquipement.pourType(TypeEquipement.oya),
+          FormateurMesures(l10n, const PreferencesUnites())),
       isNotEmpty,
     );
     // A neutral effect yields no chips.
-    expect(l10n.resumeEffet(EffetEquipement.neutre), isEmpty);
+    expect(
+        l10n.resumeEffet(EffetEquipement.neutre,
+            FormateurMesures(l10n, const PreferencesUnites())),
+        isEmpty);
+  });
+
+  test('hardiness zones use the official USDA °F bounds in imperial', () {
+    final imperial = FormateurMesures(
+        l10n, const PreferencesUnites.uniforme(SystemeUnites.imperial));
+    expect(l10n.rusticiteDescription(ZoneRusticite.zone1, imperial),
+        'Minimales hivernales de -60 à -50 °F.');
+    expect(l10n.rusticiteDescription(ZoneRusticite.zone8, imperial),
+        'Minimales hivernales de 10 à 20 °F.');
+    expect(
+        l10n.rusticiteDescription(
+            ZoneRusticite.zone8, FormateurMesures(l10n, const PreferencesUnites())),
+        'Minimales hivernales de -12 à -7 °C.');
+  });
+
+  test('resumeEffet shows the warmth gain in the chosen scale', () {
+    final chassis = EffetEquipement.pourType(TypeEquipement.chassis);
+    expect(
+        l10n.resumeEffet(
+            chassis, FormateurMesures(l10n, const PreferencesUnites())),
+        contains('+3 °C'));
+    expect(
+        l10n.resumeEffet(
+            chassis,
+            FormateurMesures(l10n,
+                const PreferencesUnites.uniforme(SystemeUnites.imperial))),
+        contains('+5,4 °F'));
   });
 }

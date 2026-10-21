@@ -16,6 +16,7 @@ import '../../domain/entities/tache.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/position_potager_actions.dart';
 import '../widgets/titre_tache.dart';
@@ -265,13 +266,15 @@ class _CarteMeteo extends ConsumerWidget {
             null,
           );
         }
+        final mesures = formateurMesures(context, ref);
         return (
           iconeVerdictMeteo(vue.verdict),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.meteoTemperatures(vue.tempMin.round(), vue.tempMax.round()),
+                l10n.meteoTemperatures(
+                    mesures.degres(vue.tempMin), mesures.degres(vue.tempMax)),
                 style: theme.textTheme.titleMedium,
               ),
               Text(l10n.verdictMeteo(vue.verdict), style: muted),

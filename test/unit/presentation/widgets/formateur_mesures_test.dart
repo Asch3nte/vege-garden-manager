@@ -15,8 +15,10 @@ void main() {
   test('temperatures', () {
     expect(metrique.temperature(21.4), '21 °C');
     expect(imperial.temperature(21.4), '71 °F');
-    expect(metrique.temperatureCourte(-2.6), '-3°');
-    expect(imperial.temperatureCourte(0), '32°');
+    expect(metrique.degres(-2.6), '-3');
+    expect(imperial.degres(0), '32');
+    expect(metrique.symboleTemperature, '°C');
+    expect(imperial.symboleTemperature, '°F');
     expect(metrique.ecartTemperature(2), '2 °C');
     expect(imperial.ecartTemperature(2), '3.6 °F');
   });
@@ -42,6 +44,7 @@ void main() {
 
   test('rain, wind and watering depth follow the length setting', () {
     expect(metrique.precipitations(1.25), '1,3 mm');
+    expect(metrique.precipitations(2), '2 mm');
     expect(imperial.precipitations(12.7), '0.5 in');
     expect(metrique.vent(19.6), '20 km/h');
     expect(imperial.vent(16.09344), '10 mph');
@@ -49,8 +52,21 @@ void main() {
     expect(imperial.arrosage(5.08), '0.2 in');
   });
 
+  test('ranges keep the metric wording, imperial spells each bound', () {
+    expect(metrique.plageLongueurCm(15, 30), '15–30 cm');
+    expect(imperial.plageLongueurCm(15, 40), '5.9 in – 1 ft 4 in');
+    expect(metrique.plageArrosage(3, 5), '3 à 5 L/m²');
+    expect(imperial.plageArrosage(2.54, 5.08), '0.1 to 0.2 in');
+  });
+
+  test('elevation', () {
+    expect(metrique.altitudeM(65.4), '65 m');
+    expect(imperial.altitudeM(30.48), '100 ft');
+  });
+
   test('areas', () {
     expect(metrique.surfaceM2(2.5), '2,5 m²');
+    expect(metrique.surfaceM2(0.25), '0,25 m²');
     expect(imperial.surfaceM2(1), '10.8 ft²');
   });
 

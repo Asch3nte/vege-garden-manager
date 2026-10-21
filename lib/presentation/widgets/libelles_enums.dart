@@ -44,6 +44,7 @@ import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/value_objects/effet_equipement.dart';
 import '../../l10n/app_localizations.dart';
+import 'formateur_mesures.dart';
 
 /// French labels for the domain enums shown across the UI.
 ///
@@ -285,9 +286,14 @@ extension LibellesEnums on AppLocalizations {
       rusticiteZone(int.parse(z.name.replaceAll('zone', '')));
 
   /// Short helper for a hardiness zone: its USDA average annual minimum
-  /// temperature range, in °C (shown under each dropdown option).
-  String rusticiteDescription(ZoneRusticite z) {
+  /// temperature range, in the chosen scale (shown under each option).
+  String rusticiteDescription(ZoneRusticite z, FormateurMesures mesures) {
     final n = int.parse(z.name.replaceAll('zone', ''));
+    // USDA zones are defined in °F, 10 °F apart from -60 °F.
+    if (mesures.temperatureEnFahrenheit) {
+      final min = -60 + (n - 1) * 10;
+      return rusticiteZoneDesc('$min', '${min + 10}', mesures.symboleTemperature);
+    }
     final (int min, int max) = switch (n) {
       1 => (-51, -45),
       2 => (-45, -40),
@@ -303,7 +309,7 @@ extension LibellesEnums on AppLocalizations {
       12 => (10, 16),
       _ => (16, 21), // zone 13
     };
-    return rusticiteZoneDesc(min, max);
+    return rusticiteZoneDesc('$min', '$max', mesures.symboleTemperature);
   }
 
   /// Label for a parcelle (zone) type.
@@ -547,17 +553,14 @@ extension LibellesEnums on AppLocalizations {
   /// Short, human-readable summary of an equipment's agronomic effect, as a list
   /// of chip labels (empty when the effect is neutral). Numeric modifiers are
   /// provisional (see `EffetEquipement`); only the meaningful ones are shown.
-  List<String> resumeEffet(EffetEquipement e) {
+  List<String> resumeEffet(EffetEquipement e, FormateurMesures mesures) {
     final resume = <String>[];
     if (e.modificateurBesoinEau < 1) {
       resume.add(equipEffetEau(((1 - e.modificateurBesoinEau) * 100).round()));
     }
     if (e.modificateurTemperatureC > 0) {
-      final delta = e.modificateurTemperatureC;
-      final texte = delta == delta.roundToDouble()
-          ? delta.toStringAsFixed(0)
-          : delta.toStringAsFixed(1);
-      resume.add(equipEffetChaleur(texte));
+      resume.add(equipEffetChaleur(
+          mesures.ecartTemperature(e.modificateurTemperatureC)));
     }
     if (e.protectionGel) resume.add(equipEffetProtectionGel);
     if (e.protectionInsectes) resume.add(equipEffetProtectionInsectes);

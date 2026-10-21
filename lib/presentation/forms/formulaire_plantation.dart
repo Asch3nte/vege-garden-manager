@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
@@ -11,9 +10,11 @@ import '../../domain/entities/fiche_plante.dart';
 import '../../domain/entities/plantation.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/exceptions/surface_insuffisante_exception.dart';
+import '../../domain/value_objects/preferences_unites.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/langue_contexte.dart';
 import '../widgets/libelles_enums.dart';
@@ -115,9 +116,10 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
               nombrePieds: int.parse(_pieds.text.trim()),
             ),
         messageErreur: (e) => e is SurfaceInsuffisanteException
+            // In m², the unit of the surface field.
             ? l10n.plantationSurfaceInsuffisante(
-                NumberFormat('0.##', l10n.localeName)
-                    .format(e.disponible.enMetresCarres))
+                FormateurMesures(l10n, const PreferencesUnites())
+                    .surfaceM2(e.disponible.enMetresCarres))
             : null);
   }
 

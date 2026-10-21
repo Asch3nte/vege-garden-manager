@@ -31,6 +31,7 @@ import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/couleur_zone_ui.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/titre_tache.dart';
@@ -238,7 +239,7 @@ Future<void> _observer(BuildContext context, CulturePotager culture) async {
 }
 
 /// The loaded detail body for a resolved [zone].
-class _Detail extends StatelessWidget {
+class _Detail extends ConsumerWidget {
   final ZonePotager zone;
   final String potagerId;
   final Color couleur;
@@ -268,7 +269,7 @@ class _Detail extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
@@ -318,9 +319,8 @@ class _Detail extends StatelessWidget {
                   children: [
                     _Fait(
                       icone: PhosphorIconsRegular.ruler,
-                      texte: l10n.potagerSurfaceM2(
-                        _formaterSurface(zone.surfaceM2),
-                      ),
+                      texte: formateurMesures(context, ref)
+                          .surfaceM2(zone.surfaceM2),
                     ),
                     _Fait(
                       icone: PhosphorIconsRegular.sun,
@@ -942,12 +942,6 @@ class _LigneConseilArrosage extends StatelessWidget {
   }
 }
 
-/// Formats a surface in m² without trailing ".0" for whole values.
-String _formaterSurface(double m2) {
-  return m2 == m2.roundToDouble()
-      ? m2.toStringAsFixed(0)
-      : m2.toStringAsFixed(1);
-}
 
 /// Short `dd/MM` date for the next-task line (the year is rarely useful there).
 String _formaterDateCourte(DateTime d) =>

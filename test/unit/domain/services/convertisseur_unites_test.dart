@@ -20,6 +20,7 @@ void main() {
     proche(c.poucesVersCentimetres(12), 30.48);
     proche(c.millimetresVersPouces(25.4), 1);
     proche(c.kmhVersMph(1.609344), 1);
+    proche(c.metresVersPieds(0.3048), 1);
   });
 
   test('surface', () {

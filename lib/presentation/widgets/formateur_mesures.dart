@@ -1,5 +1,8 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../application/providers/unites_provider.dart';
 import '../../domain/enums/grandeur_mesure.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/services/convertisseur_unites.dart';
@@ -14,11 +17,13 @@ class FormateurMesures {
   static const double _oncesLiquidesParGallon = 128;
   static const double _unitesParKilo = 1000;
 
+  /// Shared by every formatter: patterns are parsed once per locale.
+  static final Map<String, NumberFormat> _formats = {};
+
   final AppLocalizations _l10n;
   final PreferencesUnites _unites;
-  final List<NumberFormat?> _formats = [null, null, null];
 
-  FormateurMesures(this._l10n, this._unites);
+  const FormateurMesures(this._l10n, this._unites);
 
   bool _imperial(GrandeurMesure g) => _unites.pour(g) == SystemeUnites.imperial;
 
@@ -29,11 +34,13 @@ class FormateurMesures {
   }
 
   /// [valeur] rounded to [decimales] (0 to 2), in the locale.
-  String _nombre(double valeur, [int decimales = 0]) =>
-      (_formats[decimales] ??= NumberFormat(
-        decimales == 0 ? '0' : '0.${'#' * decimales}',
-        _l10n.localeName,
-      )).format(_arrondi(valeur, decimales));
+  String _nombre(double valeur, [int decimales = 0]) {
+    final motif = decimales == 0 ? '0' : '0.${'#' * decimales}';
+    return _formats
+        .putIfAbsent('${_l10n.localeName}|$motif',
+            () => NumberFormat(motif, _l10n.localeName))
+        .format(_arrondi(valeur, decimales));
+  }
 
   String temperature(double celsius) => _imperial(GrandeurMesure.temperature)
       ? _l10n.mesureFahrenheit(
@@ -41,14 +48,18 @@ class FormateurMesures {
         )
       : _l10n.mesureCelsius(_nombre(celsius));
 
-  /// Degree sign only, for compact weather readings.
-  String temperatureCourte(double celsius) => _l10n.mesureDegres(
-    _nombre(
-      _imperial(GrandeurMesure.temperature)
-          ? _convertisseur.celsiusVersFahrenheit(celsius)
-          : celsius,
-    ),
+  /// The rounded number of degrees in the chosen scale, without symbol.
+  String degres(double celsius) => _nombre(
+    _imperial(GrandeurMesure.temperature)
+        ? _convertisseur.celsiusVersFahrenheit(celsius)
+        : celsius,
   );
+
+  bool get temperatureEnFahrenheit => _imperial(GrandeurMesure.temperature);
+
+  String get symboleTemperature => _imperial(GrandeurMesure.temperature)
+      ? _l10n.symbolesFahrenheit
+      : _l10n.symbolesCelsius;
 
   /// A temperature difference, such as the warmth a shelter adds.
   String ecartTemperature(double celsius) =>
@@ -79,6 +90,10 @@ class FormateurMesures {
       ? _l10n.mesurePouces(_nombre(_convertisseur.millimetresVersPouces(mm), 2))
       : _l10n.mesureMm(_nombre(mm, 1));
 
+  String altitudeM(double m) => _imperial(GrandeurMesure.longueur)
+      ? _l10n.mesurePieds(_nombre(_convertisseur.metresVersPieds(m)))
+      : _l10n.mesureMetres(_nombre(m));
+
   String vent(double kmh) => _imperial(GrandeurMesure.longueur)
       ? _l10n.mesureMph(_nombre(_convertisseur.kmhVersMph(kmh)))
       : _l10n.mesureKmh(_nombre(kmh));
@@ -90,9 +105,24 @@ class FormateurMesures {
         )
       : _l10n.mesureLitresM2(_nombre(litresParM2, 1));
 
+  /// A range of lengths; metric keeps the compact « 15–30 cm ».
+  String plageLongueurCm(int min, int max) =>
+      _imperial(GrandeurMesure.longueur)
+      ? _l10n.mesurePlage(longueurCm(min), longueurCm(max))
+      : _l10n.mesurePlageCm('$min', '$max');
+
+  /// A range of watering amounts, in L/m² or inches of water.
+  String plageArrosage(double min, double max) =>
+      _imperial(GrandeurMesure.longueur)
+      ? _l10n.mesurePoucesPlage(
+          _nombre(_convertisseur.millimetresVersPouces(min), 2),
+          _nombre(_convertisseur.millimetresVersPouces(max), 2),
+        )
+      : _l10n.mesurePlageLitresM2(_nombre(min, 1), _nombre(max, 1));
+
   String surfaceM2(double m2) => _imperial(GrandeurMesure.surface)
       ? _l10n.mesureFt2(_nombre(_convertisseur.m2VersFt2(m2), 1))
-      : _l10n.mesureM2(_nombre(m2, 1));
+      : _l10n.mesureM2(_nombre(m2, 2));
 
   /// Grams or kilograms; ounces under a pound, then pounds. The unit is
   /// chosen on the rounded value, so 999.6 g reads « 1 kg ».
@@ -122,3 +152,12 @@ class FormateurMesures {
         : _l10n.mesureLitres(_nombre(ml / _unitesParKilo, 1));
   }
 }
+
+/// The measure formatter for [context]'s language and the chosen units; in
+/// build, it rebuilds the widget when the units change.
+FormateurMesures formateurMesures(BuildContext context, WidgetRef ref) =>
+    FormateurMesures(AppLocalizations.of(context)!, ref.watch(unitesProvider));
+
+/// The same, read once, for callbacks run outside build.
+FormateurMesures formateurMesuresLu(BuildContext context, WidgetRef ref) =>
+    FormateurMesures(AppLocalizations.of(context)!, ref.read(unitesProvider));

@@ -23,6 +23,7 @@ import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/couleur_zone_ui.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/potager_actif_actions.dart';
@@ -447,7 +448,7 @@ class PlanPotager extends StatelessWidget {
 /// One plan bed: tinted, colour-bordered card with the zone name, up to three
 /// crop chips and a drop marker when a task is due today. Tapping it opens the
 /// zone detail.
-class _Planche extends StatelessWidget {
+class _Planche extends ConsumerWidget {
   final ZonePotager zone;
   final Color couleur;
   final VoidCallback onTap;
@@ -462,7 +463,7 @@ class _Planche extends StatelessWidget {
   static const int _maxPuces = 3;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
@@ -521,7 +522,7 @@ class _Planche extends StatelessWidget {
                 ),
               const SizedBox(height: EspacementsApp.s3),
               Text(
-                '${l10n.potagerSurfaceM2(_formaterSurface(zone.surfaceM2))}'
+                '${formateurMesures(context, ref).surfaceM2(zone.surfaceM2)}'
                 ' · ${l10n.exposition(zone.exposition)}',
                 style: theme.textTheme.labelSmall
                     ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
@@ -716,9 +717,3 @@ class _EtatErreur extends StatelessWidget {
   }
 }
 
-/// Formats a surface in m² without trailing ".0" for whole values.
-String _formaterSurface(double m2) {
-  return m2 == m2.roundToDouble()
-      ? m2.toStringAsFixed(0)
-      : m2.toStringAsFixed(1);
-}

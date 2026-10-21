@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
@@ -24,6 +25,7 @@ import '../../l10n/app_localizations.dart';
 import '../glossaire/catalogue/notions_associations.dart';
 import '../glossaire/terme_cliquable.dart';
 import 'explication_association.dart';
+import 'formateur_mesures.dart';
 import 'fiche_plante_detail.dart';
 import 'langue_contexte.dart';
 import 'libelles_enums.dart';
@@ -300,7 +302,7 @@ class _GroupeAssoc {
   }
 }
 
-class _VueAssociations extends StatefulWidget {
+class _VueAssociations extends ConsumerStatefulWidget {
   final FichePlante centre;
   final List<_NoeudAssoc> bons;
   final List<_NoeudAssoc> aEviter;
@@ -327,13 +329,13 @@ class _VueAssociations extends StatefulWidget {
   static const int maxDerivesParCote = 5;
 
   @override
-  State<_VueAssociations> createState() => _VueAssociationsState();
+  ConsumerState<_VueAssociations> createState() => _VueAssociationsState();
 }
 
 /// Filter options for the second (suggestion-level) filter row.
 enum _FiltreSugg { tout, eleve, moyen, faible, horsMoteur }
 
-class _VueAssociationsState extends State<_VueAssociations> {
+class _VueAssociationsState extends ConsumerState<_VueAssociations> {
   bool _tousAffiches = false;
 
   /// Direction filter; `null` = all directions.
@@ -481,8 +483,8 @@ class _VueAssociationsState extends State<_VueAssociations> {
                         final recoit = n.sens == SensAssociation.recoit;
                         final source = recoit ? n.fiche : widget.centre;
                         final cible = recoit ? widget.centre : n.fiche;
-                        final facteurs = facteursAssociation(
-                            l10n, n.criteres, source, cible);
+                        final facteurs = facteursAssociation(l10n, n.criteres,
+                            source, cible, formateurMesuresLu(context, ref));
                         unawaited(afficherFichePlanteDetail(
                           context,
                           n.fiche,

@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/state/jour_meteo_vue.dart';
 import '../../application/state/meteo_accueil_vue.dart';
 import '../../domain/enums/etat_ciel_jour.dart';
 import '../../l10n/app_localizations.dart';
+import 'formateur_mesures.dart';
 
 /// Writes the weather-detail summaries in the user's language.
 class RedacteurResumeMeteo {
@@ -12,20 +13,21 @@ class RedacteurResumeMeteo {
   static const double _seuilPluie = 0.30;
 
   final AppLocalizations _l10n;
-  final NumberFormat _mm;
+  final FormateurMesures _mesures;
 
-  RedacteurResumeMeteo(this._l10n, Locale locale)
-      : _mm = NumberFormat('0.0', locale.toLanguageTag());
+  RedacteurResumeMeteo(this._l10n, this._mesures);
 
-  /// Writer for the locale of [context].
-  factory RedacteurResumeMeteo.de(BuildContext context) => RedacteurResumeMeteo(
-      AppLocalizations.of(context)!, Localizations.localeOf(context));
+  /// Writer for the language of [context] and the chosen units.
+  factory RedacteurResumeMeteo.de(BuildContext context, WidgetRef ref) =>
+      RedacteurResumeMeteo(
+          AppLocalizations.of(context)!, formateurMesures(context, ref));
 
   /// Summary of [jour]: sky, temperatures, alert, rain and wind.
   String resumeJour(JourMeteoVue jour) {
     final phrases = [
       _l10n.meteoResumeEtat(EtatCielJour.depuisWmo(jour.weathercode).name),
-      _l10n.meteoResumeTemperatures(jour.tempMin.round(), jour.tempMax.round()),
+      _l10n.meteoResumeTemperatures(
+          _mesures.degres(jour.tempMin), _mesures.degres(jour.tempMax)),
       if (jour.risqueGel)
         _l10n.meteoResumeGel
       else if (jour.risqueCanicule)
@@ -33,9 +35,10 @@ class RedacteurResumeMeteo {
       if (jour.probabilitePluie >= _seuilPluie)
         jour.precipitationsMm > 0
             ? _l10n.meteoResumePluieVolume(
-                _pourcent(jour), _mm.format(jour.precipitationsMm))
+                _pourcent(jour), _mesures.precipitations(jour.precipitationsMm))
             : _l10n.meteoResumePluie(_pourcent(jour)),
-      _l10n.meteoResumeVent(_forceVent(jour.ventMaxKmh), jour.ventMaxKmh.round()),
+      _l10n.meteoResumeVent(
+          _forceVent(jour.ventMaxKmh), _mesures.vent(jour.ventMaxKmh)),
     ];
     return phrases.join(' ');
   }
@@ -44,13 +47,14 @@ class RedacteurResumeMeteo {
   String resumeDemain(JourMeteoVue demain) {
     final etat = _l10n
         .meteoDemainEtat(EtatCielJour.depuisWmo(demain.weathercode).name);
-    final max = demain.tempMax.round();
+    final max = _mesures.degres(demain.tempMax);
     if (demain.probabilitePluie < _seuilPluie) {
       return _l10n.meteoDemain(etat, max);
     }
     return demain.precipitationsMm > 0
         ? _l10n.meteoDemainPluieVolume(
-            etat, max, _pourcent(demain), _mm.format(demain.precipitationsMm))
+            etat, max, _pourcent(demain),
+            _mesures.precipitations(demain.precipitationsMm))
         : _l10n.meteoDemainPluie(etat, max, _pourcent(demain));
   }
 

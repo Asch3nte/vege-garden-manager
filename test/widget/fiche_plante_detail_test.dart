@@ -16,6 +16,9 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/fiche_plante_detail.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/providers/unites_provider.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 import '../helpers/favoris_mock.dart';
 
 FichePlante _fiche({int? difficulte}) => FichePlante(
@@ -74,12 +77,14 @@ Future<void> _ouvrir(
   FichePlante fiche, {
   required NiveauExperience niveau,
   Locale? locale,
+  PreferencesUnites unites = const PreferencesUnites(),
 }) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
         accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
+        unitesProvider.overrideWithValue(unites),
       ],
       child: MaterialApp(
         locale: locale,
@@ -111,6 +116,22 @@ void main() {
     expect(find.text('Mi-ombre à plein soleil'), findsOneWidget);
     expect(find.text('15–30 cm'), findsOneWidget);
     expect(find.text('6 à 7'), findsOneWidget);
+  });
+
+  testWidgets('imperial units convert spacing and height',
+      (tester) async {
+    const imperial = PreferencesUnites.uniforme(SystemeUnites.imperial);
+    await _ouvrir(tester, _fiche(),
+        niveau: NiveauExperience.debutant, unites: imperial);
+    expect(find.text('11,8 in'), findsOneWidget);
+    expect(find.text('5,9 in – 11,8 in'), findsOneWidget);
+  });
+
+  testWidgets('imperial watering reads in inches of water', (tester) async {
+    await _ouvrir(tester, _ficheAvecDetail(),
+        niveau: NiveauExperience.expert,
+        unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+    expect(find.text('0,12 à 0,2 in'), findsOneWidget);
   });
 
   testWidgets('the sheet names the plant in the active language',
