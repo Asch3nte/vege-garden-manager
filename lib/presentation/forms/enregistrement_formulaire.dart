@@ -11,8 +11,10 @@ mixin EnregistrementFormulaire<W extends StatefulWidget> on State<W> {
   /// Whether a save is in progress (the submit button is then disabled).
   bool get enregistrementEnCours => _enregistrement;
 
-  /// Runs [action] and pops the route with its result.
-  Future<void> enregistrer<T>(Future<T> Function() action) async {
+  /// Runs [action] and pops the route with its result. On failure,
+  /// [messageErreur] may give a specific message for the exception.
+  Future<void> enregistrer<T>(Future<T> Function() action,
+      {String? Function(Exception)? messageErreur}) async {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = AppLocalizations.of(context)!;
     setState(() => _enregistrement = true);
@@ -23,9 +25,8 @@ mixin EnregistrementFormulaire<W extends StatefulWidget> on State<W> {
       reussi = true;
     } on Exception catch (e) {
       debugPrint('Form save failed: $e');
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.formEnregistrementErreur)),
-      );
+      messenger.showSnackBar(SnackBar(
+          content: Text(messageErreur?.call(e) ?? l10n.formEnregistrementErreur)));
       return;
     } finally {
       if (!reussi && mounted) setState(() => _enregistrement = false);

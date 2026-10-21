@@ -131,8 +131,25 @@ class Parcelle {
       .fold(Surface.zero, (total, s) => total + s);
 
   /// Surface still free (clamped at zero if over-planted).
-  Surface surfaceLibre() {
-    final occupee = surfaceOccupee();
+  Surface surfaceLibre() => _libreApres(_plantations);
+
+  /// Throws [SurfaceInsuffisanteException] when the active [plantation] does
+  /// not fit beside the plantations [enPlace] of this parcelle.
+  void verifierPlace(Plantation plantation,
+      {required Iterable<Plantation> enPlace}) {
+    if (!plantation.estActive()) return;
+    final libre = _libreApres(enPlace);
+    if (plantation.surfaceOccupee > libre) {
+      throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
+    }
+  }
+
+  /// Surface left free by the active plantations among [plantations].
+  Surface _libreApres(Iterable<Plantation> plantations) {
+    final occupee = plantations
+        .where((p) => p.estActive())
+        .map((p) => p.surfaceOccupee)
+        .fold(Surface.zero, (total, s) => total + s);
     return occupee >= _surface ? Surface.zero : _surface - occupee;
   }
 

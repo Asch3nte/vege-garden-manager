@@ -1433,6 +1433,8 @@
   "@formPotagerPositionRefusee": { "description": "Erreur : permission géoloc refusée." },
   "formEnregistrementErreur": "Enregistrement impossible. Réessayez.",
   "@formEnregistrementErreur": { "description": "Erreur générique : la sauvegarde d'un formulaire a échoué." },
+  "plantationSurfaceInsuffisante": "Plus assez de place dans cette zone : {libre} m² libres.",
+  "@plantationSurfaceInsuffisante": { "description": "Plantation refusée : la zone n'a plus assez de surface libre (m² déjà formaté).", "placeholders": { "libre": { "type": "String" } } },
   "formPotagerPositionErreur": "Position indisponible (vérifie le GPS et l'autorisation).",
   "@formPotagerPositionErreur": { "description": "Erreur : impossible d'obtenir la position." },
   "formPotagerChoisirRegion": "Choisir une région",

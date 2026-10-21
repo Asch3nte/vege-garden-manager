@@ -6,21 +6,28 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
+import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
+import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
+import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_plantation.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
 class MockPlantations extends Mock implements AbstractPlantationRepository {}
+
+class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
 class _FakePlantation extends Fake implements Plantation {}
 
@@ -31,6 +38,7 @@ void main() {
 
   late MockFiches fiches;
   late MockPlantations plantations;
+  late MockParcelles parcelles;
 
   FichePlante fiche(String id, String nomFr) => FichePlante(
         id: id,
@@ -54,6 +62,15 @@ void main() {
   setUp(() {
     fiches = MockFiches();
     plantations = MockPlantations();
+    parcelles = MockParcelles();
+    when(() => parcelles.obtenirParId('z-1')).thenAnswer((_) async => Parcelle(
+          id: 'z-1',
+          nom: 'Bac',
+          potagerId: 'pot1',
+          type: TypeParcelle.bacSureleve,
+          surface: Surface.enMetresCarres(4),
+          exposition: NiveauSoleil.pleinSoleil,
+        ));
     when(() => fiches.obtenirToutes())
         .thenAnswer((_) async => [fiche('tomate', 'Tomate')]);
     when(() => plantations.sauvegarder(any())).thenAnswer((_) async {});
@@ -72,6 +89,7 @@ void main() {
             return familles;
           }),
           plantationRepositoryProvider.overrideWithValue(plantations),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -102,6 +120,34 @@ void main() {
     expect(plantation.planteId, 'tomate');
     expect(plantation.parcelleId, 'z-1');
     expect(plantation.nombrePieds, 1);
+  });
+
+  testWidgets('a zone without room refuses the plantation with a reason',
+      (tester) async {
+    when(() => plantations.obtenirParParcelle(any())).thenAnswer((_) async => [
+          Plantation(
+            id: 'en-place',
+            planteId: 'courge',
+            parcelleId: 'z-1',
+            dateMiseEnPlace: DateTime(2026, 5, 1),
+            methode: MethodeMiseEnPlace.repiquage,
+            surfaceOccupee: Surface.enMetresCarres(3.75),
+            nombrePieds: 1,
+          ),
+        ]);
+    await monter(tester);
+    await tester.tap(find.byType(DropdownButtonFormField<FichePlante>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tomate').last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.widgetWithText(TextFormField, '0.5'), '1');
+
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Plus assez de place dans cette zone : 0,25 m² libres.'),
+        findsOneWidget);
+    verifyNever(() => plantations.sauvegarder(any()));
   });
 
   testWidgets('the planting-type field is renamed and describes each option',
@@ -141,6 +187,7 @@ void main() {
             return familles;
           }),
           plantationRepositoryProvider.overrideWithValue(plantations),
+          parcelleRepositoryProvider.overrideWithValue(parcelles),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),

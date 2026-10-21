@@ -512,6 +512,7 @@
   "formPotagerPositionDetectee": "Climate and hardiness zone pre-filled from your location — adjust if needed.",
   "formPotagerPositionRefusee": "Location permission denied.",
   "formEnregistrementErreur": "Could not save. Please try again.",
+  "plantationSurfaceInsuffisante": "Not enough room left in this zone: {libre} m² free.",
   "formPotagerPositionErreur": "Location unavailable (check GPS and permissions).",
   "formPotagerChoisirRegion": "Choose a region",
   "captureLocalisationTitre": "Set my location",
