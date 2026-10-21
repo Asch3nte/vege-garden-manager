@@ -18,7 +18,7 @@ import 'type_terme_glossaire.dart';
 /// the reference lists and hand them over. The locale comes from
 /// [AppLocalizations.localeName], so a term's title follows the app language.
 ///
-/// Guarantees (verified by the integrity test, D6):
+/// Guarantees (verified by the integrity test):
 ///  - ids are unique and prefixed (`famille.` / `bio.` / `outil.` / `notion.`);
 ///  - families and bioaggressors are sorted alphabetically by localized title
 ///    (stable rendering), notions keep their catalogue order;

@@ -501,7 +501,7 @@ class _CarteGroupeState extends State<_CarteGroupe> {
 }
 
 /// One species row: name, category, sun & water needs; trailing chevron, or an
-/// expand toggle (arrow only — the variety count is dropped, #1) when [onToggle]
+/// expand toggle (arrow only — the variety count is dropped) when [onToggle]
 /// is set.
 class _CarteFiche extends ConsumerWidget {
   final FichePlante fiche;

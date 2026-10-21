@@ -81,7 +81,7 @@ class VueReseauCatalogue extends StatefulWidget {
   final List<FichePlante> fiches;
 
   /// Returns the varieties of the species [mereId], listed below the network
-  /// when that species is selected (#9).
+  /// when that species is selected.
   final List<FichePlante> Function(String mereId) varietesDe;
   final void Function(FichePlante) onAjouter;
 
@@ -188,7 +188,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   Timer? _recadrageTaille;
 
   // Drives BOX 2 (the fiches sheet); its size shrinks BOX 1 (the network) and
-  // toggles the compact form (#10).
+  // toggles the compact form.
   final DraggableScrollableController _feuille =
       DraggableScrollableController();
   double _tailleFeuille = _feuilleMin;
@@ -470,7 +470,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
   /// Closes the search: clears the field, collapses it back to the magnifier,
   /// and **drops the focus** (deselects + recenters) to return to the global
-  /// view (tweak #2/#5).
+  /// view.
   void _fermerRecherche() {
     _ctrlRecherche.clear();
     setState(() {
@@ -484,7 +484,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
   /// In the **global** (unselected) view, the set of nodes whose constant-size
   /// name label fits at transform [t] without overlapping any node disc or an
-  /// already-placed label (tweak #6) — greedy, deterministic by index order.
+  /// already-placed label — greedy, deterministic by index order.
   Set<int> _labelsQuiTiennent(_TransformReseau t, TextStyle style) {
     final rayon = _rayonEcran(t);
     final discs = [
@@ -789,7 +789,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 
   /// BOX 2: the draggable fiches sheet — toggle + selected-species panel + its
-  /// varieties (#9). Swiping it up shrinks BOX 1 (#10); it scrolls internally
+  /// varieties. Swiping it up shrinks BOX 1; it scrolls internally
   /// once fully expanded.
   Widget _construireFeuille(
     BuildContext context,
@@ -851,7 +851,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     );
   }
 
-  /// Builds the interactive constellation canvas (#7/#8). Behaves identically
+  /// Builds the interactive constellation canvas. Behaves identically
   /// whether BOX 1 is reduced or not: bubbles + full names + de-overlap.
   Widget _construireCanvas(BuildContext context) {
     final theme = Theme.of(context);
@@ -887,7 +887,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
         Offset posAffichee(int i) => _posAffichee(i);
 
         // Node disc radius at this zoom; attenuated nodes (in focus) halve it
-        // and fade more (tweak #3). Bubbles scale with zoom (dev request).
+        // and fade more. Bubbles scale with zoom.
         final rBase = _rayonEcran(t);
         double rayonDe(int i) =>
             (_selection != null &&
@@ -896,15 +896,15 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                 : rBase;
         // Which nodes show a full-name label: in focus, the focus set (#8a); in
         // the global view, those whose label fits without overlap at this zoom
-        // (tweak #6).
+        //.
         final style = _styleEtiquette(context);
         final nommes = _selection == null
             ? _labelsQuiTiennent(t, style)
             : const <int>{};
 
         // Node + label layer. Global view: plain discs + the labels that fit
-        // (#6). Focus: same-family links collapse into one grouped node — family
-        // name above, species listed below, each tappable (dev request).
+        //. Focus: same-family links collapse into one grouped node — family
+        // name above, species listed below, each tappable.
         final List<Widget> coucheNoeuds;
         if (_selection == null) {
           coucheNoeuds = [
@@ -946,7 +946,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
           onScaleUpdate: _majGeste,
           // A stationary tap on the empty canvas resolves to this recognizer
           // (a drag/pinch goes to the scale one); it selects the nearest node
-          // within [_hitboxMax] (Voronoï hit-testing, #3).
+          // within [_hitboxMax] (Voronoï hit-testing).
           onTapUp: _surTapCanvas,
           child: ClipRect(
             child: Stack(
@@ -959,7 +959,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                     transform: t,
                     // Global view: every family labelled (unless the toggle is
                     // off). In focus, halo labels are suppressed — the grouped
-                    // family nodes carry the family name instead (dev request).
+                    // family nodes carry the family name instead.
                     famillesAvecLabel: (_afficherNomsFamille && _selection == null)
                         ? null
                         : const <String>{},
@@ -1038,7 +1038,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
   /// Whether node [i] is a good (true) or to-avoid (false) companion of the
   /// selected node, or `null` if there is no edge / it is the selection itself —
-  /// drives the green/red label background in focus (tweak #1).
+  /// drives the green/red label background in focus.
   bool? _relationAvecSelection(int i) {
     final sel = _selection;
     if (sel == null || sel == i) return null;
@@ -1049,7 +1049,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 
   /// The focus node layer: faded context bubbles plus **one grouped node per
-  /// family among the selection and its links** (#2). The selected node now
+  /// family among the selection and its links**. The selected node now
   /// merges **into** its own family group — listed first with a neutral label —
   /// so a same-family companion sits beside it under a single family node (no
   /// separate "selected node" disc). Each name is tappable (the selection →
@@ -1057,7 +1057,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   List<Widget> _coucheFocus(_TransformReseau t, double rBase, Set<int> voisins) {
     final sel = _selection!;
     // Group the selection together with its links, so same-family links fuse
-    // with it instead of with a standalone node (#2).
+    // with it instead of with a standalone node.
     final groupes = <String, List<int>>{};
     for (final i in {sel, ...voisins}) {
       groupes.putIfAbsent(widget.fiches[i].familleBotanique, () => []).add(i);
@@ -1113,7 +1113,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 }
 
-/// A variety row listed under the selected species in the network view (#9),
+/// A variety row listed under the selected species in the network view,
 /// opening the variety's sheet on tap. Mirrors `_LigneVariete` of the Fiches
 /// view.
 class _LigneVarieteReseau extends StatelessWidget {
@@ -1187,7 +1187,7 @@ class _Noeud extends StatelessWidget {
       onTap: onTap,
       child: Opacity(
         // Attenuated nodes (in focus) fade further so the focus reads clearly
-        // (tweak #3).
+        //.
         opacity: attenue ? 0.15 : 1,
         child: Container(
           width: rayon * 2,
@@ -1221,7 +1221,7 @@ class _Noeud extends StatelessWidget {
 /// Kept at a constant on-screen size (it lives outside the zoom transform).
 ///
 /// [relation] tints the background to show the relationship to the selection
-/// (tweak #1): green for a good companion, red for one to avoid, neutral when
+///: green for a good companion, red for one to avoid, neutral when
 /// `null` (the selection itself, or the global view).
 class _EtiquetteNoeud extends StatelessWidget {
   final String nom;
@@ -1261,11 +1261,11 @@ class _EtiquetteNoeud extends StatelessWidget {
   }
 }
 
-/// A grouped focus node in the constellation (dev request): when a plant is
+/// A grouped focus node in the constellation: when a plant is
 /// selected, the members of one family collapse here — the family name above, a
 /// disc (species count), and the species names below (each tappable; green/red
 /// per relationship to the selection, neutral for the selection itself). The
-/// selected species' own family group lists it first (#2).
+/// selected species' own family group lists it first.
 class _GroupeFocusReseau extends StatelessWidget {
   final String famille;
   final List<FichePlante> especes;
@@ -1345,7 +1345,7 @@ class _GroupeFocusReseau extends StatelessWidget {
   }
 }
 
-/// Overlaid display controls (#7): collapsed to a single button; opening it
+/// Overlaid display controls: collapsed to a single button; opening it
 /// reveals zoom in / out / recenter and the two toggles (links, family names).
 /// Tapping outside closes it (like the search). Doubles the pinch gesture.
 class _ControlesZoom extends StatelessWidget {
@@ -1439,7 +1439,7 @@ class _ControlesZoom extends StatelessWidget {
   }
 }
 
-/// Overlaid name search: collapsed to a magnifier button (tweak #2);
+/// Overlaid name search: collapsed to a magnifier button;
 /// tapping it opens the text field. Finds a species by name, selecting + framing
 /// it on submit (accent/case-insensitive). Closing it returns to the global view.
 class _BarreRecherche extends StatelessWidget {
@@ -1466,7 +1466,7 @@ class _BarreRecherche extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    // Collapsed: just a magnifier button (tweak #2).
+    // Collapsed: just a magnifier button.
     if (!ouverte) {
       return Material(
         color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.92),
@@ -1493,7 +1493,7 @@ class _BarreRecherche extends StatelessWidget {
               controller: controleur,
               autofocus: true,
               textInputAction: TextInputAction.search,
-              // Keep the text vertically centred in the pill (tweak #1).
+              // Keep the text vertically centred in the pill.
               textAlignVertical: TextAlignVertical.center,
               onSubmitted: onSoumettre,
               // Tapping outside an *empty* field collapses it back to the
@@ -1666,9 +1666,9 @@ class _Panneau extends StatelessWidget {
 
 /// Paints the family halos: a smooth, non-overlapping "blobby" disc per family.
 /// The family name sits in a pill **just above** the halo so it does
-/// not collide with the bubbles inside (tweak #4). In focus, only the families
-/// in [famillesAvecLabel] keep their name; the others show just the halo (tweak
-/// #3). `null` means label every family (global view). Sits under edges/nodes.
+/// not collide with the bubbles inside. In focus, only the families
+/// in [famillesAvecLabel] keep their name; the others show just the halo.
+/// `null` means label every family (global view). Sits under edges/nodes.
 class _PeintreFoyers extends CustomPainter {
   final List<FoyerFamille> foyers;
   final _TransformReseau transform;
@@ -1715,7 +1715,7 @@ class _PeintreFoyers extends CustomPainter {
         textDirection: TextDirection.ltr,
       )..layout();
       // Pill just above the halo's top edge → clears the family's own bubbles
-      // (tweak #4), with a translucent backing for readability over anything.
+      //, with a translucent backing for readability over anything.
       final origine = Offset(centre.dx - tp.width / 2, centre.dy - rayon - tp.height - 4);
       final pastille = Rect.fromLTWH(
         origine.dx - 4,

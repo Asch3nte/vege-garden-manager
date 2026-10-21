@@ -15,7 +15,7 @@ import 'type_terme_glossaire.dart';
 
 /// The static catalogue of **notions & tools** — every
 /// glossary entry that is *not* derived from a YAML reference. Content lives
-/// in the ARB (`glossaire*` keys) and may embed wiki links (D2).
+/// in the ARB (`glossaire*` keys) and may embed wiki links.
 ///
 /// The catalogue covers the transverse seed notions
 /// below, then one chapter file per book chapter under `catalogue/` (one page

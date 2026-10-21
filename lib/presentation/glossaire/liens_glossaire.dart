@@ -10,7 +10,7 @@
 /// [analyserLiensGlossaire] splits a text into plain/link segments. It is a
 /// **pure** function: rendering (colored clickable spans, dead-link fallback)
 /// belongs to the widgets; integrity (every id resolves) is enforced by the
-/// glossary integrity test (D6).
+/// glossary integrity test.
 library;
 
 /// One segment of an analysed glossary text: either plain text or a link.
@@ -91,6 +91,6 @@ List<SegmentTexte> analyserLiensGlossaire(String texte) {
 }
 
 /// Every link id present in [texte], in order of appearance (with duplicates).
-/// Used by the integrity test (D6) to check that all links resolve.
+/// Used by the integrity test to check that all links resolve.
 List<String> extraireIdsLiens(String texte) => List<String>.unmodifiable(
     analyserLiensGlossaire(texte).whereType<SegmentLien>().map((s) => s.idCible));

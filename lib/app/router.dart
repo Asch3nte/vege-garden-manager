@@ -115,7 +115,7 @@ abstract final class RoutesApp {
 
   // « Aide & lexique » glossary: the panel and its chapter/term
   // pages are sub-routes of [plus] so they join the global back history —
-  // back replays pages in the exact order the user opened them (D3).
+  // back replays pages in the exact order the user opened them.
   static const String plusAideSegment = 'aide';
   static const String plusAide = '$plus/$plusAideSegment';
 
@@ -363,7 +363,7 @@ final routeurProvider = Provider<GoRouter>((ref) {
                 routes: [
                   // Hourly weather detail (opened from the weather card). The
                   // zone detail is no longer registered here: a dashboard zone
-                  // tile now jumps to the Potager branch (#5), and the global
+                  // tile now jumps to the Potager branch, and the global
                   // back stack returns to the dashboard.
                   GoRoute(
                     path: RoutesApp.accueilMeteoSegment,

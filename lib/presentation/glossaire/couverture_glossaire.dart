@@ -34,7 +34,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   // — Santé du jardin —
   'TypeBioagresseur': [TermeGlossaire.idNotion('bioagresseur')],
 
-  // — Sol & terre — (textures & techniques: one page per value, D1)
+  // — Sol & terre — (textures & techniques: one page per value)
   'TextureSol': [
     TermeGlossaire.idNotion('texture-sol'),
     TermeGlossaire.idNotion('sol-argileux'),
@@ -110,7 +110,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'NiveauExperience': [TermeGlossaire.idNotion('niveaux-experience')],
 });
 
-/// Enums consciously **excluded** from the glossary (D6): pure UI/device
+/// Enums consciously **excluded** from the glossary: pure UI/device
 /// mechanics with no gardening meaning to explain. This list is the only
 /// escape hatch — an enum absent from both lists breaks the integrity test,
 /// so every exclusion is a documented decision.

@@ -11,7 +11,7 @@ import 'terme_glossaire.dart';
 ///
 /// Rules (never a dead link):
 ///  - a link whose id resolves in [index] becomes an underlined span
-///    **coloured by the target's kind** (the D5 chart — same grammar as
+///    **coloured by the target's kind** (the kind colour chart — same grammar as
 ///    `TermeCliquable`); a **bare** link (`[[id]]`) displays the target's
 ///    title instead of the id;
 ///  - a link whose id does **not** resolve renders as plain text (its label).

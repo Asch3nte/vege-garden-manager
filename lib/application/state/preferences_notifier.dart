@@ -83,7 +83,7 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
       _modifier((p) => p.copierAvec(meteoAutoActive: actif));
 
   /// Sets the do-not-disturb window (`HH:MM` bounds); notifications whose time
-  /// falls inside are suppressed by the Application layer (opt-out #3).
+  /// falls inside are suppressed by the Application layer.
   Future<void> definirNePasDeranger(String debut, String fin) =>
       _modifier((p) => p.avecNePasDeranger(debut, fin));
 

@@ -62,7 +62,7 @@ class EcranAccueil extends ConsumerWidget {
           onRefresh: () async => ref.invalidate(accueilProvider),
           child: _Contenu(
             vue: data,
-            // Jump to the zone detail on the Potager tab (#5); the global back
+            // Jump to the zone detail on the Potager tab; the global back
             // stack returns straight to the dashboard.
             onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
             onToggleTache: (t) =>

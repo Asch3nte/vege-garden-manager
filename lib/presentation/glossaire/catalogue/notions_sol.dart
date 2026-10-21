@@ -14,7 +14,7 @@ import '../type_terme_glossaire.dart';
 
 /// « Sol & terre » chapter of the notion catalogue.
 ///
-/// Per the D1 granularity rule, concrete objects get **one page per value**:
+/// concrete objects get **one page per value**:
 /// each soil texture and each soil technique has its own page; scales (pH,
 /// qualities…) get one concept page listing their values.
 List<TermeGlossaire> construireNotionsSol(AppLocalizations l10n) => [
@@ -160,7 +160,7 @@ List<TermeGlossaire> construireNotionsSol(AppLocalizations l10n) => [
       ),
     ];
 
-/// Glossary id of a texture page (one page per value, D1).
+/// Glossary id of a texture page (one page per value).
 String _idTexture(TextureSol v) => TermeGlossaire.idNotion(switch (v) {
       TextureSol.argileux => 'sol-argileux',
       TextureSol.sableux => 'sol-sableux',
@@ -222,7 +222,7 @@ TermeGlossaire _pageTexture(AppLocalizations l10n, TextureSol v) {
   );
 }
 
-/// Glossary id of a technique page (one page per value, D1). Public because
+/// Glossary id of a technique page (one page per value). Public because
 /// other chapters link to techniques (paillage, no-dig…) and the coverage map
 /// enumerates them.
 String idTechnique(TechniqueSol v) => TermeGlossaire.idNotion(switch (v) {

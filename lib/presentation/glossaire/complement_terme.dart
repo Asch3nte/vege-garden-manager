@@ -75,7 +75,7 @@ class ComplementBioagresseur extends ComplementTerme {
 typedef ValeurDecrite = ({String libelle, String? description});
 
 /// Enum-values block: the list of an enum's values with their existing
-/// descriptions (reuses `LibellesEnums.*Description` — D3), for notion pages
+/// descriptions (reuses `LibellesEnums.*Description`), for notion pages
 /// that explain a scale (soil pH, water needs…).
 class ComplementValeursEnum extends ComplementTerme {
   final List<ValeurDecrite> _valeurs;
@@ -89,7 +89,7 @@ class ComplementValeursEnum extends ComplementTerme {
   List<ValeurDecrite> get valeurs => _valeurs;
 }
 
-/// Provenance block of an association-mechanism page (annexe A):
+/// Provenance block of an association-mechanism page:
 /// whether the mechanism can be **computed by the engine** (a derivation rule
 /// exists in `MoteurDerivationAssociations`) or is only **documented by the
 /// permaculture community** (curated pairs from the YAML sheets).

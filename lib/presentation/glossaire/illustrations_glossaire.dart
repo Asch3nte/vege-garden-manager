@@ -27,7 +27,7 @@ const Set<String> idsIllustres = {
 };
 
 /// Asset path of the illustration of [idTerme], or `null` when the term has
-/// none (D4: no image block is rendered).
+/// none (no image block is rendered).
 String? illustrationDe(String idTerme) => idsIllustres.contains(idTerme)
     ? '$dossierIllustrationsGlossaire/$idTerme.webp'
     : null;

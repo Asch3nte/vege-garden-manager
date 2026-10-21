@@ -113,7 +113,7 @@ class GenererTachesArrosage {
     final n = _maintenant();
     final debutJour = DateTime(n.year, n.month, n.day);
 
-    // Notification opt-outs (constraint #3): the watering push is only scheduled
+    // Notification opt-outs: the watering push is only scheduled
     // when the master switch is on and the 'arrosage' category is not muted.
     // The do-not-disturb window is time-based, so it is checked per scheduled
     // time in [_programmerRecap]. Loaded once — constant across plantations.
@@ -213,7 +213,7 @@ class GenererTachesArrosage {
     }
 
     // A single push notification for everything urgent today, honouring the
-    // notification opt-outs (constraint #3). The tasks themselves are always
+    // notification opt-outs. The tasks themselves are always
     // created above — opt-outs mute the notification, not the gardening plan.
     // Called even with nothing to water: the day-scoped id must then be
     // cancelled rather than left pending.
@@ -269,7 +269,7 @@ class GenererTachesArrosage {
   /// names go **in the title** (truncated with a "+N" overflow marker) and the
   /// **full list** in the body.
   ///
-  /// [notifiable] carries the notification opt-outs (constraint #3): when false,
+  /// [notifiable] carries the notification opt-outs: when false,
   /// nothing is scheduled and any pending notification for the day is cancelled.
   /// [fenetreNpd] suppresses a notification whose time falls in the
   /// do-not-disturb window.

@@ -35,7 +35,7 @@ void ouvrirTermeGlossaire(BuildContext context, String idTerme) {
   }
 }
 
-/// An **inline clickable term**: coloured by its glossary kind (the D5 chart),
+/// An **inline clickable term**: coloured by its glossary kind (the kind colour chart),
 /// discreetly underlined, tapping opens its glossary page. This is the same
 /// visual grammar as the wiki links rendered by `TexteAvecLiens` — one look,
 /// everywhere (plant sheets, panels, glossary pages…).
@@ -106,7 +106,7 @@ class AideGlossaire extends StatelessWidget {
 
 /// A **clickable term chip** (shared by the glossary pages and the app
 /// surfaces, e.g. the plant sheet's disease/pest chips): label tinted by the
-/// D5 chart, optional tooltip, tapping opens the term page.
+/// kind colour chart, optional tooltip, tapping opens the term page.
 class PuceTermeGlossaire extends StatelessWidget {
   /// Prefixed glossary id of the target term.
   final String idTerme;

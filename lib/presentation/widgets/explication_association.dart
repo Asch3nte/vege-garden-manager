@@ -3,7 +3,7 @@ import '../../domain/enums/critere_association.dart';
 import '../../l10n/app_localizations.dart';
 
 /// Builds the **full, explicit list of factors** behind a derived association
-/// (Décision 1/2): one localised sentence per [CritereAssociation] the
+/// : one localised sentence per [CritereAssociation] the
 /// engine evaluated, **with the real values** read from the two sheets — so the
 /// user sees every variable that entered the calculation, never a vague phrase.
 ///
