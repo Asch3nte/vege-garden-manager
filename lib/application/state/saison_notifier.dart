@@ -5,6 +5,7 @@ import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
+import '../../domain/services/comparateur_noms.dart';
 import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'contexte_climat.dart';
@@ -65,7 +66,7 @@ class SaisonNotifier extends AsyncNotifier<SaisonVue> {
         recolte: pc?.recolte,
       ));
     }
-    lignes.sort((a, b) => a.nom.compareTo(b.nom));
+    lignes.sort((a, b) => const ComparateurNoms().comparer(a.nom, b.nom));
 
     return SaisonVue(
       hemisphereSuppose: contexte.hemisphereSuppose,

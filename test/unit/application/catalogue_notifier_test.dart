@@ -100,6 +100,18 @@ void main() {
     expect(vue.filtreActif, isFalse);
   });
 
+  test('orders accented and lowercase names alphabetically', () async {
+    catalogue = [
+      fiche('tomate', 'Tomate', CategoriePlante.legume),
+      fiche('echalote', 'Échalote', CategoriePlante.legume),
+      fiche('ail', 'ail', CategoriePlante.legume),
+      fiche('fraise', 'Fraise', CategoriePlante.petitFruit),
+    ];
+    final vue = await conteneur().read(catalogueProvider.future);
+
+    expect(vue.fiches.map((f) => f.id), ['ail', 'echalote', 'fraise', 'tomate']);
+  });
+
   test('sorts and searches by the names of the user language', () async {
     catalogue = [
       fiche('courgette', 'Courgette', CategoriePlante.legume, nomEn: 'Zucchini'),
@@ -135,6 +147,30 @@ void main() {
     final vue = c.read(catalogueProvider).value!;
 
     expect(vue.fiches.map((f) => f.id), ['tomate']);
+  });
+
+  test('query ignores accents on both sides', () async {
+    catalogue = [
+      fiche('epinard', 'Épinard', CategoriePlante.legume),
+      fiche('tomate', 'Tomate', CategoriePlante.legume),
+      fiche('tomate-v1', 'Cœur de bœuf', CategoriePlante.legume,
+          parentId: 'tomate'),
+    ];
+    final c = conteneur();
+    await c.read(catalogueProvider.future);
+    final notifier = c.read(catalogueProvider.notifier);
+
+    notifier.definirRequete('epinard');
+    expect(c.read(catalogueProvider).value!.fiches.map((f) => f.id),
+        ['epinard']);
+
+    notifier.definirRequete('coeur');
+    expect(c.read(catalogueProvider).value!.fiches.map((f) => f.id),
+        ['tomate']);
+
+    notifier.definirRequete('TÔMATE');
+    expect(c.read(catalogueProvider).value!.fiches.map((f) => f.id),
+        ['tomate']);
   });
 
   test('combines query and category', () async {

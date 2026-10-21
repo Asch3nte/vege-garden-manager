@@ -2,26 +2,15 @@
 /// looking into titles **and** definitions, title matches ranked first.
 library;
 
+import '../../domain/services/comparateur_noms.dart';
 import 'terme_glossaire.dart';
-
-const String _accents = 'àâäáãåçèêëéìîïíòôöóõùûüúÿñ';
-const String _sans = 'aaaaaaceeeeiiiiooooouuuuyn';
 
 /// Lowercases [texte] and strips French accents/ligatures, so `Épinard`
 /// matches `epinard`. Whitespace is collapsed.
-String normaliserRecherche(String texte) {
-  final tampon = StringBuffer();
-  for (final rune in texte.trim().toLowerCase().runes) {
-    final c = String.fromCharCode(rune);
-    if (c == 'œ' || c == 'æ') {
-      tampon.write(c == 'œ' ? 'oe' : 'ae');
-      continue;
-    }
-    final i = _accents.indexOf(c);
-    tampon.write(i >= 0 ? _sans[i] : c);
-  }
-  return tampon.toString().replaceAll(RegExp(r'\s+'), ' ');
-}
+String normaliserRecherche(String texte) =>
+    const ComparateurNoms().replier(texte.trim()).replaceAll(_espaces, ' ');
+
+final RegExp _espaces = RegExp(r'\s+');
 
 /// Filters [termes] on [requete].
 ///

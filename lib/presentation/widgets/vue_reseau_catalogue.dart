@@ -8,6 +8,7 @@ import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/services/comparateur_noms.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
 import 'fiche_plante_detail.dart';
@@ -431,19 +432,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     }
   }
 
-  /// Lowercases and strips diacritics (keeps spaces) for accent-insensitive
-  /// name search.
-  static String _normaliser(String s) {
-    const accents = 'àâäáãåçèêëéìîïíòôöóõùûüú';
-    const sans = 'aaaaaaceeeeiiiiooooouuuu';
-    final buffer = StringBuffer();
-    for (final rune in s.toLowerCase().runes) {
-      final c = String.fromCharCode(rune);
-      final i = accents.indexOf(c);
-      buffer.write(i >= 0 ? sans[i] : c);
-    }
-    return buffer.toString();
-  }
+  static String _normaliser(String s) => const ComparateurNoms().replier(s);
 
   /// Finds the first species whose name contains [requete] and selects + frames
   /// it (like a tap); flags "no result" otherwise.
