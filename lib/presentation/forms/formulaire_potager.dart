@@ -6,14 +6,13 @@ import '../../application/engine/derivateur_localisation.dart';
 import '../../application/providers/service_providers.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../domain/entities/potager.dart';
-import '../../domain/enums/permission_localisation.dart';
 import '../../domain/enums/type_climat.dart';
 import '../../domain/enums/type_emplacement.dart';
 import '../../domain/enums/zone_rusticite.dart';
-import '../../domain/exceptions/geolocalisation_indisponible_exception.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/capture_localisation.dart';
 import '../widgets/selecteur_carte_monde.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
@@ -87,27 +86,12 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
   /// from it (suggestions the user can still adjust). Hemisphere is implied by
   /// the stored position, so the Saison/calendar contexts become precise.
   Future<void> _detecterPosition() async {
-    final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    final service = ref.read(geolocalisationServiceProvider);
-
     setState(() => _detection = true);
     try {
-      final permission = await service.demanderPermission();
-      if (permission != PermissionLocalisation.accordee) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(l10n.formPotagerPositionRefusee)),
-        );
-        return;
-      }
-      final position = await service.positionActuelle();
-      if (!mounted) return;
-      _appliquerPosition(position);
+      final position =
+          await capterGps(context, ref.read(geolocalisationServiceProvider));
       // The inline caption confirms the suggestion; no snackbar needed here.
-    } on GeolocalisationIndisponibleException {
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.formPotagerPositionErreur)),
-      );
+      if (position != null && mounted) _appliquerPosition(position);
     } finally {
       if (mounted) setState(() => _detection = false);
     }

@@ -92,11 +92,8 @@ class CalculateurDatesCulture {
   /// Returns `null` when the latitude is unknown — the engine never invents a
   /// default. A defined location is expected to be obtained at onboarding (GPS
   /// or an approximate map pick); see the onboarding requirement.
-  Hemisphere? hemisphereDe(Localisation localisation) {
-    final latitude = localisation.latitude;
-    if (latitude == null) return null;
-    return latitude < 0 ? Hemisphere.sud : Hemisphere.nord;
-  }
+  Hemisphere? hemisphereDe(Localisation localisation) =>
+      localisation.hemisphere;
 }
 
 /// DI provider for the (stateless) [CalculateurDatesCulture].

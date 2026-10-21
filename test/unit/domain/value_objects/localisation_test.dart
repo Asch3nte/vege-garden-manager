@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/enums/hemisphere.dart';
 import 'package:pot_a_gerer/domain/enums/source_localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 
@@ -106,5 +107,15 @@ void main() {
       final gps = Localisation.gps(latitude: 48.85, longitude: 2.35);
       expect(manual == gps, isFalse);
     });
+  });
+
+  test('hemisphere follows the latitude sign, null when undefined', () {
+    expect(const Localisation.nonDefinie().hemisphere, isNull);
+    expect(Localisation.gps(latitude: 50.8, longitude: 4.3).hemisphere,
+        Hemisphere.nord);
+    expect(Localisation.gps(latitude: 0, longitude: 0).hemisphere,
+        Hemisphere.nord);
+    expect(Localisation.gps(latitude: -33.9, longitude: 18.4).hemisphere,
+        Hemisphere.sud);
   });
 }

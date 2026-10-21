@@ -10,6 +10,7 @@ import '../enums/type_parcelle.dart';
 import '../enums/usage_plante.dart';
 import '../enums/zone_rusticite.dart';
 import '../exceptions/invariant_domaine_exception.dart';
+import 'famille_botanique.dart';
 import '../value_objects/association_benefique.dart';
 import '../value_objects/association_conflit.dart';
 import '../value_objects/besoins_culture.dart';
@@ -269,6 +270,11 @@ class FichePlante {
   int get dureeAvantRecolteJoursMin => _dureeAvantRecolteJoursMin;
   int get dureeAvantRecolteJoursMax => _dureeAvantRecolteJoursMax;
   String? get rotationFamille => _rotationFamille;
+
+  /// Normalized family key used by rotation: [rotationFamille] when set,
+  /// otherwise [familleBotanique].
+  String get cleFamilleRotation =>
+      FamilleBotanique.normaliserCle(_rotationFamille ?? _familleBotanique);
   int? get delaiRetourAnnees => _delaiRetourAnnees;
 
   /// Cultural precedents that make this plant a **good** follower (unmodifiable,

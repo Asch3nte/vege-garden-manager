@@ -35,7 +35,7 @@ class DerivateurLocalisation {
     if (latitude == null) {
       throw ArgumentError('a defined position is required to derive a climate');
     }
-    final hemisphere = latitude >= 0 ? Hemisphere.nord : Hemisphere.sud;
+    final hemisphere = localisation.hemisphere!;
     final abs = latitude.abs();
     return SuggestionClimat._(hemisphere, _climat(abs), _rusticite(abs));
   }

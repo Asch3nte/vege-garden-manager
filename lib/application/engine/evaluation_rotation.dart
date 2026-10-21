@@ -1,6 +1,5 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/groupe_cultural.dart';
@@ -57,13 +56,13 @@ class EvaluationRotation {
     if (!rotationApplicable || historique.isEmpty) return ResultatRotation.neutre;
 
     final raisons = <RaisonRotation>[];
-    final familleCandidate = _famille(candidate);
+    final familleCandidate = candidate.cleFamilleRotation;
 
     // 1. Family return-delay conflict — over the candidate's own delay window.
     final delai = candidate.delaiRetourAnnees ?? delaiRetourDefaut;
     final seuilFamille = _recul(date, delai);
     for (final c in historique) {
-      if (_famille(c.fiche) == familleCandidate &&
+      if (c.fiche.cleFamilleRotation == familleCandidate &&
           c.dateReference.isAfter(seuilFamille)) {
         raisons.add(RaisonRotation.conflitFamille(
           familleSlug: familleCandidate,
@@ -124,10 +123,10 @@ class EvaluationRotation {
   /// Whether [fiche] satisfies the precedent [p]: a family precedent matches by
   /// normalized family; a group precedent matches by trait/category.
   bool _correspond(PrecedentCultural p, FichePlante fiche) {
-    if (p.estFamille) return _famille(fiche) == p.familleSlug;
+    if (p.estFamille) return fiche.cleFamilleRotation == p.familleSlug;
     return switch (p.groupe!) {
       GroupeCultural.legumineuses =>
-        fiche.fixeAzote || _famille(fiche) == 'fabaceae',
+        fiche.fixeAzote || fiche.cleFamilleRotation == 'fabaceae',
       GroupeCultural.engraisVerts =>
         fiche.categorie == CategoriePlante.engraisVert,
     };
@@ -147,11 +146,6 @@ class EvaluationRotation {
           r.motif == MotifRotation.precedentFavorable &&
           r.cultureId == cultureId);
 
-  /// Normalized botanical family key: `rotation.famille` when present, else the
-  /// declared `famille_botanique` (both folded to a slug so `Solanaceae` and
-  /// `solanaceae` compare equal).
-  String _famille(FichePlante f) =>
-      FamilleBotanique.normaliserCle(f.rotationFamille ?? f.familleBotanique);
 
   DateTime _recul(DateTime date, int annees) =>
       DateTime(date.year - annees, date.month, date.day);
