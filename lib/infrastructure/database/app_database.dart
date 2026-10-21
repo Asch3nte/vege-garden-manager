@@ -44,6 +44,8 @@ class AppDatabase extends _$AppDatabase {
         },
         // ⚠️ Any new/changed column MUST bump `schemaVersion` above AND add a
         // step here, else existing installs miss the column (docs/06 §5).
+        // Data reshaped by a step must be reshaped the same way in
+        // MonteeSauvegarde, or older backups import in the old shape.
         onUpgrade: (m, from, to) async {
           // v1 → v2: onboarding-completion flag (defaults to false, so existing
           // installs are re-routed through the first-launch onboarding flow).

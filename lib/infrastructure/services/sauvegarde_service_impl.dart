@@ -6,13 +6,15 @@ import '../../domain/enums/mode_import.dart';
 import '../../domain/exceptions/sauvegarde_invalide_exception.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
 import '../database/app_database.dart';
+import 'montee_sauvegarde.dart';
 
 /// drift-backed implementation of [AbstractSauvegardeService].
 ///
 /// Backup is **generic**: every table in [AppDatabase.allTables] is dumped via
 /// raw `SELECT *`, so the format follows the schema automatically (no per-table
-/// code to maintain). The JSON envelope carries the `schemaVersion`; an import
-/// from a different version is rejected rather than silently corrupting data.
+/// code to maintain). The JSON envelope carries the `schemaVersion`: a backup
+/// from an older version is brought up to date ([MonteeSauvegarde]), one from a
+/// newer app is rejected rather than silently corrupting data.
 ///
 /// The schema has no BLOB columns in V1 (photos are V1.1), so every value is
 /// JSON-encodable. All work happens locally; the produced/consumed JSON never
@@ -46,16 +48,18 @@ class SauvegardeServiceImpl implements AbstractSauvegardeService {
       throw SauvegardeInvalideException('Backup is not valid JSON.', cause: e);
     }
 
-    if (envelope['schemaVersion'] != _db.schemaVersion) {
+    final version = envelope['schemaVersion'];
+    if (version is! int || version < 1 || version > _db.schemaVersion) {
       throw SauvegardeInvalideException(
-        'Unsupported backup schema version: ${envelope['schemaVersion']} '
-        '(expected ${_db.schemaVersion}).',
+        'Unsupported backup schema version: $version '
+        '(expected at most ${_db.schemaVersion}).',
       );
     }
     final tables = envelope['tables'];
     if (tables is! Map<String, dynamic>) {
       throw SauvegardeInvalideException('Backup is missing its "tables" map.');
     }
+    const MonteeSauvegarde().monter(tables, version);
 
     try {
       await _db.transaction(() async {
