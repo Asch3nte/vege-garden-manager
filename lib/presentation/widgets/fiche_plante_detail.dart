@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +21,7 @@ import '../../domain/value_objects/arrosage_detaille.dart';
 import '../../domain/value_objects/modele_fiche_personnelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_fiche_personnelle.dart';
+import '../glossaire/catalogue/notions_associations.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
@@ -160,8 +163,36 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
     const resolveur = ResolveurCompagnonnage();
     final compagnons =
         resolveur.resoudre(_fiche, vue?.toutesMeres ?? const <FichePlante>[]);
-    final bons = _noms(compagnons.bons);
-    final aEviter = _noms(compagnons.aEviter);
+    final bons = [
+      for (final c in compagnons.bonsDetailles)
+        _Compagnon(
+          fiche: c.fiche,
+          nom: c.fiche.nomLocalise(context.langue),
+          bon: true,
+          mecanismes: [
+            for (final m in c.association.mecanismes) l10n.mecanismeBenefice(m)
+          ],
+          idMecanisme: c.association.mecanisme == null
+              ? null
+              : idMecanismeBenefice(c.association.mecanisme!),
+          raison: c.association.raison(context.langue),
+        ),
+    ]..sort(_Compagnon.parNom);
+    final aEviter = [
+      for (final c in compagnons.aEviterDetailles)
+        _Compagnon(
+          fiche: c.fiche,
+          nom: c.fiche.nomLocalise(context.langue),
+          bon: false,
+          mecanismes: [
+            for (final m in c.association.mecanismes) l10n.mecanismeConflit(m)
+          ],
+          idMecanisme: c.association.mecanisme == null
+              ? null
+              : idMecanismeConflit(c.association.mecanisme!),
+          raison: c.association.raison(context.langue),
+        ),
+    ]..sort(_Compagnon.parNom);
 
     final liste = ListView(
       controller: widget.scrollController,
@@ -295,7 +326,26 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
         const SizedBox(height: EspacementsApp.s5),
         Text(l10n.ficheAssociations, style: theme.textTheme.titleLarge),
         const SizedBox(height: EspacementsApp.s3),
-        _Associations(bons: bons, aEviter: aEviter),
+        _Associations(
+          bons: bons,
+          aEviter: aEviter,
+          // Replaces this sheet rather than stacking one per companion.
+          onOuvrir: (c) {
+            final navigator = Navigator.of(context);
+            navigator.pop();
+            unawaited(afficherFichePlanteDetail(
+              navigator.context,
+              c.fiche,
+              onAjouter: widget.onAjouter,
+              contexte: ContexteAssociation(
+                bon: c.bon,
+                mecanisme: c.mecanismes.firstOrNull,
+                idMecanisme: c.idMecanisme,
+                raison: c.raison,
+              ),
+            ));
+          },
+        ),
         _SectionFamille(fiche: _fiche),
       ],
     );
@@ -344,10 +394,6 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
       child: contenu,
     );
   }
-
-  /// Localized, alphabetically-sorted names of an iterable of sheets.
-  List<String> _noms(Iterable<FichePlante> fiches) =>
-      [for (final f in fiches) f.nomLocalise(context.langue)]..sort();
 
   /// Projects the shown built-in sheet onto an editable draft and opens the
   /// personal-sheet form pre-filled with it (a *copy*, not an override). Closes
@@ -635,6 +681,13 @@ class _Faits extends StatelessWidget {
             _ph(b.phMin, l10n.localeName), _ph(b.phMax, l10n.localeName)),
         TermeGlossaire.idNotion('ph-sol'),
       ),
+      if (fiche.difficulte != null)
+        (
+          PhosphorIconsRegular.gauge,
+          l10n.ficheDifficulte,
+          l10n.difficulte(fiche.difficulte!),
+          null,
+        ),
       (
         PhosphorIconsRegular.leaf,
         l10n.ficheRecolte,
@@ -699,12 +752,35 @@ class _Fait extends StatelessWidget {
   }
 }
 
-/// Companion plants: good ones and ones to avoid.
-class _Associations extends StatelessWidget {
-  final List<String> bons;
-  final List<String> aEviter;
+/// A resolved companion with its localised mechanisms and reason.
+class _Compagnon {
+  final FichePlante fiche;
+  final String nom;
+  final bool bon;
+  final List<String> mecanismes;
+  final String? idMecanisme;
+  final String? raison;
 
-  const _Associations({required this.bons, required this.aEviter});
+  const _Compagnon({
+    required this.fiche,
+    required this.nom,
+    required this.bon,
+    required this.mecanismes,
+    this.idMecanisme,
+    this.raison,
+  });
+
+  static int parNom(_Compagnon a, _Compagnon b) => a.nom.compareTo(b.nom);
+}
+
+/// Companion plants, good ones and ones to avoid, each with its reason.
+class _Associations extends StatelessWidget {
+  final List<_Compagnon> bons;
+  final List<_Compagnon> aEviter;
+  final void Function(_Compagnon) onOuvrir;
+
+  const _Associations(
+      {required this.bons, required this.aEviter, required this.onOuvrir});
 
   @override
   Widget build(BuildContext context) {
@@ -724,12 +800,8 @@ class _Associations extends StatelessWidget {
       children: [
         if (bons.isNotEmpty) ...[
           Text(l10n.ficheBonsCompagnons, style: theme.textTheme.bodySmall),
-          const SizedBox(height: EspacementsApp.s2),
-          Wrap(
-            spacing: EspacementsApp.s2,
-            runSpacing: EspacementsApp.s2,
-            children: [for (final n in bons) Chip(label: Text(n))],
-          ),
+          for (final c in bons)
+            _LigneCompagnon(compagnon: c, onTap: () => onOuvrir(c)),
         ],
         if (aEviter.isNotEmpty) ...[
           const SizedBox(height: EspacementsApp.s4),
@@ -737,20 +809,87 @@ class _Associations extends StatelessWidget {
             l10n.ficheAEviter,
             style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
           ),
-          const SizedBox(height: EspacementsApp.s2),
-          Wrap(
-            spacing: EspacementsApp.s2,
-            runSpacing: EspacementsApp.s2,
-            children: [
-              for (final n in aEviter)
-                Chip(
-                  label: Text(n),
-                  side: BorderSide(color: theme.colorScheme.error.withValues(alpha: 0.5)),
-                ),
-            ],
-          ),
+          for (final c in aEviter)
+            _LigneCompagnon(compagnon: c, onTap: () => onOuvrir(c)),
         ],
       ],
+    );
+  }
+}
+
+/// One companion: name, mechanism tags and, below, the editorial reason.
+class _LigneCompagnon extends StatelessWidget {
+  final _Compagnon compagnon;
+  final VoidCallback onTap;
+
+  const _LigneCompagnon({required this.compagnon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final couleur =
+        compagnon.bon ? theme.colorScheme.primary : theme.colorScheme.error;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: const BorderRadius.all(RayonsApp.sm),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s2),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              compagnon.bon
+                  ? PhosphorIconsRegular.heart
+                  : PhosphorIconsRegular.prohibit,
+              size: TaillesIconesApp.sm,
+              color: couleur,
+            ),
+            const SizedBox(width: EspacementsApp.s2),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    spacing: EspacementsApp.s2,
+                    runSpacing: EspacementsApp.s1,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(compagnon.nom, style: theme.textTheme.bodyMedium),
+                      for (final m in compagnon.mecanismes)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: EspacementsApp.s1),
+                          decoration: BoxDecoration(
+                            color: couleur.withValues(alpha: 0.12),
+                            borderRadius: const BorderRadius.all(RayonsApp.sm),
+                            border: Border.all(
+                                color: couleur.withValues(alpha: 0.5)),
+                          ),
+                          child: Text(
+                            m,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                                color: couleur, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                    ],
+                  ),
+                  if (compagnon.raison != null)
+                    Text(
+                      compagnon.raison!,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                ],
+              ),
+            ),
+            Icon(
+              PhosphorIconsRegular.caretRight,
+              size: TaillesIconesApp.sm,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
