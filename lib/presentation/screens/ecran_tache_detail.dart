@@ -13,6 +13,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/titre_tache.dart';
 
@@ -40,7 +41,7 @@ class EcranTacheDetail extends ConsumerWidget {
         actions: [
           if (vue.value != null)
             PopupMenuButton<_ActionMenu>(
-              icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+              icon: const IconeMenuActions(),
               onSelected: (a) => switch (a) {
                 _ActionMenu.modifier => _modifier(context, ref, vue.value!.tache),
                 _ActionMenu.supprimer =>
@@ -162,7 +163,7 @@ class _Contenu extends ConsumerWidget {
           children: [
             _Puce(
               icone: tache.estFaite
-                  ? PhosphorIconsFill.checkCircle
+                  ? PhosphorIconsBold.checkCircle
                   : PhosphorIconsRegular.circle,
               texte: l10n.etatTache(tache.etat),
             ),

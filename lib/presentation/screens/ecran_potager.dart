@@ -23,6 +23,7 @@ import '../forms/formulaire_potager.dart';
 import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/potager_actif_actions.dart';
 
@@ -77,7 +78,7 @@ class EcranPotager extends ConsumerWidget {
         actions: [
           if (potagerId != null)
             PopupMenuButton<_ActionPotager>(
-              icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+              icon: const IconeMenuActions(),
               onSelected: (a) => switch (a) {
                 _ActionPotager.changer => _choisirPotager(context, ref),
                 _ActionPotager.ajouter => _ajouterPotager(context, ref),
@@ -317,7 +318,7 @@ class _FeuilleChoixPotager extends StatelessWidget {
           for (final p in potagers)
             ListTile(
               leading: Icon(
-                p.id == actifId ? PhosphorIconsFill.checkCircle : PhosphorIconsRegular.circle,
+                p.id == actifId ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
                 color: p.id == actifId
                     ? theme.colorScheme.primary
                     : theme.colorScheme.outline,
@@ -589,7 +590,7 @@ class _PastilleTache extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Icon(
-        PhosphorIconsFill.drop,
+        PhosphorIconsBold.drop,
         size: TaillesIconesApp.sm,
         color: accents.chaud,
       ),
@@ -665,8 +666,8 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              PhosphorIconsRegular.flower,
+            PhosphorIcon(
+              PhosphorIconsDuotone.flower,
               size: TaillesIconesApp.xl2,
               color: theme.colorScheme.secondary,
             ),

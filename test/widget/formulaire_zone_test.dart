@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
@@ -91,6 +92,13 @@ void main() {
       tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Enregistrer')).onPressed,
       isNotNull,
     );
+  });
+
+  testWidgets('type and exposure fields keep their glossary help icon',
+      (tester) async {
+    await monter(tester);
+
+    expect(find.byIcon(PhosphorIconsRegular.question), findsNWidgets(2));
   });
 
   group('soil controls gating', () {

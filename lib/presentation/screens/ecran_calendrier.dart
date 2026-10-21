@@ -25,6 +25,7 @@ import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/carte_teaser_palier.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
@@ -1091,7 +1092,7 @@ class _CarteGesteState extends State<_CarteGeste> {
                     onPressed: () => widget.onCocherGroupe(geste),
                     icon: Icon(
                       fait
-                          ? PhosphorIconsFill.checkCircle
+                          ? PhosphorIconsBold.checkCircle
                           : geste.partiellementFaite
                               ? PhosphorIconsRegular.circleHalf
                               : PhosphorIconsRegular.circle,
@@ -1170,7 +1171,7 @@ class _LigneSousTache extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              fait ? PhosphorIconsFill.checkCircle : PhosphorIconsRegular.circle,
+              fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
               size: TaillesIconesApp.md,
               color:
                   fait ? theme.colorScheme.primary : theme.colorScheme.outline,
@@ -1187,7 +1188,7 @@ class _LigneSousTache extends StatelessWidget {
               ),
             ),
             PopupMenuButton<_ActionTache>(
-              icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+              icon: const IconeMenuActions(),
               tooltip: l10n.actionsTache,
               onSelected: (action) => switch (action) {
                 _ActionTache.ouvrir => onOuvrir(tache),
@@ -1257,7 +1258,7 @@ class _CarteTache extends StatelessWidget {
                 tooltip: l10n.tacheMarquerFaite,
                 onPressed: () => onCocher(tache),
                 icon: Icon(
-                  fait ? PhosphorIconsFill.checkCircle : PhosphorIconsRegular.circle,
+                  fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
                   color: fait
                       ? theme.colorScheme.primary
                       : theme.colorScheme.outline,
@@ -1326,7 +1327,7 @@ class _CarteTache extends StatelessWidget {
               ),
               const SizedBox(width: EspacementsApp.s2),
               PopupMenuButton<_ActionTache>(
-                icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+                icon: const IconeMenuActions(),
                 tooltip: l10n.actionsTache,
                 onSelected: (action) => switch (action) {
                   // Not offered in this menu — the whole card already opens the
@@ -1403,7 +1404,8 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(PhosphorIconsRegular.coffee, size: TaillesIconesApp.xl2, color: theme.colorScheme.secondary),
+            PhosphorIcon(PhosphorIconsDuotone.coffee,
+                size: TaillesIconesApp.xl2, color: theme.colorScheme.secondary),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               l10n.calendrierVide,

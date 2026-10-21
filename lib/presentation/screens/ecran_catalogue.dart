@@ -748,8 +748,8 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              PhosphorIconsRegular.magnifyingGlassMinus,
+            PhosphorIcon(
+              PhosphorIconsDuotone.magnifyingGlassMinus,
               size: TaillesIconesApp.xl2,
               color: theme.colorScheme.secondary,
             ),

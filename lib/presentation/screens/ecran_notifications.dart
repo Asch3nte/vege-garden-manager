@@ -226,8 +226,8 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              PhosphorIconsRegular.bell,
+            PhosphorIcon(
+              PhosphorIconsDuotone.bell,
               size: 48,
               color: theme.colorScheme.outline,
             ),

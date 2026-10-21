@@ -532,7 +532,7 @@ IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.taille => PhosphorIconsRegular.scissors,
       TypeTache.tuteurage => PhosphorIconsRegular.ruler,
       TypeTache.fertilisation => PhosphorIconsRegular.flask,
-      TypeTache.traitementBio => PhosphorIconsRegular.bandaids,
+      TypeTache.traitementBio => PhosphorIconsRegular.sprayBottle,
       TypeTache.observation => PhosphorIconsRegular.eye,
       TypeTache.semis => PhosphorIconsRegular.grains,
       TypeTache.repiquage => PhosphorIconsRegular.flowerLotus,
@@ -541,7 +541,7 @@ IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.installationEquipement => PhosphorIconsRegular.hammer,
       TypeTache.entretienEquipement => PhosphorIconsRegular.wrench,
       TypeTache.nettoyage => PhosphorIconsRegular.broom,
-      TypeTache.autre => PhosphorIconsRegular.checkCircle,
+      TypeTache.autre => PhosphorIconsRegular.dotsThreeCircle,
     };
 
 /// Decorative dot colour for a task type (calendar month grid). Uses the static
@@ -569,22 +569,22 @@ Color couleurTypeTache(TypeTache t) => switch (t) {
 /// identity lives in one place.
 IconData iconeTypeEquipement(TypeEquipement t) => switch (t) {
       TypeEquipement.oya => PhosphorIconsRegular.drop,
-      TypeEquipement.gouttesAGoutte => PhosphorIconsRegular.waves,
+      TypeEquipement.gouttesAGoutte => PhosphorIconsRegular.pipe,
       TypeEquipement.tuteur => PhosphorIconsRegular.ruler,
       TypeEquipement.treillis => PhosphorIconsRegular.gridFour,
       TypeEquipement.tunnel => PhosphorIconsRegular.warehouse,
       TypeEquipement.serreSemis => PhosphorIconsRegular.house,
       TypeEquipement.chassis => PhosphorIconsRegular.square,
-      TypeEquipement.cloche => PhosphorIconsFill.umbrella,
+      TypeEquipement.cloche => PhosphorIconsRegular.umbrella,
       TypeEquipement.voileHivernage => PhosphorIconsRegular.snowflake,
       TypeEquipement.filetAntiInsecte => PhosphorIconsRegular.bug,
-      TypeEquipement.hotelInsectes => PhosphorIconsRegular.bug,
+      TypeEquipement.hotelInsectes => PhosphorIconsRegular.bugBeetle,
       TypeEquipement.composteur => PhosphorIconsRegular.recycle,
-      TypeEquipement.recuperateurEau => PhosphorIconsRegular.waves,
+      TypeEquipement.recuperateurEau => PhosphorIconsRegular.cloudRain,
       TypeEquipement.autre => PhosphorIconsRegular.hammer,
     };
 
-/// Icon of a weather watering verdict (home card).
+/// Icon of a weather watering verdict.
 IconData iconeVerdictMeteo(VerdictMeteo v) => switch (v) {
       VerdictMeteo.pluieAVenir => PhosphorIconsRegular.umbrella,
       VerdictMeteo.solHumide => PhosphorIconsRegular.drop,

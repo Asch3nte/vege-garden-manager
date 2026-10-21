@@ -30,6 +30,7 @@ import '../forms/formulaire_recolte.dart';
 import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/titre_tache.dart';
 import 'ecran_potager.dart' show couleurZone;
@@ -793,7 +794,7 @@ class _LigneCulture extends ConsumerWidget {
             ),
           ),
           PopupMenuButton<_ActionCulture>(
-            icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+            icon: const IconeMenuActions(),
             tooltip: l10n.cultureActions,
             onSelected: (action) => switch (action) {
               _ActionCulture.recolter => onRecolter(),
@@ -904,7 +905,7 @@ class _LigneConseilArrosage extends StatelessWidget {
   Widget build(BuildContext context) {
     final (icone, couleur, libelle) = switch (conseil.urgence) {
       UrgenceArrosage.arroserMaintenant => (
-          PhosphorIconsFill.drop,
+          PhosphorIconsBold.drop,
           theme.colorScheme.error,
           l10n.conseilArroserMaintenant,
         ),

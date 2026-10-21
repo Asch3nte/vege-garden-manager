@@ -8,6 +8,7 @@ import '../../domain/entities/fiche_plante_personnelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_fiche_personnelle.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Screen listing the user's own plant sheets (`FichePlantePersonnelle`),
@@ -86,7 +87,7 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(PhosphorIconsRegular.leaf,
+            PhosphorIcon(PhosphorIconsDuotone.leaf,
                 size: 48, color: theme.colorScheme.onSurfaceVariant),
             const SizedBox(height: EspacementsApp.s4),
             Text(l10n.fichesPersoVide,
@@ -168,7 +169,7 @@ class _MenuActions extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return PopupMenuButton<_ActionFiche>(
-      icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+      icon: const IconeMenuActions(),
       tooltip: l10n.fichesPersoTitre,
       onSelected: (action) => switch (action) {
         _ActionFiche.modifier => _modifier(context, ref),

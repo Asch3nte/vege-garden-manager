@@ -163,7 +163,7 @@ class _EnteteProfil extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.3),
-            child: Icon(PhosphorIconsFill.leaf, color: theme.colorScheme.primary),
+            child: Icon(PhosphorIconsBold.leaf, color: theme.colorScheme.primary),
           ),
           const SizedBox(width: EspacementsApp.s3),
           Expanded(

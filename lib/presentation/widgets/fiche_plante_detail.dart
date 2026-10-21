@@ -24,6 +24,7 @@ import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import 'badge_perso.dart';
 import 'calendrier_semis_recolte.dart';
+import 'icones_communes.dart';
 import 'langue_contexte.dart';
 import 'libelles_enums.dart';
 
@@ -189,7 +190,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                 ),
               )
             else
-              Icon(PhosphorIconsFill.leaf,
+              Icon(PhosphorIconsBold.leaf,
                   size: TaillesIconesApp.xl, color: theme.colorScheme.primary),
             const SizedBox(width: EspacementsApp.s3),
             Expanded(
@@ -220,7 +221,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
             // editable copy, or edit the personal sheet shown here.
             if (accesPerso)
               PopupMenuButton<_ActionFichePerso>(
-                icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+                icon: const IconeMenuActions(),
                 onSelected: (a) => switch (a) {
                   _ActionFichePerso.dupliquer => _dupliquer(),
                   _ActionFichePerso.modifier => _modifierPerso(),

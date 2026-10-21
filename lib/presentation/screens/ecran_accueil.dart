@@ -44,12 +44,11 @@ class EcranAccueil extends ConsumerWidget {
           IconButton(
             tooltip: l10n.accueilNotificationsTooltip,
             onPressed: () => context.go(RoutesApp.accueilNotifications),
-            icon: nombreAlertes > 0
-                ? Badge.count(
-                    count: nombreAlertes,
-                    child: const Icon(PhosphorIconsRegular.bell),
-                  )
-                : const Icon(PhosphorIconsRegular.bell),
+            icon: Badge.count(
+              count: nombreAlertes,
+              isLabelVisible: nombreAlertes > 0,
+              child: const Icon(PhosphorIconsRegular.bell),
+            ),
           ),
         ],
       ),
@@ -172,7 +171,7 @@ class _LigneNiveau extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(PhosphorIconsFill.sealCheck, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
+              Icon(PhosphorIconsBold.sealCheck, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
               const SizedBox(width: EspacementsApp.s1),
               Text(_libelle(l10n), style: theme.textTheme.labelSmall),
               const SizedBox(width: EspacementsApp.s2),
@@ -193,7 +192,7 @@ class _LigneNiveau extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        Icon(PhosphorIconsFill.squaresFour, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+        Icon(PhosphorIconsBold.squaresFour, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: EspacementsApp.s1),
         Text(
           l10n.accueilNbZones(nombreZones),
@@ -469,7 +468,7 @@ class _LigneGesteState extends State<_LigneGeste> {
                   onPressed: () => widget.onToggleGeste(geste),
                   icon: Icon(
                     fait
-                        ? PhosphorIconsFill.checkCircle
+                        ? PhosphorIconsBold.checkCircle
                         : geste.partiellementFaite
                             ? PhosphorIconsRegular.circleHalf
                             : PhosphorIconsRegular.circle,
@@ -555,7 +554,7 @@ class _LigneTache extends StatelessWidget {
               tooltip: l10n.tacheMarquerFaite,
               onPressed: onToggle,
               icon: Icon(
-                fait ? PhosphorIconsFill.checkCircle : PhosphorIconsRegular.circle,
+                fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
                 size: TaillesIconesApp.lg,
                 color:
                     fait ? theme.colorScheme.primary : theme.colorScheme.outline,

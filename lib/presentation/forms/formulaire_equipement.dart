@@ -13,6 +13,7 @@ import '../../l10n/app_localizations.dart';
 import '../glossaire/catalogue/outils.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/terme_glossaire.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the equipment form for [potagerId] and returns the saved [Equipement].
@@ -243,6 +244,7 @@ class _FormulaireEquipementState extends ConsumerState<FormulaireEquipement> {
             ),
             const SizedBox(height: EspacementsApp.s4),
             DropdownButtonFormField<String?>(
+              icon: const IconeDeroulante(),
               initialValue: valeurEmplacement,
               isExpanded: true,
               decoration: InputDecoration(

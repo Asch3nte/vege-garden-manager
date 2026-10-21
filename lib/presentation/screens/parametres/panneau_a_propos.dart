@@ -31,7 +31,7 @@ class PanneauAPropos extends ConsumerWidget {
             CircleAvatar(
               radius: 28,
               backgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.3),
-              child: Icon(PhosphorIconsFill.leaf, color: theme.colorScheme.primary, size: TaillesIconesApp.xl),
+              child: Icon(PhosphorIconsBold.leaf, color: theme.colorScheme.primary, size: TaillesIconesApp.xl),
             ),
             const SizedBox(height: EspacementsApp.s3),
             Text(l10n.aproposNom, style: theme.textTheme.headlineSmall),

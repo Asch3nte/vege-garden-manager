@@ -14,6 +14,7 @@ import '../../domain/exceptions/surface_insuffisante_exception.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/langue_contexte.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
@@ -151,6 +152,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
               )
             else
               DropdownButtonFormField<FichePlante>(
+                icon: const IconeDeroulante(),
                 initialValue: _plante,
                 isExpanded: true,
                 decoration: InputDecoration(

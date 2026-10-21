@@ -55,14 +55,14 @@ void main() {
     await tester.pumpAndSettle();
 
     // No selection yet: no pin, confirm is disabled.
-    expect(find.byIcon(PhosphorIconsFill.mapPin), findsNothing);
+    expect(find.byIcon(PhosphorIconsBold.mapPin), findsNothing);
 
     await tester.ensureVisible(find.text('Zone tropicale'));
     await tester.tap(find.text('Zone tropicale'));
     await tester.pumpAndSettle();
 
     // The pin is now shown.
-    expect(find.byIcon(PhosphorIconsFill.mapPin), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsBold.mapPin), findsOneWidget);
 
     await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
@@ -98,13 +98,13 @@ void main() {
     await tester.tap(find.text('ouvrir'));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(PhosphorIconsFill.mapPin), findsNothing);
+    expect(find.byIcon(PhosphorIconsBold.mapPin), findsNothing);
 
     // Tap somewhere inside the map image.
     await tester.tap(find.byType(Image));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(PhosphorIconsFill.mapPin), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsBold.mapPin), findsOneWidget);
     expect(find.text('Valider'), findsOneWidget);
   });
 }

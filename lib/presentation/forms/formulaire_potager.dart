@@ -14,6 +14,7 @@ import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/selecteur_carte_monde.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/libelles_enums.dart';
@@ -179,6 +180,7 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
             ),
             const SizedBox(height: EspacementsApp.s4),
             DropdownButtonFormField<TypeEmplacement>(
+              icon: const IconeDeroulante(),
               initialValue: _emplacement,
               decoration: InputDecoration(
                 labelText: l10n.formPotagerEmplacement,

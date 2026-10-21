@@ -11,6 +11,7 @@ import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/titre_tache.dart';
 
@@ -216,6 +217,7 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
                   ),
                   const SizedBox(height: EspacementsApp.s4),
                   DropdownButtonFormField<TypeTache>(
+                    icon: const IconeDeroulante(),
                     initialValue: _type,
                     isExpanded: true,
                     decoration: InputDecoration(
@@ -250,6 +252,7 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
                   ),
                   const SizedBox(height: EspacementsApp.s4),
                   DropdownButtonFormField<_CibleOption>(
+                    icon: const IconeDeroulante(),
                     initialValue: _cible,
                     isExpanded: true,
                     decoration: InputDecoration(

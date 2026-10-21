@@ -16,6 +16,7 @@ import '../glossaire/catalogue/outils.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Equipment list of the active garden (`Equipement`), reached from the Potager
@@ -415,7 +416,7 @@ class _MenuActions extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return PopupMenuButton<_ActionEquipement>(
-      icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
+      icon: const IconeMenuActions(),
       tooltip: l10n.equipTitre,
       onSelected: (action) => switch (action) {
         _ActionEquipement.modifier => _modifier(context, ref),

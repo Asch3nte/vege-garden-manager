@@ -13,6 +13,7 @@ import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
+import '../widgets/libelles_enums.dart';
 import '../widgets/redacteur_resume_meteo.dart';
 
 // ── Screen ────────────────────────────────────────────────────────────────────
@@ -484,7 +485,7 @@ class _ExplicationTaches extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                _iconeVerdict(vue.verdictArrosage),
+                iconeVerdictMeteo(vue.verdictArrosage),
                 size: TaillesIconesApp.lg,
                 color: _couleurVerdict(vue.verdictArrosage, accents),
               ),
@@ -511,13 +512,6 @@ class _ExplicationTaches extends StatelessWidget {
       ),
     );
   }
-
-  IconData _iconeVerdict(VerdictMeteo v) => switch (v) {
-        VerdictMeteo.pluieAVenir     => PhosphorIconsRegular.umbrella,
-        VerdictMeteo.solHumide       => PhosphorIconsRegular.drop,
-        VerdictMeteo.arroserConseille => PhosphorIconsRegular.dropHalf,
-        VerdictMeteo.clement         => PhosphorIconsRegular.leaf,
-      };
 
   Color _couleurVerdict(VerdictMeteo v, AccentsCarnet a) => switch (v) {
         VerdictMeteo.pluieAVenir      => a.info,

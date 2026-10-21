@@ -60,7 +60,7 @@ dependencies:
   # validated with the dev (2026-07-07). 100% local: no data sent by the app.
   url_launcher: ^6.3.3
   # Phosphor icons (MIT): IconData constants, compatible with the current
-  # Flutter (phosphor_flutter is not) — validated with the dev (2026-10-21).
+  # Flutter (phosphor_flutter is not).
   phosphoricons_flutter: ^1.1.1
 
 dev_dependencies:

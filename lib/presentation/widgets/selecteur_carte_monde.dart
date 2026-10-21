@@ -255,7 +255,7 @@ class _EcranCarteMondeState extends State<_EcranCarteMonde> {
       height: hauteur,
       child: IgnorePointer(
         child: Icon(
-          PhosphorIconsFill.mapPin,
+          PhosphorIconsBold.mapPin,
           size: hauteur,
           color: Theme.of(context).colorScheme.error,
         ),

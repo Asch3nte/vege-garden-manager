@@ -11,6 +11,7 @@ import '../../domain/enums/destination_recolte.dart';
 import '../../domain/enums/unite_quantite.dart';
 import '../../domain/value_objects/quantite.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import 'enregistrement_formulaire.dart';
 
@@ -135,6 +136,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
                 const SizedBox(width: EspacementsApp.s3),
                 Expanded(
                   child: DropdownButtonFormField<UniteQuantite>(
+                    icon: const IconeDeroulante(),
                     initialValue: _unite,
                     decoration: InputDecoration(
                       labelText: l10n.formRecolteUnite,
@@ -152,6 +154,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
             ),
             const SizedBox(height: EspacementsApp.s4),
             DropdownButtonFormField<DestinationRecolte>(
+              icon: const IconeDeroulante(),
               initialValue: _destination,
               isExpanded: true,
               decoration: InputDecoration(
