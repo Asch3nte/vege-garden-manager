@@ -5,8 +5,6 @@ import '../enums/cible_tache.dart';
 ///
 /// Reads exclude soft-deleted rows. A task targets exactly one of a potager,
 /// parcelle, plantation or equipment ([CibleTache] + cibleId).
-///
-/// See `docs/05-modele-de-domaine.md` §6.
 abstract class AbstractTacheRepository {
   /// Tasks attached to a given target.
   Future<List<Tache>> obtenirParCible(CibleTache cible, String cibleId);

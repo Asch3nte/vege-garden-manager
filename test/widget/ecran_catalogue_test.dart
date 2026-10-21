@@ -136,7 +136,7 @@ void main() {
   Future<void> monter(
     WidgetTester tester, {
     bool avecCible = false,
-    // Intermediate by default so the Réseau view (intermediate+, ADR-0009) is
+    // Intermediate by default so the Réseau view (intermediate+) is
     // available — matching these tests' assumptions before gating.
     NiveauExperience niveau = NiveauExperience.intermediaire,
   }) async {
@@ -258,14 +258,14 @@ void main() {
     expect(find.text('Basilic'), findsWidgets);
   });
 
-  testWidgets('the detail sheet shows the family education section (ADR-0006 Lot 4)',
+  testWidgets('the detail sheet shows the family education section',
       (tester) async {
     await monter(tester);
 
     await tester.tap(find.text('Tomate'));
     await tester.pumpAndSettle();
 
-    // Title split since ADR-0017 Lot 3: prefix + the family name rendered as
+    // Title split: prefix + the family name rendered as
     // a clickable glossary term.
     await tester.scrollUntilVisible(
       find.text('Sa famille :'),
@@ -290,7 +290,7 @@ void main() {
     expect(find.text('Ajouter au potager'), findsOneWidget);
   });
 
-  testWidgets('a fiche card opens the detailed Associations view (ADR-0008)',
+  testWidgets('a fiche card opens the detailed Associations view',
       (tester) async {
     await monter(tester);
 
@@ -509,7 +509,7 @@ void main() {
     expect(find.text('Tomate Cerise'), findsNothing);
   });
 
-  testWidgets('the Réseau view is hidden for beginners (ADR-0009)',
+  testWidgets('the Réseau view is hidden for beginners',
       (tester) async {
     await monter(tester, niveau: NiveauExperience.debutant);
 
@@ -518,7 +518,7 @@ void main() {
     expect(find.text('Tomate'), findsOneWidget);
   });
 
-  testWidgets('a beginner sees a dismissable level-up teaser (ADR-0009 §4b)',
+  testWidgets('a beginner sees a dismissable level-up teaser',
       (tester) async {
     await monter(tester, niveau: NiveauExperience.debutant);
 
@@ -538,7 +538,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // The hint is shown; the Fiches search box is replaced by the network's
-    // own name search — collapsed to a magnifier button (ADR-0008 Lot 5).
+    // own name search — collapsed to a magnifier button.
     expect(find.text('Touchez une plante pour voir ses associations.'),
         findsOneWidget);
     expect(find.text('Nom, sol, exposition…'), findsNothing);

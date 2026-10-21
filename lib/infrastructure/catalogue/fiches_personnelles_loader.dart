@@ -12,7 +12,7 @@ import 'fiche_plante_validator.dart';
 /// (`validerFormatId: false`): personal ids live in their own namespace. Sheets
 /// carry no inheritance (no `parent_id`), so no mother resolution is needed.
 ///
-/// Robustness (see `docs/07-base-de-connaissances-yaml.md` §6): a corrupt sheet
+/// Robustness: a corrupt sheet
 /// is reported through [_onErreur] and **skipped** — the catalogue still loads.
 class FichesPersonnellesLoader {
   final AbstractFichePlantePersonnelleRepository _repo;

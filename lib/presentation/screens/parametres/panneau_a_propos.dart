@@ -6,7 +6,7 @@ import '../../../application/providers/service_providers.dart';
 import '../../../l10n/app_localizations.dart';
 import 'widgets_parametres.dart';
 
-/// Public source repository (docs/11 §7 — "lien GitHub").
+/// Public source repository ("lien GitHub").
 final Uri _urlCodeSource =
     Uri.parse('https://github.com/Asch3nte/vege-garden-manager');
 

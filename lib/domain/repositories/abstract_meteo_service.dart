@@ -5,8 +5,6 @@ import '../value_objects/prevision_meteo.dart';
 
 /// Contract for fetching weather (implemented with Open-Meteo in the
 /// infrastructure layer).
-///
-/// See `docs/05-modele-de-domaine.md` §7 and ADR-0016.
 abstract class AbstractMeteoService {
   /// Current weather at [loc].
   Future<DonneesMeteo> obtenirMeteoActuelle(Localisation loc);
@@ -37,6 +35,6 @@ abstract class AbstractMeteoService {
   /// `null` when the location is undefined or the service is unavailable.
   ///
   /// Never throws — callers treat `null` as "elevation unknown" and omit it
-  /// from the display (ADR-0016 Lot 2).
+  /// from the display.
   Future<double?> obtenirElevation(Localisation loc);
 }

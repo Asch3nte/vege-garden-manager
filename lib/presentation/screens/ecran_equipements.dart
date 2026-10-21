@@ -18,7 +18,7 @@ import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Equipment list of the active garden (`Equipement`), reached from the Potager
-/// header menu. An intermediate+ feature (ADR-0009, gated by `acces.equipements`
+/// header menu. An intermediate+ feature (gated by `acces.equipements`
 /// at the entry point).
 ///
 /// Shows equipment still in service (with its type, condition, location and

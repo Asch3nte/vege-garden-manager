@@ -1,2 +1,2 @@
-/// Lifecycle state of a reminder. See `docs/05-modele-de-domaine.md` §5.
+/// Lifecycle state of a reminder.
 enum EtatRappel { actif, enPause, termine }

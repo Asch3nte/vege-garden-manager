@@ -74,7 +74,7 @@ class RecommanderPlantes {
 
     final plantations = await _plantations.obtenirParParcelle(parcelle.id);
     final actives = plantations.where((p) => p.estActive()).toList();
-    // Compare at the species level (ADR-0005): a planted variety resolves to its
+    // Compare at the species level: a planted variety resolves to its
     // mother id, so presence and companion checks match the candidates (mothers)
     // and their associations (declared by mother id).
     final planteIdsActifs =
@@ -88,7 +88,7 @@ class RecommanderPlantes {
 
     final recommandations = <RecommandationPlante>[];
     // The engine evaluates at the species level only: candidates are mother
-    // sheets; varieties are never recommended directly (ADR-0005).
+    // sheets; varieties are never recommended directly.
     for (final candidate in catalogue.where((f) => f.estMere)) {
       // Don't recommend a species already growing here (any of its varieties).
       if (planteIdsActifs.contains(candidate.id)) continue;
@@ -96,7 +96,7 @@ class RecommanderPlantes {
       final rotationConflit = rotationVerifiee &&
           _rotationConflit(candidate, plantations, parId, maintenant);
 
-      // Derived beneficial association (ADR-0010): only when no curated good pair
+      // Derived beneficial association: only when no curated good pair
       // already covers it, and only on a reasonably confident, trait-based rule
       // (no family resolver here → repulsion/trap are left out).
       final deriveBenefice =
@@ -165,7 +165,7 @@ class RecommanderPlantes {
   /// Whether a trait-based beneficial association scoring at least
   /// [_seuilBonusDerive] under [profil] is derived between [candidate] and an
   /// active [actif] (either direction). Weighting the families thus shapes the
-  /// reco bonus (ADR-0011).
+  /// reco bonus.
   bool _benefDerive(
     FichePlante candidate,
     FichePlante actif,

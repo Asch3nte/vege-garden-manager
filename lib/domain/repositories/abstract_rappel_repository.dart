@@ -6,8 +6,6 @@ import '../enums/cible_tache.dart';
 ///
 /// Reads exclude soft-deleted rows. A reminder targets exactly one of a
 /// potager, parcelle, plantation or equipment ([CibleTache] + cibleId).
-///
-/// See `docs/05-modele-de-domaine.md` §6.
 abstract class AbstractRappelRepository {
   /// Active reminders (state `actif`) — the ones the task-generation engine
   /// iterates over.

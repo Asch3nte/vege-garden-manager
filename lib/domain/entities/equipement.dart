@@ -13,7 +13,7 @@ import '../value_objects/effet_equipement.dart';
 ///
 /// `Equipement` is an **entity** (identity by [id]); the [id] is a UUID generated
 /// app-side and injected. Domain names are kept in French; the code is
-/// documented in English. See `docs/05-modele-de-domaine.md` §3.7.
+/// documented in English.
 class Equipement {
   final String _id;
   final String _nom;

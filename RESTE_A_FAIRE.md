@@ -4,16 +4,12 @@ Source unique du reste à faire. Remplace `docs/13-roadmap-et-versioning.md` et
 `docs/15-elements-differes.md` (historique : `git log -- docs/13* docs/15*`).
 Une entrée résolue est retirée dans le commit qui la résout.
 
-Ordre d'exécution : §1 (lots numérotés, une branche par lot), puis §2 et §3.
+Ordre d'exécution : §2 et §3 (§1, l'audit, est soldé).
 §4 avance en parallèle. §5 juste avant la sortie.
 
 ## 1. Corrections issues de l'audit
 
-Détail, fichiers et gravité : [docs/audit-2026-10.md](docs/audit-2026-10.md) (`#n`).
-
-| Lot | Branche | Contenu |
-|---|---|---|
-| 8 | `chore/purge-commentaires` | Retrait des références ADR/docs/lot/§ (701 lignes), commentaires du domaine en anglais, paraphrases supprimées. |
+Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10.md).
 
 ## 2. Dette technique hors audit
 

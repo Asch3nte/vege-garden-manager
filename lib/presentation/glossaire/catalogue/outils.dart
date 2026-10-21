@@ -7,8 +7,8 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Outils & équipements » chapter of the catalogue (ADR-0017 Lot 4): **one
-/// page per [TypeEquipement] value** (D1/annexe A), plus the equipment-state
+/// « Outils & équipements » chapter of the catalogue: **one
+/// page per [TypeEquipement] value**, plus the equipment-state
 /// scale. [TypeEquipement.autre] is the only value without a page — it names
 /// nothing concrete to explain.
 List<TermeGlossaire> construireOutils(AppLocalizations l10n) => [
@@ -153,7 +153,7 @@ TermeGlossaire _pageOutil(AppLocalizations l10n, TypeEquipement v) {
     conseils: [?conseil],
     complements: [
       // The stake page also explains the climber-load scale the association
-      // engine uses to size a support (ChargeTuteur, ADR-0010).
+      // engine uses to size a support (ChargeTuteur).
       if (v == TypeEquipement.tuteur)
         ComplementValeursEnum(valeurs: [
           for (final c in ChargeTuteur.values)

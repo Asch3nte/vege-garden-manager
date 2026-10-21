@@ -9,7 +9,6 @@ import '../enums/source_localisation.dart';
 /// global geolocation preference (that lives in the preferences).
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §4.3.
 class Localisation {
   final double? _latitude;
   final double? _longitude;

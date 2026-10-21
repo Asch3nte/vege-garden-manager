@@ -45,7 +45,7 @@ FichePlante uneFiche(
     );
 
 /// Builds a sheet [id] carrying explicit typed associations (mechanism + reason)
-/// to exercise the resolver's detail/reason exposure (ADR-0010).
+/// to exercise the resolver's detail/reason exposure.
 FichePlante uneFicheTypee(
   String id, {
   List<AssociationBenefique> benefiques = const [],
@@ -138,7 +138,7 @@ void main() {
     });
 
     test('counts match between two sheets of the same pair (alignment)', () {
-      // The whole point of ADR-0008: the count seen from either sheet is the
+      // The whole point: the count seen from either sheet is the
       // same relationship, so the Réseau and the detail sheet agree.
       final a = uneFiche('A', benefiques: {'B'});
       final b = uneFiche('B');
@@ -154,7 +154,7 @@ void main() {
     });
   });
 
-  group('sens — direction curatée (ADR-0012)', () {
+  group('sens — direction curatée', () {
     test('donne quand seul le centre déclare la paire', () {
       final a = uneFiche('A', benefiques: {'B'});
       final b = uneFiche('B');
@@ -194,7 +194,7 @@ void main() {
     });
   });
 
-  group('mécanisme & raison — exposition typée (ADR-0010)', () {
+  group('mécanisme & raison — exposition typée', () {
     test('beneficeEntre returns the mechanism and reason, either direction', () {
       final a = uneFicheTypee('A', benefiques: [
         AssociationBenefique(

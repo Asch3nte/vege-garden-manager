@@ -4,10 +4,10 @@ import '../enums/type_conflit_association.dart';
 /// by a plant towards another plant ([cibleId]).
 ///
 /// Loaded from the YAML catalogue (`associations.defavorables[]`). [mecanismes]
-/// names *why* the pairing is to be avoided (ADR-0010 Décision 1) — **possibly
-/// several** (ADR-0012) ; empty for a legacy/curated pair that only states the
+/// names *why* the pairing is to be avoided — **possibly
+/// several** ; empty for a legacy/curated pair that only states the
 /// target. A free editorial reason ([raison], localised) may complete — or
-/// nuance — the typed mechanisms. See `docs/05` §4.8.
+/// nuance — the typed mechanisms.
 ///
 /// Immutable value object: equality is by [cibleId], the set of [mecanismes]
 /// and the localised reason map.
@@ -22,8 +22,8 @@ class AssociationConflit {
     this._raisonI18n,
   ) : assert(_cibleId.length > 0, 'cibleId must not be empty');
 
-  /// Builds the association. Provide either a single [mecanisme] (convenience,
-  /// ADR-0010 style) **or** a set of [mecanismes] (ADR-0012), not both. The
+  /// Builds the association. Provide either a single [mecanisme] (convenience)
+  /// **or** a set of [mecanismes], not both. The
   /// collections are stored unmodifiable and default to empty.
   factory AssociationConflit({
     required String cibleId,
@@ -48,7 +48,7 @@ class AssociationConflit {
   /// The mechanisms qualifying the conflict (unmodifiable, may be empty).
   Set<TypeConflitAssociation> get mecanismes => _mecanismes;
 
-  /// Convenience: the first mechanism (ADR-0010 compatibility), or `null`.
+  /// Convenience: the first mechanism, or `null`.
   TypeConflitAssociation? get mecanisme =>
       _mecanismes.isEmpty ? null : _mecanismes.first;
 

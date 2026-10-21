@@ -1,8 +1,8 @@
 import '../../domain/entities/bioagresseur.dart';
 import '../../domain/entities/famille_botanique.dart';
 
-/// A typed additional block a term page renders below the definition
-/// (ADR-0017, D3). Blocks carry **derived data only** — the page never invents
+/// A typed additional block a term page renders below the definition.
+/// Blocks carry **derived data only** — the page never invents
 /// content: an absent block simply doesn't render.
 ///
 /// Sealed so the term page can switch exhaustively; adding a block kind is a
@@ -75,7 +75,7 @@ class ComplementBioagresseur extends ComplementTerme {
 typedef ValeurDecrite = ({String libelle, String? description});
 
 /// Enum-values block: the list of an enum's values with their existing
-/// descriptions (reuses `LibellesEnums.*Description` — D3), for notion pages
+/// descriptions (reuses `LibellesEnums.*Description`), for notion pages
 /// that explain a scale (soil pH, water needs…).
 class ComplementValeursEnum extends ComplementTerme {
   final List<ValeurDecrite> _valeurs;
@@ -89,7 +89,7 @@ class ComplementValeursEnum extends ComplementTerme {
   List<ValeurDecrite> get valeurs => _valeurs;
 }
 
-/// Provenance block of an association-mechanism page (ADR-0017, annexe A):
+/// Provenance block of an association-mechanism page:
 /// whether the mechanism can be **computed by the engine** (a derivation rule
 /// exists in `MoteurDerivationAssociations`) or is only **documented by the
 /// permaculture community** (curated pairs from the YAML sheets).

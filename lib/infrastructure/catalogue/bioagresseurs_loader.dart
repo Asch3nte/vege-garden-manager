@@ -8,7 +8,7 @@ import 'bioagresseur_mapper.dart';
 import 'bioagresseur_validator.dart';
 
 /// Loads the bioaggressor reference in a single pass: read → parse → for each
-/// entry validate → map → cache (ADR-0006, Lot 4).
+/// entry validate → map → cache.
 ///
 /// Robustness mirrors the family reference: a corrupt entry is reported through
 /// [_onErreur] and **skipped** — the app never crashes. A structurally broken

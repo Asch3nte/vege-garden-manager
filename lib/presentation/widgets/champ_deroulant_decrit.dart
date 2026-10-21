@@ -32,7 +32,7 @@ class ChampDeroulantDecrit<T> extends StatelessWidget {
   /// Optional field-level helper, under the closed field.
   final String? helperText;
 
-  /// Optional glossary page id of the field's concept (ADR-0017 D5): renders a
+  /// Optional glossary page id of the field's concept: renders a
   /// discreet « ? » suffix opening that page (e.g. `notion.type-climat`).
   final String? idAideGlossaire;
 

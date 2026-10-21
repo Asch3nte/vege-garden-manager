@@ -1,8 +1,7 @@
 // Characterization tests for [VueReseauCatalogue] — the catalogue "Réseau" view.
 //
-// Written as a safety net BEFORE the lot E rework (docs/15 §8 E): they pin the
-// current behaviour (nodes, selection → panel, re-tap → sheet, "à éviter"
-// toggle) so the upcoming zoom/pan/fit changes can't regress it silently.
+// They pin the behaviour (nodes, selection → panel, re-tap → sheet, "à éviter"
+// toggle) so zoom/pan/fit changes can't regress it silently.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,7 +63,7 @@ FichePlante _fiche(
 
 void main() {
   // Distinct initials so a node can be tapped by its letter (T/C/B/F), and
-  // distinct families so each sits in its own bubble (ADR-0008 grouping).
+  // distinct families so each sits in its own bubble.
   final fiches = [
     _fiche(
       'tomate',
@@ -169,7 +168,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    // The search is collapsed to a magnifier; open it first (tweak #2).
+    // The search is collapsed to a magnifier; open it first.
     await tester.tap(find.byIcon(Icons.search));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'tom');
@@ -381,7 +380,7 @@ void main() {
     // Manual multi-step drag from an empty point on the left of the canvas
     // (past the side padding, far from the centred constellation, the top-right
     // controls and the bottom panel) so the scale recognizer engages. Since the
-    // canvas also has an onTapUp (Voronoï hit-testing, #3), the scale gesture now
+    // canvas also has an onTapUp (Voronoï hit-testing), the scale gesture now
     // wins the arena only once the first move crosses the tap slop — that first
     // segment is absorbed, so we drag a few steps and expect the *remaining*
     // segments to pan every node.
@@ -443,7 +442,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    // In the global view, names show where they fit (tweak #6); selecting a node
+    // In the global view, names show where they fit; selecting a node
     // then restricts the labels to it and its links (Basilic/Fenouil are linked
     // to Tomate, Courgette is unrelated).
     await tester.tap(find.text('T'));

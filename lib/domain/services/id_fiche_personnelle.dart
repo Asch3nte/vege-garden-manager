@@ -5,7 +5,7 @@
 /// between two personal sheets is resolved with a numeric suffix at creation
 /// time. The slug folds common French accents and keeps only `[a-z0-9_]`.
 ///
-/// See `docs/07-base-de-connaissances-yaml.md` §7. Pure, no I/O.
+/// Pure, no I/O.
 class IdFichePersonnelle {
   const IdFichePersonnelle._();
 

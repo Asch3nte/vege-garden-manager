@@ -32,18 +32,20 @@ import 'vue_reseau_catalogue.dart' show couleurCategorie;
 /// Opens the **Associations** view of [centre]: a dedicated, detailed ego graph
 /// of a single species — itself at the centre, its good companions on the left
 /// half and the ones to avoid on the right half, **one node per species** (the
-/// granular counterpart of the grouped "Réseau" constellation). Reached from the
-/// Fiches list (ADR-0008). Companions are resolved over [catalogue] by the
+/// granular counterpart of the grouped "Réseau" constellation). Reached from
+/// the
+/// Fiches list. Companions are resolved over [catalogue] by the
 /// shared service, so the split matches the catalogue everywhere.
 ///
 /// Each association shows its typed **mechanism** and, when present, its
-/// editorial **reason** (ADR-0010) — both resolved from the catalogue, never
+/// editorial **reason** — both resolved from the catalogue, never
 /// invented. A bare pair (no mechanism) shows the name only.
-/// Derived suggestions (ADR-0010) are added only when [acces] grants the network
+/// Derived suggestions are added only when [acces] grants the network
 /// view (intermédiaire+); [familles] lets the family-dependent rules fire
 /// (repulsion / trap), and may be `null` for trait-based suggestions only.
-/// Suggestions are **scored & ranked** by [profil] (ADR-0011): a family weighted
-/// `ignore` is dropped, and only the top suggestions per side are shown (the rest
+/// Suggestions are **scored & ranked** by [profil]: a family weighted
+/// `ignore` is dropped, and only the top suggestions per side are shown (the
+/// rest
 /// behind a "voir plus"). Curated associations always rank first and are never
 /// pruned.
 Future<void> afficherVueAssociations(
@@ -63,7 +65,7 @@ Future<void> afficherVueAssociations(
   const resolveur = ResolveurCompagnonnage();
   final comp = resolveur.resoudre(centre, catalogue);
 
-  // Curated companions (Lot 1): always shown → ranked first via an infinite score.
+  // Curated companions: always shown → ranked first via an infinite score.
   final bons = <_NoeudAssoc>[
     for (final c in comp.bonsDetailles)
       _NoeudAssoc(
@@ -96,8 +98,8 @@ Future<void> afficherVueAssociations(
         bon: false,
       ),
   ];
-  // Derived suggestions (Lot 3/4), gated by experience level (ADR-0009),
-  // scored & weighted by the profile (ADR-0011).
+  // Derived suggestions, gated by experience level,
+  // scored & weighted by the profile.
   if (acces?.vueReseau ?? false) {
     _ajouterSuggestions(centre, catalogue, l10n, bons, aEviter, familles,
         profil ?? ProfilPonderationAssociations.defaut(),
@@ -128,7 +130,7 @@ Future<void> afficherVueAssociations(
 }
 
 /// Appends the engine's derived suggestions to [bons]/[aEviter], scored by
-/// [profil] (ADR-0011): one node per (target, sense) keeping the best score,
+/// [profil]: one node per (target, sense) keeping the best score,
 /// dropping families weighted `ignore`, and skipping targets already shown as a
 /// curated companion on the same side (curated precedence).
 void _ajouterSuggestions(
@@ -209,7 +211,7 @@ class _NoeudAssoc {
   final double score;
   final String? mecanisme;
 
-  /// Glossary id of the mechanism page (`notion.meca-*`, ADR-0017) — makes the
+  /// Glossary id of the mechanism page (`notion.meca-*`) — makes the
   /// group chip a clickable term; `null` for untyped pairs.
   final String? idMecanisme;
   final String? raison;
@@ -220,11 +222,11 @@ class _NoeudAssoc {
   /// the suggestion-level filter can match without string comparison.
   final NiveauConfiance? niveauConfiance;
 
-  /// Criteria the engine evaluated for a derived node (ADR-0014) — turned into
+  /// Criteria the engine evaluated for a derived node — turned into
   /// the explicit factor list shown on the sheet.
   final Set<CritereAssociation> criteres;
 
-  /// Direction seen from the centre (ADR-0012); `null` for the centre itself.
+  /// Direction seen from the centre; `null` for the centre itself.
   final SensAssociation? sens;
 
   /// Good companion (true) vs to-avoid (false); `null` for the centre itself.
@@ -245,11 +247,13 @@ class _NoeudAssoc {
   });
 }
 
-/// A **group** of companions sharing the exact same relationship to the centre
-/// (ADR-0013): same side, same direction, same suggested/curated nature, and the
-/// same mechanism — or, for untyped curated pairs, the same free reason. Rendered
+/// A **group** of companions sharing the exact same relationship to the centre:
+/// same side, same direction, same suggested/curated nature, and the
+/// same mechanism — or, for untyped curated pairs, the same free reason.
+/// Rendered
 /// as one labelled cluster with a **single arrow** to the centre, so a shared
-/// label (e.g. "Attire les pollinisateurs") is shown once instead of repeated on
+/// label (e.g. "Attire les pollinisateurs") is shown once instead of repeated
+/// on
 /// every member.
 class _GroupeAssoc {
   final List<_NoeudAssoc> membres;
@@ -270,8 +274,10 @@ class _GroupeAssoc {
       membres.fold(0.0, (m, n) => n.score > m ? n.score : m);
   bool get curate => score.isInfinite;
 
-  /// Grouping key: side + direction + suggested + mechanism (or free reason when
-  /// untyped). Untyped curated pairs with no reason fall into one "Autre" bucket.
+  /// Grouping key: side + direction + suggested + mechanism (or free reason
+  /// when
+  /// untyped). Untyped curated pairs with no reason fall into one "Autre"
+  /// bucket.
   static String cleDe(_NoeudAssoc n) =>
       '${n.bon}|${n.sens}|${n.suggere}|${n.mecanisme ?? n.raison ?? ''}';
 
@@ -300,7 +306,7 @@ class _VueAssociations extends StatefulWidget {
   final void Function(FichePlante)? onAjouter;
 
   /// Weighting profile used to score the suggestions, surfaced as a banner so
-  /// the user knows when a non-default profile skews the split (ADR-0013 §4).
+  /// the user knows when a non-default profile skews the split.
   final ProfilPonderationAssociations? profil;
 
   /// Opens the weighting-profile page (navigation), or `null` to disable the
@@ -329,14 +335,14 @@ enum _FiltreSugg { tout, eleve, moyen, faible, horsMoteur }
 class _VueAssociationsState extends State<_VueAssociations> {
   bool _tousAffiches = false;
 
-  /// Direction filter (ADR-0012); `null` = all directions.
+  /// Direction filter; `null` = all directions.
   SensAssociation? _filtre;
 
   /// Suggestion-level filter; defaults to [_FiltreSugg.tout].
   _FiltreSugg _filtreSugg = _FiltreSugg.tout;
 
   /// Zoom/pan transform; auto-fitted to the whole graph on first layout and
-  /// whenever the displayed set changes (ADR-0013 §1).
+  /// whenever the displayed set changes.
   final TransformationController _transfo = TransformationController();
 
   /// Signature of the last set we auto-fitted, so a plain rebuild (e.g. opening
@@ -378,8 +384,8 @@ class _VueAssociationsState extends State<_VueAssociations> {
     return r;
   }
 
-  /// The side's **groups** capped at curated + N derived groups, unless expanded
-  /// (ADR-0013 — capping now counts groups, not individual plants).
+  /// The side's **groups** capped at curated + N derived groups, unless
+  /// expanded (the cap counts groups, not individual plants).
   List<_GroupeAssoc> _affiches(List<_GroupeAssoc> groupes) {
     if (_tousAffiches) return groupes;
     final nbCurated = groupes.where((g) => g.curate).length;
@@ -447,8 +453,9 @@ class _VueAssociationsState extends State<_VueAssociations> {
                 builder: (context, c) {
                   final viewport = Size(c.maxWidth, c.maxHeight);
                   final geo = _GeoConstellation.calculer(bons, aEviter);
-                  // Auto-fit when the displayed set changes (not on every rebuild,
-                  // so opening a sheet keeps the user's zoom/pan). ADR-0013 §1.
+                  // Auto-fit when the displayed set changes (not on every
+                  // rebuild,
+                  // so opening a sheet keeps the user's zoom/pan).
                   final sig = '$_filtre|$_filtreSugg|$_tousAffiches|${geo.canvas}';
                   if (sig != _signatureFit) {
                     _signatureFit = sig;
@@ -466,9 +473,10 @@ class _VueAssociationsState extends State<_VueAssociations> {
                       bons: bons,
                       aEviter: aEviter,
                       onTapNoeud: (n) {
-                        // Resolve the rule's source/cible from the direction, then
-                        // list every criterion that produced the association
-                        // (ADR-0014). Curated nodes (no criteria) keep their reason.
+                        // Resolve the rule's source/cible from the direction,
+                        // then
+                        // list every criterion that produced the association.
+                        // Curated nodes (no criteria) keep their reason.
                         final recoit = n.sens == SensAssociation.recoit;
                         final source = recoit ? n.fiche : widget.centre;
                         final cible = recoit ? widget.centre : n.fiche;
@@ -500,8 +508,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
   }
 }
 
-/// Floating toggle to reveal / hide the lower-scored derived suggestions
-/// (ADR-0011 declutter).
+/// Floating toggle to reveal / hide the lower-scored derived suggestions.
 class _BoutonVoirPlus extends StatelessWidget {
   final int caches;
   final bool tousAffiches;
@@ -524,8 +531,8 @@ class _BoutonVoirPlus extends StatelessWidget {
   }
 }
 
-/// AppBar `bottom`: a preferences banner above a side-by-side filter panel
-/// (ADR-0013 §4) — direction (left) and suggestion level (right), each as a
+/// AppBar `bottom`: a preferences banner above a side-by-side filter panel:
+/// direction (left) and suggestion level (right), each as a
 /// dropdown so the layout stays compact.
 class _BasAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ProfilPonderationAssociations? profil;
@@ -571,9 +578,9 @@ class _BasAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// Single-line banner summarising the association weighting profile (ADR-0013
-/// §4): the **tuned families only** (no verbose prefix), or "normales (par
-/// défaut)". Tapping it jumps to the weighting page (ADR-0013 §7).
+/// Single-line banner summarising the association weighting profile:
+/// the **tuned families only** (no verbose prefix), or "normales (par
+/// défaut)". Tapping it jumps to the weighting page.
 class _BandeauPreferences extends StatelessWidget {
   final ProfilPonderationAssociations? profil;
   final double hauteur;
@@ -595,8 +602,9 @@ class _BandeauPreferences extends StatelessWidget {
         ? theme.colorScheme.onSurfaceVariant
         : theme.colorScheme.tertiary;
 
-    // Default → a short hint; custom → just the tuned families (no prefix, so it
-    // is not truncated for the part that matters — ADR-0013 §7).
+    // Default → a short hint; custom → just the tuned families (no prefix, so
+    // it
+    // is not truncated for the part that matters).
     final String texte = estDefaut
         ? l10n.assocPrefsNormales
         : [
@@ -808,8 +816,8 @@ class _DimGroupe {
   static const double hauteurMembre = 70;
   static const int maxParRangee = 3;
 
-  /// Min cluster width — wide enough for a full mechanism label (no truncation,
-  /// ADR-0013 §4).
+  /// Min cluster width — wide enough for a full mechanism label (no
+  /// truncation).
   static const double largeurMin = 144;
 
   /// Header band height (chip wrapped up to 3 lines + the suggestion/“hors
@@ -817,7 +825,7 @@ class _DimGroupe {
   /// its neighbours.
   static const double hauteurEntete = 90;
 
-  /// Inner padding of the rounded shape around a cluster (ADR-0013 §5).
+  /// Inner padding of the rounded shape around a cluster.
   static const double paddingForme = 10;
 
   /// Free margin kept around the whole graph inside the canvas.
@@ -842,7 +850,7 @@ class _GeoGroupe {
 }
 
 /// Pre-computed geometry of the constellation: a [canvas] sized to the whole
-/// content (so every node lies inside it and stays hit-testable, ADR-0013 §3),
+/// content (so every node lies inside it and stays hit-testable),
 /// the [centre] position and one [_GeoGroupe] per side.
 class _GeoConstellation {
   final Size canvas;
@@ -862,7 +870,7 @@ class _GeoConstellation {
     List<_GroupeAssoc> aEviter,
   ) {
     // Uniform spacing box = the largest cluster, so the no-overlap ego layout
-    // (ADR-0012) keeps its guarantee despite variable cluster sizes.
+    // keeps its guarantee despite variable cluster sizes.
     final tous = [...bons, ...aEviter];
     var maxL = _DimGroupe.largeurMin, maxH = _DimGroupe.hauteurEntete;
     for (final g in tous) {
@@ -915,7 +923,7 @@ class _GeoConstellation {
 }
 
 /// The radial ego layout: a single arrow from the centre to each cluster, and
-/// the clusters themselves (ADR-0013). Geometry is pre-computed in [geo].
+/// the clusters themselves. Geometry is pre-computed in [geo].
 class _Constellation extends StatelessWidget {
   final _GeoConstellation geo;
   final FichePlante centre;
@@ -936,7 +944,7 @@ class _Constellation extends StatelessWidget {
     final theme = Theme.of(context);
 
     // Width is fixed (drives wrapping & the shape width); height is left to the
-    // content so a slightly taller cluster never overflows (ADR-0013 §1 fix).
+    // content so a slightly taller cluster never overflows.
     // The box estimate stays generous so spacing/arrows keep no-overlap.
     Widget groupe(_GroupeAssoc g, _GeoGroupe geoG, Color accent) => Positioned(
           left: geoG.centre.dx - geoG.taille.width / 2,
@@ -949,8 +957,9 @@ class _Constellation extends StatelessWidget {
           ),
         );
 
-    // One edge per cluster; the painter trims the far end to the shape's edge so
-    // the arrowhead lands on the coloured border, never on a bubble (ADR-0013).
+    // One edge per cluster; the painter trims the far end to the shape's edge
+    // so
+    // the arrowhead lands on the coloured border, never on a bubble.
     _Arete arete(_GroupeAssoc g, _GeoGroupe geoG) => (
           pos: geoG.centre,
           sens: g.sens,
@@ -1002,8 +1011,9 @@ class _Constellation extends StatelessWidget {
 }
 
 /// A group cluster: a shared header (mechanism/“Autre” chip + direction, plus a
-/// single “suggested · confidence” line) over a grid of tappable member bubbles
-/// (ADR-0013). The single edge/arrow is drawn by [_Peintre].
+/// single “suggested · confidence” line) over a grid of tappable member
+/// bubbles.
+/// The single edge/arrow is drawn by [_Peintre].
 class _GroupeWidget extends StatelessWidget {
   final _GroupeAssoc groupe;
   final Color accent;
@@ -1019,12 +1029,12 @@ class _GroupeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    // Untyped curated pair → neutral "Autre" chip (not a family colour, ADR-0013).
+    // Untyped curated pair → neutral "Autre" chip (not a family colour).
     final estAutre = groupe.mecanisme == null;
     final libelle = groupe.mecanisme ?? l10n.assocMecaAutre;
     final couleurChip = estAutre ? theme.colorScheme.onSurfaceVariant : accent;
     // Second line: "Suggestion · niveau" (derived) or "Hors suggestion"
-    // (curated) — both elaborated in the sheet banner on tap (ADR-0013 §6/§7).
+    // (curated) — both elaborated in the sheet banner on tap.
     final ligne = groupe.suggere
         ? (groupe.confiance == null
             ? l10n.assocSuggere
@@ -1032,8 +1042,7 @@ class _GroupeWidget extends StatelessWidget {
         : l10n.assocHorsSuggestion;
 
     // The cluster sits inside a rounded shape tinted with the side colour, more
-    // muted than the chips so they stay distinct; the single arrow points here
-    // (ADR-0013 §5).
+    // muted than the chips so they stay distinct; the single arrow points here.
     return Container(
       padding: const EdgeInsets.all(_DimGroupe.paddingForme),
       decoration: BoxDecoration(
@@ -1049,7 +1058,7 @@ class _GroupeWidget extends StatelessWidget {
             sens: groupe.sens,
             couleur: couleurChip,
             ligne: ligne,
-            // Typed mechanism → its glossary page (ADR-0017 D5); the dialog is
+            // Typed mechanism → its glossary page; the dialog is
             // closed first by ouvrirTermeGlossaire.
             onTapLibelle: groupe.idMecanisme == null
                 ? null
@@ -1078,7 +1087,7 @@ class _GroupeWidget extends StatelessWidget {
 }
 
 /// Shared header of a group: the mechanism/“Autre” chip with a direction glyph
-/// (never truncated, ADR-0013 §4), and the once-per-group second line
+/// (never truncated), and the once-per-group second line
 /// (“Suggestion · …” or “Hors suggestion”).
 class _EnteteGroupe extends StatelessWidget {
   final String libelle;
@@ -1086,7 +1095,7 @@ class _EnteteGroupe extends StatelessWidget {
   final Color couleur;
   final String ligne;
 
-  /// Opens the mechanism's glossary page (ADR-0017); `null` (untyped "Autre")
+  /// Opens the mechanism's glossary page; `null` (untyped "Autre")
   /// leaves the chip inert and un-underlined.
   final VoidCallback? onTapLibelle;
 
@@ -1125,14 +1134,14 @@ class _EnteteGroupe extends StatelessWidget {
             child: Text(
               libelle,
               textAlign: TextAlign.center,
-              // No ellipsis: the cluster is wide enough (ADR-0013 §4); wrap
+              // No ellipsis: the cluster is wide enough; wrap
               // generously rather than truncate.
               maxLines: 3,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: couleur,
                 fontWeight: FontWeight.w700,
                 height: 1.1,
-                // Clickable-term grammar (ADR-0017 D5): discreet underline.
+                // Clickable-term grammar: discreet underline.
                 decoration:
                     onTapLibelle == null ? null : TextDecoration.underline,
                 decorationColor: couleur,
@@ -1173,7 +1182,7 @@ class _EnteteGroupe extends StatelessWidget {
 }
 
 /// A single group member: category-coloured disc + name, tappable to open its
-/// sheet. The shared label/direction live on the group header (ADR-0013).
+/// sheet. The shared label/direction live on the group header.
 class _MembreNoeud extends StatelessWidget {
   final _NoeudAssoc noeud;
   final double rayon;
@@ -1234,7 +1243,8 @@ class _MembreNoeud extends StatelessWidget {
   }
 }
 
-/// A node in the Associations view: category-coloured disc + full name, tappable
+/// A node in the Associations view: category-coloured disc + full name,
+/// tappable
 /// to open its sheet.
 class _Noeud extends StatelessWidget {
   final _NoeudAssoc noeud;
@@ -1271,7 +1281,8 @@ class _Noeud extends StatelessWidget {
             decoration: BoxDecoration(
               color: disque,
               shape: BoxShape.circle,
-              // A dashed-look (thinner, accented) ring marks a derived suggestion.
+              // A dashed-look (thinner, accented) ring marks a derived
+              // suggestion.
               border: Border.all(
                 color: noeud.suggere && accent != null
                     ? accent!.withValues(alpha: 0.8)
@@ -1295,7 +1306,7 @@ class _Noeud extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelSmall,
           ),
-          // (ADR-0012) The view shows only the short typed mechanism (when
+          // The view shows only the short typed mechanism (when
           // known) and, for a derived node, a "suggested + confidence" tag. The
           // full editorial reason is moved to a banner on the tapped sheet, so
           // nothing is ever truncated here.
@@ -1325,7 +1336,7 @@ class _Noeud extends StatelessWidget {
   }
 }
 
-/// A small accent-coloured chip naming an association mechanism (ADR-0010).
+/// A small accent-coloured chip naming an association mechanism.
 class _PuceMecanisme extends StatelessWidget {
   final String libelle;
   final Color? accent;
@@ -1363,12 +1374,13 @@ class _PuceMecanisme extends StatelessWidget {
 
 /// An edge to draw: the cluster centre [pos], the relation [sens], and the
 /// cluster shape half-extents [demi] used to trim the far end so the single
-/// arrow stops on the shape's edge (ADR-0012/0013).
+/// arrow stops on the shape's edge.
 typedef _Arete = ({Offset pos, SensAssociation? sens, Size demi});
 
 /// Paints one edge from the centre to each **group** anchor, **with a direction
-/// arrow** (ADR-0012/0013): a head at the group end for *donne*, at the centre
-/// end for *recoit*, at both for *mutuel*. The far end is trimmed to the group's
+/// arrow**: a head at the group end for *donne*, at the centre
+/// end for *recoit*, at both for *mutuel*. The far end is trimmed to the
+/// group's
 /// box so a single arrow points at the cluster rather than through it.
 class _Peintre extends CustomPainter {
   final Offset centre;
@@ -1400,7 +1412,7 @@ class _Peintre extends CustomPainter {
         if (dist < 1) continue;
         final dir = vecteur / dist;
         // Far end: intersection of the ray with the cluster's rectangle, so the
-        // arrowhead lands on the shape border, never on a bubble (ADR-0013 §5).
+        // arrowhead lands on the shape border, never on a bubble.
         final tBord = _distanceBord(dir, a.demi);
         final debut = centre + dir * rayonCentre;
         final fin = a.pos - dir * tBord;

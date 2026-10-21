@@ -142,7 +142,7 @@ void main() {
     expect(prefs.nePasDerangerFin, isNull);
   });
 
-  test('setting an association weight updates only that family (ADR-0011)',
+  test('setting an association weight updates only that family',
       () async {
     final c = conteneur();
     await c.read(preferencesProvider.future);

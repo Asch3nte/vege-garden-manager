@@ -23,7 +23,7 @@ Color couleurFamille(String famille) =>
 ///
 /// Rounder than a circle yet **angle-free** (quadratic béziers). The wobble is
 /// **inward only** (radius never exceeds [rayon]), so families packed without
-/// overlap stay disjoint (ADR-0008). The phase is seeded on [famille] →
+/// overlap stay disjoint. The phase is seeded on [famille] →
 /// deterministic and stable under zoom.
 Path cheminBlobbyFamille(Offset centre, double rayon, String famille) {
   const n = 90;

@@ -1,7 +1,7 @@
 import '../value_objects/statistiques_stockage.dart';
 
 /// Contract for reading local-storage statistics for the data-transparency
-/// settings panel (docs/11 §6 — "Transparence des données").
+/// settings panel ("Transparence des données").
 ///
 /// Backed by the SQLite database in the infrastructure layer (per-table
 /// `COUNT(*)` + the database page size); no network is involved — the figures

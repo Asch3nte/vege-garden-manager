@@ -14,7 +14,7 @@ import 'recherche_glossaire.dart';
 import 'registre_glossaire.dart';
 import 'terme_glossaire.dart';
 
-/// « Aide & lexique » — the glossary cover (ADR-0017, D3): an always-visible
+/// « Aide & lexique » — the glossary cover: an always-visible
 /// search field, the « Par où commencer ? » novice entry, then the nine book
 /// chapters with their entry counts. Reached from the Plus root
 /// (`/plus/aide`); chapters and terms are sub-routes, so the global back

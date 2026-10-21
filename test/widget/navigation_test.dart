@@ -142,7 +142,7 @@ void main() {
     expect(find.text('Confidentialité & opt-outs'), findsOneWidget);
   });
 
-  testWidgets('tapping an inactive tab resets it to its root (docs/15 §8 #5/#6)',
+  testWidgets('tapping an inactive tab resets it to its root',
       (tester) async {
     await pomperA(tester, const Size(390, 800));
 

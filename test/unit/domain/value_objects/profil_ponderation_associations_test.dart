@@ -4,7 +4,7 @@ import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/value_objects/profil_ponderation_associations.dart';
 
 void main() {
-  group('ProfilPonderationAssociations (ADR-0011)', () {
+  group('ProfilPonderationAssociations', () {
     test('the default profile is neutral (all normal)', () {
       final p = ProfilPonderationAssociations.defaut();
       expect(p.estDefaut, isTrue);

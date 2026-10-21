@@ -540,7 +540,7 @@
   },
   "assocMecaTuteurStructurel": "Tuteur naturel",
   "@assocMecaTuteurStructurel": {
-    "description": "Mécanisme d'association bénéfique (ADR-0010) : une plante sert de support à une grimpante."
+    "description": "Mécanisme d'association bénéfique : une plante sert de support à une grimpante."
   },
   "assocMecaEtagementLumiere": "Étagement / ombre",
   "@assocMecaEtagementLumiere": {
@@ -580,7 +580,7 @@
   },
   "assocMecaMemeFamilleRavageurs": "Même famille",
   "@assocMecaMemeFamilleRavageurs": {
-    "description": "Mécanisme d'association défavorable (ADR-0010) : même famille botanique, donc ravageurs et maladies partagés."
+    "description": "Mécanisme d'association défavorable : même famille botanique, donc ravageurs et maladies partagés."
   },
   "assocMecaCompetitionLumiere": "Concurrence lumière",
   "@assocMecaCompetitionLumiere": {
@@ -596,39 +596,39 @@
   },
   "assocMecaAttractionAuxiliaires": "Attire les auxiliaires",
   "@assocMecaAttractionAuxiliaires": {
-    "description": "Mécanisme d'association bénéfique : attire les insectes auxiliaires (prédateurs/parasitoïdes) qui régulent les ravageurs d'une voisine (ADR-0013)."
+    "description": "Mécanisme d'association bénéfique : attire les insectes auxiliaires (prédateurs/parasitoïdes) qui régulent les ravageurs d'une voisine."
   },
   "assocMecaAmeublissementSol": "Ameublit le sol",
   "@assocMecaAmeublissementSol": {
-    "description": "Mécanisme d'association bénéfique : des racines profondes décompactent le sol pour les voisines (ADR-0013)."
+    "description": "Mécanisme d'association bénéfique : des racines profondes décompactent le sol pour les voisines."
   },
   "assocMecaCompetitionEau": "Concurrence eau",
   "@assocMecaCompetitionEau": {
-    "description": "Mécanisme d'association défavorable : deux plantes se concurrencent pour l'eau (ADR-0013)."
+    "description": "Mécanisme d'association défavorable : deux plantes se concurrencent pour l'eau."
   },
   "assocMecaCompetitionEspace": "Concurrence espace",
   "@assocMecaCompetitionEspace": {
-    "description": "Mécanisme d'association défavorable : deux plantes étalées se concurrencent pour la place (ADR-0013)."
+    "description": "Mécanisme d'association défavorable : deux plantes étalées se concurrencent pour la place."
   },
   "assocMecaPartageMaladies": "Maladies partagées",
   "@assocMecaPartageMaladies": {
-    "description": "Mécanisme d'association défavorable : deux plantes hébergent un pathogène commun (fongique/sol), même hors même famille (ADR-0013)."
+    "description": "Mécanisme d'association défavorable : deux plantes hébergent un pathogène commun (fongique/sol), même hors même famille."
   },
   "assocMecaAutre": "Autre",
   "@assocMecaAutre": {
-    "description": "Marqueur de présentation pour une association curatée sans mécanisme typé : le détail complet est dans la fiche (ADR-0013)."
+    "description": "Marqueur de présentation pour une association curatée sans mécanisme typé : le détail complet est dans la fiche."
   },
   "assocSuggere": "Suggestion",
   "@assocSuggere": {
-    "description": "Badge d'une association dérivée (suggérée par le moteur, ADR-0010), distincte d'une association curatée."
+    "description": "Badge d'une association dérivée (suggérée par le moteur), distincte d'une association curatée."
   },
   "assocHorsSuggestion": "Hors moteur",
   "@assocHorsSuggestion": {
-    "description": "Libellé d'une association curatée (non dérivée) dans la vue Associations, pendant de « Suggestion · … » (ADR-0013). Aussi utilisé comme option du filtre par niveau de suggestion."
+    "description": "Libellé d'une association curatée (non dérivée) dans la vue Associations, pendant de « Suggestion · … ». Aussi utilisé comme option du filtre par niveau de suggestion."
   },
   "assocHorsSuggestionExpl": "Association reconnue et documentée, pas une déduction automatique de l'app.",
   "@assocHorsSuggestionExpl": {
-    "description": "Phrase élaborant « Hors moteur » dans le bandeau de fiche (ADR-0013)."
+    "description": "Phrase élaborant « Hors moteur » dans le bandeau de fiche."
   },
   "assocFiltreEleve": "Élevée",
   "@assocFiltreEleve": {
@@ -652,20 +652,20 @@
   },
   "assocPrefsNormales": "Préférences d'association : normales (par défaut)",
   "@assocPrefsNormales": {
-    "description": "Banderole de la vue Associations quand le profil de pondération est au défaut (ADR-0013)."
+    "description": "Banderole de la vue Associations quand le profil de pondération est au défaut."
   },
   "assocPrefsPerso": "Préférences personnalisées",
   "@assocPrefsPerso": {
-    "description": "Préfixe de la banderole quand le profil de pondération est personnalisé, suivi de la liste des familles ajustées (ADR-0013)."
+    "description": "Préfixe de la banderole quand le profil de pondération est personnalisé, suivi de la liste des familles ajustées."
   },
   "enracinementSuperficiel": "racines superficielles",
-  "@enracinementSuperficiel": { "description": "Système racinaire superficiel (ADR-0014)." },
+  "@enracinementSuperficiel": { "description": "Système racinaire superficiel." },
   "enracinementMoyen": "racines de profondeur moyenne",
-  "@enracinementMoyen": { "description": "Système racinaire de profondeur moyenne (ADR-0014)." },
+  "@enracinementMoyen": { "description": "Système racinaire de profondeur moyenne." },
   "enracinementProfond": "racines profondes",
-  "@enracinementProfond": { "description": "Système racinaire profond (ADR-0014)." },
+  "@enracinementProfond": { "description": "Système racinaire profond." },
   "enracinementPivotant": "racine pivotante",
-  "@enracinementPivotant": { "description": "Racine pivotante, décompacte le sol (ADR-0014)." },
+  "@enracinementPivotant": { "description": "Racine pivotante, décompacte le sol." },
   "critereSourceFixeAzote": "{plante} fixe l'azote de l'air dans le sol",
   "@critereSourceFixeAzote": { "placeholders": { "plante": { "type": "String" } } },
   "critereCibleGourmandeAzote": "{plante} est gourmande en azote (besoin élevé)",
@@ -693,17 +693,17 @@
   "critereCibleTolereOmbre": "{plante} tolère la mi-ombre",
   "@critereCibleTolereOmbre": { "placeholders": { "plante": { "type": "String" } } },
   "critereCyclesComplementaires": "Cycles complémentaires : l'une est rapide, l'autre longue",
-  "@critereCyclesComplementaires": { "description": "Critère succession (ADR-0014)." },
+  "@critereCyclesComplementaires": { "description": "Critère succession." },
   "critereOccupationsDecalees": "Leurs périodes d'occupation du sol se succèdent",
-  "@critereOccupationsDecalees": { "description": "Critère succession calendaire (ADR-0014)." },
+  "@critereOccupationsDecalees": { "description": "Critère succession calendaire." },
   "critereSourceCouvreSol": "{plante} couvre le sol (limite l'évaporation et les adventices)",
   "@critereSourceCouvreSol": { "placeholders": { "plante": { "type": "String" } } },
   "critereSourceBriseVent": "{plante} protège ses voisines du vent",
   "@critereSourceBriseVent": { "placeholders": { "plante": { "type": "String" } } },
   "critereDeuxAromatiques": "Les deux sont aromatiques",
-  "@critereDeuxAromatiques": { "description": "Critère brouillage olfactif (ADR-0014)." },
+  "@critereDeuxAromatiques": { "description": "Critère brouillage olfactif." },
   "critereUneRepulsive": "L'une est répulsive et brouille les odeurs qui guident les ravageurs",
-  "@critereUneRepulsive": { "description": "Critère brouillage olfactif (ADR-0014)." },
+  "@critereUneRepulsive": { "description": "Critère brouillage olfactif." },
   "critereSourceRepulsiveCible": "{source} repousse un ravageur qui s'attaque à {cible}",
   "@critereSourceRepulsiveCible": { "placeholders": { "source": { "type": "String" }, "cible": { "type": "String" } } },
   "critereSourcePiegeCible": "{source} détourne (plante-piège) un ravageur de {cible}",
@@ -715,15 +715,15 @@
   "critereMemeFamille": "Même famille botanique ({famille}) : mêmes ravageurs et maladies",
   "@critereMemeFamille": { "placeholders": { "famille": { "type": "String" } } },
   "critereDeuxHautesPleinSoleil": "Les deux sont hautes et exigent le plein soleil : elles se font de l'ombre",
-  "@critereDeuxHautesPleinSoleil": { "description": "Critère concurrence lumière (ADR-0014)." },
+  "@critereDeuxHautesPleinSoleil": { "description": "Critère concurrence lumière." },
   "critereDeuxGourmandesAzote": "Les deux sont gourmandes en azote : concurrence pour cet élément",
-  "@critereDeuxGourmandesAzote": { "description": "Critère concurrence azote (ADR-0014)." },
+  "@critereDeuxGourmandesAzote": { "description": "Critère concurrence azote." },
   "critereDeuxAssoiffees": "Les deux ont un fort besoin en eau : concurrence hydrique",
-  "@critereDeuxAssoiffees": { "description": "Critère concurrence eau (ADR-0014)." },
+  "@critereDeuxAssoiffees": { "description": "Critère concurrence eau." },
   "critereDeuxEtalees": "Les deux sont très étalées : concurrence pour la place",
-  "@critereDeuxEtalees": { "description": "Critère concurrence espace (ADR-0014)." },
+  "@critereDeuxEtalees": { "description": "Critère concurrence espace." },
   "critereMaladieCommune": "Elles hébergent une même maladie (transmission facilitée)",
-  "@critereMaladieCommune": { "description": "Critère maladies partagées (ADR-0014)." },
+  "@critereMaladieCommune": { "description": "Critère maladies partagées." },
   "confianceFaible": "faible",
   "@confianceFaible": {
     "description": "Niveau de confiance faible d'une suggestion (affiché après « Suggéré · »)."
@@ -738,11 +738,11 @@
   },
   "assocFacteursTitre": "Pourquoi cette suggestion :",
   "@assocFacteursTitre": {
-    "description": "Titre de la liste des facteurs (critères) d'une association dérivée dans le bandeau de fiche (ADR-0014)."
+    "description": "Titre de la liste des facteurs (critères) d'une association dérivée dans le bandeau de fiche."
   },
   "assocVoirPlus": "{count, plural, =1{Voir 1 suggestion de plus} other{Voir {count} suggestions de plus}}",
   "@assocVoirPlus": {
-    "description": "Bouton dépliant les suggestions d'associations dérivées masquées (ADR-0011).",
+    "description": "Bouton dépliant les suggestions d'associations dérivées masquées.",
     "placeholders": {
       "count": { "type": "int" }
     }
@@ -777,7 +777,7 @@
   },
   "categPonderation": "Pondération des associations",
   "@categPonderation": {
-    "description": "Titre de la catégorie/écran de réglage des poids d'associations (ADR-0011, expert)."
+    "description": "Titre de la catégorie/écran de réglage des poids d'associations."
   },
   "categPonderationSub": "Ajuster l'importance de chaque type d'effet",
   "@categPonderationSub": {
@@ -813,19 +813,19 @@
   },
   "familleConflitConcurrence": "Concurrence (ressources)",
   "@familleConflitConcurrence": {
-    "description": "Famille de conflit : concurrence lumière/eau/espace/azote (ADR-0014)."
+    "description": "Famille de conflit : concurrence lumière/eau/espace/azote."
   },
   "familleConflitSanitaire": "Risque sanitaire",
   "@familleConflitSanitaire": {
-    "description": "Famille de conflit : même famille / maladies partagées (ADR-0014)."
+    "description": "Famille de conflit : même famille / maladies partagées."
   },
   "familleConflitAllelopathie": "Allélopathie",
   "@familleConflitAllelopathie": {
-    "description": "Famille de conflit : inhibition chimique (ADR-0014)."
+    "description": "Famille de conflit : inhibition chimique."
   },
   "ponderationConflitsTitre": "À éviter — importance des avertissements",
   "@ponderationConflitsTitre": {
-    "description": "Titre de la section de pondération des conflits dans les réglages (ADR-0014)."
+    "description": "Titre de la section de pondération des conflits dans les réglages."
   },
   "poidsIgnore": "Ignorer",
   "@poidsIgnore": {
@@ -975,26 +975,26 @@
   },
   "ficheExpositionPlage": "{min} à {max}",
   "@ficheExpositionPlage": {
-    "description": "Plage d'exposition de la fiche : du minimum toléré à l'optimum (ADR-0014).",
+    "description": "Plage d'exposition de la fiche : du minimum toléré à l'optimum.",
     "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
   },
   "ficheHauteur": "Hauteur adulte",
-  "@ficheHauteur": { "description": "Libellé de la hauteur adulte dans la fiche (ADR-0014)." },
+  "@ficheHauteur": { "description": "Libellé de la hauteur adulte dans la fiche." },
   "ficheHauteurCm": "{min}–{max} cm",
   "@ficheHauteurCm": {
-    "description": "Plage de hauteur adulte en cm (ADR-0014).",
+    "description": "Plage de hauteur adulte en cm.",
     "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
   },
   "ficheHauteurCmUnique": "{cm} cm",
   "@ficheHauteurCmUnique": {
-    "description": "Hauteur adulte unique en cm (ADR-0014).",
+    "description": "Hauteur adulte unique en cm.",
     "placeholders": { "cm": { "type": "int" } }
   },
   "fichePh": "pH du sol",
-  "@fichePh": { "description": "Libellé du pH dans la fiche (ADR-0014)." },
+  "@fichePh": { "description": "Libellé du pH dans la fiche." },
   "fichePhPlage": "{min} à {max}",
   "@fichePhPlage": {
-    "description": "Plage de pH du sol (ADR-0014).",
+    "description": "Plage de pH du sol.",
     "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
   },
   "ficheCalendrierTitre": "Semis & récolte",
@@ -1591,9 +1591,9 @@
   "formPotagerTitreModifier": "Modifier le potager",
   "@formPotagerTitreModifier": { "description": "Titre du formulaire de potager en mode édition." },
   "potagerChangerDe": "Changer de potager",
-  "@potagerChangerDe": { "description": "Action (en-tête Potager, ADR-0009 multi-potager) : ouvre la liste des potagers pour en choisir un autre comme actif." },
+  "@potagerChangerDe": { "description": "Action (en-tête Potager) : ouvre la liste des potagers pour en choisir un autre comme actif." },
   "potagerAjouterAutre": "Ajouter un potager",
-  "@potagerAjouterAutre": { "description": "Action (en-tête Potager, ADR-0009 multi-potager) : crée un nouveau potager et bascule dessus." },
+  "@potagerAjouterAutre": { "description": "Action (en-tête Potager) : crée un nouveau potager et bascule dessus." },
   "potagerListeTitre": "Mes potagers",
   "@potagerListeTitre": { "description": "Titre de la feuille listant tous les potagers pour changer l'actif." },
   "potagerModifier": "Modifier le potager",
@@ -1677,7 +1677,7 @@
   "categDonneesSub": "Exporter, importer, réinitialiser",
   "@categDonneesSub": { "description": "Sous-titre de la catégorie Sauvegarde & données." },
   "donneesStockageSectionTitre": "Données stockées",
-  "@donneesStockageSectionTitre": { "description": "Titre de la section transparence des données (docs/11 §6)." },
+  "@donneesStockageSectionTitre": { "description": "Titre de la section transparence des données." },
   "donneesStockageNote": "Ce que l'application conserve sur cet appareil. Aucune donnée n'est envoyée sur un serveur.",
   "@donneesStockageNote": { "description": "Note explicative de la section données stockées." },
   "donneesStockageTaille": "Taille sur l'appareil",
@@ -1751,11 +1751,11 @@
   "donneesImportErreur": "Fichier de sauvegarde invalide ou incompatible.",
   "@donneesImportErreur": { "description": "Erreur d'import (JSON invalide ou version incompatible)." },
   "niveauDebutantDesc": "L'essentiel, sans complexité. L'app vous guide pas à pas avec des conseils détaillés.",
-  "@niveauDebutantDesc": { "description": "Description du niveau débutant (ADR-0009)." },
+  "@niveauDebutantDesc": { "description": "Description du niveau débutant." },
   "niveauIntermediaireDesc": "Plus de contrôle : outils, techniques de sol (lasagne…), vue Réseau des associations, observations, plusieurs potagers.",
-  "@niveauIntermediaireDesc": { "description": "Description du niveau intermédiaire (ADR-0009)." },
+  "@niveauIntermediaireDesc": { "description": "Description du niveau intermédiaire." },
   "niveauExpertDesc": "Tout est ouvert : sol et pH, statistiques, rotation, fiches perso. Conseils concis.",
-  "@niveauExpertDesc": { "description": "Description du niveau expert (ADR-0009)." },
+  "@niveauExpertDesc": { "description": "Description du niveau expert." },
   "onboardingNiveauTitre": "Votre expérience au potager",
   "@onboardingNiveauTitre": { "description": "Titre de l'étape de choix du niveau d'expérience." },
   "onboardingNiveauCorps": "L'app s'adapte à vous. Choisissez votre niveau — vous pourrez le changer à tout moment dans les réglages.",
@@ -1880,7 +1880,7 @@
   "generalNiveauChangeAction": "Découvrir",
   "@generalNiveauChangeAction": { "description": "Action du snackbar → guide des niveaux." },
   "glossaireChapCultures": "Cultures & plantes",
-  "@glossaireChapCultures": { "description": "Chapitre du glossaire (ADR-0017)." },
+  "@glossaireChapCultures": { "description": "Chapitre du glossaire." },
   "glossaireChapFamilles": "Familles botaniques",
   "@glossaireChapFamilles": { "description": "Chapitre du glossaire." },
   "glossaireChapSante": "Santé du jardin",
@@ -1910,7 +1910,7 @@
   "glossaireDefinitionAVenir": "Description détaillée à venir — les informations affichées proviennent des fiches embarquées.",
   "@glossaireDefinitionAVenir": { "description": "Définition de repli quand un référentiel n'a pas encore de description (jamais de contenu inventé)." },
   "glossaireNotionFamilleBotaniqueTitre": "Famille botanique",
-  "@glossaireNotionFamilleBotaniqueTitre": { "description": "Notion du glossaire (seed Lot 1)." },
+  "@glossaireNotionFamilleBotaniqueTitre": { "description": "Notion du glossaire." },
   "glossaireNotionFamilleBotaniqueDef": "Les plantes sont regroupées en grandes familles (Solanacées, Fabacées…) qui partagent des besoins, des maladies et des ravageurs communs. Connaître la famille d'une plante aide à organiser la [[notion.rotation-cultures|rotation des cultures]] et à comprendre le [[notion.compagnonnage|compagnonnage]].",
   "@glossaireNotionFamilleBotaniqueDef": { "description": "Définition (liens wiki [[id|texte]])." },
   "glossaireNotionFamilleBotaniqueAstuce": "La famille d'une plante est affichée sur sa fiche, dans le Catalogue.",
@@ -1918,7 +1918,7 @@
   "glossaireNotionFamilleBotaniqueConseil1": "Évitez de replanter la même famille au même endroit deux années de suite : les maladies communes s'installent dans le sol.",
   "@glossaireNotionFamilleBotaniqueConseil1": { "description": "Conseil d'utilisation." },
   "glossaireNotionRotationTitre": "Rotation des cultures",
-  "@glossaireNotionRotationTitre": { "description": "Notion du glossaire (seed Lot 1)." },
+  "@glossaireNotionRotationTitre": { "description": "Notion du glossaire." },
   "glossaireNotionRotationDef": "La rotation des cultures consiste à ne pas cultiver la même [[notion.famille-botanique|famille de plantes]] au même endroit deux saisons de suite. Trois raisons à cela : elle casse le cycle des maladies et des ravageurs qui se maintiennent dans le sol d'une année sur l'autre ; elle évite d'épuiser toujours les mêmes nutriments ; et elle fait alterner des plantes aux besoins et aux racines différents, ce qui préserve la structure et la fertilité de la terre.\n\nCertaines successions sont vertueuses : une légumineuse (pois, haricot, fève) fixe l'azote de l'air dans le sol, dont profitera ensuite une plante gourmande ; un engrais vert nourrit et protège la terre entre deux cultures. À l'inverse, faire suivre une famille par elle-même — ou par une famille qui partage ses ennemis — concentre maladies et carences.\n\nDans l'app, chaque fiche plante porte sa famille, son délai de retour conseillé, ses bons et mauvais précédents et son rapport à l'azote. En croisant ces informations avec l'historique réel de vos plantations, l'app sait, parcelle par parcelle, ce qui a poussé récemment et ce qu'il vaut mieux — ou non — replanter maintenant.",
   "@glossaireNotionRotationDef": { "description": "Définition détaillée de la rotation : pourquoi + comment l'app l'implémente (liens wiki, paragraphes séparés par des sauts de ligne)." },
   "glossaireNotionRotationAstuce": "Réflexe simple : alternez les « organes » récoltés — feuille, fruit, racine — puis une légumineuse qui restaure l'azote, avant de recommencer.",
@@ -1946,7 +1946,7 @@
   "glossaireValGroupeCulturalEngraisVertsDesc": "Plantes semées non pour être récoltées mais pour couvrir, nourrir et structurer le sol entre deux cultures (phacélie, moutarde, trèfle…), avant d'être restituées à la terre.",
   "@glossaireValGroupeCulturalEngraisVertsDesc": { "description": "Description du groupe engrais verts." },
   "glossaireNotionCompagnonnageTitre": "Compagnonnage",
-  "@glossaireNotionCompagnonnageTitre": { "description": "Notion du glossaire (seed Lot 1)." },
+  "@glossaireNotionCompagnonnageTitre": { "description": "Notion du glossaire." },
   "glossaireNotionCompagnonnageDef": "Art d'associer des plantes qui se rendent service : ombrage, répulsion d'insectes, partage du sol… Certaines associations sont au contraire à éviter (concurrence, maladies communes de [[notion.famille-botanique|famille]]).",
   "@glossaireNotionCompagnonnageDef": { "description": "Définition (liens wiki)." },
   "glossaireNotionCompagnonnageAstuce": "La vue « Associations » du Catalogue montre les bons et mauvais compagnons de chaque plante, avec la raison.",
@@ -1954,7 +1954,7 @@
   "glossaireNotionCompagnonnageConseil1": "Commencez simple : basilic près des tomates, œillets d'Inde au potager — puis explorez la vue Associations.",
   "@glossaireNotionCompagnonnageConseil1": { "description": "Conseil d'utilisation." },
   "categAide": "Aide & lexique",
-  "@categAide": { "description": "Catégorie du Plus : le glossaire (ADR-0017)." },
+  "@categAide": { "description": "Catégorie du Plus : le glossaire." },
   "categAideSub": "La référence du jardinier : termes, conseils, illustrations",
   "@categAideSub": { "description": "Sous-titre de la catégorie Aide & lexique." },
   "glossaireTitre": "Aide & lexique",
@@ -1980,7 +1980,7 @@
   "glossaireDelaiRetour": "{annees, plural, =1{Délai de retour conseillé : 1 an} other{Délai de retour conseillé : {annees} ans}}",
   "@glossaireDelaiRetour": { "description": "Rotation : délai de retour de la famille.", "placeholders": { "annees": { "type": "int" } } },
   "glossaireNotionCommencerTitre": "Par où commencer ?",
-  "@glossaireNotionCommencerTitre": { "description": "Notion d'accueil du glossaire (seed Lot 2)." },
+  "@glossaireNotionCommencerTitre": { "description": "Notion d'accueil du glossaire." },
   "glossaireNotionCommencerDef": "Bienvenue dans le lexique du jardinier ! Parcourez les chapitres à votre rythme : chaque terme de l'app y a sa page, avec des conseils pratiques. Pour débuter, découvrez ce qu'est une [[notion.famille-botanique|famille botanique]], pourquoi pratiquer la [[notion.rotation-cultures|rotation des cultures]], et comment marier vos plantes grâce au [[notion.compagnonnage|compagnonnage]].",
   "@glossaireNotionCommencerDef": { "description": "Définition (liens wiki)." },
   "glossaireNotionCommencerAstuce": "Partout dans l'app, les termes colorés sont cliquables : ils mènent à leur page du lexique.",
@@ -1988,14 +1988,14 @@
   "glossaireNotionCommencerConseil1": "Utilisez la recherche en haut du lexique : elle fouille les titres et les définitions, accents ou pas.",
   "@glossaireNotionCommencerConseil1": { "description": "Conseil d'utilisation." },
   "glossaireProvenanceTitre": "Provenance",
-  "@glossaireProvenanceTitre": { "description": "Étiquette du bloc provenance d'une page mécanisme (ADR-0017 Lot 4)." },
+  "@glossaireProvenanceTitre": { "description": "Étiquette du bloc provenance d'une page mécanisme." },
   "glossaireProvenanceCalculee": "Calculé par le moteur : l'app sait déduire ce mécanisme des caractéristiques des plantes (règles de dérivation), en plus des paires documentées par la communauté permaculture.",
   "@glossaireProvenanceCalculee": { "description": "Provenance d'un mécanisme dérivable (inventaire du moteur)." },
   "glossaireProvenanceDocumentee": "Documenté par la communauté : ce mécanisme provient uniquement des associations consignées dans les fiches par la communauté permaculture, reprises telles quelles — l'app ne le déduit pas elle-même.",
   "@glossaireProvenanceDocumentee": { "description": "Provenance d'un mécanisme non dérivable (curaté uniquement)." },
 
   "glossaireNotionCategoriePlanteTitre": "Catégories de plantes",
-  "@glossaireNotionCategoriePlanteTitre": { "description": "Page glossaire CategoriePlante (Lot 4)." },
+  "@glossaireNotionCategoriePlanteTitre": { "description": "Page glossaire CategoriePlante." },
   "glossaireNotionCategoriePlanteDef": "Chaque fiche du Catalogue est rangée dans une catégorie principale : légume, aromatique, fruit… La catégorie décrit le rôle principal de la plante au potager ; ses rôles secondaires (répulsive, mellifère…) sont portés par les [[notion.usage-plante|usages]].",
   "@glossaireNotionCategoriePlanteDef": { "description": "Définition." },
   "glossaireNotionCategoriePlanteAstuce": "Le Catalogue se filtre par catégorie d'un geste, via les pastilles en haut de l'écran.",
@@ -2406,7 +2406,7 @@
   "glossaireValEauEleveDesc": "ne doit jamais manquer d'eau (céleri, cultures en pot…).",
   "@glossaireValEauEleveDesc": { "description": "Descriptif BesoinEau.eleve." },
   "glossaireNotionUrgenceArrosageTitre": "Urgence d'arrosage",
-  "@glossaireNotionUrgenceArrosageTitre": { "description": "Page glossaire UrgenceArrosage (ADR-0015)." },
+  "@glossaireNotionUrgenceArrosageTitre": { "description": "Page glossaire UrgenceArrosage." },
   "glossaireNotionUrgenceArrosageDef": "Pour chaque plantation, l'app croise la chaleur des derniers jours, la pluie tombée et annoncée, l'[[notion.evapotranspiration|évapotranspiration]] et la soif propre de la plante pour dire s'il faut arroser. Quand c'est urgent, une tâche d'arrosage est créée automatiquement.",
   "@glossaireNotionUrgenceArrosageDef": { "description": "Définition (lien wiki)." },
   "glossaireValUrgenceMaintenant": "Arroser maintenant",
@@ -2580,7 +2580,7 @@
   "glossaireValAlerteFortePluieDesc": "précipitations importantes prévues : tuteurez, et inutile d'arroser.",
   "@glossaireValAlerteFortePluieDesc": { "description": "Descriptif de la valeur." },
   "glossaireNotionEtatCielTitre": "États du ciel (prévisions)",
-  "@glossaireNotionEtatCielTitre": { "description": "Page glossaire EtatCielJour (ADR-0016)." },
+  "@glossaireNotionEtatCielTitre": { "description": "Page glossaire EtatCielJour." },
   "glossaireNotionEtatCielDef": "Les prévisions résument chaque journée par un état du ciel, dérivé des codes météo internationaux (OMM). C'est lui qui choisit l'icône et le résumé en français de l'écran météo.",
   "@glossaireNotionEtatCielDef": { "description": "Définition." },
   "glossaireValCielEnsoleille": "Ensoleillé",
@@ -2609,13 +2609,13 @@
   "@glossaireValExpositionOmbreDesc": { "description": "Descriptif NiveauSoleil.ombre." },
 
   "glossaireNotionCalculAssociationsTitre": "Comment l'app calcule les associations",
-  "@glossaireNotionCalculAssociationsTitre": { "description": "Page générale du chapitre Associations (retour dev 2026-07-06)." },
+  "@glossaireNotionCalculAssociationsTitre": { "description": "Page générale du chapitre Associations." },
   "glossaireNotionCalculAssociationsDef": "Le [[notion.compagnonnage|compagnonnage]] n'est pas une science exacte : les résultats dépendent du sol, du climat, de l'année et de mille facteurs propres à chaque potager. L'app ne promet donc jamais un effet — elle explique des raisons d'y croire, toujours vérifiables. Deux sources se complètent : les paires documentées par la communauté permaculture (reprises telles quelles des fiches) et les suggestions calculées par le moteur à partir des caractéristiques réelles des plantes (usages, hauteurs, racines, familles, besoins…).",
   "@glossaireNotionCalculAssociationsDef": { "description": "Définition (lien wiki) — pas une science exacte + les deux provenances." },
   "glossaireNotionCalculAssociationsAstuce": "Chaque mécanisme a sa page dans ce chapitre, avec sa provenance : calculé par le moteur ou documenté par la communauté.",
   "@glossaireNotionCalculAssociationsAstuce": { "description": "Astuce 💡." },
   "glossaireNotionCalculAssociationsConseil1": "Chaque suggestion liste ses critères avec les vraies valeurs des plantes (hauteurs, familles, besoins…) : dépliez « Pourquoi cette suggestion » pour juger vous-même.",
-  "@glossaireNotionCalculAssociationsConseil1": { "description": "Conseil — critères ADR-0014." },
+  "@glossaireNotionCalculAssociationsConseil1": { "description": "Conseil — critères d'association." },
   "glossaireNotionCalculAssociationsConseil2": "Le [[notion.niveau-confiance|niveau de confiance]] dit la solidité du raisonnement ; la [[notion.ponderation-associations|pondération]] (profil expert) règle l'importance de chaque famille d'effets.",
   "@glossaireNotionCalculAssociationsConseil2": { "description": "Conseil (liens wiki)." },
   "glossaireNotionCalculAssociationsConseil3": "Testez, observez, notez : votre potager a toujours le dernier mot.",
@@ -2679,7 +2679,7 @@
   "glossaireValFamAllelopathieDesc": "substances qui inhibent les voisines.",
   "@glossaireValFamAllelopathieDesc": { "description": "Descriptif FamilleEffetConflit.allelopathie." },
   "glossaireNotionSensAssociationTitre": "Sens d'une association",
-  "@glossaireNotionSensAssociationTitre": { "description": "Page glossaire SensAssociation (ADR-0012)." },
+  "@glossaireNotionSensAssociationTitre": { "description": "Page glossaire SensAssociation." },
   "glossaireNotionSensAssociationDef": "Une association a un sens : la plante qui rend le service, celle qui en profite, ou les deux. Les flèches de la vue Associations le montrent, depuis la plante au centre.",
   "@glossaireNotionSensAssociationDef": { "description": "Définition." },
   "glossaireValSensDonneDesc": "la plante du centre aide sa voisine (→).",
@@ -2699,7 +2699,7 @@
   "glossaireValConfianceEleveDesc": "lien précis et vérifié entre les deux fiches.",
   "@glossaireValConfianceEleveDesc": { "description": "Descriptif NiveauConfiance.eleve." },
   "glossaireNotionPonderationTitre": "Pondération des associations",
-  "@glossaireNotionPonderationTitre": { "description": "Page glossaire PoidsAssociation (ADR-0011, profil expert)." },
+  "@glossaireNotionPonderationTitre": { "description": "Page glossaire PoidsAssociation." },
   "glossaireNotionPonderationDef": "Réglage du profil expert : donnez plus ou moins d'importance à chaque [[notion.familles-effets|famille d'effets]] dans le score des associations — ignorez ce qui ne vous parle pas, renforcez ce qui compte pour vous. Le tri des compagnons suit vos préférences.",
   "@glossaireNotionPonderationDef": { "description": "Définition (lien wiki)." },
   "glossaireValPoidsIgnoreDesc": "la famille d'effets ne compte plus dans le score.",
@@ -2806,7 +2806,7 @@
   "glossaireNotionTypesEmplacementsDef": "Où vit votre potager : jardin, balcon, terrasse, toit, cour, intérieur… L'emplacement situe chaque potager de l'app.",
   "@glossaireNotionTypesEmplacementsDef": { "description": "Définition." },
   "glossaireNotionNiveauxExperienceTitre": "Niveaux d'expérience",
-  "@glossaireNotionNiveauxExperienceTitre": { "description": "Page glossaire NiveauExperience (ADR-0009)." },
+  "@glossaireNotionNiveauxExperienceTitre": { "description": "Page glossaire NiveauExperience." },
   "glossaireNotionNiveauxExperienceDef": "L'app s'adapte à votre expérience : l'interface reste simple au départ, puis dévoile des réglages plus pointus (qualités de sol, pondération des associations…) à mesure que vous montez. Rien d'essentiel n'est jamais bloqué — changez de niveau librement dans les réglages.",
   "@glossaireNotionNiveauxExperienceDef": { "description": "Définition." },
   "glossaireNotionPermacultureTitre": "Permaculture",
@@ -2817,7 +2817,7 @@
   "@glossaireNotionPermacultureConseil1": { "description": "Conseil." },
 
   "ficheFamilleTitrePrefixe": "Sa famille :",
-  "@ficheFamilleTitrePrefixe": { "description": "Préfixe du titre de la section famille ; le nom de famille suit en terme cliquable → glossaire (ADR-0017 Lot 3)." },
+  "@ficheFamilleTitrePrefixe": { "description": "Préfixe du titre de la section famille ; le nom de famille suit en terme cliquable → glossaire." },
 
   "equipTypeOya": "Oya",
   "@equipTypeOya": { "description": "Libellé TypeEquipement.oya." },

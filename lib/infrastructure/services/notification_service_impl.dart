@@ -11,8 +11,8 @@ import '../../domain/value_objects/notification_locale.dart';
 ///
 /// All notifications are **local** (no server, privacy by design) and scheduled
 /// in the device's local timezone via `zonedSchedule`. This service is a thin
-/// wrapper: the **opt-out logic** (per-category mute, do-not-disturb window —
-/// see `docs/11-parametres-et-opt-outs.md`) lives in the Application layer,
+/// wrapper: the **opt-out logic** (per-category mute, do-not-disturb window)
+/// lives in the Application layer,
 /// which decides whether to call [programmer] at all.
 ///
 /// Domain notification ids are UUID [String]s, whereas the plugin keys

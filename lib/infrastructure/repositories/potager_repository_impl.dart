@@ -30,7 +30,7 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
         _mapper.versEntite, (r) => r.id);
   }
 
-  // ADR-0009 (multi-potager): the active garden is the user's persisted
+  // The active garden is the user's persisted
   // selection (preferences.potagerActifId), when it still resolves to a
   // non-deleted garden. Otherwise (no selection yet, or it points at a
   // deleted/missing garden) it falls back to the earliest-created one.

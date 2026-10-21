@@ -1,5 +1,5 @@
 /// Immutable value object for a **do-not-disturb** window: a daily time range
-/// during which the app must not fire notifications (docs/11 opt-outs).
+/// during which the app must not fire notifications (opt-outs).
 ///
 /// Bounds are minutes since midnight (0–1439). The range is **half-open**
 /// `[debut, fin)` — a notification exactly at [debutMinutes] is inside the

@@ -1,4 +1,4 @@
-/// Pure search over glossary terms (ADR-0017, D3): case- and accent-insensitive,
+/// Pure search over glossary terms: case- and accent-insensitive,
 /// looking into titles **and** definitions, title matches ranked first.
 library;
 

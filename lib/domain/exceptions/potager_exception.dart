@@ -4,8 +4,6 @@
 /// generic `Exception('...')`. The [message] is developer-facing and written in
 /// English; user-facing messages are localised separately at the presentation
 /// layer.
-///
-/// See `docs/05-modele-de-domaine.md` §8.
 abstract class PotagerException implements Exception {
   /// Developer-facing description of the error (English).
   final String message;

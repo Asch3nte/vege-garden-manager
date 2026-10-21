@@ -8,8 +8,6 @@ import '../value_objects/localisation.dart';
 /// Application layer only calls this when the user explicitly enabled it. The
 /// returned [Localisation] has its coordinates rounded to ~1 km
 /// ([Localisation.gps]); no city name is attached.
-///
-/// See `docs/05-modele-de-domaine.md` §7 and `docs/11-parametres-et-opt-outs.md`.
 abstract class AbstractGeolocalisationService {
   /// Whether the OS location service (GPS) is currently enabled.
   Future<bool> serviceActif();

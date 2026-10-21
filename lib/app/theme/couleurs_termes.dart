@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import '../../presentation/glossaire/type_terme_glossaire.dart';
 import 'couleurs_app.dart';
 
-/// Colour chart of the glossary term kinds (ADR-0017, D5): one colour per
+/// Colour chart of the glossary term kinds: one colour per
 /// [TypeTermeGlossaire], used by every clickable occurrence of a term across
 /// the app (`TermeCliquable`, wiki links, badges, chips) so a kind is
 /// recognisable at a glance.
 ///
-/// Values reuse the « Carnet vivant » palette tokens (docs/08 §2 — no new
-/// colour is invented); the dark variants come from the §3 set and must be
+/// Values reuse the « Carnet vivant » palette tokens (no new
+/// colour is invented); the dark variants come from the dark palette and must
+/// be
 /// revisited when the dark mode is actually designed.
 class CouleursTermes extends ThemeExtension<CouleursTermes> {
   /// Botanical families — sage green (primary accent).
@@ -35,7 +36,7 @@ class CouleursTermes extends ThemeExtension<CouleursTermes> {
     required this.notion,
   });
 
-  /// Light-mode chart (docs/08 §2 tokens).
+  /// Light-mode chart.
   static const CouleursTermes clair = CouleursTermes(
     famille: CouleursApp.accentPrimaireClair,
     maladie: CouleursApp.erreurClair,
@@ -44,7 +45,7 @@ class CouleursTermes extends ThemeExtension<CouleursTermes> {
     notion: CouleursApp.decoAubergine,
   );
 
-  /// Dark-mode chart (docs/08 §3 tokens — to revalidate with the dark design).
+  /// Dark-mode chart, to revalidate with the dark design.
   static const CouleursTermes sombre = CouleursTermes(
     famille: CouleursApp.accentPrimaireSombre,
     maladie: CouleursApp.erreurSombre,

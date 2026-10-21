@@ -5,7 +5,7 @@ import 'package:pot_a_gerer/infrastructure/catalogue/familles_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/filesystem_fiche_asset_source.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_familles.dart';
 
-/// Guards the real embedded family reference (ADR-0006): every shipped family
+/// Guards the real embedded family reference: every shipped family
 /// sheet must parse, validate and map cleanly, and every species must point to
 /// an existing, coherent family. Runs against `assets/fiches_plantes/_familles`
 /// via the filesystem source (no Flutter bundle needed).
@@ -30,7 +30,7 @@ void main() {
     expect(chemins.any((p) => p.endsWith('familles_registry.yaml')), isFalse);
   });
 
-  test('seeded families expose their editorial notes (ADR-0006 Lot 4)',
+  test('seeded families expose their editorial notes',
       () async {
     final cache = await FamillesLoader(FilesystemFamilleAssetSource()).charger();
     for (final id in const ['fabaceae', 'solanaceae']) {

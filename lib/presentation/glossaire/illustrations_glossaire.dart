@@ -1,4 +1,4 @@
-/// Registry of the glossary illustrations (ADR-0017, D4 / Lot 5).
+/// Registry of the glossary illustrations.
 ///
 /// One file per illustrated term: `assets/images/glossaire/<term id>.webp`
 /// (lightweight WebP, capped dimensions), provenance and licence recorded in
@@ -27,7 +27,7 @@ const Set<String> idsIllustres = {
 };
 
 /// Asset path of the illustration of [idTerme], or `null` when the term has
-/// none (D4: no image block is rendered).
+/// none (no image block is rendered).
 String? illustrationDe(String idTerme) => idsIllustres.contains(idTerme)
     ? '$dossierIllustrationsGlossaire/$idTerme.webp'
     : null;

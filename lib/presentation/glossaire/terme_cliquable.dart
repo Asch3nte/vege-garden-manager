@@ -11,14 +11,13 @@ import 'type_terme_glossaire.dart';
 /// system back returns to it exactly as the user left it (associations view,
 /// plant sheet…). Term→term navigation from such a page pushes again — back
 /// then replays the pages in their opening order, matching the app-wide
-/// history contract (docs/15 §8 D#6).
+/// history contract.
 class _RoutePageTerme extends MaterialPageRoute<void> {
   _RoutePageTerme(String idTerme)
       : super(builder: (_) => PageTermeGlossaire(idTerme: idTerme));
 }
 
-/// Navigates to the glossary page of [idTerme] from **anywhere** in the app
-/// (ADR-0017 D5).
+/// Navigates to the glossary page of [idTerme] from **anywhere** in the app.
 ///
 /// From a modal overlay (the associations dialog, the plant sheet…) the page
 /// is **pushed above it** ([_RoutePageTerme]): back returns to the overlay,
@@ -36,7 +35,8 @@ void ouvrirTermeGlossaire(BuildContext context, String idTerme) {
   }
 }
 
-/// An **inline clickable term**: coloured by its glossary kind (the D5 chart),
+/// An **inline clickable term**: coloured by its glossary kind (the kind colour
+/// chart),
 /// discreetly underlined, tapping opens its glossary page. This is the same
 /// visual grammar as the wiki links rendered by `TexteAvecLiens` — one look,
 /// everywhere (plant sheets, panels, glossary pages…).
@@ -79,7 +79,7 @@ class TermeCliquable extends StatelessWidget {
   }
 }
 
-/// A small « ? » help affordance opening a glossary page (ADR-0017 D5) —
+/// A small « ? » help affordance opening a glossary page —
 /// used as the `suffixIcon` of form fields whose concept deserves a full
 /// explanation (climate, hardiness, soil texture…). Kept deliberately
 /// discreet: outlined icon, muted colour, compact hit target.
@@ -107,7 +107,7 @@ class AideGlossaire extends StatelessWidget {
 
 /// A **clickable term chip** (shared by the glossary pages and the app
 /// surfaces, e.g. the plant sheet's disease/pest chips): label tinted by the
-/// D5 chart, optional tooltip, tapping opens the term page.
+/// kind colour chart, optional tooltip, tapping opens the term page.
 class PuceTermeGlossaire extends StatelessWidget {
   /// Prefixed glossary id of the target term.
   final String idTerme;

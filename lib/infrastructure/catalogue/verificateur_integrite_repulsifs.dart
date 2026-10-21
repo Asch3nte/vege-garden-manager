@@ -3,8 +3,7 @@ import '../../domain/enums/type_bioagresseur.dart';
 import 'bioagresseur_cache.dart';
 
 /// A single referential-integrity problem between a plant sheet's targeted
-/// defence (`repulsif_contre` / `piege_a`) and the bioaggressor reference
-/// (ADR-0010, Lot 2).
+/// defence (`repulsif_contre` / `piege_a`) and the bioaggressor reference.
 class ProblemeIntegriteRepulsif {
   /// Offending species id.
   final String espece;
@@ -19,7 +18,7 @@ class ProblemeIntegriteRepulsif {
 }
 
 /// Cross-checks that the plant catalogue's targeted-defence slugs resolve in the
-/// bioaggressor reference (ADR-0010, Lot 2):
+/// bioaggressor reference:
 ///
 /// 1. **Coverage** — every slug listed in `repulsif_contre` / `piege_a` must
 ///    resolve to a reference entry.

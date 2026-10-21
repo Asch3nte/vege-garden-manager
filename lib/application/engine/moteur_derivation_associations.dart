@@ -27,7 +27,7 @@ import 'suggestion_association.dart';
 typedef ResolveurFamille = FamilleBotanique? Function(String familleBrute);
 
 /// Pure engine that **derives typed companion associations** from plant traits,
-/// usages and (family) bioaggressors (ADR-0010, Lot 3). It is what lets the app
+/// usages and (family) bioaggressors. It is what lets the app
 /// *reason* about pairings — suggesting the milpa or tomato + marigold without
 /// any pair being hand-authored — rather than only reciting curated pairs.
 ///
@@ -49,14 +49,14 @@ class MoteurDerivationAssociations {
   static const int seuilLongJours = 100;
 
   /// A companion is "notably shorter" for layering when its max height is at most
-  /// this fraction of the tall plant's (ADR-0014 — étagement précis).
+  /// this fraction of the tall plant's.
   static const double ratioEtagement = 0.5;
 
   /// Planting distance (cm) at/above which a plant counts as "spreading", for the
-  /// space-competition rule (ADR-0014).
+  /// space-competition rule.
   static const int seuilEtaleeCm = 70;
 
-  /// Benefit mechanisms the engine has a derivation rule for (ADR-0017).
+  /// Benefit mechanisms the engine has a derivation rule for.
   ///
   /// This is the engine's **own rule inventory** — the single source the
   /// glossary derives each mechanism page's provenance from ("computed by the
@@ -78,10 +78,10 @@ class MoteurDerivationAssociations {
     TypeBeneficeAssociation.ameublissementSol,
   };
 
-  /// Conflict mechanisms the engine has a derivation rule for (ADR-0017).
+  /// Conflict mechanisms the engine has a derivation rule for.
   ///
-  /// Same contract as [beneficesDerivables]. Allelopathy is **curated only**
-  /// (ADR-0013): no reliable trait-based rule exists, so it never appears here.
+  /// Same contract as [beneficesDerivables]. Allelopathy is **curated only**:
+  /// no reliable trait-based rule exists, so it never appears here.
   static const Set<TypeConflitAssociation> conflitsDerivables = {
     TypeConflitAssociation.memeFamilleRavageurs,
     TypeConflitAssociation.competitionLumiere,
@@ -104,7 +104,7 @@ class MoteurDerivationAssociations {
     if (a.id == b.id) return const [];
     final out = <SuggestionAssociation>[];
 
-    // — Bénéfices —
+    // — Benefits —
     if (a.fixeAzote && b.besoinAzote == NiveauBesoin.eleve) {
       out.add(_benef(b, TypeBeneficeAssociation.fixationAzote, NiveauConfiance.eleve,
           criteres: const {
@@ -129,9 +129,9 @@ class MoteurDerivationAssociations {
             if (_plusHaute(a, b)) CritereAssociation.sourcePlusHaute,
           }));
     }
-    // Étagement (ADR-0014, précis) : [a] haute & plein soleil porte de l'ombre,
-    // [b] **nettement plus basse** et qui **préfère** (confiance moyenne) ou
-    // **tolère** (confiance faible — c'est sous-optimal pour elle) cette ombre.
+    // Layering: [a], tall and in full sun, casts shade on [b], **notably
+    // shorter**, which **prefers** it (medium confidence) or **tolerates** it
+    // (low confidence — suboptimal for [b]).
     if (a.besoins.soleil == NiveauSoleil.pleinSoleil &&
         _haute(a) &&
         _nettementPlusBasse(a, b) &&
@@ -148,9 +148,9 @@ class MoteurDerivationAssociations {
               CritereAssociation.cibleTolereOmbre,
           }));
     }
-    // Succession (ADR-0014) : si l'hémisphère/climat sont connus, on vérifie le
-    // **calendrier réel** (occupations du sol qui ne se chevauchent pas →
-    // confiance moyenne) ; sinon repli sur l'heuristique de durée (faible).
+    // Succession: with a known hemisphere/climate the **real calendar** is
+    // checked (non-overlapping soil occupation → medium confidence); otherwise
+    // the duration heuristic applies (low).
     if (hemisphere != null &&
         climat != null &&
         _successionCalendaire(a, b, hemisphere, climat)) {
@@ -196,8 +196,8 @@ class MoteurDerivationAssociations {
           slug: piege,
           criteres: const {CritereAssociation.sourcePiegeCible}));
     }
-    // Attire les auxiliaires (ADR-0014) : [a] attire des prédateurs/parasitoïdes,
-    // qui régulent les ravageurs auxquels la famille de [b] est sujette.
+    // Beneficial insects: [a] attracts predators/parasitoids that control the
+    // pests [b]'s family is prone to.
     if (a.aUsage(UsagePlante.attireAuxiliaires) &&
         _ravageursDe(b, familles).isNotEmpty) {
       out.add(_benef(b, TypeBeneficeAssociation.attractionAuxiliaires,
@@ -207,8 +207,8 @@ class MoteurDerivationAssociations {
             CritereAssociation.cibleSujetteRavageurs,
           }));
     }
-    // Ameublit le sol (ADR-0014) : racine profonde/pivotante de [a] qui
-    // décompacte pour la racine superficielle de [b].
+    // Soil loosening: [a]'s deep/tap root loosens the soil for [b]'s shallow
+    // roots.
     if ((a.enracinement == EnracinementPlante.pivotant ||
             a.enracinement == EnracinementPlante.profond) &&
         b.enracinement == EnracinementPlante.superficiel) {
@@ -226,8 +226,8 @@ class MoteurDerivationAssociations {
           b, TypeConflitAssociation.memeFamilleRavageurs, NiveauConfiance.eleve,
           criteres: const {CritereAssociation.memeFamille}));
     }
-    // Concurrence lumière (ADR-0014, précis) : toutes deux **exigent** le plein
-    // soleil (pas seulement le tolèrent) et sont hautes → elles se font de l'ombre.
+    // Light competition: both **require** full sun (not merely tolerate it)
+    // and are tall → they shade each other.
     if (_exigePleinSoleil(a) && _exigePleinSoleil(b) && _haute(a) && _haute(b)) {
       out.add(_conflit(
           b, TypeConflitAssociation.competitionLumiere, NiveauConfiance.moyen,
@@ -238,19 +238,19 @@ class MoteurDerivationAssociations {
           b, TypeConflitAssociation.competitionAzote, NiveauConfiance.moyen,
           criteres: const {CritereAssociation.deuxGourmandesAzote}));
     }
-    // Concurrence eau (ADR-0014) : deux forts besoins en eau.
+    // Water competition: two high water needs.
     if (a.besoins.eau == BesoinEau.eleve && b.besoins.eau == BesoinEau.eleve) {
       out.add(_conflit(b, TypeConflitAssociation.competitionEau, NiveauConfiance.moyen,
           criteres: const {CritereAssociation.deuxAssoiffees}));
     }
-    // Concurrence espace (ADR-0014) : deux plantes très étalées (gros espacement).
+    // Space competition: two widely spreading plants (large spacing).
     if (a.espacementCm >= seuilEtaleeCm && b.espacementCm >= seuilEtaleeCm) {
       out.add(_conflit(
           b, TypeConflitAssociation.competitionEspace, NiveauConfiance.moyen,
           criteres: const {CritereAssociation.deuxEtalees}));
     }
-    // Maladies partagées (ADR-0014) : familles **différentes** mais hôtes d'une
-    // même maladie (sinon c'est déjà « même famille »).
+    // Shared diseases: **different** families hosting the same disease
+    // (otherwise it is already "same family").
     if (!_memeFamille(a, b)) {
       final commune =
           _premierCommun(_maladiesDe(a, familles), _maladiesDe(b, familles));
@@ -413,7 +413,7 @@ class MoteurDerivationAssociations {
   bool _exigePleinSoleil(FichePlante f) =>
       f.besoins.soleil == NiveauSoleil.pleinSoleil && !_tolereOmbre(f);
 
-  /// [b] is notably shorter than [a] (both heights known, ADR-0014).
+  /// [b] is notably shorter than [a] (both heights known).
   bool _nettementPlusBasse(FichePlante a, FichePlante b) {
     final ha = a.hauteurAdulteCmMax, hb = b.hauteurAdulteCmMax;
     return ha != null && hb != null && hb <= ha * ratioEtagement;
@@ -437,7 +437,7 @@ class MoteurDerivationAssociations {
     return (aCourt && bLong) || (aLong && bCourt);
   }
 
-  /// Calendar succession (ADR-0014) : both plants have a soil-occupation window
+  /// Calendar succession : both plants have a soil-occupation window
   /// for [hemisphere]×[climat] and those windows **don't overlap** (one frees the
   /// spot before the other takes it).
   bool _successionCalendaire(

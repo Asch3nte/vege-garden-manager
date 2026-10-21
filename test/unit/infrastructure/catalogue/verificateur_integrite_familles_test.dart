@@ -73,7 +73,7 @@ void main() {
     expect(verif.verifier([espece], _familles(['apiaceae'])), hasLength(1));
   });
 
-  group('cultural precedents (rotation avancée, Lot 2)', () {
+  group('cultural precedents', () {
     test('flags a family precedent with no family sheet', () {
       final espece = _espece(
         precedentsFavorables: {PrecedentCultural.famille('cucurbitaceae')},

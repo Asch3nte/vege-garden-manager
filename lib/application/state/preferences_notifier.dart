@@ -16,7 +16,7 @@ import '../providers/repository_providers.dart';
 /// Exposes the user [PreferencesUtilisateur] and the actions that mutate it.
 ///
 /// Every setter applies the change with `copierAvec`, **persists immediately**
-/// (auto-save, docs/09 §6) and reflects the new value in [state]. The single
+/// (auto-save) and reflects the new value in [state]. The single
 /// private [_modifier] helper keeps each setter to one line and guarantees the
 /// save-then-publish order. All preferences are local-only — no network, no
 /// account (privacy by design).
@@ -77,13 +77,13 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> terminerOnboarding() =>
       _modifier((p) => p.copierAvec(onboardingTermine: true));
 
-  /// Toggles automatic weather fetching (docs/11 opt-out). When off, no Open-Meteo
+  /// Toggles automatic weather fetching (opt-out). When off, no Open-Meteo
   /// call is made automatically (home card, watering advice, alerts).
   Future<void> definirMeteoAuto(bool actif) =>
       _modifier((p) => p.copierAvec(meteoAutoActive: actif));
 
   /// Sets the do-not-disturb window (`HH:MM` bounds); notifications whose time
-  /// falls inside are suppressed by the Application layer (docs/11, opt-out #3).
+  /// falls inside are suppressed by the Application layer.
   Future<void> definirNePasDeranger(String debut, String fin) =>
       _modifier((p) => p.avecNePasDeranger(debut, fin));
 
@@ -100,7 +100,7 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
     });
   }
 
-  /// Sets the weight of one association effect family (ADR-0011, expert).
+  /// Sets the weight of one association effect family (expert).
   Future<void> definirPoidsAssociation(
     FamilleEffetAssociation famille,
     PoidsAssociation poids,
@@ -110,7 +110,7 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
                 p.ponderationAssociations.avec(famille, poids),
           ));
 
-  /// Sets the weight of one **conflict** effect family (ADR-0014, expert).
+  /// Sets the weight of one **conflict** effect family (expert).
   Future<void> definirPoidsConflit(
     FamilleEffetConflit famille,
     PoidsAssociation poids,

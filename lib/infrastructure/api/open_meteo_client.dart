@@ -29,7 +29,7 @@ class OpenMeteoClient {
       'precipitation_probability_max,wind_speed_10m_max,'
       'et0_fao_evapotranspiration,weather_code';
 
-  /// Open-Meteo hourly variables requested for the detail view (ADR-0016 Lot 2).
+  /// Open-Meteo hourly variables requested for the detail view.
   static const _hourlyVariables =
       'temperature_2m,precipitation,precipitation_probability,'
       'weather_code,wind_speed_10m';
@@ -260,7 +260,7 @@ class OpenMeteoClient {
 
   /// Returns the ground elevation (metres) at [loc] from the Open-Meteo
   /// response metadata, or `null` on any failure (undefined location, network
-  /// error, parse error). Never throws. (ADR-0016 Lot 2)
+  /// error, parse error). Never throws.
   Future<double?> obtenirElevation(Localisation loc) async {
     if (!loc.estDefinie) return null;
     try {

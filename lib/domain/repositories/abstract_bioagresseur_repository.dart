@@ -1,7 +1,7 @@
 import '../entities/bioagresseur.dart';
 import '../enums/type_bioagresseur.dart';
 
-/// Read-only access to the embedded bioaggressor reference (ADR-0006, Lot 4).
+/// Read-only access to the embedded bioaggressor reference.
 ///
 /// The reference is shipped with the app and never mutated by the user, so the
 /// interface only exposes lookups. Backed by the in-memory cache built at load.

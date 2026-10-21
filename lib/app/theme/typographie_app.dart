@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Typographic scale of the **« Carnet vivant »** design system.
 ///
-/// From `docs/08-design-system.md` §4. Titles use **Manrope**, body & UI use
+/// Titles use **Manrope**, body & UI use
 /// **Inter**. The font files are not embedded yet (no `google_fonts` dependency
 /// — it is not in the validated stack), so the families resolve to the platform
 /// fallback until the `.ttf` assets are added to `pubspec.yaml`. Naming them now

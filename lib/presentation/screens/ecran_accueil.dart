@@ -20,10 +20,9 @@ import '../widgets/position_potager_actions.dart';
 import '../widgets/titre_tache.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
-/// level, weather & season stats. Read-only, no creation actions (docs/09 §3).
+/// level, weather & season stats. Read-only, no creation actions.
 ///
-/// Reimplemented from the `accueil-final.jsx` mock-up (direction B « Tableau
-/// modulaire ») as Flutter widgets. Real data (active garden, zones, today's
+/// A modular dashboard. Real data (active garden, zones, today's
 /// tasks, experience level) comes from [accueilProvider]; weather, alerts and
 /// season harvests are explicit placeholders until their reads/verdicts exist.
 class EcranAccueil extends ConsumerWidget {
@@ -62,7 +61,7 @@ class EcranAccueil extends ConsumerWidget {
           onRefresh: () async => ref.invalidate(accueilProvider),
           child: _Contenu(
             vue: data,
-            // Jump to the zone detail on the Potager tab (#5); the global back
+            // Jump to the zone detail on the Potager tab; the global back
             // stack returns straight to the dashboard.
             onZoneTap: (id) => context.go(RoutesApp.zoneDetail(id)),
             onToggleTache: (t) =>
@@ -241,7 +240,7 @@ class _CarteMeteo extends ConsumerWidget {
         null,
       ),
       data: (vue) {
-        // Auto weather-fetch opt-out is off (docs/11): muted, no fetch happened.
+        // Auto weather-fetch opt-out is off: muted, no fetch happened.
         if (vue.meteoDesactivee) {
           return (
             Icons.cloud_off_outlined,

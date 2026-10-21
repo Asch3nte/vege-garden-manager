@@ -1,4 +1,4 @@
-// Widget tests for the `locale` wiring on [PotAGererApp] (docs/15 §6 —
+// Widget tests for the `locale` wiring on [PotAGererApp] (
 // "Langue effective"): the stored `Langue` preference must drive the actual
 // app locale instead of being persisted but inert.
 import 'package:flutter/material.dart';

@@ -59,7 +59,7 @@ void main() {
       expect(cache.rechercher('', 'fr'), hasLength(2));
     });
 
-    test('separates mother sheets from their varieties (ADR-0005)', () {
+    test('separates mother sheets from their varieties', () {
       final variete = _fiche('tomate_cdb', CategoriePlante.legume,
           {UsagePlante.alimentaire}, 'Cœur de Bœuf',
           parentId: 'tomate');

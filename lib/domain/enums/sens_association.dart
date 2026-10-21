@@ -1,5 +1,5 @@
-/// Direction of a companion association, **seen from the centre plant**
-/// (ADR-0012). Lets the view draw oriented arrows and filter by direction.
+/// Direction of a companion association, **seen from the centre plant**.
+/// Lets the view draw oriented arrows and filter by direction.
 enum SensAssociation {
   /// The centre helps the other plant (centre → X).
   donne,

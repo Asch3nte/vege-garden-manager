@@ -1,4 +1,4 @@
-// Widget tests for the Associations view (ADR-0010): each companion shows its
+// Widget tests for the Associations view: each companion shows its
 // typed mechanism label and, when present, the editorial reason — and a bare
 // pair shows neither (nothing invented).
 import 'package:flutter/material.dart';
@@ -99,7 +99,7 @@ void main() {
   }
 
   testWidgets('shows the typed mechanism; the reason is not in the view '
-      '(moved to the sheet, ADR-0012)', (tester) async {
+      '(moved to the sheet)', (tester) async {
     final centre = _fiche('centre', benefiques: [
       AssociationBenefique(
         cibleId: 'compagnon',
@@ -124,7 +124,7 @@ void main() {
     expect(find.text('Attire les abeilles'), findsNothing);
   });
 
-  testWidgets('the opened sheet shows the full reason in a banner (ADR-0012)',
+  testWidgets('the opened sheet shows the full reason in a banner',
       (tester) async {
     await tester.pumpWidget(
       ProviderScope(
@@ -161,7 +161,7 @@ void main() {
   });
 
   testWidgets(
-      'the banner lists every factor of a derived suggestion (ADR-0014)',
+      'the banner lists every factor of a derived suggestion',
       (tester) async {
     await tester.pumpWidget(
       ProviderScope(
@@ -205,7 +205,7 @@ void main() {
 
   testWidgets(
       'an untyped curated pair shows the name under a neutral "Autre" marker '
-      '(ADR-0013)', (tester) async {
+      '', (tester) async {
     final centre = _fiche('centre', benefiques: [
       AssociationBenefique(cibleId: 'compagnon'),
     ]);
@@ -219,14 +219,14 @@ void main() {
     expect(find.text('compagnon'), findsOneWidget);
     expect(find.text('Attire les pollinisateurs'), findsNothing);
     expect(find.text('Autre'), findsOneWidget);
-    // A curated cluster shows the "Hors moteur" line (ADR-0013 §7); the
+    // A curated cluster shows the "Hors moteur" line; the
     // suggestion dropdown shows the current selection ("Tout" by default), so
     // "Hors moteur" appears exactly once (the cluster label only).
     expect(find.text('Hors moteur'), findsOneWidget);
   });
 
   testWidgets(
-      'tapping a cluster bubble opens its sheet (regression guard, ADR-0013 §3)',
+      'tapping a cluster bubble opens its sheet (regression guard)',
       (tester) async {
     final centre = _fiche('centre', benefiques: [
       AssociationBenefique(
@@ -246,7 +246,7 @@ void main() {
     expect(find.text('Attire les abeilles'), findsOneWidget);
   });
 
-  group('derived suggestions gated by experience level (ADR-0010/0009)', () {
+  group('derived suggestions gated by experience level', () {
     // haricot (nitrogen fixer) + mais (heavy feeder) → derived fixationAzote.
     final haricot = _fiche('haricot', famille: 'Fabaceae', fixeAzote: true);
     final mais =
@@ -269,7 +269,7 @@ void main() {
     });
 
     testWidgets('tapping the suggestion lists its real factors end-to-end '
-        '(ADR-0014)', (tester) async {
+        '', (tester) async {
       await ouvrir(tester, haricot, [haricot, mais],
           acces: const AccesNiveau(NiveauExperience.intermediaire));
       await tester.tap(find.text('mais'));
@@ -281,7 +281,7 @@ void main() {
     });
   });
 
-  group('filtre par direction (ADR-0012)', () {
+  group('filtre par direction', () {
     // centre déclare → donne (vers planteDonne) ; planteRecoit déclare centre → reçoit.
     final centre = _fiche('centre', benefiques: [
       AssociationBenefique(cibleId: 'planteDonne'),
@@ -321,7 +321,7 @@ void main() {
     });
   });
 
-  group('scoring & declutter (ADR-0011)', () {
+  group('scoring & declutter', () {
     const intermediaire = AccesNiveau(NiveauExperience.intermediaire);
 
     // mais (living stake, tall) + haricot (climber) → tuteurStructurel (gainDePlace).
@@ -349,7 +349,7 @@ void main() {
 
     testWidgets(
         'same-mechanism suggestions form a single cluster, not a capped list '
-        '(ADR-0013)', (tester) async {
+        '', (tester) async {
       // One fixer centre + 7 heavy feeders → 7 derived "Fixe l'azote" benefits,
       // all in the same direction → ONE cluster (one shared label), so the
       // per-side cap no longer hides anything: no "voir plus".
@@ -373,7 +373,7 @@ void main() {
     });
   });
 
-  group('conflict precedence — one side per pair (ADR-0013 §2/§3)', () {
+  group('conflict precedence — one side per pair', () {
     const intermediaire = AccesNiveau(NiveauExperience.intermediaire);
 
     testWidgets('a pair that is both beneficial and conflicting shows only on '
@@ -397,7 +397,7 @@ void main() {
     });
   });
 
-  group('preferences banner (ADR-0013 §4)', () {
+  group('preferences banner', () {
     testWidgets('default profile → "normales (par défaut)"', (tester) async {
       final centre = _fiche('centre',
           benefiques: [AssociationBenefique(cibleId: 'compagnon')]);
@@ -413,13 +413,13 @@ void main() {
       await ouvrir(tester, centre, [centre, _fiche('compagnon')],
           profil: ProfilPonderationAssociations.defaut().avec(
               FamilleEffetAssociation.fertilite, PoidsAssociation.fort));
-      // The tuned family is shown; the verbose prefix is gone (ADR-0013 §7).
+      // The tuned family is shown; the verbose prefix is gone.
       expect(find.textContaining('Fertilité du sol'), findsOneWidget);
       expect(find.textContaining('Préférences personnalisées'), findsNothing);
     });
   });
 
-  group('mécanismes cliquables → glossaire (ADR-0017 #4bis)', () {
+  group('mécanismes cliquables → glossaire', () {
     // Router-based harness: the view opens from '/', the glossary term route
     // is available so ouvrirTermeGlossaire can land somewhere.
     Future<void> ouvrirAvecGlossaire(
@@ -500,7 +500,7 @@ void main() {
       expect(find.textContaining('Calculé par le moteur'), findsOneWidget);
 
       // The dialog was NOT closed: back lands on the associations view,
-      // exactly where the user was (#4bis, retour dev 2026-07-07).
+      // exactly where the user was.
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.byType(Dialog), findsOneWidget);

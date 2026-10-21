@@ -15,7 +15,7 @@ import '../../domain/value_objects/modele_fiche_personnelle.dart';
 /// double-quoted scalar, so the result is always valid YAML — a corrupt sheet
 /// can never be produced from a well-formed model.
 ///
-/// See `docs/07-base-de-connaissances-yaml.md` §7. The current MVP schema covers
+/// The current MVP schema covers
 /// identity + basic cultivation; unset optional fields are simply omitted.
 class SerialiseurFichePersonnelle {
   const SerialiseurFichePersonnelle();

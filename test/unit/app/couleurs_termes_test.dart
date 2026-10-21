@@ -5,7 +5,7 @@ import 'package:pot_a_gerer/presentation/glossaire/type_terme_glossaire.dart';
 
 void main() {
   group('CouleursTermes', () {
-    test('both themes carry the term colour chart (ADR-0017 D5)', () {
+    test('both themes carry the term colour chart', () {
       expect(ThemeApp.clair().extension<CouleursTermes>(),
           same(CouleursTermes.clair));
       expect(ThemeApp.sombre().extension<CouleursTermes>(),

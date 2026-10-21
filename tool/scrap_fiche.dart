@@ -1,7 +1,7 @@
 // Reusable research/scrape tool — drafts a plant **species** sheet by cross-
 // referencing several open-source botanical databases.
 //
-// Goal (ADR-0005, Lot 3): bootstrap a *mother* sheet (species level) so the
+// Goal: bootstrap a *mother* sheet (species level) so the
 // catalogue is easy to grow. The tool reliably auto-fills **taxonomy** (cross-
 // checked GBIF × Wikidata) and **descriptions** (Wikipedia fr/en). Agronomic
 // fields have no clean open API, so they are emitted as TODO placeholders for
@@ -54,7 +54,7 @@ class FicheBrouillon {
   /// filled; agronomic blocks are TODO placeholders for human completion.
   String versYaml() {
     String bloc(String? v) => v ?? 'TODO';
-    // Normalized family key (ADR-0006): links the species to its family sheet.
+    // Normalized family key: links the species to its family sheet.
     final familleCle = familleBotanique == null
         ? 'TODO'
         : FamilleBotanique.normaliserCle(familleBotanique!);

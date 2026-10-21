@@ -15,7 +15,6 @@ import '../value_objects/quantite.dart';
 /// [qualite] and [notes] can be filled in afterwards.
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §3.5.
 class Recolte {
   final String _id;
   final String _plantationId;

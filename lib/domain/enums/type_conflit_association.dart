@@ -1,11 +1,9 @@
-/// The mechanism by which two plants *conflict* when grown nearby (ADR-0010,
-/// Décision 1). Typing the mechanism lets the app explain *why* a pairing is to
+/// The mechanism by which two plants *conflict* when grown nearby. Typing the
+/// mechanism lets the app explain *why* a pairing is to
 /// be avoided and, for the derivable ones, suggest the conflict on its own.
-///
-/// See `docs/05` §5.
 enum TypeConflitAssociation {
   /// Same botanical family → shared pests and diseases (referential
-  /// `Bioagresseur`, ADR-0006). Derivable from `A.famille == B.famille`.
+  /// `Bioagresseur`). Derivable from `A.famille == B.famille`.
   memeFamilleRavageurs,
 
   /// Two tall, full-sun plants competing for light side by side.
@@ -15,16 +13,16 @@ enum TypeConflitAssociation {
   competitionAzote,
 
   /// Two plants competing for water when grown too close (e.g. thirsty crops
-  /// side by side in dry conditions). ADR-0013.
+  /// side by side in dry conditions).
   competitionEau,
 
-  /// Two spreading/bulky plants competing for room (e.g. two cucurbits). ADR-0013.
+  /// Two spreading/bulky plants competing for room (e.g. two cucurbits).
   competitionEspace,
 
   /// Plants sharing a common fungal/soil pathogen (host plant), even across
   /// botanical families (e.g. potato + tomato, Verticillium; strawberry +
   /// brassica, soil diseases) — distinct from [memeFamilleRavageurs] (same
-  /// family). **Curated only**, not derivable (ADR-0013).
+  /// family). **Curated only**, not derivable.
   partageMaladies,
 
   /// Allelopathy — a plant chemically inhibits another (e.g. fennel, walnut's

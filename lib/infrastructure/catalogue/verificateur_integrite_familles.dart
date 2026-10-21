@@ -4,7 +4,7 @@ import '../../domain/value_objects/precedent_cultural.dart';
 import 'famille_botanique_cache.dart';
 
 /// A single referential-integrity problem found between the plant catalogue and
-/// the family reference (ADR-0006).
+/// the family reference.
 class ProblemeIntegriteFamille {
   /// Offending species id.
   final String espece;
@@ -18,15 +18,15 @@ class ProblemeIntegriteFamille {
   String toString() => '$espece: $raison';
 }
 
-/// Cross-checks that the plant catalogue and the family reference are coherent
-/// (ADR-0006, Décisions 1 & 3):
+/// Cross-checks that the plant catalogue and the family reference are
+/// coherent:
 ///
 /// 1. **Coverage** — the family of every species (the normalized
 ///    `famille_botanique`) must have a loaded family sheet.
 /// 2. **Coherence** — when a species also declares `rotation.famille`, it must
 ///    equal that normalized key.
-/// 3. **Precedents** — every *family* cultural precedent (rotation avancée,
-///    Lot 2) must resolve to a loaded family sheet. Functional-group precedents
+/// 3. **Precedents** — every *family* cultural precedent must resolve to a
+///    loaded family sheet. Functional-group precedents
 ///    ([GroupeCultural]) carry no family reference and are always valid.
 ///
 /// Pure and non-fatal: it *reports* problems (it never throws), so callers can

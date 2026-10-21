@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 
-// Référence logique : docs/06-modele-de-donnees-sqlite.md.
-// Conventions : id TEXT (UUID), dates en TEXT ISO 8601 UTC, enums en TEXT + CHECK,
-// booléens via boolean() (INTEGER 0/1), FK en ON DELETE RESTRICT (cascade logique
-// côté repositories). Les valeurs d'enum sont en camelCase (= noms Dart).
+// Conventions: id TEXT (UUID), dates as TEXT ISO 8601 UTC, enums as TEXT +
+// CHECK,
+// booleans via boolean() (INTEGER 0/1), FKs ON DELETE RESTRICT (logical cascade
+// in the repositories). Enum values are camelCase (= Dart names).
 
 @DataClassName('PotagerRow')
 class Potagers extends Table {
@@ -415,7 +415,7 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(true))();
   BoolColumn get syncLocaleActive =>
       boolean().withDefault(const Constant(false))();
-  // Auto weather-fetch opt-out (docs/11): true = fetch Open-Meteo automatically.
+  // Auto weather-fetch opt-out: true = fetch Open-Meteo automatically.
   BoolColumn get meteoAutoActive =>
       boolean().withDefault(const Constant(true))();
   BoolColumn get communauteOptIn =>
@@ -428,7 +428,7 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(true))();
   TextColumn get notificationsParCategorie =>
       text().withDefault(const Constant('{}'))(); // JSON
-  // ADR-0011 — association weighting profile, JSON {familleEffet: poids}.
+  // Association weighting profile, JSON {familleEffet: poids}.
   TextColumn get ponderationAssociations =>
       text().withDefault(const Constant('{}'))(); // JSON
   TextColumn get nePasDerangerDebut => text().nullable()();
@@ -437,7 +437,7 @@ class Preferences extends Table {
       boolean().withDefault(const Constant(false))();
   IntColumn get schemaVersion => integer().withDefault(const Constant(1))();
   TextColumn get derniereModification => text()();
-  // ADR-0009 — multi-garden active-selection (v4→v5); null = no explicit
+  // Active-garden selection (v4→v5); null = no explicit
   // choice yet, the repository falls back to the earliest-created garden.
   TextColumn get potagerActifId => text().nullable()();
 

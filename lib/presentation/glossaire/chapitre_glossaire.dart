@@ -1,5 +1,5 @@
 /// The chapters of the « Aide & lexique » glossary — the "book" structure the
-/// panel presents (ADR-0017, D1).
+/// panel presents.
 ///
 /// Every [TermeGlossaire] belongs to exactly one chapter. Chapters drive the
 /// **organisation** (panel tabs/sections); the term's `TypeTermeGlossaire`

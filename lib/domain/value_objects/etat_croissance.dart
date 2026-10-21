@@ -7,7 +7,6 @@ import '../enums/stade_croissance.dart';
 /// never persisted. The progression is an assumed ratio of elapsed days to the
 /// minimum days-to-harvest — an approximation, never a measurement. Domain names
 /// are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §4 and `docs/15-elements-differes.md` §3.
 class EtatCroissance {
   final StadeCroissance _stade;
   final double _progression;

@@ -1,9 +1,9 @@
-/// The kind of a glossary term (ADR-0017, D1).
+/// The kind of a glossary term.
 ///
 /// The type drives the **visual identity** of the term across the app: the
 /// colour of its badge on the term page and of every clickable occurrence
-/// (`TermeCliquable`, wiki links — D2/D5). The chart itself lives in the
-/// design system (theme extension, docs/08).
+/// (`TermeCliquable`, wiki links). The chart itself lives in the
+/// design system (theme extension).
 enum TypeTermeGlossaire {
   /// A botanical family (derived from the YAML family reference).
   famille,

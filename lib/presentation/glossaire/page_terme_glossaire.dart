@@ -12,7 +12,7 @@ import 'terme_cliquable.dart';
 import 'terme_glossaire.dart';
 import 'texte_avec_liens.dart';
 
-/// A glossary term page (`/plus/aide/terme/:id`, ADR-0017 D3): kind badge +
+/// A glossary term page (`/plus/aide/terme/:id`): kind badge +
 /// chapter, optional illustration, definition with rendered wiki links,
 /// « 💡 Astuce », advice list, then the typed derived blocks (family,
 /// bioaggressor, enum values, see-also). An unknown id renders a friendly
@@ -136,7 +136,7 @@ class _Entete extends StatelessWidget {
   }
 }
 
-/// « 💡 Astuce » tinted block (wiki links rendered, D2 — one grammar for all
+/// « 💡 Astuce » tinted block (wiki links rendered — one grammar for all
 /// glossary texts).
 class _Astuce extends StatelessWidget {
   final String texte;
@@ -189,7 +189,7 @@ class _SousTitre extends StatelessWidget {
   }
 }
 
-/// Clickable chips towards other term pages, tinted by the D5 chart;
+/// Clickable chips towards other term pages, tinted by the kind colour chart;
 /// unresolved ids are skipped (never a dead chip).
 class _ChipsTermes extends StatelessWidget {
   final List<String> ids;
@@ -323,7 +323,7 @@ class _BlocBioagresseur extends StatelessWidget {
 }
 
 /// Enum-values block: each value with its existing description — rendered
-/// with wiki links (D2: one grammar for every glossary text).
+/// with wiki links (one grammar for every glossary text).
 class _BlocValeurs extends StatelessWidget {
   final ComplementValeursEnum bloc;
   final Map<String, TermeGlossaire> index;

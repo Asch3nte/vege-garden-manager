@@ -1,4 +1,4 @@
-/// How a plantation was established. See `docs/05-modele-de-domaine.md` §5.
+/// How a plantation was established.
 enum MethodeMiseEnPlace {
   semisDirect,
   semisInterieur,

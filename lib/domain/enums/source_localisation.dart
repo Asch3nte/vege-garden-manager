@@ -1,8 +1,7 @@
 /// Origin of a [Localisation]'s coordinates.
 ///
 /// This describes **where the data came from**, not the user's global geolocation
-/// preference (that lives in the preferences). See `docs/05-modele-de-domaine.md`
-/// §4.3.
+/// preference (that lives in the preferences).
 enum SourceLocalisation {
   /// No location set (privacy default / opt-out).
   nonDefinie,

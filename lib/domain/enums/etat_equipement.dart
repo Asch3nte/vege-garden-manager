@@ -1,2 +1,2 @@
-/// Condition of a piece of equipment. See `docs/05-modele-de-domaine.md` §5.
+/// Condition of a piece of equipment.
 enum EtatEquipement { neuf, bon, use, aRemplacer, horsService }

@@ -1,7 +1,5 @@
 /// Immutable description of a device discovered on the local network for sync
 /// (DTO carried by `AbstractSyncService`).
-///
-/// See `docs/05-modele-de-domaine.md` §7.
 class AppareilDecouvert {
   final String _id;
   final String _nom;

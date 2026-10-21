@@ -1,6 +1,6 @@
 import '../enums/niveau_experience.dart';
 
-/// Progressive-disclosure access policy (ADR-0009).
+/// Progressive-disclosure access policy.
 ///
 /// Maps a user [NiveauExperience] to the features it unlocks. **Single source of
 /// truth**: the UI asks this policy (`acces.vueReseau`, `acces.solTexturePh`…)
@@ -8,7 +8,7 @@ import '../enums/niveau_experience.dart';
 /// respects the reversibility guard — it only governs **display**, never the
 /// stored data.
 ///
-/// Tiers (ADR-0009 Décision 2):
+/// Tiers:
 /// - **Débutant**: the core loop only.
 /// - **Intermédiaire**: tools, soil techniques, network view, observations,
 ///   season view, multi-garden, per-category notifications, lunar option.
@@ -69,7 +69,7 @@ class AccesNiveau {
   /// term (a lot / moderate / little).
   bool get eauDetaillee => _expert;
 
-  /// Tuning the association weighting profile (ADR-0011). Everyone benefits from
+  /// Tuning the association weighting profile. Everyone benefits from
   /// the default weights; only an expert edits them.
   bool get ponderationAssociations => _expert;
 

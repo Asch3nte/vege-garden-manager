@@ -4,7 +4,7 @@ import '../../application/providers/repository_providers.dart';
 import '../../domain/entities/bioagresseur.dart';
 import '../../domain/entities/famille_botanique.dart';
 
-/// The reference data the glossary derives from (ADR-0017, D1): all botanical
+/// The reference data the glossary derives from: all botanical
 /// families and all bioaggressors, loaded once from the embedded YAML.
 typedef DonneesGlossaire = ({
   List<FamilleBotanique> familles,

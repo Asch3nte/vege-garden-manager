@@ -3,7 +3,7 @@ import '../../domain/enums/type_bioagresseur.dart';
 import '../../domain/exceptions/bioagresseur_invalide_exception.dart';
 
 /// Validates a single parsed entry of the bioaggressor reference before it is
-/// mapped to a [Bioagresseur] (ADR-0006, Lot 4).
+/// mapped to a [Bioagresseur].
 ///
 /// On the first problem it throws a [BioagresseurInvalideException]. The `type`
 /// token is checked against [TypeBioagresseur] so an unknown value is reported

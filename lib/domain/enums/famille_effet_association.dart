@@ -1,6 +1,6 @@
 import 'type_benefice_association.dart';
 
-/// Thematic family a *beneficial* association mechanism belongs to (ADR-0011).
+/// Thematic family a *beneficial* association mechanism belongs to.
 ///
 /// Grouping the ten benefit mechanisms into a handful of families lets the user
 /// weight associations by **theme** (a few sliders) rather than per mechanism,
@@ -23,7 +23,7 @@ enum FamilleEffetAssociation {
 }
 
 /// The effect family of a benefit [mecanisme] — the **single source of truth**
-/// for the mechanism→family mapping (ADR-0011), exhaustive by construction.
+/// for the mechanism→family mapping, exhaustive by construction.
 FamilleEffetAssociation familleDe(TypeBeneficeAssociation mecanisme) =>
     switch (mecanisme) {
       TypeBeneficeAssociation.tuteurStructurel ||
@@ -45,7 +45,7 @@ FamilleEffetAssociation familleDe(TypeBeneficeAssociation mecanisme) =>
         FamilleEffetAssociation.couvertureAbri,
     };
 
-/// The set of effect families covered by [mecanismes] (ADR-0012) — used to label
+/// The set of effect families covered by [mecanismes] — used to label
 /// an association by family rather than by each precise mechanism.
 Set<FamilleEffetAssociation> famillesDe(
         Iterable<TypeBeneficeAssociation> mecanismes) =>

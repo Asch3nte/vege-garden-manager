@@ -91,7 +91,7 @@ class PanneauGeneral extends ConsumerWidget {
                   for (final v in NiveauExperience.values)
                     (v, l10n.niveauExperience(v)),
                 ],
-                // Reaching a level nudges the user to the guide (ADR-0009 §4b).
+                // Reaching a level nudges the user to the guide.
                 onChanged: (n) async {
                   final messenger = ScaffoldMessenger.of(context);
                   try {

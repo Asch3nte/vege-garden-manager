@@ -12,7 +12,7 @@ class PanneauParametres extends StatelessWidget {
   final List<Widget> enfants;
 
   /// Optional app-bar actions (e.g. an `AideGlossaire` towards the concept
-  /// page explaining the panel, ADR-0017 D5).
+  /// page explaining the panel).
   final List<Widget>? actions;
 
   const PanneauParametres(

@@ -162,7 +162,7 @@ void main() {
       expect(r.score, greaterThan(0.8));
     });
 
-    test('a derived association (ADR-0010) is a softer bonus than curated', () {
+    test('a derived association is a softer bonus than curated', () {
       final base = evaluer(fiche());
       final derive = evaluer(fiche(), associationDeriveeFavorable: true);
       final curated = evaluer(fiche(benefiques: {'basilic'}), actifs: {'basilic'});
@@ -209,8 +209,8 @@ void main() {
       expect(r!.raisons, isNot(contains(RaisonReco.rotationFavorable)));
     });
 
-    // --- §A Rusticité -------------------------------------------------------
-    group('hardiness filter §A', () {
+    // --- Hardiness -----------------------------------------------------------
+    group('hardiness filter', () {
       FichePlante ficheRusticite(ZoneRusticite zoneMin) => FichePlante(
             id: 'citrus',
             nomScientifique: 'Citrus sp',
@@ -277,8 +277,8 @@ void main() {
       });
     });
 
-    // --- §C Difficulté ------------------------------------------------------
-    group('difficulty filter §C', () {
+    // --- Difficulty ----------------------------------------------------------
+    group('difficulty filter', () {
       FichePlante ficheD(int d) => FichePlante(
             id: 'x',
             nomScientifique: 'X sp',
@@ -343,8 +343,8 @@ void main() {
       });
     });
 
-    // --- §D Contenant -------------------------------------------------------
-    group('container filter §D', () {
+    // --- Container -----------------------------------------------------------
+    group('container filter', () {
       FichePlante ficheContenant({required bool compatible}) => FichePlante(
             id: 'courge',
             nomScientifique: 'Cucurbita sp',
@@ -409,8 +409,8 @@ void main() {
       });
     });
 
-    // --- §I soleilMin -------------------------------------------------------
-    group('sun tolerance range §I', () {
+    // --- soleilMin -----------------------------------------------------------
+    group('sun tolerance range', () {
       FichePlante ficheTomate() => FichePlante(
             id: 'tomate_sol',
             nomScientifique: 'Solanum lycopersicum',
@@ -484,7 +484,7 @@ void main() {
       });
     });
 
-    // --- §E Culture verticale -----------------------------------------------
+    // --- Vertical growing ----------------------------------------------------
     test('adds cultureVerticaleCompatible reason when plant and parcelle match', () {
       final plante = FichePlante(
         id: 'haricot_grimpant',

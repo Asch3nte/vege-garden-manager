@@ -7,10 +7,9 @@ import '../exceptions/invariant_domaine_exception.dart';
 /// **polymorphic target**: a potager, a parcelle or a plantation.
 ///
 /// `Observation` is an **entity** (identity by [id]); the [id] is a UUID
-/// generated app-side and injected. Photos are deferred to V1.1.
+/// generated app-side and injected.
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §3.7 (ADR-0004 D6).
 class Observation {
   final String _id;
   final CibleObservation _cible;

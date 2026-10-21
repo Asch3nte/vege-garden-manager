@@ -1,5 +1,5 @@
-// Reusable research/scrape tool — drafts a botanical **family** sheet
-// (ADR-0006, Lot 4), sibling of `tool/scrap_fiche.dart`.
+// Reusable research/scrape tool — drafts a botanical **family** sheet,
+// sibling of `tool/scrap_fiche.dart`.
 //
 // It reliably auto-fills the family **identity** (id/scientific name, cross-
 // checked GBIF × Wikidata) and a **description** (Wikipedia fr/en, CC-BY-SA →

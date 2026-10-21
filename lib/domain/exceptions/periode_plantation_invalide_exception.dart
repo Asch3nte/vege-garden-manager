@@ -2,8 +2,6 @@ import 'potager_exception.dart';
 
 /// Thrown when a plant is planted in a month outside its valid window for the
 /// current hemisphere/climate.
-///
-/// See `docs/05-modele-de-domaine.md` §8.
 class PeriodePlantationInvalideException extends PotagerException {
   final String planteId;
 

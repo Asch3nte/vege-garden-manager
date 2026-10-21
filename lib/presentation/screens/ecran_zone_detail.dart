@@ -37,13 +37,12 @@ import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
 
-/// Detail of one garden zone (`ZoneDetail` in the `potager.jsx` mock-up), reached
-/// by tapping a bed on the Potager plan.
+/// Detail of one garden zone, reached by tapping a bed on the Potager plan.
 ///
 /// Shows the zone's real data (name, type, surface, sun exposure, active crops)
 /// and its actions: add a plant (→ catalogue), pull out / remove a crop, edit or
 /// delete the zone. Deletes are **soft** (logical cascade), so history is kept.
-/// Rich per-crop growth stages remain deferred (docs/15 §3).
+/// Rich per-crop growth stages remain deferred.
 class EcranZoneDetail extends ConsumerWidget {
   final String zoneId;
 
@@ -371,9 +370,9 @@ class _Detail extends StatelessWidget {
                 onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
               ),
             ],
-          // Crop rotation of this zone (expert, ADR-0009 / rotation avancée).
+          // Crop rotation of this zone (expert).
           _SectionRotationZone(zoneId: zone.id, type: zone.type),
-          // Equipment attached to this zone (intermediate+, ADR-0009).
+          // Equipment attached to this zone (intermediate+).
           _SectionEquipementsZone(
             potagerId: potagerId,
             zoneId: zone.id,
@@ -711,9 +710,9 @@ class _LigneCulture extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    // Observations are an intermediate+ feature (ADR-0009).
+    // Observations are an intermediate+ feature.
     final observationsDispo = ref.watch(accesNiveauProvider).observations;
-    // Watering advice (ADR-0015) — silent on load/error (.value = null).
+    // Watering advice — silent on load/error (.value = null).
     final conseil = ref
         .watch(conseilArrosagePlantationProvider(culture.plantationId))
         .value;
@@ -744,7 +743,7 @@ class _LigneCulture extends ConsumerWidget {
                 Text(culture.nom, style: theme.textTheme.titleMedium),
                 if (culture.etat != null) ...[
                   const SizedBox(height: EspacementsApp.s1),
-                  // Clickable term (ADR-0017 D5): the stage label opens the
+                  // Clickable term: the stage label opens the
                   // « Stades de croissance » glossary page.
                   TermeCliquable(
                     idTerme: TermeGlossaire.idNotion('stade-croissance'),

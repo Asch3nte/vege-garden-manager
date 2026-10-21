@@ -13,11 +13,11 @@ import 'chapitre_glossaire.dart';
 import 'terme_glossaire.dart';
 import 'type_terme_glossaire.dart';
 
-/// The static catalogue of **notions & tools** (ADR-0017, D1/D6) — every
+/// The static catalogue of **notions & tools** — every
 /// glossary entry that is *not* derived from a YAML reference. Content lives
-/// in the ARB (`glossaire*` keys) and may embed wiki links (D2).
+/// in the ARB (`glossaire*` keys) and may embed wiki links.
 ///
-/// Lot 4 covers the full annexe A inventory: the transverse seed notions
+/// The catalogue covers the transverse seed notions
 /// below, then one chapter file per book chapter under `catalogue/` (one page
 /// per tool, per soil texture, per soil technique, per association mechanism;
 /// one concept page per remaining business enum). Coverage is proved by the
@@ -103,5 +103,5 @@ List<TermeGlossaire> construireNotions(AppLocalizations l10n) =>
     ]);
 
 /// Id of the novice landing page the glossary panel highlights
-/// (« Par où commencer ? », ADR-0017 D3).
+/// (« Par où commencer ? »).
 final String idNotionCommencer = TermeGlossaire.idNotion('par-ou-commencer');

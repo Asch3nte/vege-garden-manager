@@ -1,7 +1,5 @@
 /// USDA hardiness zone — the cold tolerance dimension of a climate, based on the
 /// average annual extreme minimum temperature.
-///
-/// See `docs/05-modele-de-domaine.md` §4.6 & §5.
 enum ZoneRusticite {
   zone1,
   zone2,

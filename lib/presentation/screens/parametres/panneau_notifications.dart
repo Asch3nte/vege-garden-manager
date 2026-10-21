@@ -45,7 +45,7 @@ class PanneauNotifications extends ConsumerWidget {
     }
 
     final master = prefs.notificationsGlobalesActives;
-    // Per-category toggles are an intermediate+ feature (ADR-0009): beginners
+    // Per-category toggles are an intermediate+ feature: beginners
     // keep just the master switch. Hidden categories stay at their default (on),
     // so essential/safety notifications (e.g. critical weather) still fire.
     final parCategorie = ref.watch(accesNiveauProvider).notificationsParCategorie;

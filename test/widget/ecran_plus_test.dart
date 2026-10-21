@@ -110,7 +110,7 @@ void main() {
     expect(find.text('Notifications'), findsOneWidget);
     expect(find.text('Aide & lexique'), findsOneWidget);
     // « À propos » sits below the fold since the glossary row was added
-    // (ADR-0017) — the lazy ListView needs a scroll to build it.
+    // — the lazy ListView needs a scroll to build it.
     await tester.scrollUntilVisible(find.text('À propos'), 100,
         scrollable: find.byType(Scrollable).first);
     expect(find.text('À propos'), findsOneWidget);
@@ -228,7 +228,7 @@ void main() {
 
   testWidgets(
       'privacy panel lists the other gardens read-only, collapsed by '
-      'default (§8 F2)', (tester) async {
+      'default', (tester) async {
     when(() => repo.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(
         niveauExperience: NiveauExperience.intermediaire,
@@ -282,7 +282,7 @@ void main() {
     verifyNever(() => potagers.sauvegarder(any()));
   });
 
-  testWidgets('a beginner does not see the other-gardens list (ADR-0009)',
+  testWidgets('a beginner does not see the other-gardens list',
       (tester) async {
     when(() => potagers.obtenirPotagerActif()).thenAnswer(
       (_) async => Potager(
@@ -315,7 +315,7 @@ void main() {
 
   testWidgets('notifications master gates the categories', (tester) async {
     // Master off; intermediate level so the per-category toggles are shown
-    // (they are an intermediate+ feature — ADR-0009).
+    // (they are an intermediate+ feature).
     when(() => repo.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(
         notificationsGlobalesActives: false,
@@ -335,7 +335,7 @@ void main() {
     expect(switches.skip(1).every((s) => s.onChanged == null), isTrue);
   });
 
-  testWidgets('a beginner sees only the master notifications switch (ADR-0009)',
+  testWidgets('a beginner sees only the master notifications switch',
       (tester) async {
     // Default level is débutant → per-category toggles are hidden.
     await monter(tester);

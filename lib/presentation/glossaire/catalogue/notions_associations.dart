@@ -13,7 +13,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Associations & compagnonnage » chapter of the catalogue (ADR-0017 Lot 4):
+/// « Associations & compagnonnage » chapter of the catalogue:
 /// the general « how the app computes associations » page, **one page per
 /// mechanism** (benefit and conflict) carrying its provenance — derived from
 /// the engine's own rule inventory, never marked by hand — plus the scoring

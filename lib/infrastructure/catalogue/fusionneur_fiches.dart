@@ -2,14 +2,14 @@
 /// species sheet (fiche mère): the variety only declares the fields that differ,
 /// everything else is inherited from the mother.
 ///
-/// See ADR-0005. The merge runs on the **raw maps** (before validation and
+/// The merge runs on the **raw maps** (before validation and
 /// mapping), so the merged map looks like a complete, standalone sheet to the
 /// rest of the pipeline.
 class FusionneurFiches {
   const FusionneurFiches();
 
   /// Fields a variety can never override — they belong to the species and are
-  /// always taken from the mother (ADR-0005). Declaring them on a variety has no
+  /// always taken from the mother. Declaring them on a variety has no
   /// effect.
   static const Set<String> champsNonSurchargeables = {
     'categorie',

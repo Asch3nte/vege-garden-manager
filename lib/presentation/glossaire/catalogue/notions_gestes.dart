@@ -16,7 +16,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Gestes & organisation » chapter of the notion catalogue (ADR-0017 Lot 4):
+/// « Gestes & organisation » chapter of the notion catalogue:
 /// tasks, harvests, observations, zones and experience tiers — plus the
 /// transverse permaculture notion.
 List<TermeGlossaire> construireNotionsGestes(AppLocalizations l10n) => [

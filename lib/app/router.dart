@@ -57,8 +57,7 @@ abstract final class RoutesApp {
   ///
   /// The dashboard tiles also target this location: tapping a zone there
   /// switches to the Potager tab on that zone, and the global back stack
-  /// (see [pileNavigationProvider]) returns straight to the dashboard
-  /// (docs/15 §8 D #5).
+  /// (see [pileNavigationProvider]) returns straight to the dashboard.
   static String zoneDetail(String id) => '$potager/zone/$id';
 
   /// Path segment of the equipment list (under [potager]).
@@ -114,9 +113,9 @@ abstract final class RoutesApp {
   static const String plusDonnees = '$plus/$plusDonneesSegment';
   static const String plusAPropos = '$plus/$plusAProposSegment';
 
-  // « Aide & lexique » glossary (ADR-0017): the panel and its chapter/term
+  // « Aide & lexique » glossary: the panel and its chapter/term
   // pages are sub-routes of [plus] so they join the global back history —
-  // back replays pages in the exact order the user opened them (D3).
+  // back replays pages in the exact order the user opened them.
   static const String plusAideSegment = 'aide';
   static const String plusAide = '$plus/$plusAideSegment';
 
@@ -134,14 +133,14 @@ abstract final class RoutesApp {
   static String aideTerme(String idTerme) => '$plusAide/terme/$idTerme';
 }
 
-/// The five primary destinations, in display order (docs/09 §3).
+/// The five primary destinations, in display order.
 ///
 /// Order is the contract between the router branches and the navigation shell:
 /// the Nth branch corresponds to the Nth destination here.
-// Icons map to the Phosphor set targeted by docs/09 §3 (House, Plant, BookOpen,
-// CalendarBlank, DotsThree); Material stand-ins are used until Phosphor is
-// re-wired (phosphor_flutter is incompatible with Flutter 3.44.1 — see docs/08
-// §7). Outline for the resting state, filled for the selected state.
+// Icons map to the Phosphor set (House, Plant, BookOpen, CalendarBlank,
+// DotsThree); Material stand-ins are used until Phosphor is re-wired
+// (phosphor_flutter does not compile with the current Flutter). Outline for the
+// resting state, filled for the selected state.
 const List<DestinationNav> _destinations = [
   DestinationNav(
     route: RoutesApp.accueil,
@@ -238,8 +237,7 @@ void quitterRessourceSupprimee(
 /// would land on the branch root rather than the screen the user came from
 /// (e.g. a dashboard → zone jump returning to the Potager root instead of the
 /// dashboard). This PopScope sits *inside* the sub-route page (deeper than the
-/// branch Navigator), so it wins and drives the same global history (docs/15
-/// §8 D #5/#6).
+/// branch Navigator), so it wins and drives the same global history.
 class _RetourGlobal extends ConsumerWidget {
   final Widget child;
 
@@ -264,7 +262,7 @@ class _RetourGlobal extends ConsumerWidget {
 /// state of its **root** screen (dashboard scroll, catalogue search…) when
 /// switching between them. Native indexed-stack back, however, only pops within
 /// the active branch; to give a browser-like back that retraces every step
-/// across tabs (docs/15 §8 D #5/#6), the router feeds a single cross-branch
+/// across tabs, the router feeds a single cross-branch
 /// history ([pileNavigationProvider]) from a listener on its
 /// [GoRouterDelegate], and the shell's `PopScope` drives the system back button
 /// from it. Tapping any tab resets that tab to its root (so a tab never
@@ -306,7 +304,7 @@ final routeurProvider = Provider<GoRouter>((ref) {
       // Already on the onboarding flow: stay until it is **completed**. The
       // onboarding creates its garden lazily (to attach zones), so a freshly
       // created garden must NOT bounce the user out mid-flow — only
-      // `onboardingTermine` lifts the gate, then we land on Potager (feedback #4).
+      // `onboardingTermine` lifts the gate, then we land on Potager.
       if (surOnboarding) {
         return prefs.onboardingTermine ? RoutesApp.potager : null;
       }
@@ -345,8 +343,8 @@ final routeurProvider = Provider<GoRouter>((ref) {
                   onSelection: (index) {
                     _rafraichirBranche(ref, index);
                     ref.read(pileNavigationProvider.notifier).avancer();
-                    // Any tab tap returns to that tab's root (docs/15 §8 D
-                    // #5/#6): a deep sub-route is replayed via the back button,
+                    // Any tab tap returns to that tab's root: a deep
+                    // sub-route is replayed via the back button,
                     // never restored by re-selecting the tab.
                     navigationShell.goBranch(index, initialLocation: true);
                   },
@@ -363,10 +361,9 @@ final routeurProvider = Provider<GoRouter>((ref) {
                 path: RoutesApp.accueil,
                 builder: (context, state) => const EcranAccueil(),
                 routes: [
-                  // Hourly weather detail (opened from the weather card). The
-                  // zone detail is no longer registered here: a dashboard zone
-                  // tile now jumps to the Potager branch (#5), and the global
-                  // back stack returns to the dashboard.
+                  // Hourly weather detail (opened from the weather card). A
+                  // dashboard zone tile jumps to the zone detail on the Potager
+                  // branch; the global back stack returns to the dashboard.
                   GoRoute(
                     path: RoutesApp.accueilMeteoSegment,
                     builder: (context, state) =>

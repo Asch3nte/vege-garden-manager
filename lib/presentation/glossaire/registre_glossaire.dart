@@ -10,7 +10,7 @@ import 'recherche_glossaire.dart';
 import 'terme_glossaire.dart';
 import 'type_terme_glossaire.dart';
 
-/// Builds the complete glossary (ADR-0017, D1): one term per botanical family
+/// Builds the complete glossary: one term per botanical family
 /// and per bioaggressor — **derived** from the YAML references, never copied —
 /// plus the static notion catalogue (`construireNotions`).
 ///
@@ -18,7 +18,7 @@ import 'type_terme_glossaire.dart';
 /// the reference lists and hand them over. The locale comes from
 /// [AppLocalizations.localeName], so a term's title follows the app language.
 ///
-/// Guarantees (verified by the integrity test, D6):
+/// Guarantees (verified by the integrity test):
 ///  - ids are unique and prefixed (`famille.` / `bio.` / `outil.` / `notion.`);
 ///  - families and bioaggressors are sorted alphabetically by localized title
 ///    (stable rendering), notions keep their catalogue order;
@@ -43,7 +43,7 @@ List<TermeGlossaire> construireGlossaire({
         complements: [
           ComplementFamille(
             famille: famille,
-            // Referential integrity (ADR-0006 Lot 4) guarantees every slug
+            // Referential integrity guarantees every slug
             // resolves to a bioaggressor, hence to a glossary term.
             idsMaladies: [
               for (final slug in famille.maladiesCommunes)
@@ -93,7 +93,7 @@ List<TermeGlossaire> construireGlossaire({
       ...termesBioagresseurs,
       ...construireNotions(l10n),
     ])
-      // D4/Lot 5: attach the registered illustration, whatever the source —
+      // Attach the registered illustration, whatever the source —
       // YAML-derived pages get theirs the day their image lands.
       switch (illustrationDe(terme.id)) {
         null => terme,

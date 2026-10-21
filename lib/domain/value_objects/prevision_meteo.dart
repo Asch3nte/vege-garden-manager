@@ -5,10 +5,8 @@ import '../enums/type_releve_meteo.dart';
 ///
 /// [weathercode] is the WMO weather interpretation code (0–99; 0 = clear sky).
 /// When rebuilt from the local cache the code defaults to 0 (the DB column is
-/// not stored — ADR-0016 Lot 2 decision: no migration, offline fallback drops
+/// not stored: no migration, offline fallback drops
 /// the visual code gracefully).
-///
-/// See `docs/05-modele-de-domaine.md` §7 and ADR-0016.
 class PrevisionMeteo {
   final DateTime _date;
   final double _tempMin;
@@ -65,7 +63,7 @@ class PrevisionMeteo {
   TypeReleveMeteo get type => _type;
 
   /// Reference evapotranspiration ET₀ FAO-56 (mm/day), or `null` when not
-  /// provided by the weather source (ADR-0015 Lot 5).
+  /// provided by the weather source.
   double? get evapotranspirationMm => _evapotranspirationMm;
 
   /// WMO weather interpretation code (0–99; 0 = clear sky).

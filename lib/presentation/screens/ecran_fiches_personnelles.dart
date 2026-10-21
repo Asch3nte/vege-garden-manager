@@ -10,7 +10,7 @@ import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Screen listing the user's own plant sheets (`FichePlantePersonnelle`),
-/// reached from the Catalogue header. An expert feature (ADR-0009), gated by
+/// reached from the Catalogue header. An expert feature, gated by
 /// `acces.fichesPerso` at the entry point.
 ///
 /// Each sheet shows its common name, category and last-modified date, with an

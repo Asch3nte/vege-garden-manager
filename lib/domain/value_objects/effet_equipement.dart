@@ -7,7 +7,7 @@ import '../enums/type_equipement.dart';
 ///
 /// The numeric modifiers exposed here are **provisional**: their precise values
 /// will be calibrated at the recommendation-engine step. The *shape* of the VO
-/// is what matters for now. See `docs/05-modele-de-domaine.md` §4.7.
+/// is what matters for now.
 ///
 /// Domain names are kept in French; the code is documented in English.
 class EffetEquipement {

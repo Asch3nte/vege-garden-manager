@@ -61,8 +61,8 @@ class OpportuniteAzoteRotation {
   const OpportuniteAzoteRotation(this.nomPlante);
 }
 
-/// Plot-scoped crop-rotation synthesis shown in the zone detail (rotation
-/// avancée, Lot 4): what grew here recently, which families are still blocked
+/// Plot-scoped crop-rotation synthesis shown in the zone detail: what
+/// grew here recently, which families are still blocked
 /// by their return delay, and the nitrogen opportunities the history leaves.
 ///
 /// The blocked-family decision reuses [EvaluationRotation] (single source of the

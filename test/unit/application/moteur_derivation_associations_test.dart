@@ -116,7 +116,7 @@ void main() {
           (x) => x.mecanisme == TypeBeneficeAssociation.fixationAzote);
       expect(fix.confiance, NiveauConfiance.eleve);
       expect(fix.cibleId, 'mais');
-      // ADR-0014: the suggestion carries the explicit criteria behind it.
+      // The suggestion carries the explicit criteria behind it.
       expect(fix.criteres, {
         CritereAssociation.sourceFixeAzote,
         CritereAssociation.cibleGourmandeAzote,
@@ -152,14 +152,14 @@ void main() {
       final s = moteur.deriver(mais, laitue).whereType<SuggestionBenefique>();
       final eta = s.firstWhere(
           (x) => x.mecanisme == TypeBeneficeAssociation.etagementLumiere);
-      // Tolère seulement → confiance faible + critère "tolère" explicite (ADR-0014).
+      // Tolère seulement → confiance faible + critère "tolère" explicite.
       expect(eta.confiance, NiveauConfiance.faible);
       expect(eta.criteres, contains(CritereAssociation.cibleTolereOmbre));
       expect(eta.criteres, contains(CritereAssociation.cibleNettementPlusBasse));
     });
 
     test('etagementLumiere: ne se déclenche PAS si la cible n est pas plus basse '
-        '(ADR-0014)', () {
+        '', () {
       final mais = _f('mais', hauteurMax: 200);
       // Tournesol tolère l ombre mais reste grand → pas d étagement.
       final tournesol = _f('tournesol',
@@ -231,7 +231,7 @@ void main() {
           contains(TypeConflitAssociation.competitionLumiere));
     });
 
-    test('competitionLumiere: PAS de conflit si l une tolère l ombre (ADR-0014)',
+    test('competitionLumiere: PAS de conflit si l une tolère l ombre',
         () {
       final a = _f('mais', hauteurMax: 200);
       // Haute mais tolère la mi-ombre → n exige pas le plein soleil → pas de concurrence.
@@ -249,7 +249,7 @@ void main() {
     });
   });
 
-  group('deriver — règles ADR-0014 (mécanismes activés)', () {
+  group('deriver — règles (mécanismes activés)', () {
     test('ameublissementSol: racine pivotante × racine superficielle', () {
       final radis = _f('radis', enracinement: EnracinementPlante.pivotant);
       final laitue = _f('laitue', enracinement: EnracinementPlante.superficiel);
@@ -284,7 +284,7 @@ void main() {
           contains(TypeConflitAssociation.competitionEspace));
     });
 
-    test('successionTemporelle: calendrier décalé avec contexte (ADR-0014)', () {
+    test('successionTemporelle: calendrier décalé avec contexte', () {
       FichePlante avecPeriodes(String id, Periode plant, Periode recolte) =>
           FichePlante(
             id: id,
@@ -384,7 +384,7 @@ void main() {
     });
   });
 
-  group('sens — direction dérivée (ADR-0012)', () {
+  group('sens — direction dérivée', () {
     // Distinct families everywhere, so no spurious memeFamille conflict.
     SuggestionBenefique benefVers(List<SuggestionAssociation> s, String id) =>
         s.whereType<SuggestionBenefique>().firstWhere((x) => x.cibleId == id);
@@ -417,7 +417,7 @@ void main() {
     });
   });
 
-  group('inventaire des règles (provenance glossaire, ADR-0017)', () {
+  group('inventaire des règles (provenance glossaire)', () {
     // The glossary marks each mechanism page "computed by the engine" vs
     // "documented by the community" from [beneficesDerivables] /
     // [conflitsDerivables]. This scan keeps those declared sets equal to the

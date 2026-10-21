@@ -4,7 +4,7 @@ import '../../l10n/app_localizations.dart';
 import 'chapitre_glossaire.dart';
 import 'type_terme_glossaire.dart';
 
-/// French labels & icons for the glossary enums (ADR-0017), mirroring the
+/// French labels & icons for the glossary enums, mirroring the
 /// `LibellesEnums` pattern: exhaustive `switch`es so adding a value is a
 /// compile error until its label is provided.
 extension LibellesGlossaire on AppLocalizations {
@@ -32,7 +32,7 @@ extension LibellesGlossaire on AppLocalizations {
       };
 }
 
-/// Material icon for a glossary chapter (Phosphor pending — docs/08 §7).
+/// Material icon for a glossary chapter (Phosphor pending).
 IconData iconeChapitreGlossaire(ChapitreGlossaire c) => switch (c) {
       ChapitreGlossaire.culturesEtPlantes => Icons.eco_outlined,
       ChapitreGlossaire.famillesBotaniques => Icons.account_tree_outlined,

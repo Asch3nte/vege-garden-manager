@@ -6,7 +6,7 @@ import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 
 void main() {
-  group('multi-mécanismes & familles (ADR-0012)', () {
+  group('multi-mécanismes & familles', () {
     test('une paire peut porter plusieurs mécanismes', () {
       final a = AssociationBenefique(cibleId: 'x', mecanismes: {
         TypeBeneficeAssociation.brouillageOlfactif,
@@ -14,7 +14,7 @@ void main() {
       });
       expect(a.mecanismes, hasLength(2));
       expect(a.aMecanisme, isTrue);
-      // Convenience `mecanisme` returns the first (ADR-0010 compat).
+      // Convenience `mecanisme` returns the first.
       expect(a.mecanisme, isNotNull);
     });
 
@@ -77,7 +77,7 @@ void main() {
     });
   });
 
-  group('AssociationBenefique (ADR-0010)', () {
+  group('AssociationBenefique', () {
     test('exposes target, mechanism and localised reason', () {
       final a = AssociationBenefique(
         cibleId: 'LEG-001',
@@ -142,7 +142,7 @@ void main() {
     });
   });
 
-  group('AssociationConflit (ADR-0010)', () {
+  group('AssociationConflit', () {
     test('exposes target, mechanism and reason', () {
       final c = AssociationConflit(
         cibleId: 'LEG-002',

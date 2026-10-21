@@ -1,7 +1,7 @@
 import 'jour_meteo_vue.dart';
 import 'meteo_accueil_vue.dart';
 
-/// Full view-model for [EcranMeteoDetail] (ADR-0016 Lot 3).
+/// Full view-model for [EcranMeteoDetail].
 ///
 /// When [disponible] is false (no position on the active garden, or
 /// [meteoDesactivee]) all other fields carry zero/empty/null values — the screen

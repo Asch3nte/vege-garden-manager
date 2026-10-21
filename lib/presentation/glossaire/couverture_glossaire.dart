@@ -7,7 +7,7 @@ import 'catalogue/notions_sol.dart';
 import 'catalogue/outils.dart';
 import 'terme_glossaire.dart';
 
-/// Coverage map of the glossary (ADR-0017, D6).
+/// Coverage map of the glossary.
 ///
 /// Every enum declared under `lib/domain/enums/` must be **either** covered —
 /// listed here with the id(s) of the glossary term(s) that explain it — **or**
@@ -28,13 +28,13 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'RaisonReco': [TermeGlossaire.idNotion('pourquoi-recommandation')],
   // Functional crop groups used as rotation precedents (legumes, green manures)
   // — explained by the crop-rotation page. Dedicated per-value labels/pages are
-  // tracked as the rotation avancée i18n follow-up (Lot 4).
+  // tracked as the advanced rotation i18n follow-up.
   'GroupeCultural': [TermeGlossaire.idNotion('rotation-cultures')],
 
   // — Santé du jardin —
   'TypeBioagresseur': [TermeGlossaire.idNotion('bioagresseur')],
 
-  // — Sol & terre — (textures & techniques: one page per value, D1)
+  // — Sol & terre — (textures & techniques: one page per value)
   'TextureSol': [
     TermeGlossaire.idNotion('texture-sol'),
     TermeGlossaire.idNotion('sol-argileux'),
@@ -60,7 +60,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'UrgenceArrosage': [TermeGlossaire.idNotion('urgence-arrosage')],
   'ToleranceSecheresse': [TermeGlossaire.idNotion('tolerance-secheresse')],
   // Water-sensitive growth stages are a facet of the detailed water need
-  // (ADR-0009 `acces.eauDetaillee`); the detailed-watering section links there.
+  // (`acces.eauDetaillee`); the detailed-watering section links there.
   'PhaseSensibleEau': [TermeGlossaire.idNotion('besoin-eau')],
 
   // — Outils & équipements — (one page per value; `autre` names nothing)
@@ -93,7 +93,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'PoidsAssociation': [TermeGlossaire.idNotion('ponderation-associations')],
   // The criteria vocabulary is explained by the general "how the app computes
   // associations" page; each criterion line already shows its real values in
-  // the associations view (ADR-0014).
+  // the associations view.
   'CritereAssociation': [TermeGlossaire.idNotion('calcul-associations')],
 
   // — Gestes & organisation —
@@ -110,7 +110,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'NiveauExperience': [TermeGlossaire.idNotion('niveaux-experience')],
 });
 
-/// Enums consciously **excluded** from the glossary (D6): pure UI/device
+/// Enums consciously **excluded** from the glossary: pure UI/device
 /// mechanics with no gardening meaning to explain. This list is the only
 /// escape hatch — an enum absent from both lists breaks the integrity test,
 /// so every exclusion is a documented decision.

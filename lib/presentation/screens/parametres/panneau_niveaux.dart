@@ -20,7 +20,7 @@ typedef _Feature = ({
   String Function(AppLocalizations) comment,
 });
 
-/// The mini-tuto catalogue (ADR-0009 §4a). Only **built** gated features are
+/// The mini-tuto catalogue. Only **built** gated features are
 /// listed (those a user can actually use); reserved-but-unbuilt features
 /// (multi-garden, equipment…) are added here as they ship. Closures resolve the
 /// localized text at build time, so this is `final`, not `const`.
@@ -83,7 +83,7 @@ final List<_Feature> _features = [
   ),
 ];
 
-/// Settings category — **Guide des niveaux** (ADR-0009 §4a/§4b): a re-consultable
+/// Settings category — **Guide des niveaux**: a re-consultable
 /// mini-tuto listing what each tier unlocks, why it exists and how to use it.
 /// Features at or below the user's level are marked "unlocked"; higher ones act
 /// as a level-up teaser.
@@ -98,7 +98,7 @@ class PanneauNiveaux extends ConsumerWidget {
 
     return PanneauParametres(
       titre: l10n.categNiveaux,
-      // « ? » → the glossary page explaining the experience tiers (ADR-0017).
+      // « ? » → the glossary page explaining the experience tiers.
       actions: [
         AideGlossaire(
             idTerme: TermeGlossaire.idNotion('niveaux-experience'),

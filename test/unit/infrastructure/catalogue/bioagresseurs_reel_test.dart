@@ -5,7 +5,7 @@ import 'package:pot_a_gerer/infrastructure/catalogue/famille_asset_source.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/familles_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/verificateur_integrite_bioagresseurs.dart';
 
-/// Guards the real embedded bioaggressor reference (ADR-0006, Lot 4): it must
+/// Guards the real embedded bioaggressor reference: it must
 /// parse/validate/map cleanly, and every disease/pest slug listed by a family
 /// sheet must resolve to a coherent reference entry. Runs against
 /// `assets/fiches_plantes/_referentiels/bioagresseurs.yaml` via the filesystem

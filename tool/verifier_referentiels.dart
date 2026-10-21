@@ -1,4 +1,4 @@
-// CI-able lint for the catalogue reference data (ADR-0006, Lot 4).
+// CI-able lint for the catalogue reference data.
 //
 // Pure Dart (`dart run`, no Flutter): it reads the YAML directly with dart:io +
 // package:yaml, then **reuses the pure validators/mappers/verifiers** from the
@@ -7,11 +7,11 @@
 //   • the bioaggressor reference parses/validates/maps cleanly;
 //   • every family `maladies_communes`/`ravageurs_communs` slug resolves to a
 //     coherent reference entry (VerificateurIntegriteBioagresseurs);
-//   • the glossary illustrations (ADR-0017 D4/Lot 5) are coherent: every
+//   • the glossary illustrations are coherent: every
 //     `.webp` under assets/images/glossaire/ is registered in
 //     `illustrations_glossaire.dart` AND recorded in SOURCES.txt, and every
 //     registered id has its file (orphans in any direction are fatal);
-// and *warns* (non-fatal) on editorial gaps: families without the Lot 4 notes,
+// and *warns* (non-fatal) on editorial gaps: families without editorial notes,
 // bioaggressors without a description or an EPPO code, stale SOURCES.txt
 // mentions.
 //
@@ -131,7 +131,7 @@ Future<RapportReferentiels> verifierReferentiels({
       .verifier(familles, BioagresseurCache(bioagresseurs));
   erreurs.addAll(problemes.map((p) => p.toString()));
 
-  // 4. Glossary illustrations (ADR-0017 D4/Lot 5): files ⟷ registry ⟷ sources.
+  // 4. Glossary illustrations: files ⟷ registry ⟷ sources.
   final imagesDir = Directory(dossierIllustrationsGlossaire);
   final sourcesFichier = File('$dossierIllustrationsGlossaire/SOURCES.txt');
   final sources =

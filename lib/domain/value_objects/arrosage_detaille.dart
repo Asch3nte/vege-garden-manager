@@ -3,7 +3,7 @@ import '../exceptions/invariant_domaine_exception.dart';
 
 /// Immutable, **optional** detailed watering guidance carried by a fiche's
 /// [BesoinsCulture] (the coarse [BesoinEau] term stays for every tier; this
-/// detail is only surfaced to expert users, ADR-0009 / `acces.eauDetaillee`).
+/// detail is only surfaced to expert users, `acces.eauDetaillee`).
 ///
 /// Every aspect is **independently optional** on purpose: per-plant frequency
 /// and volume figures must be *real* (sourced from horticultural references),

@@ -1,4 +1,4 @@
-/// Nature of a journal observation. See `docs/05-modele-de-domaine.md` §5.
+/// Nature of a journal observation.
 enum TypeObservation {
   maladie,
   ravageur,

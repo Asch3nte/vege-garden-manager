@@ -1,8 +1,7 @@
 import '../../domain/entities/bioagresseur.dart';
 import '../../domain/enums/type_bioagresseur.dart';
 
-/// Maps a validated bioaggressor entry into a domain [Bioagresseur]
-/// (ADR-0006, Lot 4).
+/// Maps a validated bioaggressor entry into a domain [Bioagresseur].
 ///
 /// Assumes the entry has already passed `BioagresseurValidator`.
 class BioagresseurMapper {

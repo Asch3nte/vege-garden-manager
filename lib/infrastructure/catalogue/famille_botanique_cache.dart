@@ -2,7 +2,7 @@ import '../../domain/entities/famille_botanique.dart';
 import '../../domain/enums/categorie_plante.dart';
 
 /// In-memory store of the loaded botanical families, indexed by id (the
-/// normalized scientific name) for instant lookup (ADR-0006).
+/// normalized scientific name) for instant lookup.
 class FamilleBotaniqueCache {
   final Map<String, FamilleBotanique> _parId;
 

@@ -1,10 +1,10 @@
-/// The mechanism by which a plant *benefits* a companion grown nearby
-/// (ADR-0010, Décision 1). Typing the mechanism — rather than relying on free
+/// The mechanism by which a plant *benefits* a companion grown nearby.
+/// Typing the mechanism — rather than relying on free
 /// text — lets the app *reason* about associations (derivation, placement) and
 /// display a localised, meaningful reason instead of opaque prose.
 ///
 /// Most mechanisms are derivable from existing traits/usages/bioaggressors; the
-/// curated layer may also state one explicitly on a pair. See `docs/05` §5.
+/// curated layer may also state one explicitly on a pair.
 enum TypeBeneficeAssociation {
   /// One plant physically supports a climbing neighbour (e.g. maize + pole
   /// bean). Derivable from a sturdy/tall support × a vertical-growing climber.
@@ -29,7 +29,7 @@ enum TypeBeneficeAssociation {
   /// lacewings, parasitic wasps) — that prey on a neighbour's pests (e.g. dill +
   /// brassicas against caterpillars). Distinct from [attractionPollinisateurs]
   /// (pollination): this is pest control. **Curated only**, not derivable from
-  /// current traits (ADR-0013).
+  /// current traits.
   attractionAuxiliaires,
 
   /// Diverting a pest onto a decoy/trap plant (e.g. nasturtium + broad bean for
@@ -42,7 +42,7 @@ enum TypeBeneficeAssociation {
 
   /// Deep/strong roots loosen and structure the soil for shallower-rooted
   /// neighbours (e.g. radish ahead of carrots). Belongs to the *fertilité et
-  /// structure du sol* family (ADR-0013).
+  /// structure du sol* family.
   ameublissementSol,
 
   /// Covering the soil (against weeds, to keep moisture) — e.g. squash in the

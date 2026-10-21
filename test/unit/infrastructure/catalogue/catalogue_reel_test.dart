@@ -59,7 +59,7 @@ void main() {
   test('the seeded species carry detailed watering (sensitive stages)',
       () async {
     final cache = await CatalogueLoader(FilesystemFicheAssetSource()).charger();
-    // Species seeded in Lot 2 with real, documented sensitive stages + notes.
+    // Species seeded with real, documented sensitive stages + notes.
     const seedees = {'LEG-001', 'LEG-014', 'LEG-004', 'LEG-011', 'LEG-013',
         'ARO-001'};
     for (final id in seedees) {

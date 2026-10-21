@@ -2,14 +2,11 @@ import 'package:flutter/painting.dart';
 
 /// Raw colour tokens of the **« Carnet vivant »** design system.
 ///
-/// Values come straight from the validated design system in
-/// `docs/08-design-system.md` (§2 light, §3 dark), which is the source of truth
-/// for the project. The **light** roles (§2.1) and the decorative palette (§2.2)
-/// reflect the validated Claude Design mock-ups (`vege-garden-export/`,
-/// `bg-directions.css`). The **dark** roles still come from the original CAHIER
-/// §4.1 — the mock-ups did not redefine a dark mode.
+/// The **light** roles and the decorative palette are validated; the **dark**
+/// roles are provisional until a dark mode is designed.
 ///
-/// These are intentionally *semantic* roles, not Material slots — the mapping to
+/// These are intentionally *semantic* roles, not Material slots — the mapping
+/// to
 /// a Flutter [ColorScheme] happens in [ThemeApp]. Keeping the roles here lets
 /// widgets that need a project-specific colour (e.g. the warm "harvest" accent,
 /// which has no Material equivalent) reach for it by meaning rather than by
@@ -17,7 +14,7 @@ import 'package:flutter/painting.dart';
 abstract final class CouleursApp {
   const CouleursApp._();
 
-  // ── Light mode — semantic roles (docs/08 §2.1) ───────────────────────────
+  // ── Light mode — semantic roles ───────────────────────────
 
   /// Crème lin — application background (`--c-bg`).
   static const Color fondPrincipalClair = Color(0xFFF6F2E9);
@@ -58,9 +55,10 @@ abstract final class CouleursApp {
   /// Beige ombré — strokes, separators (`--c-border`).
   static const Color bordureClair = Color(0xFFDBD2C0);
 
-  // ── Decorative palette (docs/08 §2.2) ────────────────────────────────────
+  // ── Decorative palette ────────────────────────────────────
   // Non-semantic: tile gradients, vegetal separators, organic blobs/arches,
-  // illustrations. Never use these to convey a state — that's the §2.1 roles.
+  // illustrations. Never use these to convey a state — that's the semantic
+  // roles.
 
   /// Vert moyen — tile gradients, vegetal accents (`--c-green-mid`).
   static const Color decoVertMoyen = Color(0xFF4FA06A);
@@ -74,7 +72,8 @@ abstract final class CouleursApp {
   /// Aubergine clair — light aubergine variant (`--c-aubergine-2`).
   static const Color decoAubergineClair = Color(0xFFB98AAC);
 
-  /// Aubergine profond — occasional dark fills, e.g. chips (`--c-aubergine-deep`).
+  /// Aubergine profond — occasional dark fills, e.g. chips
+  /// (`--c-aubergine-deep`).
   static const Color decoAubergineProfond = Color(0xFF2C1A27);
 
   /// Bordeaux — tile gradients, warm accents (`--c-bordeaux`).
@@ -86,11 +85,11 @@ abstract final class CouleursApp {
   /// Ocre — warm decor; equals the Attention semantic role (`--c-ocre`).
   static const Color decoOcre = Color(0xFFE0A82E);
 
-  // ── Dark mode (docs/08 §3) ───────────────────────────────────────────────
-  // Not re-validated by the Claude Design mock-ups (light-only). From CAHIER
-  // §4.1; revisit when a dark mode is actually designed.
+  // ── Dark mode ───────────────────────────────────────────────
+  // Provisional: revisit when a dark mode is actually designed.
 
-  /// Bleu nuit profond — application background (inhabited night blue, never black).
+  /// Bleu nuit profond — application background (inhabited night blue, never
+  /// black).
   static const Color fondPrincipalSombre = Color(0xFF161D26);
 
   /// Bleu nuit doux — cards, modals.

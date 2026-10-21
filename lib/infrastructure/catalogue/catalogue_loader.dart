@@ -17,16 +17,16 @@ class _FicheBrute {
 /// Orchestrates the catalogue loading pipeline in **two passes**:
 /// list → read → parse (pass 1), then resolve species/variety inheritance →
 /// validate → map → cache (pass 2). The second pass needs every mother sheet
-/// already parsed, hence the split (ADR-0005).
+/// already parsed, hence the split.
 ///
-/// Robustness (see `docs/07-base-de-connaissances-yaml.md` §6): a corrupt or
+/// Robustness: a corrupt or
 /// orphan sheet is reported through [_onErreur] and **skipped** — the app never
 /// crashes.
 class CatalogueLoader {
   final FicheAssetSource _source;
   final void Function(String source, Object erreur)? _onErreur;
   final CatalogueYamlParser _parser = const CatalogueYamlParser();
-  // Catalogue is migrated to canonical ADR-0005 ids → enforce the format.
+  // The catalogue uses canonical ids → enforce the format.
   final FichePlanteValidator _validator =
       const FichePlanteValidator(validerFormatId: true);
   final FichePlanteMapper _mapper = const FichePlanteMapper();

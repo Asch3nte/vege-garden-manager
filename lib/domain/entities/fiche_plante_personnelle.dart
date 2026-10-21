@@ -10,8 +10,7 @@ import '../value_objects/modele_fiche_personnelle.dart';
 /// serialized to YAML (`yaml_contenu`, the on-disk source of truth) and its key
 /// fields are denormalized into columns for listing/querying.
 ///
-/// See `docs/05-modele-de-domaine.md` and `docs/07-base-de-connaissances-yaml.md`
-/// §7. Domain names stay in French; the code is documented in English.
+/// Domain names stay in French; the code is documented in English.
 class FichePlantePersonnelle {
   final String _id;
   final ModeleFichePersonnelle _contenu;

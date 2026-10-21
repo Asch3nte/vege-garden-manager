@@ -3,8 +3,7 @@
 /// Plant-agnostic on purpose: the catalogue carries only a total days-to-harvest
 /// window (no per-species stage curve), so the stage is **derived** by the engine
 /// as an assumed proportion of that duration — never a measured value. Enough to
-/// give the gardener a sense of progress. A V2 may refine it per species/variety
-/// once the fiches carry finer data. See `docs/15-elements-differes.md` §3.
+/// give the gardener a sense of progress.
 ///
 /// Domain names are kept in French; the code is documented in English.
 enum StadeCroissance {

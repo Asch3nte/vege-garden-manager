@@ -3,7 +3,7 @@ import '../exceptions/invariant_domaine_exception.dart';
 
 /// Botanical family reference, loaded from the YAML catalogue and **not created
 /// by the user**. A *sibling* type of [FichePlante] — **not** a grand-mother in
-/// the species/variety inheritance chain (ADR-0006): a family carries neither
+/// the species/variety inheritance chain: a family carries neither
 /// growing needs nor cycle nor periods, only its identity and family-level
 /// editorial/agronomic notes.
 ///
@@ -12,7 +12,7 @@ import '../exceptions/invariant_domaine_exception.dart';
 ///
 /// `FamilleBotanique` is an immutable catalogue **entity** (identity by [id],
 /// the normalized scientific family name, e.g. `solanaceae`). Domain names are
-/// kept in French; the code is documented in English. See ADR-0006.
+/// kept in French; the code is documented in English.
 class FamilleBotanique {
   final String _id;
   final String _nomScientifique;
@@ -89,7 +89,7 @@ class FamilleBotanique {
   /// Canonical link key for a family: the scientific family name lowercased,
   /// stripped of accents and whitespace (`Solanaceae` → `solanaceae`,
   /// `Amaryllidaceae ` → `amaryllidaceae`). This is the family [id] and the key
-  /// a species references through its `rotation.famille` (ADR-0006).
+  /// a species references through its `rotation.famille`.
   static String normaliserCle(String nomFamille) {
     const accents = 'àâäáãåçèêëéìîïíòôöóõùûüú';
     const sans = 'aaaaaaceeeeiiiiooooouuuu';
@@ -134,7 +134,7 @@ class FamilleBotanique {
       _descriptionsLocalisees[locale] ?? _descriptionsLocalisees['fr'];
 
   /// Educational note explaining *why* this family demands its crop rotation
-  /// (ADR-0006 Lot 4) for [locale] (falls back to French), or `null` if absent.
+  /// for [locale] (falls back to French), or `null` if absent.
   String? pourquoiRotation(String locale) =>
       _pourquoiRotationLocalise[locale] ?? _pourquoiRotationLocalise['fr'];
 

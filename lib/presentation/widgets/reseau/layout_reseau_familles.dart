@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' show Offset;
 
 /// One node fed to the layout: a stable [id] and the botanical [famille] it
-/// belongs to (the clustering key, ADR-0008).
+/// belongs to (the clustering key).
 class NoeudLayout {
   final String id;
   final String famille;
@@ -12,7 +12,7 @@ class NoeudLayout {
 
 /// A family's footprint: the member node [indices], the circle [centre] and its
 /// [rayon]. Family circles are **packed without overlap**, so a family is always
-/// a smooth disc that never intersects another (ADR-0008). The label sits inside
+/// a smooth disc that never intersects another. The label sits inside
 /// the top of the circle.
 class FoyerFamille {
   final String famille;
@@ -38,7 +38,7 @@ class ResultatLayout {
 }
 
 /// Tunable constants of the layout. Defaults are a starting point — the preview
-/// harness exists to tune them against real data (ADR-0008).
+/// harness exists to tune them against real data.
 class ParametresLayout {
   /// Spacing between two species inside a family's circle (phyllotaxis step).
   final double espacementNoeud;
@@ -66,8 +66,7 @@ class ParametresLayout {
   });
 }
 
-/// Deterministic **bubble** layout clustering nodes by botanical family
-/// (ADR-0008, Décision 2, révisée après prototype).
+/// Deterministic **bubble** layout clustering nodes by botanical family.
 ///
 /// Each family is a **circle** whose radius grows with its member count; the
 /// circles are **packed without overlap** (a family never intersects another →

@@ -3,7 +3,7 @@ import '../../domain/enums/type_bioagresseur.dart';
 import 'bioagresseur_cache.dart';
 
 /// A single referential-integrity problem between a family sheet and the
-/// bioaggressor reference (ADR-0006, Lot 4).
+/// bioaggressor reference.
 class ProblemeIntegriteBioagresseur {
   /// Offending family id.
   final String famille;
@@ -18,7 +18,7 @@ class ProblemeIntegriteBioagresseur {
 }
 
 /// Cross-checks that the family sheets and the bioaggressor reference are
-/// coherent (ADR-0006, Lot 4):
+/// coherent:
 ///
 /// 1. **Coverage** — every slug listed in a family's `maladies_communes` /
 ///    `ravageurs_communs` must resolve to a reference entry.

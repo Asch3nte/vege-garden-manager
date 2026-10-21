@@ -14,9 +14,9 @@ import 'non_branche.dart';
 
 /// Domain service ports. Their implementations are bound by the composition
 /// root; tests override them with doubles. `AbstractSyncService` is
-/// intentionally absent (WiFi sync is deferred to V2).
+/// intentionally absent (no WiFi sync yet).
 
-/// Reverse-geocoding service (Nominatim / OSM — ADR-0016).
+/// Reverse-geocoding service (Nominatim / OSM).
 final geocodageServiceProvider = Provider<AbstractGeocodageService>(
   (ref) => nonBranche('geocodageServiceProvider'),
 );
@@ -48,7 +48,7 @@ final reinitialisationServiceProvider =
   (ref) => nonBranche('reinitialisationServiceProvider'),
 );
 
-/// Local-storage statistics for the data-transparency panel (docs/11 §6).
+/// Local-storage statistics for the data-transparency panel.
 final statistiquesDonneesServiceProvider =
     Provider<AbstractStatistiquesDonneesService>(
   (ref) => nonBranche('statistiquesDonneesServiceProvider'),
@@ -59,7 +59,7 @@ final infoApplicationServiceProvider =
   (ref) => nonBranche('infoApplicationServiceProvider'),
 );
 
-/// One-shot read of the running app's version (docs/11 §7 — "À propos").
+/// One-shot read of the running app's version ("À propos").
 final versionAppliProvider = FutureProvider<String>(
   (ref) => ref.watch(infoApplicationServiceProvider).obtenirVersionAffichee(),
 );

@@ -4,7 +4,7 @@ import '../../domain/enums/niveau_experience.dart';
 import '../../domain/services/acces_niveau.dart';
 import 'preferences_notifier.dart';
 
-/// The current [AccesNiveau] progressive-disclosure policy (ADR-0009), derived
+/// The current [AccesNiveau] progressive-disclosure policy, derived
 /// from the user's experience level.
 ///
 /// Defaults to the most **restrictive** level (débutant) while preferences are

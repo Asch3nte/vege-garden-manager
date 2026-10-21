@@ -157,7 +157,7 @@ extension LibellesEnums on AppLocalizations {
         NiveauExperience.expert => niveauExpert,
       };
 
-  /// One-line description of what an experience level unlocks (ADR-0009).
+  /// One-line description of what an experience level unlocks.
   String niveauDescription(NiveauExperience n) => switch (n) {
         NiveauExperience.debutant => niveauDebutantDesc,
         NiveauExperience.intermediaire => niveauIntermediaireDesc,
@@ -288,7 +288,7 @@ extension LibellesEnums on AppLocalizations {
         TypeParcelle.autre => typeParcelleAutre,
       };
 
-  /// Label for a soil texture (ADR-0009 — expert).
+  /// Label for a soil texture (expert).
   String textureSol(TextureSol t) => switch (t) {
         TextureSol.argileux => textureArgileux,
         TextureSol.sableux => textureSableux,
@@ -299,14 +299,14 @@ extension LibellesEnums on AppLocalizations {
         TextureSol.caillouteux => textureCaillouteux,
       };
 
-  /// Label for a soil pH (ADR-0009 — expert).
+  /// Label for a soil pH (expert).
   String phSol(PhSol p) => switch (p) {
         PhSol.acide => phAcide,
         PhSol.neutre => phNeutre,
         PhSol.alcalin => phAlcalin,
       };
 
-  /// Label for a soil technique (ADR-0009 — intermédiaire+).
+  /// Label for a soil technique (intermédiaire+).
   String techniqueSol(TechniqueSol t) => switch (t) {
         TechniqueSol.butteLasagne => techButteLasagne,
         TechniqueSol.hugelkultur => techHugelkultur,
@@ -378,7 +378,7 @@ extension LibellesEnums on AppLocalizations {
         StadeCroissance.recolte => stadeRecolte,
       };
 
-  /// Label for a beneficial-association mechanism (ADR-0010).
+  /// Label for a beneficial-association mechanism.
   String mecanismeBenefice(TypeBeneficeAssociation m) => switch (m) {
         TypeBeneficeAssociation.tuteurStructurel => assocMecaTuteurStructurel,
         TypeBeneficeAssociation.etagementLumiere => assocMecaEtagementLumiere,
@@ -398,7 +398,7 @@ extension LibellesEnums on AppLocalizations {
           assocMecaSuccessionTemporelle,
       };
 
-  /// Label for a conflicting-association mechanism (ADR-0010).
+  /// Label for a conflicting-association mechanism.
   String mecanismeConflit(TypeConflitAssociation m) => switch (m) {
         TypeConflitAssociation.memeFamilleRavageurs =>
           assocMecaMemeFamilleRavageurs,
@@ -410,14 +410,14 @@ extension LibellesEnums on AppLocalizations {
         TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
       };
 
-  /// Label for a derived-suggestion confidence level (ADR-0010).
+  /// Label for a derived-suggestion confidence level.
   String confiance(NiveauConfiance c) => switch (c) {
         NiveauConfiance.faible => confianceFaible,
         NiveauConfiance.moyen => confianceMoyen,
         NiveauConfiance.eleve => confianceEleve,
       };
 
-  /// Label for an association effect family (ADR-0011).
+  /// Label for an association effect family.
   String familleEffet(FamilleEffetAssociation f) => switch (f) {
         FamilleEffetAssociation.gainDePlace => familleEffetGainDePlace,
         FamilleEffetAssociation.protectionRavageurs =>
@@ -427,14 +427,14 @@ extension LibellesEnums on AppLocalizations {
         FamilleEffetAssociation.couvertureAbri => familleEffetCouvertureAbri,
       };
 
-  /// Label for an association **conflict** effect family (ADR-0014).
+  /// Label for an association **conflict** effect family.
   String familleEffetConflit(FamilleEffetConflit f) => switch (f) {
         FamilleEffetConflit.concurrenceRessources => familleConflitConcurrence,
         FamilleEffetConflit.risqueSanitaire => familleConflitSanitaire,
         FamilleEffetConflit.allelopathie => familleConflitAllelopathie,
       };
 
-  /// Label for an association weight level (ADR-0011).
+  /// Label for an association weight level.
   String poids(PoidsAssociation p) => switch (p) {
         PoidsAssociation.ignore => poidsIgnore,
         PoidsAssociation.faible => poidsFaible,
@@ -442,7 +442,7 @@ extension LibellesEnums on AppLocalizations {
         PoidsAssociation.fort => poidsFort,
       };
 
-  /// Label for a plant's root system (ADR-0014).
+  /// Label for a plant's root system.
   String enracinement(EnracinementPlante e) => switch (e) {
         EnracinementPlante.superficiel => enracinementSuperficiel,
         EnracinementPlante.moyen => enracinementMoyen,
@@ -522,8 +522,8 @@ extension LibellesEnums on AppLocalizations {
   }
 }
 
-/// Material icon standing in for the eventual Phosphor icon of a task type
-/// (cf. docs/15 — Phosphor pending). Kept beside the labels so the gesture's
+/// Material icon standing in for the eventual Phosphor icon of a task type.
+/// Kept beside the labels so the gesture's
 /// visual identity lives in one place.
 IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.arrosage => Icons.water_drop_outlined,
@@ -544,8 +544,7 @@ IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.autre => Icons.task_alt_outlined,
     };
 
-/// Decorative dot colour for a task type (calendar month grid), echoing the
-/// per-gesture colours of the `calendrier.jsx` mock-up. Uses the static
+/// Decorative dot colour for a task type (calendar month grid). Uses the static
 /// decorative palette so it is theme-independent.
 Color couleurTypeTache(TypeTache t) => switch (t) {
       TypeTache.arrosage => CouleursApp.accentInfoClair,
@@ -567,7 +566,7 @@ Color couleurTypeTache(TypeTache t) => switch (t) {
     };
 
 /// Material icon standing in for the eventual Phosphor icon of an equipment
-/// type (cf. docs/15 — Phosphor pending). Kept beside the labels so an
+/// type. Kept beside the labels so an
 /// equipment's visual identity lives in one place.
 IconData iconeTypeEquipement(TypeEquipement t) => switch (t) {
       TypeEquipement.oya => Icons.water_drop_outlined,
@@ -594,8 +593,7 @@ IconData iconeVerdictMeteo(VerdictMeteo v) => switch (v) {
       VerdictMeteo.clement => Icons.cloud_outlined,
     };
 
-/// Display order of categories in the catalogue filter chips and grouped list,
-/// matching the mock-up's `CAT_ORDER`.
+/// Display order of categories in the catalogue filter chips and grouped list.
 const List<CategoriePlante> ordreCategories = [
   CategoriePlante.legume,
   CategoriePlante.aromatique,

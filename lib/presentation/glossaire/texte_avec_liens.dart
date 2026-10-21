@@ -6,12 +6,13 @@ import 'liens_glossaire.dart';
 import 'terme_cliquable.dart';
 import 'terme_glossaire.dart';
 
-/// Renders a glossary text with its wiki links (`[[id]]` / `[[id|texte]]`,
-/// ADR-0017 D2) as tappable spans navigating to the target term page.
+/// Renders a glossary text with its wiki links (`[[id]]` / `[[id|texte]]`)
+/// as tappable spans navigating to the target term page.
 ///
 /// Rules (never a dead link):
 ///  - a link whose id resolves in [index] becomes an underlined span
-///    **coloured by the target's kind** (the D5 chart — same grammar as
+///    **coloured by the target's kind** (the kind colour chart — same grammar
+/// as
 ///    `TermeCliquable`); a **bare** link (`[[id]]`) displays the target's
 ///    title instead of the id;
 ///  - a link whose id does **not** resolve renders as plain text (its label).

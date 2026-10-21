@@ -80,7 +80,7 @@ class LigneTermeGlossaire extends StatelessWidget {
 }
 
 /// The small kind badge of a term (« Famille botanique », « Maladie »…),
-/// tinted by the per-type colour chart (ADR-0017 D5).
+/// tinted by the per-type colour chart.
 class BadgeTypeTerme extends StatelessWidget {
   final TermeGlossaire terme;
 

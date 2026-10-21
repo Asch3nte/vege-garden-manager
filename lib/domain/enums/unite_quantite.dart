@@ -4,8 +4,6 @@
 enum NatureUnite { masse, volume, piece, botte }
 
 /// Units in which a quantity (e.g. a harvest) can be expressed.
-///
-/// See `docs/05-modele-de-domaine.md` §5.
 enum UniteQuantite { g, kg, piece, botte, litre, ml }
 
 /// Conversion metadata for [UniteQuantite].

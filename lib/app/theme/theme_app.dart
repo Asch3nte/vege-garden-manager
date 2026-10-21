@@ -69,15 +69,14 @@ class AccentsCarnet extends ThemeExtension<AccentsCarnet> {
 
 /// Builds the light and dark [ThemeData] for **« Carnet vivant »**.
 ///
-/// Tokens come from `docs/08-design-system.md` (the validated source of truth),
-/// whose light palette now reflects the Claude Design mock-ups. The "paper on a
-/// table" elevation style (§6) means very diffuse, low-opacity shadows and no
+/// The "paper on a
+/// table" elevation style means very diffuse, low-opacity shadows and no
 /// coloured shadows — reflected here by flat card borders rather than heavy
 /// elevation.
 abstract final class ThemeApp {
   const ThemeApp._();
 
-  /// Light theme (docs/08 §2).
+  /// Light theme.
   static ThemeData clair() {
     final scheme = const ColorScheme.light(
       primary: CouleursApp.accentPrimaireClair,
@@ -108,7 +107,7 @@ abstract final class ThemeApp {
     );
   }
 
-  /// Dark theme (docs/08 §3) — inhabited night blue, never black.
+  /// Dark theme — inhabited night blue, never black.
   static ThemeData sombre() {
     final scheme = const ColorScheme.dark(
       primary: CouleursApp.accentPrimaireSombre,
@@ -175,7 +174,7 @@ abstract final class ThemeApp {
         style: FilledButton.styleFrom(
           shape: const RoundedRectangleBorder(borderRadius: RayonsApp.brMd),
           textStyle: texte.labelLarge,
-          minimumSize: const Size(0, 48), // 48dp touch target (docs/08 §8).
+          minimumSize: const Size(0, 48), // 48dp touch target.
         ),
       ),
       dividerTheme: DividerThemeData(color: scheme.outline, thickness: 1),

@@ -2,7 +2,7 @@ import 'chapitre_glossaire.dart';
 import 'complement_terme.dart';
 import 'type_terme_glossaire.dart';
 
-/// One entry of the « Aide & lexique » glossary (ADR-0017, D1).
+/// One entry of the « Aide & lexique » glossary.
 ///
 /// Immutable Presentation model with **already-localized** strings: instances
 /// are built by `construireGlossaire` (registre) from the YAML references
@@ -10,7 +10,7 @@ import 'type_terme_glossaire.dart';
 /// never user-created.
 ///
 /// [definition] and [conseils] may embed wiki links (`[[id]]` /
-/// `[[id|texte]]`, D2) resolved at render time by `analyserLiensGlossaire`.
+/// `[[id|texte]]`) resolved at render time by `analyserLiensGlossaire`.
 class TermeGlossaire {
   final String _id;
   final ChapitreGlossaire _chapitre;
@@ -89,7 +89,7 @@ class TermeGlossaire {
   /// The book chapter this term is filed under.
   ChapitreGlossaire get chapitre => _chapitre;
 
-  /// The term kind — drives its colour everywhere (D5).
+  /// The term kind — drives its colour everywhere.
   TypeTermeGlossaire get type => _type;
 
   /// Localized display name.
@@ -105,13 +105,13 @@ class TermeGlossaire {
   String? get astuce => _astuce;
 
   /// Asset path of the illustration (`assets/images/glossaire/<id>.webp`), or
-  /// `null` — an absent illustration renders no block (D4).
+  /// `null` — an absent illustration renders no block.
   String? get illustration => _illustration;
 
-  /// Typed derived blocks the term page renders (unmodifiable, D3).
+  /// Typed derived blocks the term page renders (unmodifiable).
   List<ComplementTerme> get complements => _complements;
 
-  /// Copy of this term carrying [illustration] (D4 / Lot 5): the registry
+  /// Copy of this term carrying [illustration]: the registry
   /// (`construireGlossaire`) attaches the asset path of every term listed in
   /// `illustrations_glossaire.dart` — content builders never set it themselves.
   TermeGlossaire avecIllustration(String illustration) => TermeGlossaire._(

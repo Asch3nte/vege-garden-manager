@@ -316,8 +316,8 @@ void main() {
     when(() => preferences.charger()).thenAnswer(
       (_) async => PreferencesUtilisateur(),
     );
-    // The dashboard tile now targets the zone detail under the Potager branch
-    // (docs/15 §8 D #5); the cross-branch "back returns to the dashboard"
+    // The dashboard tile targets the zone detail under the Potager branch;
+    // the cross-branch "back returns to the dashboard"
     // behaviour belongs to the real shell and is covered in navigation_test.
     final router = GoRouter(
       initialLocation: RoutesApp.accueil,

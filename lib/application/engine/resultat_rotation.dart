@@ -7,7 +7,7 @@ import '../../domain/value_objects/precedent_cultural.dart';
 /// planting date). Assembled by the caller from the plot's plantation history
 /// so that [EvaluationRotation] stays pure (no repositories).
 class CulturePrecedente {
-  /// Mother sheet of the plant that grew (ADR-0005: varieties resolve to it).
+  /// Mother sheet of the plant that grew (varieties resolve to it).
   final FichePlante fiche;
 
   /// Reference date for recency: the culture's real end date when finished,
@@ -47,7 +47,7 @@ enum MotifRotation {
 }
 
 /// A single, explainable reason contributing to a [ResultatRotation]. Carries
-/// the real values behind the motive so the UI (Lot 4) can phrase it precisely
+/// the real values behind the motive so the UI can phrase it precisely
 /// (which family/group, which past culture, how long ago, the required delay).
 class RaisonRotation {
   /// What kind of signal this is.

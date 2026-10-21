@@ -180,7 +180,7 @@ class PanneauDonnees extends ConsumerWidget {
   }
 }
 
-/// Data-transparency section (docs/11 §6): the database's on-disk size and the
+/// Data-transparency section: the database's on-disk size and the
 /// per-table record counts — read live from the SQLite database, so the user
 /// can see exactly what the app keeps on this device (nothing leaves it).
 class _SectionStockage extends ConsumerWidget {

@@ -24,11 +24,11 @@ import '../value_objects/precedent_cultural.dart';
 ///
 /// `FichePlante` is an immutable catalogue **entity** (identity by [id]; the id
 /// is the YAML `id:`, snake_case). Domain names are kept in French; the code is
-/// documented in English. See `docs/05-modele-de-domaine.md` §3.6.
+/// documented in English.
 class FichePlante {
   final String _id;
   // Parent species id when this sheet is a variety (cultivar); `null` on a
-  // mother sheet (species level). See ADR-0005.
+  // mother sheet (species level).
   final String? _parentId;
   final String _nomScientifique;
   final String _familleBotanique;
@@ -45,39 +45,37 @@ class FichePlante {
   final List<AssociationConflit> _associationsNegatives;
   final String? _rotationFamille;
   final int? _delaiRetourAnnees;
-  // Rotation avancée (Lot 1) — typed cultural precedents (families or
+  // Advanced rotation — typed cultural precedents (families or
   // functional groups). Empty when the sheet declares none.
   final Set<PrecedentCultural> _precedentsFavorables;
   final Set<PrecedentCultural> _precedentsDefavorables;
   final Map<String, String> _descriptionsLocalisees;
 
-  // Enrichissement §A — rusticité USDA tolérée par la plante
+  // USDA hardiness tolerated by the plant
   final ZoneRusticite? _rusticiteMin;
-  // Enrichissement §B — tolérance au gel
+  // Frost tolerance
   final double? _temperatureMinSurvie;
   final bool _geleFatal;
-  // Enrichissement §C — niveau de difficulté (1 débutant → 3 expert)
+  // Difficulty level (1 beginner → 3 expert)
   final int? _difficulte;
-  // Enrichissement §D — compatibilité contenant / profondeur sol
+  // Container compatibility / soil depth
   final int? _profondeurSolMinCm;
   final bool _compatibleHorsSol;
-  // Enrichissement §E — culture verticale (tuteur/treillis)
   final bool _cultureVerticale;
-  // Enrichissement §F — hauteur adulte (cm), bornes basse/haute (optionnel)
   final int? _hauteurAdulteCmMin;
   final int? _hauteurAdulteCmMax;
-  // Enrichissement §H — dynamique azotée
+  // Nitrogen dynamics
   final bool _fixeAzote;
   final NiveauBesoin? _besoinAzote;
-  // Enrichissement ADR-0010 Lot 2 — défense ciblée & charge sur tuteur
-  // Slugs Bioagresseur que la plante repousse / piège (intégrité référentielle
-  // vérifiée par VerificateurIntegriteRepulsifs, comme rotation.famille).
+  // Targeted defence & support load
+  // Bioaggressor slugs the plant repels / traps (referential integrity checked
+  // by VerificateurIntegriteRepulsifs, like rotation.famille).
   final Set<String> _repulsifContre;
   final Set<String> _piegeA;
   final ChargeTuteur? _chargeTuteur;
-  // Enrichissement ADR-0014 — système racinaire (structuration du sol / concurrence).
+  // Root system (soil structuring / competition).
   final EnracinementPlante? _enracinement;
-  // Enrichissement ADR-0015 Lot 4 — réponse thermique & sécheresse
+  // Heat & drought response
   final ToleranceSecheresse? _toleranceSecheresse;
   final double? _temperatureMaxTolerance;
 
@@ -146,7 +144,7 @@ class FichePlante {
   }
 
   /// Builds a plant sheet. Collections are stored unmodifiable; periods default
-  /// to empty. All enrichment fields (§A–H of doc 16) are optional.
+  /// to empty. All enrichment fields are optional.
   factory FichePlante({
     required String id,
     required String nomScientifique,
@@ -168,31 +166,21 @@ class FichePlante {
     Set<PrecedentCultural>? precedentsFavorables,
     Set<PrecedentCultural>? precedentsDefavorables,
     Map<String, String>? descriptionsLocalisees,
-    // Enrichissement §A
     ZoneRusticite? rusticiteMin,
-    // Enrichissement §B
     double? temperatureMinSurvie,
     bool geleFatal = false,
-    // Enrichissement §C
     int? difficulte,
-    // Enrichissement §D
     int? profondeurSolMinCm,
     bool compatibleHorsSol = true,
-    // Enrichissement §E
     bool cultureVerticale = false,
-    // Enrichissement §F
     int? hauteurAdulteCmMin,
     int? hauteurAdulteCmMax,
-    // Enrichissement §H
     bool fixeAzote = false,
     NiveauBesoin? besoinAzote,
-    // Enrichissement ADR-0010 Lot 2
     Set<String>? repulsifContre,
     Set<String>? piegeA,
     ChargeTuteur? chargeTuteur,
-    // Enrichissement ADR-0014
     EnracinementPlante? enracinement,
-    // Enrichissement ADR-0015 Lot 4
     ToleranceSecheresse? toleranceSecheresse,
     double? temperatureMaxTolerance,
   }) =>
@@ -250,7 +238,7 @@ class FichePlante {
 
   String get id => _id;
 
-  /// Parent species id when this sheet is a variety, else `null` (ADR-0005).
+  /// Parent species id when this sheet is a variety, else `null`.
   String? get parentId => _parentId;
 
   /// Whether this sheet is a variety/cultivar (it inherits from a mother sheet).
@@ -279,7 +267,7 @@ class FichePlante {
 
   /// Cultural precedents that make this plant a **good** follower (unmodifiable,
   /// possibly empty) — families or functional groups it does well after
-  /// (rotation avancée). See [PrecedentCultural].
+  /// (advanced rotation). See [PrecedentCultural].
   Set<PrecedentCultural> get precedentsFavorables => _precedentsFavorables;
 
   /// Cultural precedents that make this plant a **poor** follower (unmodifiable,
@@ -287,33 +275,25 @@ class FichePlante {
   Set<PrecedentCultural> get precedentsDefavorables => _precedentsDefavorables;
 
   /// Typed beneficial associations of this plant — each pairs a target id with
-  /// an optional mechanism and localised reason (unmodifiable, ADR-0010).
+  /// an optional mechanism and localised reason (unmodifiable).
   List<AssociationBenefique> get associationsBenefiques =>
       _associationsBenefiques;
 
-  /// Typed conflicting associations of this plant (unmodifiable, ADR-0010).
+  /// Typed conflicting associations of this plant (unmodifiable).
   List<AssociationConflit> get associationsNegatives => _associationsNegatives;
 
-  // Enrichissement §A
   ZoneRusticite? get rusticiteMin => _rusticiteMin;
-  // Enrichissement §B
   double? get temperatureMinSurvie => _temperatureMinSurvie;
   bool get geleFatal => _geleFatal;
-  // Enrichissement §C
   int? get difficulte => _difficulte;
-  // Enrichissement §D
   int? get profondeurSolMinCm => _profondeurSolMinCm;
   bool get compatibleHorsSol => _compatibleHorsSol;
-  // Enrichissement §E
   bool get cultureVerticale => _cultureVerticale;
-  // Enrichissement §F — hauteur adulte (cm)
   int? get hauteurAdulteCmMin => _hauteurAdulteCmMin;
   int? get hauteurAdulteCmMax => _hauteurAdulteCmMax;
-  // Enrichissement §H
   bool get fixeAzote => _fixeAzote;
   NiveauBesoin? get besoinAzote => _besoinAzote;
 
-  // Enrichissement ADR-0010 Lot 2
   /// Bioaggressor slugs this plant **repels** from its neighbours (unmodifiable).
   Set<String> get repulsifContre => _repulsifContre;
 
@@ -324,18 +304,17 @@ class FichePlante {
   /// when unspecified (the engine then approximates it).
   ChargeTuteur? get chargeTuteur => _chargeTuteur;
 
-  /// Root system (depth/shape), or `null` when unspecified (ADR-0014). Drives
+  /// Root system (depth/shape), or `null` when unspecified. Drives
   /// the soil-loosening rule and refines root competition.
   EnracinementPlante? get enracinement => _enracinement;
 
-  // Enrichissement ADR-0015 Lot 4
   /// Drought tolerance level, or `null` when unspecified. Used by [BilanArrosage]
   /// to scale the demand index (×0.8 forte / ×1.0 moyenne / ×1.2 faible).
   ToleranceSecheresse? get toleranceSecheresse => _toleranceSecheresse;
 
   /// Plant-specific heat-stress threshold (°C), or `null` when unspecified.
   /// When [tempMax] reaches this value the heatwave multiplier is applied
-  /// regardless of the generic tier (ADR-0015 Décision 4).
+  /// regardless of the generic tier.
   double? get temperatureMaxTolerance => _temperatureMaxTolerance;
 
   /// Common name for [locale], falling back to French (always present).
@@ -372,7 +351,7 @@ class FichePlante {
       _associationsNegatives.any((a) => a.cibleId == planteId);
 
   /// The beneficial association this plant declares towards [planteId], or
-  /// `null` when none is declared (ADR-0010). Lets callers read the mechanism
+  /// `null` when none is declared. Lets callers read the mechanism
   /// and reason behind a "good companion" relation.
   AssociationBenefique? associationBenefiqueAvec(String planteId) {
     for (final a in _associationsBenefiques) {
@@ -382,7 +361,7 @@ class FichePlante {
   }
 
   /// The conflicting association this plant declares towards [planteId], or
-  /// `null` when none is declared (ADR-0010).
+  /// `null` when none is declared.
   AssociationConflit? associationConflitAvec(String planteId) {
     for (final a in _associationsNegatives) {
       if (a.cibleId == planteId) return a;
@@ -393,10 +372,10 @@ class FichePlante {
   /// Whether the plant has the given functional [usage].
   bool aUsage(UsagePlante usage) => _usages.contains(usage);
 
-  /// Whether the plant repels the bioaggressor [slug] (ADR-0010 Lot 2).
+  /// Whether the plant repels the bioaggressor [slug].
   bool repousse(String slug) => _repulsifContre.contains(slug);
 
-  /// Whether the plant traps the bioaggressor [slug] as a decoy (ADR-0010 Lot 2).
+  /// Whether the plant traps the bioaggressor [slug] as a decoy.
   bool piege(String slug) => _piegeA.contains(slug);
 
   @override

@@ -35,7 +35,7 @@ import '../glossaire/terme_glossaire.dart';
 /// [PreferencesUtilisateur.onboardingTermine] is `false`; the router redirects
 /// here until the user completes it. Steps: welcome → privacy → position
 /// (required, auto-advances) → derived climate/hardiness → experience level
-/// (ADR-0009) → first garden (name + zones) → notifications opt-in. The garden
+/// → first garden (name + zones) → notifications opt-in. The garden
 /// is created lazily (as soon as a zone is added, or when leaving the garden
 /// step), so zones can attach to it. Finishing records the level, geolocation
 /// mode and notification choice, refreshes the data views and lifts the router
@@ -108,7 +108,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   }
 
   /// Once a position is captured, move straight to the next step (no extra
-  /// "Suivant" tap — test feedback #1).
+  /// "Suivant" tap).
   void _avancerDepuisPosition() {
     if (mounted && _etape == _etapePositionIndex && _position.estDefinie) {
       unawaited(_suivant());
@@ -188,9 +188,9 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
         await prefs.definirNotificationCategorie(e.key, e.value);
       }
       // Refresh the data views so the (otherwise cached) dashboard/potager show
-      // the freshly created garden — test feedback #5.
+      // the freshly created garden.
       invaliderVuesDonnees(ref);
-      // One-off hint shown on the Potager screen we land on (feedback #4).
+      // One-off hint shown on the Potager screen we land on.
       ref.read(astucePotagerZonesProvider.notifier).afficher();
       // Lifts the router gate (refreshListenable → redirect to Potager).
       await prefs.terminerOnboarding();
@@ -468,7 +468,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
 
   Widget _etapeNotifications(AppLocalizations l10n) {
     // Intermediate+ get the full per-category detail (like the settings panel);
-    // a beginner keeps just the master switch (ADR-0009).
+    // a beginner keeps just the master switch.
     final parCategorie = AccesNiveau(_niveau).notificationsParCategorie;
     return _Etape(
       icone: Icons.notifications_outlined,

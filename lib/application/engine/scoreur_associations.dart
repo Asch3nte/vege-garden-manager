@@ -6,11 +6,11 @@ import '../../domain/enums/niveau_confiance.dart';
 import '../../domain/value_objects/profil_ponderation_associations.dart';
 import 'suggestion_association.dart';
 
-/// Pure calculator that **scores** a derived association (ADR-0011) so the UI can
+/// Pure calculator that **scores** a derived association so the UI can
 /// rank and prune suggestions and the recommendation engine can weight them.
 ///
 /// `score(bénéfice) = poids(familleEffet(mécanisme)) × facteurConfiance` and,
-/// since ADR-0014, `score(conflit) = poids(familleConflit(mécanisme)) ×
+/// `score(conflit) = poids(familleConflit(mécanisme)) ×
 /// facteurConfiance` — so the user can prioritise (or ignore) a class of warnings
 /// too. Stateless; the [ProfilPonderationAssociations] is passed in, keeping the
 /// calculator dependency-free and testable.
@@ -29,7 +29,7 @@ class ScoreurAssociations {
       };
 
   /// Score of [s] under [profil]: weighted by its effect family (benefit) or its
-  /// conflict family (ADR-0014). Always `>= 0`; an `ignore`d family yields `0`
+  /// conflict family. Always `>= 0`; an `ignore`d family yields `0`
   /// (the suggestion is then dropped).
   double score(SuggestionAssociation s, ProfilPonderationAssociations profil) {
     final facteur = _facteur(s.confiance);
@@ -42,7 +42,7 @@ class ScoreurAssociations {
   }
 
   /// Whether [s] should be shown at all: a benefit **or conflict** whose family
-  /// is `ignore`d (score `0`) is dropped (ADR-0014).
+  /// is `ignore`d (score `0`) is dropped.
   bool estRetenue(SuggestionAssociation s, ProfilPonderationAssociations profil) =>
       score(s, profil) > 0;
 }

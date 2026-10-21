@@ -11,7 +11,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Climat & saisons » chapter of the notion catalogue (ADR-0017 Lot 4):
+/// « Climat & saisons » chapter of the notion catalogue:
 /// climates, hardiness, hemispheres, weather alerts and sky conditions.
 List<TermeGlossaire> construireNotionsClimat(AppLocalizations l10n) => [
       TermeGlossaire(

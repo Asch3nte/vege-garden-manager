@@ -25,7 +25,7 @@ import '../../domain/value_objects/precedent_cultural.dart';
 
 /// Maps a validated plant-sheet map into a domain [FichePlante].
 ///
-/// Pipeline step 4 (see `docs/07-base-de-connaissances-yaml.md` §6). Assumes the
+/// Pipeline step 4. Assumes the
 /// map has already passed `FichePlanteValidator`. snake_case YAML values are
 /// converted to camelCase enum names; `[min, max]` month lists become `Periode`.
 class FichePlanteMapper {
@@ -63,7 +63,7 @@ class FichePlanteMapper {
         soleilMin: besoins['ensoleillement_min'] == null
             ? null
             : _enum(NiveauSoleil.values, besoins['ensoleillement_min'] as String),
-        // Detailed watering (optional, ADR-0009 `acces.eauDetaillee`).
+        // Detailed watering (optional, `acces.eauDetaillee`).
         arrosageDetaille: _arrosageDetaille(besoins['arrosage_detaille']),
       ),
       espacementCm: cycle['espacement_cm'] as int,
@@ -74,44 +74,35 @@ class FichePlanteMapper {
       associationsNegatives: _conflits(y),
       rotationFamille: rotation?['famille'] as String?,
       delaiRetourAnnees: rotation?['delai_retour_annees'] as int?,
-      // Rotation avancée (Lot 2) — typed cultural precedents, normalized.
+      // Advanced rotation — typed cultural precedents, normalized.
       precedentsFavorables: _precedents(rotation?['precedents_favorables']),
       precedentsDefavorables: _precedents(rotation?['precedents_defavorables']),
-      // Enrichissement §A
       rusticiteMin: rusticite?['zone_min'] == null
           ? null
           : _enum(ZoneRusticite.values, rusticite!['zone_min'] as String),
-      // Enrichissement §B
       temperatureMinSurvie: besoins['temperature_min_survie'] == null
           ? null
           : (besoins['temperature_min_survie'] as num).toDouble(),
       geleFatal: besoins['gele_fatal'] as bool? ?? false,
-      // Enrichissement §C
       difficulte: y['difficulte'] as int?,
-      // Enrichissement §D
       profondeurSolMinCm: cycle['profondeur_sol_min_cm'] as int?,
       compatibleHorsSol: cycle['compatible_hors_sol'] as bool? ?? true,
-      // Enrichissement §E
       cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
-      // Enrichissement §F — hauteur adulte [min, max]
       hauteurAdulteCmMin: (cycle['hauteur_adulte_cm'] as List?)?[0] as int?,
       hauteurAdulteCmMax: (cycle['hauteur_adulte_cm'] as List?)?[1] as int?,
-      // Enrichissement §H
       fixeAzote: rotation?['fixe_azote'] as bool? ?? false,
       besoinAzote: rotation?['besoin_azote'] == null
           ? null
           : _enum(NiveauBesoin.values, rotation!['besoin_azote'] as String),
-      // Enrichissement ADR-0010 Lot 2
       repulsifContre: _slugs(y['repulsif_contre']),
       piegeA: _slugs(y['piege_a']),
       chargeTuteur: cycle['charge_tuteur'] == null
           ? null
           : _enum(ChargeTuteur.values, cycle['charge_tuteur'] as String),
-      // Enrichissement ADR-0014 — système racinaire
+      // Root system
       enracinement: cycle['enracinement'] == null
           ? null
           : _enum(EnracinementPlante.values, cycle['enracinement'] as String),
-      // Enrichissement ADR-0015 Lot 4
       temperatureMaxTolerance: besoins['temperature_max_tolerance'] == null
           ? null
           : (besoins['temperature_max_tolerance'] as num).toDouble(),
@@ -233,7 +224,7 @@ class FichePlanteMapper {
   }
 
   /// Parses an association `type:` that is **a single token or a list** of
-  /// tokens (ADR-0012) into a set of enum values (empty when absent).
+  /// tokens into a set of enum values (empty when absent).
   Set<T> _typesAssociation<T extends Enum>(Object? type, List<T> valeurs) {
     if (type == null) return const {};
     final tokens = type is Iterable ? type : [type];

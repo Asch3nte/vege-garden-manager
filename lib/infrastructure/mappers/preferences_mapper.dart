@@ -59,7 +59,7 @@ class PreferencesMapper {
     final poids = <FamilleEffetAssociation, PoidsAssociation>{};
     final poidsConflit = <FamilleEffetConflit, PoidsAssociation>{};
     // Benefit and conflict families share one JSON map; their enum names never
-    // collide, so each key resolves to exactly one side (ADR-0014).
+    // collide, so each key resolves to exactly one side.
     for (final entry in brut.entries) {
       final valeur = _parNom(PoidsAssociation.values, entry.value);
       if (valeur == null) continue;

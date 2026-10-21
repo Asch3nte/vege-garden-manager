@@ -12,11 +12,11 @@ import '../value_objects/profil_ponderation_associations.dart';
 ///
 /// A singleton (`id == 'singleton'`) and **immutable**: every change produces a
 /// new instance via [copierAvec] (or the dedicated do-not-disturb helpers).
-/// Because it is a singleton configuration, equality is **by value** (unlike the
+/// Because it is a singleton configuration, equality is **by value** (unlike
+/// the
 /// other entities, which use identity).
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §3.7 and `docs/06` §3.12.
 class PreferencesUtilisateur {
   /// The fixed identity of the single preferences row.
   static const String idSingleton = 'singleton';
@@ -125,7 +125,7 @@ class PreferencesUtilisateur {
   /// Whether the app may fetch weather from Open-Meteo **automatically** (home
   /// card, watering advice, weather alerts). When `false`, no automatic network
   /// call is made — the weather card is hidden and only the detail screen still
-  /// refreshes on explicit user action (docs/11 opt-out, absolute constraint #3).
+  /// refreshes on explicit user action.
   bool get meteoAutoActive => _meteoAutoActive;
   bool get communauteOptIn => _communauteOptIn;
   bool get calendrierLunaireOptIn => _calendrierLunaireOptIn;
@@ -152,13 +152,13 @@ class PreferencesUtilisateur {
   /// router gates the app on the onboarding flow (position, derived climate…).
   bool get onboardingTermine => _onboardingTermine;
 
-  /// The association weighting profile (ADR-0011). Defaults to the neutral
+  /// The association weighting profile. Defaults to the neutral
   /// profile; only an expert overrides it.
   ProfilPonderationAssociations get ponderationAssociations =>
       _ponderationAssociations;
 
-  /// The id of the garden the user last selected as active (ADR-0009
-  /// multi-potager), or `null` if none was ever chosen — the repository then
+  /// The id of the garden the user last selected as active, or `null` if none
+  /// was ever chosen — the repository then
   /// falls back to the earliest-created garden.
   String? get potagerActifId => _potagerActifId;
 

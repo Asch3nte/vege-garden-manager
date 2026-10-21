@@ -29,7 +29,7 @@ final conseilArrosagePlantationProvider =
         await ref.watch(potagerRepositoryProvider).obtenirPotagerActif();
     if (potager == null) return null;
 
-    // Honour the auto weather-fetch opt-out (docs/11): with it off, the advice
+    // Honour the auto weather-fetch opt-out: with it off, the advice
     // degrades to demand-only rather than hitting Open-Meteo automatically.
     final meteoAuto =
         ref.watch(preferencesProvider).value?.meteoAutoActive ?? true;

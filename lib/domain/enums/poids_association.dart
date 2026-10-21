@@ -1,4 +1,4 @@
-/// How much a user values a family of association effects (ADR-0011).
+/// How much a user values a family of association effects.
 ///
 /// A weight scales the score of every suggestion in its effect family.
 /// [ignore] (×0) makes the family disappear entirely — e.g. a gardener who finds

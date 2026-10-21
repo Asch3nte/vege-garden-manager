@@ -24,8 +24,9 @@ import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/potager_actif_actions.dart';
 
-/// Stable decorative colours assigned to zones by position, so each zone keeps a
-/// consistent accent across the plan (mirrors the per-zone colour of the mock-up).
+/// Stable decorative colours assigned to zones by position, so each zone keeps
+/// a
+/// consistent accent across the plan.
 const List<Color> _couleursZones = [
   CouleursApp.decoVertProfond,
   CouleursApp.accentChaudClair,
@@ -38,13 +39,14 @@ const List<Color> _couleursZones = [
 /// Decorative colour of the zone at [index] in the plan (stable, cyclic).
 Color couleurZone(int index) => _couleursZones[index % _couleursZones.length];
 
-/// Tab 2 — **Potager**: a top-down *plan* of the active garden, one bed per zone
-/// (docs/09 §4), reimplemented from the `potager.jsx` mock-up, **variant A**
-/// (`PotagerGrille`): a grid of beds with the greenhouse spanning the full width.
+/// Tab 2 — **Potager**: a top-down *plan* of the active garden, one bed per
+/// zone:
+/// a grid of beds with the greenhouse spanning the full width.
 ///
 /// Each bed shows the zone name, its crops and a drop marker when a task is due
-/// today. Tapping a bed opens the zone detail. The spatial plan (variant B) needs
-/// per-zone layout coordinates that the model does not carry yet (docs/15 §3).
+/// today. Tapping a bed opens the zone detail. The spatial plan (variant B)
+/// needs
+/// per-zone layout coordinates that the model does not carry yet.
 class EcranPotager extends ConsumerWidget {
   const EcranPotager({super.key});
 
@@ -52,11 +54,12 @@ class EcranPotager extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(potagerProvider);
-    // Multi-garden and equipment are intermediate+ features (ADR-0009); their
+    // Multi-garden and equipment are intermediate+ features; their
     // menu entries are gated.
     final acces = ref.watch(accesNiveauProvider);
 
-    // The FAB adds a zone to the active garden; only shown once a garden exists.
+    // The FAB adds a zone to the active garden; only shown once a garden
+    // exists.
     final potagerId = vue.value?.potagerId;
     Future<void> ajouterZone() async {
       final cree = await ouvrirFormulaireZone(context, potagerId!);
@@ -124,7 +127,7 @@ class EcranPotager extends ConsumerWidget {
             _EtatErreur(onReessayer: () => ref.invalidate(potagerProvider)),
         data: (data) {
           // One-off post-onboarding hint: nudge the user to tap a zone to add
-          // plants (only meaningful once zones exist) — feedback #4.
+          // plants (only meaningful once zones exist).
           final astuce = ref.watch(astucePotagerZonesProvider);
           return Column(
             children: [
@@ -206,7 +209,7 @@ void _rafraichirPotager(WidgetRef ref) {
   ref.invalidate(contexteClimatProvider);
 }
 
-/// Opens a bottom sheet listing every garden (ADR-0009 multi-potager);
+/// Opens a bottom sheet listing every garden;
 /// tapping one switches to it and refreshes the dependent views.
 Future<void> _choisirPotager(BuildContext context, WidgetRef ref) async {
   final potagers = await ref.read(potagersProvider.future);
@@ -266,7 +269,7 @@ Future<void> _supprimerPotager(
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackPotagerSupprime)));
 }
 
-/// Bottom sheet listing every garden (ADR-0009 multi-potager); returns the
+/// Bottom sheet listing every garden; returns the
 /// tapped garden's id, or `null` if dismissed without a choice.
 class _FeuilleChoixPotager extends StatelessWidget {
   final List<Potager> potagers;
@@ -573,7 +576,7 @@ class _PastilleTache extends StatelessWidget {
 
 /// Plan legend: only the markers the plan actually renders are explained — the
 /// zone colours are assigned by position (not by crop category), so a colour
-/// legend would be misleading (decision: show what exists, docs/15 §3).
+/// legend would be misleading (decision: show what exists).
 class _Legende extends StatelessWidget {
   const _Legende();
 

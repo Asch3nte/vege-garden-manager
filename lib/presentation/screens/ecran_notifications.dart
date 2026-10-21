@@ -19,7 +19,7 @@ import '../glossaire/type_terme_glossaire.dart';
 /// [alertesMeteoProvider] (frost / heatwave / heavy rain over the alert horizon)
 /// — which until now only existed as a count on the dashboard. In V1 an alert is
 /// generic: it concerns every in-place culture of the active garden (no per-plant
-/// sensitivity data yet, see `docs/13` §2.1), so the card reports how many
+/// sensitivity data yet), so the card reports how many
 /// cultures are affected rather than naming them.
 ///
 /// Empty (and without any forecast fetch) when the auto-weather opt-out is off,
@@ -69,7 +69,7 @@ class _Liste extends ConsumerWidget {
           EspacementsApp.s6,
         ),
         children: [
-          // Clickable glossary term (ADR-0017): explains what weather alerts are.
+          // Clickable glossary term: explains what weather alerts are.
           Padding(
             padding: const EdgeInsets.only(bottom: EspacementsApp.s2),
             child: TermeCliquable(

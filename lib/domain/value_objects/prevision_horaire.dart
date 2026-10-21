@@ -3,7 +3,6 @@
 ///
 /// [probabilitePluie] is a 0..1 fraction. [weathercode] is the WMO weather
 /// interpretation code (0–99). Domain names are French; code/docs are English.
-/// See `docs/05-modele-de-domaine.md` §7 and ADR-0016 Lot 2.
 class PrevisionHoraire {
   final DateTime _heure;
   final double _temperature;

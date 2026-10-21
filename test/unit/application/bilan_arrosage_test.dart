@@ -133,7 +133,7 @@ void main() {
     });
   });
 
-  group('BilanArrosage — pondération pluie (Lot 3)', () {
+  group('BilanArrosage — pondération pluie', () {
     const bilan = BilanArrosage();
 
     test('score élevé (20mm × 0.8 = 16) → pluiePrevue=true, watering deferred',
@@ -174,7 +174,7 @@ void main() {
     });
   });
 
-  group('BilanArrosage — Lot 4 (sensibilité plante)', () {
+  group('BilanArrosage (sensibilité plante)', () {
     const bilan = BilanArrosage();
 
     test('faible tolerance → higher demand (modere becomes arroserMaintenant)',
@@ -218,7 +218,7 @@ void main() {
     });
   });
 
-  group('BilanArrosage — Lot 5 (ET₀)', () {
+  group('BilanArrosage (ET₀)', () {
     test('ET₀ = referenceET0Mm → facteur 1.0', () {
       expect(BilanArrosage.facteurET0(BilanArrosage.referenceET0Mm), 1.0);
     });

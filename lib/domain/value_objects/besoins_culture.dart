@@ -13,12 +13,11 @@ import 'arrosage_detaille.dart';
 /// to a simple distance-based score.
 ///
 /// [arrosageDetaille] carries optional, expert-only watering detail
-/// (frequency/volume/sensitive stages, ADR-0009 `acces.eauDetaillee`); `null`
+/// (frequency/volume/sensitive stages, `acces.eauDetaillee`); `null`
 /// when the fiche only states the coarse [eau] level.
 ///
 /// To be distinguished from the texture a parcelle actually *has*: matching the
-/// two is the engine's job (`docs/05-modele-de-domaine.md` §4.4 & §4.5/D7).
-/// See also `docs/16-enrichissement-fiches-plantes.md` §I.
+/// two is the engine's job.
 ///
 /// Domain names are kept in French; the code is documented in English.
 class BesoinsCulture {

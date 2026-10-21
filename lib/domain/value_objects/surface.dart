@@ -6,8 +6,6 @@
 ///
 /// Domain names are kept in French (inherited from the specification); the code
 /// and its documentation are written in English.
-///
-/// See `docs/05-modele-de-domaine.md` §4.1.
 class Surface implements Comparable<Surface> {
   /// Number of square metres represented by this surface. Always `>= 0`.
   final double _metresCarres;

@@ -10,7 +10,7 @@ import 'ecran_potager.dart' show PlanPotager;
 /// if dismissed).
 ///
 /// Used by the "add a plant" flow when the user reached the catalogue without a
-/// pre-selected zone (free browse, docs spec §8): the plan opens so they tap the
+/// pre-selected zone (free browse): the plan opens so they tap the
 /// destination bed.
 Future<String?> selectionnerZonePourAjout(BuildContext context) {
   return Navigator.of(context).push<String>(

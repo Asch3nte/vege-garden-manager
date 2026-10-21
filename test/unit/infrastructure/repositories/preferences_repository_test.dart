@@ -52,7 +52,7 @@ void main() {
     expect(relu.notificationsParCategorie, {'arrosage': false, 'semis': true});
   });
 
-  test('charger returns the default weighting profile (ADR-0011)', () async {
+  test('charger returns the default weighting profile', () async {
     expect((await repo.charger()).ponderationAssociations.estDefaut, isTrue);
   });
 
@@ -76,7 +76,7 @@ void main() {
         FamilleEffetAssociation.fertilite), PoidsAssociation.normal);
   });
 
-  test('save then load round-trips the active-garden selection (ADR-0009)',
+  test('save then load round-trips the active-garden selection',
       () async {
     await repo.sauvegarder(
         (await repo.charger()).copierAvec(potagerActifId: 'pot-2'));

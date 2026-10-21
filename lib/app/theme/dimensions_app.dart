@@ -2,9 +2,9 @@ import 'package:flutter/widgets.dart';
 
 /// Spacing scale of the **« Carnet vivant »** design system (base 4px).
 ///
-/// From `docs/08-design-system.md` §5. Layout code must pull spacing from these
+/// Layout code must pull spacing from these
 /// tokens — **no arbitrary values** (no 17px, 22px…). The names map 1:1 to the
-/// `space-1` … `space-8` tokens in the docs.
+/// `space-1` … `space-8` tokens of the design system.
 abstract final class EspacementsApp {
   const EspacementsApp._();
 
@@ -34,8 +34,6 @@ abstract final class EspacementsApp {
 }
 
 /// Corner radius tokens of the **« Carnet vivant »** design system.
-///
-/// From `docs/08-design-system.md` §6.
 abstract final class RayonsApp {
   const RayonsApp._();
 
@@ -67,7 +65,7 @@ abstract final class RayonsApp {
   static const BorderRadius brXl = BorderRadius.all(xl);
 }
 
-/// Phosphor-aligned icon sizes (`docs/08-design-system.md` §7).
+/// Phosphor-aligned icon sizes.
 ///
 /// The default everywhere is [md] (20). A bare icon must always carry a label or
 /// tooltip — enforce that at the call site, not here.
