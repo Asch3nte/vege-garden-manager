@@ -2,10 +2,10 @@ import '../enums/langue.dart';
 import '../enums/mode_geolocalisation.dart';
 import '../enums/niveau_experience.dart';
 import '../enums/sens_swipe.dart';
-import '../enums/systeme_unites.dart';
 import '../enums/theme_app.dart';
 import '../exceptions/invariant_domaine_exception.dart';
 import '../value_objects/fenetre_ne_pas_deranger.dart';
+import '../value_objects/preferences_unites.dart';
 import '../value_objects/profil_ponderation_associations.dart';
 
 /// User settings (language, theme, units, opt-outs, notifications…).
@@ -23,7 +23,7 @@ class PreferencesUtilisateur {
 
   final Langue _langue;
   final ThemeApp _theme;
-  final SystemeUnites _systemeUnites;
+  final PreferencesUnites _unites;
   final SensSwipe _sensSwipe;
   final NiveauExperience _niveauExperience;
   final ModeGeolocalisation _modeGeolocalisation;
@@ -44,7 +44,7 @@ class PreferencesUtilisateur {
   PreferencesUtilisateur._(
     this._langue,
     this._theme,
-    this._systemeUnites,
+    this._unites,
     this._sensSwipe,
     this._niveauExperience,
     this._modeGeolocalisation,
@@ -80,7 +80,7 @@ class PreferencesUtilisateur {
   factory PreferencesUtilisateur({
     Langue langue = Langue.auto,
     ThemeApp theme = ThemeApp.auto,
-    SystemeUnites systemeUnites = SystemeUnites.metrique,
+    PreferencesUnites unites = const PreferencesUnites(),
     SensSwipe sensSwipe = SensSwipe.standard,
     NiveauExperience niveauExperience = NiveauExperience.debutant,
     ModeGeolocalisation modeGeolocalisation = ModeGeolocalisation.desactivee,
@@ -101,7 +101,7 @@ class PreferencesUtilisateur {
       PreferencesUtilisateur._(
         langue,
         theme,
-        systemeUnites,
+        unites,
         sensSwipe,
         niveauExperience,
         modeGeolocalisation,
@@ -123,7 +123,8 @@ class PreferencesUtilisateur {
   String get id => idSingleton;
   Langue get langue => _langue;
   ThemeApp get theme => _theme;
-  SystemeUnites get systemeUnites => _systemeUnites;
+  /// Display unit chosen for each quantity.
+  PreferencesUnites get unites => _unites;
   SensSwipe get sensSwipe => _sensSwipe;
   NiveauExperience get niveauExperience => _niveauExperience;
   ModeGeolocalisation get modeGeolocalisation => _modeGeolocalisation;
@@ -175,7 +176,7 @@ class PreferencesUtilisateur {
   PreferencesUtilisateur copierAvec({
     Langue? langue,
     ThemeApp? theme,
-    SystemeUnites? systemeUnites,
+    PreferencesUnites? unites,
     SensSwipe? sensSwipe,
     NiveauExperience? niveauExperience,
     ModeGeolocalisation? modeGeolocalisation,
@@ -194,7 +195,7 @@ class PreferencesUtilisateur {
       PreferencesUtilisateur(
         langue: langue ?? _langue,
         theme: theme ?? _theme,
-        systemeUnites: systemeUnites ?? _systemeUnites,
+        unites: unites ?? _unites,
         sensSwipe: sensSwipe ?? _sensSwipe,
         niveauExperience: niveauExperience ?? _niveauExperience,
         modeGeolocalisation: modeGeolocalisation ?? _modeGeolocalisation,
@@ -239,7 +240,7 @@ class PreferencesUtilisateur {
       PreferencesUtilisateur(
         langue: _langue,
         theme: _theme,
-        systemeUnites: _systemeUnites,
+        unites: _unites,
         sensSwipe: _sensSwipe,
         niveauExperience: _niveauExperience,
         modeGeolocalisation: _modeGeolocalisation,
@@ -263,7 +264,7 @@ class PreferencesUtilisateur {
       other is PreferencesUtilisateur &&
       other._langue == _langue &&
       other._theme == _theme &&
-      other._systemeUnites == _systemeUnites &&
+      other._unites == _unites &&
       other._sensSwipe == _sensSwipe &&
       other._niveauExperience == _niveauExperience &&
       other._modeGeolocalisation == _modeGeolocalisation &&
@@ -285,7 +286,7 @@ class PreferencesUtilisateur {
   int get hashCode => Object.hash(
         _langue,
         _theme,
-        _systemeUnites,
+        _unites,
         _sensSwipe,
         _niveauExperience,
         _modeGeolocalisation,

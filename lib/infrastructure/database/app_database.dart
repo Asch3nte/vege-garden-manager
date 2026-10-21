@@ -31,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -107,6 +107,23 @@ class AppDatabase extends _$AppDatabase {
           // v8 → v9: favourite plant sheets.
           if (from < 9) {
             await m.createTable(favoris);
+          }
+          // v9 → v10: one unit setting per quantity, each taking the former
+          // single setting.
+          if (from < 10) {
+            final colonnes = [
+              preferences.uniteTemperature,
+              preferences.uniteLongueur,
+              preferences.uniteSurface,
+              preferences.uniteVolume,
+              preferences.uniteMasse,
+            ];
+            for (final colonne in colonnes) {
+              await m.addColumn(preferences, colonne);
+            }
+            final affectations =
+                colonnes.map((c) => '${c.name} = systeme_unites').join(', ');
+            await customStatement('UPDATE preferences SET $affectations');
           }
         },
         beforeOpen: (details) async {

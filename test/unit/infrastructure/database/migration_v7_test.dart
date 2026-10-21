@@ -2,6 +2,8 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 
+import '../../../helpers/schemas_anciens.dart';
+
 /// `taches` as created by schema version 6.
 const _tachesV6 = 'CREATE TABLE "taches" ("id" TEXT NOT NULL, "titre" TEXT NOT NULL, '
     '"description" TEXT NULL, "type" TEXT NOT NULL, "etat" TEXT NOT NULL DEFAULT \'aFaire\', '
@@ -24,6 +26,7 @@ void main() {
     final db = AppDatabase(NativeDatabase.memory(setup: (raw) {
       raw.execute(_tachesV6);
       raw.execute(_parcellesV6);
+      raw.execute(preferencesV9);
       void inserer(String id, String titre, String type, String? plantationId) =>
           raw.execute(
               'INSERT INTO taches (id, titre, type, potager_id, plantation_id, '

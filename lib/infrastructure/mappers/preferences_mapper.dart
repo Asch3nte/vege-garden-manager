@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/famille_effet_conflit.dart';
+import '../../domain/enums/grandeur_mesure.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
@@ -12,6 +13,7 @@ import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart';
+import '../../domain/value_objects/preferences_unites.dart';
 import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../database/app_database.dart';
 
@@ -23,13 +25,23 @@ import '../database/app_database.dart';
 class PreferencesMapper {
   const PreferencesMapper();
 
+  /// A value the CHECK constraint should have refused reads as metric.
+  static SystemeUnites _systeme(String nom) =>
+      SystemeUnites.values.asNameMap()[nom] ?? SystemeUnites.metrique;
+
   PreferencesUtilisateur versEntite(PreferencesRow row) {
     final notifs = (jsonDecode(row.notificationsParCategorie) as Map)
         .map((cle, valeur) => MapEntry(cle as String, valeur as bool));
     return PreferencesUtilisateur(
       langue: Langue.values.byName(row.langue),
       theme: ThemeApp.values.byName(row.theme),
-      systemeUnites: SystemeUnites.values.byName(row.systemeUnites),
+      unites: PreferencesUnites(
+        temperature: _systeme(row.uniteTemperature),
+        longueur: _systeme(row.uniteLongueur),
+        surface: _systeme(row.uniteSurface),
+        volume: _systeme(row.uniteVolume),
+        masse: _systeme(row.uniteMasse),
+      ),
       sensSwipe: SensSwipe.values.byName(row.sensSwipe),
       niveauExperience: NiveauExperience.values.byName(row.niveauExperience),
       modeGeolocalisation:
@@ -94,7 +106,14 @@ class PreferencesMapper {
         id: const Value(PreferencesUtilisateur.idSingleton),
         langue: Value(p.langue.name),
         theme: Value(p.theme.name),
-        systemeUnites: Value(p.systemeUnites.name),
+        systemeUnites:
+            Value((p.unites.prereglage ?? SystemeUnites.metrique).name),
+        uniteTemperature:
+            Value(p.unites.pour(GrandeurMesure.temperature).name),
+        uniteLongueur: Value(p.unites.pour(GrandeurMesure.longueur).name),
+        uniteSurface: Value(p.unites.pour(GrandeurMesure.surface).name),
+        uniteVolume: Value(p.unites.pour(GrandeurMesure.volume).name),
+        uniteMasse: Value(p.unites.pour(GrandeurMesure.masse).name),
         sensSwipe: Value(p.sensSwipe.name),
         niveauExperience: Value(p.niveauExperience.name),
         modeGeolocalisation: Value(p.modeGeolocalisation.name),

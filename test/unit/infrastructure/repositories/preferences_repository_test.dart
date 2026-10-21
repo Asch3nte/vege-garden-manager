@@ -10,6 +10,9 @@ import 'package:pot_a_gerer/domain/enums/theme_app.dart';
 import 'package:pot_a_gerer/domain/exceptions/preferences_illisibles_exception.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/preferences_repository_impl.dart';
+import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 void main() {
   late AppDatabase db;
@@ -53,6 +56,23 @@ void main() {
     expect(relu.nePasDerangerDebut, '22:00');
     expect(relu.nePasDerangerFin, '07:00');
     expect(relu.notificationsParCategorie, {'arrosage': false, 'semis': true});
+  });
+
+  test('save then load round-trips the units of each quantity', () async {
+    final unites = const PreferencesUnites.uniforme(SystemeUnites.imperial)
+        .avec(GrandeurMesure.temperature, SystemeUnites.metrique);
+    await repo.sauvegarder((await repo.charger()).copierAvec(unites: unites));
+
+    expect((await repo.charger()).unites, unites);
+  });
+
+  test('an unknown unit value is refused by the base', () async {
+    await repo.charger();
+    expect(
+      () => db.customStatement(
+          "UPDATE preferences SET unite_masse = 'inconnue'"),
+      throwsA(anything),
+    );
   });
 
   test('charger returns the default weighting profile', () async {

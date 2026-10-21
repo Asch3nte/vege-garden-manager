@@ -252,9 +252,10 @@ class ChampEmpile extends StatelessWidget {
   }
 }
 
-/// A segmented selector over an enum's values.
+/// A segmented selector over an enum's values; a `null` [valeur] selects
+/// none.
 class ChampSegmente<T> extends StatelessWidget {
-  final T valeur;
+  final T? valeur;
   final List<(T, String)> options;
   final ValueChanged<T> onChanged;
 
@@ -274,8 +275,11 @@ class ChampSegmente<T> extends StatelessWidget {
           for (final (val, lab) in options)
             ButtonSegment(value: val, label: Text(lab)),
         ],
-        selected: {valeur},
-        onSelectionChanged: (s) => onChanged(s.first),
+        selected: {?valeur},
+        emptySelectionAllowed: valeur == null,
+        onSelectionChanged: (s) {
+          if (s.isNotEmpty) onChanged(s.first);
+        },
         showSelectedIcon: false,
       ),
     );

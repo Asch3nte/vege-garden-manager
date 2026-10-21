@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/enums/famille_effet_association.dart';
 import '../../domain/enums/famille_effet_conflit.dart';
+import '../../domain/enums/grandeur_mesure.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
@@ -10,6 +11,7 @@ import '../../domain/enums/poids_association.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/enums/theme_app.dart';
+import '../../domain/value_objects/preferences_unites.dart';
 import '../../domain/value_objects/profil_ponderation_associations.dart';
 import '../providers/repository_providers.dart';
 
@@ -45,9 +47,14 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> definirTheme(ThemeApp theme) =>
       _modifier((p) => p.copierAvec(theme: theme));
 
-  /// Sets the unit system.
-  Future<void> definirUnites(SystemeUnites unites) =>
-      _modifier((p) => p.copierAvec(systemeUnites: unites));
+  /// Sets every quantity to [systeme].
+  Future<void> definirPrereglageUnites(SystemeUnites systeme) => _modifier(
+      (p) => p.copierAvec(unites: PreferencesUnites.uniforme(systeme)));
+
+  /// Sets the unit of a single [grandeur].
+  Future<void> definirUnite(GrandeurMesure grandeur, SystemeUnites systeme) =>
+      _modifier(
+          (p) => p.copierAvec(unites: p.unites.avec(grandeur, systeme)));
 
   /// Sets the list-swipe direction.
   Future<void> definirSensSwipe(SensSwipe sens) =>

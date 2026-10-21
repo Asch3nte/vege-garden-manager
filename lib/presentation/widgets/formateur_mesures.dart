@@ -1,0 +1,124 @@
+import 'package:intl/intl.dart';
+
+import '../../domain/enums/grandeur_mesure.dart';
+import '../../domain/enums/systeme_unites.dart';
+import '../../domain/services/convertisseur_unites.dart';
+import '../../domain/value_objects/preferences_unites.dart';
+import '../../l10n/app_localizations.dart';
+
+/// Formats metric measures in the unit the user chose for each quantity.
+class FormateurMesures {
+  static const _convertisseur = ConvertisseurUnites();
+  static const int _poucesParPied = 12;
+  static const double _oncesParLivre = 16;
+  static const double _oncesLiquidesParGallon = 128;
+  static const double _unitesParKilo = 1000;
+
+  final AppLocalizations _l10n;
+  final PreferencesUnites _unites;
+  final List<NumberFormat?> _formats = [null, null, null];
+
+  FormateurMesures(this._l10n, this._unites);
+
+  bool _imperial(GrandeurMesure g) => _unites.pour(g) == SystemeUnites.imperial;
+
+  /// [valeur] rounded half away from zero to [decimales] (0 to 2).
+  static double _arrondi(double valeur, int decimales) {
+    final facteur = [1, 10, 100][decimales];
+    return (valeur * facteur).round() / facteur;
+  }
+
+  /// [valeur] rounded to [decimales] (0 to 2), in the locale.
+  String _nombre(double valeur, [int decimales = 0]) =>
+      (_formats[decimales] ??= NumberFormat(
+        decimales == 0 ? '0' : '0.${'#' * decimales}',
+        _l10n.localeName,
+      )).format(_arrondi(valeur, decimales));
+
+  String temperature(double celsius) => _imperial(GrandeurMesure.temperature)
+      ? _l10n.mesureFahrenheit(
+          _nombre(_convertisseur.celsiusVersFahrenheit(celsius)),
+        )
+      : _l10n.mesureCelsius(_nombre(celsius));
+
+  /// Degree sign only, for compact weather readings.
+  String temperatureCourte(double celsius) => _l10n.mesureDegres(
+    _nombre(
+      _imperial(GrandeurMesure.temperature)
+          ? _convertisseur.celsiusVersFahrenheit(celsius)
+          : celsius,
+    ),
+  );
+
+  /// A temperature difference, such as the warmth a shelter adds.
+  String ecartTemperature(double celsius) =>
+      _imperial(GrandeurMesure.temperature)
+      ? _l10n.mesureFahrenheit(
+          _nombre(_convertisseur.ecartCelsiusVersFahrenheit(celsius), 1),
+        )
+      : _l10n.mesureCelsius(_nombre(celsius, 1));
+
+  /// Inches (one decimal) under a foot, then feet and inches.
+  String longueurCm(num cm) {
+    if (!_imperial(GrandeurMesure.longueur)) {
+      return _l10n.mesureCm(_nombre(cm.toDouble(), 1));
+    }
+    final enPouces = _convertisseur.centimetresVersPouces(cm.toDouble());
+    if (_arrondi(enPouces, 1) < _poucesParPied) {
+      return _l10n.mesurePouces(_nombre(enPouces, 1));
+    }
+    final pouces = enPouces.round();
+    final pieds = pouces ~/ _poucesParPied;
+    final reste = pouces % _poucesParPied;
+    return reste == 0
+        ? _l10n.mesurePieds('$pieds')
+        : _l10n.mesurePiedsPouces('$pieds', '$reste');
+  }
+
+  String precipitations(double mm) => _imperial(GrandeurMesure.longueur)
+      ? _l10n.mesurePouces(_nombre(_convertisseur.millimetresVersPouces(mm), 2))
+      : _l10n.mesureMm(_nombre(mm, 1));
+
+  String vent(double kmh) => _imperial(GrandeurMesure.longueur)
+      ? _l10n.mesureMph(_nombre(_convertisseur.kmhVersMph(kmh)))
+      : _l10n.mesureKmh(_nombre(kmh));
+
+  /// A watering amount; in imperial, its depth of water (1 L/m² = 1 mm).
+  String arrosage(double litresParM2) => _imperial(GrandeurMesure.longueur)
+      ? _l10n.mesurePouces(
+          _nombre(_convertisseur.millimetresVersPouces(litresParM2), 2),
+        )
+      : _l10n.mesureLitresM2(_nombre(litresParM2, 1));
+
+  String surfaceM2(double m2) => _imperial(GrandeurMesure.surface)
+      ? _l10n.mesureFt2(_nombre(_convertisseur.m2VersFt2(m2), 1))
+      : _l10n.mesureM2(_nombre(m2, 1));
+
+  /// Grams or kilograms; ounces under a pound, then pounds. The unit is
+  /// chosen on the rounded value, so 999.6 g reads « 1 kg ».
+  String masseG(double grammes) {
+    if (_imperial(GrandeurMesure.masse)) {
+      final onces = _convertisseur.grammesVersOnces(grammes);
+      return _arrondi(onces, 1) < _oncesParLivre
+          ? _l10n.mesureOnces(_nombre(onces, 1))
+          : _l10n.mesureLivres(_nombre(onces / _oncesParLivre, 1));
+    }
+    return _arrondi(grammes, 0) < _unitesParKilo
+        ? _l10n.mesureGrammes(_nombre(grammes))
+        : _l10n.mesureKilogrammes(_nombre(grammes / _unitesParKilo, 1));
+  }
+
+  /// Millilitres or litres; fluid ounces under a gallon, then gallons. The
+  /// unit is chosen on the rounded value.
+  String volumeMl(double ml) {
+    if (_imperial(GrandeurMesure.volume)) {
+      final onces = _convertisseur.millilitresVersOncesLiquides(ml);
+      return _arrondi(onces, 1) < _oncesLiquidesParGallon
+          ? _l10n.mesureOncesLiquides(_nombre(onces, 1))
+          : _l10n.mesureGallons(_nombre(onces / _oncesLiquidesParGallon, 1));
+    }
+    return _arrondi(ml, 0) < _unitesParKilo
+        ? _l10n.mesureMillilitres(_nombre(ml))
+        : _l10n.mesureLitres(_nombre(ml / _unitesParKilo, 1));
+  }
+}
