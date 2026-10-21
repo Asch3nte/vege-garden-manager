@@ -9,6 +9,7 @@ import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/preferences_notifier.dart';
 import '../../application/state/catalogue_vue.dart';
+import '../../application/state/contexte_climat.dart';
 import '../../application/state/potager_notifier.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
@@ -587,21 +588,35 @@ class _CarteFiche extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.hub_outlined),
               tooltip: l10n.catalogueAssociations,
-              onPressed: () => afficherVueAssociations(
-                context,
-                fiche,
-                ref.read(catalogueProvider).value?.toutesMeres ??
-                    const <FichePlante>[],
-                onAjouter: onAjouter,
-                // Derived suggestions appear from intermédiaire+,
-                // ranked by the user's weighting profile.
-                acces: ref.read(accesNiveauProvider),
-                profil:
-                    ref.read(preferencesProvider).value?.ponderationAssociations,
-                // Tapping the preferences banner jumps to the weighting page.
-                onOuvrirPreferences: () =>
-                    context.go(RoutesApp.plusPonderation),
-              ),
+              onPressed: () async {
+                final familles = await ref.read(famillesParIdProvider.future);
+                final contexte = await ref.read(contexteClimatProvider.future);
+                final climat = contexte == null || contexte.hemisphereSuppose
+                    ? null
+                    : contexte;
+                if (!context.mounted) return;
+                await afficherVueAssociations(
+                  context,
+                  fiche,
+                  ref.read(catalogueProvider).value?.toutesMeres ??
+                      const <FichePlante>[],
+                  onAjouter: onAjouter,
+                  familles: (brute) =>
+                      familles[FamilleBotanique.normaliserCle(brute)],
+                  hemisphere: climat?.hemisphere,
+                  climat: climat?.climat,
+                  // Derived suggestions appear from intermédiaire+,
+                  // ranked by the user's weighting profile.
+                  acces: ref.read(accesNiveauProvider),
+                  profil: ref
+                      .read(preferencesProvider)
+                      .value
+                      ?.ponderationAssociations,
+                  // Tapping the preferences banner jumps to the weighting page.
+                  onOuvrirPreferences: () =>
+                      context.go(RoutesApp.plusPonderation),
+                );
+              },
             ),
             // The arrow only signals whether varieties exist (expandable) — the
             // count is dropped so every card's right side stays compact.

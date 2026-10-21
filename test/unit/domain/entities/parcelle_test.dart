@@ -115,6 +115,38 @@ void main() {
       );
     });
 
+    test('verifierPlace checks a new plantation against those in place', () {
+      final p = _parcelle(surfaceM2: 2);
+      final enPlace = [
+        _plantation('a', 1.5),
+        _plantation('fini', 2, active: false),
+      ];
+
+      expect(() => p.verifierPlace(_plantation('b', 0.5), enPlace: enPlace),
+          returnsNormally);
+      expect(() => p.verifierPlace(_plantation('c', 1), enPlace: enPlace),
+          throwsA(isA<SurfaceInsuffisanteException>()));
+      expect(
+          () => p.verifierPlace(_plantation('d', 5, active: false),
+              enPlace: enPlace),
+          returnsNormally);
+    });
+
+    test('verifierPlace accepts a parcelle already over-planted only for '
+        'inactive plantations', () {
+      final p = _parcelle(surfaceM2: 1);
+      final enPlace = [_plantation('a', 3)];
+      expect(() => p.verifierPlace(_plantation('b', 0.1), enPlace: enPlace),
+          throwsA(isA<SurfaceInsuffisanteException>()));
+    });
+
+    test('an exact fit is accepted despite float rounding', () {
+      final p = _parcelle(surfaceM2: 1);
+      final enPlace = [_plantation('a', 0.1), _plantation('b', 0.2)];
+      expect(() => p.verifierPlace(_plantation('c', 0.7), enPlace: enPlace),
+          returnsNormally);
+    });
+
     test('remettreEnCours reopens a plantation when there is room', () {
       final p = _parcelle(surfaceM2: 2);
       p.ajouterPlantation(_plantation('fini', 1, active: false));

@@ -122,7 +122,8 @@ class Composition {
             .overrideWith((ref) =>
                 RappelRepositoryImpl(base, lecteur: _lecteur(ref))),
         preferencesRepositoryProvider
-            .overrideWith((ref) => PreferencesRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                PreferencesRepositoryImpl(base, lecteur: _lecteur(ref))),
         fichesPersonnellesChargeesProvider.overrideWith(
           (ref) => FichesPersonnellesLoader(
             ref.watch(fichePlantePersonnelleRepositoryProvider),

@@ -9,8 +9,10 @@ import '../../../domain/enums/niveau_experience.dart';
 import '../../../domain/enums/sens_swipe.dart';
 import '../../../domain/enums/systeme_unites.dart';
 import '../../../domain/enums/theme_app.dart' as prefs_theme;
+import '../../../domain/exceptions/preferences_illisibles_exception.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/libelles_enums.dart';
+import 'enregistreur_preferences.dart';
 import 'widgets_parametres.dart';
 
 /// Category 1 — **Préférences générales**: language, theme, units, swipe
@@ -23,6 +25,7 @@ class PanneauGeneral extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final prefs = ref.watch(preferencesProvider).value;
     final notifier = ref.read(preferencesProvider.notifier);
+    final enregistreur = EnregistreurPreferences.de(context);
 
     if (prefs == null) {
       return PanneauParametres(titre: l10n.categGenerale, enfants: const []);
@@ -38,7 +41,7 @@ class PanneauGeneral extends ConsumerWidget {
               enfant: ChampSegmente<Langue>(
                 valeur: prefs.langue,
                 options: [for (final v in Langue.values) (v, l10n.langue(v))],
-                onChanged: notifier.definirLangue,
+                onChanged: enregistreur.pour(notifier.definirLangue),
               ),
             ),
             ChampEmpile(
@@ -48,7 +51,7 @@ class PanneauGeneral extends ConsumerWidget {
                 options: [
                   for (final v in prefs_theme.ThemeApp.values) (v, l10n.theme(v)),
                 ],
-                onChanged: notifier.definirTheme,
+                onChanged: enregistreur.pour(notifier.definirTheme),
               ),
             ),
             ChampEmpile(
@@ -58,7 +61,7 @@ class PanneauGeneral extends ConsumerWidget {
                 options: [
                   for (final v in SystemeUnites.values) (v, l10n.unites(v)),
                 ],
-                onChanged: notifier.definirUnites,
+                onChanged: enregistreur.pour(notifier.definirUnites),
               ),
             ),
           ],
@@ -74,7 +77,7 @@ class PanneauGeneral extends ConsumerWidget {
                 options: [
                   for (final v in SensSwipe.values) (v, l10n.sensSwipe(v)),
                 ],
-                onChanged: notifier.definirSensSwipe,
+                onChanged: enregistreur.pour(notifier.definirSensSwipe),
               ),
             ),
           ],
@@ -96,6 +99,10 @@ class PanneauGeneral extends ConsumerWidget {
                   final messenger = ScaffoldMessenger.of(context);
                   try {
                     await notifier.definirNiveau(n);
+                  } on PreferencesIllisiblesException {
+                    messenger.showSnackBar(SnackBar(
+                        content: Text(l10n.preferencesIllisiblesRefus)));
+                    return;
                   } on Exception catch (e) {
                     debugPrint('Level change failed: $e');
                     messenger.showSnackBar(SnackBar(

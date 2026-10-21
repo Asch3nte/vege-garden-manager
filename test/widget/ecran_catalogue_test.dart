@@ -60,6 +60,8 @@ void main() {
     Set<String> bons = const {},
     String? parentId,
     String famille = 'Test',
+    Set<UsagePlante> usages = const {UsagePlante.alimentaire},
+    Set<String> repulsifContre = const {},
   }) =>
       FichePlante(
         id: id,
@@ -67,7 +69,8 @@ void main() {
         nomScientifique: '$id sp',
         familleBotanique: famille,
         categorie: cat,
-        usages: const {UsagePlante.alimentaire},
+        usages: usages,
+        repulsifContre: repulsifContre,
         nomsLocalises: {'fr': nomFr},
         besoins: BesoinsCulture(
           eau: BesoinEau.modere,
@@ -100,6 +103,10 @@ void main() {
             famille: 'Lamiaceae'),
         fiche('fraise', 'Fraise', CategoriePlante.petitFruit,
             famille: 'Rosaceae'),
+        fiche('souci', 'Souci', CategoriePlante.aromatique,
+            famille: 'Asteraceae',
+            usages: const {UsagePlante.repulsif},
+            repulsifContre: const {'doryphore'}),
       ],
     );
     when(() => familles.obtenirToutes()).thenAnswer((_) async => [
@@ -256,6 +263,20 @@ void main() {
     expect(find.text('Bons compagnons'), findsOneWidget);
     // "Basilic" now also appears as a companion chip inside the sheet.
     expect(find.text('Basilic'), findsWidgets);
+  });
+
+  testWidgets('the Associations view derives family-based suggestions',
+      (tester) async {
+    await monter(tester);
+
+    await tester.tap(find.descendant(
+        of: find.ancestor(
+            of: find.text('Tomate'), matching: find.byType(Card)),
+        matching: find.byIcon(Icons.hub_outlined)));
+    await tester.pumpAndSettle();
+
+    // Marigold repels the Colorado beetle, a pest of the Solanaceae family.
+    expect(find.text('Éloigne un ravageur'), findsWidgets);
   });
 
   testWidgets('the detail sheet shows the family education section',

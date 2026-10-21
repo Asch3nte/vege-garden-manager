@@ -5,6 +5,7 @@ import '../../../application/state/acces_niveau_provider.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/entities/preferences_utilisateur.dart';
 import '../../../l10n/app_localizations.dart';
+import 'enregistreur_preferences.dart';
 import 'widgets_parametres.dart';
 
 /// A notification category: its stable storage key, icon and label resolver.
@@ -39,6 +40,7 @@ class PanneauNotifications extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final prefs = ref.watch(preferencesProvider).value;
     final notifier = ref.read(preferencesProvider.notifier);
+    final enregistreur = EnregistreurPreferences.de(context);
 
     if (prefs == null) {
       return PanneauParametres(titre: l10n.categNotifications, enfants: const []);
@@ -60,7 +62,8 @@ class PanneauNotifications extends ConsumerWidget {
               label: l10n.notifMaster,
               sousTitre: master ? l10n.notifMasterOn : l10n.notifMasterOff,
               valeur: master,
-              onChanged: notifier.definirNotificationsGlobales,
+              onChanged:
+                  enregistreur.pour(notifier.definirNotificationsGlobales),
             ),
           ],
         ),
@@ -75,7 +78,8 @@ class PanneauNotifications extends ConsumerWidget {
                   valeur: master && _estActive(prefs, cat.cle),
                   // Disabled while the master switch is off.
                   onChanged: master
-                      ? (v) => notifier.definirNotificationCategorie(cat.cle, v)
+                      ? (v) => enregistreur.executer(() =>
+                          notifier.definirNotificationCategorie(cat.cle, v))
                       : null,
                 ),
             ],
@@ -90,24 +94,26 @@ class PanneauNotifications extends ConsumerWidget {
                 label: l10n.notifDnd,
                 sousTitre: l10n.notifDndSousTitre,
                 valeur: prefs.nePasDerangerActif,
-                onChanged: (v) => v
+                onChanged: (v) => enregistreur.executer(() => v
                     ? notifier.definirNePasDeranger(
                         _dndDebutDefaut, _dndFinDefaut)
-                    : notifier.desactiverNePasDeranger(),
+                    : notifier.desactiverNePasDeranger()),
               ),
               if (prefs.nePasDerangerActif) ...[
                 const Divider(height: 1),
                 _LigneHeure(
                   label: l10n.notifDndDebut,
                   heure: prefs.nePasDerangerDebut ?? _dndDebutDefaut,
-                  onChoisir: (h) => notifier.definirNePasDeranger(
-                      h, prefs.nePasDerangerFin ?? _dndFinDefaut),
+                  onChoisir: (h) => enregistreur.executer(() =>
+                      notifier.definirNePasDeranger(
+                          h, prefs.nePasDerangerFin ?? _dndFinDefaut)),
                 ),
                 _LigneHeure(
                   label: l10n.notifDndFin,
                   heure: prefs.nePasDerangerFin ?? _dndFinDefaut,
-                  onChoisir: (h) => notifier.definirNePasDeranger(
-                      prefs.nePasDerangerDebut ?? _dndDebutDefaut, h),
+                  onChoisir: (h) => enregistreur.executer(() =>
+                      notifier.definirNePasDeranger(
+                          prefs.nePasDerangerDebut ?? _dndDebutDefaut, h)),
                 ),
               ],
             ],

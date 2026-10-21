@@ -67,6 +67,14 @@ class PreferencesUtilisateur {
         'do-not-disturb bounds must be both set or both null');
   }
 
+  /// Defaults used when the stored preferences cannot be read: every opt-in
+  /// stays off, so no opt-out the user had chosen can be bypassed.
+  factory PreferencesUtilisateur.prudentes() => PreferencesUtilisateur(
+        notificationsGlobalesActives: false,
+        meteoAutoActive: false,
+        onboardingTermine: true,
+      );
+
   /// Creates a preferences object. All defaults are the "smart defaults" of the
   /// spec (privacy-first: geolocation off, sync off, beginner level).
   factory PreferencesUtilisateur({

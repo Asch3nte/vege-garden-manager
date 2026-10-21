@@ -131,8 +131,30 @@ class Parcelle {
       .fold(Surface.zero, (total, s) => total + s);
 
   /// Surface still free (clamped at zero if over-planted).
-  Surface surfaceLibre() {
-    final occupee = surfaceOccupee();
+  Surface surfaceLibre() => _libreApres(_plantations);
+
+  /// Throws [SurfaceInsuffisanteException] when the active [plantation] does
+  /// not fit beside the plantations [enPlace] of this parcelle.
+  void verifierPlace(Plantation plantation,
+      {required Iterable<Plantation> enPlace}) {
+    if (!plantation.estActive()) return;
+    final libre = _libreApres(enPlace);
+    // Float sums of surfaces must not refuse an exact fit.
+    if (plantation.surfaceOccupee.enMetresCarres >
+        libre.enMetresCarres + _toleranceM2) {
+      throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
+    }
+  }
+
+  /// Rounding slack of a surface comparison (1 mm²).
+  static const double _toleranceM2 = 1e-6;
+
+  /// Surface left free by the active plantations among [plantations].
+  Surface _libreApres(Iterable<Plantation> plantations) {
+    final occupee = plantations
+        .where((p) => p.estActive())
+        .map((p) => p.surfaceOccupee)
+        .fold(Surface.zero, (total, s) => total + s);
     return occupee >= _surface ? Surface.zero : _surface - occupee;
   }
 
@@ -145,12 +167,7 @@ class Parcelle {
       plantation.parcelleId == _id,
       'the plantation must reference this parcelle',
     );
-    if (plantation.estActive()) {
-      final libre = surfaceLibre();
-      if (plantation.surfaceOccupee > libre) {
-        throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
-      }
-    }
+    verifierPlace(plantation, enPlace: _plantations);
     _plantations.add(plantation);
   }
 

@@ -15,10 +15,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 - **Phosphor Icons** : `phosphor_flutter` 2.1.0 ne compile pas (étend `IconData`, devenu `final`). Material en substitut. Options : wrapper local (`.ttf` MIT + `IconData` const) ou version amont compatible. Points de remplacement : `lib/app/router.dart` (`_destinations`), `libelles_enums.dart` (`iconeTypeTache`), icône par catégorie du catalogue.
 - **Dark mode** : valeurs de `CouleursApp.*Sombre` non revalidées (maquettes light uniquement) ; maquetter puis revoir docs/08 §3.
-- **Surface libre non contrôlée à la création** : `CreerPlantation` n'applique pas `Parcelle.ajouterPlantation` → une zone peut être sur-plantée.
-- **Préférences illisibles** : une ligne de préférences invalide héritée bloque encore leur lecture (les autres tables écartent leurs lignes illisibles). Lui substituer des valeurs par défaut écraserait les réglages au prochain enregistrement ; traitement à décider.
-- **Échecs d'enregistrement des préférences non signalés** : les bascules des panneaux Paramètres appellent `PreferencesNotifier` sans gestion d'erreur (seul le changement de niveau est couvert).
-- **`ResolveurFamille`** non transmis à `afficherVueAssociations` (`ecran_catalogue.dart`) → suggestions répulsion/piège inactives.
 
 ## 3. Finitions V1
 

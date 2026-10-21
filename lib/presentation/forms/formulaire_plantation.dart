@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/catalogue_notifier.dart';
@@ -8,6 +9,7 @@ import '../../application/state/plantations_notifier.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/entities/plantation.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
+import '../../domain/exceptions/surface_insuffisante_exception.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
@@ -99,6 +101,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
     setState(() => _planteManquante = _plante == null);
     if (!formOk || _plante == null) return;
 
+    final l10n = AppLocalizations.of(context)!;
     await enregistrer(
         () => ref.read(plantationsProvider(widget.parcelleId).notifier).creer(
               planteId: _plante!.id,
@@ -108,7 +111,12 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
                 double.parse(_surface.text.trim().replaceAll(',', '.')),
               ),
               nombrePieds: int.parse(_pieds.text.trim()),
-            ));
+            ),
+        messageErreur: (e) => e is SurfaceInsuffisanteException
+            ? l10n.plantationSurfaceInsuffisante(
+                NumberFormat('0.##', l10n.localeName)
+                    .format(e.disponible.enMetresCarres))
+            : null);
   }
 
   @override

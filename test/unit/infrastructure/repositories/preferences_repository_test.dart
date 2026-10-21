@@ -1,10 +1,13 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/enums/famille_effet_association.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/poids_association.dart';
 import 'package:pot_a_gerer/domain/enums/theme_app.dart';
+import 'package:pot_a_gerer/domain/exceptions/preferences_illisibles_exception.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/preferences_repository_impl.dart';
 
@@ -95,5 +98,40 @@ void main() {
         (await repo.charger()).copierAvec(theme: ThemeApp.sombre));
     await repo.reinitialiser();
     expect((await repo.charger()).theme, ThemeApp.auto);
+  });
+
+  group('unreadable preferences', () {
+    setUp(() async {
+      await (db.update(db.preferences)
+            ..where((t) => t.id.equals(PreferencesUtilisateur.idSingleton)))
+          .write(const PreferencesCompanion(
+              ponderationAssociations: Value('{"pas du json'),
+              meteoAutoActive: Value(false)));
+    });
+
+    test('load prudent defaults: every opt-in off', () async {
+      final p = await repo.charger();
+
+      expect(await repo.sontIllisibles(), isTrue);
+      expect(p.meteoAutoActive, isFalse);
+      expect(p.notificationsGlobalesActives, isFalse);
+      expect(p.modeGeolocalisation, ModeGeolocalisation.desactivee);
+      expect(p.syncLocaleActive, isFalse);
+      expect(p.onboardingTermine, isTrue);
+    });
+
+    test('are never overwritten', () async {
+      await expectLater(repo.sauvegarder(PreferencesUtilisateur()),
+          throwsA(isA<PreferencesIllisiblesException>()));
+      await expectLater(
+          repo.reinitialiser(), throwsA(isA<PreferencesIllisiblesException>()));
+
+      final ligne = await db.select(db.preferences).getSingle();
+      expect(ligne.ponderationAssociations, '{"pas du json');
+    });
+  });
+
+  test('readable preferences are not reported as unreadable', () async {
+    expect(await repo.sontIllisibles(), isFalse);
   });
 }

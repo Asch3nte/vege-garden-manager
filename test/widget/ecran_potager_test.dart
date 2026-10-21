@@ -19,6 +19,7 @@ import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/exceptions/preferences_illisibles_exception.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
@@ -366,6 +367,30 @@ void main() {
         verify(() => preferences.sauvegarder(captureAny())).captured.single
             as PreferencesUtilisateur;
     expect(saved.potagerActifId, 'pot-2');
+  });
+
+  testWidgets('a refused garden switch is explained', (tester) async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => potagers.obtenirTous())
+        .thenAnswer((_) async => [unPotager(), autrePotager()]);
+    when(() => parcelles.obtenirParPotager(any()))
+        .thenAnswer((_) async => []);
+    when(() => preferences.sauvegarder(any()))
+        .thenThrow(PreferencesIllisiblesException());
+
+    await monter(tester, niveau: NiveauExperience.intermediaire);
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Changer de potager'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Jardin de la grand-mère'));
+    await tester.pumpAndSettle();
+
+    expect(
+        find.text(
+            'Réglage non modifiable : tes préférences enregistrées sont illisibles.'),
+        findsOneWidget);
   });
 
   testWidgets('adding a garden creates it and switches to it', (tester) async {
