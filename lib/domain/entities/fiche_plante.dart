@@ -358,13 +358,10 @@ class FichePlante {
 
   /// Whether the plant is compatible with [typeParcelle].
   ///
-  /// Container types ([TypeParcelle.pot], [TypeParcelle.jardiniere]) are
-  /// rejected when [compatibleHorsSol] is `false`. All other parcelle types
-  /// are always accepted.
-  bool estCompatibleAvec(TypeParcelle typeParcelle) {
-    const contenants = {TypeParcelle.pot, TypeParcelle.jardiniere};
-    return compatibleHorsSol || !contenants.contains(typeParcelle);
-  }
+  /// Containers ([TypeParcelle.solRenouvele]) are rejected when
+  /// [compatibleHorsSol] is `false`; other parcelle types are always accepted.
+  bool estCompatibleAvec(TypeParcelle typeParcelle) =>
+      compatibleHorsSol || !typeParcelle.solRenouvele;
 
   /// Whether this plant benefits from being grown near [planteId].
   bool sAssocieBienAvec(String planteId) =>

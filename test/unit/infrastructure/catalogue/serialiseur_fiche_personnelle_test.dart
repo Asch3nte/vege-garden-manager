@@ -11,6 +11,8 @@ import 'package:pot_a_gerer/infrastructure/catalogue/fiche_plante_validator.dart
 import 'package:pot_a_gerer/infrastructure/catalogue/serialiseur_fiche_personnelle.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../../helpers/champ_yaml.dart';
+
 ModeleFichePersonnelle modele({
   String nomCommunFr = 'Tomate de mémé',
   String? nomCommunEn,
@@ -41,10 +43,6 @@ ModeleFichePersonnelle modele({
       dureeAvantRecolteJoursMax: 90,
       difficulte: difficulte,
     );
-
-/// Value at [cle] of the mapping found at [section] of [m].
-Object? champ(Map<dynamic, dynamic> m, String section, String cle) =>
-    (m[section] as Map<dynamic, dynamic>)[cle];
 
 void main() {
   const serialiseur = SerialiseurFichePersonnelle();

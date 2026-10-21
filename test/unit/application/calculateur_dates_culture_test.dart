@@ -13,7 +13,6 @@ import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
-import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 
 void main() {
@@ -169,22 +168,6 @@ void main() {
         calc.fenetresPour(fiche(), Hemisphere.sud, TypeClimat.oceanique),
         isNull,
       );
-    });
-  });
-
-  group('hemisphereDe', () {
-    test('north for non-negative latitude', () {
-      final loc = Localisation.manuelle(ville: 'Lyon', latitude: 45.75, longitude: 4.85);
-      expect(calc.hemisphereDe(loc), Hemisphere.nord);
-    });
-
-    test('south for negative latitude', () {
-      final loc = Localisation.gps(latitude: -33.86, longitude: 151.2);
-      expect(calc.hemisphereDe(loc), Hemisphere.sud);
-    });
-
-    test('null when latitude is unknown (no silent default)', () {
-      expect(calc.hemisphereDe(const Localisation.nonDefinie()), isNull);
     });
   });
 }

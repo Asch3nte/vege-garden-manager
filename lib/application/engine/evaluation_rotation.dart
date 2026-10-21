@@ -146,7 +146,6 @@ class EvaluationRotation {
           r.motif == MotifRotation.precedentFavorable &&
           r.cultureId == cultureId);
 
-
   DateTime _recul(DateTime date, int annees) =>
       DateTime(date.year - annees, date.month, date.day);
 

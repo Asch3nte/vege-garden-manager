@@ -1,7 +1,3 @@
-// Mappers surface a corrupt stored value as an Error; catching it is limited
-// to the mapping call and always reported.
-// ignore_for_file: avoid_catching_errors
-
 import 'dart:developer' as developer;
 
 import '../../domain/exceptions/invariant_domaine_exception.dart';
@@ -39,9 +35,12 @@ class LecteurLignes {
       _ecarter(table, idDe(ligne), e);
     } on FormatException catch (e) {
       _ecarter(table, idDe(ligne), e);
+      // A corrupt stored value surfaces as an Error from the mapper.
+      // ignore: avoid_catching_errors
     } on ArgumentError catch (e) {
       // An unknown stored enum value.
       _ecarter(table, idDe(ligne), e);
+      // ignore: avoid_catching_errors
     } on TypeError catch (e) {
       // A stored JSON or YAML value of an unexpected shape.
       _ecarter(table, idDe(ligne), e);

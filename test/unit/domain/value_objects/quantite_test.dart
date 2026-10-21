@@ -165,6 +165,18 @@ void main() {
       expect(somme.hashCode, attendu.hashCode);
     });
 
+    test('large amounts and infinity compare without failing', () {
+      final grand = const Quantite(1e7, UniteQuantite.kg) +
+          const Quantite(0.1, UniteQuantite.kg);
+      expect(grand, const Quantite(10000000100, UniteQuantite.g));
+      expect(const Quantite(double.infinity, UniteQuantite.kg),
+          const Quantite(double.infinity, UniteQuantite.g));
+      expect(
+          const Quantite(double.infinity, UniteQuantite.kg) ==
+              const Quantite(1, UniteQuantite.kg),
+          isFalse);
+    });
+
     test('different amounts are not equal', () {
       expect(
         const Quantite(1, UniteQuantite.kg) ==

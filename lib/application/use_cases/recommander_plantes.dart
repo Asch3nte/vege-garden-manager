@@ -178,7 +178,6 @@ class RecommanderPlantes {
         _associations.deriver(actif, candidate).any(fort);
   }
 
-
   /// Species (mother) id behind a plantation's [planteId]: the sheet's
   /// `parentId` when a variety was planted, otherwise [planteId] itself.
   String _mereDe(String planteId, Map<String, FichePlante> parId) =>

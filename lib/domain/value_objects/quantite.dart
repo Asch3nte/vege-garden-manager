@@ -56,18 +56,25 @@ class Quantite {
   Quantite operator -(Quantite autre) =>
       Quantite(_valeur - autre.convertirVers(_unite)._valeur, _unite);
 
-  /// Amount in millionths of the base unit, so float rounding from
-  /// conversions does not break equality.
-  int get _cleEgalite => (_enBase * 1e6).round();
+  /// Relative tolerance absorbing float rounding from conversions.
+  static const double _tolerance = 1e-9;
 
   @override
-  bool operator ==(Object other) =>
-      other is Quantite &&
-      other._unite.nature == _unite.nature &&
-      other._cleEgalite == _cleEgalite;
+  bool operator ==(Object other) {
+    if (other is! Quantite || other._unite.nature != _unite.nature) {
+      return false;
+    }
+    final a = _enBase;
+    final b = other._enBase;
+    if (a == b) return true;
+    if (!a.isFinite || !b.isFinite) return false;
+    final echelle = [a.abs(), b.abs(), 1.0].reduce((x, y) => x > y ? x : y);
+    return (a - b).abs() <= _tolerance * echelle;
+  }
 
+  /// By nature only: a tolerance cannot be hashed by value.
   @override
-  int get hashCode => Object.hash(_unite.nature, _cleEgalite);
+  int get hashCode => _unite.nature.hashCode;
 
   @override
   String toString() => 'Quantite($_valeur ${_unite.name})';

@@ -104,9 +104,7 @@ class EvaluateurRecommandations {
       return null;
     }
     // 7. Container §D
-    if (typeParcelle != null &&
-        typeParcelle.solRenouvele &&
-        !candidate.compatibleHorsSol) {
+    if (typeParcelle != null && !candidate.estCompatibleAvec(typeParcelle)) {
       return null;
     }
 

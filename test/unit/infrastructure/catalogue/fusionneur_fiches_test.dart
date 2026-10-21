@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fusionneur_fiches.dart';
 
-/// Value at [cle] of the mapping found at [section] of [m].
-Object? champ(Map<dynamic, dynamic> m, String section, String cle) =>
-    (m[section] as Map<dynamic, dynamic>)[cle];
+import '../../../helpers/champ_yaml.dart';
 
 void main() {
   const fusionneur = FusionneurFiches();

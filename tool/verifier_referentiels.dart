@@ -87,7 +87,7 @@ Future<RapportReferentiels> verifierReferentiels({
         avertissements.add('${famille.id}: pas de associations_note (fr)');
       }
     } catch (e) {
-      erreurs.add('${f.path}: $e');
+      erreurs.add('${f.path}: ${e is FormatException ? e.message : e}');
     }
   }
 
@@ -117,11 +117,13 @@ Future<RapportReferentiels> verifierReferentiels({
           avertissements.add('bioagresseur $slug: pas de code_eppo');
         }
       } catch (err) {
-        erreurs.add('$bioagresseursFichier ($slug): $err');
+        erreurs.add('$bioagresseursFichier ($slug): '
+            '${err is FormatException ? err.message : err}');
       }
     }
   } catch (e) {
-    erreurs.add('$bioagresseursFichier: $e');
+    erreurs.add(
+        '$bioagresseursFichier: ${e is FormatException ? e.message : e}');
   }
 
   // 3. Referential integrity: family slugs ⟶ reference.

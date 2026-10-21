@@ -24,16 +24,7 @@ class FilesystemFicheAssetSource implements FicheAssetSource {
         .listSync(recursive: true)
         .whereType<File>()
         .map((f) => f.path)
-        .where(estFiche));
-  }
-
-  /// Whether [chemin] is a plant sheet, whatever the platform's separator.
-  static bool estFiche(String chemin) {
-    final p = chemin.replaceAll(r'\', '/');
-    return p.endsWith('.yaml') &&
-        !p.contains('/_schema/') &&
-        !p.contains('/_familles/') &&
-        !p.contains('/_referentiels/');
+        .where(FicheAssetSource.estFiche));
   }
 
   @override

@@ -3,6 +3,16 @@ import 'package:flutter/services.dart';
 /// Abstraction over the source of plant-sheet assets, so the catalogue loader
 /// can be tested without the Flutter asset bundle.
 abstract class FicheAssetSource {
+  /// Whether [chemin] is a plant sheet outside the reserved folders, whatever
+  /// the platform's separator.
+  static bool estFiche(String chemin) {
+    final p = chemin.replaceAll(r'\', '/');
+    return p.endsWith('.yaml') &&
+        !p.contains('/_schema/') &&
+        !p.contains('/_familles/') &&
+        !p.contains('/_referentiels/');
+  }
+
   /// Paths of every plant-sheet YAML file available.
   Future<List<String>> listerCheminsFiches();
 
@@ -23,15 +33,9 @@ class BundleFicheAssetSource implements FicheAssetSource {
   @override
   Future<List<String>> listerCheminsFiches() async {
     final manifest = await AssetManifest.loadFromAssetBundle(_bundle);
-    return manifest
-        .listAssets()
-        .where((p) =>
-            p.startsWith('assets/fiches_plantes/') &&
-            p.endsWith('.yaml') &&
-            !p.contains('/_schema/') &&
-            !p.contains('/_familles/') &&
-            !p.contains('/_referentiels/'))
-        .toList();
+    return List.unmodifiable(manifest.listAssets().where((p) =>
+        p.startsWith('assets/fiches_plantes/') &&
+        FicheAssetSource.estFiche(p)));
   }
 
   @override
