@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/journal_erreurs_chargement.dart';
+import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fiche_asset_source.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -42,10 +44,12 @@ void main() {
       () async {
     final c = ProviderContainer(overrides: [
       ficheAssetSourceProvider.overrideWithValue(_SourceInvalide()),
+      fichesPersonnellesChargeesProvider
+          .overrideWith((ref) async => const <FichePlante>[]),
     ]);
     addTearDown(c.dispose);
 
-    await c.read(catalogueLoaderProvider).charger();
+    await c.read(fichePlanteCacheProvider.future);
 
     expect(c.read(journalErreursChargementProvider).erreurs.single.source,
         'legumes/cassee.yaml');

@@ -1,7 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pot_a_gerer/application/providers/database_providers.dart';
+import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -19,22 +19,21 @@ class MockPotagerRepository extends Mock implements AbstractPotagerRepository {}
 
 void main() {
   ProviderContainer withDb() {
-    final container = ProviderContainer(overrides: [
-      appDatabaseProvider.overrideWithValue(AppDatabase(NativeDatabase.memory())),
-    ]);
+    final db = AppDatabase(NativeDatabase.memory());
+    final container = ProviderContainer(overrides: Composition.surcharges(db));
     addTearDown(() {
-      container.read(appDatabaseProvider).close();
+      db.close();
       container.dispose();
     });
     return container;
   }
 
-  test('appDatabaseProvider must be overridden', () {
+  test('a port without implementation fails explicitly', () {
     final container = ProviderContainer();
     addTearDown(container.dispose);
     // Riverpod 3.x wraps initialisation errors, so match the message instead.
     expect(
-      () => container.read(appDatabaseProvider),
+      () => container.read(potagerRepositoryProvider),
       throwsA(predicate((e) => e.toString().contains('must be overridden'))),
     );
   });
@@ -83,10 +82,16 @@ void main() {
   });
 
   test('fichePlanteRepositoryProvider resolves from the loaded cache', () async {
+    final db = AppDatabase(NativeDatabase.memory());
     final container = ProviderContainer(overrides: [
-      fichePlanteCacheProvider.overrideWith((ref) async => FichePlanteCache(const [])),
+      ...Composition.surcharges(db),
+      fichePlanteCacheProvider
+          .overrideWith((ref) async => FichePlanteCache(const [])),
     ]);
-    addTearDown(container.dispose);
+    addTearDown(() {
+      db.close();
+      container.dispose();
+    });
     final repo = await container.read(fichePlanteRepositoryProvider.future);
     expect(repo, isNotNull);
   });

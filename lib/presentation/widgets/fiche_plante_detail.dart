@@ -945,16 +945,15 @@ class _SectionFamille extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
 
     final famille = ref
-        .watch(familleBotaniqueCacheProvider)
-        .value
-        ?.parId(FamilleBotanique.normaliserCle(fiche.familleBotanique));
+        .watch(famillesParIdProvider)
+        .value?[FamilleBotanique.normaliserCle(fiche.familleBotanique)];
     if (famille == null) return const SizedBox.shrink();
 
-    final bioCache = ref.watch(bioagresseurCacheProvider).value;
+    final bioagresseurs = ref.watch(bioagresseursParIdProvider).value;
     // Clickable chip → the bioaggressor's glossary page (ADR-0017 Lot 3); an
     // unresolved slug stays a plain chip (never a dead link).
     Widget puce(String slug) {
-      final bio = bioCache?.parId(slug);
+      final bio = bioagresseurs?[slug];
       if (bio == null) return Chip(label: Text(slug));
       return PuceTermeGlossaire(
         idTerme: TermeGlossaire.idBioagresseur(bio.id),

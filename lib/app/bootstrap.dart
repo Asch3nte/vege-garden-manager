@@ -6,22 +6,17 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../application/providers/database_providers.dart';
 import '../application/providers/langue_provider.dart';
 import '../application/providers/service_providers.dart';
 import '../infrastructure/database/app_database.dart';
 import '../infrastructure/database/connection/connexion_native.dart';
 import '../infrastructure/services/notification_service_impl.dart';
 import '../l10n/app_localizations.dart';
-import 'textes_notifications_arb.dart';
+import 'composition.dart';
 
 /// Result of a successful [Bootstrap.initialiser]: the opened [database] the app
 /// owns (and must close on shutdown) and a [scopeBuilder] that wraps the app's
 /// root widget in a `ProviderScope` configured with the runtime overrides.
-///
-/// The override list is kept inside [Bootstrap] (inferred) rather than exposed
-/// as a field, because Riverpod does not publish its `Override` type under a
-/// nameable public symbol.
 class ResultatBootstrap {
   /// The opened persistent database, owned by the app.
   final AppDatabase database;
@@ -36,7 +31,7 @@ class ResultatBootstrap {
 /// first frame.
 ///
 /// Responsibilities:
-///  - open the persistent SQLite database and override [appDatabaseProvider];
+///  - open the persistent SQLite database and bind the implementations on it;
 ///  - initialise the timezone database and set the device's local zone, so
 ///    scheduled notifications fire at the right wall-clock time (DST included);
 ///  - initialise the local-notifications plugin.
@@ -55,13 +50,11 @@ class Bootstrap {
     await _initialiserFuseauHoraire();
 
     final overrides = [
-      appDatabaseProvider.overrideWithValue(database),
+      ...Composition.surcharges(database),
       codeLangueSystemeProvider.overrideWithValue(basicLocaleListResolution(
               PlatformDispatcher.instance.locales,
               AppLocalizations.supportedLocales)
           .languageCode),
-      textesNotificationsProvider.overrideWith(
-          (ref) => TextesNotificationsArb(() => ref.read(codeLangueProvider))),
     ];
 
     // Initialise the notification plugin via a throwaway container so we use the

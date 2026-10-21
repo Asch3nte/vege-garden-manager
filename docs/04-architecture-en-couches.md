@@ -154,12 +154,14 @@ Exemple : *l'utilisateur ajoute une plantation*.
 
 ## 6. Injection de dépendances (Riverpod)
 
-- Les **interfaces** du Domain sont fournies via des `Provider` Riverpod, dont
-  l'implémentation pointe vers l'Infrastructure.
-- En **test**, on **override** ces providers avec des mocks (`mocktail`), sans
-  toucher au reste du code → testabilité maximale.
+- Les **interfaces** du Domain sont exposées par des `Provider` Riverpod
+  déclarés dans `application/providers/`, sans implémentation par défaut.
+- La **racine de composition** `lib/app/composition.dart` les branche sur
+  l'Infrastructure au démarrage ([ADR-0021](decisions/0021-racine-de-composition.md)).
+- En **test**, on **override** ces providers avec des mocks (`mocktail`), ou
+  avec `Composition.surcharges(db)` pour les vraies implémentations.
 - Exemple de chaîne : `potagerRepositoryProvider` (Provider d'interface) →
-  retourne `PotagerRepositoryImpl(database)` en prod, ou un mock en test.
+  `PotagerRepositoryImpl(database)` branché par la composition, ou un mock en test.
 
 ## 7. Avantages concrets
 

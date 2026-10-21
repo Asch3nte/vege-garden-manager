@@ -15,7 +15,6 @@ import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:riverpod/riverpod.dart';
@@ -77,10 +76,10 @@ void main() {
     _fiche('tomate', 'solanaceae', delaiRetour: 4),
     _fiche('pois', 'fabaceae', delaiRetour: 3, fixeAzote: true),
   ];
-  final familles = FamilleBotaniqueCache([
+  final familles = [
     _famille('solanaceae', 'Solanacées'),
     _famille('fabaceae', 'Fabacées'),
-  ]);
+  ];
 
   ProviderContainer conteneur(List<Plantation> plantations) {
     final fiches = MockFiches();
@@ -90,7 +89,8 @@ void main() {
         .thenAnswer((_) async => plantations);
     return ProviderContainer(overrides: [
       fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
-      familleBotaniqueCacheProvider.overrideWith((ref) async => familles),
+      famillesParIdProvider
+          .overrideWith((ref) async => {for (final e in familles) e.id: e}),
       plantationRepositoryProvider.overrideWithValue(plants),
       horlogeProvider.overrideWithValue(() => maintenant),
     ]);

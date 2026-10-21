@@ -42,7 +42,6 @@ import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
@@ -500,15 +499,14 @@ void main() {
           meteoServiceProvider.overrideWithValue(meteo),
           tacheRepositoryProvider.overrideWithValue(taches),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
-          familleBotaniqueCacheProvider.overrideWith((ref) async =>
-              FamilleBotaniqueCache([
-                FamilleBotanique(
+          famillesParIdProvider.overrideWith((ref) async => {
+                'solanaceae': FamilleBotanique(
                   id: 'solanaceae',
                   nomScientifique: 'Solanaceae',
                   categories: const {CategoriePlante.legume},
                   nomsLocalises: const {'fr': 'Solanacées'},
                 ),
-              ])),
+              }),
           accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
           horlogeProvider.overrideWithValue(() => maintenant),
         ],

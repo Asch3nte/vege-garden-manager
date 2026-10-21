@@ -24,6 +24,7 @@ import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_bioagresseur.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
@@ -31,8 +32,6 @@ import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_cache.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/main.dart';
 import 'package:pot_a_gerer/presentation/glossaire/ecran_chapitre_glossaire.dart';
@@ -94,6 +93,8 @@ void _taperLien(WidgetTester tester, String texte) {
   expect(recognizer, isNotNull, reason: 'lien « $texte » introuvable');
   recognizer!.onTap!();
 }
+
+class _MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
 
 void main() {
   // --- Standalone harness: the /plus/aide subtree with fixture data. --------
@@ -444,11 +445,13 @@ void main() {
           potagerRepositoryProvider.overrideWithValue(potagers),
           accesNiveauProvider
               .overrideWithValue(AccesNiveau(NiveauExperience.debutant)),
-          // The family education section reads the caches directly.
-          familleBotaniqueCacheProvider
-              .overrideWith((ref) async => FamilleBotaniqueCache(_familles)),
-          bioagresseurCacheProvider
-              .overrideWith((ref) async => BioagresseurCache(_bioagresseurs)),
+          familleBotaniqueRepositoryProvider.overrideWith((ref) async {
+            final familles = _MockFamilles();
+            when(familles.obtenirToutes).thenAnswer((_) async => _familles);
+            return familles;
+          }),
+          bioagresseursParIdProvider.overrideWith(
+              (ref) async => {for (final e in _bioagresseurs) e.id: e}),
           glossaireDonneesProvider.overrideWith((ref) async =>
               (familles: _familles, bioagresseurs: _bioagresseurs)),
         ],

@@ -11,6 +11,7 @@ import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
@@ -22,6 +23,8 @@ class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 class MockPlantations extends Mock implements AbstractPlantationRepository {}
 
 class _FakePlantation extends Fake implements Plantation {}
+
+class _MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
 
 void main() {
   setUpAll(() => registerFallbackValue(_FakePlantation()));
@@ -63,6 +66,11 @@ void main() {
       ProviderScope(
         overrides: [
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          familleBotaniqueRepositoryProvider.overrideWith((ref) async {
+            final familles = _MockFamilles();
+            when(familles.obtenirToutes).thenAnswer((_) async => []);
+            return familles;
+          }),
           plantationRepositoryProvider.overrideWithValue(plantations),
         ],
         child: MaterialApp(
@@ -127,6 +135,11 @@ void main() {
       ProviderScope(
         overrides: [
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
+          familleBotaniqueRepositoryProvider.overrideWith((ref) async {
+            final familles = _MockFamilles();
+            when(familles.obtenirToutes).thenAnswer((_) async => []);
+            return familles;
+          }),
           plantationRepositoryProvider.overrideWithValue(plantations),
         ],
         child: MaterialApp(

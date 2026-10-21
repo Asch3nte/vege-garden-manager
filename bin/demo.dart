@@ -20,8 +20,9 @@
 import 'package:drift/native.dart';
 import 'package:riverpod/riverpod.dart';
 
-import 'package:pot_a_gerer/application/providers/database_providers.dart';
+import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/journal_erreurs_chargement.dart';
 import 'package:pot_a_gerer/application/use_cases/calculer_besoin_arrosage.dart';
 import 'package:pot_a_gerer/application/use_cases/creer_equipement.dart';
 import 'package:pot_a_gerer/application/use_cases/creer_parcelle.dart';
@@ -42,7 +43,6 @@ import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/catalogue_loader.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/filesystem_fiche_asset_source.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 
@@ -60,13 +60,8 @@ Future<void> runDemo() async {
   //  - the catalogue source (rootBundle is Flutter-only) -> the filesystem.
   final container = ProviderContainer(
     overrides: [
-      appDatabaseProvider.overrideWithValue(db),
-      catalogueLoaderProvider.overrideWithValue(
-        CatalogueLoader(
-          FilesystemFicheAssetSource(),
-          (source, erreur) => _print('  ⚠️  fiche ignorée ($source): $erreur'),
-        ),
-      ),
+      ...Composition.surcharges(db),
+      ficheAssetSourceProvider.overrideWithValue(FilesystemFicheAssetSource()),
     ],
   );
 
@@ -82,6 +77,9 @@ Future<void> _executerDemo(ProviderContainer c) async {
   _titre('1. Catalogue YAML (chargé depuis le disque, vrais fichiers)');
   final catalogue = await c.read(fichePlanteRepositoryProvider.future);
   final fiches = await catalogue.obtenirToutes();
+  for (final e in c.read(journalErreursChargementProvider).erreurs) {
+    _print('  ⚠️  fiche ignorée (${e.source}): ${e.erreur}');
+  }
   _print('  ${fiches.length} fiche(s) chargée(s) :');
   for (final f in fiches) {
     _print('    • ${f.nomLocalise('fr')} '
