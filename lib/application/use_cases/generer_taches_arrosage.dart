@@ -184,10 +184,7 @@ class GenererTachesArrosage {
         await _taches.supprimer(t.id);
       }
 
-      // Resolve the crop's common name so the task (and the recap notification)
-      // names *which* plant to water — "Arroser : Tomate" rather than a generic
-      // "Arroser" that reads like a whole-garden chore. Null when the sheet is
-      // missing; the title then falls back to the generic verb.
+      // Crop name for the recap notification; null when the sheet is missing.
       final nom = await _nomPlante(plantation);
 
       // Create only if no task on the target day (completed or not).

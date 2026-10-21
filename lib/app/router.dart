@@ -208,13 +208,13 @@ int _indexBranche(String location) {
 }
 
 /// Replays one step of the cross-branch history: navigates to the previous
-/// screen ([PileNavigation.revenir]) and refreshes its branch. Shared by the
+/// screen ([PileNavigation.precedent]) and refreshes its branch. Shared by the
 /// shell's back handler (branch roots) and every sub-route's [_RetourGlobal]
 /// (deep screens) so the system back button behaves identically everywhere.
 void _retourGlobal(BuildContext context, WidgetRef ref) {
   final notifier = ref.read(pileNavigationProvider.notifier);
   if (!notifier.peutRevenir) return;
-  final precedent = notifier.revenir();
+  final precedent = notifier.precedent;
   _rafraichirBranche(ref, _indexBranche(precedent));
   context.go(precedent);
 }
@@ -344,6 +344,7 @@ final routeurProvider = Provider<GoRouter>((ref) {
                   destinations: _destinations,
                   onSelection: (index) {
                     _rafraichirBranche(ref, index);
+                    ref.read(pileNavigationProvider.notifier).avancer();
                     // Any tab tap returns to that tab's root (docs/15 §8 D
                     // #5/#6): a deep sub-route is replayed via the back button,
                     // never restored by re-selecting the tab.

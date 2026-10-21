@@ -1379,7 +1379,8 @@ Future<void> _supprimerTache(
   final confirme = await confirmerAction(
     context,
     titre: l10n.tacheSupprimerTitre,
-    message: l10n.tacheSupprimerMessage(TitreTache.texte(l10n, tache, null)),
+    message: l10n.tacheSupprimerMessage(TitreTache.texte(
+        l10n, tache, ref.read(calendrierProvider).value?.cibleNom(tache))),
     libelleConfirmer: l10n.actionSupprimer,
     destructif: true,
   );

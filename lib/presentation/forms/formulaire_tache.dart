@@ -131,8 +131,9 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
       final titre = _titre.text.trim();
       tache = Tache(
         id: initial.id,
-        titre: titre.isEmpty && initial.generee ? null : titre,
-        generee: initial.generee,
+        // A generated task given its own title becomes the user's.
+        titre: titre.isEmpty ? null : titre,
+        generee: initial.generee && titre.isEmpty,
         type: _type,
         cible: _cible!.cible,
         cibleId: _cible!.id,

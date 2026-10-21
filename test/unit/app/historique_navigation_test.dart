@@ -42,31 +42,42 @@ void main() {
         [RoutesApp.accueil, RoutesApp.catalogue]);
   });
 
-  test('a requested back move pops instead of pushing a duplicate', () {
+  test('navigating to the entry below the top is a backward move (pop)', () {
     pile.enregistrer(RoutesApp.catalogue);
     pile.enregistrer(RoutesApp.potager);
 
-    pile.enregistrer(pile.revenir());
+    pile.enregistrer(pile.precedent);
     expect(container.read(pileNavigationProvider),
         [RoutesApp.accueil, RoutesApp.catalogue]);
   });
 
-  test('re-tapping the tab below the top is a forward move', () {
+  test('a tab tap to the entry below the top is a forward move', () {
     pile.enregistrer(RoutesApp.catalogue);
 
+    pile.avancer();
     pile.enregistrer(RoutesApp.accueil);
     expect(container.read(pileNavigationProvider),
         [RoutesApp.accueil, RoutesApp.catalogue, RoutesApp.accueil]);
     expect(pile.precedent, RoutesApp.catalogue);
   });
 
-  test('a duplicate event does not consume a pending back move', () {
+  test('a duplicate event does not consume a pending forward move', () {
     pile.enregistrer(RoutesApp.catalogue);
-    final cible = pile.revenir();
 
+    pile.avancer();
     pile.enregistrer(RoutesApp.catalogue);
-    pile.enregistrer(cible);
-    expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
+    pile.enregistrer(RoutesApp.accueil);
+    expect(container.read(pileNavigationProvider),
+        [RoutesApp.accueil, RoutesApp.catalogue, RoutesApp.accueil]);
+  });
+
+  test('the history is capped, dropping the oldest entries', () {
+    for (var i = 0; i < 60; i++) {
+      pile.enregistrer(RoutesApp.zoneDetail('z$i'));
+    }
+    final etat = container.read(pileNavigationProvider);
+    expect(etat, hasLength(50));
+    expect(etat.last, RoutesApp.zoneDetail('z59'));
   });
 
   test('oublier drops a deleted resource and its sub-routes', () {
@@ -106,9 +117,9 @@ void main() {
     pile.enregistrer(RoutesApp.catalogue);
     pile.enregistrer(RoutesApp.potager);
 
-    pile.enregistrer(pile.revenir()); // back → Catalogue
+    pile.enregistrer(pile.precedent); // back → Catalogue
     expect(pile.precedent, RoutesApp.accueil);
-    pile.enregistrer(pile.revenir()); // back → Accueil
+    pile.enregistrer(pile.precedent); // back → Accueil
 
     expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
     expect(pile.peutRevenir, isFalse);
@@ -120,7 +131,7 @@ void main() {
     expect(pile.precedent, RoutesApp.accueil);
 
     // …and a single back returns straight to Accueil.
-    pile.enregistrer(pile.revenir());
+    pile.enregistrer(pile.precedent);
     expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
   });
 

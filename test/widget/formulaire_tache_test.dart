@@ -163,6 +163,28 @@ void main() {
     expect(tache.generee, isTrue);
   });
 
+  testWidgets('a generated task given a title becomes the user\'s',
+      (tester) async {
+    final initiale = Tache(
+      id: 't-8',
+      generee: true,
+      type: TypeTache.arrosage,
+      cible: CibleTache.parcelle,
+      cibleId: 'z-1',
+      datePrevue: DateTime(2026, 6, 12),
+    );
+
+    await monter(tester, tacheInitiale: initiale);
+    await tester.enterText(find.byType(TextFormField).first, 'Arroser au purin');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.titre, 'Arroser au purin');
+    expect(tache.generee, isFalse);
+  });
+
   testWidgets('an empty title blocks saving', (tester) async {
     await monter(tester);
 
