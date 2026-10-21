@@ -411,6 +411,13 @@ extension LibellesEnums on AppLocalizations {
         TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
       };
 
+  /// Label for a growing difficulty from 1 (easy) to 3 (demanding).
+  String difficulte(int n) => switch (n) {
+        1 => difficulteFacile,
+        2 => difficulteMoyen,
+        _ => difficulteExigeant,
+      };
+
   /// Label for a derived-suggestion confidence level.
   String confiance(NiveauConfiance c) => switch (c) {
         NiveauConfiance.faible => confianceFaible,

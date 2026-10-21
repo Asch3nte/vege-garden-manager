@@ -16,7 +16,7 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/fiche_plante_detail.dart';
 
-FichePlante _fiche() => FichePlante(
+FichePlante _fiche({int? difficulte}) => FichePlante(
       id: 'laitue',
       nomScientifique: 'Lactuca sativa',
       familleBotanique: 'Asteraceae',
@@ -35,6 +35,7 @@ FichePlante _fiche() => FichePlante(
       dureeAvantRecolteJoursMax: 60,
       hauteurAdulteCmMin: 15,
       hauteurAdulteCmMax: 30,
+      difficulte: difficulte,
     );
 
 FichePlante _ficheAvecDetail() => FichePlante(
@@ -116,6 +117,21 @@ void main() {
 
     expect(find.text('Lettuce'), findsOneWidget);
     expect(find.text('Laitue'), findsNothing);
+  });
+
+  testWidgets('the sheet shows the growing difficulty when known',
+      (tester) async {
+    await _ouvrir(tester, _fiche(difficulte: 2),
+        niveau: NiveauExperience.debutant);
+
+    expect(find.text('Difficulté'), findsOneWidget);
+    expect(find.text('Moyen'), findsOneWidget);
+  });
+
+  testWidgets('no difficulty fact when the sheet has none', (tester) async {
+    await _ouvrir(tester, _fiche(), niveau: NiveauExperience.debutant);
+
+    expect(find.text('Difficulté'), findsNothing);
   });
 
   group('detailed watering section (acces.eauDetaillee)', () {

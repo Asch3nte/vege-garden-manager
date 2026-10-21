@@ -27,7 +27,10 @@ import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
+import 'package:pot_a_gerer/domain/enums/type_benefice_association.dart';
+import 'package:pot_a_gerer/domain/enums/type_conflit_association.dart';
 import 'package:pot_a_gerer/domain/value_objects/association_benefique.dart';
+import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
@@ -63,6 +66,9 @@ void main() {
     String famille = 'Test',
     Set<UsagePlante> usages = const {UsagePlante.alimentaire},
     Set<String> repulsifContre = const {},
+    List<AssociationBenefique> benefiques = const [],
+    List<AssociationConflit> conflits = const [],
+    int? difficulte,
   }) =>
       FichePlante(
         id: id,
@@ -85,7 +91,10 @@ void main() {
         periodes: const {},
         associationsBenefiques: [
           for (final id in bons) AssociationBenefique(cibleId: id),
+          ...benefiques,
         ],
+        associationsNegatives: conflits,
+        difficulte: difficulte,
       );
 
   setUp(() {
@@ -237,6 +246,21 @@ void main() {
     expect(find.text('Courgette'), findsNothing);
   });
 
+  testWidgets('a card shows the growing difficulty', (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer((_) async => [
+          fiche('tomate', 'Tomate', CategoriePlante.legume, difficulte: 3),
+          fiche('basilic', 'Basilic', CategoriePlante.aromatique),
+        ]);
+    final semantique = tester.ensureSemantics();
+    await monter(tester);
+
+    // The card merges its children's labels into one node.
+    expect(find.bySemanticsLabel(RegExp('Difficulté : Exigeant')),
+        findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('Difficulté')), findsOneWidget);
+    semantique.dispose();
+  });
+
   testWidgets('no match shows the empty state', (tester) async {
     await monter(tester);
 
@@ -264,6 +288,86 @@ void main() {
     expect(find.text('Bons compagnons'), findsOneWidget);
     // "Basilic" now also appears as a companion chip inside the sheet.
     expect(find.text('Basilic'), findsWidgets);
+  });
+
+  group('detail companions with their reason', () {
+    setUp(() {
+      when(() => fiches.obtenirToutes()).thenAnswer(
+        (_) async => [
+          fiche('tomate', 'Tomate', CategoriePlante.legume,
+              famille: 'Solanaceae',
+              benefiques: [
+                AssociationBenefique(
+                  cibleId: 'basilic',
+                  mecanisme: TypeBeneficeAssociation.repulsionRavageur,
+                  raisonI18n: const {'fr': 'Éloigne l\'aleurode.'},
+                ),
+                AssociationBenefique(cibleId: 'souci'),
+                AssociationBenefique(
+                  cibleId: 'courgette',
+                  mecanismes: const {
+                    TypeBeneficeAssociation.couvreSol,
+                    TypeBeneficeAssociation.briseVent,
+                  },
+                ),
+              ],
+              conflits: [
+                AssociationConflit(
+                  cibleId: 'fraise',
+                  mecanisme: TypeConflitAssociation.allelopathie,
+                  raisonI18n: const {'fr': 'Freine la croissance voisine.'},
+                ),
+              ]),
+          fiche('basilic', 'Basilic', CategoriePlante.aromatique,
+              famille: 'Lamiaceae'),
+          fiche('fraise', 'Fraise', CategoriePlante.petitFruit,
+              famille: 'Rosaceae'),
+          fiche('souci', 'Souci', CategoriePlante.aromatique,
+              famille: 'Asteraceae'),
+          fiche('courgette', 'Courgette', CategoriePlante.legume,
+              famille: 'Cucurbitaceae'),
+        ],
+      );
+    });
+
+    Future<void> ouvrirAssociations(WidgetTester tester) async {
+      await monter(tester);
+      await tester.tap(find.text('Tomate'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Freine la croissance voisine.'),
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
+    }
+
+    testWidgets('each companion shows its mechanism and reason',
+        (tester) async {
+      await ouvrirAssociations(tester);
+
+      expect(find.text('Éloigne un ravageur'), findsOneWidget);
+      expect(find.text('Éloigne l\'aleurode.'), findsOneWidget);
+      expect(find.text('Allélopathie'), findsOneWidget);
+      expect(find.text('Freine la croissance voisine.'), findsOneWidget);
+      // A companion without mechanism nor reason is still listed.
+      expect(find.text('Souci'), findsNWidgets(2));
+      // Every declared mechanism gets its tag.
+      expect(find.text('Couvre-sol'), findsOneWidget);
+      expect(find.text('Brise-vent'), findsOneWidget);
+    });
+
+    testWidgets('tapping a companion replaces the sheet with its own',
+        (tester) async {
+      await ouvrirAssociations(tester);
+
+      await tester.tap(find.text('Fraise').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('fraise sp'), findsOneWidget);
+      expect(find.text('tomate sp'), findsNothing);
+      // The reason shows in the banner and in the sheet's own Tomate row.
+      expect(find.text('Freine la croissance voisine.'), findsNWidgets(2));
+    });
   });
 
   testWidgets('the Associations view derives family-based suggestions',

@@ -20,8 +20,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 | Élément | Manque | Où |
 |---|---|---|
 | Unités de mesure | Réglage par grandeur : température (°C/°F), longueur (m/cm ↔ ft/in), surface (m² ↔ ft²), volume (L ↔ gal), masse (kg/g ↔ lb/oz). Le choix « Métrique / Impérial » existe déjà dans Paramètres › Général mais n'a **aucun effet** (stockage métrique inchangé, conversion à l'affichage et à la saisie). | `SystemeUnites` → préférences par grandeur ; formats d'affichage, formulaires, météo, notifications |
-| Sections « Bons compagnons / À éviter » dans la fiche | Sections listées avec raison (la vue Associations les affiche déjà) | `fiche_plante_detail.dart` |
-| Difficulté de culture | Champ présent sur `FichePlante`, non affiché au catalogue | `fiche_plante_detail.dart`, cartes catalogue |
 | Gabarit / hauteur de plante | Champ absent | YAML + `FichePlante` |
 | Favoris | Notion absente | Préférences + persistance |
 | Métadonnées de zone | Dimensions L×l, besoin en eau de zone | `Parcelle` (actuellement `surface` seule) |
