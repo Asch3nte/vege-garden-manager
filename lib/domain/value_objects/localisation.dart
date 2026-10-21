@@ -1,3 +1,4 @@
+import '../enums/hemisphere.dart';
 import '../enums/source_localisation.dart';
 
 /// Immutable value object describing where a potager is located.
@@ -62,6 +63,12 @@ class Localisation {
 
   /// Rounded latitude (~1 km precision), or `null` when undefined.
   double? get latitude => _latitude;
+
+  /// Hemisphere of the latitude, or `null` when undefined.
+  Hemisphere? get hemisphere => switch (_latitude) {
+        null => null,
+        final lat => lat < 0 ? Hemisphere.sud : Hemisphere.nord,
+      };
 
   /// Rounded longitude (~1 km precision), or `null` when undefined.
   double? get longitude => _longitude;

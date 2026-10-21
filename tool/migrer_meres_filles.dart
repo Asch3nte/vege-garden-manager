@@ -198,7 +198,7 @@ String _flowQuoted(Object? v) => v is String
     ? '"${v.replaceAll(r'\', r'\\').replaceAll('"', r'\"')}"'
     : '$v';
 
-String _flowMap(Map m) =>
+String _flowMap(Map<dynamic, dynamic> m) =>
     '{ ${m.entries.map((e) => '${e.key}: ${_flowQuoted(e.value)}').join(', ')} }';
 
 String _folded(String texte, int indent) {
@@ -222,7 +222,7 @@ String _folded(String texte, int indent) {
   return b.toString();
 }
 
-String _dumpMap(Map m, int indent) {
+String _dumpMap(Map<dynamic, dynamic> m, int indent) {
   final pad = '  ' * indent;
   final b = StringBuffer();
   m.forEach((k, v) {
@@ -245,7 +245,7 @@ String _dumpMap(Map m, int indent) {
   return b.toString();
 }
 
-String _dumpListe(String key, List l, int indent) {
+String _dumpListe(String key, List<dynamic> l, int indent) {
   final pad = '  ' * indent;
   if (l.isEmpty) return '$pad$key: []\n';
   if (l.every((e) => e is num)) return '$pad$key: [${l.join(', ')}]\n';
@@ -263,7 +263,7 @@ String _dumpListe(String key, List l, int indent) {
   return b.toString();
 }
 
-String _dumpItemMap(Map m, int indent) {
+String _dumpItemMap(Map<dynamic, dynamic> m, int indent) {
   final pad = '  ' * indent;
   final b = StringBuffer();
   var first = true;
@@ -280,7 +280,7 @@ String _dumpItemMap(Map m, int indent) {
   return b.toString();
 }
 
-Map _reecrireRefs(Map assoc) {
+Map<dynamic, dynamic> _reecrireRefs(Map<dynamic, dynamic> assoc) {
   final out = {};
   for (final section in ['beneficies', 'defavorables']) {
     if (assoc[section] == null) continue;
@@ -299,7 +299,7 @@ Map _reecrireRefs(Map assoc) {
 
 // ── Build ──────────────────────────────────────────────────────────────────
 
-String construireMere(Espece e, Map agro) {
+String construireMere(Espece e, Map<dynamic, dynamic> agro) {
   final fr = (agro['i18n'] as Map)['fr'] as Map;
   final b = StringBuffer()
     ..writeln('# Fiche mère (espèce) — ${e.nomFr}.')
@@ -379,7 +379,7 @@ String construireMere(Espece e, Map agro) {
   return b.toString();
 }
 
-String construireFille(Espece e, Map v) {
+String construireFille(Espece e, Map<dynamic, dynamic> v) {
   final fr = (v['i18n'] as Map)['fr'] as Map;
   final en = (v['i18n'] as Map)['en'] as Map?;
   // When the mother is built from the variety's own sheet (single-variety

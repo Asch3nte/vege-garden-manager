@@ -23,7 +23,7 @@ class ContexteClimat {
   factory ContexteClimat.pour(Potager potager) {
     final latitude = potager.localisation.latitude;
     return ContexteClimat._(
-      (latitude ?? 0) >= 0 ? Hemisphere.nord : Hemisphere.sud,
+      potager.localisation.hemisphere ?? Hemisphere.nord,
       potager.zoneClimatique.type,
       latitude == null,
     );

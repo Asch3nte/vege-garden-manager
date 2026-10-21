@@ -1,12 +1,9 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/entities/plantation.dart';
-import '../../domain/enums/hemisphere.dart';
 import '../../domain/enums/niveau_experience.dart';
-import '../../domain/enums/type_parcelle.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/value_objects/localisation.dart';
@@ -59,13 +56,6 @@ class RecommanderPlantes {
   /// Default return delay (years) when a plant sheet states none.
   static const int delaiRetourDefautAnnees = 3;
 
-  /// Container parcelle types whose soil is routinely renewed → rotation
-  /// relaxed.
-  static const Set<TypeParcelle> _typesSansRotation = {
-    TypeParcelle.pot,
-    TypeParcelle.jardiniere,
-  };
-
   Future<ResultatRecommandations> executer({
     required Parcelle parcelle,
     required ZoneClimatique zoneClimatique,
@@ -76,7 +66,7 @@ class RecommanderPlantes {
   }) async {
     final maintenant = date ?? DateTime.now();
     final profilEff = profil ?? ProfilPonderationAssociations.defaut();
-    final hemisphere = _hemisphereDe(localisation);
+    final hemisphere = localisation.hemisphere;
     final climat = zoneClimatique.type;
 
     final catalogue = await _fiches.obtenirToutes();
@@ -94,7 +84,7 @@ class RecommanderPlantes {
         planteIdsActifs.map((id) => parId[id]).whereType<FichePlante>().toList();
     final surfaceLibre = _surfaceLibre(parcelle, actives);
     final qualitesSol = _sol.qualitesDe(parcelle.texture, parcelle.techniquesSol);
-    final rotationVerifiee = !_typesSansRotation.contains(parcelle.type);
+    final rotationVerifiee = !parcelle.type.solRenouvele;
 
     final recommandations = <RecommandationPlante>[];
     // The engine evaluates at the species level only: candidates are mother
@@ -141,12 +131,6 @@ class RecommanderPlantes {
     );
   }
 
-  Hemisphere? _hemisphereDe(Localisation loc) {
-    final lat = loc.latitude;
-    if (lat == null) return null;
-    return lat < 0 ? Hemisphere.sud : Hemisphere.nord;
-  }
-
   Surface _surfaceLibre(Parcelle parcelle, List<Plantation> actives) {
     final occupee = actives
         .map((p) => p.surfaceOccupee)
@@ -164,14 +148,14 @@ class RecommanderPlantes {
     Map<String, FichePlante> parId,
     DateTime maintenant,
   ) {
-    final famille = _famille(candidate);
+    final famille = candidate.cleFamilleRotation;
     final delai = candidate.delaiRetourAnnees ?? delaiRetourDefautAnnees;
     final seuil =
         DateTime(maintenant.year - delai, maintenant.month, maintenant.day);
 
     for (final p in plantations) {
       final fiche = parId[_mereDe(p.planteId, parId)] ?? parId[p.planteId];
-      if (fiche == null || _famille(fiche) != famille) continue;
+      if (fiche == null || fiche.cleFamilleRotation != famille) continue;
       final reference = p.dateFinReelle ?? p.dateMiseEnPlace;
       if (reference.isAfter(seuil)) return true; // grown too recently
     }
@@ -193,9 +177,6 @@ class RecommanderPlantes {
     return _associations.deriver(candidate, actif).any(fort) ||
         _associations.deriver(actif, candidate).any(fort);
   }
-
-  String _famille(FichePlante fiche) => FamilleBotanique.normaliserCle(
-      fiche.rotationFamille ?? fiche.familleBotanique);
 
   /// Species (mother) id behind a plantation's [planteId]: the sheet's
   /// `parentId` when a variety was planted, otherwise [planteId] itself.

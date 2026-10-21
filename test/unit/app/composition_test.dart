@@ -22,9 +22,9 @@ void main() {
   ProviderContainer withDb() {
     final db = AppDatabase(NativeDatabase.memory());
     final container = ProviderContainer(overrides: Composition.surcharges(db));
-    addTearDown(() {
-      db.close();
+    addTearDown(() async {
       container.dispose();
+      await db.close();
     });
     return container;
   }
@@ -89,9 +89,9 @@ void main() {
       fichePlanteCacheProvider
           .overrideWith((ref) async => FichePlanteCache(const [])),
     ]);
-    addTearDown(() {
-      db.close();
+    addTearDown(() async {
       container.dispose();
+      await db.close();
     });
     final repo = await container.read(fichePlanteRepositoryProvider.future);
     expect(repo, isNotNull);
@@ -100,9 +100,9 @@ void main() {
   test('an unreadable row is set aside and counted in the journal', () async {
     final db = AppDatabase(NativeDatabase.memory());
     final container = ProviderContainer(overrides: Composition.surcharges(db));
-    addTearDown(() {
-      db.close();
+    addTearDown(() async {
       container.dispose();
+      await db.close();
     });
     final repo = container.read(potagerRepositoryProvider);
     for (final id in ['ok', 'ko']) {

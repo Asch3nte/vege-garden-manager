@@ -42,13 +42,6 @@ class EvaluateurRecommandations {
   static const double _poidsSol = 0.4;
   static const double _poidsAssociation = 0.2;
 
-  /// Container types whose renewable soil relaxes rotation but which also
-  /// constrain [FichePlante.compatibleHorsSol].
-  static const Set<TypeParcelle> _typesSansRacines = {
-    TypeParcelle.pot,
-    TypeParcelle.jardiniere,
-  };
-
   /// Maximum difficulty level accepted per [NiveauExperience].
   static int _difficulteMax(NiveauExperience niveau) => niveau.index + 1;
 
@@ -111,9 +104,7 @@ class EvaluateurRecommandations {
       return null;
     }
     // 7. Container §D
-    if (typeParcelle != null &&
-        _typesSansRacines.contains(typeParcelle) &&
-        !candidate.compatibleHorsSol) {
+    if (typeParcelle != null && !candidate.estCompatibleAvec(typeParcelle)) {
       return null;
     }
 

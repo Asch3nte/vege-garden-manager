@@ -1,7 +1,5 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../../domain/entities/famille_botanique.dart';
-import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../engine/evaluation_rotation.dart';
 import '../engine/resultat_rotation.dart';
@@ -107,13 +105,6 @@ class SyntheseRotationZone {
           opportunites.isNotEmpty);
 }
 
-/// Container parcelle types whose renewable soil resets the rotation clock —
-/// mirrors [RecommanderPlantes]/[EvaluateurRecommandations].
-const Set<TypeParcelle> _typesSansRotation = {
-  TypeParcelle.pot,
-  TypeParcelle.jardiniere,
-};
-
 /// Computes the [SyntheseRotationZone] for a plot (`zoneId`, `type`).
 ///
 /// Read-only: resolves the plot's plantation history to mother sheets, then
@@ -121,7 +112,7 @@ const Set<TypeParcelle> _typesSansRotation = {
 final syntheseRotationZoneProvider = FutureProvider.autoDispose
     .family<SyntheseRotationZone, ({String zoneId, TypeParcelle type})>(
   (ref, args) async {
-    final applicable = !_typesSansRotation.contains(args.type);
+    final applicable = !args.type.solRenouvele;
     if (!applicable) {
       return const SyntheseRotationZone(
         applicable: false,
@@ -159,7 +150,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
     // Group history by normalized family.
     final parFamille = <String, List<CulturePrecedente>>{};
     for (final c in historique) {
-      (parFamille[_famille(c.fiche)] ??= []).add(c);
+      (parFamille[c.fiche.cleFamilleRotation] ??= []).add(c);
     }
 
     // Blocked families — the engine decides the rule, dates give the free year.
@@ -198,7 +189,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
     final opportunites = <String, OpportuniteAzoteRotation>{};
     for (final c in historique) {
       if (!c.dateReference.isAfter(seuilRecent)) continue;
-      final f = _famille(c.fiche);
+      final f = c.fiche.cleFamilleRotation;
       final existante = recentesParFamille[f];
       if (existante == null ||
           c.dateReference.isAfter(existante.dateReference)) {
@@ -227,6 +218,3 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
     );
   },
 );
-
-String _famille(FichePlante f) =>
-    FamilleBotanique.normaliserCle(f.rotationFamille ?? f.familleBotanique);

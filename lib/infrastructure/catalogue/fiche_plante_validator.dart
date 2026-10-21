@@ -69,7 +69,7 @@ class FichePlanteValidator {
     final i18n = y['i18n'];
     exiger(i18n is Map && i18n['fr'] is Map, 'i18n.fr is mandatory');
     exiger(
-      (i18n as Map)['fr']['nom_commun'] != null,
+      ((i18n as Map)['fr'] as Map)['nom_commun'] != null,
       'i18n.fr.nom_commun is mandatory',
     );
 
@@ -84,16 +84,15 @@ class FichePlanteValidator {
     exiger(phMin <= phMax, 'ph_min must be <= ph_max');
 
     final cycle = y['cycle'] as Map;
-    exiger(cycle['espacement_cm'] is int && cycle['espacement_cm'] > 0,
+    final espacement = cycle['espacement_cm'];
+    exiger(espacement is int && espacement > 0,
         'cycle.espacement_cm must be a positive integer');
     final duree = cycle['duree_avant_recolte_jours'];
     exiger(
-      duree is List &&
-          duree.length == 2 &&
-          duree[0] is int &&
-          duree[1] is int &&
-          duree[0] > 0 &&
-          duree[0] <= duree[1],
+      switch (duree) {
+        [final int min, final int max] => min > 0 && min <= max,
+        _ => false,
+      },
       'cycle.duree_avant_recolte_jours must be [min, max] with 0 < min <= max',
     );
 
@@ -262,7 +261,7 @@ class FichePlanteValidator {
   /// Validates one associations section (`beneficies` / `defavorables`) against
   /// the [mecanismesValides] enum names (camelCase). [exiger] reports failures.
   void _validerAssociations(
-    Map associations,
+    Map<dynamic, dynamic> associations,
     String section,
     Set<String> mecanismesValides,
     void Function(bool, String) exiger,

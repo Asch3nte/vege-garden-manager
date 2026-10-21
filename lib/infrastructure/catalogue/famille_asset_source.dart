@@ -31,7 +31,7 @@ class BundleFamilleAssetSource implements FamilleAssetSource {
   @override
   Future<List<String>> listerCheminsFamilles() async {
     final manifest = await AssetManifest.loadFromAssetBundle(_bundle);
-    return manifest.listAssets().where(_estFicheFamille).toList();
+    return List.unmodifiable(manifest.listAssets().where(_estFicheFamille));
   }
 
   @override
@@ -52,13 +52,12 @@ class FilesystemFamilleAssetSource implements FamilleAssetSource {
   @override
   Future<List<String>> listerCheminsFamilles() async {
     if (!_racine.existsSync()) return const [];
-    return _racine
+    return List.unmodifiable(_racine
         .listSync(recursive: false)
         .whereType<File>()
         .map((f) => f.path)
         .where((p) =>
-            p.endsWith('.yaml') && !p.endsWith('familles_registry.yaml'))
-        .toList();
+            p.endsWith('.yaml') && !p.endsWith('familles_registry.yaml')));
   }
 
   @override

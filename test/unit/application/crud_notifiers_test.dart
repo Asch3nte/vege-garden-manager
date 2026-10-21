@@ -36,9 +36,9 @@ void main() {
   setUp(() async {
     db = AppDatabase(NativeDatabase.memory());
     container = ProviderContainer(overrides: Composition.surcharges(db));
-    addTearDown(() {
+    addTearDown(() async {
       container.dispose();
-      db.close();
+      await db.close();
     });
     // FK parents: potager -> parcelle -> plantation.
     await db.into(db.potagers).insert(PotagersCompanion.insert(

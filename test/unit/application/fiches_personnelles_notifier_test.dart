@@ -40,9 +40,9 @@ void main() {
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
     container = ProviderContainer(overrides: Composition.surcharges(db));
-    addTearDown(() {
+    addTearDown(() async {
       container.dispose();
-      db.close();
+      await db.close();
     });
   });
 

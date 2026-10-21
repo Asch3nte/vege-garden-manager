@@ -20,16 +20,11 @@ class FilesystemFicheAssetSource implements FicheAssetSource {
   @override
   Future<List<String>> listerCheminsFiches() async {
     if (!_racine.existsSync()) return const [];
-    return _racine
+    return List.unmodifiable(_racine
         .listSync(recursive: true)
         .whereType<File>()
         .map((f) => f.path)
-        .where((p) =>
-            p.endsWith('.yaml') &&
-            !p.contains('/_schema/') &&
-            !p.contains('/_familles/') &&
-            !p.contains('/_referentiels/'))
-        .toList();
+        .where(FicheAssetSource.estFiche));
   }
 
   @override

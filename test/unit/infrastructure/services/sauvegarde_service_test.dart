@@ -43,7 +43,9 @@ void main() {
     final tables = json['tables'] as Map<String, dynamic>;
     expect(tables.keys, contains('potagers'));
     expect(tables.keys, contains('preferences')); // seeded singleton
-    expect((tables['potagers'] as List).single['nom'], 'Jardin');
+    expect(
+        ((tables['potagers'] as List).single as Map<String, dynamic>)['nom'],
+        'Jardin');
   });
 
   test('remplacer wipes current data and restores the backup', () async {

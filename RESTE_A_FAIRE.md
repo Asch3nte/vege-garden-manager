@@ -13,7 +13,6 @@ Détail, fichiers et gravité : [docs/audit-2026-10.md](docs/audit-2026-10.md) (
 
 | Lot | Branche | Contenu |
 |---|---|---|
-| 7 | `chore/qualite` | Lints de fond (`strict-casts`, `strict-raw-types`, `avoid_dynamic_calls`, `discarded_futures`, `only_throw_errors`, `avoid_catching_errors`, `unawaited_futures`) ; listes des repositories via `List.unmodifiable` (#29) ; `Quantite` égalité à tolérance (#30) ; chemins Windows (#34) ; duplications (#35) ; code mort (#27) ; tap raté du test (#28). |
 | 8 | `chore/purge-commentaires` | Retrait des références ADR/docs/lot/§ (701 lignes), commentaires du domaine en anglais, paraphrases supprimées. |
 
 ## 2. Dette technique hors audit

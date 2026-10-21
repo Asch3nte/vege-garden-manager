@@ -25,6 +25,7 @@ BesoinsCulture _besoins() => BesoinsCulture(
 
 FichePlante _fiche({
   String id = 'tomate',
+  String? rotationFamille,
   String? parentId,
   Set<UsagePlante>? usages,
   Map<String, String>? noms,
@@ -45,6 +46,7 @@ FichePlante _fiche({
       parentId: parentId,
       nomScientifique: 'Solanum lycopersicum',
       familleBotanique: 'Solanaceae',
+      rotationFamille: rotationFamille,
       categorie: CategoriePlante.legume,
       usages: usages ?? {UsagePlante.alimentaire},
       nomsLocalises: noms ?? {'fr': 'Tomate', 'en': 'Tomato'},
@@ -252,5 +254,11 @@ void main() {
       expect(_fiche(id: 'tomate') == _fiche(id: 'tomate'), isTrue);
       expect(_fiche(id: 'tomate') == _fiche(id: 'basilic'), isFalse);
     });
+  });
+
+  test('cleFamilleRotation normalizes the rotation family, else the family', () {
+    expect(_fiche().cleFamilleRotation, 'solanaceae');
+    expect(_fiche(rotationFamille: 'Brassicacées').cleFamilleRotation,
+        'brassicacees');
   });
 }

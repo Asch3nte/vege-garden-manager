@@ -88,7 +88,7 @@ void main() {
     await monter(tester);
 
     // Pick the plant from the catalogue dropdown.
-    await tester.tap(find.text('Plante'));
+    await tester.tap(find.byType(DropdownButtonFormField<FichePlante>));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Tomate').last);
     await tester.pumpAndSettle();

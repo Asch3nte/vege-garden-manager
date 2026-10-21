@@ -70,7 +70,9 @@ Future<RapportReferentiels> verifierReferentiels({
       : <File>[]) {
     try {
       final doc = loadYaml(f.readAsStringSync());
-      if (doc is! Map) throw 'the root must be a mapping';
+      if (doc is! Map) {
+        throw const FormatException('the root must be a mapping');
+      }
       valFamille.valider(doc, source: f.path);
       final famille = mapFamille.versEntite(doc);
       familles.add(famille);
@@ -85,7 +87,7 @@ Future<RapportReferentiels> verifierReferentiels({
         avertissements.add('${famille.id}: pas de associations_note (fr)');
       }
     } catch (e) {
-      erreurs.add('${f.path}: $e');
+      erreurs.add('${f.path}: ${e is FormatException ? e.message : e}');
     }
   }
 
@@ -96,13 +98,15 @@ Future<RapportReferentiels> verifierReferentiels({
   try {
     final doc = loadYaml(File(bioagresseursFichier).readAsStringSync());
     if (doc is! Map || doc['bioagresseurs'] is! Map) {
-      throw 'missing "bioagresseurs" mapping';
+      throw const FormatException('missing "bioagresseurs" mapping');
     }
     for (final e in (doc['bioagresseurs'] as Map).entries) {
       final slug = e.key.toString();
       try {
         final entry = e.value;
-        if (entry is! Map) throw 'entry must be a mapping';
+        if (entry is! Map) {
+          throw const FormatException('entry must be a mapping');
+        }
         valBio.valider(slug, entry, source: slug);
         final bio = mapBio.versEntite(slug, entry);
         bioagresseurs.add(bio);
@@ -113,11 +117,13 @@ Future<RapportReferentiels> verifierReferentiels({
           avertissements.add('bioagresseur $slug: pas de code_eppo');
         }
       } catch (err) {
-        erreurs.add('$bioagresseursFichier ($slug): $err');
+        erreurs.add('$bioagresseursFichier ($slug): '
+            '${err is FormatException ? err.message : err}');
       }
     }
   } catch (e) {
-    erreurs.add('$bioagresseursFichier: $e');
+    erreurs.add(
+        '$bioagresseursFichier: ${e is FormatException ? e.message : e}');
   }
 
   // 3. Referential integrity: family slugs ⟶ reference.

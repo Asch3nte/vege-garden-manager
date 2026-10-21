@@ -10,6 +10,7 @@ import '../enums/type_parcelle.dart';
 import '../enums/usage_plante.dart';
 import '../enums/zone_rusticite.dart';
 import '../exceptions/invariant_domaine_exception.dart';
+import 'famille_botanique.dart';
 import '../value_objects/association_benefique.dart';
 import '../value_objects/association_conflit.dart';
 import '../value_objects/besoins_culture.dart';
@@ -269,6 +270,11 @@ class FichePlante {
   int get dureeAvantRecolteJoursMin => _dureeAvantRecolteJoursMin;
   int get dureeAvantRecolteJoursMax => _dureeAvantRecolteJoursMax;
   String? get rotationFamille => _rotationFamille;
+
+  /// Normalized family key used by rotation: [rotationFamille] when set,
+  /// otherwise [familleBotanique].
+  String get cleFamilleRotation =>
+      FamilleBotanique.normaliserCle(_rotationFamille ?? _familleBotanique);
   int? get delaiRetourAnnees => _delaiRetourAnnees;
 
   /// Cultural precedents that make this plant a **good** follower (unmodifiable,
@@ -352,13 +358,10 @@ class FichePlante {
 
   /// Whether the plant is compatible with [typeParcelle].
   ///
-  /// Container types ([TypeParcelle.pot], [TypeParcelle.jardiniere]) are
-  /// rejected when [compatibleHorsSol] is `false`. All other parcelle types
-  /// are always accepted.
-  bool estCompatibleAvec(TypeParcelle typeParcelle) {
-    const contenants = {TypeParcelle.pot, TypeParcelle.jardiniere};
-    return compatibleHorsSol || !contenants.contains(typeParcelle);
-  }
+  /// Containers ([TypeParcelle.solRenouvele]) are rejected when
+  /// [compatibleHorsSol] is `false`; other parcelle types are always accepted.
+  bool estCompatibleAvec(TypeParcelle typeParcelle) =>
+      compatibleHorsSol || !typeParcelle.solRenouvele;
 
   /// Whether this plant benefits from being grown near [planteId].
   bool sAssocieBienAvec(String planteId) =>

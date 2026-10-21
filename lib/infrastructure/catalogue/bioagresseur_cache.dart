@@ -20,5 +20,5 @@ class BioagresseurCache {
 
   /// Bioaggressors of the given [type].
   List<Bioagresseur> parType(TypeBioagresseur type) =>
-      _parId.values.where((b) => b.type == type).toList();
+      List.unmodifiable(_parId.values.where((b) => b.type == type));
 }

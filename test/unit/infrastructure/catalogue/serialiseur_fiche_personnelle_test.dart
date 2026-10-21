@@ -11,6 +11,8 @@ import 'package:pot_a_gerer/infrastructure/catalogue/fiche_plante_validator.dart
 import 'package:pot_a_gerer/infrastructure/catalogue/serialiseur_fiche_personnelle.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../../helpers/champ_yaml.dart';
+
 ModeleFichePersonnelle modele({
   String nomCommunFr = 'Tomate de mémé',
   String? nomCommunEn,
@@ -84,7 +86,8 @@ void main() {
     final map = parse(modele());
     expect(map.containsKey('difficulte'), isFalse);
     expect((map['i18n'] as Map).containsKey('en'), isFalse);
-    expect((map['i18n']['fr'] as Map).containsKey('description'), isFalse);
+    final fr = champ(map, 'i18n', 'fr') as Map<dynamic, dynamic>;
+    expect(fr.containsKey('description'), isFalse);
     expect(map.containsKey('sous_type'), isTrue);
   });
 
@@ -124,7 +127,7 @@ void main() {
 
   test('integral pH values round-trip without spurious decimals', () {
     final map = parse(modele(phMin: 6, phMax: 7));
-    expect(map['besoins']['ph_min'], 6);
-    expect(map['besoins']['ph_max'], 7);
+    expect(champ(map, 'besoins', 'ph_min'), 6);
+    expect(champ(map, 'besoins', 'ph_max'), 7);
   });
 }

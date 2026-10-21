@@ -9,7 +9,6 @@ import '../../domain/enums/type_climat.dart';
 import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/estimation_recolte.dart';
 import '../../domain/value_objects/etat_croissance.dart';
-import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/periodes_culture.dart';
 
 /// Pure engine calculator for cultivation dates.
@@ -86,17 +85,6 @@ class CalculateurDatesCulture {
     TypeClimat climat,
   ) =>
       fiche.periodesPour(hemisphere, climat);
-
-  /// Derives the hemisphere from a location's latitude.
-  ///
-  /// Returns `null` when the latitude is unknown — the engine never invents a
-  /// default. A defined location is expected to be obtained at onboarding (GPS
-  /// or an approximate map pick); see the onboarding requirement.
-  Hemisphere? hemisphereDe(Localisation localisation) {
-    final latitude = localisation.latitude;
-    if (latitude == null) return null;
-    return latitude < 0 ? Hemisphere.sud : Hemisphere.nord;
-  }
 }
 
 /// DI provider for the (stateless) [CalculateurDatesCulture].
