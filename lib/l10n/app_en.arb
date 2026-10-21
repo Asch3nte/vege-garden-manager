@@ -512,6 +512,8 @@
   "formPotagerPositionDetectee": "Climate and hardiness zone pre-filled from your location — adjust if needed.",
   "formPotagerPositionRefusee": "Location permission denied.",
   "formEnregistrementErreur": "Could not save. Please try again.",
+  "preferencesIllisibles": "Your saved preferences could not be read. They are kept as is; prudent settings apply meanwhile (automatic weather and notifications off) and cannot be changed. Importing a backup or resetting replaces them.",
+  "preferencesIllisiblesRefus": "Setting locked: your saved preferences are unreadable.",
   "plantationSurfaceInsuffisante": "Not enough room left in this zone: {libre} m² free.",
   "formPotagerPositionErreur": "Location unavailable (check GPS and permissions).",
   "formPotagerChoisirRegion": "Choose a region",

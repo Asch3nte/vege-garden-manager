@@ -131,3 +131,10 @@ final preferencesProvider =
     AsyncNotifierProvider<PreferencesNotifier, PreferencesUtilisateur>(
   PreferencesNotifier.new,
 );
+
+/// Whether the stored preferences cannot be read (prudent defaults apply and
+/// changes are refused until they are replaced by an import or a reset).
+final preferencesIllisiblesProvider = FutureProvider<bool>((ref) async {
+  await ref.watch(preferencesProvider.future);
+  return ref.watch(preferencesRepositoryProvider).sontIllisibles();
+});

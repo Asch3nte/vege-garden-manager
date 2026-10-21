@@ -36,6 +36,29 @@ class EcranPlus extends ConsumerWidget {
   }
 }
 
+/// Warning shown while the stored preferences cannot be read.
+class _BandeauPreferencesIllisibles extends ConsumerWidget {
+  const _BandeauPreferencesIllisibles();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(preferencesIllisiblesProvider).value != true) {
+      return const SizedBox.shrink();
+    }
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: EspacementsApp.s4),
+      child: Card.outlined(
+        child: ListTile(
+          leading: Icon(Icons.warning_amber_outlined,
+              color: theme.colorScheme.error),
+          title: Text(AppLocalizations.of(context)!.preferencesIllisibles),
+        ),
+      ),
+    );
+  }
+}
+
 /// Settings root: profile header, category list, local-storage footer.
 class _Racine extends StatelessWidget {
   final PreferencesUtilisateur prefs;
@@ -56,6 +79,7 @@ class _Racine extends StatelessWidget {
         EspacementsApp.s6,
       ),
       children: [
+        const _BandeauPreferencesIllisibles(),
         _EnteteProfil(prefs: prefs),
         const SizedBox(height: EspacementsApp.s5),
         LigneCategorie(

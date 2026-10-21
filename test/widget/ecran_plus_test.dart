@@ -15,6 +15,7 @@ import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/exceptions/preferences_illisibles_exception.dart';
 import 'package:pot_a_gerer/domain/enums/langue.dart';
 import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
@@ -53,6 +54,7 @@ void main() {
     when(() => repo.charger())
         .thenAnswer((_) async => PreferencesUtilisateur());
     when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
+    when(() => repo.sontIllisibles()).thenAnswer((_) async => false);
     // No active garden → the privacy panel's position row reads "none".
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
   });
@@ -141,6 +143,25 @@ void main() {
     await tester.tap(find.text('English'));
     await tester.pumpAndSettle();
     expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+  });
+
+  testWidgets('unreadable preferences are announced and stay locked',
+      (tester) async {
+    when(() => repo.sontIllisibles()).thenAnswer((_) async => true);
+    when(() => repo.sauvegarder(any()))
+        .thenThrow(PreferencesIllisiblesException());
+    await monter(tester);
+
+    expect(find.textContaining("n'ont pas pu être lues"), findsOneWidget);
+
+    await tester.tap(find.text('Préférences générales'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('English'));
+    await tester.pumpAndSettle();
+    expect(
+        find.text(
+            'Réglage non modifiable : tes préférences enregistrées sont illisibles.'),
+        findsOneWidget);
   });
 
   testWidgets('a failed notification switch is reported', (tester) async {
