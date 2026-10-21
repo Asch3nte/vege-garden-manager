@@ -15,6 +15,7 @@ import '../../application/state/potager_vue.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../application/state/saison_notifier.dart';
 import '../../domain/entities/potager.dart';
+import '../../domain/exceptions/preferences_illisibles_exception.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_potager.dart';
@@ -222,17 +223,37 @@ Future<void> _choisirPotager(BuildContext context, WidgetRef ref) async {
     builder: (_) =>
         _FeuilleChoixPotager(potagers: potagers, actifId: actif?.id),
   );
-  if (choisi == null || choisi == actif?.id) return;
-  await definirPotagerActif(ref, choisi);
+  if (choisi == null || choisi == actif?.id || !context.mounted) return;
+  await _basculerVers(context, ref, choisi);
+}
+
+/// Makes [potagerId] the active garden, reporting a refused or failed save.
+Future<bool> _basculerVers(
+    BuildContext context, WidgetRef ref, String potagerId) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  try {
+    await definirPotagerActif(ref, potagerId);
+    return true;
+  } on PreferencesIllisiblesException {
+    messenger.showSnackBar(
+        SnackBar(content: Text(l10n.preferencesIllisiblesRefus)));
+  } on Exception catch (e) {
+    debugPrint('Active garden change failed: $e');
+    messenger.showSnackBar(
+        SnackBar(content: Text(l10n.formEnregistrementErreur)));
+  }
+  return false;
 }
 
 /// Creates a new garden and switches to it immediately.
 Future<void> _ajouterPotager(BuildContext context, WidgetRef ref) async {
   final l10n = AppLocalizations.of(context)!;
   final cree = await ouvrirFormulairePotager(context);
-  if (cree == null) return;
-  await definirPotagerActif(ref, cree.id);
-  _confirmer(ref, l10n.snackPotagerCree);
+  if (cree == null || !context.mounted) return;
+  if (await _basculerVers(context, ref, cree.id)) {
+    _confirmer(ref, l10n.snackPotagerCree);
+  }
 }
 
 /// Opens the active garden in the edit form, then refreshes on save.

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
-import '../../application/engine/moteur_derivation_associations.dart';
 import '../../application/providers/repository_providers.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
@@ -505,19 +504,6 @@ class _CarteGroupeState extends State<_CarteGroupe> {
 /// One species row: name, category, sun & water needs; trailing chevron, or an
 /// expand toggle (arrow only — the variety count is dropped) when [onToggle]
 /// is set.
-/// Family lookup for the association engine, from the loaded families.
-ResolveurFamille? _resolveurFamille(WidgetRef ref) {
-  final familles = ref.read(famillesParIdProvider).value;
-  if (familles == null) return null;
-  return (brute) => familles[FamilleBotanique.normaliserCle(brute)];
-}
-
-/// Climate context of the active garden, when its hemisphere is known.
-ContexteClimat? _contexte(WidgetRef ref) {
-  final contexte = ref.read(contexteClimatProvider).value;
-  return contexte == null || contexte.hemisphereSuppose ? null : contexte;
-}
-
 class _CarteFiche extends ConsumerWidget {
   final FichePlante fiche;
   final void Function(FichePlante) onAjouter;
@@ -535,9 +521,6 @@ class _CarteFiche extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Kept loaded for the Associations view opened from this card.
-    ref.watch(famillesParIdProvider);
-    ref.watch(contexteClimatProvider);
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     // Personal sheets are merged into the catalogue: tag them so
@@ -605,24 +588,35 @@ class _CarteFiche extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.hub_outlined),
               tooltip: l10n.catalogueAssociations,
-              onPressed: () => afficherVueAssociations(
-                context,
-                fiche,
-                ref.read(catalogueProvider).value?.toutesMeres ??
-                    const <FichePlante>[],
-                onAjouter: onAjouter,
-                familles: _resolveurFamille(ref),
-                hemisphere: _contexte(ref)?.hemisphere,
-                climat: _contexte(ref)?.climat,
-                // Derived suggestions appear from intermédiaire+,
-                // ranked by the user's weighting profile.
-                acces: ref.read(accesNiveauProvider),
-                profil:
-                    ref.read(preferencesProvider).value?.ponderationAssociations,
-                // Tapping the preferences banner jumps to the weighting page.
-                onOuvrirPreferences: () =>
-                    context.go(RoutesApp.plusPonderation),
-              ),
+              onPressed: () async {
+                final familles = await ref.read(famillesParIdProvider.future);
+                final contexte = await ref.read(contexteClimatProvider.future);
+                final climat = contexte == null || contexte.hemisphereSuppose
+                    ? null
+                    : contexte;
+                if (!context.mounted) return;
+                await afficherVueAssociations(
+                  context,
+                  fiche,
+                  ref.read(catalogueProvider).value?.toutesMeres ??
+                      const <FichePlante>[],
+                  onAjouter: onAjouter,
+                  familles: (brute) =>
+                      familles[FamilleBotanique.normaliserCle(brute)],
+                  hemisphere: climat?.hemisphere,
+                  climat: climat?.climat,
+                  // Derived suggestions appear from intermédiaire+,
+                  // ranked by the user's weighting profile.
+                  acces: ref.read(accesNiveauProvider),
+                  profil: ref
+                      .read(preferencesProvider)
+                      .value
+                      ?.ponderationAssociations,
+                  // Tapping the preferences banner jumps to the weighting page.
+                  onOuvrirPreferences: () =>
+                      context.go(RoutesApp.plusPonderation),
+                );
+              },
             ),
             // The arrow only signals whether varieties exist (expandable) — the
             // count is dropped so every card's right side stays compact.

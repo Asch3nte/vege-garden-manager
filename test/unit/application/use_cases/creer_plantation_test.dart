@@ -6,6 +6,7 @@ import 'package:pot_a_gerer/domain/entities/plantation.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
+import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/exceptions/surface_insuffisante_exception.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
@@ -69,6 +70,13 @@ void main() {
 
   test('refuses a plantation that does not fit, without saving', () async {
     await expectLater(creer(1), throwsA(isA<SurfaceInsuffisanteException>()));
+    verifyNever(() => plantations.sauvegarder(any()));
+  });
+
+  test('refuses a plantation on an unreadable zone, without saving', () async {
+    when(() => parcelles.obtenirParId('z1')).thenAnswer((_) async => null);
+
+    await expectLater(creer(0.1), throwsA(isA<InvariantDomaineException>()));
     verifyNever(() => plantations.sauvegarder(any()));
   });
 }

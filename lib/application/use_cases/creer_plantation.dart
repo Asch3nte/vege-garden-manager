@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/plantation.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
+import '../../domain/exceptions/invariant_domaine_exception.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/value_objects/surface.dart';
@@ -41,7 +42,9 @@ class CreerPlantation {
       nombrePieds: nombrePieds,
     );
     final parcelle = await _parcelles.obtenirParId(parcelleId);
-    parcelle?.verifierPlace(plantation,
+    InvariantDomaineException.verifier(
+        parcelle != null, 'the parcelle $parcelleId cannot be read');
+    parcelle!.verifierPlace(plantation,
         enPlace: await _repo.obtenirParParcelle(parcelleId));
     await _repo.sauvegarder(plantation);
     return plantation;

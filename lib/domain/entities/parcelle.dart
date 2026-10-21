@@ -139,10 +139,15 @@ class Parcelle {
       {required Iterable<Plantation> enPlace}) {
     if (!plantation.estActive()) return;
     final libre = _libreApres(enPlace);
-    if (plantation.surfaceOccupee > libre) {
+    // Float sums of surfaces must not refuse an exact fit.
+    if (plantation.surfaceOccupee.enMetresCarres >
+        libre.enMetresCarres + _toleranceM2) {
       throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
     }
   }
+
+  /// Rounding slack of a surface comparison (1 mm²).
+  static const double _toleranceM2 = 1e-6;
 
   /// Surface left free by the active plantations among [plantations].
   Surface _libreApres(Iterable<Plantation> plantations) {
@@ -162,12 +167,7 @@ class Parcelle {
       plantation.parcelleId == _id,
       'the plantation must reference this parcelle',
     );
-    if (plantation.estActive()) {
-      final libre = surfaceLibre();
-      if (plantation.surfaceOccupee > libre) {
-        throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
-      }
-    }
+    verifierPlace(plantation, enPlace: _plantations);
     _plantations.add(plantation);
   }
 

@@ -9,6 +9,7 @@ import '../../../domain/enums/niveau_experience.dart';
 import '../../../domain/enums/sens_swipe.dart';
 import '../../../domain/enums/systeme_unites.dart';
 import '../../../domain/enums/theme_app.dart' as prefs_theme;
+import '../../../domain/exceptions/preferences_illisibles_exception.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/libelles_enums.dart';
 import 'enregistreur_preferences.dart';
@@ -98,6 +99,10 @@ class PanneauGeneral extends ConsumerWidget {
                   final messenger = ScaffoldMessenger.of(context);
                   try {
                     await notifier.definirNiveau(n);
+                  } on PreferencesIllisiblesException {
+                    messenger.showSnackBar(SnackBar(
+                        content: Text(l10n.preferencesIllisiblesRefus)));
+                    return;
                   } on Exception catch (e) {
                     debugPrint('Level change failed: $e');
                     messenger.showSnackBar(SnackBar(

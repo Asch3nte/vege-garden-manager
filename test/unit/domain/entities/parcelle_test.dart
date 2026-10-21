@@ -140,6 +140,13 @@ void main() {
           throwsA(isA<SurfaceInsuffisanteException>()));
     });
 
+    test('an exact fit is accepted despite float rounding', () {
+      final p = _parcelle(surfaceM2: 1);
+      final enPlace = [_plantation('a', 0.1), _plantation('b', 0.2)];
+      expect(() => p.verifierPlace(_plantation('c', 0.7), enPlace: enPlace),
+          returnsNormally);
+    });
+
     test('remettreEnCours reopens a plantation when there is room', () {
       final p = _parcelle(surfaceM2: 2);
       p.ajouterPlantation(_plantation('fini', 1, active: false));
