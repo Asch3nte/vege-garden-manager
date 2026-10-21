@@ -70,7 +70,9 @@ Future<RapportReferentiels> verifierReferentiels({
       : <File>[]) {
     try {
       final doc = loadYaml(f.readAsStringSync());
-      if (doc is! Map) throw 'the root must be a mapping';
+      if (doc is! Map) {
+        throw const FormatException('the root must be a mapping');
+      }
       valFamille.valider(doc, source: f.path);
       final famille = mapFamille.versEntite(doc);
       familles.add(famille);
@@ -96,13 +98,15 @@ Future<RapportReferentiels> verifierReferentiels({
   try {
     final doc = loadYaml(File(bioagresseursFichier).readAsStringSync());
     if (doc is! Map || doc['bioagresseurs'] is! Map) {
-      throw 'missing "bioagresseurs" mapping';
+      throw const FormatException('missing "bioagresseurs" mapping');
     }
     for (final e in (doc['bioagresseurs'] as Map).entries) {
       final slug = e.key.toString();
       try {
         final entry = e.value;
-        if (entry is! Map) throw 'entry must be a mapping';
+        if (entry is! Map) {
+          throw const FormatException('entry must be a mapping');
+        }
         valBio.valider(slug, entry, source: slug);
         final bio = mapBio.versEntite(slug, entry);
         bioagresseurs.add(bio);

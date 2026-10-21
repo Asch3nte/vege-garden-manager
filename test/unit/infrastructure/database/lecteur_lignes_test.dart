@@ -15,7 +15,7 @@ void main() {
         'invariant' => throw InvariantDomaineException('bad'),
         'enum' => throw ArgumentError.value(ligne),
         'date' => throw const FormatException('bad date'),
-        'json' => (<Object>[1] as dynamic).cast<String>().first.length,
+        'json' => (ligne as Object) as int,
         _ => ligne.length,
       };
 

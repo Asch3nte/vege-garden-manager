@@ -42,6 +42,10 @@ ModeleFichePersonnelle modele({
       difficulte: difficulte,
     );
 
+/// Value at [cle] of the mapping found at [section] of [m].
+Object? champ(Map<dynamic, dynamic> m, String section, String cle) =>
+    (m[section] as Map<dynamic, dynamic>)[cle];
+
 void main() {
   const serialiseur = SerialiseurFichePersonnelle();
   // Personal ids use their own namespace, not the canonical catalogue format.
@@ -84,7 +88,8 @@ void main() {
     final map = parse(modele());
     expect(map.containsKey('difficulte'), isFalse);
     expect((map['i18n'] as Map).containsKey('en'), isFalse);
-    expect((map['i18n']['fr'] as Map).containsKey('description'), isFalse);
+    final fr = champ(map, 'i18n', 'fr') as Map<dynamic, dynamic>;
+    expect(fr.containsKey('description'), isFalse);
     expect(map.containsKey('sous_type'), isTrue);
   });
 
@@ -124,7 +129,7 @@ void main() {
 
   test('integral pH values round-trip without spurious decimals', () {
     final map = parse(modele(phMin: 6, phMax: 7));
-    expect(map['besoins']['ph_min'], 6);
-    expect(map['besoins']['ph_max'], 7);
+    expect(champ(map, 'besoins', 'ph_min'), 6);
+    expect(champ(map, 'besoins', 'ph_max'), 7);
   });
 }

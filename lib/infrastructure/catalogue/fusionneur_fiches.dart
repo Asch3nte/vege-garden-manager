@@ -29,7 +29,8 @@ class FusionneurFiches {
   /// tweak a single sub-field while inheriting its siblings. Non-overridable
   /// fields ([champsNonSurchargeables]) are forced from the mother. `id`,
   /// `parent_id` and the version fields stay the variety's.
-  Map<dynamic, dynamic> fusionner(Map mere, Map fille) {
+  Map<dynamic, dynamic> fusionner(
+      Map<dynamic, dynamic> mere, Map<dynamic, dynamic> fille) {
     final resultat = _fusionnerMaps(mere, fille);
     for (final cle in champsNonSurchargeables) {
       if (mere.containsKey(cle)) {
@@ -43,7 +44,8 @@ class FusionneurFiches {
 
   /// Deep-merges [surcouche] over [base] into a fresh map (recursing into nested
   /// mappings; scalars and lists are replaced wholesale).
-  Map<dynamic, dynamic> _fusionnerMaps(Map base, Map surcouche) {
+  Map<dynamic, dynamic> _fusionnerMaps(
+      Map<dynamic, dynamic> base, Map<dynamic, dynamic> surcouche) {
     final out = <dynamic, dynamic>{
       for (final e in base.entries) e.key: _copierProfond(e.value),
     };

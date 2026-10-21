@@ -17,9 +17,9 @@ void main() {
     final db = AppDatabase(NativeDatabase.memory());
     final container =
         ProviderContainer(overrides: Composition.surcharges(db));
-    addTearDown(() {
-      db.close();
+    addTearDown(() async {
       container.dispose();
+      await db.close();
     });
     return container;
   }

@@ -25,7 +25,7 @@ class BioagresseursLoader {
   /// Loads every reference entry and returns the populated cache.
   Future<BioagresseurCache> charger() async {
     final bioagresseurs = <Bioagresseur>[];
-    Map entries;
+    Map<dynamic, dynamic> entries;
     try {
       final contenu = await _source.lireReferentiel();
       final doc = loadYaml(contenu);

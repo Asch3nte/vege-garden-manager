@@ -29,7 +29,9 @@ class FamilleBotaniqueMapper {
 
   /// Collects a per-locale string field from the `i18n` map (block scalars are
   /// trimmed of trailing newlines).
-  Map<String, String> _champLocalise(Map i18n, String cle) => {
+  Map<String, String> _champLocalise(
+          Map<dynamic, dynamic> i18n, String cle) =>
+      {
         for (final entry in i18n.entries)
           if ((entry.value as Map)[cle] != null)
             entry.key.toString(): ((entry.value as Map)[cle] as String).trim(),

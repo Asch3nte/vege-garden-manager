@@ -1,6 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fusionneur_fiches.dart';
 
+/// Value at [cle] of the mapping found at [section] of [m].
+Object? champ(Map<dynamic, dynamic> m, String section, String cle) =>
+    (m[section] as Map<dynamic, dynamic>)[cle];
+
 void main() {
   const fusionneur = FusionneurFiches();
 
@@ -38,8 +42,8 @@ void main() {
       expect(fusion['id'], 'LEG-001-V001');
       expect(fusion['parent_id'], 'LEG-001');
       // Inherited verbatim.
-      expect(fusion['cycle']['espacement_cm'], 60);
-      expect(fusion['besoins']['temperature_optimale'], 22);
+      expect(champ(fusion, 'cycle', 'espacement_cm'), 60);
+      expect(champ(fusion, 'besoins', 'temperature_optimale'), 22);
     });
 
     test('deep-merges nested mappings (overrides one sub-field, keeps siblings)',
@@ -50,8 +54,9 @@ void main() {
         'besoins': {'temperature_optimale': 24},
       });
 
-      expect(fusion['besoins']['temperature_optimale'], 24); // overridden
-      expect(fusion['besoins']['arrosage'], 'eleve'); // sibling preserved
+      // Overridden, sibling preserved.
+      expect(champ(fusion, 'besoins', 'temperature_optimale'), 24);
+      expect(champ(fusion, 'besoins', 'arrosage'), 'eleve');
     });
 
     test('forces non-overridable fields from the mother', () {
@@ -67,8 +72,8 @@ void main() {
 
       expect(fusion['categorie'], 'legume');
       expect(fusion['usages'], ['alimentaire']);
-      expect(fusion['rotation']['famille'], 'solanaceae');
-      expect((fusion['associations']['beneficies'] as List), hasLength(1));
+      expect(champ(fusion, 'rotation', 'famille'), 'solanaceae');
+      expect(champ(fusion, 'associations', 'beneficies') as List, hasLength(1));
     });
 
     test('the merged map is mutable (plain Map/List, not Yaml nodes)', () {

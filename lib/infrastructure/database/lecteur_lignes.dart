@@ -1,3 +1,7 @@
+// Mappers surface a corrupt stored value as an Error; catching it is limited
+// to the mapping call and always reported.
+// ignore_for_file: avoid_catching_errors
+
 import 'dart:developer' as developer;
 
 import '../../domain/exceptions/invariant_domaine_exception.dart';

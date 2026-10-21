@@ -164,21 +164,22 @@ class FichePlanteMapper {
     );
   }
 
-  Map<String, String> _nomsLocalises(Map i18n) => {
+  Map<String, String> _nomsLocalises(Map<dynamic, dynamic> i18n) => {
         for (final entry in i18n.entries)
           if ((entry.value as Map)['nom_commun'] != null)
             entry.key.toString(): (entry.value as Map)['nom_commun'] as String,
       };
 
   /// Localized descriptions (YAML block scalars), trimmed of trailing newlines.
-  Map<String, String> _descriptions(Map i18n) => {
+  Map<String, String> _descriptions(Map<dynamic, dynamic> i18n) => {
         for (final entry in i18n.entries)
           if ((entry.value as Map)['description'] != null)
             entry.key.toString():
                 ((entry.value as Map)['description'] as String).trim(),
       };
 
-  Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _periodes(Map? periodes) {
+  Map<Hemisphere, Map<TypeClimat, PeriodesCulture>> _periodes(
+      Map<dynamic, dynamic>? periodes) {
     if (periodes == null) return const {};
     return {
       for (final hemiEntry in periodes.entries)
@@ -193,7 +194,7 @@ class FichePlanteMapper {
     };
   }
 
-  PeriodesCulture _periodesCulture(Map m) => PeriodesCulture(
+  PeriodesCulture _periodesCulture(Map<dynamic, dynamic> m) => PeriodesCulture(
         semisInterieur: _periode(m['semis_interieur']),
         semisExterieur: _periode(m['semis_exterieur']),
         plantation: _periode(m['plantation']),
@@ -205,7 +206,7 @@ class FichePlanteMapper {
 
   /// Beneficial associations (`associations.beneficies[]`) as typed value
   /// objects, carrying the optional `type` mechanism and the localised reason.
-  List<AssociationBenefique> _benefices(Map y) {
+  List<AssociationBenefique> _benefices(Map<dynamic, dynamic> y) {
     final liste = _sectionAssociations(y, 'beneficies');
     return [
       for (final e in liste)
@@ -219,7 +220,7 @@ class FichePlanteMapper {
 
   /// Conflicting associations (`associations.defavorables[]`) as typed value
   /// objects.
-  List<AssociationConflit> _conflits(Map y) {
+  List<AssociationConflit> _conflits(Map<dynamic, dynamic> y) {
     final liste = _sectionAssociations(y, 'defavorables');
     return [
       for (final e in liste)
@@ -239,14 +240,17 @@ class FichePlanteMapper {
     return {for (final t in tokens) _enum(valeurs, t as String)};
   }
 
-  Iterable<Map> _sectionAssociations(Map y, String section) {
+  Iterable<Map<dynamic, dynamic>> _sectionAssociations(
+      Map<dynamic, dynamic> y, String section) {
     final associations = y['associations'] as Map?;
     final liste = associations?[section] as Iterable?;
-    return liste == null ? const <Map>[] : liste.cast<Map>();
+    return liste == null
+        ? const <Map<dynamic, dynamic>>[]
+        : liste.cast<Map<dynamic, dynamic>>();
   }
 
   /// Localised reason map (`{fr:, en:}`), dropping null entries.
-  Map<String, String> _raisonI18n(Map? m) => m == null
+  Map<String, String> _raisonI18n(Map<dynamic, dynamic>? m) => m == null
       ? const {}
       : {
           for (final entry in m.entries)

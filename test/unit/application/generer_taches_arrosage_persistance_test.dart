@@ -17,6 +17,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/application/use_cases/calculer_besoin_arrosage.dart';
 import 'package:pot_a_gerer/application/use_cases/generer_taches_arrosage.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
+import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
@@ -189,7 +190,7 @@ void main() {
   });
   tearDown(() => db.close());
 
-  Future<List<dynamic>> tachesDeLaPlantation() =>
+  Future<List<Tache>> tachesDeLaPlantation() =>
       taches.obtenirParCible(CibleTache.plantation, 'p-1');
 
   test('generates exactly one watering task, on today (local day)', () async {
