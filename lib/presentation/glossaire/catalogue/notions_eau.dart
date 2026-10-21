@@ -8,8 +8,8 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Eau & arrosage » chapter of the notion catalogue (ADR-0017 Lot 4): the
-/// smart-watering vocabulary (ADR-0015) — needs, urgency, drought tolerance,
+/// « Eau & arrosage » chapter of the notion catalogue: the
+/// smart-watering vocabulary — needs, urgency, drought tolerance,
 /// reference evapotranspiration.
 List<TermeGlossaire> construireNotionsEau(AppLocalizations l10n) => [
       TermeGlossaire(

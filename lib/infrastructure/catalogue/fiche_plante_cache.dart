@@ -4,7 +4,7 @@ import '../../domain/enums/usage_plante.dart';
 
 /// In-memory store of the loaded plant sheets, indexed by id for instant access.
 ///
-/// Pipeline step 5 (see `docs/07-base-de-connaissances-yaml.md` §6). On a
+/// Pipeline step 5. On a
 /// duplicate id the last sheet wins (personal sheets, loaded after the embedded
 /// ones, take precedence — ADR-0002 A6).
 class FichePlanteCache {
@@ -22,7 +22,7 @@ class FichePlanteCache {
   /// Sheet with [id], or `null` if absent.
   FichePlante? parId(String id) => _parId[id];
 
-  /// Mother sheets only — species level, varieties excluded (ADR-0005). The
+  /// Mother sheets only — species level, varieties excluded. The
   /// list and network catalogue views build on this.
   List<FichePlante> meres() =>
       List.unmodifiable(_parId.values.where((f) => f.estMere));

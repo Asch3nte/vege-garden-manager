@@ -3,8 +3,7 @@ import '../enums/sens_association.dart';
 import '../value_objects/association_benefique.dart';
 import '../value_objects/association_conflit.dart';
 
-/// The kind of companion-planting relationship between two plant sheets
-/// (ADR-0008).
+/// The kind of companion-planting relationship between two plant sheets.
 enum TypeCompagnonnage {
   /// Good companions — they benefit from being grown near each other.
   bon,
@@ -17,7 +16,7 @@ enum TypeCompagnonnage {
 }
 
 /// A resolved companion paired with the typed [association] that links it to the
-/// centre sheet — its mechanism and localised reason (ADR-0010). Used by views
+/// centre sheet — its mechanism and localised reason. Used by views
 /// to *explain* the relationship, not only list it.
 ///
 /// [association] is always present: a companion only appears because some sheet
@@ -44,9 +43,9 @@ class CompagnonAvecRaison<A> {
 /// A sheet's companions within a catalogue, split by relationship kind.
 ///
 /// Both lists are immutable. The numbers and the names a view shows derive from
-/// the same object, so the Réseau and the detail sheet can never drift apart
-/// (ADR-0008). Each companion carries its typed association so a view can show
-/// *why* (ADR-0010); [bons]/[aEviter] expose the bare sheets for callers that
+/// the same object, so the Réseau and the detail sheet can never drift apart.
+/// Each companion carries its typed association so a view can show
+/// *why*; [bons]/[aEviter] expose the bare sheets for callers that
 /// only need the names.
 class CompagnonsResolus {
   final List<CompagnonAvecRaison<AssociationBenefique>> _bons;
@@ -87,7 +86,7 @@ class CompagnonsResolus {
 
 /// Resolves companion-planting associations between plant sheets under a single
 /// canonical semantic, shared by every view so their counts and lists always
-/// coincide (ADR-0008):
+/// coincide:
 ///
 /// - **Bidirectional** — the relation holds as soon as *either* sheet declares
 ///   it; source data is often filled on one side only.
@@ -123,7 +122,7 @@ class ResolveurCompagnonnage {
   AssociationConflit? conflitEntre(FichePlante a, FichePlante b) =>
       a.associationConflitAvec(b.id) ?? b.associationConflitAvec(a.id);
 
-  /// Direction of the **beneficial** relation seen from [centre] (ADR-0012):
+  /// Direction of the **beneficial** relation seen from [centre]:
   /// [SensAssociation.donne] when only [centre]'s sheet declares it,
   /// [SensAssociation.recoit] when only [autre]'s does, [SensAssociation.mutuel]
   /// when both. `null` when no benefit is declared either way.
@@ -131,7 +130,7 @@ class ResolveurCompagnonnage {
       _sens(centre.associationBenefiqueAvec(autre.id) != null,
           autre.associationBenefiqueAvec(centre.id) != null);
 
-  /// Direction of the **conflicting** relation seen from [centre] (ADR-0012),
+  /// Direction of the **conflicting** relation seen from [centre],
   /// with the same rule as [sensBenefice].
   SensAssociation? sensConflit(FichePlante centre, FichePlante autre) =>
       _sens(centre.associationConflitAvec(autre.id) != null,

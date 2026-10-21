@@ -65,7 +65,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   final _surface = TextEditingController(text: '1');
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
-  // Soil fields (ADR-0009): techniques are intermediate+, texture/pH expert.
+  // Soil fields: techniques are intermediate+, texture/pH expert.
   // Edited only when the level unlocks them; otherwise preserved as-is.
   TextureSol? _texture;
   PhSol? _ph;
@@ -145,7 +145,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    // Soil controls are gated by the experience level (ADR-0009); hidden values
+    // Soil controls are gated by the experience level; hidden values
     // are preserved (reversibility), never wiped.
     final acces = ref.watch(accesNiveauProvider);
 
@@ -214,7 +214,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
               ],
               onChanged: (v) => setState(() => _exposition = v!),
             ),
-            // Soil techniques — intermediate+ (ADR-0009).
+            // Soil techniques — intermediate+.
             if (acces.techniquesSol) ...[
               const SizedBox(height: EspacementsApp.s5),
               Row(
@@ -247,7 +247,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
                 ],
               ),
             ],
-            // Soil texture + pH — expert (ADR-0009).
+            // Soil texture + pH — expert.
             if (acces.solTexturePh) ...[
               const SizedBox(height: EspacementsApp.s4),
               DropdownButtonFormField<TextureSol?>(

@@ -10,7 +10,7 @@ import 'recherche_glossaire.dart';
 import 'terme_glossaire.dart';
 import 'type_terme_glossaire.dart';
 
-/// Builds the complete glossary (ADR-0017, D1): one term per botanical family
+/// Builds the complete glossary: one term per botanical family
 /// and per bioaggressor — **derived** from the YAML references, never copied —
 /// plus the static notion catalogue (`construireNotions`).
 ///
@@ -43,7 +43,7 @@ List<TermeGlossaire> construireGlossaire({
         complements: [
           ComplementFamille(
             famille: famille,
-            // Referential integrity (ADR-0006 Lot 4) guarantees every slug
+            // Referential integrity guarantees every slug
             // resolves to a bioaggressor, hence to a glossary term.
             idsMaladies: [
               for (final slug in famille.maladiesCommunes)

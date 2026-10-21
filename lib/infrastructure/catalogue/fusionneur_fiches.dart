@@ -9,7 +9,7 @@ class FusionneurFiches {
   const FusionneurFiches();
 
   /// Fields a variety can never override — they belong to the species and are
-  /// always taken from the mother (ADR-0005). Declaring them on a variety has no
+  /// always taken from the mother. Declaring them on a variety has no
   /// effect.
   static const Set<String> champsNonSurchargeables = {
     'categorie',

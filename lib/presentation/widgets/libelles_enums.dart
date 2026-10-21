@@ -157,7 +157,7 @@ extension LibellesEnums on AppLocalizations {
         NiveauExperience.expert => niveauExpert,
       };
 
-  /// One-line description of what an experience level unlocks (ADR-0009).
+  /// One-line description of what an experience level unlocks.
   String niveauDescription(NiveauExperience n) => switch (n) {
         NiveauExperience.debutant => niveauDebutantDesc,
         NiveauExperience.intermediaire => niveauIntermediaireDesc,
@@ -378,7 +378,7 @@ extension LibellesEnums on AppLocalizations {
         StadeCroissance.recolte => stadeRecolte,
       };
 
-  /// Label for a beneficial-association mechanism (ADR-0010).
+  /// Label for a beneficial-association mechanism.
   String mecanismeBenefice(TypeBeneficeAssociation m) => switch (m) {
         TypeBeneficeAssociation.tuteurStructurel => assocMecaTuteurStructurel,
         TypeBeneficeAssociation.etagementLumiere => assocMecaEtagementLumiere,
@@ -398,7 +398,7 @@ extension LibellesEnums on AppLocalizations {
           assocMecaSuccessionTemporelle,
       };
 
-  /// Label for a conflicting-association mechanism (ADR-0010).
+  /// Label for a conflicting-association mechanism.
   String mecanismeConflit(TypeConflitAssociation m) => switch (m) {
         TypeConflitAssociation.memeFamilleRavageurs =>
           assocMecaMemeFamilleRavageurs,
@@ -410,14 +410,14 @@ extension LibellesEnums on AppLocalizations {
         TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
       };
 
-  /// Label for a derived-suggestion confidence level (ADR-0010).
+  /// Label for a derived-suggestion confidence level.
   String confiance(NiveauConfiance c) => switch (c) {
         NiveauConfiance.faible => confianceFaible,
         NiveauConfiance.moyen => confianceMoyen,
         NiveauConfiance.eleve => confianceEleve,
       };
 
-  /// Label for an association effect family (ADR-0011).
+  /// Label for an association effect family.
   String familleEffet(FamilleEffetAssociation f) => switch (f) {
         FamilleEffetAssociation.gainDePlace => familleEffetGainDePlace,
         FamilleEffetAssociation.protectionRavageurs =>
@@ -427,14 +427,14 @@ extension LibellesEnums on AppLocalizations {
         FamilleEffetAssociation.couvertureAbri => familleEffetCouvertureAbri,
       };
 
-  /// Label for an association **conflict** effect family (ADR-0014).
+  /// Label for an association **conflict** effect family.
   String familleEffetConflit(FamilleEffetConflit f) => switch (f) {
         FamilleEffetConflit.concurrenceRessources => familleConflitConcurrence,
         FamilleEffetConflit.risqueSanitaire => familleConflitSanitaire,
         FamilleEffetConflit.allelopathie => familleConflitAllelopathie,
       };
 
-  /// Label for an association weight level (ADR-0011).
+  /// Label for an association weight level.
   String poids(PoidsAssociation p) => switch (p) {
         PoidsAssociation.ignore => poidsIgnore,
         PoidsAssociation.faible => poidsFaible,
@@ -442,7 +442,7 @@ extension LibellesEnums on AppLocalizations {
         PoidsAssociation.fort => poidsFort,
       };
 
-  /// Label for a plant's root system (ADR-0014).
+  /// Label for a plant's root system.
   String enracinement(EnracinementPlante e) => switch (e) {
         EnracinementPlante.superficiel => enracinementSuperficiel,
         EnracinementPlante.moyen => enracinementMoyen,

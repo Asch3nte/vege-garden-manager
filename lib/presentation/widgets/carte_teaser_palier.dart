@@ -7,7 +7,7 @@ import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
 import 'libelles_enums.dart';
 
-/// A contextual **level-up teaser** (ADR-0009 §4b): a small, dismissable card
+/// A contextual **level-up teaser**: a small, dismissable card
 /// shown on a gated screen to a user below the unlocking level. It names the
 /// locked [feature], the [niveauRequis] that opens it, and offers a one-tap
 /// "learn more" that jumps to the **Guide des niveaux** (mini-tuto §4a). Never a

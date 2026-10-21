@@ -8,8 +8,6 @@ import 'potager_exception.dart';
 /// The optional [cause] carries the underlying error for diagnostics; it is
 /// never shown to the user (user-facing messages are localised at the
 /// presentation layer).
-///
-/// See `docs/05-modele-de-domaine.md` §8.
 class MeteoIndisponibleException extends PotagerException {
   /// The underlying error, when this exception wraps one (network/parse error).
   final Object? cause;

@@ -7,7 +7,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Outils & équipements » chapter of the catalogue (ADR-0017 Lot 4): **one
+/// « Outils & équipements » chapter of the catalogue: **one
 /// page per [TypeEquipement] value** (D1/annexe A), plus the equipment-state
 /// scale. [TypeEquipement.autre] is the only value without a page — it names
 /// nothing concrete to explain.

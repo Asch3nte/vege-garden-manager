@@ -12,7 +12,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Sol & terre » chapter of the notion catalogue (ADR-0017 Lot 4).
+/// « Sol & terre » chapter of the notion catalogue.
 ///
 /// Per the D1 granularity rule, concrete objects get **one page per value**:
 /// each soil texture and each soil technique has its own page; scales (pH,

@@ -12,7 +12,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Cultures & plantes » chapter of the notion catalogue (ADR-0017 Lot 4):
+/// « Cultures & plantes » chapter of the notion catalogue:
 /// the enum-backed notions of the plant/plantation lifecycle. Value labels
 /// reuse `LibellesEnums` when the app already displays them; glossary-only
 /// labels live under the `glossaireVal*` ARB keys.

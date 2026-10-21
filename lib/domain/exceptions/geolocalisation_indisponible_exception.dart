@@ -4,8 +4,6 @@ import 'potager_exception.dart';
 /// off, permission was denied, or the platform query failed.
 ///
 /// The optional [cause] carries the underlying error for diagnostics.
-///
-/// See `docs/05-modele-de-domaine.md` §8.
 class GeolocalisationIndisponibleException extends PotagerException {
   /// The underlying platform error, when this wraps one.
   final Object? cause;

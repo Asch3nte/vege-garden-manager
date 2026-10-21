@@ -67,7 +67,7 @@ abstract final class RayonsApp {
   static const BorderRadius brXl = BorderRadius.all(xl);
 }
 
-/// Phosphor-aligned icon sizes (`docs/08-design-system.md` §7).
+/// Phosphor-aligned icon sizes.
 ///
 /// The default everywhere is [md] (20). A bare icon must always carry a label or
 /// tooltip — enforce that at the call site, not here.

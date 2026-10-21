@@ -39,7 +39,7 @@ class ParametresLayoutAssoc {
   });
 }
 
-/// Pure, deterministic ego-layout for the Associations view (ADR-0012).
+/// Pure, deterministic ego-layout for the Associations view.
 ///
 /// Concentric **rings per half-plane** (good left, to-avoid right): each ring is
 /// filled to capacity (how many node-boxes fit in its 180° at that radius), the

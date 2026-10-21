@@ -25,7 +25,7 @@ import '../../domain/value_objects/precedent_cultural.dart';
 
 /// Maps a validated plant-sheet map into a domain [FichePlante].
 ///
-/// Pipeline step 4 (see `docs/07-base-de-connaissances-yaml.md` §6). Assumes the
+/// Pipeline step 4. Assumes the
 /// map has already passed `FichePlanteValidator`. snake_case YAML values are
 /// converted to camelCase enum names; `[min, max]` month lists become `Periode`.
 class FichePlanteMapper {
@@ -74,7 +74,7 @@ class FichePlanteMapper {
       associationsNegatives: _conflits(y),
       rotationFamille: rotation?['famille'] as String?,
       delaiRetourAnnees: rotation?['delai_retour_annees'] as int?,
-      // Rotation avancée (Lot 2) — typed cultural precedents, normalized.
+      // Rotation avancée — typed cultural precedents, normalized.
       precedentsFavorables: _precedents(rotation?['precedents_favorables']),
       precedentsDefavorables: _precedents(rotation?['precedents_defavorables']),
       // Enrichissement §A
@@ -233,7 +233,7 @@ class FichePlanteMapper {
   }
 
   /// Parses an association `type:` that is **a single token or a list** of
-  /// tokens (ADR-0012) into a set of enum values (empty when absent).
+  /// tokens into a set of enum values (empty when absent).
   Set<T> _typesAssociation<T extends Enum>(Object? type, List<T> valeurs) {
     if (type == null) return const {};
     final tokens = type is Iterable ? type : [type];

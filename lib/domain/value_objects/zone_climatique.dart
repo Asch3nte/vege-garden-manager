@@ -9,7 +9,6 @@ import '../enums/zone_rusticite.dart';
 /// manually.
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §4.6.
 ///
 /// Note: `compatibleAvec(...)` and `dateDernierGelEstimee(...)` are deliberately
 /// not implemented here. Their precise rules depend on context the VO does not

@@ -52,7 +52,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   }
 
   /// Sets the family sub-filter (`null` = all families of the category) and
-  /// re-filters (ADR-0006).
+  /// re-filters.
   void definirFamille(String? familleId) {
     _famille = familleId;
     state = AsyncData(_projeter());
@@ -111,7 +111,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
 
   /// Family chips for the selected category: the botanical families present
   /// among that category's species, resolved to their entity (for localized
-  /// names) and ordered by name. Empty when no category is selected (ADR-0006).
+  /// names) and ordered by name. Empty when no category is selected.
   List<FamilleBotanique> _famillesDeCategorie(List<FichePlante> meres) {
     if (_categorie == null) return const [];
     final cles = <String>{

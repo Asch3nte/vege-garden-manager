@@ -182,7 +182,7 @@ class PanneauConfidentialite extends ConsumerWidget {
             ),
             ...groupePotager,
             for (final p in autresPotagers) _GroupePotagerAutre(potager: p),
-            // Auto weather-fetch opt-out (docs/11): off → no automatic Open-Meteo
+            // Auto weather-fetch opt-out: off → no automatic Open-Meteo
             // call, home weather card hidden, detail screen refreshes manually.
             RangeeInterrupteur(
               icone: Icons.cloud_outlined,
@@ -198,7 +198,7 @@ class PanneauConfidentialite extends ConsumerWidget {
               valeur: prefs.syncLocaleActive,
               onChanged: notifier.definirSyncLocale,
             ),
-            // Lunar calendar is an intermediate+ option (ADR-0009).
+            // Lunar calendar is an intermediate+ option.
             if (acces.calendrierLunaire)
               RangeeInterrupteur(
                 icone: Icons.nightlight_outlined,

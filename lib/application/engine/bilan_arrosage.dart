@@ -55,7 +55,7 @@ class BilanArrosage {
   /// Default delay (days) attached to a "soon" advice.
   static const int joursAvantArrosageBientot = 2;
 
-  // --- Temperature factor thresholds (ADR-0015 Décision 1) ---
+  // --- Temperature factor thresholds ---
 
   /// tempMax (°C) at which evapotranspiration starts to noticeably increase.
   static const double seuilTempChaudeC = 25.0;
@@ -90,13 +90,13 @@ class BilanArrosage {
   /// Reference ET₀ (mm/day) for a typical temperate summer day.
   static const double referenceET0Mm = 5.0;
 
-  /// Drought-tolerance demand multipliers (ADR-0015 Décision 4).
+  /// Drought-tolerance demand multipliers.
   static const double facteurSecheresseFaible = 1.2;
   static const double facteurSecheresseForte = 0.8;
 
   /// Plant-specific temperature override: if [tempMax] exceeds the plant's
   /// [temperatureMaxTolerance], the heatwave factor is applied regardless of
-  /// the generic tier (ADR-0015 Décision 4).
+  /// the generic tier.
   static double _facteurTemperatureEffectif(
       double? tempMax, double? temperatureMaxTolerance) {
     if (tempMax == null) return 1.0;
@@ -108,7 +108,7 @@ class BilanArrosage {
   }
 
   /// ET₀-based demand factor: replaces the temperature heuristic when ET₀
-  /// data is available from Open-Meteo (ADR-0015 Décision 5).
+  /// data is available from Open-Meteo.
   /// [et0Mm] is the reference evapotranspiration in mm/day.
   static double facteurET0(double et0Mm) =>
       (et0Mm / referenceET0Mm).clamp(0.5, 2.5);

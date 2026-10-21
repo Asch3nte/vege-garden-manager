@@ -117,7 +117,7 @@ class EvaluateurRecommandations {
     final scoreSol = _scoreSol(candidate.besoins.qualitesSol, qualitesSol);
     final associationBenefique =
         planteIdsActifs.any(candidate.sAssocieBienAvec);
-    // Curated good association wins; a derived one (ADR-0010) is a softer bonus.
+    // Curated good association wins; a derived one is a softer bonus.
     final associationDerivee =
         !associationBenefique && associationDeriveeFavorable;
     final scoreAssociation = associationBenefique

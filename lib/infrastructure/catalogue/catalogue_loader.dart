@@ -17,9 +17,9 @@ class _FicheBrute {
 /// Orchestrates the catalogue loading pipeline in **two passes**:
 /// list → read → parse (pass 1), then resolve species/variety inheritance →
 /// validate → map → cache (pass 2). The second pass needs every mother sheet
-/// already parsed, hence the split (ADR-0005).
+/// already parsed, hence the split.
 ///
-/// Robustness (see `docs/07-base-de-connaissances-yaml.md` §6): a corrupt or
+/// Robustness: a corrupt or
 /// orphan sheet is reported through [_onErreur] and **skipped** — the app never
 /// crashes.
 class CatalogueLoader {

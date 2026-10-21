@@ -39,12 +39,12 @@ import 'package:riverpod/riverpod.dart';
 /// notification (category `'arrosage'`) is scheduled at 08:00 — never one per
 /// plant (minimise spam) — carrying the crop names in its title (with a "+N"
 /// overflow marker) and the full list in its body (maximum detail). It does
-/// nothing if 08:00 has already passed (ADR-0015).
+/// nothing if 08:00 has already passed.
 ///
 /// The notification id is **day-scoped** (`arrosage_<yyyy-MM-dd>`), so re-running
 /// rewrites the pending notification with an up-to-date list instead of stacking
-/// duplicates, and a day that no longer needs any watering **cancels** it
-/// (ADR-0020). Crops the user has already ticked off are excluded from the count.
+/// duplicates, and a day that no longer needs any watering **cancels** it.
+/// Crops the user has already ticked off are excluded from the count.
 ///
 /// The push notification honours the user's notification **opt-outs** (docs/11,
 /// absolute constraint #3): it is suppressed when the master switch is off, when
@@ -217,7 +217,7 @@ class GenererTachesArrosage {
     // notification opt-outs (constraint #3). The tasks themselves are always
     // created above — opt-outs mute the notification, not the gardening plan.
     // Called even with nothing to water: the day-scoped id must then be
-    // cancelled rather than left pending (ADR-0020).
+    // cancelled rather than left pending.
     await _programmerRecap(
       aArroserAujourdhui,
       debutJour,
@@ -263,7 +263,7 @@ class GenererTachesArrosage {
   /// five identical pings. The id is **day-scoped** (`arrosage_<yyyy-MM-dd>`), so
   /// re-running rewrites the pending notification with an up-to-date list rather
   /// than stacking duplicates — and a day with nothing left to water **cancels**
-  /// it (ADR-0020). The cancellation goes through regardless of the time of day;
+  /// it. The cancellation goes through regardless of the time of day;
   /// scheduling does nothing once 08:00 has passed.
   ///
   /// To limit spam to a single notification while still being specific, the crop

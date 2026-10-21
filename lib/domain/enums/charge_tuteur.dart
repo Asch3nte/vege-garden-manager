@@ -1,4 +1,4 @@
-/// How heavy a climbing plant is for the support it grows on (ADR-0010, Lot 2).
+/// How heavy a climbing plant is for the support it grows on.
 ///
 /// Lets the `tuteurStructurel` association rule pick a support strong enough for
 /// the climber (e.g. a pole bean is light, a running squash is heavy). When a

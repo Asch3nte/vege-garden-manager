@@ -24,11 +24,11 @@ import '../value_objects/precedent_cultural.dart';
 ///
 /// `FichePlante` is an immutable catalogue **entity** (identity by [id]; the id
 /// is the YAML `id:`, snake_case). Domain names are kept in French; the code is
-/// documented in English. See `docs/05-modele-de-domaine.md` §3.6.
+/// documented in English.
 class FichePlante {
   final String _id;
   // Parent species id when this sheet is a variety (cultivar); `null` on a
-  // mother sheet (species level). See ADR-0005.
+  // mother sheet (species level).
   final String? _parentId;
   final String _nomScientifique;
   final String _familleBotanique;
@@ -45,7 +45,7 @@ class FichePlante {
   final List<AssociationConflit> _associationsNegatives;
   final String? _rotationFamille;
   final int? _delaiRetourAnnees;
-  // Rotation avancée (Lot 1) — typed cultural precedents (families or
+  // Rotation avancée — typed cultural precedents (families or
   // functional groups). Empty when the sheet declares none.
   final Set<PrecedentCultural> _precedentsFavorables;
   final Set<PrecedentCultural> _precedentsDefavorables;
@@ -250,7 +250,7 @@ class FichePlante {
 
   String get id => _id;
 
-  /// Parent species id when this sheet is a variety, else `null` (ADR-0005).
+  /// Parent species id when this sheet is a variety, else `null`.
   String? get parentId => _parentId;
 
   /// Whether this sheet is a variety/cultivar (it inherits from a mother sheet).
@@ -324,7 +324,7 @@ class FichePlante {
   /// when unspecified (the engine then approximates it).
   ChargeTuteur? get chargeTuteur => _chargeTuteur;
 
-  /// Root system (depth/shape), or `null` when unspecified (ADR-0014). Drives
+  /// Root system (depth/shape), or `null` when unspecified. Drives
   /// the soil-loosening rule and refines root competition.
   EnracinementPlante? get enracinement => _enracinement;
 
@@ -335,7 +335,7 @@ class FichePlante {
 
   /// Plant-specific heat-stress threshold (°C), or `null` when unspecified.
   /// When [tempMax] reaches this value the heatwave multiplier is applied
-  /// regardless of the generic tier (ADR-0015 Décision 4).
+  /// regardless of the generic tier.
   double? get temperatureMaxTolerance => _temperatureMaxTolerance;
 
   /// Common name for [locale], falling back to French (always present).
@@ -372,7 +372,7 @@ class FichePlante {
       _associationsNegatives.any((a) => a.cibleId == planteId);
 
   /// The beneficial association this plant declares towards [planteId], or
-  /// `null` when none is declared (ADR-0010). Lets callers read the mechanism
+  /// `null` when none is declared. Lets callers read the mechanism
   /// and reason behind a "good companion" relation.
   AssociationBenefique? associationBenefiqueAvec(String planteId) {
     for (final a in _associationsBenefiques) {
@@ -382,7 +382,7 @@ class FichePlante {
   }
 
   /// The conflicting association this plant declares towards [planteId], or
-  /// `null` when none is declared (ADR-0010).
+  /// `null` when none is declared.
   AssociationConflit? associationConflitAvec(String planteId) {
     for (final a in _associationsNegatives) {
       if (a.cibleId == planteId) return a;
@@ -393,10 +393,10 @@ class FichePlante {
   /// Whether the plant has the given functional [usage].
   bool aUsage(UsagePlante usage) => _usages.contains(usage);
 
-  /// Whether the plant repels the bioaggressor [slug] (ADR-0010 Lot 2).
+  /// Whether the plant repels the bioaggressor [slug].
   bool repousse(String slug) => _repulsifContre.contains(slug);
 
-  /// Whether the plant traps the bioaggressor [slug] as a decoy (ADR-0010 Lot 2).
+  /// Whether the plant traps the bioaggressor [slug] as a decoy.
   bool piege(String slug) => _piegeA.contains(slug);
 
   @override

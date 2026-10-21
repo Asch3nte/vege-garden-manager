@@ -4,7 +4,7 @@ import 'package:flutter/painting.dart';
 ///
 /// Values come straight from the validated design system in
 /// `docs/08-design-system.md` (§2 light, §3 dark), which is the source of truth
-/// for the project. The **light** roles (§2.1) and the decorative palette (§2.2)
+/// for the project. The **light** roles and the decorative palette
 /// reflect the validated Claude Design mock-ups (`vege-garden-export/`,
 /// `bg-directions.css`). The **dark** roles still come from the original CAHIER
 /// §4.1 — the mock-ups did not redefine a dark mode.
@@ -17,7 +17,7 @@ import 'package:flutter/painting.dart';
 abstract final class CouleursApp {
   const CouleursApp._();
 
-  // ── Light mode — semantic roles (docs/08 §2.1) ───────────────────────────
+  // ── Light mode — semantic roles ───────────────────────────
 
   /// Crème lin — application background (`--c-bg`).
   static const Color fondPrincipalClair = Color(0xFFF6F2E9);
@@ -58,7 +58,7 @@ abstract final class CouleursApp {
   /// Beige ombré — strokes, separators (`--c-border`).
   static const Color bordureClair = Color(0xFFDBD2C0);
 
-  // ── Decorative palette (docs/08 §2.2) ────────────────────────────────────
+  // ── Decorative palette ────────────────────────────────────
   // Non-semantic: tile gradients, vegetal separators, organic blobs/arches,
   // illustrations. Never use these to convey a state — that's the §2.1 roles.
 
@@ -86,7 +86,7 @@ abstract final class CouleursApp {
   /// Ocre — warm decor; equals the Attention semantic role (`--c-ocre`).
   static const Color decoOcre = Color(0xFFE0A82E);
 
-  // ── Dark mode (docs/08 §3) ───────────────────────────────────────────────
+  // ── Dark mode ───────────────────────────────────────────────
   // Not re-validated by the Claude Design mock-ups (light-only). From CAHIER
   // §4.1; revisit when a dark mode is actually designed.
 

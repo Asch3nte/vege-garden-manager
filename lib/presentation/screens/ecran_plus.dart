@@ -11,13 +11,13 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
 import 'parametres/widgets_parametres.dart';
 
-/// Tab 5 — **Plus** (`⋯`): settings root + secondary entries (docs/09 §7).
+/// Tab 5 — **Plus** (`⋯`): settings root + secondary entries.
 ///
 /// Reimplemented from `parametres.jsx`. The settings categories that map to real
 /// `PreferencesUtilisateur` fields (general, privacy/opt-outs, notifications)
 /// and the About page are built and persisted. Post-récolte is deferred to V1.1
 /// (ADR-0019; its `plusPostRecolte(Sub)` ARB keys are reserved for then) and
-/// Communauté to V2; Transparency/Sync/Export are deferred (docs/15).
+/// Communauté to V2; Transparency/Sync/Export are deferred.
 class EcranPlus extends ConsumerWidget {
   const EcranPlus({super.key});
 
@@ -83,14 +83,14 @@ class _Racine extends StatelessWidget {
           sousTitre: l10n.categNiveauxSub,
           onTap: () => context.go(RoutesApp.plusNiveaux),
         ),
-        // « Aide & lexique » — the gardener's reference (ADR-0017).
+        // « Aide & lexique » — the gardener's reference.
         LigneCategorie(
           icone: Icons.auto_stories_outlined,
           titre: l10n.categAide,
           sousTitre: l10n.categAideSub,
           onTap: () => context.go(RoutesApp.plusAide),
         ),
-        // Association weighting — expert only (ADR-0011/0009).
+        // Association weighting — expert only.
         if (AccesNiveau(prefs.niveauExperience).ponderationAssociations)
           LigneCategorie(
             icone: Icons.tune_outlined,

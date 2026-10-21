@@ -15,7 +15,7 @@ import 'plantation.dart';
 ///
 /// `Potager` is an **entity** (identity by [id]); the [id] is a UUID generated
 /// app-side and injected. Domain names are kept in French; the code is
-/// documented in English. See `docs/05-modele-de-domaine.md` §3.1.
+/// documented in English.
 ///
 /// Note: `peutAccueillir(FichePlante)` is deferred (needs `FichePlante`).
 class Potager {

@@ -1,4 +1,4 @@
-/// The kind of a glossary term (ADR-0017, D1).
+/// The kind of a glossary term.
 ///
 /// The type drives the **visual identity** of the term across the app: the
 /// colour of its badge on the term page and of every clickable occurrence

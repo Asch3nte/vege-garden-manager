@@ -4,7 +4,7 @@ import '../../domain/enums/sens_association.dart';
 import '../../domain/enums/type_benefice_association.dart';
 import '../../domain/enums/type_conflit_association.dart';
 
-/// A companion-planting relationship **derived** by the engine (ADR-0010, Lot 3)
+/// A companion-planting relationship **derived** by the engine
 /// between a centre plant and the plant identified by [cibleId].
 ///
 /// Sealed: a suggestion is either a [SuggestionBenefique] or a
@@ -36,7 +36,7 @@ sealed class SuggestionAssociation {
   String? get slug => _slug;
 
   /// Every criterion that the engine evaluated and found true for this
-  /// suggestion (ADR-0014) — the full, explicit evidence behind it.
+  /// suggestion — the full, explicit evidence behind it.
   Set<CritereAssociation> get criteres => _criteres;
 }
 

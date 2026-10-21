@@ -16,7 +16,6 @@ import '../value_objects/profil_ponderation_associations.dart';
 /// other entities, which use identity).
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §3.7 and `docs/06` §3.12.
 class PreferencesUtilisateur {
   /// The fixed identity of the single preferences row.
   static const String idSingleton = 'singleton';
@@ -152,7 +151,7 @@ class PreferencesUtilisateur {
   /// router gates the app on the onboarding flow (position, derived climate…).
   bool get onboardingTermine => _onboardingTermine;
 
-  /// The association weighting profile (ADR-0011). Defaults to the neutral
+  /// The association weighting profile. Defaults to the neutral
   /// profile; only an expert overrides it.
   ProfilPonderationAssociations get ponderationAssociations =>
       _ponderationAssociations;

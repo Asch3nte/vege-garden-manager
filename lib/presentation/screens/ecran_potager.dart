@@ -38,13 +38,13 @@ const List<Color> _couleursZones = [
 /// Decorative colour of the zone at [index] in the plan (stable, cyclic).
 Color couleurZone(int index) => _couleursZones[index % _couleursZones.length];
 
-/// Tab 2 — **Potager**: a top-down *plan* of the active garden, one bed per zone
-/// (docs/09 §4), reimplemented from the `potager.jsx` mock-up, **variant A**
+/// Tab 2 — **Potager**: a top-down *plan* of the active garden, one bed per zone,
+/// reimplemented from the `potager.jsx` mock-up, **variant A**
 /// (`PotagerGrille`): a grid of beds with the greenhouse spanning the full width.
 ///
 /// Each bed shows the zone name, its crops and a drop marker when a task is due
 /// today. Tapping a bed opens the zone detail. The spatial plan (variant B) needs
-/// per-zone layout coordinates that the model does not carry yet (docs/15 §3).
+/// per-zone layout coordinates that the model does not carry yet.
 class EcranPotager extends ConsumerWidget {
   const EcranPotager({super.key});
 
@@ -52,7 +52,7 @@ class EcranPotager extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(potagerProvider);
-    // Multi-garden and equipment are intermediate+ features (ADR-0009); their
+    // Multi-garden and equipment are intermediate+ features; their
     // menu entries are gated.
     final acces = ref.watch(accesNiveauProvider);
 

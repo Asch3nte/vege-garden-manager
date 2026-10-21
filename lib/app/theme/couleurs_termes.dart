@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../presentation/glossaire/type_terme_glossaire.dart';
 import 'couleurs_app.dart';
 
-/// Colour chart of the glossary term kinds (ADR-0017, D5): one colour per
+/// Colour chart of the glossary term kinds: one colour per
 /// [TypeTermeGlossaire], used by every clickable occurrence of a term across
 /// the app (`TermeCliquable`, wiki links, badges, chips) so a kind is
 /// recognisable at a glance.

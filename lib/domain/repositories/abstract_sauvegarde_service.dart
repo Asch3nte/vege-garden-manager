@@ -7,8 +7,6 @@ import '../enums/mode_import.dart';
 /// writing it to disk and sharing it (native share sheet — see
 /// `docs/12-internationalisation-et-donnees.md`) is a Presentation concern, so
 /// no data ever leaves the device automatically.
-///
-/// See `docs/05-modele-de-domaine.md` §7 and `docs/11-parametres-et-opt-outs.md` §5.
 abstract class AbstractSauvegardeService {
   /// Serialises the whole database to a single JSON document.
   Future<String> exporterJson();

@@ -12,7 +12,7 @@ import 'meteo_accueil_notifier.dart';
 import 'meteo_detail_vue.dart';
 import 'preferences_notifier.dart';
 
-// ── Rich view-model provider (ADR-0016 Lot 3) ────────────────────────────────
+// ── Rich view-model provider ────────────────────────────────
 
 /// Full weather detail view-model for [EcranMeteoDetail].
 ///

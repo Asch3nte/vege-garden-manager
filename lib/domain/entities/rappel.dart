@@ -17,7 +17,7 @@ import 'tache.dart';
 ///
 /// `Rappel` is an **entity** (identity by [id]); the [id] is a UUID generated
 /// app-side and injected. Domain names are kept in French; the code is
-/// documented in English. See `docs/05-modele-de-domaine.md` §3.7.
+/// documented in English.
 class Rappel {
   final String _id;
   String _titre;

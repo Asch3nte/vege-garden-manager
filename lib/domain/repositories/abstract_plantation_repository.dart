@@ -1,8 +1,6 @@
 import '../entities/plantation.dart';
 
 /// Contract for persisting and retrieving plantations.
-///
-/// See `docs/05-modele-de-domaine.md` §6.
 abstract class AbstractPlantationRepository {
   /// The plantation with this [id], or `null` when absent or soft-deleted.
   Future<Plantation?> obtenirParId(String id);

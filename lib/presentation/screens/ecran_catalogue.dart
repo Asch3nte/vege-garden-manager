@@ -60,7 +60,7 @@ Future<void> _ajouterPlante(
 }
 
 /// Tab 3 — **Catalogue**: knowledge base of plant sheets with search and a
-/// category filter (docs/09 §5).
+/// category filter.
 ///
 /// Two views (segmented toggle): **Fiches** (search + category chips + species
 /// cards, each expandable to its varieties — ADR-0005) and **Réseau** (companion
@@ -73,7 +73,7 @@ class EcranCatalogue extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vue = ref.watch(catalogueProvider);
-    // The personal-sheet editor is an expert feature (ADR-0009): the entry point
+    // The personal-sheet editor is an expert feature: the entry point
     // only appears once unlocked. Personal sheets still show, tagged, in the
     // catalogue list for every level.
     final fichesPersoDispo = ref.watch(accesNiveauProvider).fichesPerso;
@@ -118,7 +118,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
     final l10n = AppLocalizations.of(context)!;
     final vue = widget.vue;
     final cibleAjout = ref.watch(ajoutPlanteProvider);
-    // The "Réseau" association view is an intermediate+ feature (ADR-0009):
+    // The "Réseau" association view is an intermediate+ feature:
     // hidden for beginners, who keep the Fiches view only.
     final vueReseauDispo = ref.watch(accesNiveauProvider).vueReseau;
     final reseauActif = vueReseauDispo && _reseau;
@@ -166,7 +166,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
                 )
               : _VueFiches(vue: vue, onAjouter: ajouter),
         ),
-        // Level-up teaser for the locked Réseau view (ADR-0009 §4b).
+        // Level-up teaser for the locked Réseau view.
         if (!vueReseauDispo && !_teaserFerme)
           CarteTeaserPalier(
             icone: Icons.hub_outlined,
@@ -461,7 +461,7 @@ class _Liste extends StatelessWidget {
   }
 }
 
-/// A species card with an expand control revealing its varieties (ADR-0005).
+/// A species card with an expand control revealing its varieties.
 class _CarteGroupe extends StatefulWidget {
   final GroupeFiche groupe;
   final void Function(FichePlante) onAjouter;
@@ -593,8 +593,8 @@ class _CarteFiche extends ConsumerWidget {
                 ref.read(catalogueProvider).value?.toutesMeres ??
                     const <FichePlante>[],
                 onAjouter: onAjouter,
-                // Derived suggestions (ADR-0010) appear from intermédiaire+,
-                // ranked by the user's weighting profile (ADR-0011).
+                // Derived suggestions appear from intermédiaire+,
+                // ranked by the user's weighting profile.
                 acces: ref.read(accesNiveauProvider),
                 profil:
                     ref.read(preferencesProvider).value?.ponderationAssociations,

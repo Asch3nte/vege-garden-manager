@@ -3,7 +3,7 @@ import '../../domain/enums/categorie_plante.dart';
 import '../../domain/exceptions/famille_botanique_invalide_exception.dart';
 
 /// Validates the structure and coherence of a parsed family-sheet map before it
-/// is mapped to a [FamilleBotanique] (ADR-0006).
+/// is mapped to a [FamilleBotanique].
 ///
 /// On the first problem it throws a [FamilleBotaniqueInvalideException]. Category
 /// tokens are checked against [CategoriePlante] so an unknown value is reported
@@ -50,7 +50,7 @@ class FamilleBotaniqueValidator {
     exiger(fr['nom_commun'] != null, 'i18n.fr.nom_commun is mandatory');
     exiger(fr['description'] != null, 'i18n.fr.description is mandatory');
 
-    // Optional educational notes (ADR-0006 Lot 4), per locale: when present
+    // Optional educational notes, per locale: when present
     // they must be strings (the mapper reads them as such).
     for (final entry in i18n.entries) {
       final loc = entry.value;

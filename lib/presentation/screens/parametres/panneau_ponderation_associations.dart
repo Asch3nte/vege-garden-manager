@@ -11,7 +11,7 @@ import 'widgets_parametres.dart';
 import '../../glossaire/terme_glossaire.dart';
 import '../../glossaire/terme_cliquable.dart';
 
-/// Expert-only panel (ADR-0011) to weight each association **effect family**.
+/// Expert-only panel to weight each association **effect family**.
 /// Every change persists immediately and reshapes the ranking/pruning of derived
 /// suggestions in the Associations view and the reco bonus.
 class PanneauPonderationAssociations extends ConsumerWidget {
@@ -31,7 +31,7 @@ class PanneauPonderationAssociations extends ConsumerWidget {
 
     return PanneauParametres(
       titre: l10n.categPonderation,
-      // « ? » → the glossary page explaining the weighting (ADR-0017 D5).
+      // « ? » → the glossary page explaining the weighting.
       actions: [
         AideGlossaire(
             idTerme: TermeGlossaire.idNotion('ponderation-associations'),
@@ -55,7 +55,7 @@ class PanneauPonderationAssociations extends ConsumerWidget {
               ),
           ],
         ),
-        // Conflict families are weightable too (ADR-0014): prioritise or ignore a
+        // Conflict families are weightable too: prioritise or ignore a
         // class of warnings.
         ZoneParametres(
           note: l10n.ponderationConflitsTitre,

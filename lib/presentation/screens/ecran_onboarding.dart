@@ -35,7 +35,7 @@ import '../glossaire/terme_glossaire.dart';
 /// [PreferencesUtilisateur.onboardingTermine] is `false`; the router redirects
 /// here until the user completes it. Steps: welcome → privacy → position
 /// (required, auto-advances) → derived climate/hardiness → experience level
-/// (ADR-0009) → first garden (name + zones) → notifications opt-in. The garden
+/// → first garden (name + zones) → notifications opt-in. The garden
 /// is created lazily (as soon as a zone is added, or when leaving the garden
 /// step), so zones can attach to it. Finishing records the level, geolocation
 /// mode and notification choice, refreshes the data views and lifts the router
@@ -468,7 +468,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
 
   Widget _etapeNotifications(AppLocalizations l10n) {
     // Intermediate+ get the full per-category detail (like the settings panel);
-    // a beginner keeps just the master switch (ADR-0009).
+    // a beginner keeps just the master switch.
     final parCategorie = AccesNiveau(_niveau).notificationsParCategorie;
     return _Etape(
       icone: Icons.notifications_outlined,

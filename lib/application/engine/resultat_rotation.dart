@@ -47,7 +47,7 @@ enum MotifRotation {
 }
 
 /// A single, explainable reason contributing to a [ResultatRotation]. Carries
-/// the real values behind the motive so the UI (Lot 4) can phrase it precisely
+/// the real values behind the motive so the UI can phrase it precisely
 /// (which family/group, which past culture, how long ago, the required delay).
 class RaisonRotation {
   /// What kind of signal this is.

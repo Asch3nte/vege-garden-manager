@@ -3,7 +3,7 @@
 /// Domain-level mirror of the platform permission, kept independent of any
 /// geolocation plugin so the Domain stays infrastructure-agnostic. Geolocation
 /// is **opt-out and disabled by default** (privacy by design); the Application
-/// layer decides whether to even request it. See `docs/11-parametres-et-opt-outs.md`.
+/// layer decides whether to even request it.
 enum PermissionLocalisation {
   /// Permission granted (foreground and/or background).
   accordee,

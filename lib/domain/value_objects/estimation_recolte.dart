@@ -4,7 +4,7 @@
 ///
 /// It is a **result** value object produced by the engine
 /// (`CalculateurDatesCulture`), not persisted. Domain names are kept in French;
-/// the code is documented in English. See `docs/05-modele-de-domaine.md` §4.
+/// the code is documented in English.
 class EstimationRecolte {
   final DateTime _dateMin;
   final DateTime _dateMax;

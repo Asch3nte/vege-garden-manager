@@ -2,8 +2,6 @@ import 'periode.dart';
 
 /// Immutable set of cultivation windows for one (hemisphere, climate) pair: when
 /// to sow indoors/outdoors, plant out, and harvest. Each window is optional.
-///
-/// See `docs/05-modele-de-domaine.md` §3.6.
 class PeriodesCulture {
   final Periode? _semisInterieur;
   final Periode? _semisExterieur;

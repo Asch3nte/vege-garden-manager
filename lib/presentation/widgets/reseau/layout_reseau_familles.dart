@@ -12,7 +12,7 @@ class NoeudLayout {
 
 /// A family's footprint: the member node [indices], the circle [centre] and its
 /// [rayon]. Family circles are **packed without overlap**, so a family is always
-/// a smooth disc that never intersects another (ADR-0008). The label sits inside
+/// a smooth disc that never intersects another. The label sits inside
 /// the top of the circle.
 class FoyerFamille {
   final String famille;
@@ -38,7 +38,7 @@ class ResultatLayout {
 }
 
 /// Tunable constants of the layout. Defaults are a starting point — the preview
-/// harness exists to tune them against real data (ADR-0008).
+/// harness exists to tune them against real data.
 class ParametresLayout {
   /// Spacing between two species inside a family's circle (phyllotaxis step).
   final double espacementNoeud;

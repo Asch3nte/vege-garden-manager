@@ -114,7 +114,7 @@ abstract final class RoutesApp {
   static const String plusDonnees = '$plus/$plusDonneesSegment';
   static const String plusAPropos = '$plus/$plusAProposSegment';
 
-  // « Aide & lexique » glossary (ADR-0017): the panel and its chapter/term
+  // « Aide & lexique » glossary: the panel and its chapter/term
   // pages are sub-routes of [plus] so they join the global back history —
   // back replays pages in the exact order the user opened them (D3).
   static const String plusAideSegment = 'aide';
@@ -134,7 +134,7 @@ abstract final class RoutesApp {
   static String aideTerme(String idTerme) => '$plusAide/terme/$idTerme';
 }
 
-/// The five primary destinations, in display order (docs/09 §3).
+/// The five primary destinations, in display order.
 ///
 /// Order is the contract between the router branches and the navigation shell:
 /// the Nth branch corresponds to the Nth destination here.

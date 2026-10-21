@@ -18,7 +18,7 @@ import 'preferences_notifier.dart';
 class MeteoAccueilNotifier extends AsyncNotifier<MeteoAccueilVue> {
   @override
   Future<MeteoAccueilVue> build() async {
-    // Auto weather-fetch opt-out (docs/11): with it off, the card is muted and
+    // Auto weather-fetch opt-out: with it off, the card is muted and
     // no automatic Open-Meteo call is made (constraint #3).
     final prefs = await ref.watch(preferencesProvider.future);
     if (!prefs.meteoAutoActive) {

@@ -7,7 +7,7 @@ import 'catalogue/notions_sol.dart';
 import 'catalogue/outils.dart';
 import 'terme_glossaire.dart';
 
-/// Coverage map of the glossary (ADR-0017, D6).
+/// Coverage map of the glossary.
 ///
 /// Every enum declared under `lib/domain/enums/` must be **either** covered —
 /// listed here with the id(s) of the glossary term(s) that explain it — **or**
@@ -28,7 +28,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'RaisonReco': [TermeGlossaire.idNotion('pourquoi-recommandation')],
   // Functional crop groups used as rotation precedents (legumes, green manures)
   // — explained by the crop-rotation page. Dedicated per-value labels/pages are
-  // tracked as the rotation avancée i18n follow-up (Lot 4).
+  // tracked as the rotation avancée i18n follow-up.
   'GroupeCultural': [TermeGlossaire.idNotion('rotation-cultures')],
 
   // — Santé du jardin —
@@ -93,7 +93,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'PoidsAssociation': [TermeGlossaire.idNotion('ponderation-associations')],
   // The criteria vocabulary is explained by the general "how the app computes
   // associations" page; each criterion line already shows its real values in
-  // the associations view (ADR-0014).
+  // the associations view.
   'CritereAssociation': [TermeGlossaire.idNotion('calcul-associations')],
 
   // — Gestes & organisation —

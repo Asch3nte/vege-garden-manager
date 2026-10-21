@@ -7,7 +7,7 @@ import 'famille_botanique_mapper.dart';
 import 'famille_botanique_validator.dart';
 
 /// Loads the botanical-family reference in a single pass: list → read → parse →
-/// validate → map → cache (ADR-0006). Families carry no inheritance, so unlike
+/// validate → map → cache. Families carry no inheritance, so unlike
 /// the plant catalogue no second pass is needed.
 ///
 /// Robustness mirrors the plant catalogue: a corrupt family sheet is reported

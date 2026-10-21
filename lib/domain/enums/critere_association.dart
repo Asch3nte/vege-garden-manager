@@ -1,5 +1,5 @@
 /// A single, explicit **criterion** that the derivation engine evaluated and
-/// found true when inferring an association (ADR-0014, Décision 1).
+/// found true when inferring an association.
 ///
 /// Every derived [SuggestionAssociation] carries the **set** of criteria that
 /// produced it, so the UI can list *all* the variables behind the

@@ -13,7 +13,7 @@ import 'chapitre_glossaire.dart';
 import 'terme_glossaire.dart';
 import 'type_terme_glossaire.dart';
 
-/// The static catalogue of **notions & tools** (ADR-0017, D1/D6) — every
+/// The static catalogue of **notions & tools** — every
 /// glossary entry that is *not* derived from a YAML reference. Content lives
 /// in the ARB (`glossaire*` keys) and may embed wiki links (D2).
 ///

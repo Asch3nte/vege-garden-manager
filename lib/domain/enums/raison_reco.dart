@@ -1,7 +1,7 @@
 /// Structured reason a plant is recommended (the "Pourquoi" of a recommendation).
 ///
 /// The user-facing, localised explanation is built from these at the
-/// presentation layer. See `docs/02-fonctionnalites-v1.md` §2.
+/// presentation layer.
 enum RaisonReco {
   /// The plant can be put in the ground this month in the user's climate.
   plantableMaintenant,

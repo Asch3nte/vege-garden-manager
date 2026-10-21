@@ -2,7 +2,7 @@ import '../enums/type_bioagresseur.dart';
 import '../exceptions/invariant_domaine_exception.dart';
 
 /// A disease or pest shared at the **botanical-family** level, loaded from the
-/// embedded reference and **not created by the user** (ADR-0006, Lot 4).
+/// embedded reference and **not created by the user**.
 ///
 /// It normalizes the free-form slugs that family sheets list under
 /// `maladies_communes` / `ravageurs_communs`: each such slug must resolve to a
@@ -11,7 +11,7 @@ import '../exceptions/invariant_domaine_exception.dart';
 ///
 /// Immutable catalogue **entity**, identity by [id] (the normalized slug, e.g.
 /// `mildiou`). Domain names are kept in French; the code is documented in
-/// English. See ADR-0006.
+/// English.
 class Bioagresseur {
   final String _id;
   final TypeBioagresseur _type;

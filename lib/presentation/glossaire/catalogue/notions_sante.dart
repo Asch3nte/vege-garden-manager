@@ -5,7 +5,7 @@ import '../complement_terme.dart';
 import '../terme_glossaire.dart';
 import '../type_terme_glossaire.dart';
 
-/// « Santé du jardin » chapter of the notion catalogue (ADR-0017 Lot 4): the
+/// « Santé du jardin » chapter of the notion catalogue: the
 /// transverse health notions — the per-bioaggressor pages themselves are
 /// derived from the YAML reference by the registry.
 List<TermeGlossaire> construireNotionsSante(AppLocalizations l10n) => [

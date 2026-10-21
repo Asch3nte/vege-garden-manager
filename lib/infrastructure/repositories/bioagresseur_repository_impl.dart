@@ -4,7 +4,7 @@ import '../../domain/repositories/abstract_bioagresseur_repository.dart';
 import '../catalogue/bioagresseur_cache.dart';
 
 /// [AbstractBioagresseurRepository] backed by the in-memory [BioagresseurCache]
-/// built from the embedded reference at load time (ADR-0006, Lot 4).
+/// built from the embedded reference at load time.
 class BioagresseurRepositoryImpl implements AbstractBioagresseurRepository {
   final BioagresseurCache _cache;
 

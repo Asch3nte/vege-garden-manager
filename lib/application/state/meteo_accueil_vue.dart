@@ -18,7 +18,7 @@ enum VerdictMeteo {
 ///
 /// When [disponible] is false there is no usable position on the active garden
 /// (so no weather): the card invites the user to set one. When [meteoDesactivee]
-/// is true the auto weather-fetch opt-out is off (docs/11) — no fetch happened
+/// is true the auto weather-fetch opt-out is off — no fetch happened
 /// and the card is muted. Otherwise it carries today's temperature range, a
 /// [verdict] and a frost flag.
 class MeteoAccueilVue {
@@ -58,7 +58,7 @@ class MeteoAccueilVue {
   /// Whether weather could be resolved (a position exists).
   bool get disponible => _disponible;
 
-  /// Whether the auto weather-fetch opt-out is off (docs/11).
+  /// Whether the auto weather-fetch opt-out is off.
   bool get meteoDesactivee => _meteoDesactivee;
 
   /// Today's minimum temperature (°C).

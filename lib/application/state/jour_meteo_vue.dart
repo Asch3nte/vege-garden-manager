@@ -6,7 +6,7 @@ import '../../domain/value_objects/prevision_horaire.dart';
 /// [risqueGel] / [risqueCanicule] are derived from [tempMin] / [tempMax]
 /// against [SeuilsMeteo] thresholds at construction time by
 /// [MeteoDetailNotifier]. [ventMaxKmh] is the highest hourly wind speed of
-/// the day (0 when no hourly data is available). See ADR-0016 Lot 3.
+/// the day (0 when no hourly data is available).
 class JourMeteoVue {
   final DateTime date;
   final double tempMin;

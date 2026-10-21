@@ -14,7 +14,6 @@ import 'recolte.dart';
 /// generated app-side and injected.
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §3.4.
 ///
 /// Note: `dateRecolteEstimee(FichePlante, ZoneClimatique)` is deferred — it needs
 /// `FichePlante` (catalogue, not built yet) and belongs with the engine logic.

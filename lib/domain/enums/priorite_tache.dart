@@ -1,2 +1,2 @@
-/// Priority of a task or reminder. See `docs/05-modele-de-domaine.md` §5.
+/// Priority of a task or reminder.
 enum PrioriteTache { basse, normale, haute, urgente }

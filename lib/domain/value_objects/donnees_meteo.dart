@@ -1,7 +1,5 @@
 /// Immutable observed weather data for a given day (DTO carried by
 /// `AbstractMeteoService`). `risqueGel`/`risqueCanicule` are pre-computed flags.
-///
-/// See `docs/05-modele-de-domaine.md` §7.
 class DonneesMeteo {
   final DateTime _date;
   final double _tempMin;
@@ -50,7 +48,7 @@ class DonneesMeteo {
   bool get risqueCanicule => _risqueCanicule;
 
   /// Reference evapotranspiration ET₀ FAO-56 (mm/day), or `null` when not
-  /// provided by the weather source (ADR-0015 Lot 5).
+  /// provided by the weather source.
   double? get evapotranspirationMm => _evapotranspirationMm;
 
   @override

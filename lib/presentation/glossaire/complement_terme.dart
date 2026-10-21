@@ -1,8 +1,8 @@
 import '../../domain/entities/bioagresseur.dart';
 import '../../domain/entities/famille_botanique.dart';
 
-/// A typed additional block a term page renders below the definition
-/// (ADR-0017, D3). Blocks carry **derived data only** — the page never invents
+/// A typed additional block a term page renders below the definition.
+/// Blocks carry **derived data only** — the page never invents
 /// content: an absent block simply doesn't render.
 ///
 /// Sealed so the term page can switch exhaustively; adding a block kind is a

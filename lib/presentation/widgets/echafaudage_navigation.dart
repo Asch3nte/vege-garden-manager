@@ -5,8 +5,8 @@ import '../../l10n/app_localizations.dart';
 /// One primary navigation destination: its route, label and icons.
 ///
 /// [icone] is the resting (outline) icon; [iconeActive] the selected (filled)
-/// one — mirroring the design system's Regular-vs-Bold/Fill icon states
-/// (docs/08 §7). Material icons stand in for the eventual Phosphor set.
+/// one — mirroring the design system's Regular-vs-Bold/Fill icon states.
+/// Material icons stand in for the eventual Phosphor set.
 class DestinationNav {
   /// go_router path of this destination's branch (e.g. `/accueil`).
   final String route;

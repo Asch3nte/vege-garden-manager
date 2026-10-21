@@ -3,8 +3,7 @@ import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
 
 /// A species (mother sheet) with its varieties (daughter sheets), as shown in
-/// the catalogue list — the mother is the row, its varieties expand below it
-/// (ADR-0005).
+/// the catalogue list — the mother is the row, its varieties expand below it.
 class GroupeFiche {
   final FichePlante _mere;
   final List<FichePlante> _varietes;
@@ -81,7 +80,7 @@ class CatalogueVue {
   CategoriePlante? get categorie => _categorie;
 
   /// Family chips to show under the selected category — the botanical families
-  /// present among that category's species, ordered by localized name (ADR-0006).
+  /// present among that category's species, ordered by localized name.
   /// Empty when no category is selected.
   List<FamilleBotanique> get familles => _familles;
 

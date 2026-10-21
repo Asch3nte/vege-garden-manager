@@ -2,7 +2,7 @@ import '../../domain/entities/bioagresseur.dart';
 import '../../domain/enums/type_bioagresseur.dart';
 
 /// In-memory store of the loaded bioaggressors, indexed by id (the normalized
-/// slug) for instant lookup (ADR-0006, Lot 4).
+/// slug) for instant lookup.
 class BioagresseurCache {
   final Map<String, Bioagresseur> _parId;
 

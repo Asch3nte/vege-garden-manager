@@ -4,7 +4,7 @@ import '../../domain/value_objects/precedent_cultural.dart';
 import 'famille_botanique_cache.dart';
 
 /// A single referential-integrity problem found between the plant catalogue and
-/// the family reference (ADR-0006).
+/// the family reference.
 class ProblemeIntegriteFamille {
   /// Offending species id.
   final String espece;

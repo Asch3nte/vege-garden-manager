@@ -31,7 +31,7 @@ import '../glossaire/terme_cliquable.dart';
 import '../widgets/titre_tache.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
-/// tickable (docs/09 §6).
+/// tickable.
 ///
 /// Reimplemented from `calendrier.jsx`, **Agenda view**: a summary, a week/month
 /// scope selector and day groups of tickable task cards. The Month grid and the
@@ -102,7 +102,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // The "Saison" view is an intermediate+ feature (ADR-0009): hidden for
+    // The "Saison" view is an intermediate+ feature: hidden for
     // beginners, who fall back to Agenda if it was somehow selected.
     final vueSaisonDispo = ref.watch(accesNiveauProvider).vueSaison;
     final vue = (!vueSaisonDispo && _vue == _VueCal.saison) ? _VueCal.agenda : _vue;
@@ -147,7 +147,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
             _VueCal.saison => const _VueSaison(),
           },
         ),
-        // Level-up teaser for the locked Saison view (ADR-0009 §4b).
+        // Level-up teaser for the locked Saison view.
         if (!vueSaisonDispo && !_teaserFerme)
           CarteTeaserPalier(
             icone: Icons.eco_outlined,
@@ -1289,7 +1289,7 @@ class _CarteTache extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        // Clickable term (ADR-0017 D5): the gesture label opens
+                        // Clickable term: the gesture label opens
                         // the « Types de tâches » glossary page.
                         TermeCliquable(
                           idTerme: TermeGlossaire.idNotion('types-taches'),

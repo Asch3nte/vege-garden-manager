@@ -19,7 +19,7 @@ import '../widgets/redacteur_resume_meteo.dart';
 /// Full weather detail screen: station header, horizontal day selector,
 /// horizontal hourly scroller, day summary, and task-explanation card.
 ///
-/// Reached via `/accueil/meteo`. Watches [meteoDetailProvider] (ADR-0016 Lot 4).
+/// Reached via `/accueil/meteo`. Watches [meteoDetailProvider].
 class EcranMeteoDetail extends ConsumerStatefulWidget {
   const EcranMeteoDetail({super.key});
 

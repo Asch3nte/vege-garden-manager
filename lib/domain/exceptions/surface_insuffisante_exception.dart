@@ -3,8 +3,6 @@ import 'potager_exception.dart';
 
 /// Thrown when an active plantation would need more room than a parcelle still
 /// has free.
-///
-/// See `docs/05-modele-de-domaine.md` §8.
 class SurfaceInsuffisanteException extends PotagerException {
   /// Surface the operation requires.
   final Surface requise;

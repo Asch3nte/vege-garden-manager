@@ -48,7 +48,7 @@ final reinitialisationServiceProvider =
   (ref) => nonBranche('reinitialisationServiceProvider'),
 );
 
-/// Local-storage statistics for the data-transparency panel (docs/11 §6).
+/// Local-storage statistics for the data-transparency panel.
 final statistiquesDonneesServiceProvider =
     Provider<AbstractStatistiquesDonneesService>(
   (ref) => nonBranche('statistiquesDonneesServiceProvider'),

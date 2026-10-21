@@ -1,4 +1,4 @@
-/// Root system depth/shape of a plant (ADR-0014, Décision 0).
+/// Root system depth/shape of a plant.
 ///
 /// Used by the association engine to reason about **soil structuring** (a deep
 /// or taproot plant loosens the soil for a shallow-rooted neighbour) and to

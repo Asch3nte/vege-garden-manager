@@ -11,7 +11,6 @@ import '../exceptions/conversion_unite_incompatible_exception.dart';
 /// (`1 kg == 1000 g`).
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §4.5.
 class Quantite {
   final double _valeur;
   final UniteQuantite _unite;

@@ -1,6 +1,6 @@
 import 'type_conflit_association.dart';
 
-/// Thematic family a *conflict* mechanism belongs to (ADR-0014, Décision 8).
+/// Thematic family a *conflict* mechanism belongs to.
 ///
 /// Mirrors [FamilleEffetAssociation] for benefits: grouping the conflict
 /// mechanisms into a handful of families lets the user **weight** (or ignore) a
@@ -18,7 +18,7 @@ enum FamilleEffetConflit {
 }
 
 /// The conflict family of a [mecanisme] — single source of truth, exhaustive by
-/// construction (ADR-0014).
+/// construction.
 FamilleEffetConflit familleConflitDe(TypeConflitAssociation mecanisme) =>
     switch (mecanisme) {
       TypeConflitAssociation.competitionLumiere ||

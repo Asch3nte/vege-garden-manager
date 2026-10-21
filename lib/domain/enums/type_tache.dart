@@ -1,4 +1,4 @@
-/// Kind of garden task. See `docs/05-modele-de-domaine.md` §5.
+/// Kind of garden task.
 enum TypeTache {
   arrosage,
   desherbage,

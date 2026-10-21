@@ -4,7 +4,7 @@ import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
 
 /// Parses the raw YAML text of a plant sheet into a [Map].
 ///
-/// Pipeline step 2 (see `docs/07-base-de-connaissances-yaml.md` §6): turns text
+/// Pipeline step 2: turns text
 /// into a structured map, surfacing syntax errors as a typed
 /// [FichePlanteInvalideException].
 class CatalogueYamlParser {

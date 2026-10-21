@@ -32,7 +32,7 @@ import 'libelles_enums.dart';
 /// time-to-harvest) and its companion associations (resolved to plant names via
 /// the loaded catalogue). The sowing/harvest month calendar of the mock-up is
 /// deferred — periods are indexed by hemisphere/climate, which a catalogue
-/// browse has no context for (see docs/15).
+/// browse has no context for.
 ///
 /// On a species sheet a "variety switcher" lets the user drill into one of the
 /// species' varieties in-place; a back button (and the OS back gesture) returns
@@ -66,7 +66,7 @@ Future<void> afficherFichePlanteDetail(
   );
 }
 
-/// Why this sheet was opened from the Associations view (ADR-0012): the relation
+/// Why this sheet was opened from the Associations view: the relation
 /// with the centre plant, shown as a coloured banner at the top of the sheet so
 /// the full editorial reason is never truncated in the constellation.
 class ContexteAssociation {
@@ -90,7 +90,7 @@ class ContexteAssociation {
   final String? confiance;
 
   /// Every factor (criterion) behind a derived association, each a full localised
-  /// sentence with its real values (ADR-0014). Empty for a curated relation.
+  /// sentence with its real values. Empty for a curated relation.
   final List<String> facteurs;
 
   const ContexteAssociation({
@@ -143,18 +143,18 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
 
     // Personal-sheet awareness: whether the shown sheet is one of the user's own
     // (badge), and whether the editor is unlocked (⋮ actions). Both are expert
-    // concerns (ADR-0009); the badge shows for everyone, the actions do not.
+    // concerns; the badge shows for everyone, the actions do not.
     final estPerso =
         ref.watch(idsFichesPersonnellesProvider).value?.contains(_fiche.id) ??
             false;
     final accesPerso = ref.watch(accesNiveauProvider).fichesPerso;
-    // Detailed watering is an expert-only reading (ADR-0009); lower tiers keep
+    // Detailed watering is an expert-only reading; lower tiers keep
     // the coarse "Arrosage" fact only.
     final accesEauDetaillee = ref.watch(accesNiveauProvider).eauDetaillee;
 
     // Companions are resolved by the shared service over **every** species
     // (not the filtered list), bidirectionally — so the names and counts here
-    // match the Réseau view exactly (ADR-0008).
+    // match the Réseau view exactly.
     const resolveur = ResolveurCompagnonnage();
     final compagnons =
         resolveur.resoudre(_fiche, vue?.toutesMeres ?? const <FichePlante>[]);
@@ -170,7 +170,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
         EspacementsApp.s6,
       ),
       children: [
-        // Association banner (ADR-0012) — only on the originally tapped sheet.
+        // Association banner — only on the originally tapped sheet.
         if (widget.contexte != null && _fiche.id == widget.fiche.id) ...[
           _BandeauAssociation(contexte: widget.contexte!),
           const SizedBox(height: EspacementsApp.s4),
@@ -588,7 +588,7 @@ class _Faits extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final b = fiche.besoins;
-    // Exposition shown as a **range** when a minimum tolerance is set (ADR-0014):
+    // Exposition shown as a **range** when a minimum tolerance is set:
     // e.g. « Mi-ombre à plein soleil » instead of just the optimum.
     final expo = (b.soleilMin != null && b.soleilMin != b.soleil)
         ? l10n.ficheExpositionPlage(
@@ -597,7 +597,7 @@ class _Faits extends StatelessWidget {
     final hMin = fiche.hauteurAdulteCmMin;
     final hMax = fiche.hauteurAdulteCmMax;
     // (icon, label, value, glossary id) — a non-null id renders the label as a
-    // clickable term towards its concept page (ADR-0017 D5).
+    // clickable term towards its concept page.
     final faits = <(IconData, String, String, String?)>[
       (
         Icons.wb_sunny_outlined,
@@ -662,7 +662,7 @@ class _Fait extends StatelessWidget {
   final String valeur;
 
   /// Glossary id of the concept page — a non-null id renders [cle] as a
-  /// clickable term (ADR-0017 D5).
+  /// clickable term.
   final String? idTerme;
 
   const _Fait(
@@ -817,7 +817,7 @@ class _SectionCalendrier extends ConsumerWidget {
   }
 }
 
-/// Family-level educational section (ADR-0006 Lot 4): the plant's botanical
+/// Family-level educational section: the plant's botanical
 /// family name + description, its rotation rationale, the diseases/pests it
 /// commonly shares (resolved to localized names via the bioaggressor reference,
 /// each with its description as a tooltip) and its association rationale.
@@ -950,7 +950,7 @@ class _SectionFamille extends ConsumerWidget {
     if (famille == null) return const SizedBox.shrink();
 
     final bioagresseurs = ref.watch(bioagresseursParIdProvider).value;
-    // Clickable chip → the bioaggressor's glossary page (ADR-0017 Lot 3); an
+    // Clickable chip → the bioaggressor's glossary page; an
     // unresolved slug stays a plain chip (never a dead link).
     Widget puce(String slug) {
       final bio = bioagresseurs?[slug];
@@ -980,7 +980,7 @@ class _SectionFamille extends ConsumerWidget {
       children: [
         const SizedBox(height: EspacementsApp.s5),
         // Title: prefix + the family name as a clickable term → its glossary
-        // page (ADR-0017 Lot 3).
+        // page.
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: EspacementsApp.s2,
@@ -1040,7 +1040,7 @@ class _SectionFamille extends ConsumerWidget {
 }
 
 
-/// Coloured header explaining the association that led here (ADR-0012): the
+/// Coloured header explaining the association that led here: the
 /// mechanism/family, the full editorial reason (never truncated), and, for a
 /// derived relation, a "suggested + confidence" note. Green for a good
 /// companion, red (error) for a to-avoid.
@@ -1075,7 +1075,7 @@ class _BandeauAssociation extends StatelessWidget {
                   size: TaillesIconesApp.sm, color: couleur),
               const SizedBox(width: EspacementsApp.s2),
               Expanded(
-                // Typed mechanism → its glossary page (ADR-0017 D5); the sheet
+                // Typed mechanism → its glossary page; the sheet
                 // is closed first by ouvrirTermeGlossaire.
                 child: contexte.idMecanisme == null
                     ? Text(
@@ -1111,7 +1111,7 @@ class _BandeauAssociation extends StatelessWidget {
               ),
             ),
             // Every variable that entered the calculation, with its real value
-            // (ADR-0014) — nothing left vague.
+            // — nothing left vague.
             if (contexte.facteurs.isNotEmpty) ...[
               const SizedBox(height: EspacementsApp.s2),
               Text(
@@ -1139,7 +1139,7 @@ class _BandeauAssociation extends StatelessWidget {
             ],
           ] else ...[
             // Curated association: the counterpart of "Suggestion · …",
-            // elaborated here as promised by the cluster label (ADR-0013 §7).
+            // elaborated here as promised by the cluster label.
             const SizedBox(height: EspacementsApp.s1),
             Text(
               l10n.assocHorsSuggestion,

@@ -1,7 +1,7 @@
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/enums/categorie_plante.dart';
 
-/// Maps a validated family-sheet map into a domain [FamilleBotanique] (ADR-0006).
+/// Maps a validated family-sheet map into a domain [FamilleBotanique].
 ///
 /// Assumes the map has already passed `FamilleBotaniqueValidator`. snake_case
 /// category tokens are converted to camelCase enum names.

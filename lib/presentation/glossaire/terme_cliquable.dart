@@ -17,8 +17,7 @@ class _RoutePageTerme extends MaterialPageRoute<void> {
       : super(builder: (_) => PageTermeGlossaire(idTerme: idTerme));
 }
 
-/// Navigates to the glossary page of [idTerme] from **anywhere** in the app
-/// (ADR-0017 D5).
+/// Navigates to the glossary page of [idTerme] from **anywhere** in the app.
 ///
 /// From a modal overlay (the associations dialog, the plant sheet…) the page
 /// is **pushed above it** ([_RoutePageTerme]): back returns to the overlay,
@@ -79,7 +78,7 @@ class TermeCliquable extends StatelessWidget {
   }
 }
 
-/// A small « ? » help affordance opening a glossary page (ADR-0017 D5) —
+/// A small « ? » help affordance opening a glossary page —
 /// used as the `suffixIcon` of form fields whose concept deserves a full
 /// explanation (climate, hardiness, soil texture…). Kept deliberately
 /// discreet: outlined icon, muted colour, compact hit target.

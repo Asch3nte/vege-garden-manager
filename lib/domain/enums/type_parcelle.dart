@@ -1,5 +1,5 @@
 /// Physical structure of a parcelle (cultivation techniques are orthogonal — see
-/// `TechniqueSol`). See `docs/05-modele-de-domaine.md` §5.
+/// `TechniqueSol`).
 enum TypeParcelle {
   pleineTerre,
   bacSureleve,

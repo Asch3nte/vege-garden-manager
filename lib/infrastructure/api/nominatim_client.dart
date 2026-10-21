@@ -11,7 +11,7 @@ import '../../domain/value_objects/localisation.dart';
 /// Used solely to resolve a [Localisation] (coordinates already rounded to
 /// ~1 km by the VO) into a human-readable city/town/village name.
 ///
-/// **OSM usage-policy compliance** (ADR-0016):
+/// **OSM usage-policy compliance**:
 /// - A meaningful `User-Agent` header is sent on every request.
 /// - At most one request is made per user-initiated screen opening (the result
 ///   is cached at the Riverpod provider level for the session).

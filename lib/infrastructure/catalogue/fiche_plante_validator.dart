@@ -8,7 +8,7 @@ import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
 /// Validates the structure and coherence of a parsed plant-sheet map before it
 /// is mapped to a `FichePlante`.
 ///
-/// Pipeline step 3 (see `docs/07-base-de-connaissances-yaml.md` §6). On the first
+/// Pipeline step 3. On the first
 /// problem it throws a [FichePlanteInvalideException] describing the issue.
 class FichePlanteValidator {
   /// When `true`, [valider] also enforces the canonical ADR-0005 id format.
@@ -20,7 +20,7 @@ class FichePlanteValidator {
 
   const FichePlanteValidator({this.validerFormatId = false});
 
-  /// Canonical id pattern (ADR-0005): `CAT3-NNN` for a species,
+  /// Canonical id pattern: `CAT3-NNN` for a species,
   /// `CAT3-NNN-VNNN` for a variety. Examples: `LEG-001`, `LEG-001-V001`.
   static final RegExp _formatId = RegExp(r'^[A-Z]{3}-\d{3}(-V\d{3})?$');
 
@@ -46,7 +46,7 @@ class FichePlanteValidator {
       );
     }
 
-    // Variety sheet (ADR-0005): a `parent_id` must be a non-empty string and the
+    // Variety sheet: a `parent_id` must be a non-empty string and the
     // variety id must live in its mother's namespace (id prefixed by parent_id).
     // Validation runs after inheritance resolution, so the inherited required
     // fields above are already present. (Strict id format is enforced in Lot 2.)
@@ -276,7 +276,7 @@ class FichePlanteValidator {
             (entree['id'] as String).isNotEmpty,
         'associations.$section[].id must be a non-empty string',
       );
-      // `type` may be a single token or a list of tokens (ADR-0012); each must
+      // `type` may be a single token or a list of tokens; each must
       // be a known mechanism.
       final type = (entree as Map)['type'];
       if (type != null) {

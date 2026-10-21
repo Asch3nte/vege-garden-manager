@@ -13,7 +13,6 @@ import '../exceptions/invariant_domaine_exception.dart';
 /// UUID generated app-side and injected.
 ///
 /// Domain names are kept in French; the code is documented in English.
-/// See `docs/05-modele-de-domaine.md` §3.6.
 class Tache {
   final String _id;
   String? _titre;

@@ -1,2 +1,2 @@
-/// Qualitative soil pH. See `docs/05-modele-de-domaine.md` §5.
+/// Qualitative soil pH.
 enum PhSol { acide, neutre, alcalin }

@@ -2,7 +2,7 @@
 /// `AbstractNotificationService`).
 ///
 /// Named `NotificationLocale` to avoid clashing with the Flutter/OS
-/// `Notification` class. See `docs/05-modele-de-domaine.md` §7.
+/// `Notification` class.
 class NotificationLocale {
   final String _id;
   final String _titre;

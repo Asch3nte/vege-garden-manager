@@ -69,7 +69,7 @@ class _Liste extends ConsumerWidget {
           EspacementsApp.s6,
         ),
         children: [
-          // Clickable glossary term (ADR-0017): explains what weather alerts are.
+          // Clickable glossary term: explains what weather alerts are.
           Padding(
             padding: const EdgeInsets.only(bottom: EspacementsApp.s2),
             child: TermeCliquable(

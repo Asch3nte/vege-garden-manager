@@ -40,7 +40,7 @@ class _Arete {
 
 /// Maps a **virtual** position (Fermat-spiral coords, never mutated) to a screen
 /// position: `screen = virtuel * echelle + offset`. The single source of truth
-/// for zoom + x/y pan (ADR-0007) — nodes are laid out at a constant pixel
+/// for zoom + x/y pan — nodes are laid out at a constant pixel
 /// radius, so their labels keep a constant on-screen size whatever the zoom.
 class _TransformReseau {
   final double echelle;
@@ -70,7 +70,7 @@ class _TransformReseau {
 }
 
 /// **Réseau** view of the catalogue: a constellation of plants clustered into
-/// non-overlapping family bubbles (ADR-0008), with edges between companion (and
+/// non-overlapping family bubbles, with edges between companion (and
 /// "to avoid") plants.
 ///
 /// Reimplemented from the `catalogue.jsx` `ReseauView`. Tapping a node selects
@@ -122,7 +122,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   // Zoom bounds (absolute), the +/- button step, and the cap applied when
   // fitting a small selection so a lone node doesn't zoom in absurdly (#8a).
   // The floor is low enough that the whole family-bubble constellation fits at
-  // the baseline (ADR-0008).
+  // the baseline.
   static const double _echelleMin = 0.15;
   static const double _echelleMax = 4.0;
   static const double _echelleAjustMax = 2.0;
@@ -143,7 +143,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   static const double _feuilleMax = 0.5;
 
   late final List<Offset> _positions;
-  // Family circles (centre + radius), packed without overlap (ADR-0008) — drive
+  // Family circles (centre + radius), packed without overlap — drive
   // the blobby family halos and the baseline framing.
   late final List<FoyerFamille> _foyers;
   // Union of the family circles, in virtual coords — the baseline fits this.
@@ -193,7 +193,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
       DraggableScrollableController();
   double _tailleFeuille = _feuilleMin;
 
-  // Free-text search by name (Lot 5): selects + frames the matching species.
+  // Free-text search by name: selects + frames the matching species.
   // Collapsed to a magnifier button until opened.
   final TextEditingController _ctrlRecherche = TextEditingController();
   bool _rechercheOuverte = false;
@@ -366,7 +366,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
 
   /// Unique association edges over the whole catalogue, using the shared
   /// resolver so the polarity (and the resulting counts) match the detail sheet
-  /// exactly — bidirectional, good taking precedence (ADR-0008).
+  /// exactly — bidirectional, good taking precedence.
   static List<_Arete> _calculerAretes(List<FichePlante> fiches) {
     const resolveur = ResolveurCompagnonnage();
     final aretes = <_Arete>[];
@@ -402,7 +402,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     }
   }
 
-  /// Voronoï-style canvas hit-testing (ADR-0008): a tap that missed every disc
+  /// Voronoï-style canvas hit-testing: a tap that missed every disc
   /// selects the **nearest** node when within [_hitboxMax] screen pixels, so the
   /// shrunk discs (dezoom) stay easy to hit. Precise taps landing on a disc (or
   /// on a grouped name, control, search…) are handled by those widgets' own
@@ -432,7 +432,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 
   /// Lowercases and strips diacritics (keeps spaces) for accent-insensitive
-  /// name search (Lot 5, ADR-0008).
+  /// name search.
   static String _normaliser(String s) {
     const accents = 'àâäáãåçèêëéìîïíòôöóõùûüú';
     const sans = 'aaaaaaceeeeiiiiooooouuuu';
@@ -446,7 +446,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 
   /// Finds the first species whose name contains [requete] and selects + frames
-  /// it (like a tap); flags "no result" otherwise (Lot 5).
+  /// it (like a tap); flags "no result" otherwise.
   void _rechercher(String requete) {
     final terme = _normaliser(requete.trim());
     if (terme.isEmpty) {
@@ -951,7 +951,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
           child: ClipRect(
             child: Stack(
               children: [
-                // Family halos sit under the edges and nodes (ADR-0008).
+                // Family halos sit under the edges and nodes.
                 CustomPaint(
                   size: _viewport,
                   painter: _PeintreFoyers(
@@ -1439,7 +1439,7 @@ class _ControlesZoom extends StatelessWidget {
   }
 }
 
-/// Overlaid name search (Lot 5): collapsed to a magnifier button (tweak #2);
+/// Overlaid name search: collapsed to a magnifier button (tweak #2);
 /// tapping it opens the text field. Finds a species by name, selecting + framing
 /// it on submit (accent/case-insensitive). Closing it returns to the global view.
 class _BarreRecherche extends StatelessWidget {
@@ -1664,8 +1664,8 @@ class _Panneau extends StatelessWidget {
   }
 }
 
-/// Paints the family halos: a smooth, non-overlapping "blobby" disc per family
-/// (ADR-0008). The family name sits in a pill **just above** the halo so it does
+/// Paints the family halos: a smooth, non-overlapping "blobby" disc per family.
+/// The family name sits in a pill **just above** the halo so it does
 /// not collide with the bubbles inside (tweak #4). In focus, only the families
 /// in [famillesAvecLabel] keep their name; the others show just the halo (tweak
 /// #3). `null` means label every family (global view). Sits under edges/nodes.

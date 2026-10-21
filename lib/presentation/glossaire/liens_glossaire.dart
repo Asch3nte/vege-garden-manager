@@ -1,4 +1,4 @@
-/// Wiki-link mini-syntax for glossary content (ADR-0017, D2).
+/// Wiki-link mini-syntax for glossary content.
 ///
 /// Glossary texts (definitions, advice — stored in the ARB) may embed links to
 /// other terms:

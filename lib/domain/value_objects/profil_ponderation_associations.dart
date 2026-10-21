@@ -2,7 +2,7 @@ import '../enums/famille_effet_association.dart';
 import '../enums/famille_effet_conflit.dart';
 import '../enums/poids_association.dart';
 
-/// A user's weighting profile for association effect families (ADR-0011): how
+/// A user's weighting profile for association effect families: how
 /// much each [FamilleEffetAssociation] counts when scoring derived suggestions.
 ///
 /// Immutable value object. [defaut] is applied to everyone; an expert may
@@ -15,7 +15,7 @@ class ProfilPonderationAssociations {
   const ProfilPonderationAssociations._(this._poids, this._poidsConflit);
 
   /// Builds a profile from explicit benefit [poids] and conflict
-  /// [poidsConflit] (ADR-0014). Families left out read as
+  /// [poidsConflit]. Families left out read as
   /// [PoidsAssociation.normal].
   factory ProfilPonderationAssociations(
     Map<FamilleEffetAssociation, PoidsAssociation> poids, {
@@ -50,7 +50,7 @@ class ProfilPonderationAssociations {
   double multiplicateur(FamilleEffetAssociation famille) =>
       poids(famille).multiplicateur;
 
-  /// Multiplier for a conflict [famille] (ADR-0014).
+  /// Multiplier for a conflict [famille].
   double multiplicateurConflit(FamilleEffetConflit famille) =>
       poidsConflit(famille).multiplicateur;
 
@@ -62,7 +62,7 @@ class ProfilPonderationAssociations {
       ProfilPonderationAssociations({..._poids, famille: valeur},
           poidsConflit: _poidsConflit);
 
-  /// A copy with a conflict [famille] set to [valeur] (ADR-0014).
+  /// A copy with a conflict [famille] set to [valeur].
   ProfilPonderationAssociations avecConflit(
     FamilleEffetConflit famille,
     PoidsAssociation valeur,

@@ -7,7 +7,6 @@
 /// Domain names are kept in French (inherited from the specification); the code
 /// and its documentation are written in English.
 ///
-/// See `docs/05-modele-de-domaine.md` §4.2.
 ///
 /// Note: `compatibleAvec(ZoneClimatique)` is deliberately not implemented here.
 /// A bare month range carries no climate information; the real rule ("is this

@@ -5,7 +5,6 @@ import '../entities/fiche_plante_personnelle.dart';
 /// Reads exclude soft-deleted rows. The on-disk source of truth is the emitted
 /// YAML; implementations serialize on write and rebuild the model on read.
 ///
-/// See `docs/05-modele-de-domaine.md` and `docs/07-base-de-connaissances-yaml.md`
 /// §7.
 abstract class AbstractFichePlantePersonnelleRepository {
   /// All personal sheets, most recently modified first.

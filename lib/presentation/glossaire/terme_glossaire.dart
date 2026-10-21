@@ -2,7 +2,7 @@ import 'chapitre_glossaire.dart';
 import 'complement_terme.dart';
 import 'type_terme_glossaire.dart';
 
-/// One entry of the « Aide & lexique » glossary (ADR-0017, D1).
+/// One entry of the « Aide & lexique » glossary.
 ///
 /// Immutable Presentation model with **already-localized** strings: instances
 /// are built by `construireGlossaire` (registre) from the YAML references

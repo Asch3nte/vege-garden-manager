@@ -43,7 +43,7 @@ class AppDatabase extends _$AppDatabase {
           );
         },
         // ⚠️ Any new/changed column MUST bump `schemaVersion` above AND add a
-        // step here, else existing installs miss the column (docs/06 §5).
+        // step here, else existing installs miss the column.
         // Data reshaped by a step must be reshaped the same way in
         // MonteeSauvegarde, or older backups import in the old shape.
         onUpgrade: (m, from, to) async {
@@ -52,12 +52,12 @@ class AppDatabase extends _$AppDatabase {
           if (from < 2) {
             await m.addColumn(preferences, preferences.onboardingTermine);
           }
-          // v2 → v3: association weighting profile (ADR-0011); defaults to '{}'
+          // v2 → v3: association weighting profile; defaults to '{}'
           // (= the neutral profile), so existing installs keep working.
           if (from < 3) {
             await m.addColumn(preferences, preferences.ponderationAssociations);
           }
-          // v3 → v4: ET₀ column for Open-Meteo data (ADR-0015 Lot 5).
+          // v3 → v4: ET₀ column for Open-Meteo data.
           if (from < 4) {
             await m.addColumn(
                 meteoCache, meteoCache.evapotranspirationMm);
@@ -67,7 +67,7 @@ class AppDatabase extends _$AppDatabase {
           if (from < 5) {
             await m.addColumn(preferences, preferences.potagerActifId);
           }
-          // v5 → v6: auto weather-fetch opt-out (docs/11); defaults to true, so
+          // v5 → v6: auto weather-fetch opt-out; defaults to true, so
           // existing installs keep fetching weather automatically as before.
           if (from < 6) {
             await m.addColumn(preferences, preferences.meteoAutoActive);
