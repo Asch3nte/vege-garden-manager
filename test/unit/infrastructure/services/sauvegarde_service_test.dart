@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/enums/mode_import.dart';
 import 'package:pot_a_gerer/domain/exceptions/sauvegarde_invalide_exception.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
+import 'package:pot_a_gerer/infrastructure/services/montee_sauvegarde.dart';
 import 'package:pot_a_gerer/infrastructure/services/sauvegarde_service_impl.dart';
 
 void main() {
@@ -118,7 +119,10 @@ void main() {
           createdAt: now,
           updatedAt: now,
         ));
-    for (final (id, titre) in [('t1', 'Arroser : Tomate'), ('t2', 'Arroser au purin')]) {
+    for (final (id, titre) in [
+      ('t1', 'Arroser : Tomate'),
+      ('t2', 'Arroser au purin'),
+    ]) {
       await db.into(db.taches).insert(TachesCompanion.insert(
             id: id,
             titre: Value(titre),
@@ -130,22 +134,27 @@ void main() {
             plantationId: const Value('pl1'),
           ));
     }
-    final json = jsonDecode(await service.exporterJson()) as Map<String, dynamic>;
+    final json =
+        jsonDecode(await service.exporterJson()) as Map<String, dynamic>;
     json['schemaVersion'] = 6;
-    for (final ligne in (json['tables'] as Map<String, dynamic>)['taches'] as List) {
+    final taches = (json['tables'] as Map<String, dynamic>)['taches'] as List;
+    for (final ligne in taches) {
       (ligne as Map<String, dynamic>).remove('generee');
     }
     return jsonEncode(json);
   }
 
   for (final mode in ModeImport.values) {
-    test('a v6 backup is brought up to date on import (${mode.name})', () async {
+    test('a v6 backup is brought up to date on import (${mode.name})',
+        () async {
       final sauvegarde = await sauvegardeV6();
       await db.delete(db.taches).go();
 
       await service.importerJson(sauvegarde, mode);
 
-      final taches = {for (final t in await db.select(db.taches).get()) t.id: t};
+      final taches = {
+        for (final t in await db.select(db.taches).get()) t.id: t,
+      };
       expect(taches['t1']!.titre, isNull);
       expect(taches['t1']!.generee, isTrue);
       expect(taches['t2']!.titre, 'Arroser au purin');
@@ -175,10 +184,8 @@ void main() {
     expect(prefs.meteoAutoActive, isTrue);
   });
 
-  test('every schema version has its backup step', () {
-    // A new schema version must reshape old backups in MonteeSauvegarde, then
-    // move this marker.
-    expect(db.schemaVersion, 7);
+  test('backups are brought to the current schema version', () {
+    expect(MonteeSauvegarde.versionCible, db.schemaVersion);
   });
 
   test('rejects a backup from a newer app', () async {

@@ -4,6 +4,9 @@
 /// Columns added since are left out of the rows and take their default; only
 /// data reshaped by a migration is rewritten here.
 class MonteeSauvegarde {
+  /// Schema version the backups are brought to; follows the database's.
+  static const int versionCible = 7;
+
   const MonteeSauvegarde();
 
   /// Rewrites [tables] in place from schema version [depuis].
@@ -11,7 +14,8 @@ class MonteeSauvegarde {
     if (depuis < 7) _versV7(tables);
   }
 
-  /// The engine's French watering titles become derived ones.
+  /// The engine's French watering titles become derived ones, matched like
+  /// the database migration (`LIKE` ignores ASCII case).
   void _versV7(Map<String, dynamic> tables) {
     final taches = tables['taches'];
     if (taches is! List) return;
@@ -19,8 +23,9 @@ class MonteeSauvegarde {
       final titre = ligne['titre'];
       if (ligne['type'] == 'arrosage' &&
           ligne['plantation_id'] != null &&
+          titre is String &&
           (titre == 'Arroser' ||
-              (titre is String && titre.startsWith('Arroser : ')))) {
+              titre.toLowerCase().startsWith('arroser : '))) {
         ligne['titre'] = null;
         ligne['generee'] = 1;
       }

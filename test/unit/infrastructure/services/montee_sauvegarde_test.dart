@@ -10,14 +10,16 @@ void main() {
     final lignes = [
       tache('Arroser : Tomate'),
       tache('Arroser'),
+      tache('arroser : tomate'),
       tache('Arroser le compost'),
       tache('Arroser : Tomate', plantationId: null),
       tache('Arroser : Tomate', type: 'desherbage'),
     ];
     const MonteeSauvegarde().monter({'taches': lignes}, 6);
 
-    expect(lignes.map((l) => l['generee']), [1, 1, null, null, null]);
+    expect(lignes.map((l) => l['generee']), [1, 1, 1, null, null, null]);
     expect(lignes.map((l) => l['titre']), [
+      null,
       null,
       null,
       'Arroser le compost',
