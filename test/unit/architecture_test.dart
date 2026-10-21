@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// Files of `lib/<couche>` importing one of the [interdites] layers.
+/// Files of `lib/<couche>` importing or exporting one of the [interdites]
+/// layers or files.
 List<String> _violations(String couche, List<String> interdites) => [
       for (final fichier in Directory('lib/$couche')
           .listSync(recursive: true)
           .whereType<File>()
           .where((f) => f.path.endsWith('.dart')))
         for (final ligne in fichier.readAsLinesSync())
-          if (ligne.startsWith('import ') &&
+          if ((ligne.startsWith('import ') || ligne.startsWith('export ')) &&
               interdites.any((c) =>
-                  ligne.contains('/$c/') ||
-                  ligne.contains('package:pot_a_gerer/$c/')))
+                  ligne.contains(c.endsWith('.dart') ? '/$c' : '/$c/')))
             '${fichier.path}: $ligne',
     ];
 
@@ -27,7 +27,9 @@ void main() {
         isEmpty);
   });
 
-  test('presentation does not import infrastructure', () {
-    expect(_violations('presentation', ['infrastructure']), isEmpty);
+  test('presentation does not import infrastructure nor the composition', () {
+    expect(
+        _violations('presentation', ['infrastructure', 'app/composition.dart']),
+        isEmpty);
   });
 }

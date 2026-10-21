@@ -22,6 +22,7 @@ import 'package:riverpod/riverpod.dart';
 
 import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/journal_erreurs_chargement.dart';
 import 'package:pot_a_gerer/application/use_cases/calculer_besoin_arrosage.dart';
 import 'package:pot_a_gerer/application/use_cases/creer_equipement.dart';
 import 'package:pot_a_gerer/application/use_cases/creer_parcelle.dart';
@@ -76,6 +77,9 @@ Future<void> _executerDemo(ProviderContainer c) async {
   _titre('1. Catalogue YAML (chargé depuis le disque, vrais fichiers)');
   final catalogue = await c.read(fichePlanteRepositoryProvider.future);
   final fiches = await catalogue.obtenirToutes();
+  for (final e in c.read(journalErreursChargementProvider).erreurs) {
+    _print('  ⚠️  fiche ignorée (${e.source}): ${e.erreur}');
+  }
   _print('  ${fiches.length} fiche(s) chargée(s) :');
   for (final f in fiches) {
     _print('    • ${f.nomLocalise('fr')} '

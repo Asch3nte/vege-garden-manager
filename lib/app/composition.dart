@@ -59,10 +59,18 @@ final fichePlanteCacheProvider = FutureProvider<FichePlanteCache>((ref) async {
   return FichePlanteCache([...embarquees.toutes(), ...personnelles]);
 });
 
+/// Source of the embedded YAML family sheets.
+final familleAssetSourceProvider =
+    Provider<FamilleAssetSource>((ref) => BundleFamilleAssetSource());
+
+/// Source of the embedded bioaggressor reference.
+final bioagresseurAssetSourceProvider =
+    Provider<BioagresseurAssetSource>((ref) => BundleBioagresseurAssetSource());
+
 /// Botanical families loaded from the bundled assets.
 final familleBotaniqueCacheProvider = FutureProvider<FamilleBotaniqueCache>(
   (ref) => FamillesLoader(
-    BundleFamilleAssetSource(),
+    ref.watch(familleAssetSourceProvider),
     ref.watch(journalErreursChargementProvider).signaler,
   ).charger(),
 );
@@ -70,7 +78,7 @@ final familleBotaniqueCacheProvider = FutureProvider<FamilleBotaniqueCache>(
 /// Bioaggressors loaded from the bundled reference.
 final bioagresseurCacheProvider = FutureProvider<BioagresseurCache>(
   (ref) => BioagresseursLoader(
-    BundleBioagresseurAssetSource(),
+    ref.watch(bioagresseurAssetSourceProvider),
     ref.watch(journalErreursChargementProvider).signaler,
   ).charger(),
 );

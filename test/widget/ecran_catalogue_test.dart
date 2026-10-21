@@ -153,7 +153,6 @@ void main() {
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
-          // Family-level educational section (ADR-0006 Lot 4).
           bioagresseursParIdProvider.overrideWith((ref) async => {
                 'mildiou': Bioagresseur(
                     id: 'mildiou',

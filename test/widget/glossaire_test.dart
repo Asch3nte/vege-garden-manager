@@ -445,7 +445,6 @@ void main() {
           potagerRepositoryProvider.overrideWithValue(potagers),
           accesNiveauProvider
               .overrideWithValue(AccesNiveau(NiveauExperience.debutant)),
-          // The family education section reads the caches directly.
           familleBotaniqueRepositoryProvider.overrideWith((ref) async {
             final familles = _MockFamilles();
             when(familles.obtenirToutes).thenAnswer((_) async => _familles);
