@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import 'package:pot_a_gerer/application/state/favoris_notifier.dart';
 import 'package:pot_a_gerer/application/state/fiches_personnelles_notifier.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
@@ -81,5 +82,14 @@ void main() {
 
     expect(await container.read(fichesPersonnellesProvider.future), isEmpty);
     expect(await container.read(idsFichesPersonnellesProvider.future), isEmpty);
+  });
+
+  test('supprimer also drops the sheet from the favourites', () async {
+    final fiche = await notifier().creer(modele());
+    await container.read(favorisProvider.notifier).basculer('perso_tomate');
+
+    await notifier().supprimer(fiche.id);
+
+    expect(await container.read(favorisProvider.future), isEmpty);
   });
 }

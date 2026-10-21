@@ -5,6 +5,7 @@ import '../../domain/value_objects/modele_fiche_personnelle.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/creer_fiche_personnelle.dart';
 import '../use_cases/modifier_fiche_personnelle.dart';
+import 'favoris_notifier.dart';
 
 /// Exposes the user's own plant sheets and the actions that mutate them.
 ///
@@ -38,9 +39,15 @@ class FichesPersonnellesNotifier
     return maj;
   }
 
-  /// Soft-deletes the sheet with storage [id].
+  /// Soft-deletes the sheet with storage [id], and its favourite mark.
   Future<void> supprimer(String id) async {
+    final idFiche =
+        state.value?.where((f) => f.id == id).firstOrNull?.idFiche;
     await ref.read(fichePlantePersonnelleRepositoryProvider).supprimer(id);
+    if (idFiche != null) {
+      await ref.read(favoriRepositoryProvider).retirer(idFiche);
+      ref.invalidate(favorisProvider);
+    }
     await _rafraichir();
   }
 

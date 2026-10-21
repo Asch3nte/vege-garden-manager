@@ -12,6 +12,7 @@ import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/infrastructure/catalogue/fiche_plante_cache.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
+import 'package:pot_a_gerer/infrastructure/repositories/favori_repository_impl.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/potager_repository_impl.dart';
 import 'package:pot_a_gerer/infrastructure/services/sauvegarde_service_impl.dart';
 import 'package:riverpod/riverpod.dart';
@@ -43,6 +44,14 @@ void main() {
     final container = withDb();
     expect(container.read(potagerRepositoryProvider),
         isA<PotagerRepositoryImpl>());
+  });
+
+  test('the favourites repository is wired to drift', () async {
+    final container = withDb();
+    final repo = container.read(favoriRepositoryProvider);
+    expect(repo, isA<FavoriRepositoryImpl>());
+    await repo.ajouter('tomate');
+    expect(await repo.obtenirIds(), {'tomate'});
   });
 
   test('a repository provider can be overridden with a mock', () {

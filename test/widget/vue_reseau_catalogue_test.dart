@@ -22,6 +22,7 @@ import 'package:pot_a_gerer/domain/value_objects/association_conflit.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_reseau_catalogue.dart';
+import '../helpers/favoris_mock.dart';
 
 class _MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
@@ -111,6 +112,7 @@ void main() {
         // Overrides so the detail sheet (catalogueProvider / climate context)
         // can open on a node re-tap.
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           fichePlanteRepositoryProvider.overrideWith((ref) async => repoFiches),
           familleBotaniqueRepositoryProvider.overrideWith(
             (ref) async => repoFamilles,
@@ -900,6 +902,7 @@ extension on WidgetTester {
     await pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           fichePlanteRepositoryProvider.overrideWith((ref) async => repoFiches),
           familleBotaniqueRepositoryProvider.overrideWith(
             (ref) async => repoFamilles,
@@ -948,6 +951,7 @@ extension on WidgetTester {
     await pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           fichePlanteRepositoryProvider.overrideWith((ref) async => repoFiches),
           familleBotaniqueRepositoryProvider.overrideWith(
             (ref) async => repoFamilles,

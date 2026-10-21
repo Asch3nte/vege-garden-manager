@@ -7,6 +7,7 @@ import '../../domain/services/comparateur_noms.dart';
 import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'catalogue_vue.dart';
+import 'favoris_notifier.dart';
 
 /// Drives the **Catalogue** screen: loads the plant catalogue once, then applies
 /// the user's text query and category filter in memory.
@@ -26,6 +27,8 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   String _requete = '';
   CategoriePlante? _categorie;
   String? _famille;
+  bool _favorisSeuls = false;
+  Set<String> _favoris = const {};
 
   @override
   Future<CatalogueVue> build() async {
@@ -37,6 +40,12 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     _famillesParId = {
       for (final f in await repoFamilles.obtenirToutes()) f.id: f
     };
+    // Favourites re-filter in place, without reloading the catalogue. Not
+    // awaited: unreadable favourites leave the catalogue usable, unfiltered.
+    ref.listen(favorisProvider, (_, favoris) {
+      _favoris = favoris.value ?? const {};
+      if (state.hasValue) state = AsyncData(_projeter());
+    }, fireImmediately: true);
     return _projeter();
   }
 
@@ -54,6 +63,12 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     state = AsyncData(_projeter());
   }
 
+  /// Shows only the favourite sheets, or every sheet, and re-filters.
+  void definirFavorisSeuls(bool favorisSeuls) {
+    _favorisSeuls = favorisSeuls;
+    state = AsyncData(_projeter());
+  }
+
   /// Sets the family sub-filter (`null` = all families of the category) and
   /// re-filters.
   void definirFamille(String? familleId) {
@@ -64,17 +79,19 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   /// Applies the current filters and groups the result by species (mother sheet
   /// + its varieties), ordered by localized name.
   ///
-  /// A species is shown when its category matches and either the query is empty,
-  /// the species itself matches, or one of its varieties matches. When only
-  /// varieties match, just those are expanded under the species; otherwise all
-  /// of them are.
+  /// A species shown in full must match the query and, in favourites-only
+  /// mode, be a favourite. Otherwise it appears with just its qualifying
+  /// varieties: matching the query (or under a species that does) and, in
+  /// favourites-only mode, favourite themselves or under a favourite species.
   CatalogueVue _projeter() {
     final terme = _comparateur.replier(_requete.trim());
     int parNom(FichePlante a, FichePlante b) =>
         _comparateur.comparer(a.nomLocalise(_locale), b.nomLocalise(_locale));
-    bool correspond(FichePlante f) =>
+    bool texte(FichePlante f) =>
+        terme.isEmpty ||
         _comparateur.replier(f.nomLocalise(_locale)).contains(terme) ||
         f.id.toLowerCase().contains(terme);
+    bool favori(FichePlante f) => !_favorisSeuls || _favoris.contains(f.id);
     String cleFamille(FichePlante f) =>
         FamilleBotanique.normaliserCle(f.familleBotanique);
 
@@ -91,10 +108,15 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
       if (_categorie != null && mere.categorie != _categorie) continue;
       if (_famille != null && cleFamille(mere) != _famille) continue;
       final varietes = [...?varietesParParent[mere.id]]..sort(parNom);
-      if (terme.isEmpty || correspond(mere)) {
+      final mereFavorite = favori(mere);
+      final mereTrouvee = texte(mere);
+      if (mereFavorite && mereTrouvee) {
         groupes.add(GroupeFiche(mere: mere, varietes: varietes));
       } else {
-        final filtrees = varietes.where(correspond).toList();
+        final filtrees = varietes
+            .where((v) =>
+                (mereFavorite || favori(v)) && (mereTrouvee || texte(v)))
+            .toList();
         if (filtrees.isNotEmpty) {
           groupes.add(GroupeFiche(mere: mere, varietes: filtrees));
         }
@@ -106,6 +128,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
       categorie: _categorie,
       familleSelectionnee: _famille,
       familles: _famillesDeCategorie(meres),
+      favorisSeuls: _favorisSeuls,
       groupes: groupes,
       toutesMeres: meres,
       toutesVarietes: toutesVarietes,

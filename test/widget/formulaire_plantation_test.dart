@@ -23,6 +23,7 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_plantation.dart';
+import '../helpers/favoris_mock.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
@@ -83,6 +84,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider.overrideWith((ref) async {
             final familles = _MockFamilles();
@@ -181,6 +183,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider.overrideWith((ref) async {
             final familles = _MockFamilles();

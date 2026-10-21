@@ -24,13 +24,14 @@ part 'app_database.g.dart';
     Parametres,
     FichesPlantesPersonnelles,
     Preferences,
+    Favoris,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -102,6 +103,10 @@ class AppDatabase extends _$AppDatabase {
                 'ORDER BY position_ordre, created_at, rowid) AS rang '
                 'FROM parcelles WHERE deleted_at IS NULL) r '
                 'WHERE r.id = parcelles.id)');
+          }
+          // v8 → v9: favourite plant sheets.
+          if (from < 9) {
+            await m.createTable(favoris);
           }
         },
         beforeOpen: (details) async {

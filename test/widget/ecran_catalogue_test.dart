@@ -38,6 +38,7 @@ import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/providers/ajout_plante_provider.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
+import '../helpers/favoris_mock.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
@@ -56,6 +57,7 @@ void main() {
   late MockFiches fiches;
   late MockFamilles familles;
   late MockPotagers potagers;
+  late MockFavoris favoris;
 
   FichePlante fiche(
     String id,
@@ -101,6 +103,7 @@ void main() {
     fiches = MockFiches();
     familles = MockFamilles();
     potagers = MockPotagers();
+    favoris = favorisEnMemoire();
     // No active garden → the sheet's calendar shows its "create a garden" note.
     when(() => potagers.obtenirPotagerActif()).thenAnswer((_) async => null);
     when(() => fiches.obtenirToutes()).thenAnswer(
@@ -167,6 +170,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favoris),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
@@ -282,6 +286,96 @@ void main() {
     expect(find.bySemanticsLabel(RegExp('Difficulté : Exigeant')),
         findsOneWidget);
     semantique.dispose();
+  });
+
+  group('favourites', () {
+    Finder coeurDe(String nom) => find.descendant(
+        of: find.ancestor(of: find.text(nom), matching: find.byType(Card)),
+        matching: find.byTooltip('Ajouter aux favoris'));
+
+    testWidgets('the card heart toggles a favourite', (tester) async {
+      await monter(tester);
+
+      await tester.tap(coeurDe('Tomate'));
+      await tester.pumpAndSettle();
+
+      verify(() => favoris.ajouter('tomate')).called(1);
+      expect(
+          find.descendant(
+              of: find.ancestor(
+                  of: find.text('Tomate'), matching: find.byType(Card)),
+              matching: find.byTooltip('Retirer des favoris')),
+          findsOneWidget);
+    });
+
+    testWidgets('the header heart shows only the favourites', (tester) async {
+      favoris = favorisEnMemoire({'basilic'});
+      await monter(tester);
+
+      await tester.tap(find.byTooltip('Afficher les favoris'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Basilic'), findsOneWidget);
+      expect(find.text('Tomate'), findsNothing);
+
+      await tester.tap(find.byTooltip('Afficher toutes les plantes'));
+      await tester.pumpAndSettle();
+      expect(find.text('Tomate'), findsOneWidget);
+    });
+
+    testWidgets('no favourite yet explains how to add one', (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.byTooltip('Afficher les favoris'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Aucun favori. Touchez le cœur d\'une plante pour l\'ajouter.'),
+          findsOneWidget);
+    });
+
+    testWidgets('the favourites filter is hidden in the Réseau view',
+        (tester) async {
+      await monter(tester);
+      expect(find.byTooltip('Afficher les favoris'), findsOneWidget);
+
+      await tester.tap(find.text('Réseau'));
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Afficher les favoris'), findsNothing);
+    });
+
+    testWidgets('the card heart keeps a full-size tap target', (tester) async {
+      await monter(tester);
+      // Material pads the 40dp icon button to a 48dp tap target.
+      final taille = tester.getSize(find
+          .ancestor(of: coeurDe('Tomate'), matching: find.byType(IconButton))
+          .first);
+      expect(taille.width, greaterThanOrEqualTo(48));
+      expect(taille.height, greaterThanOrEqualTo(48));
+    });
+
+    testWidgets('a failed toggle is reported', (tester) async {
+      when(() => favoris.ajouter(any())).thenThrow(Exception('refus'));
+      await monter(tester);
+
+      await tester.tap(coeurDe('Tomate'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Impossible de modifier les favoris.'), findsOneWidget);
+    });
+
+    testWidgets('the sheet heart toggles a favourite', (tester) async {
+      await monter(tester);
+      await tester.tap(find.text('Tomate'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.descendant(
+          of: find.byType(BottomSheet),
+          matching: find.byTooltip('Ajouter aux favoris')));
+      await tester.pumpAndSettle();
+
+      verify(() => favoris.ajouter('tomate')).called(1);
+    });
   });
 
   testWidgets('no match shows the empty state', (tester) async {

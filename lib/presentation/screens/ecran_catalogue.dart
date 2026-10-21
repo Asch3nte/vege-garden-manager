@@ -19,8 +19,10 @@ import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_plantation.dart';
 import '../providers/ajout_plante_provider.dart';
+import '../providers/vue_reseau_provider.dart';
 import '../screens/ecran_selection_zone.dart';
 import '../widgets/badge_perso.dart';
+import '../widgets/bouton_favori.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/fiche_plante_detail.dart';
 import '../widgets/langue_contexte.dart';
@@ -79,11 +81,27 @@ class EcranCatalogue extends ConsumerWidget {
     // only appears once unlocked. Personal sheets still show, tagged, in the
     // catalogue list for every level.
     final fichesPersoDispo = ref.watch(accesNiveauProvider).fichesPerso;
+    // The Réseau view draws every species: the favourites filter does not
+    // apply there, so its toggle is hidden.
+    final reseauActif = ref.watch(accesNiveauProvider).vueReseau &&
+        ref.watch(vueReseauProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.navCatalogue),
         actions: [
+          if (vue.value case final data? when !reseauActif)
+            IconButton(
+              icon: Icon(data.favorisSeuls
+                  ? PhosphorIconsFill.heart
+                  : PhosphorIconsRegular.heart),
+              tooltip: data.favorisSeuls
+                  ? l10n.catalogueToutesPlantes
+                  : l10n.catalogueFavorisSeuls,
+              onPressed: () => ref
+                  .read(catalogueProvider.notifier)
+                  .definirFavorisSeuls(!data.favorisSeuls),
+            ),
           if (fichesPersoDispo)
             IconButton(
               icon: const Icon(PhosphorIconsRegular.leaf),
@@ -112,7 +130,6 @@ class _Contenu extends ConsumerStatefulWidget {
 }
 
 class _ContenuState extends ConsumerState<_Contenu> {
-  bool _reseau = false;
   bool _teaserFerme = false;
 
   @override
@@ -123,7 +140,8 @@ class _ContenuState extends ConsumerState<_Contenu> {
     // The "Réseau" association view is an intermediate+ feature:
     // hidden for beginners, who keep the Fiches view only.
     final vueReseauDispo = ref.watch(accesNiveauProvider).vueReseau;
-    final reseauActif = vueReseauDispo && _reseau;
+    final reseau = ref.watch(vueReseauProvider);
+    final reseauActif = vueReseauDispo && reseau;
     void ajouter(FichePlante fiche) => _ajouterPlante(context, ref, fiche);
 
     return Column(
@@ -155,8 +173,9 @@ class _ContenuState extends ConsumerState<_Contenu> {
                   label: Text(l10n.catalogueVueReseau),
                 ),
               ],
-              selected: {_reseau},
-              onSelectionChanged: (s) => setState(() => _reseau = s.first),
+              selected: {reseau},
+              onSelectionChanged: (s) =>
+                  ref.read(vueReseauProvider.notifier).choisir(s.first),
             ),
           ),
         Expanded(
@@ -233,7 +252,10 @@ class _VueFiches extends ConsumerWidget {
         const SizedBox(height: EspacementsApp.s3),
         Expanded(
           child: vue.sansResultat
-              ? _EtatVide(message: l10n.catalogueAucunResultat)
+              ? _EtatVide(
+                  message: vue.favorisSeuls
+                      ? l10n.catalogueAucunFavori
+                      : l10n.catalogueAucunResultat)
               : _Liste(groupes: vue.groupes, onAjouter: onAjouter),
         ),
       ],
@@ -595,6 +617,7 @@ class _CarteFiche extends ConsumerWidget {
                 ],
               ),
             ),
+            BoutonFavori(ficheId: fiche.id),
             // One-tap access to the detailed Associations view of this species.
             IconButton(
               icon: const Icon(PhosphorIconsRegular.graph),
