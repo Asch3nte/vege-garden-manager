@@ -276,10 +276,11 @@ void main() {
     final semantique = tester.ensureSemantics();
     await monter(tester);
 
+    expect(find.text('Exigeant'), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.gauge), findsOneWidget);
     // The card merges its children's labels into one node.
     expect(find.bySemanticsLabel(RegExp('Difficulté : Exigeant')),
         findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('Difficulté')), findsOneWidget);
     semantique.dispose();
   });
 

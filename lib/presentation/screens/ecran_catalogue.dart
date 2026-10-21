@@ -5,7 +5,6 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
-import '../../app/theme/theme_app.dart';
 import '../../application/providers/repository_providers.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
@@ -572,7 +571,6 @@ class _CarteFiche extends ConsumerWidget {
                   const SizedBox(height: EspacementsApp.s1),
                   Wrap(
                     spacing: EspacementsApp.s3,
-                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       _Meta(
                         icone: PhosphorIconsRegular.sun,
@@ -583,7 +581,15 @@ class _CarteFiche extends ConsumerWidget {
                         texte: l10n.besoinEau(fiche.besoins.eau),
                       ),
                       if (fiche.difficulte != null)
-                        _PointsDifficulte(niveau: fiche.difficulte!),
+                        Semantics(
+                          label: l10n.catalogueDifficulte(
+                              l10n.difficulte(fiche.difficulte!)),
+                          excludeSemantics: true,
+                          child: _Meta(
+                            icone: PhosphorIconsRegular.gauge,
+                            texte: l10n.difficulte(fiche.difficulte!),
+                          ),
+                        ),
                     ],
                   ),
                 ],
@@ -734,40 +740,6 @@ class _Meta extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Growing difficulty as three dots, filled up to [niveau].
-class _PointsDifficulte extends StatelessWidget {
-  final int niveau;
-
-  const _PointsDifficulte({required this.niveau});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
-    final actif = theme.extension<AccentsCarnet>()!.attention;
-    final inactif = theme.colorScheme.onSurface.withValues(alpha: 0.22);
-    return Semantics(
-      label: l10n.catalogueDifficulte(l10n.difficulte(niveau)),
-      excludeSemantics: true,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 1; i <= 3; i++)
-            Container(
-              width: EspacementsApp.s2,
-              height: EspacementsApp.s2,
-              margin: EdgeInsets.only(left: i == 1 ? 0 : EspacementsApp.s1 / 2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: i <= niveau ? actif : inactif,
-              ),
-            ),
-        ],
-      ),
     );
   }
 }

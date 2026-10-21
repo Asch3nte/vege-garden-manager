@@ -1027,7 +1027,7 @@
   "@difficulteExigeant": { "description": "Difficulté de culture 3 sur 3." },
   "catalogueDifficulte": "Difficulté : {niveau}",
   "@catalogueDifficulte": {
-    "description": "Libellé accessible des points de difficulté sur la carte du catalogue.",
+    "description": "Libellé accessible de la difficulté sur la carte du catalogue.",
     "placeholders": { "niveau": { "type": "String" } }
   },
   "ficheFamilleRotation": "Pourquoi la rotation",
