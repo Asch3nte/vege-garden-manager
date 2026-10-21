@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/fiches_personnelles_notifier.dart';
@@ -32,7 +33,7 @@ class EcranFichesPersonnelles extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.fichesPersoTitre)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: ajouter,
-        icon: const Icon(Icons.add),
+        icon: const Icon(PhosphorIconsRegular.plus),
         label: Text(l10n.fichesPersoAjouter),
       ),
       body: ref.watch(fichesPersonnellesProvider).when(
@@ -85,7 +86,7 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.eco_outlined,
+            Icon(PhosphorIconsRegular.leaf,
                 size: 48, color: theme.colorScheme.onSurfaceVariant),
             const SizedBox(height: EspacementsApp.s4),
             Text(l10n.fichesPersoVide,
@@ -167,7 +168,7 @@ class _MenuActions extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return PopupMenuButton<_ActionFiche>(
-      icon: const Icon(Icons.more_vert),
+      icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
       tooltip: l10n.fichesPersoTitre,
       onSelected: (action) => switch (action) {
         _ActionFiche.modifier => _modifier(context, ref),
@@ -178,7 +179,7 @@ class _MenuActions extends ConsumerWidget {
           value: _ActionFiche.modifier,
           child: Row(
             children: [
-              const Icon(Icons.edit_outlined, size: TaillesIconesApp.sm),
+              const Icon(PhosphorIconsRegular.pencilSimple, size: TaillesIconesApp.sm),
               const SizedBox(width: EspacementsApp.s2),
               Text(l10n.actionModifier),
             ],
@@ -188,7 +189,7 @@ class _MenuActions extends ConsumerWidget {
           value: _ActionFiche.supprimer,
           child: Row(
             children: [
-              Icon(Icons.delete_outline,
+              Icon(PhosphorIconsRegular.trash,
                   size: TaillesIconesApp.sm, color: theme.colorScheme.error),
               const SizedBox(width: EspacementsApp.s2),
               Text(l10n.actionSupprimer),

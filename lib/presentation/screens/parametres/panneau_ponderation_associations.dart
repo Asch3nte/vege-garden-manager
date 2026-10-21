@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../application/state/preferences_notifier.dart';
 import '../../../domain/enums/famille_effet_association.dart';
@@ -85,7 +86,7 @@ class PanneauPonderationAssociations extends ConsumerWidget {
                     ? null
                     : () => enregistreur.executer(
                         notifier.reinitialiserPonderationAssociations),
-                icon: const Icon(Icons.restart_alt),
+                icon: const Icon(PhosphorIconsRegular.arrowClockwise),
                 label: Text(l10n.ponderationReinitialiser),
               ),
             ),

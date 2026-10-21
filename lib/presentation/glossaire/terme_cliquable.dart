@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/couleurs_termes.dart';
@@ -95,7 +96,7 @@ class AideGlossaire extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.help_outline),
+      icon: const Icon(PhosphorIconsRegular.question),
       iconSize: 18,
       visualDensity: VisualDensity.compact,
       color: Theme.of(context).colorScheme.onSurfaceVariant,

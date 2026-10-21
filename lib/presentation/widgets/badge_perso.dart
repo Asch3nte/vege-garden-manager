@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../l10n/app_localizations.dart';
@@ -24,7 +25,7 @@ class BadgePerso extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.person_outline,
+          Icon(PhosphorIconsRegular.user,
               size: TaillesIconesApp.sm, color: theme.colorScheme.tertiary),
           const SizedBox(width: 4),
           Text(

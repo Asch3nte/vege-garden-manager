@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/historique_navigation.dart';
 import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
@@ -357,7 +358,7 @@ void main() {
     semerUneCulture();
     await monter(tester, 'z-1');
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Arracher'));
     await tester.pumpAndSettle();
@@ -376,7 +377,7 @@ void main() {
         .thenAnswer((_) async => throw Exception('disque plein'));
     await monter(tester, 'z-1');
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Arracher'));
     await tester.pumpAndSettle();
@@ -389,7 +390,7 @@ void main() {
     semerUneCulture();
     await monter(tester, 'z-1');
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Supprimer')); // menu item
     await tester.pumpAndSettle();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -85,7 +86,7 @@ class EcranCatalogue extends ConsumerWidget {
         actions: [
           if (fichesPersoDispo)
             IconButton(
-              icon: const Icon(Icons.eco_outlined),
+              icon: const Icon(PhosphorIconsRegular.leaf),
               tooltip: l10n.fichesPersoOuvrir,
               onPressed: () => context.go(RoutesApp.fichesPerso),
             ),
@@ -145,12 +146,12 @@ class _ContenuState extends ConsumerState<_Contenu> {
               segments: [
                 ButtonSegment(
                   value: false,
-                  icon: const Icon(Icons.grid_view_outlined),
+                  icon: const Icon(PhosphorIconsRegular.squaresFour),
                   label: Text(l10n.catalogueVueFiches),
                 ),
                 ButtonSegment(
                   value: true,
-                  icon: const Icon(Icons.hub_outlined),
+                  icon: const Icon(PhosphorIconsRegular.graph),
                   label: Text(l10n.catalogueVueReseau),
                 ),
               ],
@@ -170,7 +171,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
         // Level-up teaser for the locked Réseau view.
         if (!vueReseauDispo && !_teaserFerme)
           CarteTeaserPalier(
-            icone: Icons.hub_outlined,
+            icone: PhosphorIconsRegular.graph,
             feature: l10n.tutoVueReseauTitre,
             niveauRequis: NiveauExperience.intermediaire,
             onFermer: () => setState(() => _teaserFerme = true),
@@ -263,7 +264,7 @@ class _BanniereAjout extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              Icons.add_location_alt_outlined,
+              PhosphorIconsRegular.mapPinPlus,
               size: TaillesIconesApp.sm,
               color: theme.colorScheme.onPrimaryContainer,
             ),
@@ -277,7 +278,7 @@ class _BanniereAjout extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(PhosphorIconsRegular.x),
               tooltip: l10n.catalogueAjoutAnnuler,
               color: theme.colorScheme.onPrimaryContainer,
               onPressed: onAnnuler,
@@ -320,11 +321,11 @@ class _BarreRechercheState extends State<_BarreRecherche> {
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: l10n.catalogueRecherche,
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass),
         suffixIcon: _controleur.text.isEmpty
             ? null
             : IconButton(
-                icon: const Icon(Icons.close),
+                icon: const Icon(PhosphorIconsRegular.x),
                 tooltip: l10n.catalogueEffacer,
                 onPressed: () {
                   _controleur.clear();
@@ -537,7 +538,7 @@ class _CarteFiche extends ConsumerWidget {
         child: Row(
           children: [
             Icon(
-              Icons.eco_outlined,
+              PhosphorIconsRegular.leaf,
               size: TaillesIconesApp.lg,
               color: theme.colorScheme.primary,
             ),
@@ -572,11 +573,11 @@ class _CarteFiche extends ConsumerWidget {
                     spacing: EspacementsApp.s3,
                     children: [
                       _Meta(
-                        icone: Icons.wb_sunny_outlined,
+                        icone: PhosphorIconsRegular.sun,
                         texte: l10n.exposition(fiche.besoins.soleil),
                       ),
                       _Meta(
-                        icone: Icons.water_drop_outlined,
+                        icone: PhosphorIconsRegular.drop,
                         texte: l10n.besoinEau(fiche.besoins.eau),
                       ),
                     ],
@@ -586,7 +587,7 @@ class _CarteFiche extends ConsumerWidget {
             ),
             // One-tap access to the detailed Associations view of this species.
             IconButton(
-              icon: const Icon(Icons.hub_outlined),
+              icon: const Icon(PhosphorIconsRegular.graph),
               tooltip: l10n.catalogueAssociations,
               onPressed: () async {
                 final familles = await ref.read(famillesParIdProvider.future);
@@ -628,7 +629,7 @@ class _CarteFiche extends ConsumerWidget {
             // plain chevron → the meta stays on one line on every card.
             if (onToggle != null)
               IconButton(
-                icon: Icon(ouvert ? Icons.expand_less : Icons.expand_more),
+                icon: Icon(ouvert ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown),
                 iconSize: TaillesIconesApp.md,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -639,7 +640,7 @@ class _CarteFiche extends ConsumerWidget {
               )
             else
               Icon(
-                Icons.chevron_right,
+                PhosphorIconsRegular.caretRight,
                 size: TaillesIconesApp.md,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -680,7 +681,7 @@ class _LigneVariete extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.spa_outlined,
+                PhosphorIconsRegular.flowerLotus,
                 size: TaillesIconesApp.sm,
                 color: theme.colorScheme.secondary,
               ),
@@ -692,7 +693,7 @@ class _LigneVariete extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.chevron_right,
+                PhosphorIconsRegular.caretRight,
                 size: TaillesIconesApp.md,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -748,7 +749,7 @@ class _EtatVide extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.search_off,
+              PhosphorIconsRegular.magnifyingGlassMinus,
               size: TaillesIconesApp.xl2,
               color: theme.colorScheme.secondary,
             ),
@@ -783,7 +784,7 @@ class _EtatErreur extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.error_outline,
+              PhosphorIconsRegular.warningCircle,
               size: TaillesIconesApp.xl2,
               color: theme.colorScheme.error,
             ),

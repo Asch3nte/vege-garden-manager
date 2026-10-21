@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -136,7 +137,7 @@ class _CarteAlerte extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        Icons.event_outlined,
+                        PhosphorIconsRegular.calendarCheck,
                         size: TaillesIconesApp.sm,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -172,9 +173,9 @@ class _CarteAlerte extends StatelessWidget {
   }
 
   IconData get _icone => switch (alerte.type) {
-        TypeAlerteMeteo.gel => Icons.ac_unit,
-        TypeAlerteMeteo.canicule => Icons.wb_sunny_outlined,
-        TypeAlerteMeteo.fortePluie => Icons.water_drop_outlined,
+        TypeAlerteMeteo.gel => PhosphorIconsRegular.snowflake,
+        TypeAlerteMeteo.canicule => PhosphorIconsRegular.sun,
+        TypeAlerteMeteo.fortePluie => PhosphorIconsRegular.drop,
       };
 
   Color _couleur(ThemeData theme) => switch (alerte.type) {
@@ -226,7 +227,7 @@ class _EtatVide extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.notifications_none_outlined,
+              PhosphorIconsRegular.bell,
               size: 48,
               color: theme.colorScheme.outline,
             ),

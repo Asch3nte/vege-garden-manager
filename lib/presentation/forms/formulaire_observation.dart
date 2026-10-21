@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -133,7 +134,7 @@ class _FormulaireObservationState extends ConsumerState<FormulaireObservation> {
                   Expanded(child: Text(dateLabel)),
                   TextButton.icon(
                     onPressed: _choisirDate,
-                    icon: const Icon(Icons.calendar_today, size: TaillesIconesApp.sm),
+                    icon: const Icon(PhosphorIconsRegular.calendarBlank, size: TaillesIconesApp.sm),
                     label: Text(l10n.formObservationDate),
                   ),
                 ],

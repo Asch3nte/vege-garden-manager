@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
@@ -126,7 +127,7 @@ class PanneauConfidentialite extends ConsumerWidget {
     if (potager == null) {
       groupePotager = [
         _LigneReglage(
-          icone: Icons.eco_outlined,
+          icone: PhosphorIconsRegular.leaf,
           titre: l10n.confidClimatSansPotager,
           indent: true,
         ),
@@ -148,7 +149,7 @@ class PanneauConfidentialite extends ConsumerWidget {
           ),
         ),
         _LigneReglage(
-          icone: Icons.public_outlined,
+          icone: PhosphorIconsRegular.globe,
           titre: l10n.confidPosition,
           sousTitre: positionActive
               ? _statutPosition(l10n, potager.localisation)
@@ -157,14 +158,14 @@ class PanneauConfidentialite extends ConsumerWidget {
           indent: true,
         ),
         _LigneReglage(
-          icone: Icons.thermostat_outlined,
+          icone: PhosphorIconsRegular.thermometer,
           titre: l10n.confidClimat,
           valeur: l10n.climat(z.type),
           onTap: changerClimat,
           indent: true,
         ),
         _LigneReglage(
-          icone: Icons.ac_unit_outlined,
+          icone: PhosphorIconsRegular.snowflake,
           titre: l10n.confidRusticite,
           valeur: l10n.rusticite(z.rusticite),
           onTap: changerRusticite,
@@ -181,7 +182,7 @@ class PanneauConfidentialite extends ConsumerWidget {
           enfants: [
             // Geolocation row (cycles the mode).
             _LigneReglage(
-              icone: Icons.place_outlined,
+              icone: PhosphorIconsRegular.mapPin,
               titre: l10n.confidGeoloc,
               sousTitre: l10n.geolocDescription(mode),
               valeur: l10n.geolocLabel(mode),
@@ -192,14 +193,14 @@ class PanneauConfidentialite extends ConsumerWidget {
             // Auto weather-fetch opt-out: off → no automatic Open-Meteo
             // call, home weather card hidden, detail screen refreshes manually.
             RangeeInterrupteur(
-              icone: Icons.cloud_outlined,
+              icone: PhosphorIconsRegular.cloud,
               label: l10n.confidMeteoAuto,
               sousTitre: l10n.confidMeteoAutoSub,
               valeur: prefs.meteoAutoActive,
               onChanged: enregistreur.pour(notifier.definirMeteoAuto),
             ),
             RangeeInterrupteur(
-              icone: Icons.wifi,
+              icone: PhosphorIconsRegular.wifiHigh,
               label: l10n.confidSync,
               sousTitre: l10n.confidSyncSub,
               valeur: prefs.syncLocaleActive,
@@ -208,7 +209,7 @@ class PanneauConfidentialite extends ConsumerWidget {
             // Lunar calendar is an intermediate+ option.
             if (acces.calendrierLunaire)
               RangeeInterrupteur(
-                icone: Icons.nightlight_outlined,
+                icone: PhosphorIconsRegular.moon,
                 label: l10n.confidLunaire,
                 sousTitre: l10n.confidLunaireSub,
                 valeur: prefs.calendrierLunaireOptIn,
@@ -217,7 +218,7 @@ class PanneauConfidentialite extends ConsumerWidget {
             // Community is not offered yet: shown but disabled (off,
             // non-interactive).
             RangeeInterrupteur(
-              icone: Icons.groups_outlined,
+              icone: PhosphorIconsRegular.usersThree,
               label: l10n.confidCommunaute,
               sousTitre: l10n.confidCommunauteSub,
               valeur: false,
@@ -272,7 +273,7 @@ class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
                 AnimatedRotation(
                   turns: _ouvert ? 0.5 : 0,
                   duration: const Duration(milliseconds: 150),
-                  child: Icon(Icons.expand_more,
+                  child: Icon(PhosphorIconsRegular.caretDown,
                       size: TaillesIconesApp.md,
                       color: theme.colorScheme.onSurfaceVariant),
                 ),
@@ -282,19 +283,19 @@ class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
         ),
         if (_ouvert) ...[
           _LigneReglage(
-            icone: Icons.public_outlined,
+            icone: PhosphorIconsRegular.globe,
             titre: l10n.confidPosition,
             sousTitre: _statutPosition(l10n, widget.potager.localisation),
             indent: true,
           ),
           _LigneReglage(
-            icone: Icons.thermostat_outlined,
+            icone: PhosphorIconsRegular.thermometer,
             titre: l10n.confidClimat,
             valeur: l10n.climat(z.type),
             indent: true,
           ),
           _LigneReglage(
-            icone: Icons.ac_unit_outlined,
+            icone: PhosphorIconsRegular.snowflake,
             titre: l10n.confidRusticite,
             valeur: l10n.rusticite(z.rusticite),
             indent: true,
@@ -377,7 +378,7 @@ class _LigneReglage extends StatelessWidget {
               ),
             if (interactif) ...[
               const SizedBox(width: EspacementsApp.s1),
-              Icon(Icons.chevron_right,
+              Icon(PhosphorIconsRegular.caretRight,
                   size: TaillesIconesApp.md,
                   color: theme.colorScheme.onSurfaceVariant),
             ],

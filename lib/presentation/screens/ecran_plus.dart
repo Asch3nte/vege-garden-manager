@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -50,7 +51,7 @@ class _BandeauPreferencesIllisibles extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: EspacementsApp.s4),
       child: Card.outlined(
         child: ListTile(
-          leading: Icon(Icons.warning_amber_outlined,
+          leading: Icon(PhosphorIconsRegular.warning,
               color: theme.colorScheme.error),
           title: Text(AppLocalizations.of(context)!.preferencesIllisibles),
         ),
@@ -83,32 +84,32 @@ class _Racine extends StatelessWidget {
         _EnteteProfil(prefs: prefs),
         const SizedBox(height: EspacementsApp.s5),
         LigneCategorie(
-          icone: Icons.tune,
+          icone: PhosphorIconsRegular.slidersHorizontal,
           titre: l10n.categGenerale,
           sousTitre: l10n.categGeneraleSub,
           onTap: () => context.go(RoutesApp.plusGeneral),
         ),
         LigneCategorie(
-          icone: Icons.privacy_tip_outlined,
+          icone: PhosphorIconsRegular.shieldCheck,
           titre: l10n.categConfidentialite,
           sousTitre: l10n.categConfidentialiteSub,
           onTap: () => context.go(RoutesApp.plusConfidentialite),
         ),
         LigneCategorie(
-          icone: Icons.notifications_outlined,
+          icone: PhosphorIconsRegular.bell,
           titre: l10n.categNotifications,
           sousTitre: l10n.categNotificationsSub,
           onTap: () => context.go(RoutesApp.plusNotifications),
         ),
         LigneCategorie(
-          icone: Icons.school_outlined,
+          icone: PhosphorIconsRegular.graduationCap,
           titre: l10n.categNiveaux,
           sousTitre: l10n.categNiveauxSub,
           onTap: () => context.go(RoutesApp.plusNiveaux),
         ),
         // « Aide & lexique » — the gardener's reference.
         LigneCategorie(
-          icone: Icons.auto_stories_outlined,
+          icone: PhosphorIconsRegular.bookOpenText,
           titre: l10n.categAide,
           sousTitre: l10n.categAideSub,
           onTap: () => context.go(RoutesApp.plusAide),
@@ -116,19 +117,19 @@ class _Racine extends StatelessWidget {
         // Association weighting — expert only.
         if (AccesNiveau(prefs.niveauExperience).ponderationAssociations)
           LigneCategorie(
-            icone: Icons.tune_outlined,
+            icone: PhosphorIconsRegular.slidersHorizontal,
             titre: l10n.categPonderation,
             sousTitre: l10n.categPonderationSub,
             onTap: () => context.go(RoutesApp.plusPonderation),
           ),
         LigneCategorie(
-          icone: Icons.save_outlined,
+          icone: PhosphorIconsRegular.floppyDisk,
           titre: l10n.categDonnees,
           sousTitre: l10n.categDonneesSub,
           onTap: () => context.go(RoutesApp.plusDonnees),
         ),
         LigneCategorie(
-          icone: Icons.info_outline,
+          icone: PhosphorIconsRegular.info,
           titre: l10n.categApropos,
           sousTitre: l10n.categAproposSub,
           onTap: () => context.go(RoutesApp.plusAPropos),
@@ -162,7 +163,7 @@ class _EnteteProfil extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.3),
-            child: Icon(Icons.eco, color: theme.colorScheme.primary),
+            child: Icon(PhosphorIconsFill.leaf, color: theme.colorScheme.primary),
           ),
           const SizedBox(width: EspacementsApp.s3),
           Expanded(
@@ -194,7 +195,7 @@ class _PiedLocal extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(Icons.lock_outline, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+        Icon(PhosphorIconsRegular.lock, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: EspacementsApp.s2),
         Expanded(
           child: Text(

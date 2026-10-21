@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../app/historique_navigation.dart';
 import '../../../app/router.dart';
@@ -35,13 +36,13 @@ class PanneauDonnees extends ConsumerWidget {
           note: l10n.donneesExportNote,
           enfants: [
             _Ligne(
-              icone: Icons.ios_share,
+              icone: PhosphorIconsRegular.export,
               libelle: l10n.donneesExportBouton,
               onTap: () => _exporter(context, ref),
             ),
             const Divider(height: 1),
             _Ligne(
-              icone: Icons.file_open_outlined,
+              icone: PhosphorIconsRegular.folderOpen,
               libelle: l10n.donneesImportBouton,
               onTap: () => _importer(context, ref),
             ),
@@ -53,7 +54,7 @@ class PanneauDonnees extends ConsumerWidget {
           note: l10n.donneesResetNote,
           enfants: [
             _Ligne(
-              icone: Icons.delete_forever_outlined,
+              icone: PhosphorIconsRegular.trash,
               libelle: l10n.donneesResetBouton,
               couleur: theme.colorScheme.error,
               onTap: () => _reinitialiser(context, ref),
@@ -130,13 +131,13 @@ class PanneauDonnees extends ConsumerWidget {
         title: Text(l10n.donneesImportModeTitre),
         children: [
           ListTile(
-            leading: const Icon(Icons.swap_horiz),
+            leading: const Icon(PhosphorIconsRegular.arrowsLeftRight),
             title: Text(l10n.donneesImportModeRemplacer),
             subtitle: Text(l10n.donneesImportModeRemplacerSub),
             onTap: () => Navigator.of(ctx).pop(ModeImport.remplacer),
           ),
           ListTile(
-            leading: const Icon(Icons.merge_type),
+            leading: const Icon(PhosphorIconsRegular.gitMerge),
             title: Text(l10n.donneesImportModeFusionner),
             subtitle: Text(l10n.donneesImportModeFusionnerSub),
             onTap: () => Navigator.of(ctx).pop(ModeImport.fusionner),
@@ -211,7 +212,7 @@ class _SectionStockage extends ConsumerWidget {
           error: (_, _) => Material(
             type: MaterialType.transparency,
             child: ListTile(
-              leading: Icon(Icons.error_outline, color: theme.colorScheme.error),
+              leading: Icon(PhosphorIconsRegular.warningCircle, color: theme.colorScheme.error),
               title: Text(l10n.donneesStockageErreur),
               trailing: TextButton(
                 onPressed: () => ref.invalidate(statistiquesDonneesProvider),
@@ -224,7 +225,7 @@ class _SectionStockage extends ConsumerWidget {
               Material(
                 type: MaterialType.transparency,
                 child: ListTile(
-                  leading: const Icon(Icons.sd_storage_outlined),
+                  leading: const Icon(PhosphorIconsRegular.hardDrives),
                   title: Text(l10n.donneesStockageTaille),
                   subtitle: Text(l10n.donneesStockageTotalLignes(s.totalLignes)),
                   trailing: Text(
@@ -237,7 +238,7 @@ class _SectionStockage extends ConsumerWidget {
                 Material(
                   type: MaterialType.transparency,
                   child: ListTile(
-                    leading: Icon(Icons.warning_amber_outlined,
+                    leading: Icon(PhosphorIconsRegular.warning,
                         color: theme.colorScheme.error),
                     title: Text(l10n.donneesLignesIllisibles(illisibles)),
                     subtitle: Text(l10n.donneesLignesIllisiblesNote),

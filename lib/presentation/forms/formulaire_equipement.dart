@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -356,13 +357,13 @@ class _ChampDate extends StatelessWidget {
           if (onEffacer != null)
             IconButton(
               visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.clear, size: TaillesIconesApp.sm),
+              icon: const Icon(PhosphorIconsRegular.x, size: TaillesIconesApp.sm),
               tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
               onPressed: onEffacer,
             ),
           IconButton(
             visualDensity: VisualDensity.compact,
-            icon: const Icon(Icons.calendar_today, size: TaillesIconesApp.sm),
+            icon: const Icon(PhosphorIconsRegular.calendarBlank, size: TaillesIconesApp.sm),
             tooltip: label,
             onPressed: onChoisir,
           ),

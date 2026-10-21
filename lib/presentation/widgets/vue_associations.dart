@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/moteur_derivation_associations.dart';
@@ -411,7 +412,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
         appBar: AppBar(
           title: Text(widget.centre.nomLocalise(context.langue)),
           leading: IconButton(
-            icon: const Icon(Icons.close),
+            icon: const Icon(PhosphorIconsRegular.x),
             tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -525,7 +526,7 @@ class _BoutonVoirPlus extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return FloatingActionButton.extended(
       onPressed: onPressed,
-      icon: Icon(tousAffiches ? Icons.expand_less : Icons.expand_more),
+      icon: Icon(tousAffiches ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown),
       label: Text(tousAffiches ? l10n.assocVoirMoins : l10n.assocVoirPlus(caches)),
     );
   }
@@ -624,7 +625,7 @@ class _BandeauPreferences extends StatelessWidget {
       color: accent.withValues(alpha: 0.08),
       child: Row(
         children: [
-          Icon(Icons.tune, size: TaillesIconesApp.sm, color: accent),
+          Icon(PhosphorIconsRegular.slidersHorizontal, size: TaillesIconesApp.sm, color: accent),
           const SizedBox(width: EspacementsApp.s2),
           Expanded(
             child: Text(
@@ -635,7 +636,7 @@ class _BandeauPreferences extends StatelessWidget {
             ),
           ),
           if (onOuvrirPreferences != null)
-            Icon(Icons.chevron_right, size: TaillesIconesApp.sm, color: accent),
+            Icon(PhosphorIconsRegular.caretRight, size: TaillesIconesApp.sm, color: accent),
         ],
       ),
     );
@@ -742,7 +743,7 @@ class _PanneauFiltres extends StatelessWidget {
                         ),
                         const SizedBox(width: 2),
                         Icon(
-                          Icons.arrow_drop_down,
+                          PhosphorIconsRegular.caretDown,
                           size: 16,
                           color: theme.colorScheme.onPrimary,
                         ),
@@ -1108,9 +1109,9 @@ class _EnteteGroupe extends StatelessWidget {
   });
 
   IconData? get _icone => switch (sens) {
-        SensAssociation.donne => Icons.arrow_forward,
-        SensAssociation.recoit => Icons.arrow_back,
-        SensAssociation.mutuel => Icons.swap_horiz,
+        SensAssociation.donne => PhosphorIconsRegular.arrowRight,
+        SensAssociation.recoit => PhosphorIconsRegular.arrowLeft,
+        SensAssociation.mutuel => PhosphorIconsRegular.arrowsLeftRight,
         null => null,
       };
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -62,11 +63,11 @@ class _PanneauAideState extends ConsumerState<PanneauAide> {
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: l10n.glossaireRecherche,
-                    prefixIcon: const Icon(Icons.search),
+                    prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass),
                     suffixIcon: requete.isEmpty
                         ? null
                         : IconButton(
-                            icon: const Icon(Icons.clear),
+                            icon: const Icon(PhosphorIconsRegular.x),
                             onPressed: () =>
                                 setState(() => _controleur.clear()),
                           ),
@@ -116,7 +117,7 @@ class _Chapitres extends StatelessWidget {
                   padding: const EdgeInsets.all(EspacementsApp.s3),
                   child: Row(
                     children: [
-                      Icon(Icons.emoji_objects_outlined,
+                      Icon(PhosphorIconsRegular.lightbulbFilament,
                           color: theme.colorScheme.primary),
                       const SizedBox(width: EspacementsApp.s3),
                       Expanded(
@@ -125,7 +126,7 @@ class _Chapitres extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 color: theme.colorScheme.primary)),
                       ),
-                      Icon(Icons.chevron_right,
+                      Icon(PhosphorIconsRegular.caretRight,
                           size: TaillesIconesApp.md,
                           color: theme.colorScheme.primary),
                     ],
@@ -189,7 +190,7 @@ class _LigneChapitre extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right,
+                Icon(PhosphorIconsRegular.caretRight,
                     size: TaillesIconesApp.md,
                     color: theme.colorScheme.onSurfaceVariant),
               ],

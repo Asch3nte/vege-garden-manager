@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../application/state/accueil_notifier.dart';
 import '../application/state/calendrier_notifier.dart';
@@ -137,40 +138,37 @@ abstract final class RoutesApp {
 ///
 /// Order is the contract between the router branches and the navigation shell:
 /// the Nth branch corresponds to the Nth destination here.
-// Icons map to the Phosphor set (House, Plant, BookOpen, CalendarBlank,
-// DotsThree); Material stand-ins are used until Phosphor is re-wired
-// (phosphor_flutter does not compile with the current Flutter). Outline for the
-// resting state, filled for the selected state.
+// Phosphor icons: Regular at rest, Bold when selected.
 const List<DestinationNav> _destinations = [
   DestinationNav(
     route: RoutesApp.accueil,
     libelle: _libelleAccueil,
-    icone: Icons.home_outlined,
-    iconeActive: Icons.home,
+    icone: PhosphorIconsRegular.house,
+    iconeActive: PhosphorIconsBold.house,
   ),
   DestinationNav(
     route: RoutesApp.potager,
     libelle: _libellePotager,
-    icone: Icons.local_florist_outlined,
-    iconeActive: Icons.local_florist,
+    icone: PhosphorIconsRegular.plant,
+    iconeActive: PhosphorIconsBold.plant,
   ),
   DestinationNav(
     route: RoutesApp.catalogue,
     libelle: _libelleCatalogue,
-    icone: Icons.menu_book_outlined,
-    iconeActive: Icons.menu_book,
+    icone: PhosphorIconsRegular.bookOpen,
+    iconeActive: PhosphorIconsBold.bookOpen,
   ),
   DestinationNav(
     route: RoutesApp.calendrier,
     libelle: _libelleCalendrier,
-    icone: Icons.calendar_today_outlined,
-    iconeActive: Icons.calendar_today,
+    icone: PhosphorIconsRegular.calendarBlank,
+    iconeActive: PhosphorIconsBold.calendarBlank,
   ),
   DestinationNav(
     route: RoutesApp.plus,
     libelle: _libellePlus,
-    icone: Icons.more_horiz_outlined,
-    iconeActive: Icons.more_horiz,
+    icone: PhosphorIconsRegular.dotsThree,
+    iconeActive: PhosphorIconsBold.dotsThree,
   ),
 ];
 

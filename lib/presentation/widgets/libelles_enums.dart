@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/couleurs_app.dart';
 import '../../application/state/meteo_accueil_vue.dart';
@@ -522,26 +523,25 @@ extension LibellesEnums on AppLocalizations {
   }
 }
 
-/// Material icon standing in for the eventual Phosphor icon of a task type.
-/// Kept beside the labels so the gesture's
-/// visual identity lives in one place.
+/// Icon of a task type, kept beside the labels so the gesture's visual identity
+/// lives in one place.
 IconData iconeTypeTache(TypeTache t) => switch (t) {
-      TypeTache.arrosage => Icons.water_drop_outlined,
-      TypeTache.desherbage => Icons.grass_outlined,
-      TypeTache.paillage => Icons.layers_outlined,
-      TypeTache.taille => Icons.content_cut,
-      TypeTache.tuteurage => Icons.straighten,
-      TypeTache.fertilisation => Icons.science_outlined,
-      TypeTache.traitementBio => Icons.healing_outlined,
-      TypeTache.observation => Icons.visibility_outlined,
-      TypeTache.semis => Icons.grain,
-      TypeTache.repiquage => Icons.spa_outlined,
-      TypeTache.recolte => Icons.shopping_basket_outlined,
-      TypeTache.preparationSol => Icons.agriculture_outlined,
-      TypeTache.installationEquipement => Icons.build_outlined,
-      TypeTache.entretienEquipement => Icons.handyman_outlined,
-      TypeTache.nettoyage => Icons.cleaning_services_outlined,
-      TypeTache.autre => Icons.task_alt_outlined,
+      TypeTache.arrosage => PhosphorIconsRegular.drop,
+      TypeTache.desherbage => PhosphorIconsRegular.plant,
+      TypeTache.paillage => PhosphorIconsRegular.stack,
+      TypeTache.taille => PhosphorIconsRegular.scissors,
+      TypeTache.tuteurage => PhosphorIconsRegular.ruler,
+      TypeTache.fertilisation => PhosphorIconsRegular.flask,
+      TypeTache.traitementBio => PhosphorIconsRegular.bandaids,
+      TypeTache.observation => PhosphorIconsRegular.eye,
+      TypeTache.semis => PhosphorIconsRegular.grains,
+      TypeTache.repiquage => PhosphorIconsRegular.flowerLotus,
+      TypeTache.recolte => PhosphorIconsRegular.basket,
+      TypeTache.preparationSol => PhosphorIconsRegular.tractor,
+      TypeTache.installationEquipement => PhosphorIconsRegular.hammer,
+      TypeTache.entretienEquipement => PhosphorIconsRegular.wrench,
+      TypeTache.nettoyage => PhosphorIconsRegular.broom,
+      TypeTache.autre => PhosphorIconsRegular.checkCircle,
     };
 
 /// Decorative dot colour for a task type (calendar month grid). Uses the static
@@ -565,32 +565,31 @@ Color couleurTypeTache(TypeTache t) => switch (t) {
       TypeTache.autre => CouleursApp.texteSecondaireClair,
     };
 
-/// Material icon standing in for the eventual Phosphor icon of an equipment
-/// type. Kept beside the labels so an
-/// equipment's visual identity lives in one place.
+/// Icon of an equipment type, kept beside the labels so an equipment's visual
+/// identity lives in one place.
 IconData iconeTypeEquipement(TypeEquipement t) => switch (t) {
-      TypeEquipement.oya => Icons.water_drop_outlined,
-      TypeEquipement.gouttesAGoutte => Icons.water_outlined,
-      TypeEquipement.tuteur => Icons.straighten,
-      TypeEquipement.treillis => Icons.grid_on,
-      TypeEquipement.tunnel => Icons.roofing,
-      TypeEquipement.serreSemis => Icons.home_outlined,
-      TypeEquipement.chassis => Icons.crop_square,
-      TypeEquipement.cloche => Icons.umbrella,
-      TypeEquipement.voileHivernage => Icons.ac_unit,
-      TypeEquipement.filetAntiInsecte => Icons.pest_control_outlined,
-      TypeEquipement.hotelInsectes => Icons.bug_report_outlined,
-      TypeEquipement.composteur => Icons.compost,
-      TypeEquipement.recuperateurEau => Icons.water,
-      TypeEquipement.autre => Icons.build_outlined,
+      TypeEquipement.oya => PhosphorIconsRegular.drop,
+      TypeEquipement.gouttesAGoutte => PhosphorIconsRegular.waves,
+      TypeEquipement.tuteur => PhosphorIconsRegular.ruler,
+      TypeEquipement.treillis => PhosphorIconsRegular.gridFour,
+      TypeEquipement.tunnel => PhosphorIconsRegular.warehouse,
+      TypeEquipement.serreSemis => PhosphorIconsRegular.house,
+      TypeEquipement.chassis => PhosphorIconsRegular.square,
+      TypeEquipement.cloche => PhosphorIconsFill.umbrella,
+      TypeEquipement.voileHivernage => PhosphorIconsRegular.snowflake,
+      TypeEquipement.filetAntiInsecte => PhosphorIconsRegular.bug,
+      TypeEquipement.hotelInsectes => PhosphorIconsRegular.bug,
+      TypeEquipement.composteur => PhosphorIconsRegular.recycle,
+      TypeEquipement.recuperateurEau => PhosphorIconsRegular.waves,
+      TypeEquipement.autre => PhosphorIconsRegular.hammer,
     };
 
-/// Material icon for a weather watering verdict (home card).
+/// Icon of a weather watering verdict (home card).
 IconData iconeVerdictMeteo(VerdictMeteo v) => switch (v) {
-      VerdictMeteo.pluieAVenir => Icons.umbrella_outlined,
-      VerdictMeteo.solHumide => Icons.water_drop_outlined,
-      VerdictMeteo.arroserConseille => Icons.wb_sunny_outlined,
-      VerdictMeteo.clement => Icons.cloud_outlined,
+      VerdictMeteo.pluieAVenir => PhosphorIconsRegular.umbrella,
+      VerdictMeteo.solHumide => PhosphorIconsRegular.drop,
+      VerdictMeteo.arroserConseille => PhosphorIconsRegular.sun,
+      VerdictMeteo.clement => PhosphorIconsRegular.cloud,
     };
 
 /// Display order of categories in the catalogue filter chips and grouped list.

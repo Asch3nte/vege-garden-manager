@@ -13,7 +13,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 ## 2. Dette technique hors audit
 
-- **Phosphor Icons** : `phosphor_flutter` 2.1.0 ne compile pas (étend `IconData`, devenu `final`). Material en substitut. Options : wrapper local (`.ttf` MIT + `IconData` const) ou version amont compatible. Points de remplacement : `lib/app/router.dart` (`_destinations`), `libelles_enums.dart` (`iconeTypeTache`), icône par catégorie du catalogue.
 - **Dark mode** : valeurs de `CouleursApp.*Sombre` non revalidées (maquettes light uniquement) ; maquetter puis revoir docs/08 §3.
 
 ## 3. Finitions V1

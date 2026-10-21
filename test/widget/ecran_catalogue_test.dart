@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
@@ -272,7 +273,7 @@ void main() {
     await tester.tap(find.descendant(
         of: find.ancestor(
             of: find.text('Tomate'), matching: find.byType(Card)),
-        matching: find.byIcon(Icons.hub_outlined)));
+        matching: find.byIcon(PhosphorIconsRegular.graph)));
     await tester.pumpAndSettle();
 
     // Marigold repels the Colorado beetle, a pest of the Solanaceae family.
@@ -320,7 +321,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // The full-screen Associations view opened (its close button).
-    expect(find.byIcon(Icons.close), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.x), findsOneWidget);
   });
 
   testWidgets("the detail sheet switches to one of the species' varieties",
@@ -504,7 +505,7 @@ void main() {
 
     final toggle = tester.getSize(find.byTooltip('1 variété')).width;
     final chevron =
-        tester.getSize(find.byIcon(Icons.chevron_right).first).width;
+        tester.getSize(find.byIcon(PhosphorIconsRegular.caretRight).first).width;
     expect(
       toggle,
       lessThanOrEqualTo(chevron + 1),
@@ -563,7 +564,7 @@ void main() {
     expect(find.text('Touchez une plante pour voir ses associations.'),
         findsOneWidget);
     expect(find.text('Nom, sol, exposition…'), findsNothing);
-    expect(find.byIcon(Icons.search), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.magnifyingGlass), findsOneWidget);
   });
 
   testWidgets('selecting a node reveals its associations', (tester) async {

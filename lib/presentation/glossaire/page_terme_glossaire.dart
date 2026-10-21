@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../l10n/app_localizations.dart';
@@ -157,7 +158,7 @@ class _Astuce extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.lightbulb_outline,
+          Icon(PhosphorIconsRegular.lightbulb,
               size: TaillesIconesApp.md, color: theme.colorScheme.primary),
           const SizedBox(width: EspacementsApp.s2),
           Expanded(
@@ -377,8 +378,8 @@ class _BlocProvenance extends StatelessWidget {
           children: [
             Icon(
               bloc.calculeParMoteur
-                  ? Icons.memory_outlined
-                  : Icons.menu_book_outlined,
+                  ? PhosphorIconsRegular.cpu
+                  : PhosphorIconsRegular.bookOpen,
               size: TaillesIconesApp.md,
               color: theme.colorScheme.onSurfaceVariant,
             ),

@@ -164,13 +164,8 @@ d'inset, pas d'ombres colorées**.
 
 ## 7. Iconographie (Phosphor Icons)
 
-> ⚠️ **Implémentation en attente.** Le package `phosphor_flutter` (2.1.0, dernier
-> publié) est **incompatible avec Flutter 3.44.1** : il étend `IconData`, devenue
-> une classe `final`, donc il ne compile pas. Aucun correctif en amont (ni publié,
-> ni sur la branche `main`). En attendant, l'app utilise les **icônes Material**
-> comme substituts (cf. note dans `pubspec.yaml`). Phosphor reste la cible : à
-> rebrancher via un wrapper local (fichiers `.ttf` Phosphor, MIT, + nos propres
-> `IconData const`) ou dès qu'une version compatible paraît.
+Package : `phosphoricons_flutter` (MIT, `IconData` constants). `phosphor_flutter`
+n'est plus utilisable : il étend `IconData`, devenue une classe `final`.
 
 | Variante        | Usage                                   |
 |-----------------|-----------------------------------------|

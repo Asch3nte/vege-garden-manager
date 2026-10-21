@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/domain/enums/source_localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
@@ -54,14 +55,14 @@ void main() {
     await tester.pumpAndSettle();
 
     // No selection yet: no pin, confirm is disabled.
-    expect(find.byIcon(Icons.location_on), findsNothing);
+    expect(find.byIcon(PhosphorIconsFill.mapPin), findsNothing);
 
     await tester.ensureVisible(find.text('Zone tropicale'));
     await tester.tap(find.text('Zone tropicale'));
     await tester.pumpAndSettle();
 
     // The pin is now shown.
-    expect(find.byIcon(Icons.location_on), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsFill.mapPin), findsOneWidget);
 
     await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
@@ -97,13 +98,13 @@ void main() {
     await tester.tap(find.text('ouvrir'));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.location_on), findsNothing);
+    expect(find.byIcon(PhosphorIconsFill.mapPin), findsNothing);
 
     // Tap somewhere inside the map image.
     await tester.tap(find.byType(Image));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.location_on), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsFill.mapPin), findsOneWidget);
     expect(find.text('Valider'), findsOneWidget);
   });
 }

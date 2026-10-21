@@ -59,10 +59,9 @@ dependencies:
   # Opens external links (source repo) in the platform's default handler —
   # validated with the dev (2026-07-07). 100% local: no data sent by the app.
   url_launcher: ^6.3.3
-  # NOTE: phosphor_flutter retiré — incompatible Flutter 3.44.1 (il étend
-  # IconData, devenu une classe `final`). Pas de version corrigée en amont
-  # (cf. docs/08 §7). Icônes Material en attendant ; Phosphor à rebrancher
-  # via un wrapper local (fonts .ttf MIT) quand on y reviendra.
+  # Phosphor icons (MIT): IconData constants, compatible with the current
+  # Flutter (phosphor_flutter is not) — validated with the dev (2026-10-21).
+  phosphoricons_flutter: ^1.1.1
 
 dev_dependencies:
   flutter_test:

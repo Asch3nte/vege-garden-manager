@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/derivateur_localisation.dart';
@@ -198,12 +199,12 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Icon(Icons.my_location),
+                  : const Icon(PhosphorIconsRegular.crosshair),
               label: Text(l10n.formPotagerDetecter),
             ),
             TextButton.icon(
               onPressed: _detection ? null : _choisirSurCarte,
-              icon: const Icon(Icons.public_outlined),
+              icon: const Icon(PhosphorIconsRegular.globe),
               label: Text(l10n.captureCarteChoisir),
             ),
             if (_suggere)

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
@@ -311,7 +312,7 @@ void main() {
 
     await monter(tester);
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Supprimer le potager'));
     await tester.pumpAndSettle();
@@ -332,7 +333,7 @@ void main() {
 
     await monter(tester); // débutant by default
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
 
     expect(find.text('Changer de potager'), findsNothing);
@@ -352,7 +353,7 @@ void main() {
 
     await monter(tester, niveau: NiveauExperience.intermediaire);
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Changer de potager'));
     await tester.pumpAndSettle();
@@ -380,7 +381,7 @@ void main() {
         .thenThrow(PreferencesIllisiblesException());
 
     await monter(tester, niveau: NiveauExperience.intermediaire);
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Changer de potager'));
     await tester.pumpAndSettle();
@@ -406,7 +407,7 @@ void main() {
 
     await monter(tester, niveau: NiveauExperience.intermediaire);
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Ajouter un potager'));
     await tester.pumpAndSettle();

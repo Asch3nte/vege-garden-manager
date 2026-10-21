@@ -58,7 +58,7 @@
 `flutter_lints` (ou `very_good_analysis`).
 
 **Validés** : `freezed` / `json_serializable` (immutabilité &
-sérialisation), `phosphor_flutter` (iconographie — cf.
+sérialisation), `phosphoricons_flutter` (iconographie — cf.
 [08-design-system.md](08-design-system.md)), `flutter_markdown` (doc d'aide
 in-app — cf. [10-parcours-utilisateur.md](10-parcours-utilisateur.md)).
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -264,12 +265,12 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   _EtapeSimple(
-                    icone: Icons.eco_outlined,
+                    icone: PhosphorIconsRegular.leaf,
                     titre: l10n.onboardingBienvenueTitre,
                     corps: l10n.onboardingBienvenueCorps,
                   ),
                   _EtapeSimple(
-                    icone: Icons.lock_outline,
+                    icone: PhosphorIconsRegular.lock,
                     titre: l10n.onboardingViePriveeTitre,
                     corps: l10n.onboardingViePriveeCorps,
                   ),
@@ -319,19 +320,19 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   Widget _etapePosition(AppLocalizations l10n) {
     final theme = Theme.of(context);
     return _Etape(
-      icone: Icons.place_outlined,
+      icone: PhosphorIconsRegular.mapPin,
       titre: l10n.onboardingPositionTitre,
       corps: l10n.onboardingPositionCorps,
       enfants: [
         OutlinedButton.icon(
           onPressed: _detecterGps,
-          icon: const Icon(Icons.my_location),
+          icon: const Icon(PhosphorIconsRegular.crosshair),
           label: Text(l10n.formPotagerDetecter),
         ),
         const SizedBox(height: EspacementsApp.s2),
         OutlinedButton.icon(
           onPressed: _choisirSurCarte,
-          icon: const Icon(Icons.public_outlined),
+          icon: const Icon(PhosphorIconsRegular.globe),
           label: Text(l10n.captureCarteChoisir),
         ),
         if (_position.estDefinie)
@@ -339,7 +340,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
             padding: const EdgeInsets.only(top: EspacementsApp.s3),
             child: Row(
               children: [
-                Icon(Icons.check_circle_outline,
+                Icon(PhosphorIconsRegular.checkCircle,
                     size: TaillesIconesApp.md, color: theme.colorScheme.primary),
                 const SizedBox(width: EspacementsApp.s2),
                 Expanded(
@@ -355,7 +356,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
 
   Widget _etapeClimat(AppLocalizations l10n) {
     return _Etape(
-      icone: Icons.thermostat_outlined,
+      icone: PhosphorIconsRegular.thermometer,
       titre: l10n.onboardingClimatTitre,
       corps: l10n.onboardingClimatCorps,
       enfants: [
@@ -384,7 +385,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
 
   Widget _etapeNiveau(AppLocalizations l10n) {
     return _Etape(
-      icone: Icons.school_outlined,
+      icone: PhosphorIconsRegular.graduationCap,
       titre: l10n.onboardingNiveauTitre,
       corps: l10n.onboardingNiveauCorps,
       enfants: [
@@ -405,7 +406,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
     final theme = Theme.of(context);
     final cree = _potagerId != null;
     return _Etape(
-      icone: Icons.yard_outlined,
+      icone: PhosphorIconsRegular.tree,
       titre: l10n.onboardingPotagerTitre,
       corps: l10n.onboardingPotagerCorps,
       enfants: [
@@ -459,7 +460,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           onPressed: (_nom.text.trim().isEmpty || _enregistrement)
               ? null
               : _ajouterZone,
-          icon: const Icon(Icons.add),
+          icon: const Icon(PhosphorIconsRegular.plus),
           label: Text(l10n.onboardingPotagerAjouterZone),
         ),
       ],
@@ -471,7 +472,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
     // a beginner keeps just the master switch.
     final parCategorie = AccesNiveau(_niveau).notificationsParCategorie;
     return _Etape(
-      icone: Icons.notifications_outlined,
+      icone: PhosphorIconsRegular.bell,
       titre: l10n.onboardingNotifsTitre,
       corps: l10n.onboardingNotifsCorps,
       enfants: [
@@ -540,8 +541,8 @@ class _CarteNiveau extends StatelessWidget {
             children: [
               Icon(
                 selectionne
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
+                    ? PhosphorIconsRegular.radioButton
+                    : PhosphorIconsRegular.circle,
                 color: selectionne
                     ? theme.colorScheme.primary
                     : theme.colorScheme.onSurfaceVariant,

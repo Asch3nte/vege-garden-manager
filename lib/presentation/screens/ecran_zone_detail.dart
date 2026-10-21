@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -275,12 +276,12 @@ class _Detail extends StatelessWidget {
         title: Text(zone.nom),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined),
+            icon: const Icon(PhosphorIconsRegular.pencilSimple),
             tooltip: l10n.zoneModifier,
             onPressed: onModifierZone,
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline),
+            icon: const Icon(PhosphorIconsRegular.trash),
             tooltip: l10n.zoneSupprimer,
             onPressed: onSupprimerZone,
           ),
@@ -315,17 +316,17 @@ class _Detail extends StatelessWidget {
                   runSpacing: EspacementsApp.s2,
                   children: [
                     _Fait(
-                      icone: Icons.straighten,
+                      icone: PhosphorIconsRegular.ruler,
                       texte: l10n.potagerSurfaceM2(
                         _formaterSurface(zone.surfaceM2),
                       ),
                     ),
                     _Fait(
-                      icone: Icons.wb_sunny_outlined,
+                      icone: PhosphorIconsRegular.sun,
                       texte: l10n.exposition(zone.exposition),
                     ),
                     _Fait(
-                      icone: Icons.local_florist_outlined,
+                      icone: PhosphorIconsRegular.flower,
                       texte: l10n.potagerNbCultures(zone.nombreCultures),
                     ),
                   ],
@@ -338,7 +339,7 @@ class _Detail extends StatelessWidget {
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: onAjouterPlante,
-              icon: const Icon(Icons.add),
+              icon: const Icon(PhosphorIconsRegular.plus),
               label: Text(l10n.zoneDetailAjouterPlante),
             ),
           ),
@@ -432,7 +433,7 @@ class _SectionRotationZone extends ConsumerWidget {
           _SousTitreRotation(texte: l10n.zoneRotationRecentesTitre),
           for (final r in synthese.recentes)
             _LigneRotation(
-              icone: Icons.history,
+              icone: PhosphorIconsRegular.clockCounterClockwise,
               couleur: theme.colorScheme.onSurfaceVariant,
               texte: l10n.zoneRotationRecenteLigne(
                   r.nomFamille ?? r.familleSlug, r.nomPlante, r.annee),
@@ -443,7 +444,7 @@ class _SectionRotationZone extends ConsumerWidget {
           _SousTitreRotation(texte: l10n.zoneRotationAEviterTitre),
           for (final b in synthese.famillesBloquees)
             _LigneRotation(
-              icone: Icons.block,
+              icone: PhosphorIconsRegular.prohibit,
               couleur: theme.colorScheme.error,
               texte: l10n.zoneRotationBloqueeLigne(
                   b.nomFamille ?? b.familleSlug, b.anneeLibre, b.delaiAnnees),
@@ -454,7 +455,7 @@ class _SectionRotationZone extends ConsumerWidget {
           _SousTitreRotation(texte: l10n.zoneRotationOpportunitesTitre),
           for (final o in synthese.opportunites)
             _LigneRotation(
-              icone: Icons.eco_outlined,
+              icone: PhosphorIconsRegular.leaf,
               couleur: theme.colorScheme.primary,
               texte: l10n.zoneRotationOpportuniteAzote(o.nomPlante),
             ),
@@ -575,7 +576,7 @@ class _SectionEquipementsZone extends ConsumerWidget {
         const SizedBox(height: EspacementsApp.s2),
         OutlinedButton.icon(
           onPressed: ajouter,
-          icon: const Icon(Icons.add),
+          icon: const Icon(PhosphorIconsRegular.plus),
           label: Text(l10n.zoneEquipementsAjouter),
         ),
       ],
@@ -792,7 +793,7 @@ class _LigneCulture extends ConsumerWidget {
             ),
           ),
           PopupMenuButton<_ActionCulture>(
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
             tooltip: l10n.cultureActions,
             onSelected: (action) => switch (action) {
               _ActionCulture.recolter => onRecolter(),
@@ -805,7 +806,7 @@ class _LigneCulture extends ConsumerWidget {
                 value: _ActionCulture.recolter,
                 child: Row(
                   children: [
-                    const Icon(Icons.shopping_basket_outlined,
+                    const Icon(PhosphorIconsRegular.basket,
                         size: TaillesIconesApp.sm),
                     const SizedBox(width: EspacementsApp.s2),
                     Text(l10n.cultureRecolter),
@@ -817,7 +818,7 @@ class _LigneCulture extends ConsumerWidget {
                   value: _ActionCulture.observer,
                   child: Row(
                     children: [
-                      const Icon(Icons.visibility_outlined,
+                      const Icon(PhosphorIconsRegular.eye,
                           size: TaillesIconesApp.sm),
                       const SizedBox(width: EspacementsApp.s2),
                       Text(l10n.cultureObserver),
@@ -828,7 +829,7 @@ class _LigneCulture extends ConsumerWidget {
                 value: _ActionCulture.arracher,
                 child: Row(
                   children: [
-                    const Icon(Icons.cut_outlined, size: TaillesIconesApp.sm),
+                    const Icon(PhosphorIconsRegular.scissors, size: TaillesIconesApp.sm),
                     const SizedBox(width: EspacementsApp.s2),
                     Text(l10n.cultureArracher),
                   ],
@@ -838,7 +839,7 @@ class _LigneCulture extends ConsumerWidget {
                 value: _ActionCulture.supprimer,
                 child: Row(
                   children: [
-                    Icon(Icons.delete_outline,
+                    Icon(PhosphorIconsRegular.trash,
                         size: TaillesIconesApp.sm,
                         color: theme.colorScheme.error),
                     const SizedBox(width: EspacementsApp.s2),
@@ -903,17 +904,17 @@ class _LigneConseilArrosage extends StatelessWidget {
   Widget build(BuildContext context) {
     final (icone, couleur, libelle) = switch (conseil.urgence) {
       UrgenceArrosage.arroserMaintenant => (
-          Icons.water_drop,
+          PhosphorIconsFill.drop,
           theme.colorScheme.error,
           l10n.conseilArroserMaintenant,
         ),
       UrgenceArrosage.bientot => (
-          Icons.water_drop_outlined,
+          PhosphorIconsRegular.drop,
           theme.colorScheme.tertiary,
           l10n.conseilArroserBientot(conseil.joursAvantArrosage ?? 2),
         ),
       UrgenceArrosage.pasNecessaire when conseil.pluiePrevue => (
-          Icons.water_outlined,
+          PhosphorIconsRegular.waves,
           theme.colorScheme.primary,
           l10n.conseilPluieAVenir,
         ),

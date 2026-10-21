@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/catalogue_notifier.dart';
@@ -144,7 +145,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
                     Expanded(
                       child: Text(widget.planteInitiale!.nomLocalise(context.langue)),
                     ),
-                    const Icon(Icons.lock_outline, size: TaillesIconesApp.sm),
+                    const Icon(PhosphorIconsRegular.lock, size: TaillesIconesApp.sm),
                   ],
                 ),
               )
@@ -179,7 +180,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
                   Expanded(child: Text(_formaterDate(_date))),
                   TextButton.icon(
                     onPressed: _choisirDate,
-                    icon: const Icon(Icons.calendar_today, size: TaillesIconesApp.sm),
+                    icon: const Icon(PhosphorIconsRegular.calendarBlank, size: TaillesIconesApp.sm),
                     label: Text(l10n.formPlantationDate),
                   ),
                 ],

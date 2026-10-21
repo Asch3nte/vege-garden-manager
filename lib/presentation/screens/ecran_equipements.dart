@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -44,7 +45,7 @@ class EcranEquipements extends ConsumerWidget {
           ? null
           : FloatingActionButton.extended(
               onPressed: ajouter,
-              icon: const Icon(Icons.add),
+              icon: const Icon(PhosphorIconsRegular.plus),
               label: Text(l10n.equipAjouter),
             ),
       body: potagerId == null
@@ -158,7 +159,7 @@ class _EtatVide extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.handyman_outlined,
+            Icon(PhosphorIconsRegular.wrench,
                 size: 48, color: theme.colorScheme.onSurfaceVariant),
             const SizedBox(height: EspacementsApp.s4),
             Text(l10n.equipVide,
@@ -414,7 +415,7 @@ class _MenuActions extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return PopupMenuButton<_ActionEquipement>(
-      icon: const Icon(Icons.more_vert),
+      icon: const Icon(PhosphorIconsRegular.dotsThreeVertical),
       tooltip: l10n.equipTitre,
       onSelected: (action) => switch (action) {
         _ActionEquipement.modifier => _modifier(context, ref),
@@ -426,7 +427,7 @@ class _MenuActions extends ConsumerWidget {
           value: _ActionEquipement.modifier,
           child: Row(
             children: [
-              const Icon(Icons.edit_outlined, size: TaillesIconesApp.sm),
+              const Icon(PhosphorIconsRegular.pencilSimple, size: TaillesIconesApp.sm),
               const SizedBox(width: EspacementsApp.s2),
               Text(l10n.actionModifier),
             ],
@@ -437,7 +438,7 @@ class _MenuActions extends ConsumerWidget {
             value: _ActionEquipement.retirer,
             child: Row(
               children: [
-                const Icon(Icons.archive_outlined, size: TaillesIconesApp.sm),
+                const Icon(PhosphorIconsRegular.archive, size: TaillesIconesApp.sm),
                 const SizedBox(width: EspacementsApp.s2),
                 Text(l10n.equipRetirer),
               ],
@@ -447,7 +448,7 @@ class _MenuActions extends ConsumerWidget {
           value: _ActionEquipement.supprimer,
           child: Row(
             children: [
-              Icon(Icons.delete_outline,
+              Icon(PhosphorIconsRegular.trash,
                   size: TaillesIconesApp.sm, color: theme.colorScheme.error),
               const SizedBox(width: EspacementsApp.s2),
               Text(l10n.actionSupprimer),

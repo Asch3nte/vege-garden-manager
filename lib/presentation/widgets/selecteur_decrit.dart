@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 
@@ -42,7 +43,7 @@ Future<T?> choisirOptionDecrite<T>(
                 title: Text(libelle(o)),
                 subtitle: Text(description(o)),
                 trailing: o == valeur
-                    ? Icon(Icons.check, color: theme.colorScheme.primary)
+                    ? Icon(PhosphorIconsRegular.check, color: theme.colorScheme.primary)
                     : null,
                 onTap: () => Navigator.of(context).pop(o),
               ),
