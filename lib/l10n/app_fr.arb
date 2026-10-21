@@ -917,11 +917,6 @@
   },
   "ficheArrosageVolume": "Volume",
   "@ficheArrosageVolume": { "description": "Libellé du volume d'arrosage détaillé." },
-  "ficheArrosageVolumeLitres": "{min} à {max} L/m²",
-  "@ficheArrosageVolumeLitres": {
-    "description": "Volume indicatif par arrosage, en litres par mètre carré.",
-    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
-  },
   "ficheArrosagePhases": "Périodes les plus sensibles au manque d'eau",
   "@ficheArrosagePhases": { "description": "Libellé de la liste des phases de croissance sensibles au stress hydrique." },
   "phaseSensibleGermination": "Germination / levée",
@@ -953,11 +948,6 @@
   },
   "ficheHauteur": "Hauteur adulte",
   "@ficheHauteur": { "description": "Libellé de la hauteur adulte dans la fiche." },
-  "ficheHauteurCm": "{min}–{max} cm",
-  "@ficheHauteurCm": {
-    "description": "Plage de hauteur adulte en cm.",
-    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
-  },
   "fichePh": "pH du sol",
   "@fichePh": { "description": "Libellé du pH dans la fiche." },
   "fichePhPlage": "{min} à {max}",
@@ -1363,6 +1353,10 @@
   "@mesurePlage": { "description": "Plage de deux mesures déjà mises en forme.", "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } } },
   "mesurePoucesPlage": "{min} à {max} in",
   "@mesurePoucesPlage": { "description": "Plage en pouces (arrosage en hauteur d'eau).", "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } } },
+  "mesurePlageCm": "{min}–{max} cm",
+  "@mesurePlageCm": { "description": "Plage de longueurs en centimètres.", "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } } },
+  "mesurePlageLitresM2": "{min} à {max} L/m²",
+  "@mesurePlageLitresM2": { "description": "Plage d'arrosage en litres par mètre carré.", "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } } },
   "swipeStandard": "Standard",
   "@swipeStandard": { "description": "Sens de balayage : standard." },
   "swipeInverse": "Inversé",

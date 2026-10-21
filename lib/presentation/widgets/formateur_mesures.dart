@@ -17,12 +17,13 @@ class FormateurMesures {
   static const double _oncesLiquidesParGallon = 128;
   static const double _unitesParKilo = 1000;
 
+  /// Shared by every formatter: patterns are parsed once per locale.
+  static final Map<String, NumberFormat> _formats = {};
+
   final AppLocalizations _l10n;
   final PreferencesUnites _unites;
-  final List<NumberFormat?> _formats = [null, null, null];
-  NumberFormat? _uneDecimaleFixe;
 
-  FormateurMesures(this._l10n, this._unites);
+  const FormateurMesures(this._l10n, this._unites);
 
   bool _imperial(GrandeurMesure g) => _unites.pour(g) == SystemeUnites.imperial;
 
@@ -33,11 +34,13 @@ class FormateurMesures {
   }
 
   /// [valeur] rounded to [decimales] (0 to 2), in the locale.
-  String _nombre(double valeur, [int decimales = 0]) =>
-      (_formats[decimales] ??= NumberFormat(
-        decimales == 0 ? '0' : '0.${'#' * decimales}',
-        _l10n.localeName,
-      )).format(_arrondi(valeur, decimales));
+  String _nombre(double valeur, [int decimales = 0]) {
+    final motif = decimales == 0 ? '0' : '0.${'#' * decimales}';
+    return _formats
+        .putIfAbsent('${_l10n.localeName}|$motif',
+            () => NumberFormat(motif, _l10n.localeName))
+        .format(_arrondi(valeur, decimales));
+  }
 
   String temperature(double celsius) => _imperial(GrandeurMesure.temperature)
       ? _l10n.mesureFahrenheit(
@@ -51,6 +54,8 @@ class FormateurMesures {
         ? _convertisseur.celsiusVersFahrenheit(celsius)
         : celsius,
   );
+
+  bool get temperatureEnFahrenheit => _imperial(GrandeurMesure.temperature);
 
   String get symboleTemperature => _imperial(GrandeurMesure.temperature)
       ? _l10n.symbolesFahrenheit
@@ -83,10 +88,7 @@ class FormateurMesures {
 
   String precipitations(double mm) => _imperial(GrandeurMesure.longueur)
       ? _l10n.mesurePouces(_nombre(_convertisseur.millimetresVersPouces(mm), 2))
-      : _l10n.mesureMm(
-          (_uneDecimaleFixe ??= NumberFormat('0.0', _l10n.localeName))
-              .format(_arrondi(mm, 1)),
-        );
+      : _l10n.mesureMm(_nombre(mm, 1));
 
   String altitudeM(double m) => _imperial(GrandeurMesure.longueur)
       ? _l10n.mesurePieds(_nombre(_convertisseur.metresVersPieds(m)))
@@ -107,7 +109,7 @@ class FormateurMesures {
   String plageLongueurCm(int min, int max) =>
       _imperial(GrandeurMesure.longueur)
       ? _l10n.mesurePlage(longueurCm(min), longueurCm(max))
-      : _l10n.ficheHauteurCm(min, max);
+      : _l10n.mesurePlageCm('$min', '$max');
 
   /// A range of watering amounts, in L/m² or inches of water.
   String plageArrosage(double min, double max) =>
@@ -116,7 +118,7 @@ class FormateurMesures {
           _nombre(_convertisseur.millimetresVersPouces(min), 2),
           _nombre(_convertisseur.millimetresVersPouces(max), 2),
         )
-      : _l10n.ficheArrosageVolumeLitres(_nombre(min, 1), _nombre(max, 1));
+      : _l10n.mesurePlageLitresM2(_nombre(min, 1), _nombre(max, 1));
 
   String surfaceM2(double m2) => _imperial(GrandeurMesure.surface)
       ? _l10n.mesureFt2(_nombre(_convertisseur.m2VersFt2(m2), 1))
@@ -151,6 +153,11 @@ class FormateurMesures {
   }
 }
 
-/// The measure formatter for [context]'s language and the chosen units.
+/// The measure formatter for [context]'s language and the chosen units; in
+/// build, it rebuilds the widget when the units change.
 FormateurMesures formateurMesures(BuildContext context, WidgetRef ref) =>
     FormateurMesures(AppLocalizations.of(context)!, ref.watch(unitesProvider));
+
+/// The same, read once, for callbacks run outside build.
+FormateurMesures formateurMesuresLu(BuildContext context, WidgetRef ref) =>
+    FormateurMesures(AppLocalizations.of(context)!, ref.read(unitesProvider));

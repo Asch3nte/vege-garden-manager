@@ -484,7 +484,7 @@ class _VueAssociationsState extends ConsumerState<_VueAssociations> {
                         final source = recoit ? n.fiche : widget.centre;
                         final cible = recoit ? widget.centre : n.fiche;
                         final facteurs = facteursAssociation(l10n, n.criteres,
-                            source, cible, formateurMesures(context, ref));
+                            source, cible, formateurMesuresLu(context, ref));
                         unawaited(afficherFichePlanteDetail(
                           context,
                           n.fiche,

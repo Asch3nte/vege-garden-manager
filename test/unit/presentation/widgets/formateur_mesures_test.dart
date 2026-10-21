@@ -44,7 +44,7 @@ void main() {
 
   test('rain, wind and watering depth follow the length setting', () {
     expect(metrique.precipitations(1.25), '1,3 mm');
-    expect(metrique.precipitations(2), '2,0 mm');
+    expect(metrique.precipitations(2), '2 mm');
     expect(imperial.precipitations(12.7), '0.5 in');
     expect(metrique.vent(19.6), '20 km/h');
     expect(imperial.vent(16.09344), '10 mph');

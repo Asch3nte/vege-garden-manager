@@ -114,7 +114,7 @@ class PanneauConfidentialite extends ConsumerWidget {
         options: ZoneRusticite.values,
         libelle: l10n.rusticite,
         description: (z) =>
-            l10n.rusticiteDescription(z, formateurMesures(context, ref)),
+            l10n.rusticiteDescription(z, formateurMesuresLu(context, ref)),
       );
       if (choix != null) {
         await enregistrerZoneClimatiquePotager(

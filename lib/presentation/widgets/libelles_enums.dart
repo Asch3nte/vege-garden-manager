@@ -289,6 +289,11 @@ extension LibellesEnums on AppLocalizations {
   /// temperature range, in the chosen scale (shown under each option).
   String rusticiteDescription(ZoneRusticite z, FormateurMesures mesures) {
     final n = int.parse(z.name.replaceAll('zone', ''));
+    // USDA zones are defined in °F, 10 °F apart from -60 °F.
+    if (mesures.temperatureEnFahrenheit) {
+      final min = -60 + (n - 1) * 10;
+      return rusticiteZoneDesc('$min', '${min + 10}', mesures.symboleTemperature);
+    }
     final (int min, int max) = switch (n) {
       1 => (-51, -45),
       2 => (-45, -40),
@@ -304,8 +309,7 @@ extension LibellesEnums on AppLocalizations {
       12 => (10, 16),
       _ => (16, 21), // zone 13
     };
-    return rusticiteZoneDesc(mesures.degres(min.toDouble()),
-        mesures.degres(max.toDouble()), mesures.symboleTemperature);
+    return rusticiteZoneDesc('$min', '$max', mesures.symboleTemperature);
   }
 
   /// Label for a parcelle (zone) type.

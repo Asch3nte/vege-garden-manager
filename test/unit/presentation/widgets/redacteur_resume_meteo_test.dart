@@ -107,7 +107,7 @@ void main() {
           fr.resumeDemain(
               unJour(weathercode: 61, tempMax: 22, probabilitePluie: 0.8,
                   precipitationsMm: 2)),
-          'Pluvieux, max 22°, 80 % de risque de pluie (2,0 mm).');
+          'Pluvieux, max 22°, 80 % de risque de pluie (2 mm).');
     });
 
     test('without rain', () {

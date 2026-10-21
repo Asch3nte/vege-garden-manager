@@ -376,7 +376,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           options: ZoneRusticite.values,
           libelle: l10n.rusticite,
           description: (z) =>
-              l10n.rusticiteDescription(z, formateurMesures(context, ref)),
+              l10n.rusticiteDescription(z, formateurMesuresLu(context, ref)),
           labelText: l10n.formPotagerRusticite,
           idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
           onChanged: (v) => setState(() => _rusticite = v),

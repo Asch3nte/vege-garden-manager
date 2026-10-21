@@ -977,7 +977,6 @@ class _SectionArrosageDetaille extends ConsumerWidget {
 
   const _SectionArrosageDetaille({required this.detail});
 
-  /// Formats a volume with one optional decimal in the [langue] format.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mesures = formateurMesures(context, ref);
