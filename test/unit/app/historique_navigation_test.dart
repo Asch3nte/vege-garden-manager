@@ -42,17 +42,63 @@ void main() {
         [RoutesApp.accueil, RoutesApp.catalogue]);
   });
 
-  test('navigating to the entry below the top is a backward move (pop)', () {
+  test('a requested back move pops instead of pushing a duplicate', () {
     pile.enregistrer(RoutesApp.catalogue);
     pile.enregistrer(RoutesApp.potager);
-    expect(container.read(pileNavigationProvider),
-        [RoutesApp.accueil, RoutesApp.catalogue, RoutesApp.potager]);
 
-    // Going back to Catalogue (the entry just below Potager) pops, it does not
-    // push a duplicate.
-    pile.enregistrer(RoutesApp.catalogue);
+    pile.enregistrer(pile.revenir());
     expect(container.read(pileNavigationProvider),
         [RoutesApp.accueil, RoutesApp.catalogue]);
+  });
+
+  test('re-tapping the tab below the top is a forward move', () {
+    pile.enregistrer(RoutesApp.catalogue);
+
+    pile.enregistrer(RoutesApp.accueil);
+    expect(container.read(pileNavigationProvider),
+        [RoutesApp.accueil, RoutesApp.catalogue, RoutesApp.accueil]);
+    expect(pile.precedent, RoutesApp.catalogue);
+  });
+
+  test('a duplicate event does not consume a pending back move', () {
+    pile.enregistrer(RoutesApp.catalogue);
+    final cible = pile.revenir();
+
+    pile.enregistrer(RoutesApp.catalogue);
+    pile.enregistrer(cible);
+    expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
+  });
+
+  test('oublier drops a deleted resource and its sub-routes', () {
+    pile.enregistrer(RoutesApp.potager);
+    pile.enregistrer(RoutesApp.zoneDetail('z1'));
+    pile.enregistrer(RoutesApp.potager);
+    pile.enregistrer('${RoutesApp.zoneDetail('z1')}/x');
+    pile.enregistrer(RoutesApp.zoneDetail('z10'));
+
+    final top = pile.oublier(RoutesApp.zoneDetail('z1'));
+    expect(container.read(pileNavigationProvider),
+        [RoutesApp.accueil, RoutesApp.potager, RoutesApp.zoneDetail('z10')]);
+    expect(top, RoutesApp.zoneDetail('z10'));
+  });
+
+  test('oublier on the current screen returns the previous one', () {
+    pile.enregistrer(RoutesApp.tacheDetail('t1'));
+
+    expect(pile.oublier(RoutesApp.tacheDetail('t1')), RoutesApp.accueil);
+    expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
+  });
+
+  test('reinitialiser drops the history, keeping the current screen', () {
+    pile.enregistrer(RoutesApp.zoneDetail('z1'));
+    pile.enregistrer(RoutesApp.plusDonnees);
+
+    pile.reinitialiser(courant: RoutesApp.plusDonnees);
+    expect(container.read(pileNavigationProvider),
+        [RoutesApp.accueil, RoutesApp.plusDonnees]);
+
+    pile.reinitialiser();
+    expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
   });
 
   test('a full back-and-forth retraces every step then exits', () {
@@ -60,9 +106,9 @@ void main() {
     pile.enregistrer(RoutesApp.catalogue);
     pile.enregistrer(RoutesApp.potager);
 
-    pile.enregistrer(pile.precedent); // back → Catalogue
+    pile.enregistrer(pile.revenir()); // back → Catalogue
     expect(pile.precedent, RoutesApp.accueil);
-    pile.enregistrer(pile.precedent); // back → Accueil
+    pile.enregistrer(pile.revenir()); // back → Accueil
 
     expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
     expect(pile.peutRevenir, isFalse);
@@ -74,7 +120,7 @@ void main() {
     expect(pile.precedent, RoutesApp.accueil);
 
     // …and a single back returns straight to Accueil.
-    pile.enregistrer(pile.precedent);
+    pile.enregistrer(pile.revenir());
     expect(container.read(pileNavigationProvider), [RoutesApp.accueil]);
   });
 

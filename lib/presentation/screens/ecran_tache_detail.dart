@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/detail_tache_notifier.dart';
 import '../../domain/entities/tache.dart';
@@ -78,7 +79,6 @@ class EcranTacheDetail extends ConsumerWidget {
   Future<void> _supprimer(BuildContext context, WidgetRef ref, Tache tache) async {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
-    final router = GoRouter.of(context);
     final confirme = await confirmerAction(
       context,
       titre: l10n.tacheSupprimerTitre,
@@ -89,7 +89,9 @@ class EcranTacheDetail extends ConsumerWidget {
     if (!confirme) return;
     await ref.read(detailTacheProvider(tacheId).notifier).supprimerTache();
     messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
-    if (router.canPop()) router.pop();
+    if (context.mounted) {
+      quitterRessourceSupprimee(context, ref, RoutesApp.tacheDetail(tacheId));
+    }
   }
 }
 

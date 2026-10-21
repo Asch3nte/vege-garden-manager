@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/historique_navigation.dart';
+import '../../../app/router.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../application/state/preferences_notifier.dart';
 import '../../../application/state/statistiques_donnees_notifier.dart';
@@ -107,6 +109,9 @@ class PanneauDonnees extends ConsumerWidget {
       // state everywhere.
       ref.invalidate(preferencesProvider);
       invaliderVuesDonnees(ref);
+      ref
+          .read(pileNavigationProvider.notifier)
+          .reinitialiser(courant: RoutesApp.plusDonnees);
       messenger.showSnackBar(SnackBar(content: Text(l10n.donneesImportSucces)));
     } on Exception catch (e) {
       debugPrint('Import failed: $e');
@@ -168,6 +173,7 @@ class PanneauDonnees extends ConsumerWidget {
     // then redirects to the onboarding.
     ref.invalidate(preferencesProvider);
     invaliderVuesDonnees(ref);
+    ref.read(pileNavigationProvider.notifier).reinitialiser();
   }
 }
 

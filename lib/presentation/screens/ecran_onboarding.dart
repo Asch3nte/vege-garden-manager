@@ -119,7 +119,10 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   /// Idempotent: called when adding a zone and when leaving the garden step.
   Future<String> _assurerPotager() async {
     final existant = _potagerId;
-    if (existant != null) return existant;
+    if (existant != null) {
+      await _synchroniserPotager(existant);
+      return existant;
+    }
     final potager = await ref.read(potagersProvider.notifier).creer(
           nom: _nom.text.trim(),
           zoneClimatique: ZoneClimatique(_climat, _rusticite),
@@ -127,6 +130,21 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
         );
     _potagerId = potager.id;
     return potager.id;
+  }
+
+  /// Applies a climate or position changed after going back to the created
+  /// garden [id].
+  Future<void> _synchroniserPotager(String id) async {
+    final potagers = await ref.read(potagersProvider.future);
+    final potager = potagers.firstWhere((p) => p.id == id);
+    final zone = ZoneClimatique(_climat, _rusticite);
+    if (potager.zoneClimatique == zone && potager.localisation == _position) {
+      return;
+    }
+    potager
+      ..mettreAJourZoneClimatique(zone)
+      ..mettreAJourLocalisation(_position);
+    await ref.read(potagersProvider.notifier).modifier(potager);
   }
 
   Future<void> _ajouterZone() async {

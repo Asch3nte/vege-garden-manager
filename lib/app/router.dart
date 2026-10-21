@@ -208,15 +208,24 @@ int _indexBranche(String location) {
 }
 
 /// Replays one step of the cross-branch history: navigates to the previous
-/// screen ([PileNavigation.precedent]) and refreshes its branch. Shared by the
+/// screen ([PileNavigation.revenir]) and refreshes its branch. Shared by the
 /// shell's back handler (branch roots) and every sub-route's [_RetourGlobal]
 /// (deep screens) so the system back button behaves identically everywhere.
 void _retourGlobal(BuildContext context, WidgetRef ref) {
   final notifier = ref.read(pileNavigationProvider.notifier);
   if (!notifier.peutRevenir) return;
-  final precedent = notifier.precedent;
+  final precedent = notifier.revenir();
   _rafraichirBranche(ref, _indexBranche(precedent));
   context.go(precedent);
+}
+
+/// Leaves the screen of a deleted resource at [location]: forgets it from the
+/// history, then shows the screen below it.
+void quitterRessourceSupprimee(
+    BuildContext context, WidgetRef ref, String location) {
+  final cible = ref.read(pileNavigationProvider.notifier).oublier(location);
+  _rafraichirBranche(ref, _indexBranche(cible));
+  context.go(cible);
 }
 
 /// Wraps a **sub-route** screen so the system back button replays the global

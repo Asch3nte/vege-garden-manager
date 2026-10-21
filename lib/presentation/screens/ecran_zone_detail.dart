@@ -142,7 +142,9 @@ Future<void> _supprimerZone(
   await ref.read(parcellesProvider(potagerId).notifier).supprimer(zone.id);
   ref.invalidate(potagerProvider);
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackZoneSupprimee)));
-  if (context.mounted) context.go(RoutesApp.potager);
+  if (context.mounted) {
+    quitterRessourceSupprimee(context, ref, RoutesApp.zoneDetail(zone.id));
+  }
 }
 
 /// Marks a crop as pulled out (`arrachee`): it leaves the active crops but stays

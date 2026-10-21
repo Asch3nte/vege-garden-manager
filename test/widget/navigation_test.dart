@@ -188,6 +188,20 @@ void main() {
     expect(find.widgetWithText(AppBar, 'Accueil'), findsOneWidget);
   });
 
+  testWidgets('back after re-tapping the previous tab returns to the left tab',
+      (tester) async {
+    await pomperA(tester, const Size(390, 800));
+
+    await tester.tap(find.text('Catalogue'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Accueil'));
+    await tester.pumpAndSettle();
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Catalogue'), findsOneWidget);
+  });
+
   testWidgets('system back retraces tab switches in order (#6)', (tester) async {
     await pomperA(tester, const Size(390, 800));
 
