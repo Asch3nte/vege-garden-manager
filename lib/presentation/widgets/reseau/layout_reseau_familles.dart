@@ -66,8 +66,7 @@ class ParametresLayout {
   });
 }
 
-/// Deterministic **bubble** layout clustering nodes by botanical family
-/// (révisée après prototype).
+/// Deterministic **bubble** layout clustering nodes by botanical family.
 ///
 /// Each family is a **circle** whose radius grows with its member count; the
 /// circles are **packed without overlap** (a family never intersects another →

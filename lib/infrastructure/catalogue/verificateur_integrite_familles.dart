@@ -18,8 +18,8 @@ class ProblemeIntegriteFamille {
   String toString() => '$espece: $raison';
 }
 
-/// Cross-checks that the plant catalogue and the family reference are coherent
-/// (Décisions 1 & 3):
+/// Cross-checks that the plant catalogue and the family reference are
+/// coherent:
 ///
 /// 1. **Coverage** — the family of every species (the normalized
 ///    `famille_botanique`) must have a loaded family sheet.

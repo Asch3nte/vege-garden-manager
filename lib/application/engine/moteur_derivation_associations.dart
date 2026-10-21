@@ -49,7 +49,7 @@ class MoteurDerivationAssociations {
   static const int seuilLongJours = 100;
 
   /// A companion is "notably shorter" for layering when its max height is at most
-  /// this fraction of the tall plant's (étagement précis).
+  /// this fraction of the tall plant's.
   static const double ratioEtagement = 0.5;
 
   /// Planting distance (cm) at/above which a plant counts as "spreading", for the
@@ -104,7 +104,7 @@ class MoteurDerivationAssociations {
     if (a.id == b.id) return const [];
     final out = <SuggestionAssociation>[];
 
-    // — Bénéfices —
+    // — Benefits —
     if (a.fixeAzote && b.besoinAzote == NiveauBesoin.eleve) {
       out.add(_benef(b, TypeBeneficeAssociation.fixationAzote, NiveauConfiance.eleve,
           criteres: const {
@@ -129,9 +129,9 @@ class MoteurDerivationAssociations {
             if (_plusHaute(a, b)) CritereAssociation.sourcePlusHaute,
           }));
     }
-    // Étagement (précis) : [a] haute & plein soleil porte de l'ombre,
-    // [b] **nettement plus basse** et qui **préfère** (confiance moyenne) ou
-    // **tolère** (confiance faible — c'est sous-optimal pour elle) cette ombre.
+    // Layering: [a], tall and in full sun, casts shade on [b], **notably
+    // shorter**, which **prefers** it (medium confidence) or **tolerates** it
+    // (low confidence — suboptimal for [b]).
     if (a.besoins.soleil == NiveauSoleil.pleinSoleil &&
         _haute(a) &&
         _nettementPlusBasse(a, b) &&
@@ -148,9 +148,9 @@ class MoteurDerivationAssociations {
               CritereAssociation.cibleTolereOmbre,
           }));
     }
-    // Succession : si l'hémisphère/climat sont connus, on vérifie le
-    // **calendrier réel** (occupations du sol qui ne se chevauchent pas →
-    // confiance moyenne) ; sinon repli sur l'heuristique de durée (faible).
+    // Succession: with a known hemisphere/climate the **real calendar** is
+    // checked (non-overlapping soil occupation → medium confidence); otherwise
+    // the duration heuristic applies (low).
     if (hemisphere != null &&
         climat != null &&
         _successionCalendaire(a, b, hemisphere, climat)) {
@@ -196,8 +196,8 @@ class MoteurDerivationAssociations {
           slug: piege,
           criteres: const {CritereAssociation.sourcePiegeCible}));
     }
-    // Attire les auxiliaires : [a] attire des prédateurs/parasitoïdes,
-    // qui régulent les ravageurs auxquels la famille de [b] est sujette.
+    // Beneficial insects: [a] attracts predators/parasitoids that control the
+    // pests [b]'s family is prone to.
     if (a.aUsage(UsagePlante.attireAuxiliaires) &&
         _ravageursDe(b, familles).isNotEmpty) {
       out.add(_benef(b, TypeBeneficeAssociation.attractionAuxiliaires,
@@ -207,8 +207,8 @@ class MoteurDerivationAssociations {
             CritereAssociation.cibleSujetteRavageurs,
           }));
     }
-    // Ameublit le sol : racine profonde/pivotante de [a] qui
-    // décompacte pour la racine superficielle de [b].
+    // Soil loosening: [a]'s deep/tap root loosens the soil for [b]'s shallow
+    // roots.
     if ((a.enracinement == EnracinementPlante.pivotant ||
             a.enracinement == EnracinementPlante.profond) &&
         b.enracinement == EnracinementPlante.superficiel) {
@@ -226,8 +226,8 @@ class MoteurDerivationAssociations {
           b, TypeConflitAssociation.memeFamilleRavageurs, NiveauConfiance.eleve,
           criteres: const {CritereAssociation.memeFamille}));
     }
-    // Concurrence lumière (précis) : toutes deux **exigent** le plein
-    // soleil (pas seulement le tolèrent) et sont hautes → elles se font de l'ombre.
+    // Light competition: both **require** full sun (not merely tolerate it)
+    // and are tall → they shade each other.
     if (_exigePleinSoleil(a) && _exigePleinSoleil(b) && _haute(a) && _haute(b)) {
       out.add(_conflit(
           b, TypeConflitAssociation.competitionLumiere, NiveauConfiance.moyen,
@@ -238,12 +238,12 @@ class MoteurDerivationAssociations {
           b, TypeConflitAssociation.competitionAzote, NiveauConfiance.moyen,
           criteres: const {CritereAssociation.deuxGourmandesAzote}));
     }
-    // Concurrence eau : deux forts besoins en eau.
+    // Water competition: two high water needs.
     if (a.besoins.eau == BesoinEau.eleve && b.besoins.eau == BesoinEau.eleve) {
       out.add(_conflit(b, TypeConflitAssociation.competitionEau, NiveauConfiance.moyen,
           criteres: const {CritereAssociation.deuxAssoiffees}));
     }
-    // Concurrence espace : deux plantes très étalées (gros espacement).
+    // Space competition: two widely spreading plants (large spacing).
     if (a.espacementCm >= seuilEtaleeCm && b.espacementCm >= seuilEtaleeCm) {
       out.add(_conflit(
           b, TypeConflitAssociation.competitionEspace, NiveauConfiance.moyen,

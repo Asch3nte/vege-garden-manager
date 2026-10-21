@@ -74,7 +74,7 @@ class FichePlanteMapper {
       associationsNegatives: _conflits(y),
       rotationFamille: rotation?['famille'] as String?,
       delaiRetourAnnees: rotation?['delai_retour_annees'] as int?,
-      // Rotation avancée — typed cultural precedents, normalized.
+      // Advanced rotation — typed cultural precedents, normalized.
       precedentsFavorables: _precedents(rotation?['precedents_favorables']),
       precedentsDefavorables: _precedents(rotation?['precedents_defavorables']),
       rusticiteMin: rusticite?['zone_min'] == null
@@ -100,7 +100,7 @@ class FichePlanteMapper {
       chargeTuteur: cycle['charge_tuteur'] == null
           ? null
           : _enum(ChargeTuteur.values, cycle['charge_tuteur'] as String),
-      // Système racinaire
+      // Root system
       enracinement: cycle['enracinement'] == null
           ? null
           : _enum(EnracinementPlante.values, cycle['enracinement'] as String),

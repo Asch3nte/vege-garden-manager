@@ -8,7 +8,7 @@ import '../../domain/value_objects/precedent_cultural.dart';
 import 'resultat_rotation.dart';
 
 /// Pure engine that evaluates **crop-rotation suitability** of a candidate plant
-/// on a plot (rotation avancée). It reconciles three signals into one
+/// on a plot. It reconciles three signals into one
 /// explainable [ResultatRotation]:
 ///
 /// 1. **Family return delay** — the candidate's own family must not have grown

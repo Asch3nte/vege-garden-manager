@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 
-// Conventions : id TEXT (UUID), dates en TEXT ISO 8601 UTC, enums en TEXT + CHECK,
-// booléens via boolean() (INTEGER 0/1), FK en ON DELETE RESTRICT (cascade logique
-// côté repositories). Les valeurs d'enum sont en camelCase (= noms Dart).
+// Conventions: id TEXT (UUID), dates as TEXT ISO 8601 UTC, enums as TEXT + CHECK,
+// booleans via boolean() (INTEGER 0/1), FKs ON DELETE RESTRICT (logical cascade
+// in the repositories). Enum values are camelCase (= Dart names).
 
 @DataClassName('PotagerRow')
 class Potagers extends Table {

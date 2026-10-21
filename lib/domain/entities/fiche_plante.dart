@@ -45,20 +45,20 @@ class FichePlante {
   final List<AssociationConflit> _associationsNegatives;
   final String? _rotationFamille;
   final int? _delaiRetourAnnees;
-  // Rotation avancée — typed cultural precedents (families or
+  // Advanced rotation — typed cultural precedents (families or
   // functional groups). Empty when the sheet declares none.
   final Set<PrecedentCultural> _precedentsFavorables;
   final Set<PrecedentCultural> _precedentsDefavorables;
   final Map<String, String> _descriptionsLocalisees;
 
-  // Rusticité USDA tolérée par la plante
+  // USDA hardiness tolerated by the plant
   final ZoneRusticite? _rusticiteMin;
-  // Tolérance au gel
+  // Frost tolerance
   final double? _temperatureMinSurvie;
   final bool _geleFatal;
-  // Niveau de difficulté (1 débutant → 3 expert)
+  // Difficulty level (1 beginner → 3 expert)
   final int? _difficulte;
-  // Compatibilité contenant / profondeur sol
+  // Container compatibility / soil depth
   final int? _profondeurSolMinCm;
   final bool _compatibleHorsSol;
   // Culture verticale (tuteur/treillis)
@@ -66,18 +66,18 @@ class FichePlante {
   // Hauteur adulte (cm), bornes basse/haute (optionnel)
   final int? _hauteurAdulteCmMin;
   final int? _hauteurAdulteCmMax;
-  // Dynamique azotée
+  // Nitrogen dynamics
   final bool _fixeAzote;
   final NiveauBesoin? _besoinAzote;
-  // Défense ciblée & charge sur tuteur
-  // Slugs Bioagresseur que la plante repousse / piège (intégrité référentielle
-  // vérifiée par VerificateurIntegriteRepulsifs, comme rotation.famille).
+  // Targeted defence & support load
+  // Bioaggressor slugs the plant repels / traps (referential integrity checked
+  // by VerificateurIntegriteRepulsifs, like rotation.famille).
   final Set<String> _repulsifContre;
   final Set<String> _piegeA;
   final ChargeTuteur? _chargeTuteur;
-  // Système racinaire (structuration du sol / concurrence).
+  // Root system (soil structuring / competition).
   final EnracinementPlante? _enracinement;
-  // Réponse thermique & sécheresse
+  // Heat & drought response
   final ToleranceSecheresse? _toleranceSecheresse;
   final double? _temperatureMaxTolerance;
 
@@ -146,7 +146,7 @@ class FichePlante {
   }
 
   /// Builds a plant sheet. Collections are stored unmodifiable; periods default
-  /// to empty. All enrichment fields (§A–H of doc 16) are optional.
+  /// to empty. All enrichment fields are optional.
   factory FichePlante({
     required String id,
     required String nomScientifique,
@@ -269,7 +269,7 @@ class FichePlante {
 
   /// Cultural precedents that make this plant a **good** follower (unmodifiable,
   /// possibly empty) — families or functional groups it does well after
-  /// (rotation avancée). See [PrecedentCultural].
+  /// (advanced rotation). See [PrecedentCultural].
   Set<PrecedentCultural> get precedentsFavorables => _precedentsFavorables;
 
   /// Cultural precedents that make this plant a **poor** follower (unmodifiable,

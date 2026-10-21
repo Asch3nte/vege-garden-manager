@@ -10,50 +10,50 @@
 ///
 /// The full set is declared up-front; each rule emits the subset it checks.
 enum CritereAssociation {
-  // — Fixation d'azote —
+  // — Nitrogen fixation —
   sourceFixeAzote,
   cibleGourmandeAzote,
 
-  // — Pollinisation —
+  // — Pollination —
   sourceAttirePollinisateurs,
   cibleEntomophile,
 
-  // — Auxiliaires (prédateurs/parasitoïdes) —
+  // — Beneficial insects (predators/parasitoids) —
   sourceAttireAuxiliaires,
   cibleSujetteRavageurs,
 
-  // — Tuteur structurel —
+  // — Structural support —
   sourceSupport,
   sourcePlusHaute,
   cibleGrimpante,
 
-  // — Étagement / ombre —
+  // — Layering / shade —
   sourceHaute,
   cibleNettementPlusBasse,
   ciblePrefereOmbre,
   cibleTolereOmbre,
 
-  // — Succession temporelle —
+  // — Succession in time —
   cyclesComplementaires,
   occupationsDecalees,
 
-  // — Couverture / abri —
+  // — Ground cover / shelter —
   sourceCouvreSol,
   sourceBriseVent,
 
-  // — Brouillage olfactif —
+  // — Scent masking —
   deuxAromatiques,
   uneRepulsive,
 
-  // — Répulsion / plante-piège (bioagresseur ciblé) —
+  // — Repellent / trap plant (targeted bioaggressor) —
   sourceRepulsiveCible,
   sourcePiegeCible,
 
-  // — Ameublissement du sol —
+  // — Soil loosening —
   sourceRacineProfonde,
   cibleRacineSuperficielle,
 
-  // — Conflits —
+  // — Conflicts —
   memeFamille,
   deuxHautesPleinSoleil,
   deuxGourmandesAzote,

@@ -28,7 +28,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'RaisonReco': [TermeGlossaire.idNotion('pourquoi-recommandation')],
   // Functional crop groups used as rotation precedents (legumes, green manures)
   // — explained by the crop-rotation page. Dedicated per-value labels/pages are
-  // tracked as the rotation avancée i18n follow-up.
+  // tracked as the advanced rotation i18n follow-up.
   'GroupeCultural': [TermeGlossaire.idNotion('rotation-cultures')],
 
   // — Santé du jardin —

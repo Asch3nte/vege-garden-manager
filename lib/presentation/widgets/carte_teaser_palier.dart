@@ -10,7 +10,7 @@ import 'libelles_enums.dart';
 /// A contextual **level-up teaser**: a small, dismissable card
 /// shown on a gated screen to a user below the unlocking level. It names the
 /// locked [feature], the [niveauRequis] that opens it, and offers a one-tap
-/// "learn more" that jumps to the **Guide des niveaux** (mini-tuto §4a). Never a
+/// "learn more" that jumps to the **Guide des niveaux** (mini-tutorial). Never a
 /// blocking modal.
 class CarteTeaserPalier extends StatelessWidget {
   final IconData icone;

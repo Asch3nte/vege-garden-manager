@@ -24,9 +24,9 @@ import '../../domain/value_objects/surface.dart';
 /// 2. Surface: not enough free room (espacement² vs free surface).
 /// 3. Rotation conflict (computed by the caller, type-aware).
 /// 4. Hard companion conflict (negative association already in the parcelle).
-/// 5. Rusticité §A: potager's zone colder than the plant's minimum.
-/// 6. Difficulty §C: plant too hard for the user's experience level.
-/// 7. Container §D: plant incompatible with pot/planter type.
+/// 5. Hardiness: potager's zone colder than the plant's minimum.
+/// 6. Difficulty: plant too hard for the user's experience level.
+/// 7. Container: plant incompatible with pot/planter type.
 ///
 /// ## Soft score
 /// Exposition (40%), soil quality (40%), beneficial companion (20%). The
@@ -52,9 +52,9 @@ class EvaluateurRecommandations {
   /// is `true` when rotation was actually checked.
   ///
   /// **New params (all optional, backward-compatible)**:
-  /// - [zoneRusticite]: potager's USDA hardiness zone — enables filter §A.
-  /// - [niveauExperience]: user's experience level — enables filter §C.
-  /// - [typeParcelle]: parcelle structure — enables filter §D.
+  /// - [zoneRusticite]: potager's USDA hardiness zone — enables the hardiness filter.
+  /// - [niveauExperience]: user's experience level — enables the difficulty filter.
+  /// - [typeParcelle]: parcelle structure — enables the container filter.
   /// - [cultureVerticaleDisponible]: `true` when the parcelle has a trellis or
   ///   stake — triggers [RaisonReco.cultureVerticaleCompatible].
   RecommandationPlante? evaluer({
@@ -91,17 +91,17 @@ class EvaluateurRecommandations {
     if (rotationConflit) return null;
     // 4. Companion conflict
     if (planteIdsActifs.any(candidate.entreEnConflitAvec)) return null;
-    // 5. Rusticité §A
+    // 5. Hardiness
     if (zoneRusticite != null && candidate.rusticiteMin != null &&
         zoneRusticite.numero < candidate.rusticiteMin!.numero) {
       return null;
     }
-    // 6. Difficulty §C
+    // 6. Difficulty
     if (niveauExperience != null && candidate.difficulte != null &&
         candidate.difficulte! > _difficulteMax(niveauExperience)) {
       return null;
     }
-    // 7. Container §D
+    // 7. Container
     if (typeParcelle != null && !candidate.estCompatibleAvec(typeParcelle)) {
       return null;
     }

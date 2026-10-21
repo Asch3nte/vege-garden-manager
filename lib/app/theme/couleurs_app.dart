@@ -56,7 +56,7 @@ abstract final class CouleursApp {
 
   // ── Decorative palette ────────────────────────────────────
   // Non-semantic: tile gradients, vegetal separators, organic blobs/arches,
-  // illustrations. Never use these to convey a state — that's the §2.1 roles.
+  // illustrations. Never use these to convey a state — that's the semantic roles.
 
   /// Vert moyen — tile gradients, vegetal accents (`--c-green-mid`).
   static const Color decoVertMoyen = Color(0xFF4FA06A);

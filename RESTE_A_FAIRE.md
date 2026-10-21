@@ -9,11 +9,7 @@ Ordre d'exécution : §1 (lots numérotés, une branche par lot), puis §2 et §
 
 ## 1. Corrections issues de l'audit
 
-Détail, fichiers et gravité : [docs/audit-2026-10.md](docs/audit-2026-10.md) (`#n`).
-
-| Lot | Branche | Contenu |
-|---|---|---|
-| 8 | `chore/purge-commentaires` | Retrait des références ADR/docs/lot/§ (701 lignes), commentaires du domaine en anglais, paraphrases supprimées. |
+Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10.md).
 
 ## 2. Dette technique hors audit
 

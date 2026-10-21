@@ -2,7 +2,6 @@
 ///
 /// This describes **where the data came from**, not the user's global geolocation
 /// preference (that lives in the preferences).
-/// §4.3.
 enum SourceLocalisation {
   /// No location set (privacy default / opt-out).
   nonDefinie,
