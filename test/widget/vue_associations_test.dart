@@ -31,6 +31,8 @@ import 'package:pot_a_gerer/presentation/glossaire/page_terme_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/panneau_aide.dart';
 import 'package:pot_a_gerer/presentation/widgets/fiche_plante_detail.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_associations.dart';
+import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import '../helpers/favoris_mock.dart';
 
 FichePlante _fiche(
   String id, {
@@ -77,6 +79,9 @@ void main() {
   }) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
+        ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -128,6 +133,9 @@ void main() {
       (tester) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
+        ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -165,6 +173,9 @@ void main() {
       (tester) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
+        ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -460,6 +471,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
             glossaireDonneesProvider.overrideWith((ref) async => (
                   familles: <FamilleBotanique>[],
                   bioagresseurs: <Bioagresseur>[],

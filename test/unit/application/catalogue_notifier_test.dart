@@ -4,6 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:pot_a_gerer/application/providers/langue_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/catalogue_notifier.dart';
+import 'package:pot_a_gerer/application/state/catalogue_vue.dart';
 import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
@@ -11,12 +12,15 @@ import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_favori_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
 class MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
+
+class MockFavoris extends Mock implements AbstractFavoriRepository {}
 
 FamilleBotanique famille(String id, String nomFr, Set<CategoriePlante> cats) =>
     FamilleBotanique(
@@ -29,6 +33,7 @@ FamilleBotanique famille(String id, String nomFr, Set<CategoriePlante> cats) =>
 void main() {
   late MockFiches fiches;
   late MockFamilles familles;
+  late MockFavoris favoris;
 
   FichePlante fiche(String id, String nomFr, CategoriePlante cat,
           {String? parentId, String famille = 'Test', String? nomEn}) =>
@@ -57,6 +62,8 @@ void main() {
   setUp(() {
     fiches = MockFiches();
     familles = MockFamilles();
+    favoris = MockFavoris();
+    when(() => favoris.obtenirIds()).thenAnswer((_) async => {});
     catalogue = [
       fiche('tomate', 'Tomate', CategoriePlante.legume, famille: 'Solanaceae'),
       fiche('tomate-v1', 'Tomate Cerise', CategoriePlante.legume,
@@ -80,6 +87,7 @@ void main() {
   ProviderContainer conteneur({String langue = 'fr'}) {
     final c = ProviderContainer(overrides: [
       codeLangueProvider.overrideWithValue(langue),
+      favoriRepositoryProvider.overrideWithValue(favoris),
       fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
       familleBotaniqueRepositoryProvider.overrideWith((ref) async => familles),
     ]);
@@ -171,6 +179,60 @@ void main() {
     notifier.definirRequete('TÔMATE');
     expect(c.read(catalogueProvider).value!.fiches.map((f) => f.id),
         ['tomate']);
+  });
+
+  group('favourites only', () {
+    setUp(() {
+      catalogue = [
+        fiche('tomate', 'Tomate', CategoriePlante.legume),
+        fiche('tomate-cerise', 'Tomate cerise', CategoriePlante.legume,
+            parentId: 'tomate'),
+        fiche('tomate-coeur', 'Cœur de bœuf', CategoriePlante.legume,
+            parentId: 'tomate'),
+        fiche('basilic', 'Basilic', CategoriePlante.aromatique),
+        fiche('fraise', 'Fraise', CategoriePlante.petitFruit),
+      ];
+    });
+
+    Future<CatalogueVue> favorisSeuls(Set<String> ids) async {
+      when(() => favoris.obtenirIds()).thenAnswer((_) async => ids);
+      final c = conteneur();
+      await c.read(catalogueProvider.future);
+      c.read(catalogueProvider.notifier).definirFavorisSeuls(true);
+      return c.read(catalogueProvider).value!;
+    }
+
+    test('keeps only favourite species, with all their varieties', () async {
+      final vue = await favorisSeuls({'basilic', 'tomate'});
+      expect(vue.fiches.map((f) => f.id), ['basilic', 'tomate']);
+      expect(vue.groupes.last.varietes, hasLength(2));
+      expect(vue.favorisSeuls, isTrue);
+      expect(vue.filtreActif, isTrue);
+    });
+
+    test('a favourite variety surfaces its species with that variety only',
+        () async {
+      final vue = await favorisSeuls({'tomate-coeur'});
+      expect(vue.fiches.map((f) => f.id), ['tomate']);
+      expect(vue.groupes.single.varietes.map((v) => v.id), ['tomate-coeur']);
+    });
+
+    test('combines with the query', () async {
+      when(() => favoris.obtenirIds())
+          .thenAnswer((_) async => {'basilic', 'fraise'});
+      final c = conteneur();
+      await c.read(catalogueProvider.future);
+      c.read(catalogueProvider.notifier)
+        ..definirFavorisSeuls(true)
+        ..definirRequete('fra');
+      expect(c.read(catalogueProvider).value!.fiches.map((f) => f.id),
+          ['fraise']);
+    });
+
+    test('no favourite → empty result', () async {
+      final vue = await favorisSeuls({});
+      expect(vue.sansResultat, isTrue);
+    });
   });
 
   test('combines query and category', () async {

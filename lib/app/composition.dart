@@ -24,6 +24,7 @@ import '../infrastructure/database/lecteur_lignes.dart';
 import '../infrastructure/repositories/bioagresseur_repository_impl.dart';
 import '../infrastructure/repositories/equipement_repository_impl.dart';
 import '../infrastructure/repositories/famille_botanique_repository_impl.dart';
+import '../infrastructure/repositories/favori_repository_impl.dart';
 import '../infrastructure/repositories/fiche_plante_personnelle_repository_impl.dart';
 import '../infrastructure/repositories/fiche_plante_repository_impl.dart';
 import '../infrastructure/repositories/meteo_service_impl.dart';
@@ -124,6 +125,8 @@ class Composition {
         preferencesRepositoryProvider
             .overrideWith((ref) =>
                 PreferencesRepositoryImpl(base, lecteur: _lecteur(ref))),
+        favoriRepositoryProvider
+            .overrideWith((ref) => FavoriRepositoryImpl(base)),
         fichesPersonnellesChargeesProvider.overrideWith(
           (ref) => FichesPersonnellesLoader(
             ref.watch(fichePlantePersonnelleRepositoryProvider),

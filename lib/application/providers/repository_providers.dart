@@ -6,6 +6,7 @@ import '../../domain/entities/fiche_plante.dart';
 import '../../domain/repositories/abstract_bioagresseur_repository.dart';
 import '../../domain/repositories/abstract_equipement_repository.dart';
 import '../../domain/repositories/abstract_famille_botanique_repository.dart';
+import '../../domain/repositories/abstract_favori_repository.dart';
 import '../../domain/repositories/abstract_fiche_plante_personnelle_repository.dart';
 import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_observation_repository.dart';
@@ -61,6 +62,10 @@ final rappelRepositoryProvider = Provider<AbstractRappelRepository>(
 
 final preferencesRepositoryProvider = Provider<AbstractPreferencesRepository>(
   (ref) => nonBranche('preferencesRepositoryProvider'),
+);
+
+final favoriRepositoryProvider = Provider<AbstractFavoriRepository>(
+  (ref) => nonBranche('favoriRepositoryProvider'),
 );
 
 // --- Plant catalogue ---------------------------------------------------------

@@ -41,6 +41,7 @@ class CatalogueVue {
   final List<GroupeFiche> _groupes;
   final List<FichePlante> _toutesMeres;
   final List<FichePlante> _toutesVarietes;
+  final bool _favorisSeuls;
 
   CatalogueVue._(
     this._requete,
@@ -50,6 +51,7 @@ class CatalogueVue {
     List<GroupeFiche> groupes,
     List<FichePlante> toutesMeres,
     List<FichePlante> toutesVarietes,
+    this._favorisSeuls,
   )   : _familles = List.unmodifiable(familles),
         _groupes = List.unmodifiable(groupes),
         _toutesMeres = List.unmodifiable(toutesMeres),
@@ -69,9 +71,10 @@ class CatalogueVue {
     List<FichePlante> toutesVarietes = const [],
     String? familleSelectionnee,
     List<FamilleBotanique> familles = const [],
+    bool favorisSeuls = false,
   }) =>
       CatalogueVue._(requete, categorie, familleSelectionnee, familles, groupes,
-          toutesMeres, toutesVarietes);
+          toutesMeres, toutesVarietes, favorisSeuls);
 
   /// Current free-text query (as typed).
   String get requete => _requete;
@@ -83,6 +86,9 @@ class CatalogueVue {
   /// present among that category's species, ordered by localized name.
   /// Empty when no category is selected.
   List<FamilleBotanique> get familles => _familles;
+
+  /// Whether only favourite sheets are shown.
+  bool get favorisSeuls => _favorisSeuls;
 
   /// Active family filter (a family id), or `null` for "Toutes les familles".
   String? get familleSelectionnee => _familleSelectionnee;
@@ -123,9 +129,10 @@ class CatalogueVue {
   /// Whether the current filters yield no result (drives the empty state).
   bool get sansResultat => _groupes.isEmpty;
 
-  /// Whether any filter is active (query, category or family).
+  /// Whether any filter is active (query, category, family or favourites).
   bool get filtreActif =>
       _requete.trim().isNotEmpty ||
       _categorie != null ||
-      _familleSelectionnee != null;
+      _familleSelectionnee != null ||
+      _favorisSeuls;
 }

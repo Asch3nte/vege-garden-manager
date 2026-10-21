@@ -402,6 +402,19 @@ class FichesPlantesPersonnelles extends Table {
       ];
 }
 
+/// Favourite plant sheets, keyed by sheet id (a catalogue slug, not a UUID).
+@DataClassName('FavoriRow')
+class Favoris extends Table {
+  TextColumn get ficheId => text()();
+  TextColumn get createdAt => text()();
+  TextColumn get updatedAt => text()();
+  TextColumn get deletedAt => text().nullable()();
+  IntColumn get syncVersion => integer().withDefault(const Constant(1))();
+
+  @override
+  Set<Column> get primaryKey => {ficheId};
+}
+
 @DataClassName('PreferencesRow')
 class Preferences extends Table {
   TextColumn get id => text().withDefault(const Constant('singleton'))();

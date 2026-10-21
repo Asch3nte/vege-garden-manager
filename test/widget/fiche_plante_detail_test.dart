@@ -15,6 +15,8 @@ import 'package:pot_a_gerer/domain/value_objects/arrosage_detaille.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/fiche_plante_detail.dart';
+import 'package:pot_a_gerer/application/providers/repository_providers.dart';
+import '../helpers/favoris_mock.dart';
 
 FichePlante _fiche({int? difficulte}) => FichePlante(
       id: 'laitue',
@@ -76,6 +78,7 @@ Future<void> _ouvrir(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
         accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
       ],
       child: MaterialApp(

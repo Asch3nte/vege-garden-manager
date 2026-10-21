@@ -27,6 +27,7 @@ import '../glossaire/terme_cliquable.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import 'badge_perso.dart';
+import 'bouton_favori.dart';
 import 'calendrier_semis_recolte.dart';
 import 'icones_communes.dart';
 import 'langue_contexte.dart';
@@ -249,6 +250,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                 ],
               ),
             ),
+            BoutonFavori(ficheId: _fiche.id),
             // Editor actions (expert): duplicate a built-in sheet into an
             // editable copy, or edit the personal sheet shown here.
             if (accesPerso)

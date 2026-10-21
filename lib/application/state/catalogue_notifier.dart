@@ -7,6 +7,7 @@ import '../../domain/services/comparateur_noms.dart';
 import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'catalogue_vue.dart';
+import 'favoris_notifier.dart';
 
 /// Drives the **Catalogue** screen: loads the plant catalogue once, then applies
 /// the user's text query and category filter in memory.
@@ -26,6 +27,8 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   String _requete = '';
   CategoriePlante? _categorie;
   String? _famille;
+  bool _favorisSeuls = false;
+  Set<String> _favoris = const {};
 
   @override
   Future<CatalogueVue> build() async {
@@ -37,6 +40,12 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     _famillesParId = {
       for (final f in await repoFamilles.obtenirToutes()) f.id: f
     };
+    // A toggled favourite re-filters in place, without reloading the catalogue.
+    ref.listen(favorisProvider, (_, favoris) {
+      _favoris = favoris.value ?? const {};
+      if (state.hasValue) state = AsyncData(_projeter());
+    });
+    _favoris = await ref.read(favorisProvider.future);
     return _projeter();
   }
 
@@ -51,6 +60,12 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   void definirCategorie(CategoriePlante? categorie) {
     _categorie = categorie;
     _famille = null;
+    state = AsyncData(_projeter());
+  }
+
+  /// Shows only the favourite sheets, or every sheet, and re-filters.
+  void definirFavorisSeuls(bool favorisSeuls) {
+    _favorisSeuls = favorisSeuls;
     state = AsyncData(_projeter());
   }
 
@@ -73,8 +88,10 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     int parNom(FichePlante a, FichePlante b) =>
         _comparateur.comparer(a.nomLocalise(_locale), b.nomLocalise(_locale));
     bool correspond(FichePlante f) =>
-        _comparateur.replier(f.nomLocalise(_locale)).contains(terme) ||
-        f.id.toLowerCase().contains(terme);
+        (!_favorisSeuls || _favoris.contains(f.id)) &&
+        (terme.isEmpty ||
+            _comparateur.replier(f.nomLocalise(_locale)).contains(terme) ||
+            f.id.toLowerCase().contains(terme));
     String cleFamille(FichePlante f) =>
         FamilleBotanique.normaliserCle(f.familleBotanique);
 
@@ -91,7 +108,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
       if (_categorie != null && mere.categorie != _categorie) continue;
       if (_famille != null && cleFamille(mere) != _famille) continue;
       final varietes = [...?varietesParParent[mere.id]]..sort(parNom);
-      if (terme.isEmpty || correspond(mere)) {
+      if (correspond(mere)) {
         groupes.add(GroupeFiche(mere: mere, varietes: varietes));
       } else {
         final filtrees = varietes.where(correspond).toList();
@@ -106,6 +123,7 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
       categorie: _categorie,
       familleSelectionnee: _famille,
       familles: _famillesDeCategorie(meres),
+      favorisSeuls: _favorisSeuls,
       groupes: groupes,
       toutesMeres: meres,
       toutesVarietes: toutesVarietes,

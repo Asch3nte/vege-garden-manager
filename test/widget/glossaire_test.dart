@@ -44,6 +44,7 @@ import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/presentation/glossaire/terme_glossaire.dart';
 import 'package:pot_a_gerer/presentation/widgets/champ_deroulant_decrit.dart';
 import 'package:pot_a_gerer/presentation/widgets/libelles_enums.dart';
+import '../helpers/favoris_mock.dart';
 
 class _MockPotagers extends Mock implements AbstractPotagerRepository {}
 
@@ -124,6 +125,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           glossaireDonneesProvider.overrideWith((ref) async =>
               (familles: _familles, bioagresseurs: _bioagresseurs)),
         ],
@@ -209,6 +211,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           glossaireDonneesProvider.overrideWith((ref) async =>
               (familles: _familles, bioagresseurs: _bioagresseurs)),
         ],
@@ -339,6 +342,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           potagerRepositoryProvider.overrideWithValue(potagers),
           parcelleRepositoryProvider.overrideWithValue(parcelles),
           tacheRepositoryProvider.overrideWithValue(taches),
@@ -442,6 +446,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          favoriRepositoryProvider.overrideWithValue(favorisEnMemoire()),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           potagerRepositoryProvider.overrideWithValue(potagers),
           accesNiveauProvider

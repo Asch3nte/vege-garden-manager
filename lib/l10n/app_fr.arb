@@ -879,6 +879,16 @@
   "@catalogueAucunResultat": {
     "description": "État vide de la recherche du catalogue."
   },
+  "catalogueAucunFavori": "Aucun favori. Touchez le cœur d'une plante pour l'ajouter.",
+  "@catalogueAucunFavori": { "description": "État vide du catalogue filtré sur les favoris." },
+  "catalogueFavorisSeuls": "Afficher les favoris",
+  "@catalogueFavorisSeuls": { "description": "Bouton cœur de l'en-tête du catalogue : filtre sur les favoris." },
+  "catalogueToutesPlantes": "Afficher toutes les plantes",
+  "@catalogueToutesPlantes": { "description": "Bouton cœur actif : retire le filtre des favoris." },
+  "favoriAjouter": "Ajouter aux favoris",
+  "@favoriAjouter": { "description": "Cœur d'une plante non favorite." },
+  "favoriRetirer": "Retirer des favoris",
+  "@favoriRetirer": { "description": "Cœur d'une plante favorite." },
   "catalogueErreurChargement": "Impossible de charger le catalogue.",
   "@catalogueErreurChargement": {
     "description": "Message d'erreur de chargement du catalogue."

@@ -21,6 +21,7 @@ import '../forms/formulaire_plantation.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../screens/ecran_selection_zone.dart';
 import '../widgets/badge_perso.dart';
+import '../widgets/bouton_favori.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/fiche_plante_detail.dart';
 import '../widgets/langue_contexte.dart';
@@ -84,6 +85,18 @@ class EcranCatalogue extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.navCatalogue),
         actions: [
+          if (vue.value case final data?)
+            IconButton(
+              icon: Icon(data.favorisSeuls
+                  ? PhosphorIconsFill.heart
+                  : PhosphorIconsRegular.heart),
+              tooltip: data.favorisSeuls
+                  ? l10n.catalogueToutesPlantes
+                  : l10n.catalogueFavorisSeuls,
+              onPressed: () => ref
+                  .read(catalogueProvider.notifier)
+                  .definirFavorisSeuls(!data.favorisSeuls),
+            ),
           if (fichesPersoDispo)
             IconButton(
               icon: const Icon(PhosphorIconsRegular.leaf),
@@ -233,7 +246,10 @@ class _VueFiches extends ConsumerWidget {
         const SizedBox(height: EspacementsApp.s3),
         Expanded(
           child: vue.sansResultat
-              ? _EtatVide(message: l10n.catalogueAucunResultat)
+              ? _EtatVide(
+                  message: vue.favorisSeuls
+                      ? l10n.catalogueAucunFavori
+                      : l10n.catalogueAucunResultat)
               : _Liste(groupes: vue.groupes, onAjouter: onAjouter),
         ),
       ],
@@ -595,6 +611,8 @@ class _CarteFiche extends ConsumerWidget {
                 ],
               ),
             ),
+            BoutonFavori(ficheId: fiche.id, compact: true),
+            const SizedBox(width: EspacementsApp.s2),
             // One-tap access to the detailed Associations view of this species.
             IconButton(
               icon: const Icon(PhosphorIconsRegular.graph),
