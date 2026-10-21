@@ -28,7 +28,7 @@ void main() {
   setUp(() {
     repo = MockFichesPerso();
     when(() => repo.obtenirToutes()).thenAnswer((_) async => []);
-    when(() => repo.obtenirParIdFiche(any())).thenAnswer((_) async => null);
+    when(() => repo.idFicheExiste(any())).thenAnswer((_) async => false);
     when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
   });
 

@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/equipement.dart';
 import '../../domain/repositories/abstract_equipement_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/equipement_mapper.dart';
 import 'suppression_cascade.dart';
@@ -11,8 +12,9 @@ import 'suppression_cascade.dart';
 class EquipementRepositoryImpl implements AbstractEquipementRepository {
   final AppDatabase _db;
   final EquipementMapper _mapper = const EquipementMapper();
+  final LecteurLignes _lecteur;
 
-  EquipementRepositoryImpl(this._db);
+  EquipementRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Equipement>> obtenirParPotager(String potagerId) async {
@@ -20,7 +22,8 @@ class EquipementRepositoryImpl implements AbstractEquipementRepository {
           ..where((t) => t.potagerId.equals(potagerId) & t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.dateInstallation)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.equipements.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -29,7 +32,8 @@ class EquipementRepositoryImpl implements AbstractEquipementRepository {
           ..where((t) => t.parcelleId.equals(parcelleId) & t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.dateInstallation)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.equipements.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -37,7 +41,8 @@ class EquipementRepositoryImpl implements AbstractEquipementRepository {
     final row = await (_db.select(_db.equipements)
           ..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.equipements.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override

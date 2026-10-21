@@ -4,6 +4,7 @@ import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/tache_mapper.dart';
 
@@ -11,8 +12,9 @@ import '../mappers/tache_mapper.dart';
 class TacheRepositoryImpl implements AbstractTacheRepository {
   final AppDatabase _db;
   final TacheMapper _mapper = const TacheMapper();
+  final LecteurLignes _lecteur;
 
-  TacheRepositoryImpl(this._db);
+  TacheRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Tache>> obtenirParCible(CibleTache cible, String cibleId) async {
@@ -28,7 +30,8 @@ class TacheRepositoryImpl implements AbstractTacheRepository {
           })
           ..orderBy([(t) => OrderingTerm.asc(t.datePrevue)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.taches.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -36,7 +39,8 @@ class TacheRepositoryImpl implements AbstractTacheRepository {
     final row = await (_db.select(_db.taches)
           ..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.taches.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -50,7 +54,8 @@ class TacheRepositoryImpl implements AbstractTacheRepository {
               t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.datePrevue)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.taches.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -60,7 +65,8 @@ class TacheRepositoryImpl implements AbstractTacheRepository {
               t.rappelOrigineId.equals(rappelOrigineId) & t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.datePrevue)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.taches.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override

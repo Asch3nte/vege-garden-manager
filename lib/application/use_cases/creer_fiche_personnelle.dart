@@ -48,7 +48,7 @@ class CreerFichePersonnelle {
   Future<String> _idFicheUnique(String base) async {
     var candidat = base;
     var n = 2;
-    while (await _repo.obtenirParIdFiche(candidat) != null) {
+    while (await _repo.idFicheExiste(candidat)) {
       candidat = '${base}_${n++}';
     }
     return candidat;

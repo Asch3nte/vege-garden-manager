@@ -17,6 +17,9 @@ abstract class AbstractFichePlantePersonnelleRepository {
   /// The personal sheet exposed under the logical [idFiche], or `null`.
   Future<FichePlantePersonnelle?> obtenirParIdFiche(String idFiche);
 
+  /// Whether a non-deleted sheet, readable or not, holds the logical [idFiche].
+  Future<bool> idFicheExiste(String idFiche);
+
   /// Raw `yaml_contenu` of every non-deleted sheet — the on-disk source of
   /// truth, fed as-is to the catalogue pipeline when merging personal sheets
   /// into the catalogue (a corrupt one is skipped there, never crashing).

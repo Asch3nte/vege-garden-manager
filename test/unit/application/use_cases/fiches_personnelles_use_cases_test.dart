@@ -68,6 +68,26 @@ void main() {
       expect(await repo.obtenirParId('row-1'), isNotNull);
     });
 
+    test('an unreadable sheet still holds its logical id', () async {
+      const date = '2026-07-01T00:00:00.000Z';
+      await db.into(db.fichesPlantesPersonnelles).insert(
+            FichesPlantesPersonnellesCompanion.insert(
+              id: 'illisible',
+              idFiche: 'perso_tomate',
+              yamlContenu: ': ce n est pas du yaml : [',
+              schemaVersion: 1,
+              categorie: 'legume',
+              dateCreation: date,
+              createdAt: date,
+              updatedAt: date,
+            ),
+          );
+      final uc = CreerFichePersonnelle(repo);
+
+      final fiche = await uc.executer(contenu: modele(idFiche: 'perso_tomate'));
+      expect(fiche.idFiche, 'perso_tomate_2');
+    });
+
     test('suffixes the logical id on collision with another sheet', () async {
       var n = 0;
       final uc = CreerFichePersonnelle(repo, genererId: () => 'row-${n++}');

@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/fiche_plante_personnelle.dart';
 import '../../domain/repositories/abstract_fiche_plante_personnelle_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../mappers/fiche_plante_personnelle_mapper.dart';
 
 /// drift-backed implementation of [AbstractFichePlantePersonnelleRepository].
@@ -12,7 +13,10 @@ class FichePlantePersonnelleRepositoryImpl
   final FichePlantePersonnelleMapper _mapper =
       const FichePlantePersonnelleMapper();
 
-  FichePlantePersonnelleRepositoryImpl(this._db);
+  final LecteurLignes _lecteur;
+
+  FichePlantePersonnelleRepositoryImpl(this._db,
+      {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<FichePlantePersonnelle>> obtenirToutes() async {
@@ -20,7 +24,8 @@ class FichePlantePersonnelleRepositoryImpl
           ..where((t) => t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.fichesPlantesPersonnelles.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -28,7 +33,8 @@ class FichePlantePersonnelleRepositoryImpl
     final row = await (_db.select(_db.fichesPlantesPersonnelles)
           ..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.fichesPlantesPersonnelles.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -36,8 +42,16 @@ class FichePlantePersonnelleRepositoryImpl
     final row = await (_db.select(_db.fichesPlantesPersonnelles)
           ..where((t) => t.idFiche.equals(idFiche) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.fichesPlantesPersonnelles.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
+
+  @override
+  Future<bool> idFicheExiste(String idFiche) async =>
+      await (_db.select(_db.fichesPlantesPersonnelles)
+            ..where((t) => t.idFiche.equals(idFiche) & t.deletedAt.isNull()))
+          .getSingleOrNull() !=
+      null;
 
   @override
   Future<List<String>> obtenirYamlBruts() async {

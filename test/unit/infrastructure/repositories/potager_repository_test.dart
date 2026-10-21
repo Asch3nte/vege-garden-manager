@@ -94,6 +94,23 @@ void main() {
     expect((await repo.obtenirPotagerActif())!.id, 'b');
   });
 
+  test('obtenirPotagerActif skips unreadable gardens, selected or earliest',
+      () async {
+    await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));
+    await repo.sauvegarder(potager(id: 'b', date: DateTime.utc(2026, 3, 1)));
+    await repo.sauvegarder(potager(id: 'c', date: DateTime.utc(2026, 5, 1)));
+    // An empty name breaks the entity invariant.
+    await (db.update(db.potagers)..where((t) => t.id.isIn(['a', 'c'])))
+        .write(const PotagersCompanion(nom: Value('')));
+    await db.into(db.preferences).insertOnConflictUpdate(
+          PreferencesCompanion.insert(
+            derniereModification: DateTime.now().toIso8601String(),
+            potagerActifId: const Value('c'),
+          ),
+        );
+    expect((await repo.obtenirPotagerActif())!.id, 'b');
+  });
+
   test('obtenirPotagerActif falls back when the selection points at a '
       'deleted garden', () async {
     await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));

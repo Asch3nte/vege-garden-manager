@@ -6,6 +6,7 @@ import '../application/providers/langue_provider.dart';
 import '../application/providers/repository_providers.dart';
 import '../application/providers/service_providers.dart';
 import '../application/state/journal_erreurs_chargement.dart';
+import '../application/state/journal_lignes_illisibles.dart';
 import '../infrastructure/api/nominatim_client.dart';
 import '../infrastructure/api/open_meteo_client.dart';
 import '../infrastructure/catalogue/bioagresseur_asset_source.dart';
@@ -19,6 +20,7 @@ import '../infrastructure/catalogue/fiche_asset_source.dart';
 import '../infrastructure/catalogue/fiche_plante_cache.dart';
 import '../infrastructure/catalogue/fiches_personnelles_loader.dart';
 import '../infrastructure/database/app_database.dart';
+import '../infrastructure/database/lecteur_lignes.dart';
 import '../infrastructure/repositories/bioagresseur_repository_impl.dart';
 import '../infrastructure/repositories/equipement_repository_impl.dart';
 import '../infrastructure/repositories/famille_botanique_repository_impl.dart';
@@ -87,25 +89,38 @@ final bioagresseurCacheProvider = FutureProvider<BioagresseurCache>(
 class Composition {
   const Composition._();
 
+  /// Row reader reporting the unreadable rows to the shared journal.
+  static LecteurLignes _lecteur(Ref ref) =>
+      LecteurLignes(ref.watch(journalLignesIllisiblesProvider).signaler);
+
   /// Overrides wiring the implementations on [base].
   static List<Override> surcharges(AppDatabase base) => [
         potagerRepositoryProvider
-            .overrideWith((ref) => PotagerRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                PotagerRepositoryImpl(base, lecteur: _lecteur(ref))),
         parcelleRepositoryProvider
-            .overrideWith((ref) => ParcelleRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                ParcelleRepositoryImpl(base, lecteur: _lecteur(ref))),
         plantationRepositoryProvider
-            .overrideWith((ref) => PlantationRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                PlantationRepositoryImpl(base, lecteur: _lecteur(ref))),
         recolteRepositoryProvider
-            .overrideWith((ref) => RecolteRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                RecolteRepositoryImpl(base, lecteur: _lecteur(ref))),
         observationRepositoryProvider
-            .overrideWith((ref) => ObservationRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                ObservationRepositoryImpl(base, lecteur: _lecteur(ref))),
         equipementRepositoryProvider
-            .overrideWith((ref) => EquipementRepositoryImpl(base)),
-        tacheRepositoryProvider.overrideWith((ref) => TacheRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                EquipementRepositoryImpl(base, lecteur: _lecteur(ref))),
+        tacheRepositoryProvider.overrideWith(
+            (ref) => TacheRepositoryImpl(base, lecteur: _lecteur(ref))),
         fichePlantePersonnelleRepositoryProvider
-            .overrideWith((ref) => FichePlantePersonnelleRepositoryImpl(base)),
+            .overrideWith((ref) => FichePlantePersonnelleRepositoryImpl(base,
+                lecteur: _lecteur(ref))),
         rappelRepositoryProvider
-            .overrideWith((ref) => RappelRepositoryImpl(base)),
+            .overrideWith((ref) =>
+                RappelRepositoryImpl(base, lecteur: _lecteur(ref))),
         preferencesRepositoryProvider
             .overrideWith((ref) => PreferencesRepositoryImpl(base)),
         fichesPersonnellesChargeesProvider.overrideWith(

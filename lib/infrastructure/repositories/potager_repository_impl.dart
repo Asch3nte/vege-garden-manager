@@ -4,6 +4,7 @@ import '../../domain/entities/potager.dart';
 import '../../domain/entities/preferences_utilisateur.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/potager_mapper.dart';
 import 'suppression_cascade.dart';
@@ -15,8 +16,9 @@ import 'suppression_cascade.dart';
 class PotagerRepositoryImpl implements AbstractPotagerRepository {
   final AppDatabase _db;
   final PotagerMapper _mapper = const PotagerMapper();
+  final LecteurLignes _lecteur;
 
-  PotagerRepositoryImpl(this._db);
+  PotagerRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Potager>> obtenirTous() async {
@@ -24,7 +26,8 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
           ..where((t) => t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.dateCreation)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.potagers.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   // ADR-0009 (multi-potager): the active garden is the user's persisted
@@ -38,17 +41,25 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
         .getSingleOrNull();
     final choixId = prefs?.potagerActifId;
     if (choixId != null) {
-      final choisi = await (_db.select(_db.potagers)
-            ..where((t) => t.id.equals(choixId) & t.deletedAt.isNull()))
-          .getSingleOrNull();
-      if (choisi != null) return _mapper.versEntite(choisi);
+      final choisi = _lecteur.lireUne(
+          _db.potagers.actualTableName,
+          await (_db.select(_db.potagers)
+                ..where((t) => t.id.equals(choixId) & t.deletedAt.isNull()))
+              .getSingleOrNull(),
+          _mapper.versEntite,
+          (r) => r.id);
+      if (choisi != null) return choisi;
     }
-    final row = await (_db.select(_db.potagers)
+    final lignes = await (_db.select(_db.potagers)
           ..where((t) => t.deletedAt.isNull())
-          ..orderBy([(t) => OrderingTerm.asc(t.dateCreation)])
-          ..limit(1))
-        .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+          ..orderBy([(t) => OrderingTerm.asc(t.dateCreation)]))
+        .get();
+    for (final ligne in lignes) {
+      final potager = _lecteur.lireUne(_db.potagers.actualTableName, ligne,
+          _mapper.versEntite, (r) => r.id);
+      if (potager != null) return potager;
+    }
+    return null;
   }
 
   @override

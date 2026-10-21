@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
@@ -5,6 +6,7 @@ import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/etat_tache.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
+import 'package:pot_a_gerer/infrastructure/database/lecteur_lignes.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/tache_repository_impl.dart';
 
 void main() {
@@ -153,5 +155,47 @@ void main() {
     final list = await repo.obtenirEntreDates(
         DateTime(2026, 6, 9), DateTime(2026, 6, 10));
     expect(list.map((t) => t.id), ['debut']);
+  });
+
+  group('unreadable rows', () {
+    late List<String> signalees;
+
+    setUp(() async {
+      signalees = [];
+      repo = TacheRepositoryImpl(db,
+          lecteur: LecteurLignes((table, id, _) => signalees.add('$table/$id')));
+      await repo.sauvegarder(tache(id: 'ok'));
+      // A user task without title breaks the entity invariant.
+      await db.into(db.taches).insert(TachesCompanion.insert(
+            id: 'ko',
+            type: 'arrosage',
+            datePrevue: DateTime.utc(2026, 6, 10).toIso8601String(),
+            dateCreation: now,
+            createdAt: now,
+            updatedAt: now,
+            parcelleId: const Value('par1'),
+          ));
+    });
+
+    test('are set aside from a list and reported', () async {
+      final taches = await repo.obtenirParCible(CibleTache.parcelle, 'par1');
+
+      expect(taches.map((t) => t.id), ['ok']);
+      expect(signalees, ['taches/ko']);
+    });
+
+    test('read as absent on their own', () async {
+      expect(await repo.obtenirParId('ko'), isNull);
+    });
+
+    test('stay untouched in the database', () async {
+      await repo.obtenirParCible(CibleTache.parcelle, 'par1');
+
+      final ligne = await (db.select(db.taches)
+            ..where((t) => t.id.equals('ko')))
+          .getSingle();
+      expect(ligne.deletedAt, isNull);
+      expect(ligne.titre, isNull);
+    });
   });
 }
