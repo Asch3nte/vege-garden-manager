@@ -17,6 +17,7 @@ class PreferencesUnites {
     this._masse,
   );
 
+  /// Metric for any quantity not given.
   const PreferencesUnites({
     SystemeUnites temperature = SystemeUnites.metrique,
     SystemeUnites longueur = SystemeUnites.metrique,
@@ -29,6 +30,7 @@ class PreferencesUnites {
   const PreferencesUnites.uniforme(SystemeUnites systeme)
     : this._(systeme, systeme, systeme, systeme, systeme);
 
+  /// The system chosen for [grandeur].
   SystemeUnites pour(GrandeurMesure grandeur) => switch (grandeur) {
     GrandeurMesure.temperature => _temperature,
     GrandeurMesure.longueur => _longueur,

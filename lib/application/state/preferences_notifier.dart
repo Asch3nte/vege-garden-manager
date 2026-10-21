@@ -47,7 +47,6 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> definirTheme(ThemeApp theme) =>
       _modifier((p) => p.copierAvec(theme: theme));
 
-  /// Sets the unit system.
   /// Sets every quantity to [systeme].
   Future<void> definirPrereglageUnites(SystemeUnites systeme) => _modifier(
       (p) => p.copierAvec(unites: PreferencesUnites.uniforme(systeme)));

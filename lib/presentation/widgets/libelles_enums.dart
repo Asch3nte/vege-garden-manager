@@ -141,7 +141,6 @@ extension LibellesEnums on AppLocalizations {
         prefs_theme.ThemeApp.sombre => themeSombre,
       };
 
-  /// Label for the unit system.
   /// Label for a measured quantity.
   String grandeurMesure(GrandeurMesure g) => switch (g) {
         GrandeurMesure.temperature => grandeurTemperature,
@@ -168,6 +167,7 @@ extension LibellesEnums on AppLocalizations {
     };
   }
 
+  /// Label for the unit system.
   String unites(SystemeUnites u) => switch (u) {
         SystemeUnites.metrique => unitesMetrique,
         SystemeUnites.imperial => unitesImperial,

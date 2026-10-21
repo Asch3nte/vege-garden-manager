@@ -66,6 +66,15 @@ void main() {
     expect((await repo.charger()).unites, unites);
   });
 
+  test('an unknown unit value is refused by the base', () async {
+    await repo.charger();
+    expect(
+      () => db.customStatement(
+          "UPDATE preferences SET unite_masse = 'inconnue'"),
+      throwsA(anything),
+    );
+  });
+
   test('charger returns the default weighting profile', () async {
     expect((await repo.charger()).ponderationAssociations.estDefaut, isTrue);
   });

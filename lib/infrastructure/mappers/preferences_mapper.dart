@@ -25,7 +25,7 @@ import '../database/app_database.dart';
 class PreferencesMapper {
   const PreferencesMapper();
 
-  /// An unknown value (e.g. from a newer backup) reads as metric.
+  /// A value the CHECK constraint should have refused reads as metric.
   static SystemeUnites _systeme(String nom) =>
       SystemeUnites.values.asNameMap()[nom] ?? SystemeUnites.metrique;
 

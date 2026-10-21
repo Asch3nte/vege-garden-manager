@@ -16,20 +16,24 @@ class FormateurMesures {
 
   final AppLocalizations _l10n;
   final PreferencesUnites _unites;
+  final List<NumberFormat?> _formats = [null, null, null];
 
-  const FormateurMesures(this._l10n, this._unites);
+  FormateurMesures(this._l10n, this._unites);
 
   bool _imperial(GrandeurMesure g) => _unites.pour(g) == SystemeUnites.imperial;
 
-  /// [valeur] rounded half away from zero to [decimales], in the locale.
-  String _nombre(double valeur, [int decimales = 0]) {
+  /// [valeur] rounded half away from zero to [decimales] (0 to 2).
+  static double _arrondi(double valeur, int decimales) {
     final facteur = [1, 10, 100][decimales];
-    final arrondi = (valeur * facteur).round() / facteur;
-    return NumberFormat(
-      decimales == 0 ? '0' : '0.${'#' * decimales}',
-      _l10n.localeName,
-    ).format(arrondi);
+    return (valeur * facteur).round() / facteur;
   }
+
+  /// [valeur] rounded to [decimales] (0 to 2), in the locale.
+  String _nombre(double valeur, [int decimales = 0]) =>
+      (_formats[decimales] ??= NumberFormat(
+        decimales == 0 ? '0' : '0.${'#' * decimales}',
+        _l10n.localeName,
+      )).format(_arrondi(valeur, decimales));
 
   String temperature(double celsius) => _imperial(GrandeurMesure.temperature)
       ? _l10n.mesureFahrenheit(
@@ -54,13 +58,16 @@ class FormateurMesures {
         )
       : _l10n.mesureCelsius(_nombre(celsius, 1));
 
-  /// Inches under a foot, then feet and inches.
+  /// Inches (one decimal) under a foot, then feet and inches.
   String longueurCm(num cm) {
     if (!_imperial(GrandeurMesure.longueur)) {
-      return _l10n.mesureCm(_nombre(cm.toDouble()));
+      return _l10n.mesureCm(_nombre(cm.toDouble(), 1));
     }
-    final pouces = _convertisseur.centimetresVersPouces(cm.toDouble()).round();
-    if (pouces < _poucesParPied) return _l10n.mesurePouces('$pouces');
+    final enPouces = _convertisseur.centimetresVersPouces(cm.toDouble());
+    if (_arrondi(enPouces, 1) < _poucesParPied) {
+      return _l10n.mesurePouces(_nombre(enPouces, 1));
+    }
+    final pouces = enPouces.round();
     final pieds = pouces ~/ _poucesParPied;
     final reste = pouces % _poucesParPied;
     return reste == 0
@@ -87,35 +94,30 @@ class FormateurMesures {
       ? _l10n.mesureFt2(_nombre(_convertisseur.m2VersFt2(m2), 1))
       : _l10n.mesureM2(_nombre(m2, 1));
 
-  /// Grams or kilograms; ounces under a pound, then pounds.
+  /// Grams or kilograms; ounces under a pound, then pounds. The unit is
+  /// chosen on the rounded value, so 999.6 g reads « 1 kg ».
   String masseG(double grammes) {
     if (_imperial(GrandeurMesure.masse)) {
       final onces = _convertisseur.grammesVersOnces(grammes);
-      return onces < _oncesParLivre
+      return _arrondi(onces, 1) < _oncesParLivre
           ? _l10n.mesureOnces(_nombre(onces, 1))
-          : _l10n.mesureLivres(
-              _nombre(
-                _convertisseur.kilogrammesVersLivres(grammes / _unitesParKilo),
-                1,
-              ),
-            );
+          : _l10n.mesureLivres(_nombre(onces / _oncesParLivre, 1));
     }
-    return grammes < _unitesParKilo
+    return _arrondi(grammes, 0) < _unitesParKilo
         ? _l10n.mesureGrammes(_nombre(grammes))
         : _l10n.mesureKilogrammes(_nombre(grammes / _unitesParKilo, 1));
   }
 
-  /// Millilitres or litres; fluid ounces under a gallon, then gallons.
+  /// Millilitres or litres; fluid ounces under a gallon, then gallons. The
+  /// unit is chosen on the rounded value.
   String volumeMl(double ml) {
     if (_imperial(GrandeurMesure.volume)) {
       final onces = _convertisseur.millilitresVersOncesLiquides(ml);
-      return onces < _oncesLiquidesParGallon
+      return _arrondi(onces, 1) < _oncesLiquidesParGallon
           ? _l10n.mesureOncesLiquides(_nombre(onces, 1))
-          : _l10n.mesureGallons(
-              _nombre(_convertisseur.litresVersGallons(ml / _unitesParKilo), 1),
-            );
+          : _l10n.mesureGallons(_nombre(onces / _oncesLiquidesParGallon, 1));
     }
-    return ml < _unitesParKilo
+    return _arrondi(ml, 0) < _unitesParKilo
         ? _l10n.mesureMillilitres(_nombre(ml))
         : _l10n.mesureLitres(_nombre(ml / _unitesParKilo, 1));
   }

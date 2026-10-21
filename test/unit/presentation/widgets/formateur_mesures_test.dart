@@ -23,10 +23,21 @@ void main() {
 
   test('lengths: inches under a foot, then feet and inches', () {
     expect(metrique.longueurCm(30), '30 cm');
-    expect(imperial.longueurCm(15), '6 in');
+    expect(imperial.longueurCm(15), '5.9 in');
     expect(imperial.longueurCm(30.48), '1 ft');
     expect(imperial.longueurCm(40), '1 ft 4 in');
-    expect(imperial.longueurCm(30.2), '1 ft');
+    expect(imperial.longueurCm(30.2), '11.9 in');
+  });
+
+  test('small lengths keep a decimal', () {
+    expect(metrique.longueurCm(0.5), '0,5 cm');
+    expect(imperial.longueurCm(1), '0.4 in');
+  });
+
+  test('a value rounding up to the threshold switches unit', () {
+    expect(metrique.masseG(999.6), '1 kg');
+    expect(imperial.masseG(453), '1 lb');
+    expect(imperial.volumeMl(3785), '1 gal');
   });
 
   test('rain, wind and watering depth follow the length setting', () {

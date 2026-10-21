@@ -111,17 +111,19 @@ class AppDatabase extends _$AppDatabase {
           // v9 → v10: one unit setting per quantity, each taking the former
           // single setting.
           if (from < 10) {
-            for (final colonne in [
+            final colonnes = [
               preferences.uniteTemperature,
               preferences.uniteLongueur,
               preferences.uniteSurface,
               preferences.uniteVolume,
               preferences.uniteMasse,
-            ]) {
+            ];
+            for (final colonne in colonnes) {
               await m.addColumn(preferences, colonne);
-              await customStatement('UPDATE preferences '
-                  'SET ${colonne.name} = systeme_unites');
             }
+            final affectations =
+                colonnes.map((c) => '${c.name} = systeme_unites').join(', ');
+            await customStatement('UPDATE preferences SET $affectations');
           }
         },
         beforeOpen: (details) async {
