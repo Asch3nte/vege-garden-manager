@@ -142,6 +142,27 @@ void main() {
     expect(tache.cibleId, 'pl-9');
   });
 
+  testWidgets('a generated task saved without title keeps it derived',
+      (tester) async {
+    final initiale = Tache(
+      id: 't-7',
+      generee: true,
+      type: TypeTache.arrosage,
+      cible: CibleTache.parcelle,
+      cibleId: 'z-1',
+      datePrevue: DateTime(2026, 6, 12),
+    );
+
+    await monter(tester, tacheInitiale: initiale);
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final tache =
+        verify(() => taches.sauvegarder(captureAny())).captured.single as Tache;
+    expect(tache.titre, isNull);
+    expect(tache.generee, isTrue);
+  });
+
   testWidgets('an empty title blocks saving', (tester) async {
     await monter(tester);
 

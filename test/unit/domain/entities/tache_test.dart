@@ -37,6 +37,23 @@ void main() {
       expect(() => _tache(titre: ''), throwsA(isA<InvariantDomaineException>()));
     });
 
+    test('a generated task may have no title, a user task may not', () {
+      Tache sansTitre({bool generee = false}) => Tache(
+            id: 't2',
+            type: TypeTache.arrosage,
+            cible: CibleTache.plantation,
+            cibleId: 'pl1',
+            datePrevue: DateTime(2026, 6, 20),
+            generee: generee,
+          );
+
+      final generee = sansTitre(generee: true);
+      expect(generee.titre, isNull);
+      expect(generee.generee, isTrue);
+      expect(_tache().generee, isFalse);
+      expect(sansTitre, throwsA(isA<InvariantDomaineException>()));
+    });
+
     test('a completed task requires a completion date', () {
       expect(
         () => _tache(etat: EtatTache.terminee),

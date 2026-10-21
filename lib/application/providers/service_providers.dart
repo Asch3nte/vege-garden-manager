@@ -10,6 +10,7 @@ import '../../domain/repositories/abstract_ouverture_lien_service.dart';
 import '../../domain/repositories/abstract_reinitialisation_service.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
 import '../../domain/repositories/abstract_statistiques_donnees_service.dart';
+import '../../domain/repositories/abstract_textes_notifications.dart';
 import '../../infrastructure/api/nominatim_client.dart';
 import '../../infrastructure/api/open_meteo_client.dart';
 import '../../infrastructure/repositories/meteo_service_impl.dart';
@@ -53,6 +54,12 @@ final meteoServiceProvider = Provider<AbstractMeteoService>(
 
 final notificationServiceProvider = Provider<AbstractNotificationService>(
   (ref) => NotificationServiceImpl(FlutterLocalNotificationsPlugin()),
+);
+
+/// Notification texts in the user language; overridden at startup.
+final textesNotificationsProvider = Provider<AbstractTextesNotifications>(
+  (ref) => throw UnimplementedError(
+      'textesNotificationsProvider must be overridden at startup.'),
 );
 
 final geolocalisationServiceProvider =

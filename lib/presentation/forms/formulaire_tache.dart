@@ -11,6 +11,7 @@ import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/titre_tache.dart';
 
 /// Opens the task form and returns the saved [Tache] (or `null`). When
 /// [tacheInitiale] is provided, the form opens in **edit** mode (pre-filled).
@@ -67,12 +68,14 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
 
   bool get _edition => widget.tacheInitiale != null;
 
+  bool get _generee => widget.tacheInitiale?.generee ?? false;
+
   @override
   void initState() {
     super.initState();
     final t = widget.tacheInitiale;
     if (t != null) {
-      _titre.text = t.titre;
+      _titre.text = t.titre ?? '';
       _type = t.type;
       _date = t.datePrevue;
     }
@@ -125,9 +128,11 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
     if (initial != null) {
       // Edit: rebuild with the same id, preserving the lifecycle fields (type
       // and target are final on the entity).
+      final titre = _titre.text.trim();
       tache = Tache(
         id: initial.id,
-        titre: _titre.text.trim(),
+        titre: titre.isEmpty && initial.generee ? null : titre,
+        generee: initial.generee,
         type: _type,
         cible: _cible!.cible,
         cibleId: _cible!.id,
@@ -195,12 +200,17 @@ class _FormulaireTacheState extends ConsumerState<FormulaireTache> {
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       labelText: l10n.formTacheNom,
+                      // A generated task keeps its derived title when left empty.
+                      hintText: _generee
+                          ? TitreTache.texte(l10n, widget.tacheInitiale!, null)
+                          : null,
                       border:
                           const OutlineInputBorder(borderRadius: RayonsApp.brMd),
                     ),
-                    validator: (v) => (v == null || v.trim().isEmpty)
-                        ? l10n.champObligatoire
-                        : null,
+                    validator: (v) =>
+                        !_generee && (v == null || v.trim().isEmpty)
+                            ? l10n.champObligatoire
+                            : null,
                   ),
                   const SizedBox(height: EspacementsApp.s4),
                   DropdownButtonFormField<TypeTache>(

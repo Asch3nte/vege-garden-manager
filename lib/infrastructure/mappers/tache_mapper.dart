@@ -27,6 +27,7 @@ class TacheMapper {
     return Tache(
       id: r.id,
       titre: r.titre,
+      generee: r.generee,
       description: r.description,
       type: TypeTache.values.byName(r.type),
       etat: EtatTache.values.byName(r.etat),
@@ -46,6 +47,7 @@ class TacheMapper {
     return TachesCompanion(
       id: Value(t.id),
       titre: Value(t.titre),
+      generee: Value(t.generee),
       description: Value(t.description),
       type: Value(t.type.name),
       etat: Value(t.etat.name),

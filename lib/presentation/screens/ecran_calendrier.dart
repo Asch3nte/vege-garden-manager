@@ -28,6 +28,7 @@ import '../widgets/libelles_enums.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
+import '../widgets/titre_tache.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
 /// tickable (docs/09 §6).
@@ -1176,7 +1177,7 @@ class _LigneSousTache extends StatelessWidget {
             const SizedBox(width: EspacementsApp.s3),
             Expanded(
               child: Text(
-                cibleLabel ?? tache.titre,
+                cibleLabel ?? TitreTache.texte(l10n, tache, null),
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: fait ? theme.colorScheme.onSurfaceVariant : null,
@@ -1280,7 +1281,7 @@ class _CarteTache extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      tache.titre,
+                      TitreTache.texte(l10n, tache, cibleLabel),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: fait ? theme.colorScheme.onSurfaceVariant : null,
                         decoration: fait ? TextDecoration.lineThrough : null,
@@ -1378,7 +1379,7 @@ Future<void> _supprimerTache(
   final confirme = await confirmerAction(
     context,
     titre: l10n.tacheSupprimerTitre,
-    message: l10n.tacheSupprimerMessage(tache.titre),
+    message: l10n.tacheSupprimerMessage(TitreTache.texte(l10n, tache, null)),
     libelleConfirmer: l10n.actionSupprimer,
     destructif: true,
   );

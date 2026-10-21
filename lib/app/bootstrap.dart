@@ -13,6 +13,7 @@ import '../infrastructure/database/app_database.dart';
 import '../infrastructure/database/connection/connexion_native.dart';
 import '../infrastructure/services/notification_service_impl.dart';
 import '../l10n/app_localizations.dart';
+import 'textes_notifications_arb.dart';
 
 /// Result of a successful [Bootstrap.initialiser]: the opened [database] the app
 /// owns (and must close on shutdown) and a [scopeBuilder] that wraps the app's
@@ -59,6 +60,8 @@ class Bootstrap {
               PlatformDispatcher.instance.locales,
               AppLocalizations.supportedLocales)
           .languageCode),
+      textesNotificationsProvider.overrideWith(
+          (ref) => TextesNotificationsArb(() => ref.read(codeLangueProvider))),
     ];
 
     // Initialise the notification plugin via a throwaway container so we use the

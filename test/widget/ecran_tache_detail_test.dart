@@ -49,9 +49,10 @@ void main() {
     );
   });
 
-  Tache uneTache({String? notes}) => Tache(
+  Tache uneTache({String? notes, bool generee = false}) => Tache(
         id: 't-1',
-        titre: 'Arroser : Tomate',
+        titre: generee ? null : 'Arroser : Tomate',
+        generee: generee,
         type: TypeTache.arrosage,
         cible: CibleTache.parcelle,
         cibleId: 'z-1',
@@ -90,6 +91,17 @@ void main() {
     expect(find.text('Carré nord'), findsOneWidget); // resolved target
     expect(find.text('À faire'), findsOneWidget); // state chip
     expect(find.text('Aucune note pour le moment.'), findsOneWidget);
+  });
+
+  testWidgets('a generated task shows the title derived from its target',
+      (tester) async {
+    when(() => taches.obtenirParId('t-1'))
+        .thenAnswer((_) async => uneTache(generee: true));
+
+    await tester.pumpWidget(app());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Arroser : Carré nord'), findsOneWidget);
   });
 
   testWidgets('editing the notes persists them', (tester) async {

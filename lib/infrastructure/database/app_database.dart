@@ -29,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -69,6 +69,17 @@ class AppDatabase extends _$AppDatabase {
           // existing installs keep fetching weather automatically as before.
           if (from < 6) {
             await m.addColumn(preferences, preferences.meteoAutoActive);
+          }
+          // v6 → v7: engine-maintained tasks, whose title is derived from the
+          // type and target; the engine's former French watering titles are
+          // dropped so they follow the language.
+          if (from < 7) {
+            await m.alterTable(
+                TableMigration(taches, newColumns: [taches.generee]));
+            await customStatement(
+                "UPDATE taches SET generee = 1, titre = NULL "
+                "WHERE type = 'arrosage' AND plantation_id IS NOT NULL "
+                "AND (titre = 'Arroser' OR titre LIKE 'Arroser : %')");
           }
         },
         beforeOpen: (details) async {

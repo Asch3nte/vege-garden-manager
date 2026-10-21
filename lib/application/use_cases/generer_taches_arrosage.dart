@@ -15,11 +15,13 @@ import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
+import '../../domain/repositories/abstract_textes_notifications.dart';
 import '../../domain/value_objects/conseil_arrosage.dart';
 import '../../domain/value_objects/fenetre_ne_pas_deranger.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/notification_locale.dart';
 import '../../domain/value_objects/prevision_meteo.dart';
+import '../providers/horloge_provider.dart';
 import '../providers/repository_providers.dart';
 import '../providers/service_providers.dart';
 import 'calculer_besoin_arrosage.dart';
@@ -58,6 +60,7 @@ class GenererTachesArrosage {
   final AbstractPreferencesRepository _preferences;
   final AbstractFichePlanteRepository _fiches;
   final CalculerBesoinArrosage _calcul;
+  final AbstractTextesNotifications _textes;
 
   GenererTachesArrosage(
     this._plantations,
@@ -67,7 +70,8 @@ class GenererTachesArrosage {
     this._notifications,
     this._preferences,
     this._fiches,
-    this._calcul, {
+    this._calcul,
+    this._textes, {
     DateTime Function()? maintenant,
   }) : _maintenant = maintenant ?? DateTime.now;
 
@@ -157,12 +161,14 @@ class GenererTachesArrosage {
       ))
           .where((t) => t.type == TypeTache.arrosage)
           .toList();
+      // Only the engine's own pending tasks are removed or moved.
+      final generees = toutesExistantes.where((t) => t.generee && !t.estFaite);
 
       final urgence = conseil?.urgence;
 
       if (urgence == null || urgence == UrgenceArrosage.pasNecessaire) {
         // No watering needed — remove all pending tasks.
-        for (final t in toutesExistantes.where((t) => !t.estFaite)) {
+        for (final t in generees) {
           await _taches.supprimer(t.id);
         }
         continue;
@@ -173,8 +179,8 @@ class GenererTachesArrosage {
           ? PrioriteTache.urgente
           : PrioriteTache.normale;
       // Remove uncompleted tasks on wrong days (urgency or timing shifted).
-      for (final t in toutesExistantes
-          .where((t) => !t.estFaite && !_memeJour(t.datePrevue, targetDate))) {
+      for (final t
+          in generees.where((t) => !_memeJour(t.datePrevue, targetDate))) {
         await _taches.supprimer(t.id);
       }
 
@@ -193,7 +199,7 @@ class GenererTachesArrosage {
       if (tousAuTarget.isEmpty) {
         await _taches.sauvegarder(Tache(
           id: _uuid.v4(),
-          titre: nom == null ? 'Arroser' : 'Arroser : $nom',
+          generee: true,
           type: TypeTache.arrosage,
           cible: CibleTache.plantation,
           cibleId: plantation.id,
@@ -246,13 +252,11 @@ class GenererTachesArrosage {
     return dejaPrevues.isEmpty ? cible : dejaPrevues.first;
   }
 
-  /// The plant's French common name for [plantation], or `null` when its sheet
-  /// cannot be resolved. French is used deliberately (a stored task title / OS
-  /// notification, generated without a UI locale — the app is French-first; the
-  /// notification-i18n debt is tracked separately, docs/15).
+  /// The plant's common name for [plantation] in the notification language,
+  /// or `null` when its sheet cannot be resolved.
   Future<String?> _nomPlante(Plantation plantation) async {
     final fiche = await _fiches.obtenirParId(plantation.planteId);
-    return fiche?.nomLocalise('fr');
+    return fiche?.nomLocalise(_textes.langue);
   }
 
   /// Schedules **one** recap notification at 08:00 on [debutJour] for all the
@@ -303,40 +307,14 @@ class GenererTachesArrosage {
     await _notifications.programmer(
       NotificationLocale(
         id: id,
-        titre: _titreRecap(connus, total),
-        corps: _corpsRecap(connus, total),
+        titre: _textes.titreRecapArrosage(connus, total),
+        corps: _textes.corpsRecapArrosage(connus, total),
         dateProgrammee: heure,
         categorie: 'arrosage',
         cibleRoute: '/calendrier',
       ),
     );
   }
-
-  /// Notification title: the named crops (up to [_maxNomsTitre]) after the verb,
-  /// with a "+N" marker for the rest — e.g. "Arroser Tomate, Courgette +2".
-  /// Falls back to a generic title when no crop name could be resolved.
-  static String _titreRecap(List<String> connus, int total) {
-    if (connus.isEmpty) return 'Arrosage à prévoir';
-    final visibles = connus.take(_maxNomsTitre).join(', ');
-    final restants = total - connus.take(_maxNomsTitre).length;
-    return restants > 0 ? 'Arroser $visibles +$restants' : 'Arroser $visibles';
-  }
-
-  /// Notification body: the full crop list (max detail), or a count when names
-  /// are unavailable.
-  static String _corpsRecap(List<String> connus, int total) {
-    if (connus.isEmpty) {
-      return total == 1
-          ? "Une culture a besoin d'eau aujourd'hui."
-          : "$total cultures ont besoin d'eau aujourd'hui.";
-    }
-    if (total == 1) return "${connus.first} a besoin d'eau aujourd'hui.";
-    return "Cultures à arroser aujourd'hui : ${connus.join(', ')}.";
-  }
-
-  /// How many crop names to spell out in the notification title before the
-  /// "+N" overflow marker (the body always lists them all).
-  static const int _maxNomsTitre = 3;
 
   bool _memeJour(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
@@ -355,5 +333,7 @@ final genererTachesArrosageProvider = FutureProvider<GenererTachesArrosage>(
     ref.read(preferencesRepositoryProvider),
     await ref.read(fichePlanteRepositoryProvider.future),
     await ref.read(calculerBesoinArrosageProvider.future),
+    ref.read(textesNotificationsProvider),
+    maintenant: ref.read(horlogeProvider),
   ),
 );

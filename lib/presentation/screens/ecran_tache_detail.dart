@@ -13,6 +13,7 @@ import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/titre_tache.dart';
 
 /// Task-detail screen (`/calendrier/tache/:id`): a full, revisitable view of a
 /// single task with the actions the quick form does not surface.
@@ -83,7 +84,8 @@ class EcranTacheDetail extends ConsumerWidget {
     final confirme = await confirmerAction(
       context,
       titre: l10n.tacheSupprimerTitre,
-      message: l10n.tacheSupprimerMessage(tache.titre),
+      message: l10n.tacheSupprimerMessage(
+          TitreTache.texte(l10n, tache, ref.read(detailTacheProvider(tacheId)).value?.cibleNom)),
       libelleConfirmer: l10n.actionSupprimer,
       destructif: true,
     );
@@ -137,7 +139,8 @@ class _Contenu extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(tache.titre, style: theme.textTheme.titleLarge),
+                  Text(TitreTache.texte(l10n, tache, vue.cibleNom),
+                      style: theme.textTheme.titleLarge),
                   Text(
                     l10n.typeTache(tache.type),
                     style: theme.textTheme.labelMedium

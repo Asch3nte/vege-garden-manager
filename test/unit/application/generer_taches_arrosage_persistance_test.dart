@@ -30,6 +30,7 @@ import 'package:pot_a_gerer/domain/repositories/abstract_notification_service.da
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_textes_notifications.dart';
 import 'package:pot_a_gerer/domain/value_objects/conseil_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/notification_locale.dart';
@@ -58,6 +59,21 @@ class _FakeLocalisation extends Fake implements Localisation {}
 class _FakeNotificationLocale extends Fake implements NotificationLocale {}
 
 class _FakePlantation extends Fake implements Plantation {}
+
+
+/// Echoes its arguments, so the use case's choice of crops can be asserted.
+class _TextesEcho implements AbstractTextesNotifications {
+  @override
+  String get langue => 'fr';
+
+  @override
+  String titreRecapArrosage(List<String> noms, int total) =>
+      'titre:${noms.join(',')}/$total';
+
+  @override
+  String corpsRecapArrosage(List<String> noms, int total) =>
+      'corps:${noms.join(',')}/$total';
+}
 
 void main() {
   late AppDatabase db;
@@ -167,6 +183,7 @@ void main() {
       preferences,
       fiches,
       calcul,
+      _TextesEcho(),
       maintenant: () => maintenant,
     );
   });

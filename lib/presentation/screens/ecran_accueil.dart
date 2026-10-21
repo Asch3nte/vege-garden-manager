@@ -17,6 +17,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/position_potager_actions.dart';
+import '../widgets/titre_tache.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
 /// level, weather & season stats. Read-only, no creation actions (docs/09 §3).
@@ -562,8 +563,8 @@ class _LigneTache extends StatelessWidget {
             ),
             const SizedBox(width: EspacementsApp.s2),
             Expanded(
-              child: Text(
-                tache.titre,
+              child: TitreTache(
+                tache,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: fait ? theme.colorScheme.onSurfaceVariant : null,
                   decoration: fait ? TextDecoration.lineThrough : null,

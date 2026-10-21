@@ -154,7 +154,7 @@ void main() {
     Future<void> tache(String id, TachesCompanion cible) =>
         db.into(db.taches).insert(TachesCompanion.insert(
               id: id,
-              titre: 'Tâche',
+              titre: const Value('Tâche'),
               type: 'arrosage',
               datePrevue: now,
               dateCreation: now,

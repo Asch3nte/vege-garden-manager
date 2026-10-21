@@ -193,7 +193,8 @@ class Equipements extends Table {
 @DataClassName('TacheRow')
 class Taches extends Table {
   TextColumn get id => text()();
-  TextColumn get titre => text()();
+  TextColumn get titre => text().nullable()();
+  BoolColumn get generee => boolean().withDefault(const Constant(false))();
   TextColumn get description => text().nullable()();
   TextColumn get type => text()();
   TextColumn get etat => text().withDefault(const Constant('aFaire'))();

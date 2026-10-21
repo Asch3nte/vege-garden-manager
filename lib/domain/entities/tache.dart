@@ -8,14 +8,16 @@ import '../exceptions/invariant_domaine_exception.dart';
 /// target: a potager, parcelle, plantation or equipment.
 ///
 /// A task may originate from a [rappelOrigineId] (a recurring `Rappel` that
-/// generated it). `Tache` is an **entity** (identity by [id]); the [id] is a
+/// generated it). A [generee] task is maintained by the engine; without its own
+/// [titre], its title is derived from its type and target. `Tache` is an **entity** (identity by [id]); the [id] is a
 /// UUID generated app-side and injected.
 ///
 /// Domain names are kept in French; the code is documented in English.
 /// See `docs/05-modele-de-domaine.md` §3.6.
 class Tache {
   final String _id;
-  String _titre;
+  String? _titre;
+  final bool _generee;
   String? _description;
   final TypeTache _type;
   EtatTache _etat;
@@ -31,6 +33,7 @@ class Tache {
   Tache._(
     this._id,
     this._titre,
+    this._generee,
     this._description,
     this._type,
     this._etat,
@@ -45,7 +48,8 @@ class Tache {
   ) {
     InvariantDomaineException.verifier(_id.isNotEmpty, 'id must not be empty');
     InvariantDomaineException.verifier(
-        _titre.isNotEmpty, 'titre must not be empty');
+        _titre?.isNotEmpty ?? _generee,
+        'titre must not be empty, and only a generated task may omit it');
     InvariantDomaineException.verifier(
         _cibleId.isNotEmpty, 'cibleId must not be empty');
     InvariantDomaineException.verifier(
@@ -58,7 +62,7 @@ class Tache {
   /// Creates a task. Defaults to a normal-priority, to-do task.
   factory Tache({
     required String id,
-    required String titre,
+    String? titre,
     required TypeTache type,
     required CibleTache cible,
     required String cibleId,
@@ -70,10 +74,12 @@ class Tache {
     int? dureeReelleMinutes,
     String? rappelOrigineId,
     String? notes,
+    bool generee = false,
   }) =>
       Tache._(
         id,
         titre,
+        generee,
         description,
         type,
         etat,
@@ -88,7 +94,11 @@ class Tache {
       );
 
   String get id => _id;
-  String get titre => _titre;
+  /// Own title; `null` for a [generee] task whose title is derived.
+  String? get titre => _titre;
+
+  /// Whether the task is maintained by the engine.
+  bool get generee => _generee;
   String? get description => _description;
   TypeTache get type => _type;
   EtatTache get etat => _etat;

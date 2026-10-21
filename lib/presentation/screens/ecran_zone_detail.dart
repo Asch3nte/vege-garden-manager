@@ -30,6 +30,7 @@ import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/titre_tache.dart';
 import 'ecran_potager.dart' show couleurZone;
 import '../glossaire/catalogue/outils.dart';
 import '../glossaire/type_terme_glossaire.dart';
@@ -776,7 +777,7 @@ class _LigneCulture extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           l10n.cultureProchaineTache(
-                            prochaineTache!.titre,
+                            TitreTache.texte(l10n, prochaineTache!, culture.nom),
                             _formaterDateCourte(prochaineTache!.datePrevue),
                           ),
                           style: theme.textTheme.bodySmall
