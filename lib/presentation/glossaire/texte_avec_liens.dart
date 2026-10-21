@@ -6,8 +6,8 @@ import 'liens_glossaire.dart';
 import 'terme_cliquable.dart';
 import 'terme_glossaire.dart';
 
-/// Renders a glossary text with its wiki links (`[[id]]` / `[[id|texte]]`,
-/// ADR-0017 D2) as tappable spans navigating to the target term page.
+/// Renders a glossary text with its wiki links (`[[id]]` / `[[id|texte]]`)
+/// as tappable spans navigating to the target term page.
 ///
 /// Rules (never a dead link):
 ///  - a link whose id resolves in [index] becomes an underlined span

@@ -2,12 +2,8 @@ import 'package:flutter/painting.dart';
 
 /// Raw colour tokens of the **« Carnet vivant »** design system.
 ///
-/// Values come straight from the validated design system in
-/// `docs/08-design-system.md` (§2 light, §3 dark), which is the source of truth
-/// for the project. The **light** roles and the decorative palette
-/// reflect the validated Claude Design mock-ups (`vege-garden-export/`,
-/// `bg-directions.css`). The **dark** roles still come from the original CAHIER
-/// §4.1 — the mock-ups did not redefine a dark mode.
+/// The **light** roles and the decorative palette are validated; the **dark**
+/// roles are provisional until a dark mode is designed.
 ///
 /// These are intentionally *semantic* roles, not Material slots — the mapping to
 /// a Flutter [ColorScheme] happens in [ThemeApp]. Keeping the roles here lets
@@ -87,8 +83,7 @@ abstract final class CouleursApp {
   static const Color decoOcre = Color(0xFFE0A82E);
 
   // ── Dark mode ───────────────────────────────────────────────
-  // Not re-validated by the Claude Design mock-ups (light-only). From CAHIER
-  // §4.1; revisit when a dark mode is actually designed.
+  // Provisional: revisit when a dark mode is actually designed.
 
   /// Bleu nuit profond — application background (inhabited night blue, never black).
   static const Color fondPrincipalSombre = Color(0xFF161D26);

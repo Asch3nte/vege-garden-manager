@@ -8,7 +8,7 @@ import '../enums/groupe_cultural.dart';
 ///
 /// A precedent is *exactly one* of the two — never both, never neither.
 ///
-/// ## Normalization (ADR — rotation avancée)
+/// ## Normalization
 ///
 /// The sheet corpus carries spelling drift under `precedents_favorables` /
 /// `precedents_defavorables`. [PrecedentCultural.analyser] absorbs it so the

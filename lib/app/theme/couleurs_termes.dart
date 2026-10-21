@@ -35,7 +35,7 @@ class CouleursTermes extends ThemeExtension<CouleursTermes> {
     required this.notion,
   });
 
-  /// Light-mode chart (docs/08 §2 tokens).
+  /// Light-mode chart.
   static const CouleursTermes clair = CouleursTermes(
     famille: CouleursApp.accentPrimaireClair,
     maladie: CouleursApp.erreurClair,
@@ -44,7 +44,7 @@ class CouleursTermes extends ThemeExtension<CouleursTermes> {
     notion: CouleursApp.decoAubergine,
   );
 
-  /// Dark-mode chart (docs/08 §3 tokens — to revalidate with the dark design).
+  /// Dark-mode chart, to revalidate with the dark design.
   static const CouleursTermes sombre = CouleursTermes(
     famille: CouleursApp.accentPrimaireSombre,
     maladie: CouleursApp.erreurSombre,

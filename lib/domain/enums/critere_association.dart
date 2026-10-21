@@ -8,8 +8,7 @@
 /// service / driving the conflict, `cible` the other one; symmetric criteria
 /// (`deux…`, `meme…`) concern both.
 ///
-/// The full set is declared up-front (stable across lots); each rule emits the
-/// subset it checks (some are activated in later ADR-0014 lots).
+/// The full set is declared up-front; each rule emits the subset it checks.
 enum CritereAssociation {
   // — Fixation d'azote —
   sourceFixeAzote,

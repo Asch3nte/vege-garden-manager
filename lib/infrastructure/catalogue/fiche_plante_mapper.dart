@@ -63,7 +63,7 @@ class FichePlanteMapper {
         soleilMin: besoins['ensoleillement_min'] == null
             ? null
             : _enum(NiveauSoleil.values, besoins['ensoleillement_min'] as String),
-        // Detailed watering (optional, ADR-0009 `acces.eauDetaillee`).
+        // Detailed watering (optional, `acces.eauDetaillee`).
         arrosageDetaille: _arrosageDetaille(besoins['arrosage_detaille']),
       ),
       espacementCm: cycle['espacement_cm'] as int,

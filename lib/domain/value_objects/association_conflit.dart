@@ -22,8 +22,8 @@ class AssociationConflit {
     this._raisonI18n,
   ) : assert(_cibleId.length > 0, 'cibleId must not be empty');
 
-  /// Builds the association. Provide either a single [mecanisme] (convenience,
-  /// ADR-0010 style) **or** a set of [mecanismes], not both. The
+  /// Builds the association. Provide either a single [mecanisme] (convenience)
+  /// **or** a set of [mecanismes], not both. The
   /// collections are stored unmodifiable and default to empty.
   factory AssociationConflit({
     required String cibleId,
@@ -48,7 +48,7 @@ class AssociationConflit {
   /// The mechanisms qualifying the conflict (unmodifiable, may be empty).
   Set<TypeConflitAssociation> get mecanismes => _mecanismes;
 
-  /// Convenience: the first mechanism (ADR-0010 compatibility), or `null`.
+  /// Convenience: the first mechanism, or `null`.
   TypeConflitAssociation? get mecanisme =>
       _mecanismes.isEmpty ? null : _mecanismes.first;
 

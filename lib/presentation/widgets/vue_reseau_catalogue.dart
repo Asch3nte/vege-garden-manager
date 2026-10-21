@@ -98,10 +98,10 @@ class VueReseauCatalogue extends StatefulWidget {
 
 class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     with SingleTickerProviderStateMixin {
-  // Node disc radius. Unlike ADR-0007 (constant pixel size), the disc now
+  // Node disc radius. Rather than a constant pixel size, the disc
   // **scales with the zoom** between a floor and a cap [_rayonNoeud]: zoomed out
   // the bubbles shrink (so the whole constellation fits), zoomed in they grow up
-  // to their full size (dev request). [_rayonNoeudVirtuel] is the virtual radius
+  // to their full size. [_rayonNoeudVirtuel] is the virtual radius
   // mapped through the scale; [_rayonNoeud] stays the on-screen maximum (and the
   // value the label-spreading maths #8b reserves against).
   static const double _rayonNoeud = 19;
@@ -109,7 +109,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   static const double _rayonNoeudMin = 3;
 
   // Max screen distance (px) from a node centre at which a tap that missed every
-  // disc still selects it (ADR-0008 Voronoï hit-testing): the shrunk discs
+  // disc still selects it (Voronoï hit-testing): the shrunk discs
   // (dezoom) keep a generous hitbox — bounded and never overlapping by
   // construction (nearest-point assignment) — without changing the visual.
   static const double _hitboxMax = 28;

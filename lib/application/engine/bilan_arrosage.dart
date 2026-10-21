@@ -11,7 +11,7 @@ import 'derivation_sol.dart';
 
 /// Pure engine calculator for the watering balance.
 ///
-/// Multiplicative heuristic (V1, calibratable — see ADR-0015): the plant's
+/// Multiplicative heuristic (V1, calibratable): the plant's
 /// base water demand is scaled by soil texture, cultivation techniques
 /// (mulch…), equipment (oya, drip…), and a **temperature factor** (ET₀ proxy),
 /// then arbitrated against recent and forecast rain:
@@ -85,7 +85,7 @@ class BilanArrosage {
     return 1.0;
   }
 
-  // --- ET₀ & per-plant factors (ADR-0015 Décisions 4 & 5) ---
+  // --- ET₀ & per-plant factors ---
 
   /// Reference ET₀ (mm/day) for a typical temperate summer day.
   static const double referenceET0Mm = 5.0;

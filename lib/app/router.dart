@@ -57,8 +57,7 @@ abstract final class RoutesApp {
   ///
   /// The dashboard tiles also target this location: tapping a zone there
   /// switches to the Potager tab on that zone, and the global back stack
-  /// (see [pileNavigationProvider]) returns straight to the dashboard
-  /// (docs/15 §8 D #5).
+  /// (see [pileNavigationProvider]) returns straight to the dashboard.
   static String zoneDetail(String id) => '$potager/zone/$id';
 
   /// Path segment of the equipment list (under [potager]).
@@ -238,8 +237,7 @@ void quitterRessourceSupprimee(
 /// would land on the branch root rather than the screen the user came from
 /// (e.g. a dashboard → zone jump returning to the Potager root instead of the
 /// dashboard). This PopScope sits *inside* the sub-route page (deeper than the
-/// branch Navigator), so it wins and drives the same global history (docs/15
-/// §8 D #5/#6).
+/// branch Navigator), so it wins and drives the same global history.
 class _RetourGlobal extends ConsumerWidget {
   final Widget child;
 
@@ -264,7 +262,7 @@ class _RetourGlobal extends ConsumerWidget {
 /// state of its **root** screen (dashboard scroll, catalogue search…) when
 /// switching between them. Native indexed-stack back, however, only pops within
 /// the active branch; to give a browser-like back that retraces every step
-/// across tabs (docs/15 §8 D #5/#6), the router feeds a single cross-branch
+/// across tabs, the router feeds a single cross-branch
 /// history ([pileNavigationProvider]) from a listener on its
 /// [GoRouterDelegate], and the shell's `PopScope` drives the system back button
 /// from it. Tapping any tab resets that tab to its root (so a tab never
@@ -345,8 +343,8 @@ final routeurProvider = Provider<GoRouter>((ref) {
                   onSelection: (index) {
                     _rafraichirBranche(ref, index);
                     ref.read(pileNavigationProvider.notifier).avancer();
-                    // Any tab tap returns to that tab's root (docs/15 §8 D
-                    // #5/#6): a deep sub-route is replayed via the back button,
+                    // Any tab tap returns to that tab's root: a deep
+                    // sub-route is replayed via the back button,
                     // never restored by re-selecting the tab.
                     navigationShell.goBranch(index, initialLocation: true);
                   },

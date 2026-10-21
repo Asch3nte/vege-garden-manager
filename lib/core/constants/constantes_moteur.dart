@@ -1,7 +1,7 @@
 /// V1 thresholds and horizons used by the recommendation/alert engine.
 ///
 /// Centralised here (single source of truth) and **frozen for V1**
-/// (`docs/13-roadmap-et-versioning.md` lists them as configurable later). The
+/// (configurable later). The
 /// infrastructure weather client references the same temperature thresholds.
 abstract final class SeuilsMeteo {
   /// A day's minimum temperature at or below this (°C) is a frost risk.

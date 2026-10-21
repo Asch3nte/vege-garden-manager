@@ -23,7 +23,7 @@ import 'geste_groupe.dart';
 /// Reads come from [AbstractTacheRepository.obtenirEntreDates]; ticking a task
 /// uses the domain's `Tache.marquerFaite` then persists via the repository.
 /// Reopening a completed task is **not** offered — the domain has no plain
-/// "reopen" transition (only `reporter`, which reschedules); see docs/15.
+/// "reopen" transition (only `reporter`, which reschedules).
 class CalendrierNotifier extends AsyncNotifier<CalendrierVue> {
   /// Language of the displayed crop names.
   String get _locale => ref.read(codeLangueProvider);

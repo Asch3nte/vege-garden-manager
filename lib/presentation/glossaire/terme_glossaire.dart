@@ -111,7 +111,7 @@ class TermeGlossaire {
   /// Typed derived blocks the term page renders (unmodifiable, D3).
   List<ComplementTerme> get complements => _complements;
 
-  /// Copy of this term carrying [illustration] (D4 / Lot 5): the registry
+  /// Copy of this term carrying [illustration]: the registry
   /// (`construireGlossaire`) attaches the asset path of every term listed in
   /// `illustrations_glossaire.dart` — content builders never set it themselves.
   TermeGlossaire avecIllustration(String illustration) => TermeGlossaire._(

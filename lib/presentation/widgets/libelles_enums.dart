@@ -522,8 +522,8 @@ extension LibellesEnums on AppLocalizations {
   }
 }
 
-/// Material icon standing in for the eventual Phosphor icon of a task type
-/// (cf. docs/15 — Phosphor pending). Kept beside the labels so the gesture's
+/// Material icon standing in for the eventual Phosphor icon of a task type.
+/// Kept beside the labels so the gesture's
 /// visual identity lives in one place.
 IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.arrosage => Icons.water_drop_outlined,
@@ -567,7 +567,7 @@ Color couleurTypeTache(TypeTache t) => switch (t) {
     };
 
 /// Material icon standing in for the eventual Phosphor icon of an equipment
-/// type (cf. docs/15 — Phosphor pending). Kept beside the labels so an
+/// type. Kept beside the labels so an
 /// equipment's visual identity lives in one place.
 IconData iconeTypeEquipement(TypeEquipement t) => switch (t) {
       TypeEquipement.oya => Icons.water_drop_outlined,

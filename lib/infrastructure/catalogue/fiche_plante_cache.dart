@@ -6,7 +6,7 @@ import '../../domain/enums/usage_plante.dart';
 ///
 /// Pipeline step 5. On a
 /// duplicate id the last sheet wins (personal sheets, loaded after the embedded
-/// ones, take precedence — ADR-0002 A6).
+/// ones, take precedence).
 class FichePlanteCache {
   final Map<String, FichePlante> _parId;
 

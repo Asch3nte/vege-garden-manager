@@ -206,7 +206,7 @@ void _rafraichirPotager(WidgetRef ref) {
   ref.invalidate(contexteClimatProvider);
 }
 
-/// Opens a bottom sheet listing every garden (ADR-0009 multi-potager);
+/// Opens a bottom sheet listing every garden;
 /// tapping one switches to it and refreshes the dependent views.
 Future<void> _choisirPotager(BuildContext context, WidgetRef ref) async {
   final potagers = await ref.read(potagersProvider.future);
@@ -266,7 +266,7 @@ Future<void> _supprimerPotager(
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackPotagerSupprime)));
 }
 
-/// Bottom sheet listing every garden (ADR-0009 multi-potager); returns the
+/// Bottom sheet listing every garden; returns the
 /// tapped garden's id, or `null` if dismissed without a choice.
 class _FeuilleChoixPotager extends StatelessWidget {
   final List<Potager> potagers;

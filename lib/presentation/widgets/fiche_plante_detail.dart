@@ -817,14 +817,7 @@ class _SectionCalendrier extends ConsumerWidget {
   }
 }
 
-/// Family-level educational section: the plant's botanical
-/// family name + description, its rotation rationale, the diseases/pests it
-/// commonly shares (resolved to localized names via the bioaggressor reference,
-/// each with its description as a tooltip) and its association rationale.
-///
-/// Renders nothing when the family sheet is unknown; each editorial note is
-/// shown only when present (no invented content — docs/15 rule).
-/// Detailed watering guidance (expert, ADR-0009 `acces.eauDetaillee`).
+/// Detailed watering guidance (expert, `acces.eauDetaillee`).
 ///
 /// Renders only the aspects the fiche actually carries — frequency, volume,
 /// water-sensitive growth stages and an editorial note are each optional. The
@@ -934,6 +927,13 @@ class _SectionArrosageDetaille extends StatelessWidget {
   }
 }
 
+/// Family-level educational section: the plant's botanical
+/// family name + description, its rotation rationale, the diseases/pests it
+/// commonly shares (resolved to localized names via the bioaggressor reference,
+/// each with its description as a tooltip) and its association rationale.
+///
+/// Renders nothing when the family sheet is unknown; each editorial note is
+/// shown only when present (no invented content).
 class _SectionFamille extends ConsumerWidget {
   final FichePlante fiche;
 

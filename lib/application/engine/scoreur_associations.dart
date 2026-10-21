@@ -10,7 +10,7 @@ import 'suggestion_association.dart';
 /// rank and prune suggestions and the recommendation engine can weight them.
 ///
 /// `score(bénéfice) = poids(familleEffet(mécanisme)) × facteurConfiance` and,
-/// since ADR-0014, `score(conflit) = poids(familleConflit(mécanisme)) ×
+/// `score(conflit) = poids(familleConflit(mécanisme)) ×
 /// facteurConfiance` — so the user can prioritise (or ignore) a class of warnings
 /// too. Stateless; the [ProfilPonderationAssociations] is passed in, keeping the
 /// calculator dependency-free and testable.

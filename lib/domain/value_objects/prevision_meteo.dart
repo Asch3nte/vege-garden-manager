@@ -5,7 +5,7 @@ import '../enums/type_releve_meteo.dart';
 ///
 /// [weathercode] is the WMO weather interpretation code (0–99; 0 = clear sky).
 /// When rebuilt from the local cache the code defaults to 0 (the DB column is
-/// not stored — ADR-0016 Lot 2 decision: no migration, offline fallback drops
+/// not stored: no migration, offline fallback drops
 /// the visual code gracefully).
 class PrevisionMeteo {
   final DateTime _date;

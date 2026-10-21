@@ -93,7 +93,7 @@ List<TermeGlossaire> construireGlossaire({
       ...termesBioagresseurs,
       ...construireNotions(l10n),
     ])
-      // D4/Lot 5: attach the registered illustration, whatever the source —
+      // Attach the registered illustration, whatever the source —
       // YAML-derived pages get theirs the day their image lands.
       switch (illustrationDe(terme.id)) {
         null => terme,

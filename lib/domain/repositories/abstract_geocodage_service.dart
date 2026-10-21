@@ -3,9 +3,9 @@ import '../value_objects/localisation.dart';
 /// Contract for reverse-geocoding a [Localisation] into a human-readable
 /// locality name.
 ///
-/// The single implementation uses the Nominatim / OpenStreetMap public API
-/// (validated in ADR-0016); future implementations could substitute another
-/// provider without touching callers.
+/// The single implementation uses the Nominatim / OpenStreetMap public API;
+/// future implementations could substitute another provider without touching
+/// callers.
 ///
 /// Returns `null` — never throws — when the location is undefined, the service
 /// is unavailable, or no locality name can be resolved (e.g. a location far

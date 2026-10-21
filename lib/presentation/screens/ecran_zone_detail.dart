@@ -371,7 +371,7 @@ class _Detail extends StatelessWidget {
                 onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
               ),
             ],
-          // Crop rotation of this zone (expert, ADR-0009 / rotation avancée).
+          // Crop rotation of this zone (expert).
           _SectionRotationZone(zoneId: zone.id, type: zone.type),
           // Equipment attached to this zone (intermediate+).
           _SectionEquipementsZone(

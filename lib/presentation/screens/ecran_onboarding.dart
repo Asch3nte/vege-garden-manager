@@ -108,7 +108,7 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   }
 
   /// Once a position is captured, move straight to the next step (no extra
-  /// "Suivant" tap — test feedback #1).
+  /// "Suivant" tap).
   void _avancerDepuisPosition() {
     if (mounted && _etape == _etapePositionIndex && _position.estDefinie) {
       unawaited(_suivant());

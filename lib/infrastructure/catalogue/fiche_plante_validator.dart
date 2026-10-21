@@ -11,11 +11,10 @@ import '../../domain/exceptions/fiche_plante_invalide_exception.dart';
 /// Pipeline step 3. On the first
 /// problem it throws a [FichePlanteInvalideException] describing the issue.
 class FichePlanteValidator {
-  /// When `true`, [valider] also enforces the canonical ADR-0005 id format.
+  /// When `true`, [valider] also enforces the canonical id format.
   ///
   /// Defaults to `false` during the migration window: the embedded sheets still
-  /// carry legacy `snake_case` ids until the rename (Lot 2 tooling executed in
-  /// Lot 3). Flip to `true` once every sheet uses the canonical format.
+  /// carry legacy `snake_case` ids until the rename. Flip to `true` once every sheet uses the canonical format.
   final bool validerFormatId;
 
   const FichePlanteValidator({this.validerFormatId = false});
@@ -24,7 +23,7 @@ class FichePlanteValidator {
   /// `CAT3-NNN-VNNN` for a variety. Examples: `LEG-001`, `LEG-001-V001`.
   static final RegExp _formatId = RegExp(r'^[A-Z]{3}-\d{3}(-V\d{3})?$');
 
-  /// Whether [id] matches the canonical ADR-0005 id format.
+  /// Whether [id] matches the canonical id format.
   static bool formatIdValide(String id) => _formatId.hasMatch(id);
 
   void valider(Map<dynamic, dynamic> y, {required String source}) {
@@ -49,7 +48,7 @@ class FichePlanteValidator {
     // Variety sheet: a `parent_id` must be a non-empty string and the
     // variety id must live in its mother's namespace (id prefixed by parent_id).
     // Validation runs after inheritance resolution, so the inherited required
-    // fields above are already present. (Strict id format is enforced in Lot 2.)
+    // fields above are already present.
     final parentId = y['parent_id'];
     if (parentId != null) {
       exiger(parentId is String && parentId.isNotEmpty,
@@ -155,7 +154,7 @@ class FichePlanteValidator {
         'cycle.charge_tuteur "$chargeTuteur" must be one of legere|moyenne|lourde',
       );
     }
-    // ADR-0015 Lot 4 — tolérance thermique & sécheresse (optionnel).
+    // Tolérance thermique & sécheresse (optionnel).
     final temperatureMaxTolerance = besoins['temperature_max_tolerance'];
     if (temperatureMaxTolerance != null) {
       exiger(
@@ -172,7 +171,7 @@ class FichePlanteValidator {
       );
     }
 
-    // Detailed watering (optional, ADR-0009 `acces.eauDetaillee`). Every aspect
+    // Detailed watering (optional, `acces.eauDetaillee`). Every aspect
     // is independently optional; numbers must be real (never invented), so a
     // block may carry only sensitive stages and/or a note. At least one aspect
     // must be present when the block exists.
@@ -235,7 +234,7 @@ class FichePlanteValidator {
       );
     }
 
-    // ADR-0014 — système racinaire (optionnel).
+    // Système racinaire (optionnel).
     final enracinement = cycle['enracinement'];
     if (enracinement != null) {
       final valides = EnracinementPlante.values.map((e) => e.name).toSet();

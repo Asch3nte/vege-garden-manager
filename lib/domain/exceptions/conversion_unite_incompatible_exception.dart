@@ -3,8 +3,6 @@ import 'potager_exception.dart';
 
 /// Thrown when a quantity is converted (or combined) between two units of
 /// different natures — e.g. kilograms to litres, or pieces to bunches.
-///
-/// See `docs/05-modele-de-domaine.md` §4.5 & §8.
 class ConversionUniteIncompatibleException extends PotagerException {
   /// Unit the quantity is expressed in.
   final UniteQuantite source;

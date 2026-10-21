@@ -10,7 +10,7 @@ import '../../domain/value_objects/modele_fiche_personnelle.dart';
 /// Projects the sheet onto the MVP editable subset (identity + basic
 /// cultivation); richer catalogue fields are intentionally dropped. A fresh
 /// personal id is derived from the name, so saving the draft creates a *copy*
-/// rather than overriding the source sheet (`docs/07 §7`).
+/// rather than overriding the source sheet.
 ///
 /// Pure transformation — no I/O. Uniqueness of the derived id is enforced later,
 /// at creation time.

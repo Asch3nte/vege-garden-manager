@@ -33,8 +33,6 @@ import '../../domain/value_objects/surface.dart';
 /// companion sub-score is 1.0 for a **curated** good association already in the
 /// parcelle, 0.8 for a **derived** one (no curated pair), else 0.5.
 /// Bonus reasons (no weight change): [RaisonReco.cultureVerticaleCompatible].
-///
-/// See `docs/16-enrichissement-fiches-plantes.md` for the enrichment rationale.
 class EvaluateurRecommandations {
   const EvaluateurRecommandations();
 

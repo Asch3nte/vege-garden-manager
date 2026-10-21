@@ -30,7 +30,7 @@ class DestinationNav {
 
 /// Responsive navigation shell hosting the five primary destinations.
 ///
-/// Per docs/09 §2: a bottom [NavigationBar] on mobile (< 600px) and a vertical
+/// A bottom [NavigationBar] on mobile (< 600px) and a vertical
 /// [NavigationRail] on tablet/desktop (≥ 600px). The shell is route-driven — it
 /// renders whatever [child] go_router gives it for the active branch and only
 /// owns the chrome and the switch between branches.

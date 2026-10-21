@@ -11,7 +11,7 @@ import 'type_terme_glossaire.dart';
 /// system back returns to it exactly as the user left it (associations view,
 /// plant sheet…). Term→term navigation from such a page pushes again — back
 /// then replays the pages in their opening order, matching the app-wide
-/// history contract (docs/15 §8 D#6).
+/// history contract.
 class _RoutePageTerme extends MaterialPageRoute<void> {
   _RoutePageTerme(String idTerme)
       : super(builder: (_) => PageTermeGlossaire(idTerme: idTerme));

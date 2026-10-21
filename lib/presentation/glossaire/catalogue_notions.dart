@@ -17,7 +17,7 @@ import 'type_terme_glossaire.dart';
 /// glossary entry that is *not* derived from a YAML reference. Content lives
 /// in the ARB (`glossaire*` keys) and may embed wiki links (D2).
 ///
-/// Lot 4 covers the full annexe A inventory: the transverse seed notions
+/// The catalogue covers the transverse seed notions
 /// below, then one chapter file per book chapter under `catalogue/` (one page
 /// per tool, per soil texture, per soil technique, per association mechanism;
 /// one concept page per remaining business enum). Coverage is proved by the

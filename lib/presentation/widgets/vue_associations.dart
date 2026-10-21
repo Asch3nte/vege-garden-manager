@@ -96,7 +96,7 @@ Future<void> afficherVueAssociations(
         bon: false,
       ),
   ];
-  // Derived suggestions (Lot 3/4), gated by experience level,
+  // Derived suggestions, gated by experience level,
   // scored & weighted by the profile.
   if (acces?.vueReseau ?? false) {
     _ajouterSuggestions(centre, catalogue, l10n, bons, aEviter, familles,
@@ -448,7 +448,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
                   final viewport = Size(c.maxWidth, c.maxHeight);
                   final geo = _GeoConstellation.calculer(bons, aEviter);
                   // Auto-fit when the displayed set changes (not on every rebuild,
-                  // so opening a sheet keeps the user's zoom/pan). ADR-0013 §1.
+                  // so opening a sheet keeps the user's zoom/pan).
                   final sig = '$_filtre|$_filtreSugg|$_tousAffiches|${geo.canvas}';
                   if (sig != _signatureFit) {
                     _signatureFit = sig;
@@ -500,8 +500,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
   }
 }
 
-/// Floating toggle to reveal / hide the lower-scored derived suggestions
-/// (ADR-0011 declutter).
+/// Floating toggle to reveal / hide the lower-scored derived suggestions.
 class _BoutonVoirPlus extends StatelessWidget {
   final int caches;
   final bool tousAffiches;
@@ -571,8 +570,8 @@ class _BasAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// Single-line banner summarising the association weighting profile (ADR-0013
-/// §4): the **tuned families only** (no verbose prefix), or "normales (par
+/// Single-line banner summarising the association weighting profile:
+/// the **tuned families only** (no verbose prefix), or "normales (par
 /// défaut)". Tapping it jumps to the weighting page.
 class _BandeauPreferences extends StatelessWidget {
   final ProfilPonderationAssociations? profil;
@@ -808,8 +807,8 @@ class _DimGroupe {
   static const double hauteurMembre = 70;
   static const int maxParRangee = 3;
 
-  /// Min cluster width — wide enough for a full mechanism label (no truncation,
-  /// ADR-0013 §4).
+  /// Min cluster width — wide enough for a full mechanism label (no
+  /// truncation).
   static const double largeurMin = 144;
 
   /// Header band height (chip wrapped up to 3 lines + the suggestion/“hors
@@ -936,7 +935,7 @@ class _Constellation extends StatelessWidget {
     final theme = Theme.of(context);
 
     // Width is fixed (drives wrapping & the shape width); height is left to the
-    // content so a slightly taller cluster never overflows (ADR-0013 §1 fix).
+    // content so a slightly taller cluster never overflows.
     // The box estimate stays generous so spacing/arrows keep no-overlap.
     Widget groupe(_GroupeAssoc g, _GeoGroupe geoG, Color accent) => Positioned(
           left: geoG.centre.dx - geoG.taille.width / 2,

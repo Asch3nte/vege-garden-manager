@@ -6,7 +6,7 @@ part 'app_database.g.dart';
 
 /// The application's local SQLite database (drift).
 ///
-/// Schema reference: `docs/06-modele-de-donnees-sqlite.md`. Foreign keys are
+/// Foreign keys are
 /// enforced (`PRAGMA foreign_keys = ON`) and use `ON DELETE RESTRICT`; deletions
 /// cascade *logically* in the repositories (soft-delete strategy).
 @DriftDatabase(
@@ -62,7 +62,7 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(
                 meteoCache, meteoCache.evapotranspirationMm);
           }
-          // v4 → v5: active-garden selection (ADR-0009 multi-potager); null
+          // v4 → v5: active-garden selection; null
           // default preserves the existing "earliest-created" fallback.
           if (from < 5) {
             await m.addColumn(preferences, preferences.potagerActifId);

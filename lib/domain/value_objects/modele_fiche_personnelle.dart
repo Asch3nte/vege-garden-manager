@@ -10,7 +10,7 @@ import '../exceptions/invariant_domaine_exception.dart';
 /// basic cultivation).
 ///
 /// This is the structured draft the in-app form edits. It is deliberately a
-/// **subset** of the full [FichePlante] model (`docs/07 §7`): only the fields
+/// **subset** of the full [FichePlante] model: only the fields
 /// the recommendation/watering engines strictly need to treat a personal sheet
 /// like a built-in one. Richer fields (periods, associations, rusticity…) are
 /// intentionally deferred and simply left absent from the emitted YAML.

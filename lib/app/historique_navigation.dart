@@ -7,7 +7,7 @@ import 'router.dart';
 /// The router uses a [StatefulShellRoute.indexedStack], whose native back
 /// behaviour only pops *within* the active branch and never retraces tab
 /// switches. To give the user a browser-like "back always returns to the
-/// previous screen, even across tabs" (docs/15 §8 D #5/#6), this notifier keeps
+/// previous screen, even across tabs", this notifier keeps
 /// the ordered list of visited **absolute locations** (top = current screen).
 ///
 /// It is fed by a single listener on the [GoRouter] (see [routeurProvider]): the

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../application/providers/repository_providers.dart';
 import 'invalidation_vues.dart';
 
-/// Switches the active garden to [potagerId] (ADR-0009 multi-potager) and
+/// Switches the active garden to [potagerId] and
 /// refreshes every view that depends on it (plan, dashboard, season, climate
 /// context, calendar…).
 Future<void> definirPotagerActif(WidgetRef ref, String potagerId) async {

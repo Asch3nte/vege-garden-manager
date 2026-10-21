@@ -15,7 +15,7 @@ enum RaisonReco {
   /// A beneficial companion plant is already growing in the parcelle.
   bonneAssociation,
 
-  /// A beneficial companion is *inferred* from plant traits (ADR-0010 derivation
+  /// A beneficial companion is *inferred* from plant traits (derivation
   /// engine), with no curated pair — a softer signal than [bonneAssociation].
   associationDeriveeFavorable,
 

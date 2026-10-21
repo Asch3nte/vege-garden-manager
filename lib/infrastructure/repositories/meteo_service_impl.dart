@@ -16,8 +16,7 @@ import '../mappers/meteo_cache_mapper.dart';
 /// 1. fresh data in `meteo_cache` → served without any network call;
 /// 2. otherwise the network is queried, and the result is written to the cache;
 /// 3. if the network call fails but stale cache data exists → the stale data is
-///    served (degraded mode — the app keeps working offline, see
-///    `docs/12-internationalisation-et-donnees.md`);
+///    served (degraded mode — the app keeps working offline);
 /// 4. if nothing is cached and the network fails → [MeteoIndisponibleException].
 ///
 /// Freshness is instant-based (timezone-agnostic). Past forecasts are purged

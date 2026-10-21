@@ -156,8 +156,7 @@ class PreferencesUtilisateur {
   ProfilPonderationAssociations get ponderationAssociations =>
       _ponderationAssociations;
 
-  /// The id of the garden the user last selected as active (ADR-0009
-  /// multi-potager), or `null` if none was ever chosen — the repository then
+  /// The id of the garden the user last selected as active, or `null` if none was ever chosen — the repository then
   /// falls back to the earliest-created garden.
   String? get potagerActifId => _potagerActifId;
 

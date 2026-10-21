@@ -69,8 +69,7 @@ class AccentsCarnet extends ThemeExtension<AccentsCarnet> {
 
 /// Builds the light and dark [ThemeData] for **« Carnet vivant »**.
 ///
-/// Tokens come from `docs/08-design-system.md` (the validated source of truth),
-/// whose light palette now reflects the Claude Design mock-ups. The "paper on a
+/// The "paper on a
 /// table" elevation style means very diffuse, low-opacity shadows and no
 /// coloured shadows — reflected here by flat card borders rather than heavy
 /// elevation.

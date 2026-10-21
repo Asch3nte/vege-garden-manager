@@ -2,7 +2,7 @@
 /// species sheet (fiche mère): the variety only declares the fields that differ,
 /// everything else is inherited from the mother.
 ///
-/// See ADR-0005. The merge runs on the **raw maps** (before validation and
+/// The merge runs on the **raw maps** (before validation and
 /// mapping), so the merged map looks like a complete, standalone sheet to the
 /// rest of the pipeline.
 class FusionneurFiches {

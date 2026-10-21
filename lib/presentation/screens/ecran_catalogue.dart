@@ -522,7 +522,7 @@ class _CarteFiche extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    // Personal sheets are merged into the catalogue (ADR-0002 A6): tag them so
+    // Personal sheets are merged into the catalogue: tag them so
     // the user tells their own sheet from a built-in one at a glance.
     final estPerso =
         ref.watch(idsFichesPersonnellesProvider).value?.contains(fiche.id) ??

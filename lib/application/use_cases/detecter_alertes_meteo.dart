@@ -15,7 +15,7 @@ import '../providers/service_providers.dart';
 /// Fetches the forecast at [Localisation] over the next `nbJours` days and
 /// flags the risky days via [EvaluateurAlertesMeteo]. Each alert is **generic**
 /// in V1: it concerns every plantation in place (no per-plant sensitivity data
-/// exists yet — see `docs/13` §2.1).
+/// exists yet).
 ///
 /// Returns an empty list when there is nothing to alert about: the location is
 /// undefined (geolocation opt-out → no weather), there is no culture in place,
