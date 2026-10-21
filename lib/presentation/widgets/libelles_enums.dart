@@ -19,6 +19,7 @@ import '../../domain/enums/usage_plante.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/unite_quantite.dart';
+import '../../domain/enums/grandeur_mesure.dart';
 import '../../domain/enums/langue.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
@@ -141,6 +142,32 @@ extension LibellesEnums on AppLocalizations {
       };
 
   /// Label for the unit system.
+  /// Label for a measured quantity.
+  String grandeurMesure(GrandeurMesure g) => switch (g) {
+        GrandeurMesure.temperature => grandeurTemperature,
+        GrandeurMesure.longueur => grandeurLongueur,
+        GrandeurMesure.surface => grandeurSurface,
+        GrandeurMesure.volume => grandeurVolume,
+        GrandeurMesure.masse => grandeurMasse,
+      };
+
+  /// Unit symbols shown for quantity [g] in system [s].
+  String symbolesUnites(GrandeurMesure g, SystemeUnites s) {
+    final metrique = s == SystemeUnites.metrique;
+    return switch (g) {
+      GrandeurMesure.temperature =>
+        metrique ? symbolesCelsius : symbolesFahrenheit,
+      GrandeurMesure.longueur =>
+        metrique ? symbolesLongueurMetrique : symbolesLongueurImperiale,
+      GrandeurMesure.surface =>
+        metrique ? symbolesSurfaceMetrique : symbolesSurfaceImperiale,
+      GrandeurMesure.volume =>
+        metrique ? symbolesVolumeMetrique : symbolesVolumeImperial,
+      GrandeurMesure.masse =>
+        metrique ? symbolesMasseMetrique : symbolesMasseImperiale,
+    };
+  }
+
   String unites(SystemeUnites u) => switch (u) {
         SystemeUnites.metrique => unitesMetrique,
         SystemeUnites.imperial => unitesImperial,

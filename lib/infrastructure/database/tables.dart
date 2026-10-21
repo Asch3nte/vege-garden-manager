@@ -420,7 +420,18 @@ class Preferences extends Table {
   TextColumn get id => text().withDefault(const Constant('singleton'))();
   TextColumn get langue => text().withDefault(const Constant('auto'))();
   TextColumn get theme => text().withDefault(const Constant('auto'))();
+  // Superseded in v10 by the per-quantity unit columns; kept on the preset.
   TextColumn get systemeUnites =>
+      text().withDefault(const Constant('metrique'))();
+  TextColumn get uniteTemperature =>
+      text().withDefault(const Constant('metrique'))();
+  TextColumn get uniteLongueur =>
+      text().withDefault(const Constant('metrique'))();
+  TextColumn get uniteSurface =>
+      text().withDefault(const Constant('metrique'))();
+  TextColumn get uniteVolume =>
+      text().withDefault(const Constant('metrique'))();
+  TextColumn get uniteMasse =>
       text().withDefault(const Constant('metrique'))();
   TextColumn get sensSwipe => text().withDefault(const Constant('standard'))();
   TextColumn get niveauExperience =>

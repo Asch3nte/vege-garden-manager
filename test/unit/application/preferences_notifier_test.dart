@@ -11,6 +11,8 @@ import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/theme_app.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
 
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
@@ -70,6 +72,27 @@ void main() {
     expect(prefs.theme, ThemeApp.sombre);
     expect(prefs.modeGeolocalisation, ModeGeolocalisation.gps);
     expect(prefs.niveauExperience, NiveauExperience.intermediaire);
+  });
+
+  test('the units preset sets every quantity, a detail makes it custom',
+      () async {
+    final c = conteneur();
+    await c.read(preferencesProvider.future);
+    final notifier = c.read(preferencesProvider.notifier);
+
+    await notifier.definirPrereglageUnites(SystemeUnites.imperial);
+    expect(c.read(preferencesProvider).value!.unites.prereglage,
+        SystemeUnites.imperial);
+
+    await notifier.definirUnite(
+        GrandeurMesure.temperature, SystemeUnites.metrique);
+    final unites = c.read(preferencesProvider).value!.unites;
+    expect(unites.prereglage, isNull);
+    expect(unites.pour(GrandeurMesure.temperature), SystemeUnites.metrique);
+    expect(unites.pour(GrandeurMesure.longueur), SystemeUnites.imperial);
+    final persiste = verify(() => repo.sauvegarder(captureAny())).captured.last
+        as PreferencesUtilisateur;
+    expect(persiste.unites, unites);
   });
 
   test('toggling sync persists the boolean opt-out', () async {

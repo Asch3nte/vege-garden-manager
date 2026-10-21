@@ -5,6 +5,9 @@ import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/theme_app.dart';
 import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
+import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 void main() {
   group('PreferencesUtilisateur — smart defaults', () {
@@ -21,6 +24,21 @@ void main() {
       expect(p.aideContextuelleActive, isTrue);
       expect(p.nePasDerangerActif, isFalse);
       expect(p.onboardingTermine, isFalse);
+    });
+  });
+
+  group('PreferencesUtilisateur — units', () {
+    test('defaults to metric for every quantity', () {
+      expect(PreferencesUtilisateur().unites.prereglage, SystemeUnites.metrique);
+    });
+
+    test('copierAvec sets the units and they take part in equality', () {
+      final unites = PreferencesUnites()
+          .avec(GrandeurMesure.temperature, SystemeUnites.imperial);
+      final p = PreferencesUtilisateur().copierAvec(unites: unites);
+      expect(p.unites, unites);
+      expect(p == PreferencesUtilisateur(), isFalse);
+      expect(p.avecNePasDeranger('22:00', '07:00').unites, unites);
     });
   });
 

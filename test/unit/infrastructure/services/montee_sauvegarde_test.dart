@@ -76,6 +76,22 @@ void main() {
     expect(ligne['couleur_teinte'], 'vertProfond');
   });
 
+  test('v9 → v10 copies the single units setting to every quantity', () {
+    final prefs = <String, dynamic>{'systeme_unites': 'imperial'};
+    const MonteeSauvegarde().monter({
+      'preferences': [prefs],
+    }, 9);
+    for (final colonne in [
+      'unite_temperature',
+      'unite_longueur',
+      'unite_surface',
+      'unite_volume',
+      'unite_masse',
+    ]) {
+      expect(prefs[colonne], 'imperial', reason: colonne);
+    }
+  });
+
   test('a current backup is left untouched', () {
     final ligne = tache('Arroser : Tomate');
     final zone = {

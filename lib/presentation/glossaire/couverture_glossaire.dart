@@ -120,6 +120,7 @@ const Set<String> enumsExclus = {
   'ThemeApp', // light/dark/auto
   'Langue', // interface language
   'SystemeUnites', // metric/imperial
+  'GrandeurMesure', // quantity whose unit is chosen
   'TeinteZone', // zone colour swatch
   // Import/export & reminder plumbing.
   'ModeImport', // merge/replace during a JSON import

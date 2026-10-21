@@ -7,7 +7,7 @@ import '../database/teintes_zone_v8.dart';
 /// data reshaped by a migration is rewritten here.
 class MonteeSauvegarde {
   /// Schema version the backups are brought to; follows the database's.
-  static const int versionCible = 9;
+  static const int versionCible = 10;
 
   const MonteeSauvegarde();
 
@@ -15,6 +15,27 @@ class MonteeSauvegarde {
   void monter(Map<String, dynamic> tables, int depuis) {
     if (depuis < 7) _versV7(tables);
     if (depuis < 8) _versV8(tables);
+    if (depuis < 10) _versV10(tables);
+  }
+
+  /// Every quantity takes the former single unit setting, as the database
+  /// migration does.
+  void _versV10(Map<String, dynamic> tables) {
+    final preferences = tables['preferences'];
+    if (preferences is! List) return;
+    for (final ligne in preferences.whereType<Map<String, dynamic>>()) {
+      final systeme = ligne['systeme_unites'];
+      if (systeme == null) continue;
+      for (final colonne in const [
+        'unite_temperature',
+        'unite_longueur',
+        'unite_surface',
+        'unite_volume',
+        'unite_masse',
+      ]) {
+        ligne[colonne] = systeme;
+      }
+    }
   }
 
   /// The engine's French watering titles become derived ones, matched like

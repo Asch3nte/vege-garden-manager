@@ -30,6 +30,9 @@ import 'package:pot_a_gerer/presentation/screens/parametres/panneau_a_propos.dar
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_confidentialite.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_general.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_notifications.dart';
+import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
@@ -131,6 +134,48 @@ void main() {
 
     final captured = verify(() => repo.sauvegarder(captureAny())).captured;
     expect((captured.last as PreferencesUtilisateur).langue, Langue.en);
+  });
+
+  group('units', () {
+    Future<void> ouvrirGeneral(WidgetTester tester) async {
+      await monter(tester);
+      await tester.tap(find.text('Préférences générales'));
+      await tester.pumpAndSettle();
+    }
+
+    PreferencesUtilisateur derniere() =>
+        verify(() => repo.sauvegarder(captureAny())).captured.last
+            as PreferencesUtilisateur;
+
+    testWidgets('the preset sets every quantity', (tester) async {
+      await ouvrirGeneral(tester);
+
+      await tester.tap(find.text('Impérial'));
+      await tester.pumpAndSettle();
+
+      expect(derniere().unites.prereglage, SystemeUnites.imperial);
+    });
+
+    testWidgets('one quantity can differ, the preset then reads custom',
+        (tester) async {
+      when(() => repo.charger()).thenAnswer((_) async =>
+          PreferencesUtilisateur(
+              unites: const PreferencesUnites.uniforme(SystemeUnites.imperial)
+                  .avec(GrandeurMesure.temperature, SystemeUnites.metrique)));
+      await ouvrirGeneral(tester);
+
+      expect(find.text('Personnalisé'), findsOneWidget);
+
+      // A custom set opens the per-quantity section.
+      await tester.ensureVisible(find.text('kg · g'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('kg · g'));
+      await tester.pumpAndSettle();
+
+      final unites = derniere().unites;
+      expect(unites.pour(GrandeurMesure.masse), SystemeUnites.metrique);
+      expect(unites.pour(GrandeurMesure.longueur), SystemeUnites.imperial);
+    });
   });
 
   testWidgets('a failed preference save is reported', (tester) async {

@@ -2,6 +2,8 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 
+import '../../../helpers/schemas_anciens.dart';
+
 /// `parcelles` as created by schema version 7.
 const _parcellesV7 =
     'CREATE TABLE "parcelles" ("id" TEXT NOT NULL, '
@@ -25,6 +27,7 @@ void main() {
       NativeDatabase.memory(
         setup: (raw) {
           raw.execute(_parcellesV7);
+      raw.execute(preferencesV9);
           void inserer(
             String id,
             String potager,

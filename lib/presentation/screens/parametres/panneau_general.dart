@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../application/state/preferences_notifier.dart';
+import '../../../domain/enums/grandeur_mesure.dart';
 import '../../../domain/enums/langue.dart';
 import '../../../domain/enums/niveau_experience.dart';
 import '../../../domain/enums/sens_swipe.dart';
@@ -56,12 +57,38 @@ class PanneauGeneral extends ConsumerWidget {
             ),
             ChampEmpile(
               label: l10n.prefUnites,
+              indication: prefs.unites.prereglage == null
+                  ? l10n.unitesPersonnalise
+                  : null,
               enfant: ChampSegmente<SystemeUnites>(
-                valeur: prefs.systemeUnites,
+                valeur: prefs.unites.prereglage,
                 options: [
                   for (final v in SystemeUnites.values) (v, l10n.unites(v)),
                 ],
-                onChanged: enregistreur.pour(notifier.definirUnites),
+                onChanged: enregistreur.pour(notifier.definirPrereglageUnites),
+              ),
+            ),
+            // Own Material: the zone's coloured box would hide the ink.
+            Material(
+              type: MaterialType.transparency,
+              child: ExpansionTile(
+                title: Text(l10n.unitesDetail),
+                initiallyExpanded: prefs.unites.prereglage == null,
+                children: [
+                  for (final g in GrandeurMesure.values)
+                    ChampEmpile(
+                      label: l10n.grandeurMesure(g),
+                      enfant: ChampSegmente<SystemeUnites>(
+                        valeur: prefs.unites.pour(g),
+                        options: [
+                          for (final v in SystemeUnites.values)
+                            (v, l10n.symbolesUnites(g, v)),
+                        ],
+                        onChanged: enregistreur
+                            .pour((v) => notifier.definirUnite(g, v)),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],
