@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
-import '../../app/theme/dimensions_app.dart';
 import '../../app/theme/theme_app.dart';
 import '../../application/state/favoris_notifier.dart';
 import '../../l10n/app_localizations.dart';
@@ -11,10 +10,17 @@ import '../../l10n/app_localizations.dart';
 class BoutonFavori extends ConsumerWidget {
   final String ficheId;
 
-  /// Bare icon footprint, for dense rows such as catalogue cards.
-  final bool compact;
+  const BoutonFavori({super.key, required this.ficheId});
 
-  const BoutonFavori({super.key, required this.ficheId, this.compact = false});
+  Future<void> _basculer(BuildContext context, WidgetRef ref) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final message = AppLocalizations.of(context)!.favoriErreur;
+    try {
+      await ref.read(favorisProvider.notifier).basculer(ficheId);
+    } on Exception {
+      messenger.showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,12 +34,8 @@ class BoutonFavori extends ConsumerWidget {
         favori ? PhosphorIconsFill.heart : PhosphorIconsRegular.heart,
         color: favori ? couleur : null,
       ),
-      iconSize: compact ? TaillesIconesApp.md : null,
-      padding: compact ? EdgeInsets.zero : null,
-      constraints: compact ? const BoxConstraints() : null,
-      visualDensity: compact ? VisualDensity.compact : null,
       tooltip: favori ? l10n.favoriRetirer : l10n.favoriAjouter,
-      onPressed: () => ref.read(favorisProvider.notifier).basculer(ficheId),
+      onPressed: () => _basculer(context, ref),
     );
   }
 }

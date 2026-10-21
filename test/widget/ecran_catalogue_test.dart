@@ -333,6 +333,37 @@ void main() {
           findsOneWidget);
     });
 
+    testWidgets('the favourites filter is hidden in the Réseau view',
+        (tester) async {
+      await monter(tester);
+      expect(find.byTooltip('Afficher les favoris'), findsOneWidget);
+
+      await tester.tap(find.text('Réseau'));
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Afficher les favoris'), findsNothing);
+    });
+
+    testWidgets('the card heart keeps a full-size tap target', (tester) async {
+      await monter(tester);
+      // Material pads the 40dp icon button to a 48dp tap target.
+      final taille = tester.getSize(find
+          .ancestor(of: coeurDe('Tomate'), matching: find.byType(IconButton))
+          .first);
+      expect(taille.width, greaterThanOrEqualTo(48));
+      expect(taille.height, greaterThanOrEqualTo(48));
+    });
+
+    testWidgets('a failed toggle is reported', (tester) async {
+      when(() => favoris.ajouter(any())).thenThrow(Exception('refus'));
+      await monter(tester);
+
+      await tester.tap(coeurDe('Tomate'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Impossible de modifier les favoris.'), findsOneWidget);
+    });
+
     testWidgets('the sheet heart toggles a favourite', (tester) async {
       await monter(tester);
       await tester.tap(find.text('Tomate'));

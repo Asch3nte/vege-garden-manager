@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/calendrier_notifier.dart';
 import '../../application/state/contexte_climat.dart';
+import '../../application/state/favoris_notifier.dart';
 import '../../application/state/meteo_accueil_notifier.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../application/state/potager_notifier.dart';
@@ -27,4 +28,5 @@ void invaliderVuesDonnees(WidgetRef ref) {
   ref.invalidate(saisonProvider);
   ref.invalidate(contexteClimatProvider);
   ref.invalidate(parcellesProvider);
+  ref.invalidate(favorisProvider);
 }

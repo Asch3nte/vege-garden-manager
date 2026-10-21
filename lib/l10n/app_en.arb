@@ -259,6 +259,7 @@
   "catalogueToutesPlantes": "Show all plants",
   "favoriAjouter": "Add to favourites",
   "favoriRetirer": "Remove from favourites",
+  "favoriErreur": "Could not update the favourites.",
   "catalogueErreurChargement": "Couldn't load the catalogue.",
   "catalogueNbVarietes": "{count, plural, =1{1 variety} other{{count} varieties}}",
   "categorieLegume": "Vegetables",

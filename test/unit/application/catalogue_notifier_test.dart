@@ -229,6 +229,38 @@ void main() {
           ['fraise']);
     });
 
+    test('a favourite species keeps its varieties matching the query',
+        () async {
+      when(() => favoris.obtenirIds()).thenAnswer((_) async => {'tomate'});
+      final c = conteneur();
+      await c.read(catalogueProvider.future);
+      c.read(catalogueProvider.notifier)
+        ..definirFavorisSeuls(true)
+        ..definirRequete('coeur');
+      final vue = c.read(catalogueProvider).value!;
+      expect(vue.fiches.map((f) => f.id), ['tomate']);
+      expect(vue.groupes.single.varietes.map((v) => v.id), ['tomate-coeur']);
+    });
+
+    test('a favourite variety shows under a species found by name',
+        () async {
+      when(() => favoris.obtenirIds())
+          .thenAnswer((_) async => {'tomate-coeur'});
+      final c = conteneur();
+      await c.read(catalogueProvider.future);
+      c.read(catalogueProvider.notifier)
+        ..definirFavorisSeuls(true)
+        ..definirRequete('tomate');
+      final vue = c.read(catalogueProvider).value!;
+      expect(vue.groupes.single.varietes.map((v) => v.id), ['tomate-coeur']);
+    });
+
+    test('unreadable favourites do not break the catalogue', () async {
+      when(() => favoris.obtenirIds()).thenThrow(Exception('base illisible'));
+      final vue = await conteneur().read(catalogueProvider.future);
+      expect(vue.total, 3);
+    });
+
     test('no favourite → empty result', () async {
       final vue = await favorisSeuls({});
       expect(vue.sansResultat, isTrue);

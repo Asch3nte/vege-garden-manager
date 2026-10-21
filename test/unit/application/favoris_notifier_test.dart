@@ -35,6 +35,28 @@ void main() {
     expect(await conteneur().read(favorisProvider.future), {'tomate'});
   });
 
+  test('a toggle already in flight for the same sheet is ignored', () async {
+    final c = conteneur();
+    await c.read(favorisProvider.future);
+    final notifier = c.read(favorisProvider.notifier);
+
+    await Future.wait([notifier.basculer('basilic'), notifier.basculer('basilic')]);
+
+    verify(() => repo.ajouter('basilic')).called(1);
+    expect(c.read(favorisProvider).value, {'tomate', 'basilic'});
+  });
+
+  test('a failed write is reported and the state follows the base',
+      () async {
+    when(() => repo.ajouter(any())).thenThrow(Exception('écriture refusée'));
+    final c = conteneur();
+    await c.read(favorisProvider.future);
+
+    await expectLater(
+        c.read(favorisProvider.notifier).basculer('basilic'), throwsException);
+    expect(c.read(favorisProvider).value, {'tomate'});
+  });
+
   test('toggling adds then removes a favourite', () async {
     final c = conteneur();
     await c.read(favorisProvider.future);

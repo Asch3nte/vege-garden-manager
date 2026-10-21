@@ -889,6 +889,8 @@
   "@favoriAjouter": { "description": "Cœur d'une plante non favorite." },
   "favoriRetirer": "Retirer des favoris",
   "@favoriRetirer": { "description": "Cœur d'une plante favorite." },
+  "favoriErreur": "Impossible de modifier les favoris.",
+  "@favoriErreur": { "description": "Échec de l'ajout ou du retrait d'un favori." },
   "catalogueErreurChargement": "Impossible de charger le catalogue.",
   "@catalogueErreurChargement": {
     "description": "Message d'erreur de chargement du catalogue."
