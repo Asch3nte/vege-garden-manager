@@ -3,10 +3,14 @@ import 'meteo_accueil_vue.dart';
 
 /// Full view-model for [EcranMeteoDetail] (ADR-0016 Lot 3).
 ///
-/// When [disponible] is false (no position on the active garden) all other
-/// fields carry zero/empty/null values — the screen shows a prompt instead.
+/// When [disponible] is false (no position on the active garden, or
+/// [meteoDesactivee]) all other fields carry zero/empty/null values — the screen
+/// shows a prompt instead.
 class MeteoDetailVue {
   final bool disponible;
+
+  /// The auto weather opt-out is on: no weather service was called.
+  final bool meteoDesactivee;
   final String nomPotager;
 
   /// Nearest locality name from Nominatim, or `null` when unavailable.
@@ -34,6 +38,7 @@ class MeteoDetailVue {
 
   const MeteoDetailVue._({
     required this.disponible,
+    this.meteoDesactivee = false,
     required this.nomPotager,
     required this.nomStation,
     required this.elevation,
@@ -74,6 +79,22 @@ class MeteoDetailVue {
   factory MeteoDetailVue.indisponible({required String nomPotager}) =>
       MeteoDetailVue._(
         disponible: false,
+        nomPotager: nomPotager,
+        nomStation: null,
+        elevation: null,
+        derniereMaj: DateTime.now(),
+        jours: const [],
+        verdictArrosage: VerdictMeteo.clement,
+        resumeAujourdhui: '',
+        resumeDemain: null,
+        explicationTaches: '',
+      );
+
+  /// Auto weather opted out — no weather service is called.
+  factory MeteoDetailVue.desactivee({required String nomPotager}) =>
+      MeteoDetailVue._(
+        disponible: false,
+        meteoDesactivee: true,
         nomPotager: nomPotager,
         nomStation: null,
         elevation: null,

@@ -105,6 +105,13 @@ void main() {
     expect(find.byType(Card), findsNothing);
   });
 
+  testWidgets('desactivee → shows the opt-out message', (tester) async {
+    await monter(tester, MeteoDetailVue.desactivee(nomPotager: 'Mon potager'));
+
+    expect(find.textContaining('Météo automatique désactivée'), findsOneWidget);
+    expect(find.byType(Card), findsNothing);
+  });
+
   // ── Happy path ────────────────────────────────────────────────────────────
 
   testWidgets('shows potager name in AppBar', (tester) async {

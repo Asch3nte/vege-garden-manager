@@ -57,7 +57,12 @@ class _EcranMeteoDetailState extends ConsumerState<EcranMeteoDetail> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(EspacementsApp.s6),
-                child: Text(l10n.meteoSansPosition, textAlign: TextAlign.center),
+                child: Text(
+                  vue.meteoDesactivee
+                      ? l10n.meteoDesactivee
+                      : l10n.meteoSansPosition,
+                  textAlign: TextAlign.center,
+                ),
               ),
             );
           }

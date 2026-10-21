@@ -11,41 +11,27 @@ import '../providers/service_providers.dart';
 import 'jour_meteo_vue.dart';
 import 'meteo_accueil_notifier.dart';
 import 'meteo_detail_vue.dart';
-
-// ── Legacy provider (kept for EcranMeteoDetail until Lot 4 refonte) ──────────
-
-/// Hourly forecast for the active garden's position (weather detail view).
-///
-/// Returns an empty list when there is no usable position; throws (surfaced as
-/// an error state) when the weather service is unavailable. Fetched live — the
-/// detail view is opened on demand.
-///
-/// @deprecated Use [meteoDetailProvider] (ADR-0016 Lot 4).
-final meteoHoraireProvider = FutureProvider<List<PrevisionHoraire>>((ref) async {
-  final potager =
-      await ref.watch(potagerRepositoryProvider).obtenirPotagerActif();
-  if (potager == null || !potager.localisation.estDefinie) {
-    return const <PrevisionHoraire>[];
-  }
-  return ref
-      .watch(meteoServiceProvider)
-      .obtenirPrevisionsHoraires(potager.localisation, nbJours: 3);
-});
+import 'preferences_notifier.dart';
 
 // ── Rich view-model provider (ADR-0016 Lot 3) ────────────────────────────────
 
-/// Full weather detail view-model for [EcranMeteoDetail] (replaces
-/// [meteoHoraireProvider] once the screen is refactored in ADR-0016 Lot 4).
+/// Full weather detail view-model for [EcranMeteoDetail].
 ///
 /// Fetches all five data sources in parallel, derives the watering verdict,
 /// and pre-generates the French summary texts. Returns
-/// [MeteoDetailVue.indisponible] — never throws — when no position is set.
+/// [MeteoDetailVue.indisponible] — never throws — when no position is set, and
+/// [MeteoDetailVue.desactivee] without any call when auto weather is opted out.
 final meteoDetailProvider = FutureProvider<MeteoDetailVue>((ref) async {
   final potagerRepo = ref.watch(potagerRepositoryProvider);
   final meteo = ref.watch(meteoServiceProvider);
   final geocodage = ref.watch(geocodageServiceProvider);
+  final prefs = await ref.watch(preferencesProvider.future);
 
   final potager = await potagerRepo.obtenirPotagerActif();
+
+  if (!prefs.meteoAutoActive) {
+    return MeteoDetailVue.desactivee(nomPotager: potager?.nom ?? '');
+  }
 
   if (potager == null || !potager.localisation.estDefinie) {
     return MeteoDetailVue.indisponible(nomPotager: potager?.nom ?? '');
