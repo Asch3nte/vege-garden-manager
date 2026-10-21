@@ -20,16 +20,20 @@ class FilesystemFicheAssetSource implements FicheAssetSource {
   @override
   Future<List<String>> listerCheminsFiches() async {
     if (!_racine.existsSync()) return const [];
-    return _racine
+    return List.unmodifiable(_racine
         .listSync(recursive: true)
         .whereType<File>()
         .map((f) => f.path)
-        .where((p) =>
-            p.endsWith('.yaml') &&
-            !p.contains('/_schema/') &&
-            !p.contains('/_familles/') &&
-            !p.contains('/_referentiels/'))
-        .toList();
+        .where(estFiche));
+  }
+
+  /// Whether [chemin] is a plant sheet, whatever the platform's separator.
+  static bool estFiche(String chemin) {
+    final p = chemin.replaceAll(r'\', '/');
+    return p.endsWith('.yaml') &&
+        !p.contains('/_schema/') &&
+        !p.contains('/_familles/') &&
+        !p.contains('/_referentiels/');
   }
 
   @override
