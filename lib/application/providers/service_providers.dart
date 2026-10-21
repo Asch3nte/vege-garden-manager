@@ -1,4 +1,3 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/repositories/abstract_geocodage_service.dart';
@@ -11,80 +10,53 @@ import '../../domain/repositories/abstract_reinitialisation_service.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
 import '../../domain/repositories/abstract_statistiques_donnees_service.dart';
 import '../../domain/repositories/abstract_textes_notifications.dart';
-import '../../infrastructure/api/nominatim_client.dart';
-import '../../infrastructure/api/open_meteo_client.dart';
-import '../../infrastructure/repositories/meteo_service_impl.dart';
-import '../../infrastructure/services/geocodage_service_impl.dart';
-import '../../infrastructure/services/geolocalisation_service_impl.dart';
-import '../../infrastructure/services/info_application_service_impl.dart';
-import '../../infrastructure/services/notification_service_impl.dart';
-import '../../infrastructure/services/ouverture_lien_service_impl.dart';
-import '../../infrastructure/services/reinitialisation_service_impl.dart';
-import '../../infrastructure/services/sauvegarde_service_impl.dart';
-import '../../infrastructure/services/statistiques_donnees_service_impl.dart';
-import 'database_providers.dart';
+import 'non_branche.dart';
 
-/// Dependency-injection providers for the domain service interfaces.
-///
-/// Each exposes the **Domain abstraction**, backed by its infrastructure
-/// implementation. Tests override these with mocks. `AbstractSyncService` is
+/// Domain service ports. Their implementations are bound by the composition
+/// root; tests override them with doubles. `AbstractSyncService` is
 /// intentionally absent (WiFi sync is deferred to V2).
-
-/// Open-Meteo HTTP client (owns a default `http.Client`).
-final openMeteoClientProvider = Provider<OpenMeteoClient>(
-  (ref) => OpenMeteoClient(),
-);
-
-/// Nominatim HTTP client (owns a default `http.Client`).
-final nominatimClientProvider = Provider<NominatimClient>(
-  (ref) => NominatimClient(),
-);
 
 /// Reverse-geocoding service (Nominatim / OSM — ADR-0016).
 final geocodageServiceProvider = Provider<AbstractGeocodageService>(
-  (ref) => GeocodageServiceImpl(ref.watch(nominatimClientProvider)),
+  (ref) => nonBranche('geocodageServiceProvider'),
 );
 
 final meteoServiceProvider = Provider<AbstractMeteoService>(
-  (ref) => MeteoServiceImpl(
-    ref.watch(appDatabaseProvider),
-    ref.watch(openMeteoClientProvider),
-  ),
+  (ref) => nonBranche('meteoServiceProvider'),
 );
 
 final notificationServiceProvider = Provider<AbstractNotificationService>(
-  (ref) => NotificationServiceImpl(FlutterLocalNotificationsPlugin()),
+  (ref) => nonBranche('notificationServiceProvider'),
 );
 
-/// Notification texts in the user language; overridden at startup.
+/// Notification texts in the user language.
 final textesNotificationsProvider = Provider<AbstractTextesNotifications>(
-  (ref) => throw UnimplementedError(
-      'textesNotificationsProvider must be overridden at startup.'),
+  (ref) => nonBranche('textesNotificationsProvider'),
 );
 
 final geolocalisationServiceProvider =
     Provider<AbstractGeolocalisationService>(
-  (ref) => GeolocalisationServiceImpl(),
+  (ref) => nonBranche('geolocalisationServiceProvider'),
 );
 
 final sauvegardeServiceProvider = Provider<AbstractSauvegardeService>(
-  (ref) => SauvegardeServiceImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('sauvegardeServiceProvider'),
 );
 
 final reinitialisationServiceProvider =
     Provider<AbstractReinitialisationService>(
-  (ref) => ReinitialisationServiceImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('reinitialisationServiceProvider'),
 );
 
 /// Local-storage statistics for the data-transparency panel (docs/11 §6).
 final statistiquesDonneesServiceProvider =
     Provider<AbstractStatistiquesDonneesService>(
-  (ref) => StatistiquesDonneesServiceImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('statistiquesDonneesServiceProvider'),
 );
 
 final infoApplicationServiceProvider =
     Provider<AbstractInfoApplicationService>(
-  (ref) => InfoApplicationServiceImpl(),
+  (ref) => nonBranche('infoApplicationServiceProvider'),
 );
 
 /// One-shot read of the running app's version (docs/11 §7 — "À propos").
@@ -93,5 +65,5 @@ final versionAppliProvider = FutureProvider<String>(
 );
 
 final ouvertureLienServiceProvider = Provider<AbstractOuvertureLienService>(
-  (ref) => OuvertureLienServiceImpl(),
+  (ref) => nonBranche('ouvertureLienServiceProvider'),
 );

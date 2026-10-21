@@ -133,7 +133,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
 
     final plantationsRepo = ref.watch(plantationRepositoryProvider);
     final fichesRepo = await ref.watch(fichePlanteRepositoryProvider.future);
-    final familles = await ref.watch(familleBotaniqueCacheProvider.future);
+    final familles = await ref.watch(famillesParIdProvider.future);
     final eval = ref.watch(evaluationRotationProvider);
     final maintenant = ref.watch(horlogeProvider)();
     final langue = ref.watch(codeLangueProvider);
@@ -154,7 +154,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
     }
     if (historique.isEmpty) return SyntheseRotationZone.vide;
 
-    String? nomFamille(String slug) => familles.parId(slug)?.nomLocalise(langue);
+    String? nomFamille(String slug) => familles[slug]?.nomLocalise(langue);
 
     // Group history by normalized family.
     final parFamille = <String, List<CulturePrecedente>>{};

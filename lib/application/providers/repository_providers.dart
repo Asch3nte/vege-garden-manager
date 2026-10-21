@@ -1,5 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/entities/bioagresseur.dart';
+import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/repositories/abstract_bioagresseur_repository.dart';
 import '../../domain/repositories/abstract_equipement_repository.dart';
@@ -14,106 +16,59 @@ import '../../domain/repositories/abstract_preferences_repository.dart';
 import '../../domain/repositories/abstract_rappel_repository.dart';
 import '../../domain/repositories/abstract_recolte_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
-import '../../infrastructure/catalogue/bioagresseur_asset_source.dart';
-import '../../infrastructure/catalogue/bioagresseur_cache.dart';
-import '../../infrastructure/catalogue/bioagresseurs_loader.dart';
-import '../../infrastructure/catalogue/catalogue_loader.dart';
-import '../../infrastructure/catalogue/famille_asset_source.dart';
-import '../../infrastructure/catalogue/famille_botanique_cache.dart';
-import '../../infrastructure/catalogue/familles_loader.dart';
-import '../../infrastructure/catalogue/fiche_asset_source.dart';
-import '../../infrastructure/catalogue/fiche_plante_cache.dart';
-import '../../infrastructure/catalogue/fiches_personnelles_loader.dart';
-import '../../infrastructure/repositories/bioagresseur_repository_impl.dart';
-import '../../infrastructure/repositories/equipement_repository_impl.dart';
-import '../../infrastructure/repositories/famille_botanique_repository_impl.dart';
-import '../../infrastructure/repositories/fiche_plante_personnelle_repository_impl.dart';
-import '../../infrastructure/repositories/fiche_plante_repository_impl.dart';
-import '../../infrastructure/repositories/observation_repository_impl.dart';
-import '../../infrastructure/repositories/parcelle_repository_impl.dart';
-import '../../infrastructure/repositories/plantation_repository_impl.dart';
-import '../../infrastructure/repositories/potager_repository_impl.dart';
-import '../../infrastructure/repositories/preferences_repository_impl.dart';
-import '../../infrastructure/repositories/rappel_repository_impl.dart';
-import '../../infrastructure/repositories/recolte_repository_impl.dart';
-import '../../infrastructure/repositories/tache_repository_impl.dart';
-import '../state/journal_erreurs_chargement.dart';
-import 'database_providers.dart';
+import 'non_branche.dart';
 
-/// Dependency-injection providers for the domain repository interfaces.
-///
-/// Each provider exposes the **Domain abstraction**, backed by its drift
-/// implementation. Tests override these with mocks (no Flutter, no real DB).
+/// Domain repository ports. Their implementations are bound by the
+/// composition root; tests override them with doubles.
 
 final potagerRepositoryProvider = Provider<AbstractPotagerRepository>(
-  (ref) => PotagerRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('potagerRepositoryProvider'),
 );
 
 final parcelleRepositoryProvider = Provider<AbstractParcelleRepository>(
-  (ref) => ParcelleRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('parcelleRepositoryProvider'),
 );
 
 final plantationRepositoryProvider = Provider<AbstractPlantationRepository>(
-  (ref) => PlantationRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('plantationRepositoryProvider'),
 );
 
 final recolteRepositoryProvider = Provider<AbstractRecolteRepository>(
-  (ref) => RecolteRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('recolteRepositoryProvider'),
 );
 
 final observationRepositoryProvider = Provider<AbstractObservationRepository>(
-  (ref) => ObservationRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('observationRepositoryProvider'),
 );
 
 final equipementRepositoryProvider = Provider<AbstractEquipementRepository>(
-  (ref) => EquipementRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('equipementRepositoryProvider'),
 );
 
 final tacheRepositoryProvider = Provider<AbstractTacheRepository>(
-  (ref) => TacheRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('tacheRepositoryProvider'),
 );
 
 /// User-authored plant sheets (contribution feature, expert tier).
 final fichePlantePersonnelleRepositoryProvider =
     Provider<AbstractFichePlantePersonnelleRepository>(
-  (ref) =>
-      FichePlantePersonnelleRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('fichePlantePersonnelleRepositoryProvider'),
 );
 
 final rappelRepositoryProvider = Provider<AbstractRappelRepository>(
-  (ref) => RappelRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('rappelRepositoryProvider'),
 );
 
 final preferencesRepositoryProvider = Provider<AbstractPreferencesRepository>(
-  (ref) => PreferencesRepositoryImpl(ref.watch(appDatabaseProvider)),
+  (ref) => nonBranche('preferencesRepositoryProvider'),
 );
 
-// --- Plant catalogue (YAML assets, loaded asynchronously) -------------------
-
-/// Source of the embedded YAML plant sheets.
-final ficheAssetSourceProvider =
-    Provider<FicheAssetSource>((ref) => BundleFicheAssetSource());
-
-/// Pipeline that lists/reads/parses/validates the embedded YAML plant sheets.
-final catalogueLoaderProvider = Provider<CatalogueLoader>(
-  (ref) => CatalogueLoader(
-    ref.watch(ficheAssetSourceProvider),
-    ref.watch(journalErreursChargementProvider).signaler,
-  ),
-);
-
-/// Pipeline that loads user-authored sheets from the database (ADR-0002 A6).
-final fichesPersonnellesLoaderProvider = Provider<FichesPersonnellesLoader>(
-  (ref) => FichesPersonnellesLoader(
-    ref.watch(fichePlantePersonnelleRepositoryProvider),
-    ref.watch(journalErreursChargementProvider).signaler,
-  ),
-);
+// --- Plant catalogue ---------------------------------------------------------
 
 /// The user-authored sheets, parsed as catalogue entities. Invalidate this to
 /// refresh the catalogue after a personal sheet is created/edited/deleted.
 final fichesPersonnellesChargeesProvider = FutureProvider<List<FichePlante>>(
-  (ref) => ref.watch(fichesPersonnellesLoaderProvider).charger(),
+  (ref) => nonBranche('fichesPersonnellesChargeesProvider'),
 );
 
 /// Logical ids of the loaded personal sheets — used to badge them in the
@@ -124,67 +79,42 @@ final idsFichesPersonnellesProvider = FutureProvider<Set<String>>(
       .toSet(),
 );
 
-/// The in-memory plant-sheet cache: the bundled catalogue plus the user's own
-/// sheets. Personal sheets are added last, so on an id collision they win
-/// (ADR-0002 A6).
-final fichePlanteCacheProvider = FutureProvider<FichePlanteCache>(
-  (ref) async {
-    final embarquees = await ref.watch(catalogueLoaderProvider).charger();
-    final personnelles =
-        await ref.watch(fichesPersonnellesChargeesProvider.future);
-    return FichePlanteCache([...embarquees.toutes(), ...personnelles]);
+/// The plant-sheet repository: the bundled catalogue plus the user's sheets.
+final fichePlanteRepositoryProvider =
+    FutureProvider<AbstractFichePlanteRepository>(
+  (ref) => nonBranche('fichePlanteRepositoryProvider'),
+);
+
+// --- Botanical families and bioaggressors -----------------------------------
+
+final familleBotaniqueRepositoryProvider =
+    FutureProvider<AbstractFamilleBotaniqueRepository>(
+  (ref) => nonBranche('familleBotaniqueRepositoryProvider'),
+);
+
+/// Every botanical family by id, for synchronous lookups.
+final famillesParIdProvider = FutureProvider<Map<String, FamilleBotanique>>(
+  (ref) async => {
+    for (final f in await (await ref.watch(
+      familleBotaniqueRepositoryProvider.future,
+    ))
+        .obtenirToutes())
+      f.id: f,
   },
 );
 
-/// The plant-sheet repository. Async because it depends on the loaded cache.
-final fichePlanteRepositoryProvider =
-    FutureProvider<AbstractFichePlanteRepository>(
-  (ref) async => FichePlanteRepositoryImpl(
-    await ref.watch(fichePlanteCacheProvider.future),
-  ),
-);
-
-// --- Botanical families (YAML assets, loaded asynchronously) — ADR-0006 ------
-
-/// Pipeline that lists/reads/parses/validates the embedded YAML family sheets.
-final famillesLoaderProvider = Provider<FamillesLoader>(
-  (ref) => FamillesLoader(
-    BundleFamilleAssetSource(),
-    ref.watch(journalErreursChargementProvider).signaler,
-  ),
-);
-
-/// The in-memory family cache, loaded once from the bundled assets.
-final familleBotaniqueCacheProvider = FutureProvider<FamilleBotaniqueCache>(
-  (ref) => ref.watch(famillesLoaderProvider).charger(),
-);
-
-/// The family repository. Async because it depends on the loaded cache.
-final familleBotaniqueRepositoryProvider =
-    FutureProvider<AbstractFamilleBotaniqueRepository>(
-  (ref) async => FamilleBotaniqueRepositoryImpl(
-    await ref.watch(familleBotaniqueCacheProvider.future),
-  ),
-);
-
-/// Pipeline that reads/parses/validates the embedded bioaggressor reference
-/// (diseases & pests shared at family level, ADR-0006 Lot 4).
-final bioagresseursLoaderProvider = Provider<BioagresseursLoader>(
-  (ref) => BioagresseursLoader(
-    BundleBioagresseurAssetSource(),
-    ref.watch(journalErreursChargementProvider).signaler,
-  ),
-);
-
-/// The in-memory bioaggressor cache, loaded once from the bundled reference.
-final bioagresseurCacheProvider = FutureProvider<BioagresseurCache>(
-  (ref) => ref.watch(bioagresseursLoaderProvider).charger(),
-);
-
-/// The bioaggressor repository. Async because it depends on the loaded cache.
 final bioagresseurRepositoryProvider =
     FutureProvider<AbstractBioagresseurRepository>(
-  (ref) async => BioagresseurRepositoryImpl(
-    await ref.watch(bioagresseurCacheProvider.future),
-  ),
+  (ref) => nonBranche('bioagresseurRepositoryProvider'),
+);
+
+/// Every bioaggressor by id, for synchronous lookups.
+final bioagresseursParIdProvider = FutureProvider<Map<String, Bioagresseur>>(
+  (ref) async => {
+    for (final b in await (await ref.watch(
+      bioagresseurRepositoryProvider.future,
+    ))
+        .obtenirTous())
+      b.id: b,
+  },
 );

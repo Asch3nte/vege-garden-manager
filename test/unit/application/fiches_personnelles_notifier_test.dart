@@ -1,6 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pot_a_gerer/application/providers/database_providers.dart';
+import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/fiches_personnelles_notifier.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
@@ -39,9 +39,7 @@ void main() {
 
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
-    container = ProviderContainer(
-      overrides: [appDatabaseProvider.overrideWithValue(db)],
-    );
+    container = ProviderContainer(overrides: Composition.surcharges(db));
     addTearDown(() {
       container.dispose();
       db.close();

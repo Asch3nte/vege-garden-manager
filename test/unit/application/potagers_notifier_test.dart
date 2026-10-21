@@ -1,6 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pot_a_gerer/application/providers/database_providers.dart';
+import 'package:pot_a_gerer/app/composition.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/potagers_notifier.dart';
 import 'package:pot_a_gerer/application/state/preferences_notifier.dart';
@@ -14,12 +14,11 @@ void main() {
   const zone = ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8);
 
   ProviderContainer makeContainer() {
-    final container = ProviderContainer(overrides: [
-      appDatabaseProvider
-          .overrideWithValue(AppDatabase(NativeDatabase.memory())),
-    ]);
+    final db = AppDatabase(NativeDatabase.memory());
+    final container =
+        ProviderContainer(overrides: Composition.surcharges(db));
     addTearDown(() {
-      container.read(appDatabaseProvider).close();
+      db.close();
       container.dispose();
     });
     return container;

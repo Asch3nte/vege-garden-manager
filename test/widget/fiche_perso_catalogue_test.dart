@@ -15,13 +15,12 @@ import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_famille_botanique_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_personnelle_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_cache.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
 import 'package:pot_a_gerer/presentation/widgets/badge_perso.dart';
@@ -32,6 +31,8 @@ class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockFichesPerso extends Mock
     implements AbstractFichePlantePersonnelleRepository {}
+
+class _MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
 
 void main() {
   late MockFiches fiches;
@@ -88,10 +89,12 @@ void main() {
           fichePlantePersonnelleRepositoryProvider
               .overrideWithValue(fichesPerso),
           idsFichesPersonnellesProvider.overrideWith((ref) async => idsPerso),
-          familleBotaniqueCacheProvider
-              .overrideWith((ref) async => FamilleBotaniqueCache(const [])),
-          bioagresseurCacheProvider
-              .overrideWith((ref) async => BioagresseurCache(const [])),
+          familleBotaniqueRepositoryProvider.overrideWith((ref) async {
+            final familles = _MockFamilles();
+            when(familles.obtenirToutes).thenAnswer((_) async => []);
+            return familles;
+          }),
+          bioagresseursParIdProvider.overrideWith((ref) async => const {}),
           potagerRepositoryProvider.overrideWithValue(potagers),
           accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
         ],

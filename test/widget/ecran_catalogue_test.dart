@@ -31,8 +31,6 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/periode.dart';
 import 'package:pot_a_gerer/domain/value_objects/periodes_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_cache.dart';
-import 'package:pot_a_gerer/infrastructure/catalogue/famille_botanique_cache.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/providers/ajout_plante_provider.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
@@ -155,19 +153,17 @@ void main() {
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
-          // Family-level educational section (ADR-0006 Lot 4) reads the caches.
-          familleBotaniqueCacheProvider.overrideWith(
-              (ref) async => FamilleBotaniqueCache(await familles.obtenirToutes())),
-          bioagresseurCacheProvider.overrideWith((ref) async => BioagresseurCache([
-                Bioagresseur(
+          // Family-level educational section (ADR-0006 Lot 4).
+          bioagresseursParIdProvider.overrideWith((ref) async => {
+                'mildiou': Bioagresseur(
                     id: 'mildiou',
                     type: TypeBioagresseur.maladie,
                     nomsLocalises: const {'fr': 'Mildiou'}),
-                Bioagresseur(
+                'doryphore': Bioagresseur(
                     id: 'doryphore',
                     type: TypeBioagresseur.ravageur,
                     nomsLocalises: const {'fr': 'Doryphore'}),
-              ])),
+              }),
           potagerRepositoryProvider.overrideWithValue(potagers),
           accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
           if (avecCible) ajoutPlanteProvider.overrideWith(_CibleFixe.new),
