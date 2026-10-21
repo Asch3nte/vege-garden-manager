@@ -16,7 +16,8 @@ const _tachesV6 = 'CREATE TABLE "taches" ("id" TEXT NOT NULL, "titre" TEXT NOT N
 /// The `parcelles` columns later migrations touch, as of schema version 6.
 const _parcellesV6 = 'CREATE TABLE "parcelles" ("id" TEXT NOT NULL, '
     '"potager_id" TEXT NOT NULL, "position_ordre" INTEGER NOT NULL, '
-    '"deleted_at" TEXT NULL, PRIMARY KEY ("id"))';
+    '"created_at" TEXT NOT NULL DEFAULT \'x\', "deleted_at" TEXT NULL, '
+    'PRIMARY KEY ("id"))';
 
 void main() {
   test('v6 → v7 turns the engine watering titles into derived ones', () async {

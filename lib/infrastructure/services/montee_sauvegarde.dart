@@ -1,3 +1,5 @@
+import '../database/teintes_zone_v8.dart';
+
 /// Brings the tables of a backup from an older schema version to the current
 /// one, mirroring the database migrations.
 ///
@@ -42,29 +44,27 @@ class MonteeSauvegarde {
         .whereType<Map<String, dynamic>>()
         .where((l) => l['deleted_at'] == null)
         .toList();
-    // Stable sort: ties keep the file order, like the row order in base.
+    // Same order as the zone list: position, creation, then file order.
     final triees = [
       for (final (i, l) in vivantes.indexed) (i, l),
     ]..sort((a, b) {
-        final ordre = ((a.$2['position_ordre'] as num?) ?? 0)
-            .compareTo((b.$2['position_ordre'] as num?) ?? 0);
-        return ordre != 0 ? ordre : a.$1.compareTo(b.$1);
+        final ordre = _position(a.$2).compareTo(_position(b.$2));
+        if (ordre != 0) return ordre;
+        final creation = '${a.$2['created_at'] ?? ''}'
+            .compareTo('${b.$2['created_at'] ?? ''}');
+        return creation != 0 ? creation : a.$1.compareTo(b.$1);
       });
     final rangs = <Object?, int>{};
     for (final (_, ligne) in triees) {
       final rang = rangs.update(ligne['potager_id'], (r) => r + 1,
           ifAbsent: () => 0);
-      ligne['couleur_teinte'] = _teintesV8[rang % _teintesV8.length];
+      ligne['couleur_teinte'] = teintesZoneV8[rang % teintesZoneV8.length];
     }
   }
 
-  /// Tint names frozen as of v8, in palette order.
-  static const List<String> _teintesV8 = [
-    'vertProfond',
-    'terracotta',
-    'aubergine',
-    'vertMoyen',
-    'bordeaux',
-    'terre',
-  ];
+  /// Malformed positions sort first; the row import rejects them afterwards.
+  static num _position(Map<String, dynamic> ligne) {
+    final position = ligne['position_ordre'];
+    return position is num ? position : 0;
+  }
 }

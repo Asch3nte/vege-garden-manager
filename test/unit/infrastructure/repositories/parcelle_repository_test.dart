@@ -80,7 +80,7 @@ void main() {
         CouleurZone.personnalisee(0x12AB34));
   });
 
-  test('an unknown or missing tint reads as the zone position tint',
+  test('an unknown or missing tint reads as the first palette tint',
       () async {
     await repo.sauvegarder(parcelle(id: 'a', ordre: 2));
     await db.customStatement(
@@ -89,8 +89,20 @@ void main() {
     await db.customStatement(
         "UPDATE parcelles SET couleur_teinte = NULL WHERE id = 'b'");
 
-    expect((await repo.obtenirParId('a'))!.couleur, CouleurZone.pourIndex(2));
-    expect((await repo.obtenirParId('b'))!.couleur, CouleurZone.pourIndex(3));
+    const premiere = CouleurZone.teinte(TeinteZone.vertProfond);
+    expect((await repo.obtenirParId('a'))!.couleur, premiere);
+    expect((await repo.obtenirParId('b'))!.couleur, premiere);
+  });
+
+  test('creation order breaks position ties', () async {
+    await repo.sauvegarder(parcelle(id: 'b'));
+    await db.customStatement(
+        "UPDATE parcelles SET created_at = '2026-01-02' WHERE id = 'b'");
+    await repo.sauvegarder(parcelle(id: 'a'));
+    await db.customStatement(
+        "UPDATE parcelles SET created_at = '2026-01-01' WHERE id = 'a'");
+
+    expect((await repo.obtenirParPotager('pot1')).map((p) => p.id), ['a', 'b']);
   });
 
   test('obtenirParPotager returns the potager parcelles, ordered', () async {

@@ -68,7 +68,7 @@ class ParcelleMapper {
     );
   }
 
-  /// A missing or unknown tint falls back to the zone's position tint, so the
+  /// A missing or unknown tint falls back to the first palette tint, so the
   /// row stays readable.
   CouleurZone _couleur(ParcelleRow r) {
     final rgb = r.couleurRgb;
@@ -78,7 +78,7 @@ class ParcelleMapper {
     final teinte = TeinteZone.values.asNameMap()[r.couleurTeinte];
     return teinte != null
         ? CouleurZone.teinte(teinte)
-        : CouleurZone.pourIndex(r.positionOrdre);
+        : CouleurZone.teinte(TeinteZone.values.first);
   }
 
   Set<TechniqueSol> _techniques(String? json) {

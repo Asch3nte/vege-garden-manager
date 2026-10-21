@@ -39,7 +39,7 @@ class Parcelle {
   final Set<TechniqueSol> _techniquesSol;
   bool _cultureVerticale;
   final int _ordre;
-  CouleurZone _couleur;
+  final CouleurZone _couleur;
   String? _notes;
   final List<Plantation> _plantations;
   final List<Equipement> _equipements;
@@ -239,8 +239,6 @@ class Parcelle {
       _cultureVerticale = !_cultureVerticale;
 
   void modifierNotes(String? notes) => _notes = notes;
-
-  void changerCouleur(CouleurZone couleur) => _couleur = couleur;
 
   @override
   bool operator ==(Object other) => other is Parcelle && other._id == _id;

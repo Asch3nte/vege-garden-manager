@@ -96,7 +96,7 @@ void main() {
           CouleurZone.teinte(TeinteZone.values.first));
     });
 
-    test('keeps the colour it is given and can change it', () {
+    test('keeps the colour it is given', () {
       final p = Parcelle(
         id: 'par1',
         nom: 'Planche Nord',
@@ -107,9 +107,6 @@ void main() {
         couleur: const CouleurZone.teinte(TeinteZone.bordeaux),
       );
       expect(p.couleur, const CouleurZone.teinte(TeinteZone.bordeaux));
-
-      p.changerCouleur(CouleurZone.personnalisee(0xAABBCC));
-      expect(p.couleur, CouleurZone.personnalisee(0xAABBCC));
     });
   });
 

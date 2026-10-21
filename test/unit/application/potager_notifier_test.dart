@@ -170,8 +170,15 @@ void main() {
   test('each zone carries its stored colour', () async {
     when(() => potagers.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
-    final zone = uneParcelle('z-1', 'Carré nord')
-      ..changerCouleur(CouleurZone.personnalisee(0x3366CC));
+    final zone = Parcelle(
+      id: 'z-1',
+      nom: 'Carré nord',
+      potagerId: 'pot-1',
+      type: TypeParcelle.bacSureleve,
+      surface: Surface.enMetresCarres(2),
+      exposition: NiveauSoleil.pleinSoleil,
+      couleur: CouleurZone.personnalisee(0x3366CC),
+    );
     when(() => parcelles.obtenirParPotager('pot-1'))
         .thenAnswer((_) async => [zone]);
 

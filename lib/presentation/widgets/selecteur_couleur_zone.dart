@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../domain/enums/teinte_zone.dart';
 import '../../domain/value_objects/couleur_zone.dart';
@@ -74,12 +75,13 @@ class _Pastille extends StatelessWidget {
     final fond = couleur ?? theme.colorScheme.surfaceContainerHighest;
     final contraste =
         ThemeData.estimateBrightnessForColor(fond) == Brightness.dark
-        ? Colors.white
-        : Colors.black;
+        ? CouleursApp.fondEleveClair
+        : CouleursApp.texteProncipalClair;
     return Semantics(
       button: true,
       selected: selectionnee,
       label: libelle,
+      onTap: onTap,
       excludeSemantics: true,
       child: Tooltip(
         message: libelle,
@@ -230,8 +232,10 @@ class _PanneauCouleurRgbState extends State<_PanneauCouleurRgb> {
           child: Text(l10n.actionAnnuler),
         ),
         FilledButton(
-          onPressed: () =>
-              Navigator.of(context).pop(CouleurZone.personnalisee(_rgb)),
+          onPressed: _hexValide
+              ? () =>
+                  Navigator.of(context).pop(CouleurZone.personnalisee(_rgb))
+              : null,
           child: Text(l10n.actionValider),
         ),
       ],

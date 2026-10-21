@@ -75,6 +75,14 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   // Null until picked on a new zone: the first free tint is shown and saved.
   CouleurZone? _couleur;
 
+  CouleurZone get _couleurAffichee =>
+      _couleur ??
+      CouleurZone.suivante(ref
+              .watch(parcellesProvider(widget.potagerId))
+              .value
+              ?.map((p) => p.couleur) ??
+          const []);
+
   bool get _edition => widget.parcelleInitiale != null;
 
   @override
@@ -120,7 +128,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
           surface: surface,
           exposition: _exposition,
           ordre: initiale.ordre,
-          couleur: _couleur ?? initiale.couleur,
+          couleur: _couleurAffichee,
           texture: _texture,
           textureSource: initiale.textureSource,
           ph: _ph,
@@ -136,7 +144,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
         type: _type,
         surface: surface,
         exposition: _exposition,
-        couleur: _couleur,
+        couleur: _couleurAffichee,
         texture: _texture,
         ph: _ph,
         techniquesSol: _techniques,
@@ -155,12 +163,6 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
     // Soil controls are gated by the experience level; hidden values
     // are preserved (reversibility), never wiped.
     final acces = ref.watch(accesNiveauProvider);
-    final couleur = _couleur ??
-        CouleurZone.suivante(ref
-                .watch(parcellesProvider(widget.potagerId))
-                .value
-                ?.map((p) => p.couleur) ??
-            const []);
 
     return Scaffold(
       appBar: AppBar(
@@ -231,7 +233,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
             Text(l10n.formZoneCouleur, style: theme.textTheme.titleMedium),
             const SizedBox(height: EspacementsApp.s2),
             SelecteurCouleurZone(
-              valeur: couleur,
+              valeur: _couleurAffichee,
               onChanged: (c) => setState(() => _couleur = c),
             ),
             // Soil techniques — intermediate+.

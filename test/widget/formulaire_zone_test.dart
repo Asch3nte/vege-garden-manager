@@ -145,6 +145,39 @@ void main() {
       expect(curseurs.map((c) => c.value), [255, 0, 128]);
     });
 
+    testWidgets('an invalid hex code cannot be confirmed', (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.bySemanticsLabel('Couleur personnalisée'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+          find.widgetWithText(TextField, 'Code hexadécimal'), '#3A7');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Format attendu : #RRGGBB'), findsOneWidget);
+      expect(
+          tester
+              .widget<FilledButton>(find.widgetWithText(FilledButton, 'Valider'))
+              .onPressed,
+          isNull);
+    });
+
+    testWidgets('a swatch is activable through accessibility', (tester) async {
+      final semantique = tester.ensureSemantics();
+      await monter(tester);
+
+      expect(
+        tester.getSemantics(find.bySemanticsLabel('Bordeaux')),
+        matchesSemantics(
+          label: 'Bordeaux',
+          isButton: true,
+          hasTapAction: true,
+          hasSelectedState: true,
+        ),
+      );
+      semantique.dispose();
+    });
+
     testWidgets('cancelling the RGB panel keeps the previous colour',
         (tester) async {
       await monter(tester);

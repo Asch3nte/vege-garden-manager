@@ -49,6 +49,33 @@ void main() {
         ['terracotta', 'vertProfond', null, 'aubergine', 'vertProfond']);
   });
 
+  test('v7 → v8 breaks position ties by creation date', () {
+    final tardive = {
+      'potager_id': 'pot1',
+      'position_ordre': 0,
+      'created_at': '2026-02-01',
+    };
+    final ancienne = {
+      'potager_id': 'pot1',
+      'position_ordre': 0,
+      'created_at': '2026-01-01',
+    };
+    const MonteeSauvegarde().monter({
+      'parcelles': [tardive, ancienne],
+    }, 7);
+
+    expect(ancienne['couleur_teinte'], 'vertProfond');
+    expect(tardive['couleur_teinte'], 'terracotta');
+  });
+
+  test('v7 → v8 tolerates a malformed position', () {
+    final ligne = {'potager_id': 'pot1', 'position_ordre': 'x'};
+    const MonteeSauvegarde().monter({
+      'parcelles': [ligne],
+    }, 7);
+    expect(ligne['couleur_teinte'], 'vertProfond');
+  });
+
   test('a current backup is left untouched', () {
     final ligne = tache('Arroser : Tomate');
     final zone = {

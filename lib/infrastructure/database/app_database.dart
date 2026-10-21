@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import 'tables.dart';
+import 'teintes_zone_v8.dart';
 
 part 'app_database.g.dart';
 
@@ -88,11 +89,7 @@ class AppDatabase extends _$AppDatabase {
           if (from < 8) {
             await m.addColumn(parcelles, parcelles.couleurTeinte);
             await m.addColumn(parcelles, parcelles.couleurRgb);
-            // Tint names frozen as of v8, in palette order.
-            const teintes = [
-              'vertProfond', 'terracotta', 'aubergine', 'vertMoyen', 'bordeaux',
-              'terre',
-            ];
+            const teintes = teintesZoneV8;
             final cas = [
               for (var i = 0; i < teintes.length; i++)
                 "WHEN $i THEN '${teintes[i]}'",
@@ -101,7 +98,8 @@ class AppDatabase extends _$AppDatabase {
                 'UPDATE parcelles SET couleur_teinte = ('
                 'SELECT CASE (r.rang - 1) % ${teintes.length} $cas END '
                 'FROM (SELECT id, ROW_NUMBER() OVER ('
-                'PARTITION BY potager_id ORDER BY position_ordre, rowid) AS rang '
+                'PARTITION BY potager_id '
+                'ORDER BY position_ordre, created_at, rowid) AS rang '
                 'FROM parcelles WHERE deleted_at IS NULL) r '
                 'WHERE r.id = parcelles.id)');
           }
