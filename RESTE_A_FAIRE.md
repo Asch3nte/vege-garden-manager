@@ -13,7 +13,8 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 ## 2. Dette technique hors audit
 
-- **Dark mode** : valeurs de `CouleursApp.*Sombre` non revalidées (maquettes light uniquement) ; maquetter puis revoir docs/08 §3.
+- **Thème** : le thème actuel est un placeholder ; thème général à refaire entièrement, clair et sombre (valeurs `CouleursApp.*Sombre` jamais validées). Maquetter puis revoir docs/08.
+- **Tri des noms** : `String.compareTo` place les noms accentués après Z (« Échalote » après « Tomate ») ; tri selon la langue à appliquer partout (catalogue, variétés, compagnons, listes).
 
 ## 3. Finitions V1
 
