@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../domain/value_objects/localisation.dart';
@@ -254,7 +255,7 @@ class _EcranCarteMondeState extends State<_EcranCarteMonde> {
       height: hauteur,
       child: IgnorePointer(
         child: Icon(
-          Icons.location_on,
+          PhosphorIconsBold.mapPin,
           size: hauteur,
           color: Theme.of(context).colorScheme.error,
         ),
@@ -284,7 +285,7 @@ class _BandeRegions extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s1),
               child: Center(
                 child: ActionChip(
-                  avatar: const Icon(Icons.public_outlined,
+                  avatar: const Icon(PhosphorIconsRegular.globe,
                       size: TaillesIconesApp.sm),
                   label: Text(label),
                   onPressed: () => onRegion(lat, lon),

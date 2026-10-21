@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../l10n/app_localizations.dart';
 import 'chapitre_glossaire.dart';
@@ -32,15 +33,15 @@ extension LibellesGlossaire on AppLocalizations {
       };
 }
 
-/// Material icon for a glossary chapter (Phosphor pending).
+/// Icon of a glossary chapter.
 IconData iconeChapitreGlossaire(ChapitreGlossaire c) => switch (c) {
-      ChapitreGlossaire.culturesEtPlantes => Icons.eco_outlined,
-      ChapitreGlossaire.famillesBotaniques => Icons.account_tree_outlined,
-      ChapitreGlossaire.santeDuJardin => Icons.healing_outlined,
-      ChapitreGlossaire.solEtTerre => Icons.landscape_outlined,
-      ChapitreGlossaire.eauEtArrosage => Icons.water_drop_outlined,
-      ChapitreGlossaire.outilsEtEquipements => Icons.handyman_outlined,
-      ChapitreGlossaire.climatEtSaisons => Icons.wb_sunny_outlined,
-      ChapitreGlossaire.associationsEtCompagnonnage => Icons.hub_outlined,
-      ChapitreGlossaire.gestesEtOrganisation => Icons.checklist_outlined,
+      ChapitreGlossaire.culturesEtPlantes => PhosphorIconsRegular.leaf,
+      ChapitreGlossaire.famillesBotaniques => PhosphorIconsRegular.treeStructure,
+      ChapitreGlossaire.santeDuJardin => PhosphorIconsRegular.bandaids,
+      ChapitreGlossaire.solEtTerre => PhosphorIconsRegular.mountains,
+      ChapitreGlossaire.eauEtArrosage => PhosphorIconsRegular.drop,
+      ChapitreGlossaire.outilsEtEquipements => PhosphorIconsRegular.wrench,
+      ChapitreGlossaire.climatEtSaisons => PhosphorIconsRegular.sun,
+      ChapitreGlossaire.associationsEtCompagnonnage => PhosphorIconsRegular.graph,
+      ChapitreGlossaire.gestesEtOrganisation => PhosphorIconsRegular.listChecks,
     };

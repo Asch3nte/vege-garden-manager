@@ -14,6 +14,7 @@ import '../../domain/enums/usage_plante.dart';
 import '../../domain/services/id_fiche_personnelle.dart';
 import '../../domain/value_objects/modele_fiche_personnelle.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the personal-sheet form and returns the saved [FichePlantePersonnelle],
@@ -227,6 +228,7 @@ class _FormulaireFichePersonnelleState
             ),
             _espace(),
             DropdownButtonFormField<CategoriePlante>(
+              icon: const IconeDeroulante(),
               initialValue: _categorie,
               isExpanded: true,
               decoration: _decoration(l10n.fichePersoFormCategorie),
@@ -242,6 +244,7 @@ class _FormulaireFichePersonnelleState
             if (_categorie == CategoriePlante.legume) ...[
               _espace(),
               DropdownButtonFormField<SousTypeLegume?>(
+                icon: const IconeDeroulante(),
                 initialValue: _sousType,
                 isExpanded: true,
                 decoration: _decoration(l10n.fichePersoFormSousType),
@@ -274,6 +277,7 @@ class _FormulaireFichePersonnelleState
             ),
             _Section(titre: l10n.fichePersoFormSectionCulture),
             DropdownButtonFormField<NiveauSoleil>(
+              icon: const IconeDeroulante(),
               initialValue: _ensoleillement,
               isExpanded: true,
               decoration: _decoration(l10n.fichePersoFormEnsoleillement),
@@ -285,6 +289,7 @@ class _FormulaireFichePersonnelleState
             ),
             _espace(),
             DropdownButtonFormField<BesoinEau>(
+              icon: const IconeDeroulante(),
               initialValue: _arrosage,
               isExpanded: true,
               decoration: _decoration(l10n.fichePersoFormArrosage),
@@ -335,6 +340,7 @@ class _FormulaireFichePersonnelleState
             ),
             _espace(),
             DropdownButtonFormField<int?>(
+              icon: const IconeDeroulante(),
               initialValue: _difficulte,
               isExpanded: true,
               decoration: _decoration(l10n.fichePersoFormDifficulte),

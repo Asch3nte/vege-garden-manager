@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../app/theme/dimensions_app.dart';
 
@@ -73,7 +74,7 @@ class ZoneParametres extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.info_outline, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+                Icon(PhosphorIconsRegular.info, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
                 const SizedBox(width: EspacementsApp.s2),
                 Expanded(
                   child: Text(
@@ -140,7 +141,7 @@ class LigneCategorie extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+                Icon(PhosphorIconsRegular.caretRight, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
               ],
             ),
           ),

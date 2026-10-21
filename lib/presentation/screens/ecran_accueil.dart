@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
@@ -43,12 +44,11 @@ class EcranAccueil extends ConsumerWidget {
           IconButton(
             tooltip: l10n.accueilNotificationsTooltip,
             onPressed: () => context.go(RoutesApp.accueilNotifications),
-            icon: nombreAlertes > 0
-                ? Badge.count(
-                    count: nombreAlertes,
-                    child: const Icon(Icons.notifications_outlined),
-                  )
-                : const Icon(Icons.notifications_none_outlined),
+            icon: Badge.count(
+              count: nombreAlertes,
+              isLabelVisible: nombreAlertes > 0,
+              child: const Icon(PhosphorIconsRegular.bell),
+            ),
           ),
         ],
       ),
@@ -171,7 +171,7 @@ class _LigneNiveau extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.verified, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
+              Icon(PhosphorIconsBold.sealCheck, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
               const SizedBox(width: EspacementsApp.s1),
               Text(_libelle(l10n), style: theme.textTheme.labelSmall),
               const SizedBox(width: EspacementsApp.s2),
@@ -192,7 +192,7 @@ class _LigneNiveau extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        Icon(Icons.grid_view, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
+        Icon(PhosphorIconsBold.squaresFour, size: TaillesIconesApp.sm, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: EspacementsApp.s1),
         Text(
           l10n.accueilNbZones(nombreZones),
@@ -230,12 +230,12 @@ class _CarteMeteo extends ConsumerWidget {
 
     final (IconData icone, Widget contenu, VoidCallback? onTap) = async.when(
       loading: () => (
-        Icons.cloud_outlined,
+        PhosphorIconsRegular.cloud,
         Text(l10n.accueilMeteoAVenir, style: muted),
         null,
       ),
       error: (_, _) => (
-        Icons.cloud_off_outlined,
+        PhosphorIconsRegular.cloudSlash,
         Text(l10n.accueilMeteoAVenir, style: muted),
         null,
       ),
@@ -243,20 +243,20 @@ class _CarteMeteo extends ConsumerWidget {
         // Auto weather-fetch opt-out is off: muted, no fetch happened.
         if (vue.meteoDesactivee) {
           return (
-            Icons.cloud_off_outlined,
+            PhosphorIconsRegular.cloudSlash,
             Text(l10n.meteoDesactivee, style: muted),
             null,
           );
         }
         if (!vue.disponible) {
           return (
-            Icons.location_off_outlined,
+            PhosphorIconsRegular.gpsSlash,
             InkWell(
               onTap: () => _definirPosition(context, ref),
               child: Row(
                 children: [
                   Expanded(child: Text(l10n.meteoSansPosition, style: muted)),
-                  Icon(Icons.chevron_right,
+                  Icon(PhosphorIconsRegular.caretRight,
                       size: TaillesIconesApp.md,
                       color: theme.colorScheme.onSurfaceVariant),
                 ],
@@ -281,7 +281,7 @@ class _CarteMeteo extends ConsumerWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.ac_unit,
+                      Icon(PhosphorIconsRegular.snowflake,
                           size: TaillesIconesApp.sm, color: accents.info),
                       const SizedBox(width: EspacementsApp.s1),
                       Text(
@@ -317,7 +317,7 @@ class _CarteMeteo extends ConsumerWidget {
           const SizedBox(width: EspacementsApp.s3),
           Expanded(child: contenu),
           if (onTap != null)
-            Icon(Icons.chevron_right,
+            Icon(PhosphorIconsRegular.caretRight,
                 size: TaillesIconesApp.md,
                 color: theme.colorScheme.onSurfaceVariant),
         ],
@@ -468,10 +468,10 @@ class _LigneGesteState extends State<_LigneGeste> {
                   onPressed: () => widget.onToggleGeste(geste),
                   icon: Icon(
                     fait
-                        ? Icons.check_circle
+                        ? PhosphorIconsBold.checkCircle
                         : geste.partiellementFaite
-                            ? Icons.incomplete_circle
-                            : Icons.radio_button_unchecked,
+                            ? PhosphorIconsRegular.circleHalf
+                            : PhosphorIconsRegular.circle,
                     size: TaillesIconesApp.lg,
                     color: fait || geste.partiellementFaite
                         ? theme.colorScheme.primary
@@ -501,7 +501,7 @@ class _LigneGesteState extends State<_LigneGeste> {
                   ),
                 ),
                 Icon(
-                  _deplie ? Icons.expand_less : Icons.expand_more,
+                  _deplie ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown,
                   color: theme.colorScheme.onSurfaceVariant,
                   semanticLabel: _deplie
                       ? l10n.gesteGroupeReplier
@@ -554,7 +554,7 @@ class _LigneTache extends StatelessWidget {
               tooltip: l10n.tacheMarquerFaite,
               onPressed: onToggle,
               icon: Icon(
-                fait ? Icons.check_circle : Icons.radio_button_unchecked,
+                fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
                 size: TaillesIconesApp.lg,
                 color:
                     fait ? theme.colorScheme.primary : theme.colorScheme.outline,
@@ -570,7 +570,7 @@ class _LigneTache extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.chevron_right, color: theme.colorScheme.outline),
+            Icon(PhosphorIconsRegular.caretRight, color: theme.colorScheme.outline),
           ],
         ),
       ),
@@ -604,7 +604,7 @@ class _GrilleStats extends StatelessWidget {
         children: [
           Expanded(
             child: _TuileStat(
-              icone: Icons.warning_amber_rounded,
+              icone: PhosphorIconsRegular.warning,
               couleur: accents.chaud,
               titre: l10n.accueilAlertes(nombreAlertes),
             ),
@@ -613,7 +613,7 @@ class _GrilleStats extends StatelessWidget {
           Expanded(
             child: statistiquesVisibles
                 ? _TuileStat(
-                    icone: Icons.shopping_basket_outlined,
+                    icone: PhosphorIconsRegular.basket,
                     couleur: CouleursApp.decoAubergine,
                     titre: l10n.accueilRecoltesSaison(nombreRecoltes),
                   )
@@ -680,7 +680,7 @@ class _TuileVerrouillee extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.lock_outline, size: TaillesIconesApp.md, color: CouleursApp.decoAubergine),
+          Icon(PhosphorIconsRegular.lock, size: TaillesIconesApp.md, color: CouleursApp.decoAubergine),
           const SizedBox(width: EspacementsApp.s2),
           Expanded(
             child: Text(
@@ -827,7 +827,7 @@ class _EtatErreur extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
+            Icon(PhosphorIconsRegular.warningCircle, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               l10n.accueilErreurChargement,

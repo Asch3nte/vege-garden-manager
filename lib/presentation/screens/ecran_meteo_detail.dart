@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart'; // EspacementsApp, RayonsApp, TaillesIconesApp
 import '../../app/theme/theme_app.dart';
@@ -12,6 +13,7 @@ import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
+import '../widgets/libelles_enums.dart';
 import '../widgets/redacteur_resume_meteo.dart';
 
 // ── Screen ────────────────────────────────────────────────────────────────────
@@ -136,7 +138,7 @@ class _EnTeteStation extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.location_on_outlined,
+            Icon(PhosphorIconsRegular.mapPin,
                 size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
             const SizedBox(width: EspacementsApp.s2),
             Expanded(
@@ -286,7 +288,7 @@ class _CarteJour extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.air, size: 11, color: fgSub),
+                Icon(PhosphorIconsRegular.wind, size: 11, color: fgSub),
                 const SizedBox(width: 2),
                 Text(
                   '${jour.ventMaxKmh.round()} km/h',
@@ -300,7 +302,7 @@ class _CarteJour extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.water_drop_outlined, size: 11, color: fgSub),
+                  Icon(PhosphorIconsRegular.drop, size: 11, color: fgSub),
                   const SizedBox(width: 2),
                   Text(
                     '$proba %',
@@ -390,7 +392,7 @@ class _ColonneHeure extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.water_drop_outlined, size: 10, color: accents.info),
+                Icon(PhosphorIconsRegular.drop, size: 10, color: accents.info),
                 Text(
                   '$proba %',
                   style: theme.textTheme.labelSmall?.copyWith(
@@ -483,7 +485,7 @@ class _ExplicationTaches extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                _iconeVerdict(vue.verdictArrosage),
+                iconeVerdictMeteo(vue.verdictArrosage),
                 size: TaillesIconesApp.lg,
                 color: _couleurVerdict(vue.verdictArrosage, accents),
               ),
@@ -511,13 +513,6 @@ class _ExplicationTaches extends StatelessWidget {
     );
   }
 
-  IconData _iconeVerdict(VerdictMeteo v) => switch (v) {
-        VerdictMeteo.pluieAVenir     => Icons.umbrella_outlined,
-        VerdictMeteo.solHumide       => Icons.water_drop_outlined,
-        VerdictMeteo.arroserConseille => Icons.opacity,
-        VerdictMeteo.clement         => Icons.eco_outlined,
-      };
-
   Color _couleurVerdict(VerdictMeteo v, AccentsCarnet a) => switch (v) {
         VerdictMeteo.pluieAVenir      => a.info,
         VerdictMeteo.solHumide        => a.info,
@@ -528,18 +523,17 @@ class _ExplicationTaches extends StatelessWidget {
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
 
-/// Maps a WMO weather interpretation code to the most appropriate
-/// Material icon substitute (Phosphor Icons unavailable on Flutter 3.44.x).
+/// Maps a WMO weather interpretation code to the most appropriate icon.
 IconData _iconeWmo(int code) {
-  if (code == 0) return Icons.wb_sunny_outlined;
-  if (code <= 2) return Icons.wb_cloudy_outlined;
-  if (code == 3) return Icons.cloud_outlined;
-  if (code == 45 || code == 48) return Icons.foggy;
-  if (code >= 51 && code <= 57) return Icons.grain;
-  if (code >= 58 && code <= 67) return Icons.water_drop_outlined;
-  if (code >= 71 && code <= 77) return Icons.ac_unit;
-  if (code >= 80 && code <= 82) return Icons.water_drop_outlined;
-  if (code == 85 || code == 86) return Icons.ac_unit;
-  if (code >= 95 && code <= 99) return Icons.thunderstorm_outlined;
-  return Icons.cloud_outlined;
+  if (code == 0) return PhosphorIconsRegular.sun;
+  if (code <= 2) return PhosphorIconsRegular.cloudSun;
+  if (code == 3) return PhosphorIconsRegular.cloud;
+  if (code == 45 || code == 48) return PhosphorIconsRegular.cloudFog;
+  if (code >= 51 && code <= 57) return PhosphorIconsRegular.grains;
+  if (code >= 58 && code <= 67) return PhosphorIconsRegular.drop;
+  if (code >= 71 && code <= 77) return PhosphorIconsRegular.snowflake;
+  if (code >= 80 && code <= 82) return PhosphorIconsRegular.drop;
+  if (code == 85 || code == 86) return PhosphorIconsRegular.snowflake;
+  if (code >= 95 && code <= 99) return PhosphorIconsRegular.cloudLightning;
+  return PhosphorIconsRegular.cloud;
 }

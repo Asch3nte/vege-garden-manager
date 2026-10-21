@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
@@ -22,6 +23,7 @@ import '../forms/formulaire_potager.dart';
 import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/potager_actif_actions.dart';
 
@@ -76,6 +78,7 @@ class EcranPotager extends ConsumerWidget {
         actions: [
           if (potagerId != null)
             PopupMenuButton<_ActionPotager>(
+              icon: const IconeMenuActions(),
               onSelected: (a) => switch (a) {
                 _ActionPotager.changer => _choisirPotager(context, ref),
                 _ActionPotager.ajouter => _ajouterPotager(context, ref),
@@ -118,7 +121,7 @@ class EcranPotager extends ConsumerWidget {
           ? null
           : FloatingActionButton.extended(
               onPressed: ajouterZone,
-              icon: const Icon(Icons.add),
+              icon: const Icon(PhosphorIconsRegular.plus),
               label: Text(l10n.potagerCreerZone),
             ),
       body: vue.when(
@@ -169,7 +172,7 @@ class _BandeauAstuce extends StatelessWidget {
           EspacementsApp.s4, EspacementsApp.s3, EspacementsApp.s2, EspacementsApp.s3),
       child: Row(
         children: [
-          Icon(Icons.lightbulb_outline,
+          Icon(PhosphorIconsRegular.lightbulb,
               size: TaillesIconesApp.md, color: theme.colorScheme.onPrimaryContainer),
           const SizedBox(width: EspacementsApp.s2),
           Expanded(
@@ -181,7 +184,7 @@ class _BandeauAstuce extends StatelessWidget {
           ),
           IconButton(
             visualDensity: VisualDensity.compact,
-            icon: Icon(Icons.close,
+            icon: Icon(PhosphorIconsRegular.x,
                 size: TaillesIconesApp.md, color: theme.colorScheme.onPrimaryContainer),
             tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
             onPressed: onFermer,
@@ -315,7 +318,7 @@ class _FeuilleChoixPotager extends StatelessWidget {
           for (final p in potagers)
             ListTile(
               leading: Icon(
-                p.id == actifId ? Icons.check_circle : Icons.circle_outlined,
+                p.id == actifId ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
                 color: p.id == actifId
                     ? theme.colorScheme.primary
                     : theme.colorScheme.outline,
@@ -353,7 +356,7 @@ class _Contenu extends ConsumerWidget {
               _confirmer(ref, l10n.snackPotagerCree);
             }
           },
-          icon: const Icon(Icons.add),
+          icon: const Icon(PhosphorIconsRegular.plus),
           label: Text(l10n.potagerCreer),
         ),
       );
@@ -587,7 +590,7 @@ class _PastilleTache extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Icon(
-        Icons.water_drop,
+        PhosphorIconsBold.drop,
         size: TaillesIconesApp.sm,
         color: accents.chaud,
       ),
@@ -663,8 +666,8 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.local_florist_outlined,
+            PhosphorIcon(
+              PhosphorIconsDuotone.flower,
               size: TaillesIconesApp.xl2,
               color: theme.colorScheme.secondary,
             ),
@@ -704,7 +707,7 @@ class _EtatErreur extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.error_outline,
+              PhosphorIconsRegular.warningCircle,
               size: TaillesIconesApp.xl2,
               color: theme.colorScheme.error,
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../glossaire/terme_cliquable.dart';
+import 'icones_communes.dart';
 
 /// A [DropdownButtonFormField] whose **menu** shows a short description under
 /// each option's label, while the **closed field** displays the label only
@@ -52,6 +53,8 @@ class ChampDeroulantDecrit<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DropdownButtonFormField<T>(
+      // A glossary help icon takes the place of the arrow.
+      icon: idAideGlossaire == null ? const IconeDeroulante() : null,
       initialValue: value,
       isExpanded: true,
       // Null lets each menu item size to its two-line content (label + helper).

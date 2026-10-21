@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -73,7 +74,7 @@ class CarteTeaserPalier extends StatelessWidget {
           IconButton(
             visualDensity: VisualDensity.compact,
             tooltip: l10n.teaserFermer,
-            icon: Icon(Icons.close,
+            icon: Icon(PhosphorIconsRegular.x,
                 size: TaillesIconesApp.md,
                 color: theme.colorScheme.onSecondaryContainer),
             onPressed: onFermer,

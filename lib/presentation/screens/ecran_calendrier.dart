@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/couleurs_app.dart';
@@ -24,6 +25,7 @@ import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/carte_teaser_palier.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
@@ -59,8 +61,8 @@ class EcranCalendrier extends ConsumerWidget {
         actions: [
           PopupMenuButton<TypeTache?>(
             icon: Icon(notifier.filtreType == null
-                ? Icons.filter_list
-                : Icons.filter_list_alt),
+                ? PhosphorIconsRegular.funnelSimple
+                : PhosphorIconsRegular.funnel),
             tooltip: l10n.calendrierFiltrer,
             onSelected: notifier.definirFiltreType,
             itemBuilder: (context) => [
@@ -70,7 +72,7 @@ class EcranCalendrier extends ConsumerWidget {
             ],
           ),
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(PhosphorIconsRegular.plus),
             tooltip: l10n.calendrierAjouterTache,
             onPressed: creerTache,
           ),
@@ -120,18 +122,18 @@ class _ContenuState extends ConsumerState<_Contenu> {
             segments: [
               ButtonSegment(
                 value: _VueCal.agenda,
-                icon: const Icon(Icons.view_agenda_outlined),
+                icon: const Icon(PhosphorIconsRegular.rows),
                 label: Text(l10n.calendrierVueAgenda),
               ),
               ButtonSegment(
                 value: _VueCal.mois,
-                icon: const Icon(Icons.calendar_month_outlined),
+                icon: const Icon(PhosphorIconsRegular.calendar),
                 label: Text(l10n.calendrierVueMois),
               ),
               if (vueSaisonDispo)
                 ButtonSegment(
                   value: _VueCal.saison,
-                  icon: const Icon(Icons.eco_outlined),
+                  icon: const Icon(PhosphorIconsRegular.leaf),
                   label: Text(l10n.calendrierVueSaison),
                 ),
             ],
@@ -150,7 +152,7 @@ class _ContenuState extends ConsumerState<_Contenu> {
         // Level-up teaser for the locked Saison view.
         if (!vueSaisonDispo && !_teaserFerme)
           CarteTeaserPalier(
-            icone: Icons.eco_outlined,
+            icone: PhosphorIconsRegular.leaf,
             feature: l10n.tutoVueSaisonTitre,
             niveauRequis: NiveauExperience.intermediaire,
             onFermer: () => setState(() => _teaserFerme = true),
@@ -360,7 +362,7 @@ class _BarreMois extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          icon: const Icon(Icons.chevron_left),
+          icon: const Icon(PhosphorIconsRegular.caretLeft),
           onPressed: onPrecedent,
         ),
         Expanded(
@@ -371,7 +373,7 @@ class _BarreMois extends StatelessWidget {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.chevron_right),
+          icon: const Icon(PhosphorIconsRegular.caretRight),
           onPressed: onSuivant,
         ),
         TextButton(onPressed: onAujourdhui, child: Text(l10n.jourAujourdhui)),
@@ -507,7 +509,7 @@ class _CelluleJour extends StatelessWidget {
             SizedBox(
               height: 8,
               child: toutFait
-                  ? Icon(Icons.check,
+                  ? Icon(PhosphorIconsRegular.check,
                       size: 10, color: theme.colorScheme.primary)
                   : _Pastilles(
                       types: groupe?.typesPresents ?? const <TypeTache>[]),
@@ -595,7 +597,7 @@ class _VueSaison extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: EspacementsApp.s3),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline,
+                    Icon(PhosphorIconsRegular.info,
                         size: TaillesIconesApp.sm,
                         color: theme.colorScheme.onSurfaceVariant),
                     const SizedBox(width: EspacementsApp.s2),
@@ -1090,17 +1092,17 @@ class _CarteGesteState extends State<_CarteGeste> {
                     onPressed: () => widget.onCocherGroupe(geste),
                     icon: Icon(
                       fait
-                          ? Icons.check_circle
+                          ? PhosphorIconsBold.checkCircle
                           : geste.partiellementFaite
-                              ? Icons.incomplete_circle
-                              : Icons.radio_button_unchecked,
+                              ? PhosphorIconsRegular.circleHalf
+                              : PhosphorIconsRegular.circle,
                       color: fait || geste.partiellementFaite
                           ? theme.colorScheme.primary
                           : theme.colorScheme.outline,
                     ),
                   ),
                   Icon(
-                    _deplie ? Icons.expand_less : Icons.expand_more,
+                    _deplie ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown,
                     color: theme.colorScheme.onSurfaceVariant,
                     semanticLabel: _deplie
                         ? l10n.gesteGroupeReplier
@@ -1169,7 +1171,7 @@ class _LigneSousTache extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              fait ? Icons.check_circle : Icons.radio_button_unchecked,
+              fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
               size: TaillesIconesApp.md,
               color:
                   fait ? theme.colorScheme.primary : theme.colorScheme.outline,
@@ -1186,6 +1188,7 @@ class _LigneSousTache extends StatelessWidget {
               ),
             ),
             PopupMenuButton<_ActionTache>(
+              icon: const IconeMenuActions(),
               tooltip: l10n.actionsTache,
               onSelected: (action) => switch (action) {
                 _ActionTache.ouvrir => onOuvrir(tache),
@@ -1255,7 +1258,7 @@ class _CarteTache extends StatelessWidget {
                 tooltip: l10n.tacheMarquerFaite,
                 onPressed: () => onCocher(tache),
                 icon: Icon(
-                  fait ? Icons.check_circle : Icons.radio_button_unchecked,
+                  fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
                   color: fait
                       ? theme.colorScheme.primary
                       : theme.colorScheme.outline,
@@ -1304,7 +1307,7 @@ class _CarteTache extends StatelessWidget {
                                 color: theme.colorScheme.onSurfaceVariant),
                           ),
                           Icon(
-                            Icons.place_outlined,
+                            PhosphorIconsRegular.mapPin,
                             size: TaillesIconesApp.sm,
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -1324,6 +1327,7 @@ class _CarteTache extends StatelessWidget {
               ),
               const SizedBox(width: EspacementsApp.s2),
               PopupMenuButton<_ActionTache>(
+                icon: const IconeMenuActions(),
                 tooltip: l10n.actionsTache,
                 onSelected: (action) => switch (action) {
                   // Not offered in this menu — the whole card already opens the
@@ -1400,7 +1404,8 @@ class _EtatVide extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.coffee_outlined, size: TaillesIconesApp.xl2, color: theme.colorScheme.secondary),
+            PhosphorIcon(PhosphorIconsDuotone.coffee,
+                size: TaillesIconesApp.xl2, color: theme.colorScheme.secondary),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               l10n.calendrierVide,
@@ -1430,7 +1435,7 @@ class _EtatErreur extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
+            Icon(PhosphorIconsRegular.warningCircle, size: TaillesIconesApp.xl2, color: theme.colorScheme.error),
             const SizedBox(height: EspacementsApp.s4),
             Text(
               l10n.calendrierErreurChargement,

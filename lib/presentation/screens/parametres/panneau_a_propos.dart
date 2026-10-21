@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
@@ -30,7 +31,7 @@ class PanneauAPropos extends ConsumerWidget {
             CircleAvatar(
               radius: 28,
               backgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.3),
-              child: Icon(Icons.eco, color: theme.colorScheme.primary, size: TaillesIconesApp.xl),
+              child: Icon(PhosphorIconsBold.leaf, color: theme.colorScheme.primary, size: TaillesIconesApp.xl),
             ),
             const SizedBox(height: EspacementsApp.s3),
             Text(l10n.aproposNom, style: theme.textTheme.headlineSmall),
@@ -44,7 +45,7 @@ class PanneauAPropos extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.verified_outlined, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
+                Icon(PhosphorIconsRegular.sealCheck, size: TaillesIconesApp.sm, color: theme.colorScheme.primary),
                 const SizedBox(width: EspacementsApp.s1),
                 Text(
                   l10n.aproposLicence,
@@ -58,12 +59,12 @@ class PanneauAPropos extends ConsumerWidget {
         ZoneParametres(
           enfants: [
             _LigneAction(
-              icone: Icons.code,
+              icone: PhosphorIconsRegular.code,
               label: l10n.aproposCodeSource,
               onTap: () => _ouvrirLien(context, ref, _urlCodeSource),
             ),
             _LigneAction(
-              icone: Icons.description_outlined,
+              icone: PhosphorIconsRegular.fileText,
               label: l10n.aproposLicences,
               onTap: () => showLicensePage(
                 context: context,
@@ -117,7 +118,7 @@ class _LigneAction extends StatelessWidget {
         enabled: onTap != null,
         leading: Icon(icone, color: theme.colorScheme.primary),
         title: Text(label, style: theme.textTheme.bodyMedium),
-        trailing: Icon(Icons.chevron_right, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
+        trailing: Icon(PhosphorIconsRegular.caretRight, size: TaillesIconesApp.md, color: theme.colorScheme.onSurfaceVariant),
         onTap: onTap,
       ),
     );

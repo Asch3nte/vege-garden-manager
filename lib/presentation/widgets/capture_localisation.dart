@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../domain/enums/permission_localisation.dart';
@@ -104,13 +105,13 @@ class _FeuilleCaptureState extends State<_FeuilleCapture> {
                     height: 22,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Icon(Icons.my_location),
+                : const Icon(PhosphorIconsRegular.crosshair),
             title: Text(l10n.formPotagerDetecter),
             onTap: _detection ? null : _detecterGps,
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.public_outlined),
+            leading: const Icon(PhosphorIconsRegular.globe),
             title: Text(l10n.captureCarteChoisir),
             onTap: _detection ? null : _choisirSurCarte,
           ),

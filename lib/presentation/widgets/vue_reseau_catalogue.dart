@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -1135,7 +1136,7 @@ class _LigneVarieteReseau extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.spa_outlined,
+                PhosphorIconsRegular.flowerLotus,
                 size: TaillesIconesApp.sm,
                 color: theme.colorScheme.secondary,
               ),
@@ -1147,7 +1148,7 @@ class _LigneVarieteReseau extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.chevron_right,
+                PhosphorIconsRegular.caretRight,
                 size: TaillesIconesApp.md,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -1384,7 +1385,7 @@ class _ControlesZoom extends StatelessWidget {
         borderRadius: const BorderRadius.all(RayonsApp.md),
         elevation: 1,
         child: IconButton(
-          icon: const Icon(Icons.tune),
+          icon: const Icon(PhosphorIconsRegular.slidersHorizontal),
           tooltip: l10n.reseauReglages,
           onPressed: onOuvrir,
         ),
@@ -1404,29 +1405,29 @@ class _ControlesZoom extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(PhosphorIconsRegular.plus),
               tooltip: l10n.reseauZoomAvant,
               onPressed: onZoomAvant,
             ),
             IconButton(
-              icon: const Icon(Icons.remove),
+              icon: const Icon(PhosphorIconsRegular.minus),
               tooltip: l10n.reseauZoomArriere,
               onPressed: onZoomArriere,
             ),
             IconButton(
-              icon: const Icon(Icons.center_focus_strong_outlined),
+              icon: const Icon(PhosphorIconsRegular.frameCorners),
               tooltip: l10n.reseauRecentrer,
               onPressed: onRecentrer,
             ),
             const Divider(height: 1, indent: 8, endIndent: 8),
             IconButton(
-              icon: const Icon(Icons.polyline_outlined),
+              icon: const Icon(PhosphorIconsRegular.polygon),
               color: teinte(afficherLiens),
               tooltip: l10n.reseauToggleLiens,
               onPressed: onToggleLiens,
             ),
             IconButton(
-              icon: const Icon(Icons.label_outline),
+              icon: const Icon(PhosphorIconsRegular.tag),
               color: teinte(afficherNoms),
               tooltip: l10n.reseauToggleNomsFamille,
               onPressed: onToggleNoms,
@@ -1472,7 +1473,7 @@ class _BarreRecherche extends StatelessWidget {
         borderRadius: const BorderRadius.all(RayonsApp.md),
         elevation: 1,
         child: IconButton(
-          icon: const Icon(Icons.search),
+          icon: const Icon(PhosphorIconsRegular.magnifyingGlass),
           tooltip: l10n.reseauRechercher,
           onPressed: onOuvrir,
         ),
@@ -1507,12 +1508,12 @@ class _BarreRecherche extends StatelessWidget {
                 isDense: true,
                 hintText: l10n.reseauRechercher,
                 border: InputBorder.none,
-                prefixIcon: const Icon(Icons.search, size: TaillesIconesApp.sm),
+                prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass, size: TaillesIconesApp.sm),
                 prefixIconConstraints:
                     const BoxConstraints(minWidth: 36, minHeight: 36),
                 // Always offers a close/clear that collapses + returns to global.
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.close, size: TaillesIconesApp.sm),
+                  icon: const Icon(PhosphorIconsRegular.x, size: TaillesIconesApp.sm),
                   tooltip: l10n.catalogueEffacer,
                   onPressed: onEffacer,
                 ),

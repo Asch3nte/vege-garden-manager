@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/couleurs_termes.dart';
@@ -67,7 +68,7 @@ class LigneTermeGlossaire extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: EspacementsApp.s2),
-                Icon(Icons.chevron_right,
+                Icon(PhosphorIconsRegular.caretRight,
                     size: TaillesIconesApp.md,
                     color: theme.colorScheme.onSurfaceVariant),
               ],

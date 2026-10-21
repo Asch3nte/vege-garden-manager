@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../application/state/acces_niveau_provider.dart';
 import '../../../application/state/preferences_notifier.dart';
@@ -18,12 +19,12 @@ typedef CategorieNotif = ({
 /// The notification categories (shared by the settings panel and the onboarding
 /// notifications step). Each defaults to **on** when absent from the stored map.
 const List<CategorieNotif> categoriesNotifications = [
-  (cle: 'semis', icone: Icons.grain, label: _labelSemis),
-  (cle: 'arrosage', icone: Icons.water_drop_outlined, label: _labelArrosage),
-  (cle: 'recolte', icone: Icons.shopping_basket_outlined, label: _labelRecolte),
-  (cle: 'meteo', icone: Icons.thunderstorm_outlined, label: _labelMeteo),
-  (cle: 'entretien', icone: Icons.content_cut, label: _labelEntretien),
-  (cle: 'rotation', icone: Icons.autorenew, label: _labelRotation),
+  (cle: 'semis', icone: PhosphorIconsRegular.grains, label: _labelSemis),
+  (cle: 'arrosage', icone: PhosphorIconsRegular.drop, label: _labelArrosage),
+  (cle: 'recolte', icone: PhosphorIconsRegular.basket, label: _labelRecolte),
+  (cle: 'meteo', icone: PhosphorIconsRegular.cloudLightning, label: _labelMeteo),
+  (cle: 'entretien', icone: PhosphorIconsRegular.scissors, label: _labelEntretien),
+  (cle: 'rotation', icone: PhosphorIconsRegular.arrowsClockwise, label: _labelRotation),
 ];
 
 /// Category 3 — **Notifications**: a master switch gating per-category toggles.
@@ -58,7 +59,7 @@ class PanneauNotifications extends ConsumerWidget {
         ZoneParametres(
           enfants: [
             RangeeInterrupteur(
-              icone: Icons.notifications_active_outlined,
+              icone: PhosphorIconsRegular.bellRinging,
               label: l10n.notifMaster,
               sousTitre: master ? l10n.notifMasterOn : l10n.notifMasterOff,
               valeur: master,
@@ -90,7 +91,7 @@ class PanneauNotifications extends ConsumerWidget {
             titre: l10n.notifDndTitre,
             enfants: [
               RangeeInterrupteur(
-                icone: Icons.bedtime_outlined,
+                icone: PhosphorIconsRegular.moonStars,
                 label: l10n.notifDnd,
                 sousTitre: l10n.notifDndSousTitre,
                 valeur: prefs.nePasDerangerActif,
@@ -150,7 +151,7 @@ class _LigneHeure extends StatelessWidget {
     return Material(
       type: MaterialType.transparency,
       child: ListTile(
-        leading: const Icon(Icons.schedule_outlined),
+        leading: const Icon(PhosphorIconsRegular.clock),
         title: Text(label),
         trailing: Text(
           tod.format(context),

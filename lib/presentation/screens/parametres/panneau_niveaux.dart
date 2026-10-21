@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/state/acces_niveau_provider.dart';
@@ -27,56 +28,56 @@ typedef _Feature = ({
 final List<_Feature> _features = [
   (
     niveau: NiveauExperience.intermediaire,
-    icone: Icons.hub_outlined,
+    icone: PhosphorIconsRegular.graph,
     titre: (l) => l.tutoVueReseauTitre,
     pourquoi: (l) => l.tutoVueReseauPourquoi,
     comment: (l) => l.tutoVueReseauComment,
   ),
   (
     niveau: NiveauExperience.intermediaire,
-    icone: Icons.eco_outlined,
+    icone: PhosphorIconsRegular.leaf,
     titre: (l) => l.tutoVueSaisonTitre,
     pourquoi: (l) => l.tutoVueSaisonPourquoi,
     comment: (l) => l.tutoVueSaisonComment,
   ),
   (
     niveau: NiveauExperience.intermediaire,
-    icone: Icons.visibility_outlined,
+    icone: PhosphorIconsRegular.eye,
     titre: (l) => l.tutoObservationsTitre,
     pourquoi: (l) => l.tutoObservationsPourquoi,
     comment: (l) => l.tutoObservationsComment,
   ),
   (
     niveau: NiveauExperience.intermediaire,
-    icone: Icons.grass_outlined,
+    icone: PhosphorIconsRegular.plant,
     titre: (l) => l.tutoTechniquesSolTitre,
     pourquoi: (l) => l.tutoTechniquesSolPourquoi,
     comment: (l) => l.tutoTechniquesSolComment,
   ),
   (
     niveau: NiveauExperience.intermediaire,
-    icone: Icons.nightlight_outlined,
+    icone: PhosphorIconsRegular.moon,
     titre: (l) => l.tutoLunaireTitre,
     pourquoi: (l) => l.tutoLunairePourquoi,
     comment: (l) => l.tutoLunaireComment,
   ),
   (
     niveau: NiveauExperience.intermediaire,
-    icone: Icons.notifications_outlined,
+    icone: PhosphorIconsRegular.bell,
     titre: (l) => l.tutoNotifsCategTitre,
     pourquoi: (l) => l.tutoNotifsCategPourquoi,
     comment: (l) => l.tutoNotifsCategComment,
   ),
   (
     niveau: NiveauExperience.expert,
-    icone: Icons.science_outlined,
+    icone: PhosphorIconsRegular.flask,
     titre: (l) => l.tutoSolTexturePhTitre,
     pourquoi: (l) => l.tutoSolTexturePhPourquoi,
     comment: (l) => l.tutoSolTexturePhComment,
   ),
   (
     niveau: NiveauExperience.expert,
-    icone: Icons.bar_chart_outlined,
+    icone: PhosphorIconsRegular.chartBar,
     titre: (l) => l.tutoStatsTitre,
     pourquoi: (l) => l.tutoStatsPourquoi,
     comment: (l) => l.tutoStatsComment,

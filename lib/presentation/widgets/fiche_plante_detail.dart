@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -23,6 +24,7 @@ import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import 'badge_perso.dart';
 import 'calendrier_semis_recolte.dart';
+import 'icones_communes.dart';
 import 'langue_contexte.dart';
 import 'libelles_enums.dart';
 
@@ -182,13 +184,13 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
               Padding(
                 padding: const EdgeInsets.only(right: EspacementsApp.s1),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(PhosphorIconsRegular.arrowLeft),
                   tooltip: l10n.ficheRetourEspece,
                   onPressed: () => _revenirEspece(mere),
                 ),
               )
             else
-              Icon(Icons.eco,
+              Icon(PhosphorIconsBold.leaf,
                   size: TaillesIconesApp.xl, color: theme.colorScheme.primary),
             const SizedBox(width: EspacementsApp.s3),
             Expanded(
@@ -219,7 +221,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
             // editable copy, or edit the personal sheet shown here.
             if (accesPerso)
               PopupMenuButton<_ActionFichePerso>(
-                icon: const Icon(Icons.more_vert),
+                icon: const IconeMenuActions(),
                 onSelected: (a) => switch (a) {
                   _ActionFichePerso.dupliquer => _dupliquer(),
                   _ActionFichePerso.modifier => _modifierPerso(),
@@ -230,7 +232,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                       value: _ActionFichePerso.modifier,
                       child: Row(
                         children: [
-                          const Icon(Icons.edit_outlined,
+                          const Icon(PhosphorIconsRegular.pencilSimple,
                               size: TaillesIconesApp.sm),
                           const SizedBox(width: EspacementsApp.s2),
                           Flexible(child: Text(l10n.fichePersoModifierFiche)),
@@ -242,7 +244,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                       value: _ActionFichePerso.dupliquer,
                       child: Row(
                         children: [
-                          const Icon(Icons.copy_outlined,
+                          const Icon(PhosphorIconsRegular.copy,
                               size: TaillesIconesApp.sm),
                           const SizedBox(width: EspacementsApp.s2),
                           Flexible(child: Text(l10n.fichePersoDupliquer)),
@@ -323,7 +325,7 @@ class _FichePlanteDetailState extends ConsumerState<_FichePlanteDetail> {
                         Navigator.of(context).pop();
                         onAjouter(_fiche);
                       },
-                      icon: const Icon(Icons.add),
+                      icon: const Icon(PhosphorIconsRegular.plus),
                       label: Text(l10n.ficheAjouterAuPotager),
                     ),
                   ),
@@ -454,7 +456,7 @@ class _SelecteurVariete extends StatelessWidget {
                     ?.copyWith(color: theme.colorScheme.primary),
               ),
             ),
-            Icon(Icons.arrow_drop_down, color: theme.colorScheme.primary),
+            Icon(PhosphorIconsRegular.caretDown, color: theme.colorScheme.primary),
           ],
         ),
       ),
@@ -526,7 +528,7 @@ class _ListeVarietesState extends State<_ListeVarietes> {
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   hintText: l10n.ficheVarieteRecherche,
-                  prefixIcon: const Icon(Icons.search),
+                  prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass),
                   border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
                   isDense: true,
                 ),
@@ -550,7 +552,7 @@ class _ListeVarietesState extends State<_ListeVarietes> {
                     final v = resultats[i];
                     final selectionne = v.id == widget.courante.id;
                     return ListTile(
-                      leading: Icon(Icons.spa_outlined,
+                      leading: Icon(PhosphorIconsRegular.flowerLotus,
                           color: theme.colorScheme.secondary),
                       title: Text(v.nomLocalise(context.langue)),
                       subtitle: Text(
@@ -558,7 +560,7 @@ class _ListeVarietesState extends State<_ListeVarietes> {
                         style: const TextStyle(fontStyle: FontStyle.italic),
                       ),
                       trailing: selectionne
-                          ? Icon(Icons.check, color: theme.colorScheme.primary)
+                          ? Icon(PhosphorIconsRegular.check, color: theme.colorScheme.primary)
                           : null,
                       selected: selectionne,
                       onTap: () => Navigator.of(context).pop(v),
@@ -600,26 +602,26 @@ class _Faits extends StatelessWidget {
     // clickable term towards its concept page.
     final faits = <(IconData, String, String, String?)>[
       (
-        Icons.wb_sunny_outlined,
+        PhosphorIconsRegular.sun,
         l10n.ficheExposition,
         expo,
         TermeGlossaire.idNotion('exposition'),
       ),
       (
-        Icons.water_drop_outlined,
+        PhosphorIconsRegular.drop,
         l10n.ficheArrosage,
         l10n.besoinEau(b.eau),
         TermeGlossaire.idNotion('besoin-eau'),
       ),
       (
-        Icons.straighten,
+        PhosphorIconsRegular.ruler,
         l10n.ficheEspacement,
         l10n.ficheEspacementCm(fiche.espacementCm),
         null,
       ),
       if (hMin != null || hMax != null)
         (
-          Icons.height,
+          PhosphorIconsRegular.arrowsVertical,
           l10n.ficheHauteur,
           (hMin != null && hMax != null && hMin != hMax)
               ? l10n.ficheHauteurCm(hMin, hMax)
@@ -627,14 +629,14 @@ class _Faits extends StatelessWidget {
           null,
         ),
       (
-        Icons.science_outlined,
+        PhosphorIconsRegular.flask,
         l10n.fichePh,
         l10n.fichePhPlage(
             _ph(b.phMin, l10n.localeName), _ph(b.phMax, l10n.localeName)),
         TermeGlossaire.idNotion('ph-sol'),
       ),
       (
-        Icons.eco_outlined,
+        PhosphorIconsRegular.leaf,
         l10n.ficheRecolte,
         l10n.ficheRecolteJours(
           fiche.dureeAvantRecolteJoursMin,
@@ -874,7 +876,7 @@ class _SectionArrosageDetaille extends StatelessWidget {
         const SizedBox(height: EspacementsApp.s3),
         if (detail.aFrequence)
           ligne(
-            Icons.schedule,
+            PhosphorIconsRegular.clock,
             l10n.ficheArrosageFrequence,
             detail.frequenceJoursMin == detail.frequenceJoursMax
                 ? l10n.ficheArrosageFrequenceJoursUnique(
@@ -884,7 +886,7 @@ class _SectionArrosageDetaille extends StatelessWidget {
           ),
         if (detail.aVolume)
           ligne(
-            Icons.water_drop_outlined,
+            PhosphorIconsRegular.drop,
             l10n.ficheArrosageVolume,
             detail.volumeLitresM2Min == detail.volumeLitresM2Max
                 ? l10n.ficheArrosageVolumeLitresUnique(
@@ -1071,7 +1073,7 @@ class _BandeauAssociation extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(contexte.bon ? Icons.favorite_outline : Icons.block,
+              Icon(contexte.bon ? PhosphorIconsRegular.heart : PhosphorIconsRegular.prohibit,
                   size: TaillesIconesApp.sm, color: couleur),
               const SizedBox(width: EspacementsApp.s2),
               Expanded(

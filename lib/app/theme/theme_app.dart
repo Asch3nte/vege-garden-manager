@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import 'couleurs_app.dart';
 import 'couleurs_termes.dart';
@@ -155,6 +156,12 @@ abstract final class ThemeApp {
       textTheme: texte,
       fontFamily: TypographieApp.familleCorps,
       extensions: [accents, termes],
+      // Framework-provided back/close buttons use the Phosphor set too.
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (_) =>
+            const Icon(PhosphorIconsRegular.arrowLeft),
+        closeButtonIconBuilder: (_) => const Icon(PhosphorIconsRegular.x),
+      ),
       cardTheme: CardThemeData(
         color: scheme.surfaceContainer,
         elevation: 0,

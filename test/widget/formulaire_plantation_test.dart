@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
@@ -203,7 +204,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // The plant is shown locked (no dropdown to open), so saving works directly.
-    expect(find.byIcon(Icons.lock_outline), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.lock), findsOneWidget);
     expect(find.text('Tomate'), findsOneWidget);
 
     await tester.tap(find.text('Enregistrer'));

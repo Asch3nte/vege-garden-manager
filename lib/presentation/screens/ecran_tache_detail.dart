@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
@@ -12,6 +13,7 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/titre_tache.dart';
 
@@ -39,6 +41,7 @@ class EcranTacheDetail extends ConsumerWidget {
         actions: [
           if (vue.value != null)
             PopupMenuButton<_ActionMenu>(
+              icon: const IconeMenuActions(),
               onSelected: (a) => switch (a) {
                 _ActionMenu.modifier => _modifier(context, ref, vue.value!.tache),
                 _ActionMenu.supprimer =>
@@ -160,12 +163,12 @@ class _Contenu extends ConsumerWidget {
           children: [
             _Puce(
               icone: tache.estFaite
-                  ? Icons.check_circle
-                  : Icons.radio_button_unchecked,
+                  ? PhosphorIconsBold.checkCircle
+                  : PhosphorIconsRegular.circle,
               texte: l10n.etatTache(tache.etat),
             ),
             _Puce(
-              icone: Icons.flag_outlined,
+              icone: PhosphorIconsRegular.flag,
               texte: l10n.prioriteTache(tache.priorite),
             ),
           ],
@@ -176,11 +179,11 @@ class _Contenu extends ConsumerWidget {
         if (vue.cibleNom != null)
           Card(
             child: ListTile(
-              leading: const Icon(Icons.place_outlined),
+              leading: const Icon(PhosphorIconsRegular.mapPin),
               title: Text(vue.cibleNom!),
               subtitle: Text(l10n.tacheDetailCible),
               trailing: vue.cibleRoute != null
-                  ? const Icon(Icons.chevron_right)
+                  ? const Icon(PhosphorIconsRegular.caretRight)
                   : null,
               onTap: vue.cibleRoute != null
                   ? () => context.go(vue.cibleRoute!)
@@ -191,7 +194,7 @@ class _Contenu extends ConsumerWidget {
         // Planned date + reschedule.
         Card(
           child: ListTile(
-            leading: const Icon(Icons.event_outlined),
+            leading: const Icon(PhosphorIconsRegular.calendarCheck),
             title: Text(FormatDates.de(context).jourMoisAnnee(tache.datePrevue)),
             subtitle: Text(l10n.tacheDetailDatePrevue),
             trailing: TextButton(
@@ -260,7 +263,7 @@ class _Contenu extends ConsumerWidget {
         // Primary action: complete / reopen.
         FilledButton.icon(
           onPressed: () => notifier.basculerFait(),
-          icon: Icon(tache.estFaite ? Icons.undo : Icons.check),
+          icon: Icon(tache.estFaite ? PhosphorIconsRegular.arrowCounterClockwise : PhosphorIconsRegular.check),
           label: Text(
               tache.estFaite ? l10n.tacheRouvrir : l10n.tacheMarquerFaite),
         ),
@@ -269,7 +272,7 @@ class _Contenu extends ConsumerWidget {
         if (tache.etat != EtatTache.annulee)
           OutlinedButton.icon(
             onPressed: () => _annuler(context, ref, notifier, tache),
-            icon: const Icon(Icons.block_outlined),
+            icon: const Icon(PhosphorIconsRegular.prohibit),
             label: Text(l10n.tacheAnnuler),
           ),
       ],

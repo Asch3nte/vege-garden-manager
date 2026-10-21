@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
@@ -169,7 +170,7 @@ void main() {
     await pomper(tester);
 
     // The search is collapsed to a magnifier; open it first.
-    await tester.tap(find.byIcon(Icons.search));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.magnifyingGlass));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'tom');
     await tester.testTextInput.receiveAction(TextInputAction.search);
@@ -183,7 +184,7 @@ void main() {
   testWidgets('name search ignores accents and case', (tester) async {
     await pomper(tester);
 
-    await tester.tap(find.byIcon(Icons.search));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.magnifyingGlass));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'TÔMA');
     await tester.testTextInput.receiveAction(TextInputAction.search);
@@ -197,7 +198,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    await tester.tap(find.byIcon(Icons.search));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.magnifyingGlass));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'zzz');
     await tester.testTextInput.receiveAction(TextInputAction.search);
@@ -211,7 +212,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    await tester.tap(find.byIcon(Icons.search));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.magnifyingGlass));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'tom');
     await tester.testTextInput.receiveAction(TextInputAction.search);
@@ -224,7 +225,7 @@ void main() {
 
     // Clearing (the close icon) deselects (back to the global view) and
     // collapses the field back to the magnifier (tweaks #2/#5).
-    await tester.tap(find.byIcon(Icons.close));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.x));
     await tester.pumpAndSettle();
     expect(
       find.text('Touchez une plante pour voir ses associations.'),
@@ -241,18 +242,18 @@ void main() {
     // Collapsed → the zoom controls are hidden behind a single tune button.
     expect(find.byTooltip('Zoomer'), findsNothing);
 
-    await tester.tap(find.byIcon(Icons.tune));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.slidersHorizontal));
     await tester.pumpAndSettle();
 
     // Opened → zoom controls plus the links and family-names toggles.
     expect(find.byTooltip('Zoomer'), findsOneWidget);
-    expect(find.byIcon(Icons.polyline_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.label_outline), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.polygon), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.tag), findsOneWidget);
 
     // Toggling them does not throw.
-    await tester.tap(find.byIcon(Icons.polyline_outlined));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.polygon));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.label_outline));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.tag));
     await tester.pumpAndSettle();
   });
 
@@ -413,7 +414,7 @@ void main() {
     final baseline = tester.getCenter(find.text('T'));
 
     // The zoom/recenter controls live in the collapsible display menu; open it.
-    await tester.tap(find.byIcon(Icons.tune));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.slidersHorizontal));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Zoomer'));
@@ -650,7 +651,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Open the collapsible display menu to reach the zoom controls.
-    await tester.tap(find.byIcon(Icons.tune));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.slidersHorizontal));
     await tester.pumpAndSettle();
 
     // Zooming out shrinks the on-screen gaps until the constant-size labels
@@ -784,7 +785,7 @@ void main() {
     // that moves with the zoom); since #2 the selection itself merges into its
     // family group's disc, so "T" is no longer a standalone constellation node.
     final avant = tester.getCenter(find.text('Basilic'));
-    await tester.tap(find.byIcon(Icons.tune));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.slidersHorizontal));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Zoomer'));
     await tester.pumpAndSettle();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
@@ -8,6 +9,7 @@ import '../../domain/entities/observation.dart';
 import '../../domain/enums/cible_observation.dart';
 import '../../domain/enums/type_observation.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
 /// Opens the "record an observation" form for the plantation [plantationId] and
@@ -98,6 +100,7 @@ class _FormulaireObservationState extends ConsumerState<FormulaireObservation> {
           padding: const EdgeInsets.all(EspacementsApp.s4),
           children: [
             DropdownButtonFormField<TypeObservation>(
+              icon: const IconeDeroulante(),
               initialValue: _type,
               isExpanded: true,
               decoration: InputDecoration(
@@ -133,7 +136,7 @@ class _FormulaireObservationState extends ConsumerState<FormulaireObservation> {
                   Expanded(child: Text(dateLabel)),
                   TextButton.icon(
                     onPressed: _choisirDate,
-                    icon: const Icon(Icons.calendar_today, size: TaillesIconesApp.sm),
+                    icon: const Icon(PhosphorIconsRegular.calendarBlank, size: TaillesIconesApp.sm),
                     label: Text(l10n.formObservationDate),
                   ),
                 ],

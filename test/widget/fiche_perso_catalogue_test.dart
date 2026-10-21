@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
@@ -133,7 +134,7 @@ void main() {
     await tester.tap(find.text('Tomate'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
 
     expect(find.text('Dupliquer en fiche perso'), findsOneWidget);
@@ -147,7 +148,7 @@ void main() {
     await tester.tap(find.text('Basilic de mémé'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
     await tester.pumpAndSettle();
 
     expect(find.text('Modifier cette fiche'), findsOneWidget);
@@ -164,6 +165,6 @@ void main() {
     // No editor menu on the detail sheet for a non-expert.
     await tester.tap(find.text('Tomate'));
     await tester.pumpAndSettle();
-    expect(find.byIcon(Icons.more_vert), findsNothing);
+    expect(find.byIcon(PhosphorIconsRegular.dotsThreeVertical), findsNothing);
   });
 }
