@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Pins the test-time platform locale to French.
+/// Pins the test-time platform locale to French and makes missed taps fatal.
 ///
 /// Every widget test asserts against French UI strings. Before the English
 /// ARB (`app_en.arb`) existed, the app only had one supported locale, so
@@ -19,5 +19,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher;
   dispatcher.localeTestValue = const Locale('fr');
   dispatcher.localesTestValue = const [Locale('fr')];
+  // A tap that misses its widget fails instead of passing by side effect.
+  WidgetController.hitTestWarningShouldBeFatal = true;
   await testMain();
 }
