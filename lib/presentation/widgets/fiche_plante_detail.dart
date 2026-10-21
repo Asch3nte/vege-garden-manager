@@ -16,6 +16,7 @@ import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/type_bioagresseur.dart';
 import '../../domain/exceptions/invariant_domaine_exception.dart';
+import '../../domain/services/comparateur_noms.dart';
 import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../domain/value_objects/arrosage_detaille.dart';
 import '../../domain/value_objects/modele_fiche_personnelle.dart';
@@ -544,12 +545,13 @@ class _ListeVarietesState extends State<_ListeVarietes> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final terme = _requete.trim().toLowerCase();
+    const comparateur = ComparateurNoms();
+    final terme = comparateur.replier(_requete.trim());
     final resultats = [
       for (final v in widget.varietes)
         if (terme.isEmpty ||
-            v.nomLocalise(context.langue).toLowerCase().contains(terme) ||
-            v.nomScientifique.toLowerCase().contains(terme))
+            comparateur.replier(v.nomLocalise(context.langue)).contains(terme) ||
+            comparateur.replier(v.nomScientifique).contains(terme))
           v,
     ];
 
@@ -770,7 +772,8 @@ class _Compagnon {
     this.raison,
   });
 
-  static int parNom(_Compagnon a, _Compagnon b) => a.nom.compareTo(b.nom);
+  static int parNom(_Compagnon a, _Compagnon b) =>
+      const ComparateurNoms().comparer(a.nom, b.nom);
 }
 
 /// Companion plants, good ones and ones to avoid, each with its reason.

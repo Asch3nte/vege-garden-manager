@@ -1,12 +1,12 @@
 import '../../domain/entities/bioagresseur.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/enums/type_bioagresseur.dart';
+import '../../domain/services/comparateur_noms.dart';
 import '../../l10n/app_localizations.dart';
 import 'catalogue_notions.dart';
 import 'chapitre_glossaire.dart';
 import 'complement_terme.dart';
 import 'illustrations_glossaire.dart';
-import 'recherche_glossaire.dart';
 import 'terme_glossaire.dart';
 import 'type_terme_glossaire.dart';
 
@@ -56,8 +56,7 @@ List<TermeGlossaire> construireGlossaire({
           ),
         ],
       ),
-  ]..sort((a, b) =>
-      normaliserRecherche(a.titre).compareTo(normaliserRecherche(b.titre)));
+  ]..sort((a, b) => const ComparateurNoms().comparer(a.titre, b.titre));
 
   final termesBioagresseurs = [
     for (final bio in bioagresseurs)
@@ -84,8 +83,7 @@ List<TermeGlossaire> construireGlossaire({
           ),
         ],
       ),
-  ]..sort((a, b) =>
-      normaliserRecherche(a.titre).compareTo(normaliserRecherche(b.titre)));
+  ]..sort((a, b) => const ComparateurNoms().comparer(a.titre, b.titre));
 
   return List<TermeGlossaire>.unmodifiable([
     for (final terme in [

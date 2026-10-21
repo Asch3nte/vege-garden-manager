@@ -148,6 +148,30 @@ void main() {
     expect(ligne.recolte, const Periode(7, 9));
   });
 
+  test('orders plants alphabetically, accents included', () async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1')]);
+    when(() => plantations.obtenirParParcelle('z-1')).thenAnswer((_) async => [
+          unePlantation('tomate', 'z-1'),
+          unePlantation('epinard', 'z-1'),
+          unePlantation('fraise', 'z-1'),
+        ]);
+    for (final (id, nom) in [
+      ('tomate', 'Tomate'),
+      ('epinard', 'Épinard'),
+      ('fraise', 'Fraise'),
+    ]) {
+      when(() => fiches.obtenirParId(id))
+          .thenAnswer((_) async => uneFiche(id, nom));
+    }
+
+    final vue = await conteneur().read(saisonProvider.future);
+
+    expect(vue.lignes.map((l) => l.nom), ['Épinard', 'Fraise', 'Tomate']);
+  });
+
   test('a southern latitude derives the southern hemisphere', () async {
     when(() => potagers.obtenirPotagerActif()).thenAnswer(
       (_) async => unPotager(

@@ -3,6 +3,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
+import '../../domain/services/comparateur_noms.dart';
 import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'catalogue_vue.dart';
@@ -15,6 +16,8 @@ import 'catalogue_vue.dart';
 /// notifier keeps the full list privately and rebuilds the [CatalogueVue] on
 /// every filter change.
 class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
+  static const _comparateur = ComparateurNoms();
+
   /// Language of the displayed crop names.
   String get _locale => ref.read(codeLangueProvider);
 
@@ -66,11 +69,11 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
   /// varieties match, just those are expanded under the species; otherwise all
   /// of them are.
   CatalogueVue _projeter() {
-    final terme = _requete.trim().toLowerCase();
+    final terme = _comparateur.replier(_requete.trim());
     int parNom(FichePlante a, FichePlante b) =>
-        a.nomLocalise(_locale).compareTo(b.nomLocalise(_locale));
+        _comparateur.comparer(a.nomLocalise(_locale), b.nomLocalise(_locale));
     bool correspond(FichePlante f) =>
-        f.nomLocalise(_locale).toLowerCase().contains(terme) ||
+        _comparateur.replier(f.nomLocalise(_locale)).contains(terme) ||
         f.id.toLowerCase().contains(terme);
     String cleFamille(FichePlante f) =>
         FamilleBotanique.normaliserCle(f.familleBotanique);
@@ -122,7 +125,8 @@ class CatalogueNotifier extends AsyncNotifier<CatalogueVue> {
     final familles = [
       for (final cle in cles)
         if (_famillesParId[cle] != null) _famillesParId[cle]!,
-    ]..sort((a, b) => a.nomLocalise(_locale).compareTo(b.nomLocalise(_locale)));
+    ]..sort((a, b) =>
+        _comparateur.comparer(a.nomLocalise(_locale), b.nomLocalise(_locale)));
     return familles;
   }
 }

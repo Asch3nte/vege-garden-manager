@@ -246,6 +246,28 @@ void main() {
     expect(find.text('Courgette'), findsNothing);
   });
 
+  testWidgets('the variety search ignores accents', (tester) async {
+    when(() => fiches.obtenirToutes()).thenAnswer((_) async => [
+          fiche('tomate', 'Tomate', CategoriePlante.legume),
+          fiche('tomate-cdb', 'Cœur de bœuf', CategoriePlante.legume,
+              parentId: 'tomate'),
+          fiche('tomate-cerise', 'Cerise', CategoriePlante.legume,
+              parentId: 'tomate'),
+        ]);
+    await monter(tester);
+    await tester.tap(find.text('Tomate'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choisir variété…'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Rechercher une variété'), 'coeur');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Aucune variété ne correspond.'), findsNothing);
+    expect(find.text('Cerise'), findsNothing);
+  });
+
   testWidgets('a card shows the growing difficulty', (tester) async {
     when(() => fiches.obtenirToutes()).thenAnswer((_) async => [
           fiche('tomate', 'Tomate', CategoriePlante.legume, difficulte: 3),

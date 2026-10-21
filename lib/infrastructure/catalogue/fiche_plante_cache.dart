@@ -1,6 +1,7 @@
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/categorie_plante.dart';
 import '../../domain/enums/usage_plante.dart';
+import '../../domain/services/comparateur_noms.dart';
 
 /// In-memory store of the loaded plant sheets, indexed by id for instant access.
 ///
@@ -40,12 +41,13 @@ class FichePlanteCache {
       List.unmodifiable(_parId.values.where((f) => f.aUsage(usage)));
 
   /// Sheets whose localized name (in [locale]) or id contains [terme]
-  /// (case-insensitive).
+  /// (case- and accent-insensitive).
   List<FichePlante> rechercher(String terme, String locale) {
-    final t = terme.trim().toLowerCase();
+    const comparateur = ComparateurNoms();
+    final t = comparateur.replier(terme.trim());
     if (t.isEmpty) return toutes();
     return List.unmodifiable(_parId.values.where((f) =>
-        f.nomLocalise(locale).toLowerCase().contains(t) ||
+        comparateur.replier(f.nomLocalise(locale)).contains(t) ||
         f.id.toLowerCase().contains(t)));
   }
 }
