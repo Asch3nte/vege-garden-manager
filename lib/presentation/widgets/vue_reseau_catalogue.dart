@@ -14,8 +14,7 @@ import 'langue_contexte.dart';
 import 'reseau/halo_famille.dart';
 import 'reseau/layout_reseau_familles.dart';
 
-/// Decorative accent colour for a plant category (network nodes, mirrors the
-/// per-category colour of the `catalogue.jsx` mock-up).
+/// Decorative accent colour for a plant category (network nodes).
 Color couleurCategorie(CategoriePlante c) => switch (c) {
   CategoriePlante.legume => CouleursApp.accentChaudClair,
   CategoriePlante.aromatique => CouleursApp.decoVertMoyen,
@@ -73,7 +72,7 @@ class _TransformReseau {
 /// non-overlapping family bubbles, with edges between companion (and
 /// "to avoid") plants.
 ///
-/// Reimplemented from the `catalogue.jsx` `ReseauView`. Tapping a node selects
+/// Tapping a node selects
 /// it (highlighting its neighbours); tapping the selected node — or "Voir la
 /// fiche" — opens its detail sheet. Associations come from the entity predicates
 /// `sAssocieBienAvec` / `entreEnConflitAvec`, so no extra data is needed.
@@ -1049,7 +1048,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   }
 
   /// The focus node layer: faded context bubbles plus **one grouped node per
-  /// family among the selection and its links**. The selected node now
+  /// family among the selection and its links**. The selected node
   /// merges **into** its own family group — listed first with a neutral label —
   /// so a same-family companion sits beside it under a single family node (no
   /// separate "selected node" disc). Each name is tappable (the selection →

@@ -1,4 +1,5 @@
-/// Confidence level of a *derived* companion-planting suggestion. The derivation engine infers associations from plant traits/usages;
+/// Confidence level of a *derived* companion-planting suggestion. The
+/// derivation engine infers associations from plant traits/usages;
 /// some inferences are clear-cut, others approximate — this qualifies how sure
 /// the suggestion is, so the UI can present it honestly and the recommendation
 /// engine can weight or filter it.

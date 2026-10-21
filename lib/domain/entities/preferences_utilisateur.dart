@@ -12,7 +12,8 @@ import '../value_objects/profil_ponderation_associations.dart';
 ///
 /// A singleton (`id == 'singleton'`) and **immutable**: every change produces a
 /// new instance via [copierAvec] (or the dedicated do-not-disturb helpers).
-/// Because it is a singleton configuration, equality is **by value** (unlike the
+/// Because it is a singleton configuration, equality is **by value** (unlike
+/// the
 /// other entities, which use identity).
 ///
 /// Domain names are kept in French; the code is documented in English.
@@ -156,7 +157,8 @@ class PreferencesUtilisateur {
   ProfilPonderationAssociations get ponderationAssociations =>
       _ponderationAssociations;
 
-  /// The id of the garden the user last selected as active, or `null` if none was ever chosen — the repository then
+  /// The id of the garden the user last selected as active, or `null` if none
+  /// was ever chosen — the repository then
   /// falls back to the earliest-created garden.
   String? get potagerActifId => _potagerActifId;
 

@@ -88,7 +88,6 @@ class FichePlanteMapper {
       profondeurSolMinCm: cycle['profondeur_sol_min_cm'] as int?,
       compatibleHorsSol: cycle['compatible_hors_sol'] as bool? ?? true,
       cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
-      // Hauteur adulte [min, max]
       hauteurAdulteCmMin: (cycle['hauteur_adulte_cm'] as List?)?[0] as int?,
       hauteurAdulteCmMax: (cycle['hauteur_adulte_cm'] as List?)?[1] as int?,
       fixeAzote: rotation?['fixe_azote'] as bool? ?? false,

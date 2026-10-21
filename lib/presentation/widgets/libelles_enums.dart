@@ -544,8 +544,7 @@ IconData iconeTypeTache(TypeTache t) => switch (t) {
       TypeTache.autre => Icons.task_alt_outlined,
     };
 
-/// Decorative dot colour for a task type (calendar month grid), echoing the
-/// per-gesture colours of the `calendrier.jsx` mock-up. Uses the static
+/// Decorative dot colour for a task type (calendar month grid). Uses the static
 /// decorative palette so it is theme-independent.
 Color couleurTypeTache(TypeTache t) => switch (t) {
       TypeTache.arrosage => CouleursApp.accentInfoClair,
@@ -594,8 +593,7 @@ IconData iconeVerdictMeteo(VerdictMeteo v) => switch (v) {
       VerdictMeteo.clement => Icons.cloud_outlined,
     };
 
-/// Display order of categories in the catalogue filter chips and grouped list,
-/// matching the mock-up's `CAT_ORDER`.
+/// Display order of categories in the catalogue filter chips and grouped list.
 const List<CategoriePlante> ordreCategories = [
   CategoriePlante.legume,
   CategoriePlante.aromatique,

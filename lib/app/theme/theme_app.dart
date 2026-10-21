@@ -174,7 +174,7 @@ abstract final class ThemeApp {
         style: FilledButton.styleFrom(
           shape: const RoundedRectangleBorder(borderRadius: RayonsApp.brMd),
           textStyle: texte.labelLarge,
-          minimumSize: const Size(0, 48), // 48dp touch target (docs/08 §8).
+          minimumSize: const Size(0, 48), // 48dp touch target.
         ),
       ),
       dividerTheme: DividerThemeData(color: scheme.outline, thickness: 1),

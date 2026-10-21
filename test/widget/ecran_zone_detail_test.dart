@@ -452,7 +452,7 @@ void main() {
     expect(find.text('PLAN'), findsOneWidget);
   });
 
-  // ── Rotation section (expert, rotation avancée Lot 4) ─────────────────────
+  // ── Rotation section (expert) ─────────────────────────────────────────────
 
   FichePlante ficheRotation() => FichePlante(
         id: 'tomate',

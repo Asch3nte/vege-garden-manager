@@ -9,7 +9,8 @@ import 'couleurs_app.dart';
 /// recognisable at a glance.
 ///
 /// Values reuse the « Carnet vivant » palette tokens (no new
-/// colour is invented); the dark variants come from the dark palette and must be
+/// colour is invented); the dark variants come from the dark palette and must
+/// be
 /// revisited when the dark mode is actually designed.
 class CouleursTermes extends ThemeExtension<CouleursTermes> {
   /// Botanical families — sage green (primary accent).

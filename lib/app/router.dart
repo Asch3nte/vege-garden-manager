@@ -361,10 +361,9 @@ final routeurProvider = Provider<GoRouter>((ref) {
                 path: RoutesApp.accueil,
                 builder: (context, state) => const EcranAccueil(),
                 routes: [
-                  // Hourly weather detail (opened from the weather card). The
-                  // zone detail is no longer registered here: a dashboard zone
-                  // tile now jumps to the Potager branch, and the global
-                  // back stack returns to the dashboard.
+                  // Hourly weather detail (opened from the weather card). A
+                  // dashboard zone tile jumps to the zone detail on the Potager
+                  // branch; the global back stack returns to the dashboard.
                   GoRoute(
                     path: RoutesApp.accueilMeteoSegment,
                     builder: (context, state) =>

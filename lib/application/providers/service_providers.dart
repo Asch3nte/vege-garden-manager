@@ -14,7 +14,7 @@ import 'non_branche.dart';
 
 /// Domain service ports. Their implementations are bound by the composition
 /// root; tests override them with doubles. `AbstractSyncService` is
-/// intentionally absent (WiFi sync is deferred to V2).
+/// intentionally absent (no WiFi sync yet).
 
 /// Reverse-geocoding service (Nominatim / OSM).
 final geocodageServiceProvider = Provider<AbstractGeocodageService>(

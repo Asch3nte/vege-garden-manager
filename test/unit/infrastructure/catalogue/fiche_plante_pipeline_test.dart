@@ -94,7 +94,7 @@ void main() {
     });
   });
 
-  group('Catalogue pipeline — cultural precedents normalization (Lot 2)', () {
+  group('Catalogue pipeline — cultural precedents normalization', () {
     const yamlPrecedents = '''
 id: x
 nom_scientifique: X x
@@ -161,7 +161,7 @@ cycle:
     });
   });
 
-  group('Catalogue pipeline — typed associations (ADR-0010)', () {
+  group('Catalogue pipeline — typed associations', () {
     const yaml = '''
 id: x
 nom_scientifique: X x
@@ -219,7 +219,7 @@ associations:
       expect(assoc.raison('fr'), isNull);
     });
 
-    test('a type given as a list loads several mechanisms (ADR-0012)', () {
+    test('a type given as a list loads several mechanisms', () {
       const yamlListe = '''
 id: x
 nom_scientifique: X x
@@ -252,7 +252,7 @@ associations:
       });
     });
 
-    test('loads the ADR-0013 mechanisms from their snake_case tokens', () {
+    test('loads the mechanisms from their snake_case tokens', () {
       const yamlAdr13 = '''
 id: x
 nom_scientifique: X x
@@ -300,7 +300,7 @@ associations:
           TypeConflitAssociation.partageMaladies);
     });
 
-    test('loads enracinement and the attire_auxiliaires usage (ADR-0014)', () {
+    test('loads enracinement and the attire_auxiliaires usage', () {
       const yamlA14 = '''
 id: x
 nom_scientifique: X x
@@ -328,7 +328,7 @@ cycle:
       expect(f.aUsage(UsagePlante.attireAuxiliaires), isTrue);
     });
 
-    test('rejects an unknown enracinement (ADR-0014)', () {
+    test('rejects an unknown enracinement', () {
       const mauvais = '''
 id: x
 nom_scientifique: X x
@@ -383,7 +383,7 @@ associations:
     });
   });
 
-  group('Catalogue pipeline — targeted defence (ADR-0010 Lot 2)', () {
+  group('Catalogue pipeline — targeted defence', () {
     const yaml = '''
 id: x
 nom_scientifique: X x
@@ -451,7 +451,7 @@ cycle:
     });
   });
 
-  group('Catalogue pipeline — detailed watering (ADR-0009 eauDetaillee)', () {
+  group('Catalogue pipeline — detailed watering (eauDetaillee)', () {
     final goldenMap = _parser.parser(
       File('assets/fiches_plantes/legumes/LEG-001.yaml').readAsStringSync(),
       source: 'LEG-001.yaml',
@@ -707,7 +707,7 @@ cycle:
       );
     });
 
-    test('formatIdValide recognises the canonical ADR-0005 format', () {
+    test('formatIdValide recognises the canonical format', () {
       expect(FichePlanteValidator.formatIdValide('LEG-001'), isTrue);
       expect(FichePlanteValidator.formatIdValide('LEG-001-V001'), isTrue);
       expect(FichePlanteValidator.formatIdValide('ARO-001'), isTrue);

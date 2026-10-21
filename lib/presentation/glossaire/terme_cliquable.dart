@@ -35,7 +35,8 @@ void ouvrirTermeGlossaire(BuildContext context, String idTerme) {
   }
 }
 
-/// An **inline clickable term**: coloured by its glossary kind (the kind colour chart),
+/// An **inline clickable term**: coloured by its glossary kind (the kind colour
+/// chart),
 /// discreetly underlined, tapping opens its glossary page. This is the same
 /// visual grammar as the wiki links rendered by `TexteAvecLiens` — one look,
 /// everywhere (plant sheets, panels, glossary pages…).

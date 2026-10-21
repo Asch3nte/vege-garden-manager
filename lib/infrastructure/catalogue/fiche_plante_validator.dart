@@ -14,7 +14,8 @@ class FichePlanteValidator {
   /// When `true`, [valider] also enforces the canonical id format.
   ///
   /// Defaults to `false` during the migration window: the embedded sheets still
-  /// carry legacy `snake_case` ids until the rename. Flip to `true` once every sheet uses the canonical format.
+  /// carry legacy `snake_case` ids until the rename. Flip to `true` once every
+  /// sheet uses the canonical format.
   final bool validerFormatId;
 
   const FichePlanteValidator({this.validerFormatId = false});
@@ -46,7 +47,8 @@ class FichePlanteValidator {
     }
 
     // Variety sheet: a `parent_id` must be a non-empty string and the
-    // variety id must live in its mother's namespace (id prefixed by parent_id).
+    // variety id must live in its mother's namespace (id prefixed by
+    // parent_id).
     // Validation runs after inheritance resolution, so the inherited required
     // fields above are already present.
     final parentId = y['parent_id'];
@@ -154,7 +156,6 @@ class FichePlanteValidator {
         'cycle.charge_tuteur "$chargeTuteur" must be one of legere|moyenne|lourde',
       );
     }
-    // Tolérance thermique & sécheresse (optionnel).
     final temperatureMaxTolerance = besoins['temperature_max_tolerance'];
     if (temperatureMaxTolerance != null) {
       exiger(
@@ -234,7 +235,6 @@ class FichePlanteValidator {
       );
     }
 
-    // Système racinaire (optionnel).
     final enracinement = cycle['enracinement'];
     if (enracinement != null) {
       final valides = EnracinementPlante.values.map((e) => e.name).toSet();

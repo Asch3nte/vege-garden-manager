@@ -1,4 +1,5 @@
-/// The mechanism by which two plants *conflict* when grown nearby. Typing the mechanism lets the app explain *why* a pairing is to
+/// The mechanism by which two plants *conflict* when grown nearby. Typing the
+/// mechanism lets the app explain *why* a pairing is to
 /// be avoided and, for the derivable ones, suggest the conflict on its own.
 enum TypeConflitAssociation {
   /// Same botanical family → shared pests and diseases (referential

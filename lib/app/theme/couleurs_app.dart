@@ -5,7 +5,8 @@ import 'package:flutter/painting.dart';
 /// The **light** roles and the decorative palette are validated; the **dark**
 /// roles are provisional until a dark mode is designed.
 ///
-/// These are intentionally *semantic* roles, not Material slots — the mapping to
+/// These are intentionally *semantic* roles, not Material slots — the mapping
+/// to
 /// a Flutter [ColorScheme] happens in [ThemeApp]. Keeping the roles here lets
 /// widgets that need a project-specific colour (e.g. the warm "harvest" accent,
 /// which has no Material equivalent) reach for it by meaning rather than by
@@ -56,7 +57,8 @@ abstract final class CouleursApp {
 
   // ── Decorative palette ────────────────────────────────────
   // Non-semantic: tile gradients, vegetal separators, organic blobs/arches,
-  // illustrations. Never use these to convey a state — that's the semantic roles.
+  // illustrations. Never use these to convey a state — that's the semantic
+  // roles.
 
   /// Vert moyen — tile gradients, vegetal accents (`--c-green-mid`).
   static const Color decoVertMoyen = Color(0xFF4FA06A);
@@ -70,7 +72,8 @@ abstract final class CouleursApp {
   /// Aubergine clair — light aubergine variant (`--c-aubergine-2`).
   static const Color decoAubergineClair = Color(0xFFB98AAC);
 
-  /// Aubergine profond — occasional dark fills, e.g. chips (`--c-aubergine-deep`).
+  /// Aubergine profond — occasional dark fills, e.g. chips
+  /// (`--c-aubergine-deep`).
   static const Color decoAubergineProfond = Color(0xFF2C1A27);
 
   /// Bordeaux — tile gradients, warm accents (`--c-bordeaux`).
@@ -85,7 +88,8 @@ abstract final class CouleursApp {
   // ── Dark mode ───────────────────────────────────────────────
   // Provisional: revisit when a dark mode is actually designed.
 
-  /// Bleu nuit profond — application background (inhabited night blue, never black).
+  /// Bleu nuit profond — application background (inhabited night blue, never
+  /// black).
   static const Color fondPrincipalSombre = Color(0xFF161D26);
 
   /// Bleu nuit doux — cards, modals.

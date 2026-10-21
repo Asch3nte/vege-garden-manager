@@ -1,4 +1,4 @@
-// Widget tests for the « Aide & lexique » glossary (ADR-0017, Lot 2):
+// Widget tests for the « Aide & lexique » glossary:
 // the panel (chapters, search, novice entry), the chapter list, the term page
 // (definition, astuce, conseils, derived blocks, clickable chips and wiki
 // links), and the global-history guarantee — system back replays term pages
@@ -146,14 +146,14 @@ void main() {
     expect(find.text('Santé du jardin'), findsOneWidget);
     expect(find.text('Outils & équipements'), findsOneWidget);
     // Familles botaniques = famille.solanaceae + 2 seed notions ;
-    // Santé du jardin = bio.mildiou + 2 notions (Lot 4).
+    // Santé du jardin = bio.mildiou + 2 notions.
     expect(find.text('3 entrées'), findsNWidgets(2));
-    // Outils & équipements = 13 pages d'outils + états d'un équipement (Lot 4).
+    // Outils & équipements = 13 pages d'outils + états d'un équipement.
     expect(find.text('14 entrées'), findsOneWidget);
   });
 
   testWidgets(
-      'enum-value descriptions render wiki links — never a raw [[…]] (Lot 4)',
+      'enum-value descriptions render wiki links — never a raw [[…]]',
       (tester) async {
     await monter(tester,
         initialLocation: '${RoutesApp.plusAide}/terme/notion.usage-plante');
@@ -392,7 +392,7 @@ void main() {
     expect(find.text('Préférences générales'), findsOneWidget);
   });
 
-  // --- Lot 3: clickable terms from an app surface (the plant sheet). --------
+  // --- Clickable terms from an app surface (the plant sheet). --------------
   Future<void> monterCatalogue(WidgetTester tester) async {
     final fiches = _MockFiches();
     final potagers = _MockPotagers();
@@ -468,7 +468,7 @@ void main() {
 
   testWidgets(
       'the plant sheet family name opens its glossary page; back returns to'
-      ' the sheet (Lot 3, révisé #4bis)', (tester) async {
+      ' the sheet', (tester) async {
     await monterCatalogue(tester);
 
     await tester.tap(find.text('Tomate'));
@@ -513,7 +513,7 @@ void main() {
 
   testWidgets(
       'the plant sheet disease chip opens the bioaggressor glossary page'
-      ' (Lot 3)', (tester) async {
+      '', (tester) async {
     await monterCatalogue(tester);
 
     await tester.tap(find.text('Tomate'));

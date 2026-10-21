@@ -33,9 +33,9 @@ import '../widgets/titre_tache.dart';
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
 /// tickable.
 ///
-/// Reimplemented from `calendrier.jsx`, **Agenda view**: a summary, a week/month
+/// **Agenda view**: a summary, a week/month
 /// scope selector and day groups of tickable task cards. The Month grid and the
-/// Season (sowing→harvest) views are deferred.
+/// Season (sowing→harvest) views are not offered yet.
 class EcranCalendrier extends ConsumerWidget {
   const EcranCalendrier({super.key});
 

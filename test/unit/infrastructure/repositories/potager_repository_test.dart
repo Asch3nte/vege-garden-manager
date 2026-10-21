@@ -81,7 +81,7 @@ void main() {
     expect((await repo.obtenirPotagerActif())!.id, 'a');
   });
 
-  test('obtenirPotagerActif honours the persisted selection (ADR-0009)',
+  test('obtenirPotagerActif honours the persisted selection',
       () async {
     await repo.sauvegarder(potager(id: 'a', date: DateTime.utc(2026, 1, 1)));
     await repo.sauvegarder(potager(id: 'b', date: DateTime.utc(2026, 5, 1)));

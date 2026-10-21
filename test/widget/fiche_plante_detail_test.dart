@@ -1,4 +1,4 @@
-// Widget tests for the plant sheet's min–max display (ADR-0014, Lot 6).
+// Widget tests for the plant sheet's min–max display.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -99,7 +99,7 @@ Future<void> _ouvrir(
 }
 
 void main() {
-  testWidgets('the sheet shows sun as a range when a tolerance is set (ADR-0014)',
+  testWidgets('the sheet shows sun as a range when a tolerance is set',
       (tester) async {
     await _ouvrir(tester, _fiche(), niveau: NiveauExperience.debutant);
 
@@ -118,7 +118,7 @@ void main() {
     expect(find.text('Laitue'), findsNothing);
   });
 
-  group('detailed watering section (ADR-0009 acces.eauDetaillee)', () {
+  group('detailed watering section (acces.eauDetaillee)', () {
     testWidgets('an expert sees the full detail', (tester) async {
       await _ouvrir(tester, _ficheAvecDetail(),
           niveau: NiveauExperience.expert);

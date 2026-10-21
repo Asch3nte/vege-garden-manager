@@ -9,7 +9,7 @@ import 'package:pot_a_gerer/presentation/glossaire/liens_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/registre_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/terme_glossaire.dart';
 
-/// Glossary integrity test (ADR-0017, D6) — the "coverage is proved" guard:
+/// Glossary integrity test — the "coverage is proved" guard:
 ///
 ///  1. every enum under `lib/domain/enums/` is **covered or consciously
 ///     excluded** (the exclusion list is the only escape hatch);
@@ -100,7 +100,7 @@ void main() {
           terme.definition,
           ...terme.conseils,
           if (terme.astuce != null) terme.astuce!,
-          // Enum-value descriptions are rendered with wiki links too (D2).
+          // Enum-value descriptions are rendered with wiki links too.
           for (final bloc in terme.complements.whereType<ComplementValeursEnum>())
             for (final valeur in bloc.valeurs)
               if (valeur.description != null) valeur.description!,
@@ -125,7 +125,7 @@ void main() {
     });
 
     test('chaque id du registre d\'illustrations résout et a son fichier '
-        '(D4/Lot 5)', () {
+        '', () {
       for (final id in idsIllustres) {
         // YAML-derived pages (famille./bio.) are absent from the static
         // index built here; their resolution is covered by the widget tests

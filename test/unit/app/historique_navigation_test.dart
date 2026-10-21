@@ -2,7 +2,7 @@
 //
 // Pure list logic (no widgets): exercises the browser-history folding done by
 // [enregistrer] and the [peutRevenir]/[precedent] accessors that the shell's
-// PopScope relies on to drive the system back button (docs/15 §8 D #5/#6).
+// PopScope relies on to drive the system back button.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

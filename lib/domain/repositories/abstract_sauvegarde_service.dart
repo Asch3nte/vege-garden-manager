@@ -4,7 +4,8 @@ import '../enums/mode_import.dart';
 /// drift in the infrastructure layer).
 ///
 /// Backups are **100% local**: the service produces/consumes a JSON [String];
-/// writing it to disk and sharing it (native share sheet) is a Presentation concern, so
+/// writing it to disk and sharing it (native share sheet) is a Presentation
+/// concern, so
 /// no data ever leaves the device automatically.
 abstract class AbstractSauvegardeService {
   /// Serialises the whole database to a single JSON document.

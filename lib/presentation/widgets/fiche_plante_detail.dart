@@ -30,8 +30,8 @@ import 'libelles_enums.dart';
 ///
 /// Shows the sheet's **real** fields (category, sun & water needs, spacing,
 /// time-to-harvest) and its companion associations (resolved to plant names via
-/// the loaded catalogue). The sowing/harvest month calendar of the mock-up is
-/// deferred — periods are indexed by hemisphere/climate, which a catalogue
+/// the loaded catalogue). No sowing/harvest month calendar is
+/// shown: periods are indexed by hemisphere/climate, which a catalogue
 /// browse has no context for.
 ///
 /// On a species sheet a "variety switcher" lets the user drill into one of the

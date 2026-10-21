@@ -1,4 +1,4 @@
-// One-shot migration generator (ADR-0005, Lot 3): turns each legacy variety
+// One-shot migration generator: turns each legacy variety
 // sheet into a canonical **mother** (species) sheet + a slim **variety** sheet,
 // rewriting association refs to canonical mother ids and emitting clean YAML.
 //

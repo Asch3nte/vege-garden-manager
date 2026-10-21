@@ -1,4 +1,4 @@
-// Widget test for the experience-levels guide (ADR-0009 §4a mini-tuto).
+// Widget test for the experience-levels guide.
 //
 // Checks the catalogue renders the why/how content and marks features as
 // "unlocked" according to the user's level (and as a teaser otherwise).

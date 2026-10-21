@@ -12,7 +12,8 @@ import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/value_objects/recommandation_plante.dart';
 import '../../domain/value_objects/surface.dart';
 
-/// Pure engine calculator that evaluates **one** candidate plant for a parcelle.
+/// Pure engine calculator that evaluates **one** candidate plant for a
+/// parcelle.
 ///
 /// Hard filters exclude unsuitable candidates (returns `null`); the survivors
 /// get a soft score in `0..1` with the structured reasons behind it. The
@@ -52,8 +53,10 @@ class EvaluateurRecommandations {
   /// is `true` when rotation was actually checked.
   ///
   /// **New params (all optional, backward-compatible)**:
-  /// - [zoneRusticite]: potager's USDA hardiness zone — enables the hardiness filter.
-  /// - [niveauExperience]: user's experience level — enables the difficulty filter.
+  /// - [zoneRusticite]: potager's USDA hardiness zone — enables the hardiness
+  ///   filter.
+  /// - [niveauExperience]: user's experience level — enables the difficulty
+  ///   filter.
   /// - [typeParcelle]: parcelle structure — enables the container filter.
   /// - [cultureVerticaleDisponible]: `true` when the parcelle has a trellis or
   ///   stake — triggers [RaisonReco.cultureVerticaleCompatible].

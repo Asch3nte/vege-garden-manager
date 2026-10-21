@@ -1,4 +1,4 @@
-// Widget tests for the first-launch onboarding gate (docs/15 §7).
+// Widget tests for the first-launch onboarding gate.
 //
 // Mounts [PotAGererApp] through the real router: while the onboarding-completion
 // preference is false, the router redirects every location onto the onboarding
@@ -149,7 +149,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Position is required; picking one on the world map auto-advances to the
-    // climate step (no extra "Suivant" — feedback #1).
+    // climate step (no extra "Suivant").
     await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zone tropicale'));
@@ -172,7 +172,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // The garden was created and the gate opened onto the Potager screen
-    // (feedback #4), not the dashboard.
+    //, not the dashboard.
     expect(find.widgetWithText(AppBar, 'Potager'), findsOneWidget);
     expect(saved.last.onboardingTermine, isTrue);
   });
@@ -221,7 +221,7 @@ void main() {
   });
 
   testWidgets('choosing intermediate shows the per-category notifications '
-      'detail (ADR-0009)', (tester) async {
+      'detail', (tester) async {
     await monter(tester,
         onboardingTermine: false, taille: const Size(1600, 1000));
 

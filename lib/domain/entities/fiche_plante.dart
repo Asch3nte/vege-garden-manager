@@ -61,9 +61,7 @@ class FichePlante {
   // Container compatibility / soil depth
   final int? _profondeurSolMinCm;
   final bool _compatibleHorsSol;
-  // Culture verticale (tuteur/treillis)
   final bool _cultureVerticale;
-  // Hauteur adulte (cm), bornes basse/haute (optionnel)
   final int? _hauteurAdulteCmMin;
   final int? _hauteurAdulteCmMax;
   // Nitrogen dynamics
@@ -291,7 +289,6 @@ class FichePlante {
   int? get profondeurSolMinCm => _profondeurSolMinCm;
   bool get compatibleHorsSol => _compatibleHorsSol;
   bool get cultureVerticale => _cultureVerticale;
-  // Hauteur adulte (cm)
   int? get hauteurAdulteCmMin => _hauteurAdulteCmMin;
   int? get hauteurAdulteCmMax => _hauteurAdulteCmMax;
   bool get fixeAzote => _fixeAzote;

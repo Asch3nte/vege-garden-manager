@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
-// Conventions: id TEXT (UUID), dates as TEXT ISO 8601 UTC, enums as TEXT + CHECK,
+// Conventions: id TEXT (UUID), dates as TEXT ISO 8601 UTC, enums as TEXT +
+// CHECK,
 // booleans via boolean() (INTEGER 0/1), FKs ON DELETE RESTRICT (logical cascade
 // in the repositories). Enum values are camelCase (= Dart names).
 

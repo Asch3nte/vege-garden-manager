@@ -249,8 +249,8 @@ class MoteurDerivationAssociations {
           b, TypeConflitAssociation.competitionEspace, NiveauConfiance.moyen,
           criteres: const {CritereAssociation.deuxEtalees}));
     }
-    // Maladies partagées : familles **différentes** mais hôtes d'une
-    // même maladie (sinon c'est déjà « même famille »).
+    // Shared diseases: **different** families hosting the same disease
+    // (otherwise it is already "same family").
     if (!_memeFamille(a, b)) {
       final commune =
           _premierCommun(_maladiesDe(a, familles), _maladiesDe(b, familles));

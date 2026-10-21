@@ -32,7 +32,8 @@ import 'vue_reseau_catalogue.dart' show couleurCategorie;
 /// Opens the **Associations** view of [centre]: a dedicated, detailed ego graph
 /// of a single species — itself at the centre, its good companions on the left
 /// half and the ones to avoid on the right half, **one node per species** (the
-/// granular counterpart of the grouped "Réseau" constellation). Reached from the
+/// granular counterpart of the grouped "Réseau" constellation). Reached from
+/// the
 /// Fiches list. Companions are resolved over [catalogue] by the
 /// shared service, so the split matches the catalogue everywhere.
 ///
@@ -43,7 +44,8 @@ import 'vue_reseau_catalogue.dart' show couleurCategorie;
 /// view (intermédiaire+); [familles] lets the family-dependent rules fire
 /// (repulsion / trap), and may be `null` for trait-based suggestions only.
 /// Suggestions are **scored & ranked** by [profil]: a family weighted
-/// `ignore` is dropped, and only the top suggestions per side are shown (the rest
+/// `ignore` is dropped, and only the top suggestions per side are shown (the
+/// rest
 /// behind a "voir plus"). Curated associations always rank first and are never
 /// pruned.
 Future<void> afficherVueAssociations(
@@ -247,9 +249,11 @@ class _NoeudAssoc {
 
 /// A **group** of companions sharing the exact same relationship to the centre:
 /// same side, same direction, same suggested/curated nature, and the
-/// same mechanism — or, for untyped curated pairs, the same free reason. Rendered
+/// same mechanism — or, for untyped curated pairs, the same free reason.
+/// Rendered
 /// as one labelled cluster with a **single arrow** to the centre, so a shared
-/// label (e.g. "Attire les pollinisateurs") is shown once instead of repeated on
+/// label (e.g. "Attire les pollinisateurs") is shown once instead of repeated
+/// on
 /// every member.
 class _GroupeAssoc {
   final List<_NoeudAssoc> membres;
@@ -270,8 +274,10 @@ class _GroupeAssoc {
       membres.fold(0.0, (m, n) => n.score > m ? n.score : m);
   bool get curate => score.isInfinite;
 
-  /// Grouping key: side + direction + suggested + mechanism (or free reason when
-  /// untyped). Untyped curated pairs with no reason fall into one "Autre" bucket.
+  /// Grouping key: side + direction + suggested + mechanism (or free reason
+  /// when
+  /// untyped). Untyped curated pairs with no reason fall into one "Autre"
+  /// bucket.
   static String cleDe(_NoeudAssoc n) =>
       '${n.bon}|${n.sens}|${n.suggere}|${n.mecanisme ?? n.raison ?? ''}';
 
@@ -378,8 +384,8 @@ class _VueAssociationsState extends State<_VueAssociations> {
     return r;
   }
 
-  /// The side's **groups** capped at curated + N derived groups, unless expanded
-  /// (capping now counts groups, not individual plants).
+  /// The side's **groups** capped at curated + N derived groups, unless
+  /// expanded (the cap counts groups, not individual plants).
   List<_GroupeAssoc> _affiches(List<_GroupeAssoc> groupes) {
     if (_tousAffiches) return groupes;
     final nbCurated = groupes.where((g) => g.curate).length;
@@ -447,7 +453,8 @@ class _VueAssociationsState extends State<_VueAssociations> {
                 builder: (context, c) {
                   final viewport = Size(c.maxWidth, c.maxHeight);
                   final geo = _GeoConstellation.calculer(bons, aEviter);
-                  // Auto-fit when the displayed set changes (not on every rebuild,
+                  // Auto-fit when the displayed set changes (not on every
+                  // rebuild,
                   // so opening a sheet keeps the user's zoom/pan).
                   final sig = '$_filtre|$_filtreSugg|$_tousAffiches|${geo.canvas}';
                   if (sig != _signatureFit) {
@@ -466,7 +473,8 @@ class _VueAssociationsState extends State<_VueAssociations> {
                       bons: bons,
                       aEviter: aEviter,
                       onTapNoeud: (n) {
-                        // Resolve the rule's source/cible from the direction, then
+                        // Resolve the rule's source/cible from the direction,
+                        // then
                         // list every criterion that produced the association.
                         // Curated nodes (no criteria) keep their reason.
                         final recoit = n.sens == SensAssociation.recoit;
@@ -523,8 +531,8 @@ class _BoutonVoirPlus extends StatelessWidget {
   }
 }
 
-/// AppBar `bottom`: a preferences banner above a side-by-side filter panel
-/// — direction (left) and suggestion level (right), each as a
+/// AppBar `bottom`: a preferences banner above a side-by-side filter panel:
+/// direction (left) and suggestion level (right), each as a
 /// dropdown so the layout stays compact.
 class _BasAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ProfilPonderationAssociations? profil;
@@ -594,7 +602,8 @@ class _BandeauPreferences extends StatelessWidget {
         ? theme.colorScheme.onSurfaceVariant
         : theme.colorScheme.tertiary;
 
-    // Default → a short hint; custom → just the tuned families (no prefix, so it
+    // Default → a short hint; custom → just the tuned families (no prefix, so
+    // it
     // is not truncated for the part that matters).
     final String texte = estDefaut
         ? l10n.assocPrefsNormales
@@ -948,7 +957,8 @@ class _Constellation extends StatelessWidget {
           ),
         );
 
-    // One edge per cluster; the painter trims the far end to the shape's edge so
+    // One edge per cluster; the painter trims the far end to the shape's edge
+    // so
     // the arrowhead lands on the coloured border, never on a bubble.
     _Arete arete(_GroupeAssoc g, _GeoGroupe geoG) => (
           pos: geoG.centre,
@@ -1001,7 +1011,8 @@ class _Constellation extends StatelessWidget {
 }
 
 /// A group cluster: a shared header (mechanism/“Autre” chip + direction, plus a
-/// single “suggested · confidence” line) over a grid of tappable member bubbles.
+/// single “suggested · confidence” line) over a grid of tappable member
+/// bubbles.
 /// The single edge/arrow is drawn by [_Peintre].
 class _GroupeWidget extends StatelessWidget {
   final _GroupeAssoc groupe;
@@ -1232,7 +1243,8 @@ class _MembreNoeud extends StatelessWidget {
   }
 }
 
-/// A node in the Associations view: category-coloured disc + full name, tappable
+/// A node in the Associations view: category-coloured disc + full name,
+/// tappable
 /// to open its sheet.
 class _Noeud extends StatelessWidget {
   final _NoeudAssoc noeud;
@@ -1269,7 +1281,8 @@ class _Noeud extends StatelessWidget {
             decoration: BoxDecoration(
               color: disque,
               shape: BoxShape.circle,
-              // A dashed-look (thinner, accented) ring marks a derived suggestion.
+              // A dashed-look (thinner, accented) ring marks a derived
+              // suggestion.
               border: Border.all(
                 color: noeud.suggere && accent != null
                     ? accent!.withValues(alpha: 0.8)
@@ -1366,7 +1379,8 @@ typedef _Arete = ({Offset pos, SensAssociation? sens, Size demi});
 
 /// Paints one edge from the centre to each **group** anchor, **with a direction
 /// arrow**: a head at the group end for *donne*, at the centre
-/// end for *recoit*, at both for *mutuel*. The far end is trimmed to the group's
+/// end for *recoit*, at both for *mutuel*. The far end is trimmed to the
+/// group's
 /// box so a single arrow points at the cluster rather than through it.
 class _Peintre extends CustomPainter {
   final Offset centre;

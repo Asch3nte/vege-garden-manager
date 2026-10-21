@@ -13,11 +13,10 @@ import 'parametres/widgets_parametres.dart';
 
 /// Tab 5 — **Plus** (`⋯`): settings root + secondary entries.
 ///
-/// Reimplemented from `parametres.jsx`. The settings categories that map to real
-/// `PreferencesUtilisateur` fields (general, privacy/opt-outs, notifications)
-/// and the About page are built and persisted. Post-récolte is deferred to V1.1
-/// (its `plusPostRecolte(Sub)` ARB keys are reserved for then) and
-/// Communauté to V2; Transparency/Sync/Export are deferred.
+/// The settings categories that map to real `PreferencesUtilisateur` fields
+/// (general, privacy/opt-outs, notifications) and the About page are built and
+/// persisted. Post-récolte and Communauté are not offered yet (the
+/// `plusPostRecolte(Sub)` ARB keys are reserved).
 class EcranPlus extends ConsumerWidget {
   const EcranPlus({super.key});
 

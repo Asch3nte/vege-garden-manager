@@ -97,7 +97,7 @@ void main() {
     expect(cache.nombre, 0);
   });
 
-  group('species/variety inheritance (ADR-0005)', () {
+  group('species/variety inheritance', () {
     test('a variety inherits its mother and overrides only its own fields',
         () async {
       // The variety is listed before its mother to prove order does not matter

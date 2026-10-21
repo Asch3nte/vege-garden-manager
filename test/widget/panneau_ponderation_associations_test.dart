@@ -1,4 +1,4 @@
-// Widget test for the expert association-weighting panel (ADR-0011).
+// Widget test for the expert association-weighting panel.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -58,7 +58,7 @@ void main() {
   });
 
   testWidgets('shows the conflict families and persists a conflict weight '
-      '(ADR-0014)', (tester) async {
+      '', (tester) async {
     await monter(tester);
     await tester.scrollUntilVisible(find.text('Allélopathie'), 200,
         scrollable: find.byType(Scrollable).first);

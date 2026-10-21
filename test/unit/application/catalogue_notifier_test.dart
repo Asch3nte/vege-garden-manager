@@ -187,7 +187,7 @@ void main() {
     expect(vue.groupes.single.varietes.map((f) => f.id), ['tomate-v1']);
   });
 
-  group('family sub-filter (ADR-0006)', () {
+  group('family sub-filter', () {
     test('no family chips under "Tout"', () async {
       final c = conteneur();
       final vue = await c.read(catalogueProvider.future);

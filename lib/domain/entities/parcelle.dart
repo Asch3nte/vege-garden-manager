@@ -23,7 +23,7 @@ import 'plantation.dart';
 /// documented in English.
 ///
 /// Note: `pasDeConflit(FichePlante)` is deferred (needs `FichePlante`); the plan
-/// `position` (`PositionParcelle`) is a V2 concern and is not modelled here.
+/// `position` (`PositionParcelle`) is not modelled.
 class Parcelle {
   final String _id;
   String _nom;

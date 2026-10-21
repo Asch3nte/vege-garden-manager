@@ -22,10 +22,12 @@ import 'widgets_parametres.dart';
 
 /// Category 2 — **Confidentialité & opt-outs**: geolocation mode, the active
 /// garden's position + climate + hardiness, local sync, lunar calendar, P2P
-/// community (V2). Embodies the "golden rule": disabling anything keeps the app
+/// community (not offered yet). Embodies the "golden rule": disabling anything
+/// keeps the app
 /// working (a fallback always exists).
 ///
-/// Climate & hardiness live on the garden (`ZoneClimatique`); this panel surfaces
+/// Climate & hardiness live on the garden (`ZoneClimatique`); this panel
+/// surfaces
 /// them for the **active** garden so the user can always read and adjust them —
 /// even with geolocation off (then they are set by hand, not derived).
 class PanneauConfidentialite extends ConsumerWidget {
@@ -44,7 +46,8 @@ class PanneauConfidentialite extends ConsumerWidget {
 
     final mode = prefs.modeGeolocalisation;
     final acces = ref.watch(accesNiveauProvider);
-    // The active garden carries the position + climate/hardiness shown & edited.
+    // The active garden carries the position + climate/hardiness shown &
+    // edited.
     final potager = ref.watch(potagerActifProvider).value;
     // The other gardens: read-only, listed
     // below the active one when the tier unlocks multi-garden.
@@ -54,7 +57,7 @@ class PanneauConfidentialite extends ConsumerWidget {
             .where((p) => p.id != potager.id)
             .toList();
 
-    // Geolocation cycles off → manual → GPS → off (matches the mock-up).
+    // Geolocation cycles off → manual → GPS → off.
     // Changing the mode resets the stored position so the user re-picks one.
     Future<void> cyclerGeoloc() async {
       const ordre = ModeGeolocalisation.values;
@@ -207,7 +210,8 @@ class PanneauConfidentialite extends ConsumerWidget {
                 valeur: prefs.calendrierLunaireOptIn,
                 onChanged: notifier.definirCalendrierLunaire,
               ),
-            // Community is V2: shown but disabled (off, non-interactive).
+            // Community is not offered yet: shown but disabled (off,
+            // non-interactive).
             RangeeInterrupteur(
               icone: Icons.groups_outlined,
               label: l10n.confidCommunaute,

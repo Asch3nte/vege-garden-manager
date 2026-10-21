@@ -22,8 +22,7 @@ import '../widgets/titre_tache.dart';
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
 /// level, weather & season stats. Read-only, no creation actions.
 ///
-/// Reimplemented from the `accueil-final.jsx` mock-up (direction B « Tableau
-/// modulaire ») as Flutter widgets. Real data (active garden, zones, today's
+/// A modular dashboard. Real data (active garden, zones, today's
 /// tasks, experience level) comes from [accueilProvider]; weather, alerts and
 /// season harvests are explicit placeholders until their reads/verdicts exist.
 class EcranAccueil extends ConsumerWidget {

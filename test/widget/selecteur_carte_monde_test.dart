@@ -1,4 +1,4 @@
-// Widget tests for the zoomable world-map position picker (Lot 2).
+// Widget tests for the zoomable world-map position picker.
 //
 // The picker is opened via [choisirSurCarteMonde]; these tests drive the
 // region-shortcut + confirm flow and a direct tap, asserting the returned

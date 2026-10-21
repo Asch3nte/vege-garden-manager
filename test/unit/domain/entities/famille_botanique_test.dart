@@ -110,7 +110,7 @@ void main() {
     });
   });
 
-  group('FamilleBotanique — educational notes (ADR-0006 Lot 4)', () {
+  group('FamilleBotanique — educational notes', () {
     test('localizes notes, falling back to French', () {
       final f = FamilleBotanique(
         id: 'solanaceae',

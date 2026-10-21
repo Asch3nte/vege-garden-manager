@@ -101,7 +101,7 @@ void main() {
     expect(erreurs, hasLength(1));
   });
 
-  test('a personal sheet overrides a built-in one on id collision (ADR-0002 A6)',
+  test('a personal sheet overrides a built-in one on id collision',
       () {
     final builtin = ficheDepuis(modele(idFiche: 'tomate', nomCommunFr: 'Officielle'));
     final perso = ficheDepuis(modele(idFiche: 'tomate', nomCommunFr: 'Ma tomate'));

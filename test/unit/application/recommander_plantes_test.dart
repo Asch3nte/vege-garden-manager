@@ -147,7 +147,7 @@ void main() {
     expect(ids, isNot(contains('chou'))); // plantable Jan-Feb only
   });
 
-  test('derives a beneficial association reason from active plants (ADR-0010)',
+  test('derives a beneficial association reason from active plants',
       () async {
     // An active nitrogen-fixer (haricot) in the parcelle; the greedy candidate
     // (mais, besoin_azote eleve) should be flagged with a derived association.
@@ -170,7 +170,7 @@ void main() {
     expect(reco.raisons, contains(RaisonReco.associationDeriveeFavorable));
   });
 
-  test('ignoring an effect family drops its derived reco bonus (ADR-0011)',
+  test('ignoring an effect family drops its derived reco bonus',
       () async {
     final haricot = fiche('haricot', 'Fabaceae', const Periode(5, 6),
         fixeAzote: true);
@@ -266,7 +266,7 @@ void main() {
     expect(r.recommandations.map((e) => e.planteId), contains('chou'));
   });
 
-  test('evaluates species only — varieties are never candidates (ADR-0005)',
+  test('evaluates species only — varieties are never candidates',
       () async {
     final tomateCerise =
         fiche('tomate-v1', 'Solanaceae', const Periode(5, 6), parentId: 'tomate');

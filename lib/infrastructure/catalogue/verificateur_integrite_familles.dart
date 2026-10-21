@@ -25,7 +25,8 @@ class ProblemeIntegriteFamille {
 ///    `famille_botanique`) must have a loaded family sheet.
 /// 2. **Coherence** — when a species also declares `rotation.famille`, it must
 ///    equal that normalized key.
-/// 3. **Precedents** — every *family* cultural precedent must resolve to a loaded family sheet. Functional-group precedents
+/// 3. **Precedents** — every *family* cultural precedent must resolve to a
+///    loaded family sheet. Functional-group precedents
 ///    ([GroupeCultural]) carry no family reference and are always valid.
 ///
 /// Pure and non-fatal: it *reports* problems (it never throws), so callers can

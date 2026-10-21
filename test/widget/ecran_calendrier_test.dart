@@ -316,7 +316,7 @@ void main() {
         overrides: [
           ...reposOverrides(),
           saisonProvider.overrideWith(_FakeSaison.new),
-          // Saison view is intermediate+ (ADR-0009).
+          // Saison view is intermediate+.
           accesNiveauProvider.overrideWithValue(
               const AccesNiveau(NiveauExperience.intermediaire)),
         ],

@@ -37,8 +37,7 @@ import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
 
-/// Detail of one garden zone (`ZoneDetail` in the `potager.jsx` mock-up), reached
-/// by tapping a bed on the Potager plan.
+/// Detail of one garden zone, reached by tapping a bed on the Potager plan.
 ///
 /// Shows the zone's real data (name, type, surface, sun exposure, active crops)
 /// and its actions: add a plant (→ catalogue), pull out / remove a crop, edit or

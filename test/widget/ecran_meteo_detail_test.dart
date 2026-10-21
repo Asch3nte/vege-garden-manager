@@ -1,4 +1,4 @@
-// Widget tests for the refactored weather detail screen (ADR-0016 Lot 4).
+// Widget tests for the refactored weather detail screen.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

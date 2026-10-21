@@ -98,7 +98,7 @@ void main() {
     });
   });
 
-  group('FichePlante — species/variety hierarchy (ADR-0005)', () {
+  group('FichePlante — species/variety hierarchy', () {
     test('a sheet without parentId is a mother sheet', () {
       final f = _fiche();
       expect(f.parentId, isNull);
@@ -189,7 +189,7 @@ void main() {
     });
   });
 
-  group('FichePlante — défense ciblée & charge tuteur (ADR-0010 Lot 2)', () {
+  group('FichePlante — défense ciblée & charge tuteur', () {
     test('exposes repels / traps slugs and the support load', () {
       final f = _fiche(
         repulsifContre: {'nematode'},
@@ -212,7 +212,7 @@ void main() {
     });
   });
 
-  group('FichePlante — précédents culturaux (rotation avancée, Lot 1)', () {
+  group('FichePlante — précédents culturaux', () {
     test('carries favorable and unfavorable precedents', () {
       final f = _fiche(
         precedentsFavorables: {

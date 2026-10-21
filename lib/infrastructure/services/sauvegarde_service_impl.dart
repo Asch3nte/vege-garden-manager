@@ -16,7 +16,7 @@ import 'montee_sauvegarde.dart';
 /// from an older version is brought up to date ([MonteeSauvegarde]), one from a
 /// newer app is rejected rather than silently corrupting data.
 ///
-/// The schema has no BLOB columns in V1 (photos are V1.1), so every value is
+/// The schema has no BLOB columns, so every value is
 /// JSON-encodable. All work happens locally; the produced/consumed JSON never
 /// leaves the device through this service.
 class SauvegardeServiceImpl implements AbstractSauvegardeService {

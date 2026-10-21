@@ -27,10 +27,12 @@ import '../providers/service_providers.dart';
 import 'calculer_besoin_arrosage.dart';
 import 'package:riverpod/riverpod.dart';
 
-/// Materializes watering tasks for all active plantations that need water today.
+/// Materializes watering tasks for all active plantations that need water
+/// today.
 ///
 /// Called once per dashboard load (see `AccueilNotifier`). Idempotent: skips
-/// plantations that already have an uncompleted watering task today, and removes
+/// plantations that already have an uncompleted watering task today, and
+/// removes
 /// tasks for plantations whose urgency has dropped below
 /// [UrgenceArrosage.arroserMaintenant] (e.g. after rain).
 ///
@@ -41,14 +43,18 @@ import 'package:riverpod/riverpod.dart';
 /// overflow marker) and the full list in its body (maximum detail). It does
 /// nothing if 08:00 has already passed.
 ///
-/// The notification id is **day-scoped** (`arrosage_<yyyy-MM-dd>`), so re-running
-/// rewrites the pending notification with an up-to-date list instead of stacking
+/// The notification id is **day-scoped** (`arrosage_<yyyy-MM-dd>`), so
+/// re-running
+/// rewrites the pending notification with an up-to-date list instead of
+/// stacking
 /// duplicates, and a day that no longer needs any watering **cancels** it.
 /// Crops the user has already ticked off are excluded from the count.
 ///
-/// The push notification honours the user's notification **opt-outs**: it is suppressed when the master switch is off, when
+/// The push notification honours the user's notification **opt-outs**: it is
+/// suppressed when the master switch is off, when
 /// the `'arrosage'` category is muted, or when 08:00 falls inside the
-/// do-not-disturb window. The **tasks themselves are always created** — opt-outs
+/// do-not-disturb window. The **tasks themselves are always created** —
+/// opt-outs
 /// mute notifications, not the gardening plan.
 class GenererTachesArrosage {
   final AbstractPlantationRepository _plantations;
@@ -90,7 +96,8 @@ class GenererTachesArrosage {
   /// - `pasNecessaire` / null → all pending watering tasks are removed.
   ///
   /// Idempotent: if a task already exists on the target day (completed or not),
-  /// no duplicate is created. A completed task is never deleted — it records that
+  /// no duplicate is created. A completed task is never deleted — it records
+  /// that
   /// the user already watered the plant. Pending tasks on the *wrong* day are
   /// cleaned up when urgency or timing shifts.
   Future<void> executer() {
@@ -122,9 +129,11 @@ class GenererTachesArrosage {
         (prefs.notificationsParCategorie['arrosage'] ?? true);
     final fenetreNpd = prefs.fenetreNePasDeranger;
 
-    // Crops still waiting for water **today** — already-ticked ones excluded, so
+    // Crops still waiting for water **today** — already-ticked ones excluded,
+    // so
     // the day's single recap always reflects what is actually left to do. Names
-    // are collected (not just counted) so the notification can be specific while
+    // are collected (not just counted) so the notification can be specific
+    // while
     // staying a single ping (never one per plant: minimise notification spam).
     final aArroserAujourdhui = <String?>[];
 
@@ -187,7 +196,8 @@ class GenererTachesArrosage {
       final nom = await _nomPlante(plantation);
 
       // Create only if no task on the target day (completed or not).
-      // A completed task on the target day means the user already watered — skip.
+      // A completed task on the target day means the user already watered —
+      // skip.
       final tousAuTarget = toutesExistantes
           .where((t) => _memeJour(t.datePrevue, targetDate))
           .toList();
@@ -204,7 +214,8 @@ class GenererTachesArrosage {
         ));
       }
 
-      // Recap the notification only for what is urgent **today** and not already
+      // Recap the notification only for what is urgent **today** and not
+      // already
       // watered (a completed task on the target day means the user watered it).
       if (urgence == UrgenceArrosage.arroserMaintenant &&
           !tousAuTarget.any((t) => t.estFaite)) {
@@ -225,8 +236,10 @@ class GenererTachesArrosage {
     );
   }
 
-  /// Target day for a watering task: today for [UrgenceArrosage.arroserMaintenant],
-  /// today + [ConseilArrosage.joursAvantArrosage] for [UrgenceArrosage.bientot],
+  /// Target day for a watering task: today for
+  /// [UrgenceArrosage.arroserMaintenant],
+  /// today + [ConseilArrosage.joursAvantArrosage] for
+  /// [UrgenceArrosage.bientot],
   /// unless a pending task is already planned on or before that day — it is
   /// kept, so a "soon" watering is not pushed back on every run.
   DateTime _dateCible(
@@ -258,19 +271,25 @@ class GenererTachesArrosage {
   /// Schedules **one** recap notification at 08:00 on [debutJour] for all the
   /// cultures to water today ([noms], `null` = an unresolved crop).
   ///
-  /// One notification per day, not one per crop: five thirsty crops used to mean
-  /// five identical pings. The id is **day-scoped** (`arrosage_<yyyy-MM-dd>`), so
-  /// re-running rewrites the pending notification with an up-to-date list rather
-  /// than stacking duplicates — and a day with nothing left to water **cancels**
+  /// One notification per day, not one per crop: five thirsty crops used to
+  /// mean
+  /// five identical pings. The id is **day-scoped** (`arrosage_<yyyy-MM-dd>`),
+  /// so
+  /// re-running rewrites the pending notification with an up-to-date list
+  /// rather
+  /// than stacking duplicates — and a day with nothing left to water
+  /// **cancels**
   /// it. The cancellation goes through regardless of the time of day;
   /// scheduling does nothing once 08:00 has passed.
   ///
-  /// To limit spam to a single notification while still being specific, the crop
+  /// To limit spam to a single notification while still being specific, the
+  /// crop
   /// names go **in the title** (truncated with a "+N" overflow marker) and the
   /// **full list** in the body.
   ///
   /// [notifiable] carries the notification opt-outs: when false,
-  /// nothing is scheduled and any pending notification for the day is cancelled.
+  /// nothing is scheduled and any pending notification for the day is
+  /// cancelled.
   /// [fenetreNpd] suppresses a notification whose time falls in the
   /// do-not-disturb window.
   Future<void> _programmerRecap(
@@ -316,7 +335,8 @@ class GenererTachesArrosage {
       a.year == b.year && a.month == b.month && a.day == b.day;
 }
 
-/// DI provider for [GenererTachesArrosage]. Async because [CalculerBesoinArrosage]
+/// DI provider for [GenererTachesArrosage]. Async because
+/// [CalculerBesoinArrosage]
 /// depends on the YAML catalogue (async load). Uses [Ref.read] for all repos —
 /// this is a one-shot action provider, not a reactive dependency.
 final genererTachesArrosageProvider = FutureProvider<GenererTachesArrosage>(

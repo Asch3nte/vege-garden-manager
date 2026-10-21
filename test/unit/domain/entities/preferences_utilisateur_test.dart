@@ -47,7 +47,7 @@ void main() {
     });
   });
 
-  group('PreferencesUtilisateur — potagerActifId (ADR-0009 multi-potager)', () {
+  group('PreferencesUtilisateur — potagerActifId', () {
     test('defaults to null (no explicit selection)', () {
       expect(PreferencesUtilisateur().potagerActifId, isNull);
     });

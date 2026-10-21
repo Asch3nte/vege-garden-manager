@@ -39,7 +39,7 @@ void main() {
       }
     });
 
-    test('ADR-0013 mechanisms join the expected families', () {
+    test('mechanisms join the expected families', () {
       expect(familleDe(TypeBeneficeAssociation.attractionAuxiliaires),
           FamilleEffetAssociation.protectionRavageurs);
       expect(familleDe(TypeBeneficeAssociation.ameublissementSol),
@@ -106,7 +106,7 @@ void main() {
       expect(scoreur.estRetenue(conflit, defaut), isTrue);
     });
 
-    test('its conflict family is weightable by the user (ADR-0014)', () {
+    test('its conflict family is weightable by the user', () {
       // memeFamilleRavageurs → risque sanitaire; boosting it raises the score.
       final fort = defaut.avecConflit(
           FamilleEffetConflit.risqueSanitaire, PoidsAssociation.fort);
@@ -114,7 +114,7 @@ void main() {
           greaterThan(scoreur.score(conflit, defaut)));
     });
 
-    test('an ignored conflict family is dropped (ADR-0014)', () {
+    test('an ignored conflict family is dropped', () {
       final ignore = defaut.avecConflit(
           FamilleEffetConflit.risqueSanitaire, PoidsAssociation.ignore);
       expect(scoreur.score(conflit, ignore), 0);

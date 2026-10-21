@@ -31,7 +31,7 @@ class ZoneApercu {
 /// ([statistiquesVisibles]) so the widget stays declarative.
 ///
 /// Progressive disclosure (écran Accueil) keyed on the real domain
-/// [NiveauExperience] (3 levels). The mock-up's 4 labels collapse onto these:
+/// [NiveauExperience] (3 levels):
 ///  - [NiveauExperience.debutant] / [NiveauExperience.intermediaire] → core only
 ///    (weather · tasks · alert · garden overview);
 ///  - [NiveauExperience.expert] → also the season statistics (harvests).

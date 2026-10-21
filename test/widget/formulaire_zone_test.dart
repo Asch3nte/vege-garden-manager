@@ -93,7 +93,7 @@ void main() {
     );
   });
 
-  group('soil controls gating (ADR-0009)', () {
+  group('soil controls gating', () {
     testWidgets('a beginner sees no soil controls', (tester) async {
       await monter(tester); // débutant
 
