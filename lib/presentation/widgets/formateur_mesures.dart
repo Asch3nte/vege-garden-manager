@@ -69,6 +69,20 @@ class FormateurMesures {
         )
       : _l10n.mesureCelsius(_nombre(celsius, 1));
 
+  /// A range of temperature differences, such as a shelter's warmth.
+  String plageEcartTemperature(double min, double max) =>
+      _imperial(GrandeurMesure.temperature)
+      ? _l10n.mesurePlageUnite(
+          _nombre(_convertisseur.ecartCelsiusVersFahrenheit(min), 1),
+          _nombre(_convertisseur.ecartCelsiusVersFahrenheit(max), 1),
+          symboleTemperature,
+        )
+      : _l10n.mesurePlageUnite(
+          _nombre(min, 1),
+          _nombre(max, 1),
+          symboleTemperature,
+        );
+
   /// Inches (one decimal) under a foot, then feet and inches.
   String longueurCm(num cm) {
     if (!_imperial(GrandeurMesure.longueur)) {

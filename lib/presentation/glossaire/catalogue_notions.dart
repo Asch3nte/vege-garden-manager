@@ -1,5 +1,6 @@
 import '../../domain/enums/groupe_cultural.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/formateur_mesures.dart';
 import 'complement_terme.dart';
 import 'catalogue/notions_associations.dart';
 import 'catalogue/notions_climat.dart';
@@ -22,7 +23,8 @@ import 'type_terme_glossaire.dart';
 /// per tool, per soil texture, per soil technique, per association mechanism;
 /// one concept page per remaining business enum). Coverage is proved by the
 /// glossary integrity test against `couverture_glossaire.dart`.
-List<TermeGlossaire> construireNotions(AppLocalizations l10n) =>
+List<TermeGlossaire> construireNotions(
+        AppLocalizations l10n, FormateurMesures mesures) =>
     List<TermeGlossaire>.unmodifiable([
       TermeGlossaire(
         id: TermeGlossaire.idNotion('famille-botanique'),
@@ -94,10 +96,10 @@ List<TermeGlossaire> construireNotions(AppLocalizations l10n) =>
       ),
       ...construireNotionsCultures(l10n),
       ...construireNotionsSante(l10n),
-      ...construireNotionsSol(l10n),
+      ...construireNotionsSol(l10n, mesures),
       ...construireNotionsEau(l10n),
-      ...construireOutils(l10n),
-      ...construireNotionsClimat(l10n),
+      ...construireOutils(l10n, mesures),
+      ...construireNotionsClimat(l10n, mesures),
       ...construireNotionsAssociations(l10n),
       ...construireNotionsGestes(l10n),
     ]);

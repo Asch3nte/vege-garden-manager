@@ -5,15 +5,16 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/providers/langue_provider.dart';
+import '../../application/providers/unites_provider.dart';
 import '../../application/use_cases/creer_recolte.dart';
 import '../../domain/entities/recolte.dart';
 import '../../domain/enums/destination_recolte.dart';
-import '../../domain/enums/unite_quantite.dart';
-import '../../domain/value_objects/quantite.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import 'enregistrement_formulaire.dart';
+import 'saisie_mesures.dart';
 
 /// Opens the "record a harvest" form for [plantationId] and returns the created
 /// [Recolte] (or `null` if cancelled).
@@ -50,7 +51,9 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
     with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _valeur = TextEditingController(text: '1');
-  UniteQuantite _unite = UniteQuantite.kg;
+  late final SaisieMesures _saisie =
+      SaisieMesures(ref.read(unitesProvider), ref.read(codeLangueProvider));
+  late UniteSaisieRecolte _unite = _saisie.uniteRecolteParDefaut;
   DestinationRecolte _destination = DestinationRecolte.consommationFraiche;
   DateTime? _date;
 
@@ -76,7 +79,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
     await enregistrer(() => ref.read(creerRecolteProvider).executer(
           plantationId: widget.plantationId,
           date: _date ?? ref.read(horlogeProvider)(),
-          quantite: Quantite(
+          quantite: _saisie.quantite(
             double.parse(_valeur.text.trim().replaceAll(',', '.')),
             _unite,
           ),
@@ -135,7 +138,7 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
                 ),
                 const SizedBox(width: EspacementsApp.s3),
                 Expanded(
-                  child: DropdownButtonFormField<UniteQuantite>(
+                  child: DropdownButtonFormField<UniteSaisieRecolte>(
                     icon: const IconeDeroulante(),
                     initialValue: _unite,
                     decoration: InputDecoration(
@@ -144,8 +147,10 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
                           const OutlineInputBorder(borderRadius: RayonsApp.brMd),
                     ),
                     items: [
-                      for (final u in UniteQuantite.values)
-                        DropdownMenuItem(value: u, child: Text(l10n.unite(u))),
+                      for (final u in _saisie.unitesRecolte)
+                        DropdownMenuItem(
+                            value: u,
+                            child: Text(SaisieMesures.libelle(l10n, u))),
                     ],
                     onChanged: (v) => setState(() => _unite = v!),
                   ),

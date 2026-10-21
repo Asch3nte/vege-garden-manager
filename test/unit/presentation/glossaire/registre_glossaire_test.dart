@@ -10,6 +10,8 @@ import 'package:pot_a_gerer/presentation/glossaire/liens_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/registre_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/terme_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/type_terme_glossaire.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 final _l10n = AppLocalizationsFr();
 
@@ -54,7 +56,10 @@ void main() {
     ];
 
     List<TermeGlossaire> construire() => construireGlossaire(
-        l10n: _l10n, familles: familles, bioagresseurs: bioagresseurs);
+        l10n: _l10n,
+        familles: familles,
+        bioagresseurs: bioagresseurs,
+        unites: const PreferencesUnites());
 
     test('derives one prefixed term per family and per bioaggressor', () {
       final ids = construire().map((t) => t.id);
@@ -67,6 +72,35 @@ void main() {
           'bio.doryphore',
         ]),
       );
+    });
+
+    test('measures follow the chosen units', () {
+      List<String> textes(PreferencesUnites unites) => [
+            for (final t in construireGlossaire(
+                l10n: _l10n,
+                familles: familles,
+                bioagresseurs: bioagresseurs,
+                unites: unites))
+              [
+                t.definition,
+                ?t.astuce,
+                for (final c in t.complements)
+                  if (c is ComplementValeursEnum)
+                    for (final v in c.valeurs) ?v.description,
+              ].join(' '),
+          ];
+      final metrique = textes(const PreferencesUnites()).join('\n');
+      final imperial =
+          textes(const PreferencesUnites.uniforme(SystemeUnites.imperial))
+              .join('\n');
+
+      expect(metrique, contains('Comptez 5–10 cm'));
+      expect(metrique, contains('2 à 4 °C gagnés'));
+      expect(metrique, contains('de -12 à -7 °C'));
+      expect(imperial, contains('Comptez 2 in – 3,9 in'));
+      expect(imperial, contains('3,6 à 7,2 °F gagnés'));
+      expect(imperial, contains('de 10 à 20 °F'));
+      expect(imperial, isNot(contains('°C')));
     });
 
     test('ids are unique (indexable)', () {

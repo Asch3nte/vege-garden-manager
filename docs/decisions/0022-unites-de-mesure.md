@@ -33,4 +33,8 @@ effet. La V1 doit l'appliquer partout où une mesure est affichée ou saisie.
 
 - Saisie impériale : la valeur convertie est stockée en métrique ; un aller-
   retour peut arrondir (ex. 12 in → 30,48 cm).
-- Les textes éditoriaux (glossaire, fiches) gardent leurs chiffres métriques.
+- Les mesures citées dans les textes du glossaire sont des paramètres ARB,
+  mis en forme selon le réglage ; les zones de rusticité y suivent les bornes
+  USDA en °F en impérial.
+- Récoltes : en impérial, saisie en oz / lb / fl oz / gal, stockée dans
+  l'unité métrique correspondante (g / kg / mL / L).

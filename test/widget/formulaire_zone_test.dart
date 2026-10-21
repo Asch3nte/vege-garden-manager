@@ -19,6 +19,9 @@ import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_zone.dart';
+import 'package:pot_a_gerer/application/providers/unites_provider.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
@@ -38,6 +41,7 @@ void main() {
   Future<void> monter(
     WidgetTester tester, {
     NiveauExperience niveau = NiveauExperience.debutant,
+    PreferencesUnites unites = const PreferencesUnites(),
   }) async {
     // Tall surface so the whole (scrollable) form — including the gated soil
     // controls and the save button — is laid out without lazy off-screen drops.
@@ -51,6 +55,7 @@ void main() {
         overrides: [
           parcelleRepositoryProvider.overrideWithValue(repo),
           accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
+          unitesProvider.overrideWithValue(unites),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -194,6 +199,27 @@ void main() {
     });
   });
 
+  testWidgets('imperial surface is typed in ft² and stored in m²',
+      (tester) async {
+    await monter(tester,
+        unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+
+    // A round default in the field's own unit.
+    expect(find.widgetWithText(TextFormField, 'Surface (ft²)'), findsOneWidget);
+    expect(find.text('10'), findsOneWidget);
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré nord');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Surface (ft²)'), '21.5278');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final parcelle = verify(() => repo.sauvegarder(captureAny())).captured.single
+        as Parcelle;
+    expect(parcelle.surface.enMetresCarres, closeTo(2, 0.001));
+  });
+
   testWidgets('a failed save reports it and re-enables the form',
       (tester) async {
     when(() => repo.sauvegarder(any()))
@@ -313,5 +339,42 @@ void main() {
     expect(parcelle.nom, 'Nouveau nom');
     expect(parcelle.type, TypeParcelle.serre);
     expect(parcelle.notes, 'mémo sol'); // untouched field preserved
+  });
+
+  testWidgets('an untouched surface is saved as stored, whatever the unit',
+      (tester) async {
+    final initiale = Parcelle(
+      id: 'z-8',
+      nom: 'Carré',
+      potagerId: 'pot-1',
+      type: TypeParcelle.pot,
+      surface: Surface.enMetresCarres(1),
+      exposition: NiveauSoleil.pleinSoleil,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          parcelleRepositoryProvider.overrideWithValue(repo),
+          unitesProvider.overrideWithValue(
+              const PreferencesUnites.uniforme(SystemeUnites.imperial)),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: FormulaireZone(potagerId: 'pot-1', parcelleInitiale: initiale),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré sud');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final parcelle =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Parcelle;
+    expect(parcelle.surface.enMetresCarres, 1);
   });
 }

@@ -23,6 +23,9 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_plantation.dart';
+import 'package:pot_a_gerer/application/providers/unites_provider.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 import '../helpers/favoris_mock.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
@@ -80,7 +83,8 @@ void main() {
         .thenAnswer((_) async => []);
   });
 
-  Future<void> monter(WidgetTester tester) async {
+  Future<void> monter(WidgetTester tester,
+      {PreferencesUnites unites = const PreferencesUnites()}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -93,6 +97,7 @@ void main() {
           }),
           plantationRepositoryProvider.overrideWithValue(plantations),
           parcelleRepositoryProvider.overrideWithValue(parcelles),
+          unitesProvider.overrideWithValue(unites),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -143,12 +148,45 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Tomate').last);
     await tester.pumpAndSettle();
-    await tester.enterText(find.widgetWithText(TextFormField, '0.5'), '1');
+    await tester.enterText(find.widgetWithText(TextFormField, '0,5'), '1');
 
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
 
     expect(find.text('Plus assez de place dans cette zone : 0,25 m² libres.'),
+        findsOneWidget);
+    verifyNever(() => plantations.sauvegarder(any()));
+  });
+
+  testWidgets('imperial surface is typed in ft², stored and checked in m²',
+      (tester) async {
+    when(() => plantations.obtenirParParcelle(any())).thenAnswer((_) async => [
+          Plantation(
+            id: 'en-place',
+            planteId: 'courge',
+            parcelleId: 'z-1',
+            dateMiseEnPlace: DateTime(2026, 5, 1),
+            methode: MethodeMiseEnPlace.repiquage,
+            surfaceOccupee: Surface.enMetresCarres(3.75),
+            nombrePieds: 1,
+          ),
+        ]);
+    await monter(tester,
+        unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+    await tester.tap(find.byType(DropdownButtonFormField<FichePlante>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tomate').last);
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(TextFormField, 'Surface occupée (ft²)'),
+        findsOneWidget);
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Surface occupée (ft²)'), '20');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    // 20 ft² ≈ 1.86 m² does not fit in the 0.25 m² left, shown in ft².
+    expect(find.text('Plus assez de place dans cette zone : 2,7 ft² libres.'),
         findsOneWidget);
     verifyNever(() => plantations.sauvegarder(any()));
   });

@@ -2,6 +2,7 @@ import '../../../domain/enums/charge_tuteur.dart';
 import '../../../domain/enums/etat_equipement.dart';
 import '../../../domain/enums/type_equipement.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../widgets/formateur_mesures.dart';
 import '../chapitre_glossaire.dart';
 import '../complement_terme.dart';
 import '../terme_glossaire.dart';
@@ -11,9 +12,11 @@ import '../type_terme_glossaire.dart';
 /// page per [TypeEquipement] value**, plus the equipment-state
 /// scale. [TypeEquipement.autre] is the only value without a page — it names
 /// nothing concrete to explain.
-List<TermeGlossaire> construireOutils(AppLocalizations l10n) => [
+List<TermeGlossaire> construireOutils(
+        AppLocalizations l10n, FormateurMesures mesures) =>
+    [
       for (final v in TypeEquipement.values)
-        if (v != TypeEquipement.autre) _pageOutil(l10n, v),
+        if (v != TypeEquipement.autre) _pageOutil(l10n, mesures, v),
       TermeGlossaire(
         id: TermeGlossaire.idNotion('etat-equipement'),
         chapitre: ChapitreGlossaire.outilsEtEquipements,
@@ -59,7 +62,8 @@ String idOutilEquipement(TypeEquipement v) => TermeGlossaire.idOutil(switch (v) 
         throw ArgumentError('TypeEquipement.autre has no glossary page'),
     });
 
-TermeGlossaire _pageOutil(AppLocalizations l10n, TypeEquipement v) {
+TermeGlossaire _pageOutil(
+    AppLocalizations l10n, FormateurMesures mesures, TypeEquipement v) {
   final (String titre, String definition, String? astuce, String? conseil) =
       switch (v) {
     TypeEquipement.oya => (
@@ -112,7 +116,8 @@ TermeGlossaire _pageOutil(AppLocalizations l10n, TypeEquipement v) {
       ),
     TypeEquipement.voileHivernage => (
         l10n.glossaireOutilVoileHivernageTitre,
-        l10n.glossaireOutilVoileHivernageDef,
+        l10n.glossaireOutilVoileHivernageDef(
+            mesures.plageEcartTemperature(2, 4)),
         l10n.glossaireOutilVoileHivernageAstuce,
         null
       ),

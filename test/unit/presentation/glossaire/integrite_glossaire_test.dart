@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 import 'package:pot_a_gerer/l10n/app_localizations_fr.dart';
 import 'package:pot_a_gerer/presentation/glossaire/complement_terme.dart';
 import 'package:pot_a_gerer/presentation/glossaire/couverture_glossaire.dart';
@@ -29,6 +30,7 @@ void main() {
     l10n: l10n,
     familles: const [],
     bioagresseurs: const [],
+    unites: const PreferencesUnites(),
   );
   final index = indexerParId(termes);
 

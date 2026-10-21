@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../application/providers/unites_provider.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../l10n/app_localizations.dart';
 import 'complement_terme.dart';
@@ -46,6 +47,7 @@ class PageTermeGlossaire extends ConsumerWidget {
           l10n: l10n,
           familles: data.familles,
           bioagresseurs: data.bioagresseurs,
+          unites: ref.watch(unitesProvider),
         ));
         final terme = index[idTerme];
         if (terme == null) {
