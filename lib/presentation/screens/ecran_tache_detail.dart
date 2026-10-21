@@ -9,6 +9,7 @@ import '../../domain/entities/tache.dart';
 import '../../domain/enums/etat_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
@@ -188,7 +189,7 @@ class _Contenu extends ConsumerWidget {
         Card(
           child: ListTile(
             leading: const Icon(Icons.event_outlined),
-            title: Text(_formaterDate(l10n, tache.datePrevue)),
+            title: Text(FormatDates.de(context).jourMoisAnnee(tache.datePrevue)),
             subtitle: Text(l10n.tacheDetailDatePrevue),
             trailing: TextButton(
               onPressed: () => _reporter(context, ref, notifier, tache),
@@ -474,21 +475,4 @@ class _EtatErreur extends StatelessWidget {
   }
 }
 
-/// French month names (matching the weather/calendar screens' convention).
-const List<String> _moisFr = [
-  'janvier',
-  'février',
-  'mars',
-  'avril',
-  'mai',
-  'juin',
-  'juillet',
-  'août',
-  'septembre',
-  'octobre',
-  'novembre',
-  'décembre',
-];
 
-String _formaterDate(AppLocalizations l10n, DateTime d) =>
-    l10n.dateJourMoisAnnee(d.day, _moisFr[d.month - 1], d.year);

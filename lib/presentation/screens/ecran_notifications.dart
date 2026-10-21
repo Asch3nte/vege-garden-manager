@@ -8,6 +8,7 @@ import '../../domain/enums/type_alerte_meteo.dart';
 import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/alerte_culture.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/format_dates.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
@@ -141,7 +142,7 @@ class _CarteAlerte extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        _libelleDate(l10n, alerte.date, aujourd),
+                        _libelleDate(context, alerte.date, aujourd),
                         style: theme.textTheme.labelSmall
                             ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                       ),
@@ -200,29 +201,15 @@ class _CarteAlerte extends StatelessWidget {
 }
 
 /// Day label relative to today: "Aujourd'hui" / "Demain" / "12 juillet".
-String _libelleDate(AppLocalizations l10n, DateTime jour, DateTime aujourd) {
+String _libelleDate(BuildContext context, DateTime jour, DateTime aujourd) {
+  final l10n = AppLocalizations.of(context)!;
   final j = DateTime(jour.year, jour.month, jour.day);
   final delta = aujourd.joursJusqua(j);
   if (delta == 0) return l10n.jourAujourdhui;
   if (delta == 1) return l10n.jourDemain;
-  return l10n.dateJourMois(j.day, _moisFr[j.month - 1]);
+  return FormatDates.de(context).jourMois(j);
 }
 
-/// French month names, matching the convention of the weather/calendar screens.
-const List<String> _moisFr = [
-  'janvier',
-  'février',
-  'mars',
-  'avril',
-  'mai',
-  'juin',
-  'juillet',
-  'août',
-  'septembre',
-  'octobre',
-  'novembre',
-  'décembre',
-];
 
 /// Empty state: reassuring message when there is nothing to alert about.
 class _EtatVide extends StatelessWidget {

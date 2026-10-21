@@ -202,46 +202,6 @@ void main() {
     expect(vue.jours[1].heures, hasLength(1));
   });
 
-  test('resumeAujourdhui is non-empty', () async {
-    when(() => potagers.obtenirPotagerActif())
-        .thenAnswer((_) async => unPotager(localisation: loc));
-    stubAllServices();
-
-    final vue = await conteneur().read(meteoDetailProvider.future);
-
-    expect(vue.resumeAujourdhui, isNotEmpty);
-  });
-
-  test('resumeDemain is non-null when J+1 data exists', () async {
-    when(() => potagers.obtenirPotagerActif())
-        .thenAnswer((_) async => unPotager(localisation: loc));
-    stubAllServices();
-
-    final vue = await conteneur().read(meteoDetailProvider.future);
-
-    expect(vue.resumeDemain, isNotNull);
-  });
-
-  test('resumeDemain is null when only one day of previsions', () async {
-    when(() => potagers.obtenirPotagerActif())
-        .thenAnswer((_) async => unPotager(localisation: loc));
-    stubAllServices(previsions: [unePrevision()]);
-
-    final vue = await conteneur().read(meteoDetailProvider.future);
-
-    expect(vue.resumeDemain, isNull);
-  });
-
-  test('explicationTaches is non-empty', () async {
-    when(() => potagers.obtenirPotagerActif())
-        .thenAnswer((_) async => unPotager(localisation: loc));
-    stubAllServices();
-
-    final vue = await conteneur().read(meteoDetailProvider.future);
-
-    expect(vue.explicationTaches, isNotEmpty);
-  });
-
   // ── Verdict derivation ──────────────────────────────────────────────────
 
   test('verdict is pluieAVenir when prevision score above threshold', () async {

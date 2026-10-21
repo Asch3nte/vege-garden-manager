@@ -5,7 +5,6 @@ import 'package:riverpod/riverpod.dart';
 import '../../core/constants/constantes_moteur.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../domain/value_objects/prevision_meteo.dart';
-import '../engine/generateur_resume_meteo.dart';
 import '../providers/repository_providers.dart';
 import '../providers/service_providers.dart';
 import 'jour_meteo_vue.dart';
@@ -17,10 +16,10 @@ import 'preferences_notifier.dart';
 
 /// Full weather detail view-model for [EcranMeteoDetail].
 ///
-/// Fetches all five data sources in parallel, derives the watering verdict,
-/// and pre-generates the French summary texts. Returns
-/// [MeteoDetailVue.indisponible] — never throws — when no position is set, and
-/// [MeteoDetailVue.desactivee] without any call when auto weather is opted out.
+/// Fetches all five data sources in parallel and derives the watering verdict.
+/// Returns [MeteoDetailVue.indisponible] — never throws — when no position is
+/// set, and [MeteoDetailVue.desactivee] without any call when auto weather is
+/// opted out.
 final meteoDetailProvider = FutureProvider<MeteoDetailVue>((ref) async {
   final potagerRepo = ref.watch(potagerRepositoryProvider);
   final meteo = ref.watch(meteoServiceProvider);
@@ -67,8 +66,6 @@ final meteoDetailProvider = FutureProvider<MeteoDetailVue>((ref) async {
     return MeteoDetailVue.indisponible(nomPotager: potager.nom);
   }
 
-  const gen = GenerateurResumeMeteo();
-
   return MeteoDetailVue.disponible(
     nomPotager: potager.nom,
     nomStation: nomVille,
@@ -76,9 +73,6 @@ final meteoDetailProvider = FutureProvider<MeteoDetailVue>((ref) async {
     derniereMaj: DateTime.now(),
     jours: jours,
     verdictArrosage: verdict,
-    resumeAujourdhui: gen.resumeJour(jours.first),
-    resumeDemain: jours.length > 1 ? gen.resumeDemain(jours[1]) : null,
-    explicationTaches: gen.explicationTaches(verdict),
   );
 });
 

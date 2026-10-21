@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart'; // EspacementsApp, RayonsApp, TaillesIconesApp
 import '../../app/theme/theme_app.dart';
-import '../../application/engine/generateur_resume_meteo.dart';
 import '../../application/providers/horloge_provider.dart';
 import '../../application/state/meteo_accueil_vue.dart';
 import '../../application/state/meteo_detail_notifier.dart';
@@ -12,6 +11,8 @@ import '../../application/state/jour_meteo_vue.dart';
 import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/format_dates.dart';
+import '../widgets/redacteur_resume_meteo.dart';
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -77,7 +78,7 @@ class _EcranMeteoDetailState extends ConsumerState<EcranMeteoDetail> {
             final delta = aujourd.joursJusqua(j);
             if (delta == 0) return l10n.jourAujourdhui;
             if (delta == 1) return l10n.jourDemain;
-            return l10n.dateJourMois(j.day, _moisFr[j.month - 1]);
+            return FormatDates.de(context).jourMois(j);
           }
 
           return SingleChildScrollView(
@@ -426,10 +427,10 @@ class _ResumeJour extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final jourSel = vue.jours[indexJourSel];
 
-    // Use pre-computed text for today; re-generate for other days.
-    final resumeSel = indexJourSel == 0
-        ? vue.resumeAujourdhui
-        : const GenerateurResumeMeteo().resumeJour(jourSel);
+    final redacteur = RedacteurResumeMeteo.de(context);
+    final demain = indexJourSel == 0 && vue.jours.length > 1
+        ? vue.jours[1]
+        : null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s4),
@@ -440,16 +441,16 @@ class _ResumeJour extends StatelessWidget {
               style: theme.textTheme.titleSmall),
           const SizedBox(height: EspacementsApp.s1),
           Text(
-            resumeSel,
+            redacteur.resumeJour(jourSel),
             style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant),
           ),
-          if (indexJourSel == 0 && vue.resumeDemain != null) ...[
+          if (demain != null) ...[
             const SizedBox(height: EspacementsApp.s4),
             Text(l10n.jourDemain, style: theme.textTheme.titleSmall),
             const SizedBox(height: EspacementsApp.s1),
             Text(
-              vue.resumeDemain!,
+              redacteur.resumeDemain(demain),
               style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant),
             ),
@@ -495,7 +496,8 @@ class _ExplicationTaches extends StatelessWidget {
                         style: theme.textTheme.titleSmall),
                     const SizedBox(height: EspacementsApp.s1),
                     Text(
-                      vue.explicationTaches,
+                      RedacteurResumeMeteo.de(context)
+                          .explicationTaches(vue.verdictArrosage),
                       style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant),
                     ),
@@ -541,8 +543,3 @@ IconData _iconeWmo(int code) {
   if (code >= 95 && code <= 99) return Icons.thunderstorm_outlined;
   return Icons.cloud_outlined;
 }
-
-const List<String> _moisFr = [
-  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
-];

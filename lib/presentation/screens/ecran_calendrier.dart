@@ -20,6 +20,7 @@ import '../../domain/enums/type_tache.dart';
 import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/carte_teaser_palier.dart';
@@ -282,7 +283,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
         Row(
           children: [
             Text(
-              l10n.dateJourMois(jourSel.day, _mois(jourSel.month)),
+              FormatDates.de(context).jourMois(jourSel),
               style: theme.textTheme.titleLarge,
             ),
             const Spacer(),
@@ -353,8 +354,7 @@ class _BarreMois extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final libelle = _moisFr[mois.month - 1];
-    final titre = '${libelle[0].toUpperCase()}${libelle.substring(1)} ${mois.year}';
+    final titre = FormatDates.de(context).moisAnnee(mois);
 
     return Row(
       children: [
@@ -1456,12 +1456,6 @@ String _libelleJour(BuildContext context, DateTime jour) {
 
   if (delta == 0) return l10n.jourAujourdhui;
   if (delta == 1) return l10n.jourDemain;
-  return l10n.dateJourMois(jour.day, _mois(jour.month));
+  return FormatDates.de(context).jourMois(jour);
 }
 
-const List<String> _moisFr = [
-  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
-];
-
-String _mois(int m) => _moisFr[m - 1];
