@@ -5,6 +5,9 @@ import 'package:pot_a_gerer/application/state/jour_meteo_vue.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_vue.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/redacteur_resume_meteo.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
+import 'package:pot_a_gerer/presentation/widgets/formateur_mesures.dart';
 
 JourMeteoVue unJour({
   int weathercode = 0,
@@ -35,10 +38,14 @@ void main() {
     await initializeDateFormatting('en');
   });
 
-  final fr = RedacteurResumeMeteo(
-      lookupAppLocalizations(const Locale('fr')), const Locale('fr'));
-  final en = RedacteurResumeMeteo(
-      lookupAppLocalizations(const Locale('en')), const Locale('en'));
+  RedacteurResumeMeteo redacteur(String langue,
+      [PreferencesUnites unites = const PreferencesUnites()]) {
+    final l10n = lookupAppLocalizations(Locale(langue));
+    return RedacteurResumeMeteo(l10n, FormateurMesures(l10n, unites));
+  }
+
+  final fr = redacteur('fr');
+  final en = redacteur('en');
 
   group('resumeJour', () {
     test('full French sentence', () {
@@ -77,6 +84,21 @@ void main() {
           probabilitePluie: 0.6, precipitationsMm: 2, ventMaxKmh: 40));
       expect(r, isNot(matches(RegExp('Pluie|gel|Vent|risque'))));
     });
+  });
+
+  test('imperial units convert temperatures, rain and wind', () {
+    final imperial =
+        redacteur('en', const PreferencesUnites.uniforme(SystemeUnites.imperial));
+    expect(
+      imperial.resumeJour(unJour(
+          tempMin: 0,
+          tempMax: 20,
+          probabilitePluie: 0.5,
+          precipitationsMm: 25.4,
+          ventMaxKmh: 16.09344)),
+      allOf(contains('32°'), contains('68°'), contains('1 in'),
+          contains('10 mph')),
+    );
   });
 
   group('resumeDemain', () {

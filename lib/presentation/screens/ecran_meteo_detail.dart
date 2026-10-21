@@ -13,6 +13,7 @@ import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/prevision_horaire.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/redacteur_resume_meteo.dart';
 
@@ -118,12 +119,12 @@ class _EcranMeteoDetailState extends ConsumerState<EcranMeteoDetail> {
 // ── _EnTeteStation ────────────────────────────────────────────────────────────
 
 /// Station info banner: locality name · elevation · last-updated time.
-class _EnTeteStation extends StatelessWidget {
+class _EnTeteStation extends ConsumerWidget {
   final MeteoDetailVue vue;
   const _EnTeteStation({required this.vue});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final maj = vue.derniereMaj;
@@ -155,7 +156,8 @@ class _EnTeteStation extends StatelessWidget {
                     children: [
                       if (vue.elevation != null) ...[
                         Text(
-                          '${vue.elevation!.round()} m',
+                          formateurMesures(context, ref)
+                              .altitudeM(vue.elevation!),
                           style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant),
                         ),
@@ -221,7 +223,7 @@ class _SelecteurJours extends StatelessWidget {
 }
 
 /// Single selectable day card.
-class _CarteJour extends StatelessWidget {
+class _CarteJour extends ConsumerWidget {
   final JourMeteoVue jour;
   final bool selected;
   final VoidCallback onTap;
@@ -235,7 +237,8 @@ class _CarteJour extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mesures = formateurMesures(context, ref);
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final proba = (jour.probabilitePluie * 100).round();
@@ -280,7 +283,7 @@ class _CarteJour extends StatelessWidget {
             const SizedBox(height: EspacementsApp.s2),
             Text(
               l10n.meteoTemperatures(
-                  jour.tempMin.round(), jour.tempMax.round()),
+                  mesures.degres(jour.tempMin), mesures.degres(jour.tempMax)),
               style: theme.textTheme.bodySmall
                   ?.copyWith(fontWeight: FontWeight.w600, color: fg),
             ),
@@ -291,7 +294,7 @@ class _CarteJour extends StatelessWidget {
                 Icon(PhosphorIconsRegular.wind, size: 11, color: fgSub),
                 const SizedBox(width: 2),
                 Text(
-                  '${jour.ventMaxKmh.round()} km/h',
+                  mesures.vent(jour.ventMaxKmh),
                   style: theme.textTheme.labelSmall
                       ?.copyWith(color: fgSub, fontSize: 10),
                 ),
@@ -358,12 +361,12 @@ class _DefileurHoraire extends StatelessWidget {
 }
 
 /// Single compact hourly column: hour · WMO icon · temperature · rain%.
-class _ColonneHeure extends StatelessWidget {
+class _ColonneHeure extends ConsumerWidget {
   final PrevisionHoraire h;
   const _ColonneHeure({required this.h});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final accents = theme.extension<AccentsCarnet>()!;
@@ -383,7 +386,7 @@ class _ColonneHeure extends StatelessWidget {
           Icon(_iconeWmo(h.weathercode), size: TaillesIconesApp.md),
           const SizedBox(height: EspacementsApp.s1),
           Text(
-            l10n.meteoTemp(h.temperature.round()),
+            l10n.meteoTemp(formateurMesures(context, ref).degres(h.temperature)),
             style: theme.textTheme.bodySmall
                 ?.copyWith(fontWeight: FontWeight.w600),
           ),
@@ -412,7 +415,7 @@ class _ColonneHeure extends StatelessWidget {
 
 /// Day-summary text block: short generated description of the selected day,
 /// plus a J+1 outlook paragraph when today is selected.
-class _ResumeJour extends StatelessWidget {
+class _ResumeJour extends ConsumerWidget {
   final MeteoDetailVue vue;
   final int indexJourSel;
   final String Function(int) libelleJour;
@@ -424,12 +427,12 @@ class _ResumeJour extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final jourSel = vue.jours[indexJourSel];
 
-    final redacteur = RedacteurResumeMeteo.de(context);
+    final redacteur = RedacteurResumeMeteo.de(context, ref);
     final demain = indexJourSel == 0 && vue.jours.length > 1
         ? vue.jours[1]
         : null;
@@ -466,12 +469,12 @@ class _ResumeJour extends StatelessWidget {
 // ── _ExplicationTaches ────────────────────────────────────────────────────────
 
 /// Card explaining why the app generated the current tasks (verdict-based).
-class _ExplicationTaches extends StatelessWidget {
+class _ExplicationTaches extends ConsumerWidget {
   final MeteoDetailVue vue;
   const _ExplicationTaches({required this.vue});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final accents = theme.extension<AccentsCarnet>()!;
@@ -498,7 +501,7 @@ class _ExplicationTaches extends StatelessWidget {
                         style: theme.textTheme.titleSmall),
                     const SizedBox(height: EspacementsApp.s1),
                     Text(
-                      RedacteurResumeMeteo.de(context)
+                      RedacteurResumeMeteo.de(context, ref)
                           .explicationTaches(vue.verdictArrosage),
                       style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant),

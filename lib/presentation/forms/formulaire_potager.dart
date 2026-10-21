@@ -17,6 +17,7 @@ import '../widgets/capture_localisation.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/selecteur_carte_monde.dart';
 import '../widgets/champ_deroulant_decrit.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
 import 'enregistrement_formulaire.dart';
@@ -244,7 +245,8 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
               value: _rusticite,
               options: ZoneRusticite.values,
               libelle: l10n.rusticite,
-              description: l10n.rusticiteDescription,
+              description: (z) =>
+                  l10n.rusticiteDescription(z, formateurMesures(context, ref)),
               labelText: l10n.formPotagerRusticite,
               idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
               onChanged: (v) => setState(() => _rusticite = v),

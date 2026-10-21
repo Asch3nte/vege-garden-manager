@@ -12,6 +12,9 @@ import 'package:pot_a_gerer/application/state/jour_meteo_vue.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_horaire.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_meteo_detail.dart';
+import 'package:pot_a_gerer/application/providers/unites_provider.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 void main() {
   final maintenant = DateTime(2026, 6, 9, 8, 24);
@@ -74,12 +77,14 @@ void main() {
             )
           : MeteoDetailVue.indisponible(nomPotager: '');
 
-  Future<void> monter(WidgetTester tester, MeteoDetailVue vue) async {
+  Future<void> monter(WidgetTester tester, MeteoDetailVue vue,
+      {PreferencesUnites unites = const PreferencesUnites()}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           horlogeProvider.overrideWithValue(() => maintenant),
           meteoDetailProvider.overrideWith((_) async => vue),
+          unitesProvider.overrideWithValue(unites),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -149,6 +154,17 @@ void main() {
     await monter(tester, uneVue());
 
     expect(find.text('Mon potager'), findsOneWidget);
+  });
+
+  testWidgets('imperial units convert temperatures, wind and elevation',
+      (tester) async {
+    await monter(tester, uneVue(),
+        unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+
+    expect(find.text('64° – 79°'), findsWidgets);
+    expect(find.text('6 mph'), findsWidgets);
+    expect(find.textContaining('213 ft'), findsOneWidget);
+    expect(find.textContaining('km/h'), findsNothing);
   });
 
   testWidgets('shows station info in header', (tester) async {

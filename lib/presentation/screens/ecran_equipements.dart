@@ -16,6 +16,7 @@ import '../glossaire/catalogue/outils.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
@@ -228,7 +229,8 @@ class _CarteEquipement extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final effets = l10n.resumeEffet(equipement.effet());
+    final effets =
+        l10n.resumeEffet(equipement.effet(), formateurMesures(context, ref));
     final retire = !equipement.estEnService;
 
     return Opacity(

@@ -15,6 +15,7 @@ import '../../../domain/value_objects/localisation.dart';
 import '../../../domain/value_objects/zone_climatique.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/capture_localisation.dart';
+import '../../widgets/formateur_mesures.dart';
 import '../../widgets/selecteur_carte_monde.dart';
 import '../../widgets/libelles_enums.dart';
 import '../../widgets/position_potager_actions.dart';
@@ -112,7 +113,8 @@ class PanneauConfidentialite extends ConsumerWidget {
         valeur: z.rusticite,
         options: ZoneRusticite.values,
         libelle: l10n.rusticite,
-        description: l10n.rusticiteDescription,
+        description: (z) =>
+            l10n.rusticiteDescription(z, formateurMesures(context, ref)),
       );
       if (choix != null) {
         await enregistrerZoneClimatiquePotager(

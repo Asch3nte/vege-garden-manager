@@ -29,6 +29,7 @@ import '../glossaire/type_terme_glossaire.dart';
 import 'badge_perso.dart';
 import 'bouton_favori.dart';
 import 'calendrier_semis_recolte.dart';
+import 'formateur_mesures.dart';
 import 'icones_communes.dart';
 import 'langue_contexte.dart';
 import 'libelles_enums.dart';
@@ -627,7 +628,7 @@ class _ListeVarietesState extends State<_ListeVarietes> {
 }
 
 /// Two-column fact grid (exposure, watering, spacing, time-to-harvest).
-class _Faits extends StatelessWidget {
+class _Faits extends ConsumerWidget {
   final FichePlante fiche;
 
   const _Faits({required this.fiche});
@@ -637,7 +638,8 @@ class _Faits extends StatelessWidget {
       NumberFormat('0.#', langue).format(v);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mesures = formateurMesures(context, ref);
     final l10n = AppLocalizations.of(context)!;
     final b = fiche.besoins;
     // Exposition shown as a **range** when a minimum tolerance is set:
@@ -666,7 +668,7 @@ class _Faits extends StatelessWidget {
       (
         PhosphorIconsRegular.ruler,
         l10n.ficheEspacement,
-        l10n.ficheEspacementCm(fiche.espacementCm),
+        mesures.longueurCm(fiche.espacementCm),
         null,
       ),
       if (hMin != null || hMax != null)
@@ -674,8 +676,8 @@ class _Faits extends StatelessWidget {
           PhosphorIconsRegular.arrowsVertical,
           l10n.ficheHauteur,
           (hMin != null && hMax != null && hMin != hMax)
-              ? l10n.ficheHauteurCm(hMin, hMax)
-              : l10n.ficheHauteurCmUnique((hMax ?? hMin)!),
+              ? mesures.plageLongueurCm(hMin, hMax)
+              : mesures.longueurCm((hMax ?? hMin)!),
           null,
         ),
       (
@@ -970,17 +972,15 @@ class _SectionCalendrier extends ConsumerWidget {
 /// numeric figures are **indicative** (a caption says so); the watering engine
 /// still reasons from the coarse need + weather, so this section is purely
 /// informational.
-class _SectionArrosageDetaille extends StatelessWidget {
+class _SectionArrosageDetaille extends ConsumerWidget {
   final ArrosageDetaille detail;
 
   const _SectionArrosageDetaille({required this.detail});
 
   /// Formats a volume with one optional decimal in the [langue] format.
-  static String _num(double v, String langue) =>
-      NumberFormat('0.#', langue).format(v);
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mesures = formateurMesures(context, ref);
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final note = detail.note(context.langue);
@@ -1033,11 +1033,9 @@ class _SectionArrosageDetaille extends StatelessWidget {
             PhosphorIconsRegular.drop,
             l10n.ficheArrosageVolume,
             detail.volumeLitresM2Min == detail.volumeLitresM2Max
-                ? l10n.ficheArrosageVolumeLitresUnique(
-                    _num(detail.volumeLitresM2Min!, l10n.localeName))
-                : l10n.ficheArrosageVolumeLitres(
-                    _num(detail.volumeLitresM2Min!, l10n.localeName),
-                    _num(detail.volumeLitresM2Max!, l10n.localeName)),
+                ? mesures.arrosage(detail.volumeLitresM2Min!)
+                : mesures.plageArrosage(
+                    detail.volumeLitresM2Min!, detail.volumeLitresM2Max!),
           ),
         if (detail.aFrequence || detail.aVolume) ...[
           Text(

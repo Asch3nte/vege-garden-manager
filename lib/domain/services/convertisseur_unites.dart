@@ -4,6 +4,7 @@ class ConvertisseurUnites {
   static const double _cmParPouce = 2.54;
   static const double _mmParPouce = 25.4;
   static const double _kmParMille = 1.609344;
+  static const double _mParPied = 0.3048;
   static const double _m2ParFt2 = 0.09290304;
   static const double _litresParGallon = 3.785411784;
   static const double _mlParOnceLiquide = 29.5735295625;
@@ -22,6 +23,7 @@ class ConvertisseurUnites {
   double poucesVersCentimetres(double pouces) => pouces * _cmParPouce;
   double millimetresVersPouces(double mm) => mm / _mmParPouce;
   double kmhVersMph(double kmh) => kmh / _kmParMille;
+  double metresVersPieds(double m) => m / _mParPied;
 
   double m2VersFt2(double m2) => m2 / _m2ParFt2;
   double ft2VersM2(double ft2) => ft2 * _m2ParFt2;

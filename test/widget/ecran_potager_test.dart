@@ -49,6 +49,9 @@ import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_potager.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_zone_detail.dart';
+import 'package:pot_a_gerer/application/providers/unites_provider.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
@@ -174,7 +177,11 @@ void main() {
   // Built lazily (per test) so it captures the mocks assigned in setUp.
   // [niveau] defaults to the most restrictive tier (débutant), matching the
   // real accesNiveauProvider default while preferences load.
-  overrides({NiveauExperience niveau = NiveauExperience.debutant}) => [
+  overrides({
+    NiveauExperience niveau = NiveauExperience.debutant,
+    PreferencesUnites unites = const PreferencesUnites(),
+  }) =>
+      [
         potagerRepositoryProvider.overrideWithValue(potagers),
         parcelleRepositoryProvider.overrideWithValue(parcelles),
         plantationRepositoryProvider.overrideWithValue(plantations),
@@ -184,16 +191,18 @@ void main() {
         geolocalisationServiceProvider.overrideWithValue(geoloc),
         horlogeProvider.overrideWithValue(() => maintenant),
         accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
+        unitesProvider.overrideWithValue(unites),
       ];
 
   // Mounts the screen alone (no inter-screen navigation needed).
   Future<void> monter(
     WidgetTester tester, {
     NiveauExperience niveau = NiveauExperience.debutant,
+    PreferencesUnites unites = const PreferencesUnites(),
   }) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: overrides(niveau: niveau),
+        overrides: overrides(niveau: niveau, unites: unites),
         child: MaterialApp(
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -262,6 +271,18 @@ void main() {
     expect(find.text('Serre'), findsOneWidget);
     expect(find.text('Tomate'), findsOneWidget);
     expect(find.text('Aubergine'), findsOneWidget);
+  });
+
+  testWidgets('a bed shows its surface in the chosen unit', (tester) async {
+    when(() => potagers.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => parcelles.obtenirParPotager('pot-1'))
+        .thenAnswer((_) async => [uneParcelle('z-1', 'Carré nord')]);
+
+    await monter(tester,
+        unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+
+    expect(find.textContaining('21,5 ft²'), findsOneWidget);
   });
 
   testWidgets('marks a bed with a drop when a task is due today',

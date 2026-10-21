@@ -1,6 +1,7 @@
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/enums/critere_association.dart';
 import '../../l10n/app_localizations.dart';
+import 'formateur_mesures.dart';
 
 /// Builds the **full, explicit list of factors** behind a derived association
 /// : one localised sentence per [CritereAssociation] the
@@ -16,10 +17,14 @@ List<String> facteursAssociation(
   Set<CritereAssociation> criteres,
   FichePlante source,
   FichePlante cible,
+  FormateurMesures mesures,
 ) {
   final s = source.nomLocalise(l10n.localeName);
   final c = cible.nomLocalise(l10n.localeName);
-  String hauteur(FichePlante f) => '${f.hauteurAdulteCmMax ?? f.hauteurAdulteCmMin ?? '?'}';
+  String hauteur(FichePlante f) {
+    final cm = f.hauteurAdulteCmMax ?? f.hauteurAdulteCmMin;
+    return cm == null ? '?' : mesures.longueurCm(cm);
+  }
 
   String ligne(CritereAssociation cr) => switch (cr) {
         CritereAssociation.sourceFixeAzote => l10n.critereSourceFixeAzote(s),

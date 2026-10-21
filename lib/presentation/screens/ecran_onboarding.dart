@@ -25,6 +25,7 @@ import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/champ_deroulant_decrit.dart';
 import '../widgets/couleur_zone_ui.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/invalidation_vues.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/selecteur_carte_monde.dart';
@@ -374,7 +375,8 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           value: _rusticite,
           options: ZoneRusticite.values,
           libelle: l10n.rusticite,
-          description: l10n.rusticiteDescription,
+          description: (z) =>
+              l10n.rusticiteDescription(z, formateurMesures(context, ref)),
           labelText: l10n.formPotagerRusticite,
           idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
           onChanged: (v) => setState(() => _rusticite = v),

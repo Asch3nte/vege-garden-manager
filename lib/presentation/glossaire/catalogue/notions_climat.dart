@@ -4,7 +4,9 @@ import '../../../domain/enums/niveau_soleil.dart';
 import '../../../domain/enums/type_alerte_meteo.dart';
 import '../../../domain/enums/type_climat.dart';
 import '../../../domain/enums/zone_rusticite.dart';
+import '../../../domain/value_objects/preferences_unites.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../widgets/formateur_mesures.dart';
 import '../../widgets/libelles_enums.dart';
 import '../chapitre_glossaire.dart';
 import '../complement_terme.dart';
@@ -42,7 +44,9 @@ List<TermeGlossaire> construireNotionsClimat(AppLocalizations l10n) => [
             for (final v in ZoneRusticite.values)
               (
                 libelle: l10n.rusticite(v),
-                description: l10n.rusticiteDescription(v)
+                // Reference text: kept metric whatever the unit setting.
+                description: l10n.rusticiteDescription(
+                    v, FormateurMesures(l10n, const PreferencesUnites()))
               ),
           ]),
         ],

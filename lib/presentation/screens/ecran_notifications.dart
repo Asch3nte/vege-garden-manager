@@ -10,6 +10,7 @@ import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/alerte_culture.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
+import '../widgets/formateur_mesures.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/type_terme_glossaire.dart';
@@ -92,7 +93,7 @@ class _Liste extends ConsumerWidget {
 }
 
 /// One alert: type icon, title, triggering figure, day and affected-culture count.
-class _CarteAlerte extends StatelessWidget {
+class _CarteAlerte extends ConsumerWidget {
   final AlerteCulture alerte;
 
   /// Local midnight of "today", to label the day relative to now.
@@ -101,7 +102,7 @@ class _CarteAlerte extends StatelessWidget {
   const _CarteAlerte({required this.alerte, required this.aujourd});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final couleur = _couleur(theme);
@@ -129,7 +130,7 @@ class _CarteAlerte extends StatelessWidget {
                   Text(_titre(l10n), style: theme.textTheme.titleSmall),
                   const SizedBox(height: 2),
                   Text(
-                    _detail(l10n),
+                    _detail(l10n, formateurMesures(context, ref)),
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),
@@ -191,12 +192,15 @@ class _CarteAlerte extends StatelessWidget {
         TypeAlerteMeteo.fortePluie => l10n.notificationsAlerteFortePluieTitre,
       };
 
-  String _detail(AppLocalizations l10n) {
-    final v = alerte.valeurDeclenchante.round();
+  String _detail(AppLocalizations l10n, FormateurMesures mesures) {
+    final v = alerte.valeurDeclenchante;
     return switch (alerte.type) {
-      TypeAlerteMeteo.gel => l10n.notificationsAlerteGelDetail(v),
-      TypeAlerteMeteo.canicule => l10n.notificationsAlerteCaniculeDetail(v),
-      TypeAlerteMeteo.fortePluie => l10n.notificationsAlerteFortePluieDetail(v),
+      TypeAlerteMeteo.gel =>
+        l10n.notificationsAlerteGelDetail(mesures.temperature(v)),
+      TypeAlerteMeteo.canicule =>
+        l10n.notificationsAlerteCaniculeDetail(mesures.temperature(v)),
+      TypeAlerteMeteo.fortePluie =>
+        l10n.notificationsAlerteFortePluieDetail(mesures.precipitations(v)),
     };
   }
 }
