@@ -156,6 +156,15 @@ void main() {
       );
     });
 
+    test('float rounding does not break equality nor the hashCode', () {
+      final somme = const Quantite(0.1, UniteQuantite.kg) +
+          const Quantite(0.2, UniteQuantite.kg);
+      const attendu = Quantite(300, UniteQuantite.g);
+
+      expect(somme, attendu);
+      expect(somme.hashCode, attendu.hashCode);
+    });
+
     test('different amounts are not equal', () {
       expect(
         const Quantite(1, UniteQuantite.kg) ==

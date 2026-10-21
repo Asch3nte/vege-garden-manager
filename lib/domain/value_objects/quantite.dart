@@ -56,14 +56,18 @@ class Quantite {
   Quantite operator -(Quantite autre) =>
       Quantite(_valeur - autre.convertirVers(_unite)._valeur, _unite);
 
+  /// Amount in millionths of the base unit, so float rounding from
+  /// conversions does not break equality.
+  int get _cleEgalite => (_enBase * 1e6).round();
+
   @override
   bool operator ==(Object other) =>
       other is Quantite &&
       other._unite.nature == _unite.nature &&
-      other._enBase == _enBase;
+      other._cleEgalite == _cleEgalite;
 
   @override
-  int get hashCode => Object.hash(_unite.nature, _enBase);
+  int get hashCode => Object.hash(_unite.nature, _cleEgalite);
 
   @override
   String toString() => 'Quantite($_valeur ${_unite.name})';
