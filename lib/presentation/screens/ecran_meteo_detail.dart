@@ -529,11 +529,11 @@ IconData _iconeWmo(int code) {
   if (code <= 2) return PhosphorIconsRegular.cloudSun;
   if (code == 3) return PhosphorIconsRegular.cloud;
   if (code == 45 || code == 48) return PhosphorIconsRegular.cloudFog;
-  if (code >= 51 && code <= 57) return PhosphorIconsRegular.grains;
-  if (code >= 58 && code <= 67) return PhosphorIconsRegular.drop;
-  if (code >= 71 && code <= 77) return PhosphorIconsRegular.snowflake;
-  if (code >= 80 && code <= 82) return PhosphorIconsRegular.drop;
-  if (code == 85 || code == 86) return PhosphorIconsRegular.snowflake;
+  if (code >= 51 && code <= 57) return PhosphorIconsRegular.drop; // drizzle
+  if (code >= 58 && code <= 67) return PhosphorIconsRegular.cloudRain;
+  if (code >= 71 && code <= 77) return PhosphorIconsRegular.cloudSnow;
+  if (code >= 80 && code <= 82) return PhosphorIconsRegular.cloudRain;
+  if (code == 85 || code == 86) return PhosphorIconsRegular.cloudSnow;
   if (code >= 95 && code <= 99) return PhosphorIconsRegular.cloudLightning;
   return PhosphorIconsRegular.cloud;
 }

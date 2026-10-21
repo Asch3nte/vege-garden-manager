@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_vue.dart';
@@ -98,6 +99,41 @@ void main() {
 
     expect(find.textContaining('position'), findsOneWidget);
     expect(find.byType(Card), findsNothing);
+  });
+
+  testWidgets('drizzle, rain and snow hours get weather icons', (tester) async {
+    PrevisionHoraire heure(int h, int code) => PrevisionHoraire(
+        heure: DateTime(2026, 6, 9, h),
+        temperature: 12,
+        precipitationsMm: 0,
+        weathercode: code);
+    final jour = JourMeteoVue(
+      date: DateTime(2026, 6, 9),
+      tempMin: 8,
+      tempMax: 14,
+      precipitationsMm: 3,
+      probabilitePluie: 0.8,
+      weathercode: 3,
+      risqueGel: false,
+      risqueCanicule: false,
+      ventMaxKmh: 10,
+      heures: [heure(8, 53), heure(9, 63), heure(10, 73)],
+    );
+    await monter(
+        tester,
+        MeteoDetailVue.disponible(
+          nomPotager: 'Mon potager',
+          nomStation: null,
+          elevation: null,
+          derniereMaj: DateTime(2026, 6, 9, 7),
+          jours: [jour],
+          verdictArrosage: VerdictMeteo.clement,
+        ));
+
+    expect(find.byIcon(PhosphorIconsRegular.grains), findsNothing);
+    expect(find.byIcon(PhosphorIconsRegular.drop), findsWidgets);
+    expect(find.byIcon(PhosphorIconsRegular.cloudRain), findsOneWidget);
+    expect(find.byIcon(PhosphorIconsRegular.cloudSnow), findsOneWidget);
   });
 
   testWidgets('desactivee → shows the opt-out message', (tester) async {
