@@ -4,6 +4,7 @@ import '../../domain/entities/observation.dart';
 import '../../domain/enums/cible_observation.dart';
 import '../../domain/repositories/abstract_observation_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/observation_mapper.dart';
 
@@ -11,8 +12,9 @@ import '../mappers/observation_mapper.dart';
 class ObservationRepositoryImpl implements AbstractObservationRepository {
   final AppDatabase _db;
   final ObservationMapper _mapper = const ObservationMapper();
+  final LecteurLignes _lecteur;
 
-  ObservationRepositoryImpl(this._db);
+  ObservationRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Observation>> obtenirParCible(
@@ -30,7 +32,8 @@ class ObservationRepositoryImpl implements AbstractObservationRepository {
           })
           ..orderBy([(t) => OrderingTerm.desc(t.dateObservation)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.observations.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -38,7 +41,8 @@ class ObservationRepositoryImpl implements AbstractObservationRepository {
     final rows = await (_db.select(_db.observations)
           ..where((t) => t.resolu.equals(false) & t.deletedAt.isNull()))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.observations.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override

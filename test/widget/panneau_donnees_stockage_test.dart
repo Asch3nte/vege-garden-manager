@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pot_a_gerer/application/state/journal_lignes_illisibles.dart';
 import 'package:pot_a_gerer/application/state/statistiques_donnees_notifier.dart';
 import 'package:pot_a_gerer/domain/value_objects/statistiques_stockage.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_donnees.dart';
 
 void main() {
-  Widget app(StatistiquesStockage stats) => ProviderScope(
+  Widget app(StatistiquesStockage stats, {JournalLignesIllisibles? journal}) =>
+      ProviderScope(
         overrides: [
           statistiquesDonneesProvider.overrideWith((ref) async => stats),
+          if (journal != null)
+            journalLignesIllisiblesProvider.overrideWithValue(journal),
         ],
         child: MaterialApp(
           locale: const Locale('fr'),
@@ -47,6 +51,25 @@ void main() {
     expect(find.text('plantations'), findsOneWidget);
     expect(find.text('5'), findsOneWidget);
     expect(find.text('2'), findsOneWidget);
+  });
+
+  testWidgets('no unreadable record, no mention', (tester) async {
+    final stats = StatistiquesStockage(tables: const [], tailleOctets: 10);
+    await tester.pumpWidget(app(stats));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('illisible'), findsNothing);
+  });
+
+  testWidgets('reports the unreadable records kept in the database',
+      (tester) async {
+    final stats = StatistiquesStockage(tables: const [], tailleOctets: 10);
+    final journal = JournalLignesIllisibles()
+      ..signaler('taches', 't1', const FormatException('x'))
+      ..signaler('plantations', 'p1', const FormatException('x'));
+    await tester.pumpWidget(app(stats, journal: journal));
+    await tester.pumpAndSettle();
+    expect(find.text('2 enregistrements illisibles, conservés tels quels'),
+        findsOneWidget);
   });
 
   testWidgets('formats a byte-range size without decimals', (tester) async {

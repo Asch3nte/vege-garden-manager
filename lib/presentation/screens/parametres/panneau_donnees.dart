@@ -5,6 +5,7 @@ import '../../../app/historique_navigation.dart';
 import '../../../app/router.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../application/state/preferences_notifier.dart';
+import '../../../application/state/journal_lignes_illisibles.dart';
 import '../../../application/state/statistiques_donnees_notifier.dart';
 import '../../../domain/enums/mode_import.dart';
 import '../../../domain/exceptions/sauvegarde_invalide_exception.dart';
@@ -188,6 +189,7 @@ class _SectionStockage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final stats = ref.watch(statistiquesDonneesProvider);
+    final illisibles = ref.watch(journalLignesIllisiblesProvider).nombre;
 
     return ZoneParametres(
       titre: l10n.donneesStockageSectionTitre,
@@ -229,6 +231,16 @@ class _SectionStockage extends ConsumerWidget {
                   ),
                 ),
               ),
+              if (illisibles > 0)
+                Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    leading: Icon(Icons.warning_amber_outlined,
+                        color: theme.colorScheme.error),
+                    title: Text(l10n.donneesLignesIllisibles(illisibles)),
+                    subtitle: Text(l10n.donneesLignesIllisiblesNote),
+                  ),
+                ),
               for (final t in s.tables) ...[
                 const Divider(height: 1),
                 Material(

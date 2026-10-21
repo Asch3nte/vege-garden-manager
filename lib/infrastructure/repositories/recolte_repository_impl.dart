@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/recolte.dart';
 import '../../domain/repositories/abstract_recolte_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/recolte_mapper.dart';
 
@@ -10,8 +11,9 @@ import '../mappers/recolte_mapper.dart';
 class RecolteRepositoryImpl implements AbstractRecolteRepository {
   final AppDatabase _db;
   final RecolteMapper _mapper = const RecolteMapper();
+  final LecteurLignes _lecteur;
 
-  RecolteRepositoryImpl(this._db);
+  RecolteRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Recolte>> obtenirParPlantation(String plantationId) async {
@@ -20,7 +22,8 @@ class RecolteRepositoryImpl implements AbstractRecolteRepository {
               t.plantationId.equals(plantationId) & t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.dateRecolte)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.recoltes.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override

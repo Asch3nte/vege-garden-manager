@@ -4,6 +4,7 @@ import '../../domain/entities/rappel.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/repositories/abstract_rappel_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/rappel_mapper.dart';
 
@@ -11,8 +12,9 @@ import '../mappers/rappel_mapper.dart';
 class RappelRepositoryImpl implements AbstractRappelRepository {
   final AppDatabase _db;
   final RappelMapper _mapper = const RappelMapper();
+  final LecteurLignes _lecteur;
 
-  RappelRepositoryImpl(this._db);
+  RappelRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Rappel>> obtenirActifs() async {
@@ -20,7 +22,8 @@ class RappelRepositoryImpl implements AbstractRappelRepository {
           ..where((t) => t.etat.equals('actif') & t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.dateDebut)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.rappels.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -37,7 +40,8 @@ class RappelRepositoryImpl implements AbstractRappelRepository {
           })
           ..orderBy([(t) => OrderingTerm.asc(t.dateDebut)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.rappels.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -45,7 +49,8 @@ class RappelRepositoryImpl implements AbstractRappelRepository {
     final row = await (_db.select(_db.rappels)
           ..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.rappels.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override

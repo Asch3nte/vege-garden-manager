@@ -4,6 +4,7 @@ import '../../domain/entities/plantation.dart';
 import '../../domain/enums/statut_plantation.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/plantation_mapper.dart';
 import 'suppression_cascade.dart';
@@ -16,15 +17,17 @@ import 'suppression_cascade.dart';
 class PlantationRepositoryImpl implements AbstractPlantationRepository {
   final AppDatabase _db;
   final PlantationMapper _mapper = const PlantationMapper();
+  final LecteurLignes _lecteur;
 
-  PlantationRepositoryImpl(this._db);
+  PlantationRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<Plantation?> obtenirParId(String id) async {
     final row = await (_db.select(_db.plantations)
           ..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.plantations.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -32,7 +35,8 @@ class PlantationRepositoryImpl implements AbstractPlantationRepository {
     final rows = await (_db.select(_db.plantations)
           ..where((t) => t.parcelleId.equals(parcelleId) & t.deletedAt.isNull()))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.plantations.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -42,7 +46,8 @@ class PlantationRepositoryImpl implements AbstractPlantationRepository {
               t.statut.equals(StatutPlantation.enCours.name) &
               t.deletedAt.isNull()))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.plantations.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override

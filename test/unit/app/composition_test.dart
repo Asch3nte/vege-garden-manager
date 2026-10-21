@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/composition.dart';
+import 'package:pot_a_gerer/application/state/journal_lignes_illisibles.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -94,5 +95,28 @@ void main() {
     });
     final repo = await container.read(fichePlanteRepositoryProvider.future);
     expect(repo, isNotNull);
+  });
+
+  test('an unreadable row is set aside and counted in the journal', () async {
+    final db = AppDatabase(NativeDatabase.memory());
+    final container = ProviderContainer(overrides: Composition.surcharges(db));
+    addTearDown(() {
+      db.close();
+      container.dispose();
+    });
+    final repo = container.read(potagerRepositoryProvider);
+    for (final id in ['ok', 'ko']) {
+      await repo.sauvegarder(Potager(
+        id: id,
+        nom: 'Jardin',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime.utc(2026, 5, 1),
+      ));
+    }
+    await db.customStatement("UPDATE potagers SET nom = '' WHERE id = 'ko'");
+
+    expect((await repo.obtenirTous()).map((p) => p.id), ['ok']);
+    expect(container.read(journalLignesIllisiblesProvider).nombre, 1);
   });
 }

@@ -627,6 +627,8 @@
   "donneesStockageNote": "What the app keeps on this device. No data is ever sent to a server.",
   "donneesStockageTaille": "Size on device",
   "donneesStockageTotalLignes": "{count, plural, =0{No records} =1{1 record in total} other{{count} records in total}}",
+  "donneesLignesIllisibles": "{count, plural, =1{1 unreadable record, kept as is} other{{count} unreadable records, kept as is}}",
+  "donneesLignesIllisiblesNote": "They are not shown but stay in the database and in backups.",
   "donneesStockageErreur": "Couldn't read the storage statistics.",
   "donneesTailleOctets": "{o} B",
   "donneesTailleKo": "{ko} KB",

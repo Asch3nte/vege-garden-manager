@@ -1687,6 +1687,10 @@
     "description": "Nombre total d'enregistrements toutes tables confondues.",
     "placeholders": { "count": { "type": "int" } }
   },
+  "donneesLignesIllisibles": "{count, plural, =1{1 enregistrement illisible, conservé tel quel} other{{count} enregistrements illisibles, conservés tels quels}}",
+  "@donneesLignesIllisibles": { "description": "Enregistrements d'une ancienne version qui ne s'affichent plus mais restent en base et dans les sauvegardes.", "placeholders": { "count": { "type": "int" } } },
+  "donneesLignesIllisiblesNote": "Ils ne s'affichent pas mais restent dans la base et dans les sauvegardes.",
+  "@donneesLignesIllisiblesNote": { "description": "Précision sous le nombre d'enregistrements illisibles." },
   "donneesStockageErreur": "Impossible de lire les statistiques de stockage.",
   "@donneesStockageErreur": { "description": "État d'erreur de la section données stockées." },
   "donneesTailleOctets": "{o} o",

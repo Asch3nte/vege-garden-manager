@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../database/app_database.dart';
+import '../database/lecteur_lignes.dart';
 import '../database/upsert_conservant_creation.dart';
 import '../mappers/parcelle_mapper.dart';
 import 'suppression_cascade.dart';
@@ -16,8 +17,9 @@ import 'suppression_cascade.dart';
 class ParcelleRepositoryImpl implements AbstractParcelleRepository {
   final AppDatabase _db;
   final ParcelleMapper _mapper = const ParcelleMapper();
+  final LecteurLignes _lecteur;
 
-  ParcelleRepositoryImpl(this._db);
+  ParcelleRepositoryImpl(this._db, {this._lecteur = const LecteurLignes()});
 
   @override
   Future<List<Parcelle>> obtenirParPotager(String potagerId) async {
@@ -25,7 +27,8 @@ class ParcelleRepositoryImpl implements AbstractParcelleRepository {
           ..where((t) => t.potagerId.equals(potagerId) & t.deletedAt.isNull())
           ..orderBy([(t) => OrderingTerm.asc(t.positionOrdre)]))
         .get();
-    return rows.map(_mapper.versEntite).toList();
+    return _lecteur.lire(_db.parcelles.actualTableName, rows,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
@@ -33,7 +36,8 @@ class ParcelleRepositoryImpl implements AbstractParcelleRepository {
     final row = await (_db.select(_db.parcelles)
           ..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .getSingleOrNull();
-    return row == null ? null : _mapper.versEntite(row);
+    return _lecteur.lireUne(_db.parcelles.actualTableName, row,
+        _mapper.versEntite, (r) => r.id);
   }
 
   @override
