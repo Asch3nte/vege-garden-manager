@@ -25,29 +25,27 @@ class FichePlanteCache {
   /// Mother sheets only — species level, varieties excluded (ADR-0005). The
   /// list and network catalogue views build on this.
   List<FichePlante> meres() =>
-      _parId.values.where((f) => f.estMere).toList();
+      List.unmodifiable(_parId.values.where((f) => f.estMere));
 
   /// Variety sheets whose parent species is [idMere].
   List<FichePlante> varietesDe(String idMere) =>
-      _parId.values.where((f) => f.parentId == idMere).toList();
+      List.unmodifiable(_parId.values.where((f) => f.parentId == idMere));
 
   /// Sheets of a given [categorie].
   List<FichePlante> parCategorie(CategoriePlante categorie) =>
-      _parId.values.where((f) => f.categorie == categorie).toList();
+      List.unmodifiable(_parId.values.where((f) => f.categorie == categorie));
 
   /// Sheets carrying a given [usage].
   List<FichePlante> parUsage(UsagePlante usage) =>
-      _parId.values.where((f) => f.aUsage(usage)).toList();
+      List.unmodifiable(_parId.values.where((f) => f.aUsage(usage)));
 
   /// Sheets whose localized name (in [locale]) or id contains [terme]
   /// (case-insensitive).
   List<FichePlante> rechercher(String terme, String locale) {
     final t = terme.trim().toLowerCase();
     if (t.isEmpty) return toutes();
-    return _parId.values
-        .where((f) =>
-            f.nomLocalise(locale).toLowerCase().contains(t) ||
-            f.id.toLowerCase().contains(t))
-        .toList();
+    return List.unmodifiable(_parId.values.where((f) =>
+        f.nomLocalise(locale).toLowerCase().contains(t) ||
+        f.id.toLowerCase().contains(t)));
   }
 }

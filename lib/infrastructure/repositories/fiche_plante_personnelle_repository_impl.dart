@@ -58,7 +58,7 @@ class FichePlantePersonnelleRepositoryImpl
     final rows = await (_db.select(_db.fichesPlantesPersonnelles)
           ..where((t) => t.deletedAt.isNull()))
         .get();
-    return rows.map((r) => r.yamlContenu).toList();
+    return List.unmodifiable(rows.map((r) => r.yamlContenu));
   }
 
   @override

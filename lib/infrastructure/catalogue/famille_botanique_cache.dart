@@ -19,8 +19,7 @@ class FamilleBotaniqueCache {
   FamilleBotanique? parId(String id) => _parId[id];
 
   /// Families declared relevant to [categorie].
-  List<FamilleBotanique> parCategorie(CategoriePlante categorie) => _parId
-      .values
-      .where((f) => f.estPertinentePour(categorie))
-      .toList();
+  List<FamilleBotanique> parCategorie(CategoriePlante categorie) =>
+      List.unmodifiable(
+          _parId.values.where((f) => f.estPertinentePour(categorie)));
 }

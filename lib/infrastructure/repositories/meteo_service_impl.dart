@@ -104,18 +104,18 @@ class MeteoServiceImpl implements AbstractMeteoService {
     final cacheUtilisable = cached.length >= nbJours &&
         _estFrais(cached.first.dateRecuperation, fraicheurPrevisions);
     if (cacheUtilisable) {
-      return cached.map(_mapper.versPrevisionMeteo).toList();
+      return List.unmodifiable(cached.map(_mapper.versPrevisionMeteo));
     }
 
     try {
       final previsions = await _client.obtenirPrevisions(loc, nbJours);
       await _cacherTout(loc, previsions, now);
       await _purgerCachePasse(now);
-      return previsions;
+      return List.unmodifiable(previsions);
     } on MeteoIndisponibleException {
       // Degraded fallback: serve whatever (possibly stale) forecast we cached.
       if (cached.isNotEmpty) {
-        return cached.map(_mapper.versPrevisionMeteo).toList();
+        return List.unmodifiable(cached.map(_mapper.versPrevisionMeteo));
       }
       rethrow;
     }
@@ -125,9 +125,10 @@ class MeteoServiceImpl implements AbstractMeteoService {
   Future<List<PrevisionHoraire>> obtenirPrevisionsHoraires(
     Localisation loc, {
     int nbJours = 3,
-  }) {
+  }) async {
     // Not cached: the detail view is opened on demand and wants live hourly data.
-    return _client.obtenirPrevisionsHoraires(loc, nbJours: nbJours);
+    return List.unmodifiable(
+        await _client.obtenirPrevisionsHoraires(loc, nbJours: nbJours));
   }
 
   @override
@@ -151,13 +152,13 @@ class MeteoServiceImpl implements AbstractMeteoService {
           await _client.obtenirPrevisions(loc, nbJours, joursPasses: joursPasses);
       await _cacherTout(loc, fenetre, now);
       await _purgerCachePasse(now);
-      return fenetre;
+      return List.unmodifiable(fenetre);
     } on MeteoIndisponibleException {
       final debut = _dateStr(DateTime(now.year, now.month, now.day - joursPasses));
       final fin = _dateStr(DateTime(now.year, now.month, now.day + nbJours - 1));
       final caches = _unParJour(await _lireFenetre(loc, debut, fin), now);
       if (caches.isNotEmpty) {
-        return caches.map(_mapper.versPrevisionMeteo).toList();
+        return List.unmodifiable(caches.map(_mapper.versPrevisionMeteo));
       }
       rethrow;
     }
