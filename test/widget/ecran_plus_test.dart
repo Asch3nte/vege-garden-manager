@@ -3,6 +3,8 @@
 // Overrides the preferences repository, then checks the settings root, the
 // general panel (persisting a change), the privacy geoloc cycle and the
 // notifications master gate.
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -127,6 +129,30 @@ void main() {
 
     final captured = verify(() => repo.sauvegarder(captureAny())).captured;
     expect((captured.last as PreferencesUtilisateur).langue, Langue.en);
+  });
+
+  testWidgets('a failed preference save is reported', (tester) async {
+    when(() => repo.sauvegarder(any()))
+        .thenThrow(const FileSystemException('plein'));
+    await monter(tester);
+
+    await tester.tap(find.text('Préférences générales'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('English'));
+    await tester.pumpAndSettle();
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+  });
+
+  testWidgets('a failed notification switch is reported', (tester) async {
+    when(() => repo.sauvegarder(any()))
+        .thenThrow(const FileSystemException('plein'));
+    await monter(tester);
+
+    await tester.tap(find.text('Notifications'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Switch).first);
+    await tester.pumpAndSettle();
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
   });
 
   testWidgets('privacy panel cycles the geolocation mode', (tester) async {

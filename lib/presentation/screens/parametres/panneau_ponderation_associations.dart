@@ -7,6 +7,7 @@ import '../../../domain/enums/famille_effet_conflit.dart';
 import '../../../domain/enums/poids_association.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/libelles_enums.dart';
+import 'enregistreur_preferences.dart';
 import 'widgets_parametres.dart';
 import '../../glossaire/terme_glossaire.dart';
 import '../../glossaire/terme_cliquable.dart';
@@ -22,6 +23,7 @@ class PanneauPonderationAssociations extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final prefs = ref.watch(preferencesProvider).value;
     final notifier = ref.read(preferencesProvider.notifier);
+    final enregistreur = EnregistreurPreferences.de(context);
 
     if (prefs == null) {
       return PanneauParametres(titre: l10n.categPonderation, enfants: const []);
@@ -49,8 +51,8 @@ class PanneauPonderationAssociations extends ConsumerWidget {
                   options: [
                     for (final p in PoidsAssociation.values) (p, l10n.poids(p)),
                   ],
-                  onChanged: (p) =>
-                      notifier.definirPoidsAssociation(famille, p),
+                  onChanged: (p) => enregistreur.executer(
+                      () => notifier.definirPoidsAssociation(famille, p)),
                 ),
               ),
           ],
@@ -68,7 +70,8 @@ class PanneauPonderationAssociations extends ConsumerWidget {
                   options: [
                     for (final p in PoidsAssociation.values) (p, l10n.poids(p)),
                   ],
-                  onChanged: (p) => notifier.definirPoidsConflit(famille, p),
+                  onChanged: (p) => enregistreur
+                      .executer(() => notifier.definirPoidsConflit(famille, p)),
                 ),
               ),
           ],
@@ -80,7 +83,8 @@ class PanneauPonderationAssociations extends ConsumerWidget {
               child: OutlinedButton.icon(
                 onPressed: profil.estDefaut
                     ? null
-                    : notifier.reinitialiserPonderationAssociations,
+                    : () => enregistreur.executer(
+                        notifier.reinitialiserPonderationAssociations),
                 icon: const Icon(Icons.restart_alt),
                 label: Text(l10n.ponderationReinitialiser),
               ),

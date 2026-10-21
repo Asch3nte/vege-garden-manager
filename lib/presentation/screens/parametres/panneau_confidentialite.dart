@@ -18,6 +18,7 @@ import '../../widgets/selecteur_carte_monde.dart';
 import '../../widgets/libelles_enums.dart';
 import '../../widgets/position_potager_actions.dart';
 import '../../widgets/selecteur_decrit.dart';
+import 'enregistreur_preferences.dart';
 import 'widgets_parametres.dart';
 
 /// Category 2 — **Confidentialité & opt-outs**: geolocation mode, the active
@@ -39,6 +40,7 @@ class PanneauConfidentialite extends ConsumerWidget {
     final theme = Theme.of(context);
     final prefs = ref.watch(preferencesProvider).value;
     final notifier = ref.read(preferencesProvider.notifier);
+    final enregistreur = EnregistreurPreferences.de(context);
 
     if (prefs == null) {
       return PanneauParametres(titre: l10n.categConfidentialite, enfants: const []);
@@ -62,8 +64,10 @@ class PanneauConfidentialite extends ConsumerWidget {
     Future<void> cyclerGeoloc() async {
       const ordre = ModeGeolocalisation.values;
       final suivant = ordre[(mode.index + 1) % ordre.length];
-      await notifier.definirGeolocalisation(suivant);
-      await reinitialiserPositionPotager(ref);
+      await enregistreur.executer(() async {
+        await notifier.definirGeolocalisation(suivant);
+        await reinitialiserPositionPotager(ref);
+      });
     }
 
     // Sets the garden position with the mode-appropriate capture. The capture
@@ -192,14 +196,14 @@ class PanneauConfidentialite extends ConsumerWidget {
               label: l10n.confidMeteoAuto,
               sousTitre: l10n.confidMeteoAutoSub,
               valeur: prefs.meteoAutoActive,
-              onChanged: notifier.definirMeteoAuto,
+              onChanged: enregistreur.pour(notifier.definirMeteoAuto),
             ),
             RangeeInterrupteur(
               icone: Icons.wifi,
               label: l10n.confidSync,
               sousTitre: l10n.confidSyncSub,
               valeur: prefs.syncLocaleActive,
-              onChanged: notifier.definirSyncLocale,
+              onChanged: enregistreur.pour(notifier.definirSyncLocale),
             ),
             // Lunar calendar is an intermediate+ option.
             if (acces.calendrierLunaire)
@@ -208,7 +212,7 @@ class PanneauConfidentialite extends ConsumerWidget {
                 label: l10n.confidLunaire,
                 sousTitre: l10n.confidLunaireSub,
                 valeur: prefs.calendrierLunaireOptIn,
-                onChanged: notifier.definirCalendrierLunaire,
+                onChanged: enregistreur.pour(notifier.definirCalendrierLunaire),
               ),
             // Community is not offered yet: shown but disabled (off,
             // non-interactive).
