@@ -130,7 +130,7 @@ void main() {
 
     await db.into(db.taches).insert(TachesCompanion.insert(
           id: 't1',
-          titre: 'Arroser',
+          titre: const Value('Arroser'),
           type: 'arrosage',
           datePrevue: now,
           dateCreation: now,
@@ -140,7 +140,7 @@ void main() {
         ));
     await db.into(db.taches).insert(TachesCompanion.insert(
           id: 't_other',
-          titre: 'Arroser',
+          titre: const Value('Arroser'),
           type: 'arrosage',
           datePrevue: now,
           dateCreation: now,

@@ -20,6 +20,7 @@ import '../../domain/enums/type_tache.dart';
 import '../../domain/extensions/date_calendaire.dart';
 import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/carte_teaser_palier.dart';
@@ -27,6 +28,7 @@ import '../widgets/libelles_enums.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
+import '../widgets/titre_tache.dart';
 
 /// Tab 4 — **Calendrier**: agenda of upcoming tasks, grouped by day, each
 /// tickable (docs/09 §6).
@@ -282,7 +284,7 @@ class _VueMoisState extends ConsumerState<_VueMois> {
         Row(
           children: [
             Text(
-              l10n.dateJourMois(jourSel.day, _mois(jourSel.month)),
+              FormatDates.de(context).jourMois(jourSel),
               style: theme.textTheme.titleLarge,
             ),
             const Spacer(),
@@ -353,8 +355,7 @@ class _BarreMois extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final libelle = _moisFr[mois.month - 1];
-    final titre = '${libelle[0].toUpperCase()}${libelle.substring(1)} ${mois.year}';
+    final titre = FormatDates.de(context).moisAnnee(mois);
 
     return Row(
       children: [
@@ -1176,7 +1177,7 @@ class _LigneSousTache extends StatelessWidget {
             const SizedBox(width: EspacementsApp.s3),
             Expanded(
               child: Text(
-                cibleLabel ?? tache.titre,
+                cibleLabel ?? TitreTache.texte(l10n, tache, null),
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: fait ? theme.colorScheme.onSurfaceVariant : null,
@@ -1280,7 +1281,7 @@ class _CarteTache extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      tache.titre,
+                      TitreTache.texte(l10n, tache, cibleLabel),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: fait ? theme.colorScheme.onSurfaceVariant : null,
                         decoration: fait ? TextDecoration.lineThrough : null,
@@ -1378,7 +1379,8 @@ Future<void> _supprimerTache(
   final confirme = await confirmerAction(
     context,
     titre: l10n.tacheSupprimerTitre,
-    message: l10n.tacheSupprimerMessage(tache.titre),
+    message: l10n.tacheSupprimerMessage(TitreTache.texte(
+        l10n, tache, ref.read(calendrierProvider).value?.cibleNom(tache))),
     libelleConfirmer: l10n.actionSupprimer,
     destructif: true,
   );
@@ -1456,12 +1458,6 @@ String _libelleJour(BuildContext context, DateTime jour) {
 
   if (delta == 0) return l10n.jourAujourdhui;
   if (delta == 1) return l10n.jourDemain;
-  return l10n.dateJourMois(jour.day, _mois(jour.month));
+  return FormatDates.de(context).jourMois(jour);
 }
 
-const List<String> _moisFr = [
-  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
-];
-
-String _mois(int m) => _moisFr[m - 1];

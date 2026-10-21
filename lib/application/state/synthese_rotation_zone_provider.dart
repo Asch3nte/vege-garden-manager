@@ -6,6 +6,7 @@ import '../../domain/enums/type_parcelle.dart';
 import '../engine/evaluation_rotation.dart';
 import '../engine/resultat_rotation.dart';
 import '../providers/horloge_provider.dart';
+import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 
 /// A botanical family that grew on the plot recently, for the "what grew here"
@@ -135,6 +136,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
     final familles = await ref.watch(familleBotaniqueCacheProvider.future);
     final eval = ref.watch(evaluationRotationProvider);
     final maintenant = ref.watch(horlogeProvider)();
+    final langue = ref.watch(codeLangueProvider);
 
     final catalogue = await fichesRepo.obtenirToutes();
     final parId = {for (final f in catalogue) f.id: f};
@@ -152,7 +154,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
     }
     if (historique.isEmpty) return SyntheseRotationZone.vide;
 
-    String? nomFamille(String slug) => familles.parId(slug)?.nomLocalise('fr');
+    String? nomFamille(String slug) => familles.parId(slug)?.nomLocalise(langue);
 
     // Group history by normalized family.
     final parFamille = <String, List<CulturePrecedente>>{};
@@ -204,7 +206,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
       }
       if (c.fiche.fixeAzote) {
         opportunites[c.fiche.id] =
-            OpportuniteAzoteRotation(c.fiche.nomLocalise('fr'));
+            OpportuniteAzoteRotation(c.fiche.nomLocalise(langue));
       }
     }
     final recentes = [
@@ -212,7 +214,7 @@ final syntheseRotationZoneProvider = FutureProvider.autoDispose
         CultureRecenteRotation(
           familleSlug: e.key,
           nomFamille: nomFamille(e.key),
-          nomPlante: e.value.fiche.nomLocalise('fr'),
+          nomPlante: e.value.fiche.nomLocalise(langue),
           annee: e.value.dateReference.year,
         ),
     ]..sort((a, b) => b.annee.compareTo(a.annee));

@@ -5,12 +5,10 @@ import '../../domain/repositories/abstract_fiche_plante_repository.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/repositories/abstract_plantation_repository.dart';
 import '../../domain/repositories/abstract_potager_repository.dart';
+import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'contexte_climat.dart';
 import 'saison_vue.dart';
-
-/// Locale used to resolve plant display names (French-first app).
-const String _locale = 'fr';
 
 /// Assembles the **Saison** view-model: the active garden's cultivated plants
 /// with their sowing/planting/harvest windows, resolved for the garden's
@@ -22,8 +20,12 @@ const String _locale = 'fr';
 /// defaulted. The climate is the garden's declared [TypeClimat]. A plant with no
 /// period data for that pair still appears, with empty windows.
 class SaisonNotifier extends AsyncNotifier<SaisonVue> {
+  /// Language of the displayed crop names.
+  String get _locale => ref.read(codeLangueProvider);
+
   @override
   Future<SaisonVue> build() async {
+    ref.watch(codeLangueProvider);
     final potagers = ref.watch(potagerRepositoryProvider);
     final parcelles = ref.watch(parcelleRepositoryProvider);
     final plantations = ref.watch(plantationRepositoryProvider);

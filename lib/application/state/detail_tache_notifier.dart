@@ -4,12 +4,10 @@ import '../../domain/entities/tache.dart';
 import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
 import '../providers/horloge_provider.dart';
+import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'accueil_notifier.dart';
 import 'calendrier_notifier.dart';
-
-/// Locale used to resolve the crop display name (French-first app).
-const String _locale = 'fr';
 
 /// View-model of the task-detail screen: the task itself plus its resolved
 /// target (a display name and, when navigable, the in-app route to open it).
@@ -55,6 +53,9 @@ class DetailTacheVue {
 /// `build` returns `null` when the id matches no task (e.g. it was just
 /// deleted); the screen then shows a "not found" state.
 class DetailTacheNotifier extends AsyncNotifier<DetailTacheVue?> {
+  /// Language of the displayed crop names.
+  String get _locale => ref.read(codeLangueProvider);
+
   DetailTacheNotifier(this.tacheId);
 
   /// The task id being viewed (family argument).
@@ -62,6 +63,7 @@ class DetailTacheNotifier extends AsyncNotifier<DetailTacheVue?> {
 
   @override
   Future<DetailTacheVue?> build() async {
+    ref.watch(codeLangueProvider);
     final tache = await ref.watch(tacheRepositoryProvider).obtenirParId(tacheId);
     if (tache == null) return null;
 

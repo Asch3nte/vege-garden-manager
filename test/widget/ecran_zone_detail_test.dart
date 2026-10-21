@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pot_a_gerer/app/historique_navigation.dart';
 import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
@@ -65,6 +66,13 @@ class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class _FakePlantation extends Fake implements Plantation {}
+
+/// History as seen from the Potager plan, zone `z-1` opened on top.
+class _PileDepuisPlan extends PileNavigation {
+  @override
+  List<String> build() =>
+      [RoutesApp.accueil, RoutesApp.potager, RoutesApp.zoneDetail('z-1')];
+}
 
 class _FakeLocalisation extends Fake implements Localisation {}
 
@@ -420,6 +428,7 @@ void main() {
           parcelleRepositoryProvider.overrideWithValue(parcelles),
           plantationRepositoryProvider.overrideWithValue(plantations),
           tacheRepositoryProvider.overrideWithValue(taches),
+          pileNavigationProvider.overrideWith(_PileDepuisPlan.new),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           horlogeProvider.overrideWithValue(() => maintenant),
         ],

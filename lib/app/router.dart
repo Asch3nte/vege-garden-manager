@@ -219,6 +219,15 @@ void _retourGlobal(BuildContext context, WidgetRef ref) {
   context.go(precedent);
 }
 
+/// Leaves the screen of a deleted resource at [location]: forgets it from the
+/// history, then shows the screen below it.
+void quitterRessourceSupprimee(
+    BuildContext context, WidgetRef ref, String location) {
+  final cible = ref.read(pileNavigationProvider.notifier).oublier(location);
+  _rafraichirBranche(ref, _indexBranche(cible));
+  context.go(cible);
+}
+
 /// Wraps a **sub-route** screen so the system back button replays the global
 /// cross-branch history instead of letting the branch Navigator pop to the
 /// branch root.
@@ -335,6 +344,7 @@ final routeurProvider = Provider<GoRouter>((ref) {
                   destinations: _destinations,
                   onSelection: (index) {
                     _rafraichirBranche(ref, index);
+                    ref.read(pileNavigationProvider.notifier).avancer();
                     // Any tab tap returns to that tab's root (docs/15 §8 D
                     // #5/#6): a deep sub-route is replayed via the back button,
                     // never restored by re-selecting the tab.

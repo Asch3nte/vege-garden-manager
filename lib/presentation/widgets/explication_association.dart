@@ -17,8 +17,8 @@ List<String> facteursAssociation(
   FichePlante source,
   FichePlante cible,
 ) {
-  final s = source.nomLocalise('fr');
-  final c = cible.nomLocalise('fr');
+  final s = source.nomLocalise(l10n.localeName);
+  final c = cible.nomLocalise(l10n.localeName);
   String hauteur(FichePlante f) => '${f.hauteurAdulteCmMax ?? f.hauteurAdulteCmMin ?? '?'}';
 
   String ligne(CritereAssociation cr) => switch (cr) {

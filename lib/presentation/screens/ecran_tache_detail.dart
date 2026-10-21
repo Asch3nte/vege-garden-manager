@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/state/detail_tache_notifier.dart';
 import '../../domain/entities/tache.dart';
 import '../../domain/enums/etat_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/titre_tache.dart';
 
 /// Task-detail screen (`/calendrier/tache/:id`): a full, revisitable view of a
 /// single task with the actions the quick form does not surface.
@@ -78,18 +81,20 @@ class EcranTacheDetail extends ConsumerWidget {
   Future<void> _supprimer(BuildContext context, WidgetRef ref, Tache tache) async {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
-    final router = GoRouter.of(context);
     final confirme = await confirmerAction(
       context,
       titre: l10n.tacheSupprimerTitre,
-      message: l10n.tacheSupprimerMessage(tache.titre),
+      message: l10n.tacheSupprimerMessage(
+          TitreTache.texte(l10n, tache, ref.read(detailTacheProvider(tacheId)).value?.cibleNom)),
       libelleConfirmer: l10n.actionSupprimer,
       destructif: true,
     );
     if (!confirme) return;
     await ref.read(detailTacheProvider(tacheId).notifier).supprimerTache();
     messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
-    if (router.canPop()) router.pop();
+    if (context.mounted) {
+      quitterRessourceSupprimee(context, ref, RoutesApp.tacheDetail(tacheId));
+    }
   }
 }
 
@@ -134,7 +139,8 @@ class _Contenu extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(tache.titre, style: theme.textTheme.titleLarge),
+                  Text(TitreTache.texte(l10n, tache, vue.cibleNom),
+                      style: theme.textTheme.titleLarge),
                   Text(
                     l10n.typeTache(tache.type),
                     style: theme.textTheme.labelMedium
@@ -186,7 +192,7 @@ class _Contenu extends ConsumerWidget {
         Card(
           child: ListTile(
             leading: const Icon(Icons.event_outlined),
-            title: Text(_formaterDate(l10n, tache.datePrevue)),
+            title: Text(FormatDates.de(context).jourMoisAnnee(tache.datePrevue)),
             subtitle: Text(l10n.tacheDetailDatePrevue),
             trailing: TextButton(
               onPressed: () => _reporter(context, ref, notifier, tache),
@@ -472,21 +478,4 @@ class _EtatErreur extends StatelessWidget {
   }
 }
 
-/// French month names (matching the weather/calendar screens' convention).
-const List<String> _moisFr = [
-  'janvier',
-  'février',
-  'mars',
-  'avril',
-  'mai',
-  'juin',
-  'juillet',
-  'août',
-  'septembre',
-  'octobre',
-  'novembre',
-  'décembre',
-];
 
-String _formaterDate(AppLocalizations l10n, DateTime d) =>
-    l10n.dateJourMoisAnnee(d.day, _moisFr[d.month - 1], d.year);

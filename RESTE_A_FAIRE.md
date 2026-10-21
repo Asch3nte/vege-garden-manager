@@ -13,7 +13,6 @@ Détail, fichiers et gravité : [docs/audit-2026-10.md](docs/audit-2026-10.md) (
 
 | Lot | Branche | Contenu |
 |---|---|---|
-| 5 | `fix/navigation-i18n` | Pile de navigation après reset/suppression (#40, #44), onboarding ignorant les retours arrière (#42), opt-out météo strict sur l'écran détail (#11, arbitré), texte FR en dur : titres de tâches persistés et notifications (#24), `generateur_resume_meteo.dart`, `_moisFr` ×4 → `DateFormat`, `'Mon carnet'`, `'$cle : '` (#26), `nomLocalise('fr')` ×32 (#41), clés de famille non normalisées (#15). |
 | 6 | `refactor/composition-root` | Branchement des implémentations déplacé dans `lib/app/` via `ProviderScope(overrides:)` (schéma de `database_providers.dart` généralisé, arbitré) ; test garde-fou « `application/` n'importe pas `infrastructure/` ». |
 | 7 | `chore/qualite` | Lints de fond (`strict-casts`, `strict-raw-types`, `avoid_dynamic_calls`, `discarded_futures`, `only_throw_errors`, `avoid_catching_errors`, `unawaited_futures`) ; listes des repositories via `List.unmodifiable` (#29) ; `Quantite` égalité à tolérance (#30) ; chemins Windows (#34) ; duplications (#35) ; code mort (#27) ; tap raté du test (#28). |
 | 8 | `chore/purge-commentaires` | Retrait des références ADR/docs/lot/§ (701 lignes), commentaires du domaine en anglais, paraphrases supprimées. |
@@ -23,6 +22,7 @@ Détail, fichiers et gravité : [docs/audit-2026-10.md](docs/audit-2026-10.md) (
 - **Phosphor Icons** : `phosphor_flutter` 2.1.0 ne compile pas (étend `IconData`, devenu `final`). Material en substitut. Options : wrapper local (`.ttf` MIT + `IconData` const) ou version amont compatible. Points de remplacement : `lib/app/router.dart` (`_destinations`), `libelles_enums.dart` (`iconeTypeTache`), icône par catégorie du catalogue.
 - **Dark mode** : valeurs de `CouleursApp.*Sombre` non revalidées (maquettes light uniquement) ; maquetter puis revoir docs/08 §3.
 - **Surface libre non contrôlée à la création** : `CreerPlantation` n'applique pas `Parcelle.ajouterPlantation` → une zone peut être sur-plantée.
+- **Sauvegardes d'un schéma antérieur refusées** : l'import exige le `schemaVersion` courant ; les exports v6 sont refusés depuis le schéma v7. Montée de version des sauvegardes à décider.
 - **Lignes en base invalides** : les invariants du domaine s'appliquent désormais en release ; une ligne invalide héritée d'une ancienne version fait échouer toute la liste à sa lecture. Tolérance ligne par ligne (ignorer + journaliser) à décider.
 - **Échecs d'enregistrement des préférences non signalés** : les bascules des panneaux Paramètres appellent `PreferencesNotifier` sans gestion d'erreur (seul le changement de niveau est couvert).
 - **`ResolveurFamille`** non transmis à `afficherVueAssociations` (`ecran_catalogue.dart`) → suggestions répulsion/piège inactives.

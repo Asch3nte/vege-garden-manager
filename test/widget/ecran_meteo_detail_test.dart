@@ -70,11 +70,6 @@ void main() {
               derniereMaj: DateTime(2026, 6, 9, 15, 45),
               jours: [jourAujourdhui(), jourDemain()],
               verdictArrosage: verdict,
-              resumeAujourdhui:
-                  'Temps ensoleillé. Min 18°, max 26°. Vent faible (10 km/h).',
-              resumeDemain: 'Pluvieux, max 22°, 80 % de risque de pluie (2.0 mm).',
-              explicationTaches:
-                  "Conditions clémentes — les tâches sont générées selon le besoin.",
             )
           : MeteoDetailVue.indisponible(nomPotager: '');
 
@@ -102,6 +97,13 @@ void main() {
     await monter(tester, uneVue(disponible: false));
 
     expect(find.textContaining('position'), findsOneWidget);
+    expect(find.byType(Card), findsNothing);
+  });
+
+  testWidgets('desactivee → shows the opt-out message', (tester) async {
+    await monter(tester, MeteoDetailVue.desactivee(nomPotager: 'Mon potager'));
+
+    expect(find.textContaining('Météo automatique désactivée'), findsOneWidget);
     expect(find.byType(Card), findsNothing);
   });
 
@@ -180,9 +182,6 @@ void main() {
       derniereMaj: DateTime(2026, 6, 9, 10),
       jours: [jourAujourdhui()],
       verdictArrosage: VerdictMeteo.pluieAVenir,
-      resumeAujourdhui: 'Temps ensoleillé.',
-      resumeDemain: null,
-      explicationTaches: "Pluie prévue — arrosage différé.",
     );
     await monter(tester, vue);
 

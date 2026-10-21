@@ -22,6 +22,7 @@ import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dar
 import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_textes_notifications.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/conseil_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
@@ -58,6 +59,21 @@ class _FakeTache extends Fake implements Tache {}
 class _FakeNotificationLocale extends Fake implements NotificationLocale {}
 
 class _FakePlantation extends Fake implements Plantation {}
+
+
+/// Echoes its arguments, so the use case's choice of crops can be asserted.
+class _TextesEcho implements AbstractTextesNotifications {
+  @override
+  String get langue => 'fr';
+
+  @override
+  String titreRecapArrosage(List<String> noms, int total) =>
+      'titre:${noms.join(',')}/$total';
+
+  @override
+  String corpsRecapArrosage(List<String> noms, int total) =>
+      'corps:${noms.join(',')}/$total';
+}
 
 void main() {
   late MockPlantations plantations;
@@ -144,7 +160,8 @@ void main() {
             meteoAutoActive: any(named: 'meteoAutoActive')))
         .thenAnswer((_) async => const <PrevisionMeteo>[]);
     useCase = GenererTachesArrosage(plantations, potager, parcelles, taches,
-        notifications, preferences, fiches, calcul, maintenant: () => pinned07h);
+        notifications, preferences, fiches, calcul, _TextesEcho(),
+        maintenant: () => pinned07h);
     // The day's single watering notification is (re)scheduled or cancelled on
     // every run, so both calls must be stubbed everywhere.
     when(() => notifications.programmer(any())).thenAnswer((_) async {});
@@ -170,7 +187,7 @@ void main() {
 
   Tache uneTacheArrosageAuj(String plantationId) => Tache(
         id: 'ta-$plantationId',
-        titre: 'Arroser',
+        generee: true,
         type: TypeTache.arrosage,
         cible: CibleTache.plantation,
         cibleId: plantationId,
@@ -203,7 +220,7 @@ void main() {
           {bool faite = false}) =>
       Tache(
         id: 'ta-${plantationId}_${datePrevue.day}',
-        titre: 'Arroser',
+        generee: true,
         type: TypeTache.arrosage,
         cible: CibleTache.plantation,
         cibleId: plantationId,
@@ -249,7 +266,8 @@ void main() {
     expect(tache.cibleId, 'p-1');
     expect(tache.priorite, PrioriteTache.urgente);
     // The task names its crop (from the catalogue) rather than a generic chore.
-    expect(tache.titre, 'Arroser : Tomate');
+    expect(tache.titre, isNull);
+    expect(tache.generee, isTrue);
 
     final notifCaptured =
         verify(() => notifications.programmer(captureAny())).captured;
@@ -260,7 +278,7 @@ void main() {
     // re-running rewrites it instead of stacking duplicates.
     expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
     // That single recap names the crop rather than counting anonymously.
-    expect(notif.titre, 'Arroser Tomate');
+    expect(notif.titre, 'titre:Tomate/1');
     expect(notif.corps, contains('Tomate'));
     expect(notif.cibleRoute, '/calendrier');
   });
@@ -292,9 +310,9 @@ void main() {
         verify(() => notifications.programmer(captureAny())).captured;
     expect(notifs, hasLength(1));
     final notif = notifs.single as NotificationLocale;
-    expect(notif.titre, 'Arroser Tomate, Basilic');
+    expect(notif.titre, 'titre:Tomate,Basilic/2');
     // Full list in the body (maximum detail).
-    expect(notif.corps, "Cultures à arroser aujourd'hui : Tomate, Basilic.");
+    expect(notif.corps, 'corps:Tomate,Basilic/2');
   });
 
   test('more crops than fit the title → first names + "+N", full list in body',
@@ -321,9 +339,8 @@ void main() {
 
     final notif = (verify(() => notifications.programmer(captureAny())).captured
         .single) as NotificationLocale;
-    expect(notif.titre, 'Arroser Tomate, Basilic, Courgette +1');
-    expect(notif.corps,
-        "Cultures à arroser aujourd'hui : Tomate, Basilic, Courgette, Poivron.");
+    expect(notif.titre, 'titre:Tomate,Basilic,Courgette,Poivron/4');
+    expect(notif.corps, 'corps:Tomate,Basilic,Courgette,Poivron/4');
   });
 
   test('missing sheet → the unnamed crop still counts in the "+N" overflow',
@@ -351,7 +368,7 @@ void main() {
     final notif = (verify(() => notifications.programmer(captureAny())).captured
         .single) as NotificationLocale;
     // Tomate named, the unresolved basilic folded into "+1".
-    expect(notif.titre, 'Arroser Tomate +1');
+    expect(notif.titre, 'titre:Tomate/2');
   });
 
   test(
@@ -438,7 +455,7 @@ void main() {
   test('bientot targets the calendar day two days later across a DST change',
       () async {
     final avantChangement = GenererTachesArrosage(plantations, potager,
-        parcelles, taches, notifications, preferences, fiches, calcul,
+        parcelles, taches, notifications, preferences, fiches, calcul, _TextesEcho(),
         maintenant: () => DateTime(2026, 10, 24, 7));
     when(() => potager.obtenirPotagerActif())
         .thenAnswer((_) async => unPotager());
@@ -637,7 +654,7 @@ void main() {
       () async {
     final faite = Tache(
       id: 'ta-done',
-      titre: 'Arroser',
+      generee: true,
       type: TypeTache.arrosage,
       cible: CibleTache.plantation,
       cibleId: 'p-1',
@@ -669,11 +686,38 @@ void main() {
     verifyNever(() => notifications.programmer(any()));
   });
 
+  test('a pending watering task entered by the user is left alone', () async {
+    final saisie = Tache(
+      id: 'ta-user',
+      titre: 'Arroser au purin',
+      type: TypeTache.arrosage,
+      cible: CibleTache.plantation,
+      cibleId: 'p-1',
+      datePrevue: DateTime(pinned07h.year, pinned07h.month, pinned07h.day + 5),
+    );
+    when(() => potager.obtenirPotagerActif())
+        .thenAnswer((_) async => unPotager());
+    when(() => plantations.obtenirActives())
+        .thenAnswer((_) async => [unePlantation('p-1')]);
+    when(() => calcul.executer(
+              plantation: any(named: 'plantation'),
+              localisation: any(named: 'localisation'),
+              fenetre: any(named: 'fenetre'),
+            ))
+        .thenAnswer((_) async => pasNecessaire());
+    when(() => taches.obtenirParCible(CibleTache.plantation, 'p-1'))
+        .thenAnswer((_) async => [saisie]);
+
+    await useCase.executer();
+
+    verifyNever(() => taches.supprimer(any()));
+  });
+
   test('completed task today is not re-deleted on urgency drop (pasNecessaire)',
       () async {
     final faite = Tache(
       id: 'ta-done',
-      titre: 'Arroser',
+      generee: true,
       type: TypeTache.arrosage,
       cible: CibleTache.plantation,
       cibleId: 'p-1',
@@ -806,7 +850,7 @@ void main() {
     final notif = captured.single as NotificationLocale;
     expect(notif.id, 'arrosage_${jourIso(pinned07h)}');
     // The body lists the crops themselves rather than counting anonymously.
-    expect(notif.corps, contains('Cultures à arroser'));
+    expect(notif.corps, startsWith('corps:'));
     expect('Tomate'.allMatches(notif.corps).length, 3);
     verifyNever(() => notifications.annuler(any()));
   });
@@ -869,7 +913,7 @@ void main() {
     // Watering done and ticked at 07:00 → no 08:00 ping about it.
     final faite = Tache(
       id: 'ta-done',
-      titre: 'Arroser',
+      generee: true,
       type: TypeTache.arrosage,
       cible: CibleTache.plantation,
       cibleId: 'p-1',
@@ -899,14 +943,13 @@ void main() {
         verify(() => notifications.programmer(captureAny())).captured;
     expect(captured, hasLength(1));
     // Only p-2 remains thirsty → singular wording, p-1 not counted.
-    expect((captured.single as NotificationLocale).corps,
-        "Tomate a besoin d'eau aujourd'hui.");
+    expect((captured.single as NotificationLocale).corps, 'corps:Tomate/1');
   });
 
   test('every crop ticked off today cancels the notification', () async {
     final faite = Tache(
       id: 'ta-done',
-      titre: 'Arroser',
+      generee: true,
       type: TypeTache.arrosage,
       cible: CibleTache.plantation,
       cibleId: 'p-1',

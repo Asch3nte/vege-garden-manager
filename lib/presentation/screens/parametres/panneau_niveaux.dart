@@ -196,7 +196,7 @@ class _LigneInfo extends StatelessWidget {
             ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         children: [
           TextSpan(
-            text: '$label : ',
+            text: AppLocalizations.of(context)!.libelleCle(label),
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           TextSpan(text: texte),

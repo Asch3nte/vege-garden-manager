@@ -30,6 +30,7 @@ import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/libelles_enums.dart';
+import '../widgets/titre_tache.dart';
 import 'ecran_potager.dart' show couleurZone;
 import '../glossaire/catalogue/outils.dart';
 import '../glossaire/type_terme_glossaire.dart';
@@ -142,7 +143,9 @@ Future<void> _supprimerZone(
   await ref.read(parcellesProvider(potagerId).notifier).supprimer(zone.id);
   ref.invalidate(potagerProvider);
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackZoneSupprimee)));
-  if (context.mounted) context.go(RoutesApp.potager);
+  if (context.mounted) {
+    quitterRessourceSupprimee(context, ref, RoutesApp.zoneDetail(zone.id));
+  }
 }
 
 /// Marks a crop as pulled out (`arrachee`): it leaves the active crops but stays
@@ -774,7 +777,7 @@ class _LigneCulture extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           l10n.cultureProchaineTache(
-                            prochaineTache!.titre,
+                            TitreTache.texte(l10n, prochaineTache!, culture.nom),
                             _formaterDateCourte(prochaineTache!.datePrevue),
                           ),
                           style: theme.textTheme.bodySmall

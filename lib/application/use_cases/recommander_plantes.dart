@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../../domain/entities/famille_botanique.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/entities/parcelle.dart';
 import '../../domain/entities/plantation.dart';
@@ -169,7 +170,7 @@ class RecommanderPlantes {
         DateTime(maintenant.year - delai, maintenant.month, maintenant.day);
 
     for (final p in plantations) {
-      final fiche = parId[p.planteId];
+      final fiche = parId[_mereDe(p.planteId, parId)] ?? parId[p.planteId];
       if (fiche == null || _famille(fiche) != famille) continue;
       final reference = p.dateFinReelle ?? p.dateMiseEnPlace;
       if (reference.isAfter(seuil)) return true; // grown too recently
@@ -193,8 +194,8 @@ class RecommanderPlantes {
         _associations.deriver(actif, candidate).any(fort);
   }
 
-  String _famille(FichePlante fiche) =>
-      fiche.rotationFamille ?? fiche.familleBotanique;
+  String _famille(FichePlante fiche) => FamilleBotanique.normaliserCle(
+      fiche.rotationFamille ?? fiche.familleBotanique);
 
   /// Species (mother) id behind a plantation's [planteId]: the sheet's
   /// `parentId` when a variety was planted, otherwise [planteId] itself.

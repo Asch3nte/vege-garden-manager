@@ -11,11 +11,9 @@ import '../../domain/repositories/abstract_potager_repository.dart';
 import '../../domain/repositories/abstract_tache_repository.dart';
 import '../engine/calculateur_dates_culture.dart';
 import '../providers/horloge_provider.dart';
+import '../providers/langue_provider.dart';
 import '../providers/repository_providers.dart';
 import 'potager_vue.dart';
-
-/// Locale used to resolve crop display names (French-first app).
-const String _locale = 'fr';
 
 /// Assembles the **Potager** view-model: the active garden's zones, each with
 /// its active crops (resolved from the catalogue) and a "task due today" flag.
@@ -25,8 +23,12 @@ const String _locale = 'fr';
 /// `Plantation` stores a plant id, not a name. A missing fiche degrades to a
 /// skipped crop rather than an error (the zone still lists its other crops).
 class PotagerNotifier extends AsyncNotifier<PotagerVue> {
+  /// Language of the displayed crop names.
+  String get _locale => ref.read(codeLangueProvider);
+
   @override
   Future<PotagerVue> build() async {
+    ref.watch(codeLangueProvider);
     final potagers = ref.watch(potagerRepositoryProvider);
     final parcelles = ref.watch(parcelleRepositoryProvider);
     final plantations = ref.watch(plantationRepositoryProvider);

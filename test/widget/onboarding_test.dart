@@ -52,6 +52,7 @@ void main() {
     WidgetTester tester, {
     required bool onboardingTermine,
     List<PreferencesUtilisateur>? saved,
+    List<Potager>? potagersSauves,
     List<Potager> potagersExistants = const [],
     Size taille = const Size(390, 800),
   }) async {
@@ -74,7 +75,11 @@ void main() {
     when(() => potagers.obtenirTous())
         .thenAnswer((_) async => List.of(jardins));
     when(() => potagers.sauvegarder(any())).thenAnswer((invocation) async {
-      jardins.add(invocation.positionalArguments.first as Potager);
+      final potager = invocation.positionalArguments.first as Potager;
+      jardins
+        ..removeWhere((p) => p.id == potager.id)
+        ..add(potager);
+      potagersSauves?.add(potager);
     });
     when(() => parcelles.obtenirParPotager(any())).thenAnswer((_) async => []);
     when(() => taches.obtenirEntreDates(any(), any()))
@@ -170,6 +175,49 @@ void main() {
     // (feedback #4), not the dashboard.
     expect(find.widgetWithText(AppBar, 'Potager'), findsOneWidget);
     expect(saved.last.onboardingTermine, isTrue);
+  });
+
+  testWidgets('going back to change the position updates the created garden',
+      (tester) async {
+    final sauves = <Potager>[];
+    await monter(tester,
+        onboardingTermine: false,
+        potagersSauves: sauves,
+        taille: const Size(1600, 800));
+
+    Future<void> choisirRegion(String region) async {
+      await tester.tap(find.text('Choisir sur la carte'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(region));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Valider'));
+      await tester.pumpAndSettle();
+    }
+
+    Future<void> taper(String libelle, [int fois = 1]) async {
+      for (var i = 0; i < fois; i++) {
+        await tester.tap(find.text(libelle));
+        await tester.pumpAndSettle();
+      }
+    }
+
+    await taper('Commencer');
+    await taper('Suivant');
+    await choisirRegion('Zone tropicale');
+    await taper('Suivant', 2);
+    await tester.enterText(find.byType(TextField), 'Mon potager');
+    await tester.pump();
+    await taper('Suivant'); // garden created on leaving the step
+    final initial = sauves.last.localisation;
+
+    await taper('Précédent', 4); // back to the position step
+    await choisirRegion("Europe du Nord");
+    await taper('Suivant', 3);
+    await taper('Terminer');
+
+    expect(sauves.map((p) => p.id).toSet(), hasLength(1));
+    expect(sauves.last.localisation, isNot(initial));
+    expect(sauves.last.zoneClimatique.type, isNot(TypeClimat.tropical));
   });
 
   testWidgets('choosing intermediate shows the per-category notifications '

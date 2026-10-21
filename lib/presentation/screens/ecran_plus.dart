@@ -146,7 +146,7 @@ class _EnteteProfil extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Mon carnet', style: theme.textTheme.titleLarge),
+                Text(l10n.parametresMonCarnet, style: theme.textTheme.titleLarge),
                 Text(
                   '${l10n.parametresNiveauMention(l10n.niveauExperience(prefs.niveauExperience))}'
                   ' · ${l10n.parametresLocal}',

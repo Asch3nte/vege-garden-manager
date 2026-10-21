@@ -114,7 +114,7 @@ void main() {
     Future<void> tache(String id, String equipementId) =>
         db.into(db.taches).insert(TachesCompanion.insert(
               id: id,
-              titre: 'Entretien',
+              titre: const Value('Entretien'),
               type: 'entretienEquipement',
               datePrevue: now,
               dateCreation: now,

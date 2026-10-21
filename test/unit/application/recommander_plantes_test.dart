@@ -215,6 +215,33 @@ void main() {
     expect(ids, contains('salade'));
   });
 
+  test('rotation compares normalized family keys', () async {
+    final aubergine = fiche('aubergine', 'solanaceae', const Periode(1, 2));
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [...catalogue, aubergine]);
+    when(() => plantations.obtenirParParcelle('par1')).thenAnswer((_) async => [
+          plantation('old', 'aubergine',
+              statut: StatutPlantation.recoltee,
+              dateMiseEnPlace: DateTime.utc(2025, 5, 1),
+              dateFinReelle: DateTime.utc(2025, 9, 1)),
+        ]);
+    expect(await recommander(), isNot(contains('tomate')));
+  });
+
+  test('rotation reads a planted variety through its mother sheet', () async {
+    final cerise = fiche('tomate-cerise', 'Inconnue', const Periode(1, 2),
+        parentId: 'tomate');
+    when(() => fiches.obtenirToutes())
+        .thenAnswer((_) async => [...catalogue, cerise]);
+    when(() => plantations.obtenirParParcelle('par1')).thenAnswer((_) async => [
+          plantation('old', 'tomate-cerise',
+              statut: StatutPlantation.recoltee,
+              dateMiseEnPlace: DateTime.utc(2025, 5, 1),
+              dateFinReelle: DateTime.utc(2025, 9, 1)),
+        ]);
+    expect(await recommander(), isNot(contains('tomate')));
+  });
+
   test('rotation is relaxed on a renewable container (pot)', () async {
     when(() => plantations.obtenirParParcelle('par1')).thenAnswer((_) async => [
           plantation('old', 'tomate',

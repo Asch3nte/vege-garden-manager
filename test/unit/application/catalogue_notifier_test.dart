@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:pot_a_gerer/application/providers/langue_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/catalogue_notifier.dart';
 import 'package:pot_a_gerer/domain/entities/famille_botanique.dart';
@@ -30,7 +31,7 @@ void main() {
   late MockFamilles familles;
 
   FichePlante fiche(String id, String nomFr, CategoriePlante cat,
-          {String? parentId, String famille = 'Test'}) =>
+          {String? parentId, String famille = 'Test', String? nomEn}) =>
       FichePlante(
         id: id,
         parentId: parentId,
@@ -38,7 +39,7 @@ void main() {
         familleBotanique: famille,
         categorie: cat,
         usages: const {UsagePlante.alimentaire},
-        nomsLocalises: {'fr': nomFr},
+        nomsLocalises: {'fr': nomFr, 'en': ?nomEn},
         besoins: BesoinsCulture(
           eau: BesoinEau.modere,
           soleil: NiveauSoleil.pleinSoleil,
@@ -76,8 +77,9 @@ void main() {
         ]);
   });
 
-  ProviderContainer conteneur() {
+  ProviderContainer conteneur({String langue = 'fr'}) {
     final c = ProviderContainer(overrides: [
+      codeLangueProvider.overrideWithValue(langue),
       fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
       familleBotaniqueRepositoryProvider.overrideWith((ref) async => familles),
     ]);
@@ -96,6 +98,21 @@ void main() {
       ['Basilic', 'Courgette', 'Fraise', 'Tomate'],
     );
     expect(vue.filtreActif, isFalse);
+  });
+
+  test('sorts and searches by the names of the user language', () async {
+    catalogue = [
+      fiche('courgette', 'Courgette', CategoriePlante.legume, nomEn: 'Zucchini'),
+      fiche('basilic', 'Basilic', CategoriePlante.aromatique, nomEn: 'Basil'),
+      fiche('fraise', 'Fraise', CategoriePlante.petitFruit, nomEn: 'Strawberry'),
+    ];
+    final c = conteneur(langue: 'en');
+    final vue = await c.read(catalogueProvider.future);
+    expect(vue.fiches.map((f) => f.id), ['basilic', 'fraise', 'courgette']);
+
+    c.read(catalogueProvider.notifier).definirRequete('zucc');
+    expect(c.read(catalogueProvider).value!.fiches.map((f) => f.id),
+        ['courgette']);
   });
 
   test('filters by category', () async {
