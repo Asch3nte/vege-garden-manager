@@ -13,10 +13,17 @@ const _tachesV6 = 'CREATE TABLE "taches" ("id" TEXT NOT NULL, "titre" TEXT NOT N
     '"updated_at" TEXT NOT NULL, "deleted_at" TEXT NULL, '
     '"sync_version" INTEGER NOT NULL DEFAULT 1, PRIMARY KEY ("id"))';
 
+/// The `parcelles` columns later migrations touch, as of schema version 6.
+const _parcellesV6 = 'CREATE TABLE "parcelles" ("id" TEXT NOT NULL, '
+    '"potager_id" TEXT NOT NULL, "position_ordre" INTEGER NOT NULL, '
+    '"created_at" TEXT NOT NULL DEFAULT \'x\', "deleted_at" TEXT NULL, '
+    'PRIMARY KEY ("id"))';
+
 void main() {
   test('v6 → v7 turns the engine watering titles into derived ones', () async {
     final db = AppDatabase(NativeDatabase.memory(setup: (raw) {
       raw.execute(_tachesV6);
+      raw.execute(_parcellesV6);
       void inserer(String id, String titre, String type, String? plantationId) =>
           raw.execute(
               'INSERT INTO taches (id, titre, type, potager_id, plantation_id, '

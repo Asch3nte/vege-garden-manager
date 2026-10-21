@@ -2,11 +2,13 @@ import '../enums/niveau_soleil.dart';
 import '../enums/ph_sol.dart';
 import '../enums/source_type_sol.dart';
 import '../enums/statut_plantation.dart';
+import '../enums/teinte_zone.dart';
 import '../enums/technique_sol.dart';
 import '../enums/texture_sol.dart';
 import '../enums/type_parcelle.dart';
 import '../exceptions/invariant_domaine_exception.dart';
 import '../exceptions/surface_insuffisante_exception.dart';
+import '../value_objects/couleur_zone.dart';
 import '../value_objects/surface.dart';
 import 'equipement.dart';
 import 'plantation.dart';
@@ -37,6 +39,7 @@ class Parcelle {
   final Set<TechniqueSol> _techniquesSol;
   bool _cultureVerticale;
   final int _ordre;
+  final CouleurZone _couleur;
   String? _notes;
   final List<Plantation> _plantations;
   final List<Equipement> _equipements;
@@ -54,6 +57,7 @@ class Parcelle {
     this._techniquesSol,
     this._cultureVerticale,
     this._ordre,
+    this._couleur,
     this._notes,
     this._plantations,
     this._equipements,
@@ -77,6 +81,7 @@ class Parcelle {
     required Surface surface,
     required NiveauSoleil exposition,
     int ordre = 0,
+    CouleurZone couleur = const CouleurZone.teinte(TeinteZone.vertProfond),
     TextureSol? texture,
     SourceTypeSol textureSource = SourceTypeSol.manuelle,
     PhSol? ph,
@@ -99,6 +104,7 @@ class Parcelle {
         Set<TechniqueSol>.of(techniquesSol ?? const <TechniqueSol>{}),
         cultureVerticale,
         ordre,
+        couleur,
         notes,
         List<Plantation>.of(plantations ?? const <Plantation>[]),
         List<Equipement>.of(equipements ?? const <Equipement>[]),
@@ -116,6 +122,7 @@ class Parcelle {
   Set<TechniqueSol> get techniquesSol => Set.unmodifiable(_techniquesSol);
   bool get cultureVerticale => _cultureVerticale;
   int get ordre => _ordre;
+  CouleurZone get couleur => _couleur;
   String? get notes => _notes;
   List<Plantation> get plantations => List.unmodifiable(_plantations);
   List<Equipement> get equipements => List.unmodifiable(_equipements);

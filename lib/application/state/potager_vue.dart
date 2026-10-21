@@ -1,5 +1,7 @@
 import '../../domain/enums/niveau_soleil.dart';
+import '../../domain/enums/teinte_zone.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/value_objects/couleur_zone.dart';
 import '../../domain/value_objects/etat_croissance.dart';
 
 /// One active crop of a zone, projected for the UI.
@@ -45,6 +47,7 @@ class ZonePotager {
   final NiveauSoleil _exposition;
   final List<CulturePotager> _cultures;
   final bool _aTacheAujourdhui;
+  final CouleurZone _couleur;
 
   ZonePotager._(
     this._id,
@@ -54,6 +57,7 @@ class ZonePotager {
     this._exposition,
     List<CulturePotager> cultures,
     this._aTacheAujourdhui,
+    this._couleur,
   ) : _cultures = List.unmodifiable(cultures);
 
   /// Creates a zone projection. [cultures] are the active crops (id + name).
@@ -65,6 +69,7 @@ class ZonePotager {
     required NiveauSoleil exposition,
     required List<CulturePotager> cultures,
     bool aTacheAujourdhui = false,
+    CouleurZone couleur = const CouleurZone.teinte(TeinteZone.vertProfond),
   }) =>
       ZonePotager._(
         id,
@@ -74,6 +79,7 @@ class ZonePotager {
         exposition,
         cultures,
         aTacheAujourdhui,
+        couleur,
       );
 
   /// Zone (parcelle) identifier.
@@ -96,6 +102,9 @@ class ZonePotager {
 
   /// Whether the zone has a task due today (drives the attention marker).
   bool get aTacheAujourdhui => _aTacheAujourdhui;
+
+  /// Colour of the zone on the plan and its detail.
+  CouleurZone get couleur => _couleur;
 
   /// Number of active crops in this zone.
   int get nombreCultures => _cultures.length;

@@ -25,7 +25,11 @@ class ParcelleRepositoryImpl implements AbstractParcelleRepository {
   Future<List<Parcelle>> obtenirParPotager(String potagerId) async {
     final rows = await (_db.select(_db.parcelles)
           ..where((t) => t.potagerId.equals(potagerId) & t.deletedAt.isNull())
-          ..orderBy([(t) => OrderingTerm.asc(t.positionOrdre)]))
+          // Creation order breaks position ties, so the plan order is stable.
+          ..orderBy([
+            (t) => OrderingTerm.asc(t.positionOrdre),
+            (t) => OrderingTerm.asc(t.createdAt),
+          ]))
         .get();
     return _lecteur.lire(_db.parcelles.actualTableName, rows,
         _mapper.versEntite, (r) => r.id);

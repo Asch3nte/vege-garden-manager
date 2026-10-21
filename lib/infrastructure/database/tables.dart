@@ -61,6 +61,9 @@ class Parcelles extends Table {
   BoolColumn get cultureVerticale =>
       boolean().withDefault(const Constant(false))();
   IntColumn get positionOrdre => integer()();
+  // Palette tint name, or null when [couleurRgb] holds a custom colour.
+  TextColumn get couleurTeinte => text().nullable()();
+  IntColumn get couleurRgb => integer().nullable()();
   RealColumn get positionX => real().nullable()();
   RealColumn get positionY => real().nullable()();
   RealColumn get positionLargeur => real().nullable()();

@@ -5,9 +5,11 @@ import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/ph_sol.dart';
 import 'package:pot_a_gerer/domain/enums/source_type_sol.dart';
+import 'package:pot_a_gerer/domain/enums/teinte_zone.dart';
 import 'package:pot_a_gerer/domain/enums/technique_sol.dart';
 import 'package:pot_a_gerer/domain/enums/texture_sol.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
+import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/parcelle_repository_impl.dart';
@@ -32,7 +34,12 @@ void main() {
   });
   tearDown(() => db.close());
 
-  Parcelle parcelle({String id = 'par1', int ordre = 0}) => Parcelle(
+  Parcelle parcelle(
+          {String id = 'par1',
+          int ordre = 0,
+          CouleurZone couleur =
+              const CouleurZone.teinte(TeinteZone.vertProfond)}) =>
+      Parcelle(
         id: id,
         nom: 'Planche',
         potagerId: 'pot1',
@@ -45,6 +52,7 @@ void main() {
         techniquesSol: {TechniqueSol.noDig, TechniqueSol.hugelkultur},
         cultureVerticale: true,
         ordre: ordre,
+        couleur: couleur,
       );
 
   test('save then read round-trips soil, techniques and culture verticale',
@@ -57,6 +65,44 @@ void main() {
     expect(p.ph, PhSol.neutre);
     expect(p.techniquesSol, {TechniqueSol.noDig, TechniqueSol.hugelkultur});
     expect(p.cultureVerticale, isTrue);
+  });
+
+  test('save then read round-trips a palette tint and a custom colour',
+      () async {
+    await repo.sauvegarder(parcelle(
+        id: 'a', couleur: const CouleurZone.teinte(TeinteZone.bordeaux)));
+    await repo.sauvegarder(
+        parcelle(id: 'b', couleur: CouleurZone.personnalisee(0x12AB34)));
+
+    expect((await repo.obtenirParId('a'))!.couleur,
+        const CouleurZone.teinte(TeinteZone.bordeaux));
+    expect((await repo.obtenirParId('b'))!.couleur,
+        CouleurZone.personnalisee(0x12AB34));
+  });
+
+  test('an unknown or missing tint reads as the first palette tint',
+      () async {
+    await repo.sauvegarder(parcelle(id: 'a', ordre: 2));
+    await db.customStatement(
+        "UPDATE parcelles SET couleur_teinte = 'inconnue' WHERE id = 'a'");
+    await repo.sauvegarder(parcelle(id: 'b', ordre: 3));
+    await db.customStatement(
+        "UPDATE parcelles SET couleur_teinte = NULL WHERE id = 'b'");
+
+    const premiere = CouleurZone.teinte(TeinteZone.vertProfond);
+    expect((await repo.obtenirParId('a'))!.couleur, premiere);
+    expect((await repo.obtenirParId('b'))!.couleur, premiere);
+  });
+
+  test('creation order breaks position ties', () async {
+    await repo.sauvegarder(parcelle(id: 'b'));
+    await db.customStatement(
+        "UPDATE parcelles SET created_at = '2026-01-02' WHERE id = 'b'");
+    await repo.sauvegarder(parcelle(id: 'a'));
+    await db.customStatement(
+        "UPDATE parcelles SET created_at = '2026-01-01' WHERE id = 'a'");
+
+    expect((await repo.obtenirParPotager('pot1')).map((p) => p.id), ['a', 'b']);
   });
 
   test('obtenirParPotager returns the potager parcelles, ordered', () async {

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
-import '../../app/theme/couleurs_app.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/derivateur_localisation.dart';
 import '../../application/providers/service_providers.dart';
@@ -25,6 +24,7 @@ import '../forms/formulaire_zone.dart';
 import '../widgets/astuce_post_onboarding.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/champ_deroulant_decrit.dart';
+import '../widgets/couleur_zone_ui.dart';
 import '../widgets/invalidation_vues.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/selecteur_carte_monde.dart';
@@ -442,11 +442,11 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
                   spacing: EspacementsApp.s2,
                   runSpacing: EspacementsApp.s2,
                   children: [
-                    for (final (i, zone) in _zones.indexed)
+                    for (final zone in _zones)
                       SizedBox(
                         width: largeur,
                         child: _CarteZone(
-                            nom: zone.nom, couleur: _couleurZone(i)),
+                            nom: zone.nom, couleur: zone.couleur.couleur),
                       ),
                   ],
                 );
@@ -570,19 +570,6 @@ class _CarteNiveau extends StatelessWidget {
     );
   }
 }
-
-/// Decorative per-zone accent palette (mirrors the Potager plan's look without
-/// reusing that screen, which is meant to evolve visually).
-const List<Color> _paletteZones = [
-  CouleursApp.decoVertProfond,
-  CouleursApp.accentChaudClair,
-  CouleursApp.decoAubergine,
-  CouleursApp.decoVertMoyen,
-  CouleursApp.decoBordeaux,
-  CouleursApp.decoTerre,
-];
-
-Color _couleurZone(int index) => _paletteZones[index % _paletteZones.length];
 
 /// A zone card for the onboarding garden step: a coloured rectangle with the
 /// zone's name — visually like the Potager plan's beds, but a separate widget.

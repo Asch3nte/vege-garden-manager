@@ -23,7 +23,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 | Gabarit / hauteur de plante | Champ absent | YAML + `FichePlante` |
 | Favoris | Notion absente | Préférences + persistance |
 | Métadonnées de zone | Dimensions L×l, besoin en eau de zone | `Parcelle` (actuellement `surface` seule) |
-| Couleur de zone stable | Couleur dérivée de l'index, non persistée | `Parcelle` + drift |
 | Swipe sur les listes | Préférence `SensSwipe` présente, geste non généralisé | listes tâches/cultures |
 | Visibilité du bloc par potager (Confidentialité) | Surface contrastée ou tranche repliable | `panneau_confidentialite.dart` |
 | Menu « Plus » | Racine Paramètres directe ; menu à ajouter si Post-récolte/Communauté arrivent | `ecran_plus.dart` |

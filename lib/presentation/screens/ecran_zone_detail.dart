@@ -29,11 +29,11 @@ import '../forms/formulaire_observation.dart';
 import '../forms/formulaire_recolte.dart';
 import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
+import '../widgets/couleur_zone_ui.dart';
 import '../widgets/dialogue_confirmation.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/titre_tache.dart';
-import 'ecran_potager.dart' show couleurZone;
 import '../glossaire/catalogue/outils.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../glossaire/terme_glossaire.dart';
@@ -80,7 +80,7 @@ class EcranZoneDetail extends ConsumerWidget {
         return _Detail(
           zone: zone,
           potagerId: potagerId,
-          couleur: couleurZone(index),
+          couleur: zone.couleur.couleur,
           prochainesTaches: prochaines,
           onAjouterPlante: () {
             ref

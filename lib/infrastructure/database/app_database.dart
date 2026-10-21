@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import 'tables.dart';
+import 'teintes_zone_v8.dart';
 
 part 'app_database.g.dart';
 
@@ -29,7 +30,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -82,6 +83,25 @@ class AppDatabase extends _$AppDatabase {
                 "UPDATE taches SET generee = 1, titre = NULL "
                 "WHERE type = 'arrosage' AND plantation_id IS NOT NULL "
                 "AND (titre = 'Arroser' OR titre LIKE 'Arroser : %')");
+          }
+          // v7 → v8: stored zone colour; each zone keeps the tint it showed
+          // by its position among its garden's zones.
+          if (from < 8) {
+            await m.addColumn(parcelles, parcelles.couleurTeinte);
+            await m.addColumn(parcelles, parcelles.couleurRgb);
+            const teintes = teintesZoneV8;
+            final cas = [
+              for (var i = 0; i < teintes.length; i++)
+                "WHEN $i THEN '${teintes[i]}'",
+            ].join(' ');
+            await customStatement(
+                'UPDATE parcelles SET couleur_teinte = ('
+                'SELECT CASE (r.rang - 1) % ${teintes.length} $cas END '
+                'FROM (SELECT id, ROW_NUMBER() OVER ('
+                'PARTITION BY potager_id '
+                'ORDER BY position_ordre, created_at, rowid) AS rang '
+                'FROM parcelles WHERE deleted_at IS NULL) r '
+                'WHERE r.id = parcelles.id)');
           }
         },
         beforeOpen: (details) async {

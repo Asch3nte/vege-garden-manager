@@ -6,9 +6,11 @@ import '../../domain/entities/parcelle.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/source_type_sol.dart';
+import '../../domain/enums/teinte_zone.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/value_objects/couleur_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../database/app_database.dart';
 
@@ -36,6 +38,7 @@ class ParcelleMapper {
         techniquesSol: _techniques(r.techniquesSol),
         cultureVerticale: r.cultureVerticale,
         ordre: r.positionOrdre,
+        couleur: _couleur(r),
         notes: r.notes,
       );
 
@@ -56,11 +59,26 @@ class ParcelleMapper {
           Value(jsonEncode(p.techniquesSol.map((t) => t.name).toList())),
       cultureVerticale: Value(p.cultureVerticale),
       positionOrdre: Value(p.ordre),
+      couleurTeinte: Value(p.couleur.teinte?.name),
+      couleurRgb: Value(p.couleur.rgb),
       dateCreation: Value(maintenant),
       notes: Value(p.notes),
       createdAt: Value(maintenant),
       updatedAt: Value(maintenant),
     );
+  }
+
+  /// A missing or unknown tint falls back to the first palette tint, so the
+  /// row stays readable.
+  CouleurZone _couleur(ParcelleRow r) {
+    final rgb = r.couleurRgb;
+    if (rgb != null && rgb >= 0 && rgb <= 0xFFFFFF) {
+      return CouleurZone.personnalisee(rgb);
+    }
+    final teinte = TeinteZone.values.asNameMap()[r.couleurTeinte];
+    return teinte != null
+        ? CouleurZone.teinte(teinte)
+        : CouleurZone.teinte(TeinteZone.values.first);
   }
 
   Set<TechniqueSol> _techniques(String? json) {

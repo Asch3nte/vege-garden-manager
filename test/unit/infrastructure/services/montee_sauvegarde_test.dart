@@ -28,9 +28,67 @@ void main() {
     ]);
   });
 
+  test('v7 → v8 gives each zone the colour it showed by position', () {
+    Map<String, dynamic> zone(String potager, int ordre,
+            {bool supprimee = false}) =>
+        {
+          'potager_id': potager,
+          'position_ordre': ordre,
+          'deleted_at': supprimee ? 'x' : null,
+        };
+    final lignes = [
+      zone('pot1', 1),
+      zone('pot1', 0),
+      zone('pot1', 0, supprimee: true),
+      zone('pot1', 1),
+      zone('pot2', 0),
+    ];
+    const MonteeSauvegarde().monter({'parcelles': lignes}, 7);
+
+    expect(lignes.map((l) => l['couleur_teinte']),
+        ['terracotta', 'vertProfond', null, 'aubergine', 'vertProfond']);
+  });
+
+  test('v7 → v8 breaks position ties by creation date', () {
+    final tardive = {
+      'potager_id': 'pot1',
+      'position_ordre': 0,
+      'created_at': '2026-02-01',
+    };
+    final ancienne = {
+      'potager_id': 'pot1',
+      'position_ordre': 0,
+      'created_at': '2026-01-01',
+    };
+    const MonteeSauvegarde().monter({
+      'parcelles': [tardive, ancienne],
+    }, 7);
+
+    expect(ancienne['couleur_teinte'], 'vertProfond');
+    expect(tardive['couleur_teinte'], 'terracotta');
+  });
+
+  test('v7 → v8 tolerates a malformed position', () {
+    final ligne = {'potager_id': 'pot1', 'position_ordre': 'x'};
+    const MonteeSauvegarde().monter({
+      'parcelles': [ligne],
+    }, 7);
+    expect(ligne['couleur_teinte'], 'vertProfond');
+  });
+
   test('a current backup is left untouched', () {
     final ligne = tache('Arroser : Tomate');
-    const MonteeSauvegarde().monter({'taches': [ligne]}, 7);
+    final zone = {
+      'potager_id': 'pot1',
+      'position_ordre': 0,
+      'couleur_teinte': null,
+      'couleur_rgb': 0x123456,
+    };
+    const MonteeSauvegarde().monter({
+      'taches': [ligne],
+      'parcelles': [zone],
+    }, 8);
     expect(ligne['titre'], 'Arroser : Tomate');
+    expect(zone['couleur_teinte'], isNull);
   });
 }

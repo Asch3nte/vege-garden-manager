@@ -38,6 +38,7 @@ import '../../domain/enums/type_observation.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/enums/etat_tache.dart';
 import '../../domain/enums/priorite_tache.dart';
+import '../../domain/enums/teinte_zone.dart';
 import '../../domain/enums/type_tache.dart';
 import '../../domain/enums/zone_rusticite.dart';
 import '../../domain/value_objects/effet_equipement.dart';
@@ -409,6 +410,16 @@ extension LibellesEnums on AppLocalizations {
         TypeConflitAssociation.competitionEspace => assocMecaCompetitionEspace,
         TypeConflitAssociation.partageMaladies => assocMecaPartageMaladies,
         TypeConflitAssociation.allelopathie => assocMecaAllelopathie,
+      };
+
+  /// Label for a zone palette tint.
+  String teinteZone(TeinteZone t) => switch (t) {
+        TeinteZone.vertProfond => teinteVertProfond,
+        TeinteZone.terracotta => teinteTerracotta,
+        TeinteZone.aubergine => teinteAubergine,
+        TeinteZone.vertMoyen => teinteVertMoyen,
+        TeinteZone.bordeaux => teinteBordeaux,
+        TeinteZone.terre => teinteTerre,
       };
 
   /// Label for a growing difficulty from 1 (easy) to 3 (demanding).

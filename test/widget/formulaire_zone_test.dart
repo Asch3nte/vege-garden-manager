@@ -10,10 +10,12 @@ import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/enums/teinte_zone.dart';
 import 'package:pot_a_gerer/domain/enums/technique_sol.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
+import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_zone.dart';
@@ -74,6 +76,122 @@ void main() {
     expect(parcelle.potagerId, 'pot-1');
     expect(parcelle.surface.enMetresCarres, 2.5);
     expect(parcelle.exposition, NiveauSoleil.pleinSoleil);
+  });
+
+  group('colour', () {
+    Future<Parcelle> enregistrerZone(WidgetTester tester) async {
+      await tester.enterText(
+          find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré nord');
+      await tester.tap(find.text('Enregistrer'));
+      await tester.pumpAndSettle();
+      return verify(() => repo.sauvegarder(captureAny())).captured.last
+          as Parcelle;
+    }
+
+    testWidgets('a new zone defaults to the first tint free in its garden',
+        (tester) async {
+      when(() => repo.obtenirParPotager('pot-1')).thenAnswer((_) async => [
+            Parcelle(
+              id: 'z-1',
+              nom: 'Existante',
+              potagerId: 'pot-1',
+              type: TypeParcelle.pot,
+              surface: Surface.enMetresCarres(1),
+              exposition: NiveauSoleil.pleinSoleil,
+            ),
+          ]);
+      await monter(tester);
+
+      expect((await enregistrerZone(tester)).couleur,
+          const CouleurZone.teinte(TeinteZone.terracotta));
+    });
+
+    testWidgets('a palette tint can be picked', (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.bySemanticsLabel('Bordeaux'));
+      await tester.pumpAndSettle();
+
+      expect((await enregistrerZone(tester)).couleur,
+          const CouleurZone.teinte(TeinteZone.bordeaux));
+    });
+
+    testWidgets('a custom colour is set from the RGB panel', (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.bySemanticsLabel('Couleur personnalisée'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+          find.widgetWithText(TextField, 'Code hexadécimal'), '#3366cc');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Valider'));
+      await tester.pumpAndSettle();
+
+      expect((await enregistrerZone(tester)).couleur,
+          CouleurZone.personnalisee(0x3366CC));
+    });
+
+    testWidgets('the RGB sliders and the hex code stay in sync',
+        (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.bySemanticsLabel('Couleur personnalisée'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+          find.widgetWithText(TextField, 'Code hexadécimal'), 'FF0080');
+      await tester.pumpAndSettle();
+
+      final curseurs = tester.widgetList<Slider>(find.byType(Slider)).toList();
+      expect(curseurs.map((c) => c.value), [255, 0, 128]);
+    });
+
+    testWidgets('an invalid hex code cannot be confirmed', (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.bySemanticsLabel('Couleur personnalisée'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+          find.widgetWithText(TextField, 'Code hexadécimal'), '#3A7');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Format attendu : #RRGGBB'), findsOneWidget);
+      expect(
+          tester
+              .widget<FilledButton>(find.widgetWithText(FilledButton, 'Valider'))
+              .onPressed,
+          isNull);
+    });
+
+    testWidgets('a swatch is activable through accessibility', (tester) async {
+      final semantique = tester.ensureSemantics();
+      await monter(tester);
+
+      expect(
+        tester.getSemantics(find.bySemanticsLabel('Bordeaux')),
+        matchesSemantics(
+          label: 'Bordeaux',
+          isButton: true,
+          hasTapAction: true,
+          hasSelectedState: true,
+        ),
+      );
+      semantique.dispose();
+    });
+
+    testWidgets('cancelling the RGB panel keeps the previous colour',
+        (tester) async {
+      await monter(tester);
+
+      await tester.tap(find.bySemanticsLabel('Couleur personnalisée'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+          find.widgetWithText(TextField, 'Code hexadécimal'), '#3366CC');
+      await tester.tap(find.text('Annuler'));
+      await tester.pumpAndSettle();
+
+      expect((await enregistrerZone(tester)).couleur,
+          const CouleurZone.teinte(TeinteZone.vertProfond));
+    });
   });
 
   testWidgets('a failed save reports it and re-enables the form',
