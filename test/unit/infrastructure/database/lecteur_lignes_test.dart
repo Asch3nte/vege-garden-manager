@@ -15,30 +15,38 @@ void main() {
         'invariant' => throw InvariantDomaineException('bad'),
         'enum' => throw ArgumentError.value(ligne),
         'date' => throw const FormatException('bad date'),
+        'json' => (<Object>[1] as dynamic).cast<String>().first.length,
         _ => ligne.length,
       };
 
   test('sets aside the invalid rows and reports each one', () {
-    final entites = lecteur.lire(
-        'taches', ['ab', 'invariant', 'enum', 'date', 'abc'], versEntite, (l) => l);
+    final lignes = ['ab', 'invariant', 'enum', 'date', 'json', 'abc'];
+    final entites = lecteur.lire('taches', lignes, versEntite, (l) => l);
 
     expect(entites, [2, 3]);
-    expect(signalees,
-        [('taches', 'invariant'), ('taches', 'enum'), ('taches', 'date')]);
+    expect(signalees, [
+      ('taches', 'invariant'),
+      ('taches', 'enum'),
+      ('taches', 'date'),
+      ('taches', 'json'),
+    ]);
     expect(() => entites.add(1), throwsUnsupportedError);
   });
 
   test('a single invalid row reads as absent', () {
-    expect(lecteur.lireUne<String, int>('taches', 'invariant', versEntite, (l) => l), isNull);
-    expect(lecteur.lireUne<String, int>('taches', null, versEntite, (l) => l), isNull);
-    expect(lecteur.lireUne<String, int>('taches', 'ab', versEntite, (l) => l), 2);
+    int? lire(String? ligne) =>
+        lecteur.lireUne<String, int>('taches', ligne, versEntite, (l) => l);
+
+    expect(lire('invariant'), isNull);
+    expect(lire(null), isNull);
+    expect(lire('ab'), 2);
     expect(signalees, [('taches', 'invariant')]);
   });
 
   test('a programming error is not swallowed', () {
     expect(
-      () => lecteur.lire<String, int>('taches', ['x'], (_) => throw StateError('bug'),
-          (l) => l),
+      () => lecteur.lire<String, int>(
+          'taches', ['x'], (_) => throw StateError('bug'), (l) => l),
       throwsStateError,
     );
   });

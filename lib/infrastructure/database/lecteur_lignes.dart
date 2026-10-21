@@ -15,8 +15,8 @@ class LecteurLignes {
   const LecteurLignes([this._signaler]);
 
   /// Entities of the readable [lignes] of [table].
-  List<E> lire<R, E>(String table, Iterable<R> lignes, E Function(R) versEntite,
-      String Function(R) idDe) {
+  List<E> lire<R, E>(String table, Iterable<R> lignes,
+      E Function(R) versEntite, String Function(R) idDe) {
     final entites = <E>[];
     for (final ligne in lignes) {
       final entite = lireUne(table, ligne, versEntite, idDe);
@@ -37,6 +37,9 @@ class LecteurLignes {
       _ecarter(table, idDe(ligne), e);
     } on ArgumentError catch (e) {
       // An unknown stored enum value.
+      _ecarter(table, idDe(ligne), e);
+    } on TypeError catch (e) {
+      // A stored JSON or YAML value of an unexpected shape.
       _ecarter(table, idDe(ligne), e);
     }
     return null;

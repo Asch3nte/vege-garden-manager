@@ -68,7 +68,9 @@ void main() {
       ..signaler('plantations', 'p1', const FormatException('x'));
     await tester.pumpWidget(app(stats, journal: journal));
     await tester.pumpAndSettle();
-    expect(find.text('2 enregistrements illisibles, conservés tels quels'),
+    expect(
+        find.text(
+            '2 enregistrements illisibles rencontrés, conservés tels quels'),
         findsOneWidget);
   });
 

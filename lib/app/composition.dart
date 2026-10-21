@@ -116,8 +116,8 @@ class Composition {
         tacheRepositoryProvider.overrideWith(
             (ref) => TacheRepositoryImpl(base, lecteur: _lecteur(ref))),
         fichePlantePersonnelleRepositoryProvider
-            .overrideWith((ref) =>
-                FichePlantePersonnelleRepositoryImpl(base, lecteur: _lecteur(ref))),
+            .overrideWith((ref) => FichePlantePersonnelleRepositoryImpl(base,
+                lecteur: _lecteur(ref))),
         rappelRepositoryProvider
             .overrideWith((ref) =>
                 RappelRepositoryImpl(base, lecteur: _lecteur(ref))),

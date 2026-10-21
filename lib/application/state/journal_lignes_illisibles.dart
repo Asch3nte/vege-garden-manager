@@ -11,6 +11,9 @@ class JournalLignesIllisibles {
   /// Records the unreadable row [id] of [table].
   void signaler(String table, String id, Object erreur) =>
       _lignes.add('$table/$id');
+
+  /// Forgets every row, once the database content is replaced.
+  void vider() => _lignes.clear();
 }
 
 /// The journal shared by every repository.

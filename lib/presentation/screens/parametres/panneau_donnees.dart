@@ -110,6 +110,7 @@ class PanneauDonnees extends ConsumerWidget {
       // state everywhere.
       ref.invalidate(preferencesProvider);
       invaliderVuesDonnees(ref);
+      ref.read(journalLignesIllisiblesProvider).vider();
       ref
           .read(pileNavigationProvider.notifier)
           .reinitialiser(courant: RoutesApp.plusDonnees);
@@ -174,6 +175,7 @@ class PanneauDonnees extends ConsumerWidget {
     // then redirects to the onboarding.
     ref.invalidate(preferencesProvider);
     invaliderVuesDonnees(ref);
+    ref.read(journalLignesIllisiblesProvider).vider();
     ref.read(pileNavigationProvider.notifier).reinitialiser();
   }
 }

@@ -10,4 +10,12 @@ void main() {
 
     expect(journal.nombre, 2);
   });
+
+  test('vider forgets every row', () {
+    final journal = JournalLignesIllisibles()
+      ..signaler('taches', 't1', const FormatException('x'))
+      ..vider();
+
+    expect(journal.nombre, 0);
+  });
 }

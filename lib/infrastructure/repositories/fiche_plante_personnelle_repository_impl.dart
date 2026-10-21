@@ -47,6 +47,13 @@ class FichePlantePersonnelleRepositoryImpl
   }
 
   @override
+  Future<bool> idFicheExiste(String idFiche) async =>
+      await (_db.select(_db.fichesPlantesPersonnelles)
+            ..where((t) => t.idFiche.equals(idFiche) & t.deletedAt.isNull()))
+          .getSingleOrNull() !=
+      null;
+
+  @override
   Future<List<String>> obtenirYamlBruts() async {
     final rows = await (_db.select(_db.fichesPlantesPersonnelles)
           ..where((t) => t.deletedAt.isNull()))

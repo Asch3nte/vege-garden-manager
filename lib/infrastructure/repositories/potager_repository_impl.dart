@@ -50,9 +50,16 @@ class PotagerRepositoryImpl implements AbstractPotagerRepository {
           (r) => r.id);
       if (choisi != null) return choisi;
     }
-    // Earliest readable garden.
-    final tous = await obtenirTous();
-    return tous.isEmpty ? null : tous.first;
+    final lignes = await (_db.select(_db.potagers)
+          ..where((t) => t.deletedAt.isNull())
+          ..orderBy([(t) => OrderingTerm.asc(t.dateCreation)]))
+        .get();
+    for (final ligne in lignes) {
+      final potager = _lecteur.lireUne(_db.potagers.actualTableName, ligne,
+          _mapper.versEntite, (r) => r.id);
+      if (potager != null) return potager;
+    }
+    return null;
   }
 
   @override
