@@ -56,7 +56,10 @@ void main() {
     ];
 
     List<TermeGlossaire> construire() => construireGlossaire(
-        l10n: _l10n, familles: familles, bioagresseurs: bioagresseurs);
+        l10n: _l10n,
+        familles: familles,
+        bioagresseurs: bioagresseurs,
+        unites: const PreferencesUnites());
 
     test('derives one prefixed term per family and per bioaggressor', () {
       final ids = construire().map((t) => t.id);

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/langue_provider.dart';
 import '../../application/providers/unites_provider.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/parcelles_notifier.dart';
@@ -67,7 +68,11 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   final _cleForm = GlobalKey<FormState>();
   final _nom = TextEditingController();
   final _surface = TextEditingController();
-  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
+  late final SaisieMesures _saisie =
+      SaisieMesures(ref.read(unitesProvider), ref.read(codeLangueProvider));
+
+  /// The surface as first shown; saved unchanged when left as is.
+  late final String _surfaceInitiale;
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
   // Soil fields: techniques are intermediate+, texture/pH expert.
@@ -92,7 +97,10 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   void initState() {
     super.initState();
     final p = widget.parcelleInitiale;
-    _surface.text = _saisie.surfacePourChamp(p?.surface.enMetresCarres ?? 1);
+    _surfaceInitiale = p == null
+        ? _saisie.surfaceParDefaut(1, 10)
+        : _saisie.surfacePourChamp(p.surface.enMetresCarres);
+    _surface.text = _surfaceInitiale;
     if (p != null) {
       _nom.text = p.nom;
       _type = p.type;
@@ -113,13 +121,14 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
 
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
-    final surface = Surface.enMetresCarres(
-      _saisie.surfaceVersM2(
-          double.parse(_surface.text.trim().replaceAll(',', '.'))),
-    );
+    final texte = _surface.text.trim();
+    final initiale = widget.parcelleInitiale;
+    final surface = initiale != null && texte == _surfaceInitiale
+        ? initiale.surface
+        : Surface.enMetresCarres(
+            _saisie.surfaceVersM2(double.parse(texte.replaceAll(',', '.'))));
     final notifier = ref.read(parcellesProvider(widget.potagerId).notifier);
 
-    final initiale = widget.parcelleInitiale;
     await enregistrer(() async {
       if (initiale != null) {
         // Edit: rebuild with the same id, preserving the non-edited fields

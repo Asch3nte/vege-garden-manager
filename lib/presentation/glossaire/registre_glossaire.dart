@@ -30,7 +30,7 @@ List<TermeGlossaire> construireGlossaire({
   required AppLocalizations l10n,
   required List<FamilleBotanique> familles,
   required List<Bioagresseur> bioagresseurs,
-  PreferencesUnites unites = const PreferencesUnites(),
+  required PreferencesUnites unites,
 }) {
   final locale = l10n.localeName;
 

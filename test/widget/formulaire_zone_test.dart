@@ -204,9 +204,9 @@ void main() {
     await monter(tester,
         unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
 
-    // The 1 m² default reads in ft².
+    // A round default in the field's own unit.
     expect(find.widgetWithText(TextFormField, 'Surface (ft²)'), findsOneWidget);
-    expect(find.text('10.76'), findsOneWidget);
+    expect(find.text('10'), findsOneWidget);
 
     await tester.enterText(
         find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré nord');
@@ -339,5 +339,42 @@ void main() {
     expect(parcelle.nom, 'Nouveau nom');
     expect(parcelle.type, TypeParcelle.serre);
     expect(parcelle.notes, 'mémo sol'); // untouched field preserved
+  });
+
+  testWidgets('an untouched surface is saved as stored, whatever the unit',
+      (tester) async {
+    final initiale = Parcelle(
+      id: 'z-8',
+      nom: 'Carré',
+      potagerId: 'pot-1',
+      type: TypeParcelle.pot,
+      surface: Surface.enMetresCarres(1),
+      exposition: NiveauSoleil.pleinSoleil,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          parcelleRepositoryProvider.overrideWithValue(repo),
+          unitesProvider.overrideWithValue(
+              const PreferencesUnites.uniforme(SystemeUnites.imperial)),
+        ],
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: FormulaireZone(potagerId: 'pot-1', parcelleInitiale: initiale),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré sud');
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    final parcelle =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Parcelle;
+    expect(parcelle.surface.enMetresCarres, 1);
   });
 }

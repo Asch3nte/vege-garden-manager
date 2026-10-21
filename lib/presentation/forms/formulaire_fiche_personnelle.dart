@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/langue_provider.dart';
 import '../../application/providers/unites_provider.dart';
 import '../../application/state/fiches_personnelles_notifier.dart';
 import '../../domain/entities/fiche_plante_personnelle.dart';
@@ -71,7 +72,13 @@ class _FormulaireFichePersonnelleState
   final _nomScientifique = TextEditingController();
   final _famille = TextEditingController();
   final _espacement = TextEditingController();
-  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
+  late final SaisieMesures _saisie =
+      SaisieMesures(ref.read(unitesProvider), ref.read(codeLangueProvider));
+
+  /// The spacing as first shown, and its stored value: saved unchanged when
+  /// the field is left as is.
+  String? _espacementAffiche;
+  int? _espacementInitialCm;
   final _recolteMin = TextEditingController();
   final _recolteMax = TextEditingController();
   final _description = TextEditingController();
@@ -103,7 +110,9 @@ class _FormulaireFichePersonnelleState
     _nomEn.text = m.nomCommunEn ?? '';
     _nomScientifique.text = m.nomScientifique;
     _famille.text = m.familleBotanique;
-    _espacement.text = _saisie.longueurPourChamp(m.espacementCm);
+    _espacement.text = _espacementAffiche =
+        _saisie.longueurPourChamp(m.espacementCm);
+    _espacementInitialCm = m.espacementCm;
     _recolteMin.text = m.dureeAvantRecolteJoursMin.toString();
     _recolteMax.text = m.dureeAvantRecolteJoursMax.toString();
     _description.text = m.descriptionFr ?? '';
@@ -157,8 +166,9 @@ class _FormulaireFichePersonnelleState
       qualitesSol: _qualitesSol,
       phMin: _ph.start,
       phMax: _ph.end,
-      espacementCm:
-          _saisie.longueurVersCm(int.parse(_espacement.text.trim())),
+      espacementCm: _espacement.text.trim() == _espacementAffiche
+          ? _espacementInitialCm!
+          : _saisie.longueurVersCm(int.parse(_espacement.text.trim())),
       dureeAvantRecolteJoursMin: int.parse(_recolteMin.text.trim()),
       dureeAvantRecolteJoursMax: int.parse(_recolteMax.text.trim()),
       difficulte: _difficulte,

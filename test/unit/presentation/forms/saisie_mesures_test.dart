@@ -5,14 +5,15 @@ import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 import 'package:pot_a_gerer/presentation/forms/saisie_mesures.dart';
 
 void main() {
-  const metrique = SaisieMesures(PreferencesUnites());
-  const imperial = SaisieMesures(
-    PreferencesUnites.uniforme(SystemeUnites.imperial),
+  final metrique = SaisieMesures(const PreferencesUnites(), 'fr');
+  final imperial = SaisieMesures(
+    const PreferencesUnites.uniforme(SystemeUnites.imperial),
+    'fr',
   );
 
   test('metric entries pass through unchanged', () {
     expect(metrique.surfaceVersM2(2.5), 2.5);
-    expect(metrique.surfacePourChamp(2.5), '2.5');
+    expect(metrique.surfacePourChamp(2.5), '2,5');
     expect(metrique.surfacePourChamp(3), '3');
     expect(metrique.longueurVersCm(25), 25);
     expect(metrique.longueurPourChamp(25), '25');
@@ -21,9 +22,12 @@ void main() {
 
   test('imperial surfaces and lengths convert both ways', () {
     expect(imperial.surfaceVersM2(10.763910416709722), closeTo(1, 1e-9));
-    expect(imperial.surfacePourChamp(1), '10.76');
+    expect(imperial.surfacePourChamp(1), '10,76');
     expect(imperial.longueurVersCm(12), 30);
     expect(imperial.longueurPourChamp(30), '12');
+    expect(imperial.longueurPourChamp(1), '1');
+    expect(imperial.surfaceParDefaut(1, 10), '10');
+    expect(metrique.surfaceParDefaut(0.5, 5), '0,5');
   });
 
   test('harvest units follow the mass and volume systems', () {

@@ -5,6 +5,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/horloge_provider.dart';
+import '../../application/providers/langue_provider.dart';
 import '../../application/providers/unites_provider.dart';
 import '../../application/use_cases/creer_recolte.dart';
 import '../../domain/entities/recolte.dart';
@@ -50,7 +51,8 @@ class _FormulaireRecolteState extends ConsumerState<FormulaireRecolte>
     with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _valeur = TextEditingController(text: '1');
-  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
+  late final SaisieMesures _saisie =
+      SaisieMesures(ref.read(unitesProvider), ref.read(codeLangueProvider));
   late UniteSaisieRecolte _unite = _saisie.uniteRecolteParDefaut;
   DestinationRecolte _destination = DestinationRecolte.consommationFraiche;
   DateTime? _date;

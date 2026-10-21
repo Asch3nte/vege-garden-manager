@@ -17,6 +17,9 @@ import 'package:pot_a_gerer/presentation/forms/formulaire_fiche_personnelle.dart
 import 'package:pot_a_gerer/application/providers/unites_provider.dart';
 import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
 import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
+import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
+import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
+import 'package:pot_a_gerer/domain/value_objects/modele_fiche_personnelle.dart';
 
 class MockFichesPerso extends Mock
     implements AbstractFichePlantePersonnelleRepository {}
@@ -36,7 +39,8 @@ void main() {
   });
 
   Future<void> monter(WidgetTester tester,
-      {PreferencesUnites unites = const PreferencesUnites()}) async {
+      {PreferencesUnites unites = const PreferencesUnites(),
+      ModeleFichePersonnelle? modele}) async {
     // A tall viewport so the whole form list is built (no scrolling needed).
     tester.view.physicalSize = const Size(1000, 6000);
     tester.view.devicePixelRatio = 1.0;
@@ -53,7 +57,7 @@ void main() {
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const FormulaireFichePersonnelle(),
+          home: FormulaireFichePersonnelle(modeleInitial: modele),
         ),
       ),
     );
@@ -121,6 +125,38 @@ void main() {
             as FichePlantePersonnelle;
     expect(captured.contenu.espacementCm, 30);
   });
+
+  for (final cm in [45, 1]) {
+    testWidgets('an untouched imperial spacing of $cm cm is saved unchanged',
+        (tester) async {
+      await monter(tester,
+          unites: const PreferencesUnites.uniforme(SystemeUnites.imperial),
+          modele: ModeleFichePersonnelle(
+            idFiche: 'perso_test',
+            categorie: CategoriePlante.legume,
+            usages: {UsagePlante.alimentaire},
+            nomScientifique: 'Testus',
+            familleBotanique: 'Testaceae',
+            nomCommunFr: 'Test',
+            ensoleillement: NiveauSoleil.pleinSoleil,
+            arrosage: BesoinEau.modere,
+            qualitesSol: {QualiteSol.riche},
+            phMin: 6,
+            phMax: 7,
+            espacementCm: cm,
+            dureeAvantRecolteJoursMin: 40,
+            dureeAvantRecolteJoursMax: 70,
+          ));
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Enregistrer'));
+      await tester.pumpAndSettle();
+
+      final captured =
+          verify(() => repo.sauvegarder(captureAny())).captured.single
+              as FichePlantePersonnelle;
+      expect(captured.contenu.espacementCm, cm);
+    });
+  }
 
   testWidgets('blocks the save and surfaces errors when required fields are empty',
       (tester) async {

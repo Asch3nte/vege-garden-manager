@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/langue_provider.dart';
 import '../../application/providers/unites_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
@@ -72,7 +73,8 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
   final _cleForm = GlobalKey<FormState>();
   final _pieds = TextEditingController(text: '1');
   final _surface = TextEditingController();
-  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
+  late final SaisieMesures _saisie =
+      SaisieMesures(ref.read(unitesProvider), ref.read(codeLangueProvider));
   FichePlante? _plante;
   DateTime _date = DateTime.now();
   MethodeMiseEnPlace _methode = MethodeMiseEnPlace.semisDirect;
@@ -82,7 +84,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
   void initState() {
     super.initState();
     _plante = widget.planteInitiale;
-    _surface.text = _saisie.surfacePourChamp(0.5);
+    _surface.text = _saisie.surfaceParDefaut(0.5, 5);
   }
 
   @override
@@ -108,8 +110,8 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
     if (!formOk || _plante == null) return;
 
     final l10n = AppLocalizations.of(context)!;
-    // Read before the await: the form may be gone when the error comes back.
-    final mesures = formateurMesuresLu(context, ref);
+    // The entry's units, so the message matches the field.
+    final mesures = FormateurMesures(l10n, _saisie.unites);
     await enregistrer(
         () => ref.read(plantationsProvider(widget.parcelleId).notifier).creer(
               planteId: _plante!.id,

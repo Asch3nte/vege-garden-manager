@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:intl/intl.dart';
 
 import '../../domain/enums/grandeur_mesure.dart';
@@ -15,13 +17,17 @@ enum UniteSaisieRecolte { g, kg, oz, lb, piece, botte, litre, ml, galUs, flOz }
 class SaisieMesures {
   static const _convertisseur = ConvertisseurUnites();
 
-  /// Plain number for a text field: up to two decimals, dot separator, as
-  /// the fields parse it.
-  static final NumberFormat _champ = NumberFormat('0.##', 'en');
-
   final PreferencesUnites _unites;
 
-  const SaisieMesures(this._unites);
+  /// Up to two decimals with the language's separator; the fields accept
+  /// both a comma and a dot.
+  final NumberFormat _champ;
+
+  SaisieMesures(this._unites, String langue)
+    : _champ = NumberFormat('0.##', langue);
+
+  /// The units this entry converts from, also used to word its errors.
+  PreferencesUnites get unites => _unites;
 
   bool _imperial(GrandeurMesure g) => _unites.pour(g) == SystemeUnites.imperial;
 
@@ -48,10 +54,16 @@ class SaisieMesures {
       ? _convertisseur.poucesVersCentimetres(saisie.toDouble()).round()
       : saisie;
 
-  /// A stored length, as the field shows it.
+  /// A stored length, as the field shows it; at least 1 so that a short
+  /// spacing stays valid.
   String longueurPourChamp(int cm) => _imperial(GrandeurMesure.longueur)
-      ? '${_convertisseur.centimetresVersPouces(cm.toDouble()).round()}'
+      ? '${math.max(1, _convertisseur.centimetresVersPouces(cm.toDouble()).round())}'
       : '$cm';
+
+  /// A default surface as the field shows it: [m2] in metric, the round
+  /// [ft2] in imperial.
+  String surfaceParDefaut(double m2, double ft2) =>
+      _champ.format(_imperial(GrandeurMesure.surface) ? ft2 : m2);
 
   /// Harvest units offered, in the chosen mass and volume systems.
   List<UniteSaisieRecolte> get unitesRecolte => List.unmodifiable([

@@ -148,7 +148,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Tomate').last);
     await tester.pumpAndSettle();
-    await tester.enterText(find.widgetWithText(TextFormField, '0.5'), '1');
+    await tester.enterText(find.widgetWithText(TextFormField, '0,5'), '1');
 
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
