@@ -46,8 +46,7 @@ import 'package:riverpod/riverpod.dart';
 /// duplicates, and a day that no longer needs any watering **cancels** it.
 /// Crops the user has already ticked off are excluded from the count.
 ///
-/// The push notification honours the user's notification **opt-outs** (docs/11,
-/// absolute constraint #3): it is suppressed when the master switch is off, when
+/// The push notification honours the user's notification **opt-outs**: it is suppressed when the master switch is off, when
 /// the `'arrosage'` category is muted, or when 08:00 falls inside the
 /// do-not-disturb window. The **tasks themselves are always created** — opt-outs
 /// mute notifications, not the gardening plan.

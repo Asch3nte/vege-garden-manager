@@ -103,5 +103,5 @@ List<TermeGlossaire> construireNotions(AppLocalizations l10n) =>
     ]);
 
 /// Id of the novice landing page the glossary panel highlights
-/// (« Par où commencer ? », ADR-0017 D3).
+/// (« Par où commencer ? »).
 final String idNotionCommencer = TermeGlossaire.idNotion('par-ou-commencer');

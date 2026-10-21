@@ -5,7 +5,7 @@ import 'potager_exception.dart';
 ///
 /// At load time a corrupt reference entry is logged and skipped — the app does
 /// not crash (same robustness contract as the plant catalogue and the family
-/// reference, ADR-0006).
+/// reference).
 class BioagresseurInvalideException extends PotagerException {
   /// Identifier of the offending entry (its slug or the file name).
   final String source;

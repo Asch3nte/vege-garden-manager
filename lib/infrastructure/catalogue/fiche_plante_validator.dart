@@ -135,7 +135,7 @@ class FichePlanteValidator {
       );
     }
 
-    // Targeted defence (optional, ADR-0010 Lot 2): lists of bioaggressor slugs.
+    // Targeted defence (optional): lists of bioaggressor slugs.
     // (Referential resolution is checked by VerificateurIntegriteRepulsifs.)
     for (final cle in ['repulsif_contre', 'piege_a']) {
       final liste = y[cle];
@@ -246,7 +246,7 @@ class FichePlanteValidator {
       );
     }
 
-    // Associations (optional, ADR-0010): each entry needs a non-empty id; the
+    // Associations (optional): each entry needs a non-empty id; the
     // `type` mechanism, when present, must be a known enum value and the
     // `raison_i18n`, when present, must be a map.
     final associations = y['associations'] as Map?;

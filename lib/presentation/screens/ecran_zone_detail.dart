@@ -373,7 +373,7 @@ class _Detail extends StatelessWidget {
             ],
           // Crop rotation of this zone (expert, ADR-0009 / rotation avancée).
           _SectionRotationZone(zoneId: zone.id, type: zone.type),
-          // Equipment attached to this zone (intermediate+, ADR-0009).
+          // Equipment attached to this zone (intermediate+).
           _SectionEquipementsZone(
             potagerId: potagerId,
             zoneId: zone.id,

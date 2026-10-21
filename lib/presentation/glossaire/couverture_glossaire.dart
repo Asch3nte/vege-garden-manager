@@ -60,7 +60,7 @@ final Map<String, List<String>> enumsCouverts = Map.unmodifiable({
   'UrgenceArrosage': [TermeGlossaire.idNotion('urgence-arrosage')],
   'ToleranceSecheresse': [TermeGlossaire.idNotion('tolerance-secheresse')],
   // Water-sensitive growth stages are a facet of the detailed water need
-  // (ADR-0009 `acces.eauDetaillee`); the detailed-watering section links there.
+  // (`acces.eauDetaillee`); the detailed-watering section links there.
   'PhaseSensibleEau': [TermeGlossaire.idNotion('besoin-eau')],
 
   // — Outils & équipements — (one page per value; `autre` names nothing)

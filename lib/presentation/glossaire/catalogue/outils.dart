@@ -153,7 +153,7 @@ TermeGlossaire _pageOutil(AppLocalizations l10n, TypeEquipement v) {
     conseils: [?conseil],
     complements: [
       // The stake page also explains the climber-load scale the association
-      // engine uses to size a support (ChargeTuteur, ADR-0010).
+      // engine uses to size a support (ChargeTuteur).
       if (v == TypeEquipement.tuteur)
         ComplementValeursEnum(valeurs: [
           for (final c in ChargeTuteur.values)

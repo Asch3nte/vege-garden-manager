@@ -9,7 +9,7 @@ import '../enums/type_alerte_meteo.dart';
 ///
 /// In V1 the alert is **generic** — [plantationsConcernees] lists every culture
 /// in place in the concerned potager, with no per-plant sensitivity filtering
-/// (no such data exists in the catalogue yet; see `docs/13` §2.1).
+/// (no such data exists in the catalogue yet).
 ///
 /// Domain names are kept in French; the code is documented in English.
 class AlerteCulture {

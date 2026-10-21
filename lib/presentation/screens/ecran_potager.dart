@@ -124,7 +124,7 @@ class EcranPotager extends ConsumerWidget {
             _EtatErreur(onReessayer: () => ref.invalidate(potagerProvider)),
         data: (data) {
           // One-off post-onboarding hint: nudge the user to tap a zone to add
-          // plants (only meaningful once zones exist) — feedback #4.
+          // plants (only meaningful once zones exist).
           final astuce = ref.watch(astucePotagerZonesProvider);
           return Column(
             children: [
@@ -573,7 +573,7 @@ class _PastilleTache extends StatelessWidget {
 
 /// Plan legend: only the markers the plan actually renders are explained — the
 /// zone colours are assigned by position (not by crop category), so a colour
-/// legend would be misleading (decision: show what exists, docs/15 §3).
+/// legend would be misleading (decision: show what exists).
 class _Legende extends StatelessWidget {
   const _Legende();
 

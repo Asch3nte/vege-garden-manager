@@ -89,7 +89,7 @@ class ComplementValeursEnum extends ComplementTerme {
   List<ValeurDecrite> get valeurs => _valeurs;
 }
 
-/// Provenance block of an association-mechanism page (ADR-0017, annexe A):
+/// Provenance block of an association-mechanism page (annexe A):
 /// whether the mechanism can be **computed by the engine** (a derivation rule
 /// exists in `MoteurDerivationAssociations`) or is only **documented by the
 /// permaculture community** (curated pairs from the YAML sheets).

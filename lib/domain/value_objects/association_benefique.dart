@@ -5,7 +5,7 @@ import '../enums/type_benefice_association.dart';
 ///
 /// Loaded from the YAML catalogue (`associations.beneficies[]`). [mecanismes]
 /// names *why* the pairing helps — **possibly several**
-/// (ADR-0012, e.g. *brouillage olfactif* + *répulsion*) ; empty for a
+/// (e.g. *brouillage olfactif* + *répulsion*) ; empty for a
 /// legacy/curated pair that only states the target. A free editorial reason
 /// ([raison], localised) may complete — or nuance — the typed mechanisms.
 ///

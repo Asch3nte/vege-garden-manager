@@ -1,4 +1,4 @@
-/// Row count of a single stored table (data-transparency view, docs/11 §6).
+/// Row count of a single stored table (data-transparency view).
 ///
 /// A plain, immutable pair — the table's real SQL name and how many records it
 /// holds — surfaced so the user can see exactly what the app keeps on device.
@@ -31,7 +31,7 @@ class StatistiqueTable {
   String toString() => 'StatistiqueTable($_nom, $_lignes)';
 }
 
-/// Immutable snapshot of what the app stores locally (docs/11 §6 — "Transparence
+/// Immutable snapshot of what the app stores locally ("Transparence
 /// des données"): the per-table record counts plus the database's on-disk size.
 ///
 /// A **result** value object assembled by an [AbstractStatistiquesDonneesService]

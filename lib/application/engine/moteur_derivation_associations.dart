@@ -49,7 +49,7 @@ class MoteurDerivationAssociations {
   static const int seuilLongJours = 100;
 
   /// A companion is "notably shorter" for layering when its max height is at most
-  /// this fraction of the tall plant's (ADR-0014 — étagement précis).
+  /// this fraction of the tall plant's (étagement précis).
   static const double ratioEtagement = 0.5;
 
   /// Planting distance (cm) at/above which a plant counts as "spreading", for the
@@ -129,7 +129,7 @@ class MoteurDerivationAssociations {
             if (_plusHaute(a, b)) CritereAssociation.sourcePlusHaute,
           }));
     }
-    // Étagement (ADR-0014, précis) : [a] haute & plein soleil porte de l'ombre,
+    // Étagement (précis) : [a] haute & plein soleil porte de l'ombre,
     // [b] **nettement plus basse** et qui **préfère** (confiance moyenne) ou
     // **tolère** (confiance faible — c'est sous-optimal pour elle) cette ombre.
     if (a.besoins.soleil == NiveauSoleil.pleinSoleil &&
@@ -226,7 +226,7 @@ class MoteurDerivationAssociations {
           b, TypeConflitAssociation.memeFamilleRavageurs, NiveauConfiance.eleve,
           criteres: const {CritereAssociation.memeFamille}));
     }
-    // Concurrence lumière (ADR-0014, précis) : toutes deux **exigent** le plein
+    // Concurrence lumière (précis) : toutes deux **exigent** le plein
     // soleil (pas seulement le tolèrent) et sont hautes → elles se font de l'ombre.
     if (_exigePleinSoleil(a) && _exigePleinSoleil(b) && _haute(a) && _haute(b)) {
       out.add(_conflit(
@@ -413,7 +413,7 @@ class MoteurDerivationAssociations {
   bool _exigePleinSoleil(FichePlante f) =>
       f.besoins.soleil == NiveauSoleil.pleinSoleil && !_tolereOmbre(f);
 
-  /// [b] is notably shorter than [a] (both heights known, ADR-0014).
+  /// [b] is notably shorter than [a] (both heights known).
   bool _nettementPlusBasse(FichePlante a, FichePlante b) {
     final ha = a.hauteurAdulteCmMax, hb = b.hauteurAdulteCmMax;
     return ha != null && hb != null && hb <= ha * ratioEtagement;

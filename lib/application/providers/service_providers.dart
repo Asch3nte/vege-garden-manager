@@ -16,7 +16,7 @@ import 'non_branche.dart';
 /// root; tests override them with doubles. `AbstractSyncService` is
 /// intentionally absent (WiFi sync is deferred to V2).
 
-/// Reverse-geocoding service (Nominatim / OSM — ADR-0016).
+/// Reverse-geocoding service (Nominatim / OSM).
 final geocodageServiceProvider = Provider<AbstractGeocodageService>(
   (ref) => nonBranche('geocodageServiceProvider'),
 );
@@ -59,7 +59,7 @@ final infoApplicationServiceProvider =
   (ref) => nonBranche('infoApplicationServiceProvider'),
 );
 
-/// One-shot read of the running app's version (docs/11 §7 — "À propos").
+/// One-shot read of the running app's version ("À propos").
 final versionAppliProvider = FutureProvider<String>(
   (ref) => ref.watch(infoApplicationServiceProvider).obtenirVersionAffichee(),
 );

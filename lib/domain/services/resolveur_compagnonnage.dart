@@ -36,7 +36,7 @@ class CompagnonAvecRaison<A> {
   /// behind the relationship.
   A get association => _association;
 
-  /// Direction seen from the centre (donne / recoit / mutuel, ADR-0012).
+  /// Direction seen from the centre (donne / recoit / mutuel).
   SensAssociation get sens => _sens;
 }
 

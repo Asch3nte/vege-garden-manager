@@ -12,7 +12,7 @@ import 'terme_cliquable.dart';
 import 'terme_glossaire.dart';
 import 'texte_avec_liens.dart';
 
-/// A glossary term page (`/plus/aide/terme/:id`, ADR-0017 D3): kind badge +
+/// A glossary term page (`/plus/aide/terme/:id`): kind badge +
 /// chapter, optional illustration, definition with rendered wiki links,
 /// « 💡 Astuce », advice list, then the typed derived blocks (family,
 /// bioaggressor, enum values, see-also). An unknown id renders a friendly

@@ -209,7 +209,7 @@ class _NoeudAssoc {
   final double score;
   final String? mecanisme;
 
-  /// Glossary id of the mechanism page (`notion.meca-*`, ADR-0017) — makes the
+  /// Glossary id of the mechanism page (`notion.meca-*`) — makes the
   /// group chip a clickable term; `null` for untyped pairs.
   final String? idMecanisme;
   final String? raison;
@@ -379,7 +379,7 @@ class _VueAssociationsState extends State<_VueAssociations> {
   }
 
   /// The side's **groups** capped at curated + N derived groups, unless expanded
-  /// (ADR-0013 — capping now counts groups, not individual plants).
+  /// (capping now counts groups, not individual plants).
   List<_GroupeAssoc> _affiches(List<_GroupeAssoc> groupes) {
     if (_tousAffiches) return groupes;
     final nbCurated = groupes.where((g) => g.curate).length;
@@ -596,7 +596,7 @@ class _BandeauPreferences extends StatelessWidget {
         : theme.colorScheme.tertiary;
 
     // Default → a short hint; custom → just the tuned families (no prefix, so it
-    // is not truncated for the part that matters — ADR-0013 §7).
+    // is not truncated for the part that matters).
     final String texte = estDefaut
         ? l10n.assocPrefsNormales
         : [
@@ -842,7 +842,7 @@ class _GeoGroupe {
 }
 
 /// Pre-computed geometry of the constellation: a [canvas] sized to the whole
-/// content (so every node lies inside it and stays hit-testable, ADR-0013 §3),
+/// content (so every node lies inside it and stays hit-testable),
 /// the [centre] position and one [_GeoGroupe] per side.
 class _GeoConstellation {
   final Size canvas;
@@ -1019,7 +1019,7 @@ class _GroupeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    // Untyped curated pair → neutral "Autre" chip (not a family colour, ADR-0013).
+    // Untyped curated pair → neutral "Autre" chip (not a family colour).
     final estAutre = groupe.mecanisme == null;
     final libelle = groupe.mecanisme ?? l10n.assocMecaAutre;
     final couleurChip = estAutre ? theme.colorScheme.onSurfaceVariant : accent;
@@ -1077,7 +1077,7 @@ class _GroupeWidget extends StatelessWidget {
 }
 
 /// Shared header of a group: the mechanism/“Autre” chip with a direction glyph
-/// (never truncated, ADR-0013 §4), and the once-per-group second line
+/// (never truncated), and the once-per-group second line
 /// (“Suggestion · …” or “Hors suggestion”).
 class _EnteteGroupe extends StatelessWidget {
   final String libelle;

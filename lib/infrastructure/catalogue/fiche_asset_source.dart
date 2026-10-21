@@ -24,7 +24,7 @@ abstract class FicheAssetSource {
 /// default). Lists `assets/fiches_plantes/<categorie>/*.yaml`, excluding the
 /// `_schema/`, `_familles/` and `_referentiels/` folders (the latter two hold
 /// family sheets and the bioaggressor reference, distinct entities loaded by
-/// their own pipelines — ADR-0006).
+/// their own pipelines).
 class BundleFicheAssetSource implements FicheAssetSource {
   final AssetBundle _bundle;
 

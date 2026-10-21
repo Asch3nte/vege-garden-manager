@@ -51,33 +51,33 @@ class FichePlante {
   final Set<PrecedentCultural> _precedentsDefavorables;
   final Map<String, String> _descriptionsLocalisees;
 
-  // Enrichissement §A — rusticité USDA tolérée par la plante
+  // Rusticité USDA tolérée par la plante
   final ZoneRusticite? _rusticiteMin;
-  // Enrichissement §B — tolérance au gel
+  // Tolérance au gel
   final double? _temperatureMinSurvie;
   final bool _geleFatal;
-  // Enrichissement §C — niveau de difficulté (1 débutant → 3 expert)
+  // Niveau de difficulté (1 débutant → 3 expert)
   final int? _difficulte;
-  // Enrichissement §D — compatibilité contenant / profondeur sol
+  // Compatibilité contenant / profondeur sol
   final int? _profondeurSolMinCm;
   final bool _compatibleHorsSol;
-  // Enrichissement §E — culture verticale (tuteur/treillis)
+  // Culture verticale (tuteur/treillis)
   final bool _cultureVerticale;
-  // Enrichissement §F — hauteur adulte (cm), bornes basse/haute (optionnel)
+  // Hauteur adulte (cm), bornes basse/haute (optionnel)
   final int? _hauteurAdulteCmMin;
   final int? _hauteurAdulteCmMax;
-  // Enrichissement §H — dynamique azotée
+  // Dynamique azotée
   final bool _fixeAzote;
   final NiveauBesoin? _besoinAzote;
-  // Enrichissement ADR-0010 Lot 2 — défense ciblée & charge sur tuteur
+  // Défense ciblée & charge sur tuteur
   // Slugs Bioagresseur que la plante repousse / piège (intégrité référentielle
   // vérifiée par VerificateurIntegriteRepulsifs, comme rotation.famille).
   final Set<String> _repulsifContre;
   final Set<String> _piegeA;
   final ChargeTuteur? _chargeTuteur;
-  // Enrichissement ADR-0014 — système racinaire (structuration du sol / concurrence).
+  // Système racinaire (structuration du sol / concurrence).
   final EnracinementPlante? _enracinement;
-  // Enrichissement ADR-0015 Lot 4 — réponse thermique & sécheresse
+  // Réponse thermique & sécheresse
   final ToleranceSecheresse? _toleranceSecheresse;
   final double? _temperatureMaxTolerance;
 
@@ -168,31 +168,21 @@ class FichePlante {
     Set<PrecedentCultural>? precedentsFavorables,
     Set<PrecedentCultural>? precedentsDefavorables,
     Map<String, String>? descriptionsLocalisees,
-    // Enrichissement §A
     ZoneRusticite? rusticiteMin,
-    // Enrichissement §B
     double? temperatureMinSurvie,
     bool geleFatal = false,
-    // Enrichissement §C
     int? difficulte,
-    // Enrichissement §D
     int? profondeurSolMinCm,
     bool compatibleHorsSol = true,
-    // Enrichissement §E
     bool cultureVerticale = false,
-    // Enrichissement §F
     int? hauteurAdulteCmMin,
     int? hauteurAdulteCmMax,
-    // Enrichissement §H
     bool fixeAzote = false,
     NiveauBesoin? besoinAzote,
-    // Enrichissement ADR-0010 Lot 2
     Set<String>? repulsifContre,
     Set<String>? piegeA,
     ChargeTuteur? chargeTuteur,
-    // Enrichissement ADR-0014
     EnracinementPlante? enracinement,
-    // Enrichissement ADR-0015 Lot 4
     ToleranceSecheresse? toleranceSecheresse,
     double? temperatureMaxTolerance,
   }) =>
@@ -287,33 +277,26 @@ class FichePlante {
   Set<PrecedentCultural> get precedentsDefavorables => _precedentsDefavorables;
 
   /// Typed beneficial associations of this plant — each pairs a target id with
-  /// an optional mechanism and localised reason (unmodifiable, ADR-0010).
+  /// an optional mechanism and localised reason (unmodifiable).
   List<AssociationBenefique> get associationsBenefiques =>
       _associationsBenefiques;
 
-  /// Typed conflicting associations of this plant (unmodifiable, ADR-0010).
+  /// Typed conflicting associations of this plant (unmodifiable).
   List<AssociationConflit> get associationsNegatives => _associationsNegatives;
 
-  // Enrichissement §A
   ZoneRusticite? get rusticiteMin => _rusticiteMin;
-  // Enrichissement §B
   double? get temperatureMinSurvie => _temperatureMinSurvie;
   bool get geleFatal => _geleFatal;
-  // Enrichissement §C
   int? get difficulte => _difficulte;
-  // Enrichissement §D
   int? get profondeurSolMinCm => _profondeurSolMinCm;
   bool get compatibleHorsSol => _compatibleHorsSol;
-  // Enrichissement §E
   bool get cultureVerticale => _cultureVerticale;
-  // Enrichissement §F — hauteur adulte (cm)
+  // Hauteur adulte (cm)
   int? get hauteurAdulteCmMin => _hauteurAdulteCmMin;
   int? get hauteurAdulteCmMax => _hauteurAdulteCmMax;
-  // Enrichissement §H
   bool get fixeAzote => _fixeAzote;
   NiveauBesoin? get besoinAzote => _besoinAzote;
 
-  // Enrichissement ADR-0010 Lot 2
   /// Bioaggressor slugs this plant **repels** from its neighbours (unmodifiable).
   Set<String> get repulsifContre => _repulsifContre;
 
@@ -328,7 +311,6 @@ class FichePlante {
   /// the soil-loosening rule and refines root competition.
   EnracinementPlante? get enracinement => _enracinement;
 
-  // Enrichissement ADR-0015 Lot 4
   /// Drought tolerance level, or `null` when unspecified. Used by [BilanArrosage]
   /// to scale the demand index (×0.8 forte / ×1.0 moyenne / ×1.2 faible).
   ToleranceSecheresse? get toleranceSecheresse => _toleranceSecheresse;

@@ -1,4 +1,4 @@
-/// Registry of the glossary illustrations (ADR-0017, D4 / Lot 5).
+/// Registry of the glossary illustrations (ADR-0017).
 ///
 /// One file per illustrated term: `assets/images/glossaire/<term id>.webp`
 /// (lightweight WebP, capped dimensions), provenance and licence recorded in

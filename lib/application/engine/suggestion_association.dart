@@ -10,7 +10,7 @@ import '../../domain/enums/type_conflit_association.dart';
 /// Sealed: a suggestion is either a [SuggestionBenefique] or a
 /// [SuggestionConflit], so callers `switch` on the concrete type to read the
 /// typed mechanism. Every suggestion carries a [confiance], a [sens] (direction
-/// seen from the centre, ADR-0012) and, when the rule hinges on a specific
+/// seen from the centre) and, when the rule hinges on a specific
 /// bioaggressor (repulsion / trap), the [slug] involved — the presentation layer
 /// builds a localised reason from these.
 sealed class SuggestionAssociation {

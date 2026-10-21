@@ -5,7 +5,7 @@
 /// heading, root crops during swelling. A fiche lists the stages where letting
 /// the soil dry out is most damaging, so the detailed watering section can warn
 /// the expert gardener. Purely informational — the watering engine
-/// (`BilanArrosage`, ADR-0015) does not consume it.
+/// (`BilanArrosage`) does not consume it.
 ///
 /// Domain names are kept in French; the code is documented in English.
 enum PhaseSensibleEau {

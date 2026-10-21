@@ -35,7 +35,7 @@ import '../widgets/titre_tache.dart';
 ///
 /// Reimplemented from `calendrier.jsx`, **Agenda view**: a summary, a week/month
 /// scope selector and day groups of tickable task cards. The Month grid and the
-/// Season (sowing→harvest) views are deferred — see docs/15.
+/// Season (sowing→harvest) views are deferred.
 class EcranCalendrier extends ConsumerWidget {
   const EcranCalendrier({super.key});
 
@@ -1137,7 +1137,7 @@ class _LigneSousTache extends StatelessWidget {
   final ValueChanged<Tache> onModifier;
   final ValueChanged<Tache> onSupprimer;
 
-  /// Opens the task detail. Tapping the row ticks the task off (ADR-0020: a
+  /// Opens the task detail. Tapping the row ticks the task off (a
   /// grouped crop must be tickable without the others), so opening the detail
   /// goes through the overflow menu rather than the row itself.
   final ValueChanged<Tache> onOuvrir;

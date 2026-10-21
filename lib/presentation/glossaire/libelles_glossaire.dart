@@ -32,7 +32,7 @@ extension LibellesGlossaire on AppLocalizations {
       };
 }
 
-/// Material icon for a glossary chapter (Phosphor pending — docs/08 §7).
+/// Material icon for a glossary chapter (Phosphor pending).
 IconData iconeChapitreGlossaire(ChapitreGlossaire c) => switch (c) {
       ChapitreGlossaire.culturesEtPlantes => Icons.eco_outlined,
       ChapitreGlossaire.famillesBotaniques => Icons.account_tree_outlined,

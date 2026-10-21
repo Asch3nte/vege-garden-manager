@@ -138,10 +138,10 @@ abstract final class RoutesApp {
 ///
 /// Order is the contract between the router branches and the navigation shell:
 /// the Nth branch corresponds to the Nth destination here.
-// Icons map to the Phosphor set targeted by docs/09 §3 (House, Plant, BookOpen,
-// CalendarBlank, DotsThree); Material stand-ins are used until Phosphor is
-// re-wired (phosphor_flutter is incompatible with Flutter 3.44.1 — see docs/08
-// §7). Outline for the resting state, filled for the selected state.
+// Icons map to the Phosphor set (House, Plant, BookOpen, CalendarBlank,
+// DotsThree); Material stand-ins are used until Phosphor is re-wired
+// (phosphor_flutter does not compile with the current Flutter). Outline for the
+// resting state, filled for the selected state.
 const List<DestinationNav> _destinations = [
   DestinationNav(
     route: RoutesApp.accueil,
@@ -306,7 +306,7 @@ final routeurProvider = Provider<GoRouter>((ref) {
       // Already on the onboarding flow: stay until it is **completed**. The
       // onboarding creates its garden lazily (to attach zones), so a freshly
       // created garden must NOT bounce the user out mid-flow — only
-      // `onboardingTermine` lifts the gate, then we land on Potager (feedback #4).
+      // `onboardingTermine` lifts the gate, then we land on Potager.
       if (surOnboarding) {
         return prefs.onboardingTermine ? RoutesApp.potager : null;
       }

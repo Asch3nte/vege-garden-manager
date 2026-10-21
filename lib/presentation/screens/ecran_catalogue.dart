@@ -63,7 +63,7 @@ Future<void> _ajouterPlante(
 /// category filter.
 ///
 /// Two views (segmented toggle): **Fiches** (search + category chips + species
-/// cards, each expandable to its varieties — ADR-0005) and **Réseau** (companion
+/// cards, each expandable to its varieties) and **Réseau** (companion
 /// constellation over the species). Both show species (mother sheets); varieties
 /// appear only when a species is expanded in the list.
 class EcranCatalogue extends ConsumerWidget {
@@ -374,7 +374,7 @@ class _ChipsCategories extends StatelessWidget {
 }
 
 /// Second filter row: botanical families of the selected category ("Toutes" +
-/// each family present among that category's species — ADR-0006).
+/// each family present among that category's species).
 class _ChipsFamilles extends StatelessWidget {
   final List<FamilleBotanique> familles;
   final String? courante;

@@ -77,41 +77,33 @@ class FichePlanteMapper {
       // Rotation avancée — typed cultural precedents, normalized.
       precedentsFavorables: _precedents(rotation?['precedents_favorables']),
       precedentsDefavorables: _precedents(rotation?['precedents_defavorables']),
-      // Enrichissement §A
       rusticiteMin: rusticite?['zone_min'] == null
           ? null
           : _enum(ZoneRusticite.values, rusticite!['zone_min'] as String),
-      // Enrichissement §B
       temperatureMinSurvie: besoins['temperature_min_survie'] == null
           ? null
           : (besoins['temperature_min_survie'] as num).toDouble(),
       geleFatal: besoins['gele_fatal'] as bool? ?? false,
-      // Enrichissement §C
       difficulte: y['difficulte'] as int?,
-      // Enrichissement §D
       profondeurSolMinCm: cycle['profondeur_sol_min_cm'] as int?,
       compatibleHorsSol: cycle['compatible_hors_sol'] as bool? ?? true,
-      // Enrichissement §E
       cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
-      // Enrichissement §F — hauteur adulte [min, max]
+      // Hauteur adulte [min, max]
       hauteurAdulteCmMin: (cycle['hauteur_adulte_cm'] as List?)?[0] as int?,
       hauteurAdulteCmMax: (cycle['hauteur_adulte_cm'] as List?)?[1] as int?,
-      // Enrichissement §H
       fixeAzote: rotation?['fixe_azote'] as bool? ?? false,
       besoinAzote: rotation?['besoin_azote'] == null
           ? null
           : _enum(NiveauBesoin.values, rotation!['besoin_azote'] as String),
-      // Enrichissement ADR-0010 Lot 2
       repulsifContre: _slugs(y['repulsif_contre']),
       piegeA: _slugs(y['piege_a']),
       chargeTuteur: cycle['charge_tuteur'] == null
           ? null
           : _enum(ChargeTuteur.values, cycle['charge_tuteur'] as String),
-      // Enrichissement ADR-0014 — système racinaire
+      // Système racinaire
       enracinement: cycle['enracinement'] == null
           ? null
           : _enum(EnracinementPlante.values, cycle['enracinement'] as String),
-      // Enrichissement ADR-0015 Lot 4
       temperatureMaxTolerance: besoins['temperature_max_tolerance'] == null
           ? null
           : (besoins['temperature_max_tolerance'] as num).toDouble(),

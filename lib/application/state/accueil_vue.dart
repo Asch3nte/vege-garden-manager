@@ -30,7 +30,7 @@ class ZoneApercu {
 /// screen renders and resolves the progressive-disclosure rule once
 /// ([statistiquesVisibles]) so the widget stays declarative.
 ///
-/// Progressive disclosure (docs/02, écran Accueil) keyed on the real domain
+/// Progressive disclosure (écran Accueil) keyed on the real domain
 /// [NiveauExperience] (3 levels). The mock-up's 4 labels collapse onto these:
 ///  - [NiveauExperience.debutant] / [NiveauExperience.intermediaire] → core only
 ///    (weather · tasks · alert · garden overview);
@@ -96,7 +96,7 @@ class AccueilVue {
   int get nombreRecoltesSaison => _nombreRecoltesSaison;
 
   /// Whether the season-statistics tile is unlocked for this level (routed
-  /// through the single-source-of-truth policy — ADR-0009).
+  /// through the single-source-of-truth policy).
   bool get statistiquesVisibles => AccesNiveau(_niveau).statsTableauBord;
 
   /// Whether the active garden has no zones yet (drives the empty state).

@@ -46,7 +46,7 @@ class PanneauConfidentialite extends ConsumerWidget {
     final acces = ref.watch(accesNiveauProvider);
     // The active garden carries the position + climate/hardiness shown & edited.
     final potager = ref.watch(potagerActifProvider).value;
-    // The other gardens (§8 F2, ADR-0009 multi-potager): read-only, listed
+    // The other gardens (§8 F2): read-only, listed
     // below the active one when the tier unlocks multi-garden.
     final autresPotagers = (potager == null || !acces.multiPotager)
         ? const <Potager>[]

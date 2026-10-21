@@ -188,9 +188,9 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
         await prefs.definirNotificationCategorie(e.key, e.value);
       }
       // Refresh the data views so the (otherwise cached) dashboard/potager show
-      // the freshly created garden — test feedback #5.
+      // the freshly created garden.
       invaliderVuesDonnees(ref);
-      // One-off hint shown on the Potager screen we land on (feedback #4).
+      // One-off hint shown on the Potager screen we land on.
       ref.read(astucePotagerZonesProvider.notifier).afficher();
       // Lifts the router gate (refreshListenable → redirect to Potager).
       await prefs.terminerOnboarding();

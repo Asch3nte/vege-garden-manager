@@ -16,7 +16,7 @@ import 'parametres/widgets_parametres.dart';
 /// Reimplemented from `parametres.jsx`. The settings categories that map to real
 /// `PreferencesUtilisateur` fields (general, privacy/opt-outs, notifications)
 /// and the About page are built and persisted. Post-récolte is deferred to V1.1
-/// (ADR-0019; its `plusPostRecolte(Sub)` ARB keys are reserved for then) and
+/// (its `plusPostRecolte(Sub)` ARB keys are reserved for then) and
 /// Communauté to V2; Transparency/Sync/Export are deferred.
 class EcranPlus extends ConsumerWidget {
   const EcranPlus({super.key});
@@ -48,7 +48,7 @@ class _Racine extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     // Sub-panels are go_router sub-routes of /plus, so re-tapping the Plus tab
-    // pops back to this root (docs/15 §6 — was an imperative push before).
+    // pops back to this root (was an imperative push before).
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s4,

@@ -124,7 +124,7 @@ class PreferencesUtilisateur {
   /// Whether the app may fetch weather from Open-Meteo **automatically** (home
   /// card, watering advice, weather alerts). When `false`, no automatic network
   /// call is made — the weather card is hidden and only the detail screen still
-  /// refreshes on explicit user action (docs/11 opt-out, absolute constraint #3).
+  /// refreshes on explicit user action (absolute constraint #3).
   bool get meteoAutoActive => _meteoAutoActive;
   bool get communauteOptIn => _communauteOptIn;
   bool get calendrierLunaireOptIn => _calendrierLunaireOptIn;

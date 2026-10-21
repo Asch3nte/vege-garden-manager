@@ -288,7 +288,7 @@ extension LibellesEnums on AppLocalizations {
         TypeParcelle.autre => typeParcelleAutre,
       };
 
-  /// Label for a soil texture (ADR-0009 — expert).
+  /// Label for a soil texture (expert).
   String textureSol(TextureSol t) => switch (t) {
         TextureSol.argileux => textureArgileux,
         TextureSol.sableux => textureSableux,
@@ -299,14 +299,14 @@ extension LibellesEnums on AppLocalizations {
         TextureSol.caillouteux => textureCaillouteux,
       };
 
-  /// Label for a soil pH (ADR-0009 — expert).
+  /// Label for a soil pH (expert).
   String phSol(PhSol p) => switch (p) {
         PhSol.acide => phAcide,
         PhSol.neutre => phNeutre,
         PhSol.alcalin => phAlcalin,
       };
 
-  /// Label for a soil technique (ADR-0009 — intermédiaire+).
+  /// Label for a soil technique (intermédiaire+).
   String techniqueSol(TechniqueSol t) => switch (t) {
         TechniqueSol.butteLasagne => techButteLasagne,
         TechniqueSol.hugelkultur => techHugelkultur,

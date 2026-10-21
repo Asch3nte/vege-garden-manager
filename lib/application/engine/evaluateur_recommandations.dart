@@ -31,7 +31,7 @@ import '../../domain/value_objects/surface.dart';
 /// ## Soft score
 /// Exposition (40%), soil quality (40%), beneficial companion (20%). The
 /// companion sub-score is 1.0 for a **curated** good association already in the
-/// parcelle, 0.8 for a **derived** one (ADR-0010, no curated pair), else 0.5.
+/// parcelle, 0.8 for a **derived** one (no curated pair), else 0.5.
 /// Bonus reasons (no weight change): [RaisonReco.cultureVerticaleCompatible].
 ///
 /// See `docs/16-enrichissement-fiches-plantes.md` for the enrichment rationale.

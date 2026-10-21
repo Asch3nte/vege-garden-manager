@@ -5,7 +5,7 @@ import 'potager_exception.dart';
 /// name, unknown category…).
 ///
 /// At load time a corrupt family sheet is logged and skipped — the app does not
-/// crash (same robustness contract as the plant catalogue, ADR-0006).
+/// crash (same robustness contract as the plant catalogue).
 class FamilleBotaniqueInvalideException extends PotagerException {
   /// Identifier of the offending sheet (its `id` or file name).
   final String source;

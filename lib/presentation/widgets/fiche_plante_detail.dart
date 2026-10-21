@@ -76,7 +76,7 @@ class ContexteAssociation {
   /// Localised mechanism / family label, or `null`.
   final String? mecanisme;
 
-  /// Glossary id of the mechanism page (`notion.meca-*`, ADR-0017) — makes the
+  /// Glossary id of the mechanism page (`notion.meca-*`) — makes the
   /// banner title clickable; `null` for untyped relations.
   final String? idMecanisme;
 
