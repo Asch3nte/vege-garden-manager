@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/unites_provider.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../domain/entities/parcelle.dart';
@@ -19,6 +20,7 @@ import '../widgets/selecteur_couleur_zone.dart';
 import '../glossaire/terme_glossaire.dart';
 import '../glossaire/terme_cliquable.dart';
 import 'enregistrement_formulaire.dart';
+import 'saisie_mesures.dart';
 
 /// Opens the zone form for [potagerId] and returns the saved [Parcelle].
 ///
@@ -64,7 +66,8 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
     with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _nom = TextEditingController();
-  final _surface = TextEditingController(text: '1');
+  final _surface = TextEditingController();
+  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
   // Soil fields: techniques are intermediate+, texture/pH expert.
@@ -89,9 +92,9 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   void initState() {
     super.initState();
     final p = widget.parcelleInitiale;
+    _surface.text = _saisie.surfacePourChamp(p?.surface.enMetresCarres ?? 1);
     if (p != null) {
       _nom.text = p.nom;
-      _surface.text = _formaterSurface(p.surface.enMetresCarres);
       _type = p.type;
       _exposition = p.exposition;
       _texture = p.texture;
@@ -111,7 +114,8 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
     final surface = Surface.enMetresCarres(
-      double.parse(_surface.text.trim().replaceAll(',', '.')),
+      _saisie.surfaceVersM2(
+          double.parse(_surface.text.trim().replaceAll(',', '.'))),
     );
     final notifier = ref.read(parcellesProvider(widget.potagerId).notifier);
 
@@ -151,10 +155,6 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
       );
     });
   }
-
-  static String _formaterSurface(double m2) => m2 == m2.roundToDouble()
-      ? m2.toStringAsFixed(0)
-      : m2.toStringAsFixed(1);
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +208,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
               ],
               decoration: InputDecoration(
-                labelText: l10n.formZoneSurface,
+                labelText: l10n.formZoneSurface(_saisie.symboleSurface(l10n)),
                 border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
               ),
               validator: (v) => _validerSurface(v, l10n),

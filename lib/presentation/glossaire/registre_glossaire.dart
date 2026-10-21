@@ -2,7 +2,9 @@ import '../../domain/entities/bioagresseur.dart';
 import '../../domain/entities/famille_botanique.dart';
 import '../../domain/enums/type_bioagresseur.dart';
 import '../../domain/services/comparateur_noms.dart';
+import '../../domain/value_objects/preferences_unites.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/formateur_mesures.dart';
 import 'catalogue_notions.dart';
 import 'chapitre_glossaire.dart';
 import 'complement_terme.dart';
@@ -28,6 +30,7 @@ List<TermeGlossaire> construireGlossaire({
   required AppLocalizations l10n,
   required List<FamilleBotanique> familles,
   required List<Bioagresseur> bioagresseurs,
+  PreferencesUnites unites = const PreferencesUnites(),
 }) {
   final locale = l10n.localeName;
 
@@ -89,7 +92,7 @@ List<TermeGlossaire> construireGlossaire({
     for (final terme in [
       ...termesFamilles,
       ...termesBioagresseurs,
-      ...construireNotions(l10n),
+      ...construireNotions(l10n, FormateurMesures(l10n, unites)),
     ])
       // Attach the registered illustration, whatever the source —
       // YAML-derived pages get theirs the day their image lands.

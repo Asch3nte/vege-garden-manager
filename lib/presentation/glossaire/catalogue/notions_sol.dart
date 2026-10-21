@@ -6,6 +6,7 @@ import '../../../domain/enums/source_type_sol.dart';
 import '../../../domain/enums/technique_sol.dart';
 import '../../../domain/enums/texture_sol.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../widgets/formateur_mesures.dart';
 import '../../widgets/libelles_enums.dart';
 import '../chapitre_glossaire.dart';
 import '../complement_terme.dart';
@@ -17,7 +18,9 @@ import '../type_terme_glossaire.dart';
 /// concrete objects get **one page per value**:
 /// each soil texture and each soil technique has its own page; scales (pH,
 /// qualities…) get one concept page listing their values.
-List<TermeGlossaire> construireNotionsSol(AppLocalizations l10n) => [
+List<TermeGlossaire> construireNotionsSol(
+        AppLocalizations l10n, FormateurMesures mesures) =>
+    [
       TermeGlossaire(
         id: TermeGlossaire.idNotion('texture-sol'),
         chapitre: ChapitreGlossaire.solEtTerre,
@@ -106,7 +109,7 @@ List<TermeGlossaire> construireNotionsSol(AppLocalizations l10n) => [
           ]),
         ],
       ),
-      for (final v in TechniqueSol.values) _pageTechnique(l10n, v),
+      for (final v in TechniqueSol.values) _pageTechnique(l10n, mesures, v),
       TermeGlossaire(
         id: TermeGlossaire.idNotion('enracinement'),
         chapitre: ChapitreGlossaire.solEtTerre,
@@ -247,7 +250,8 @@ String idTechnique(TechniqueSol v) => TermeGlossaire.idNotion(switch (v) {
       TechniqueSol.keylineDesign => 'keyline-design',
     });
 
-TermeGlossaire _pageTechnique(AppLocalizations l10n, TechniqueSol v) {
+TermeGlossaire _pageTechnique(
+    AppLocalizations l10n, FormateurMesures mesures, TechniqueSol v) {
   final (String definition, String? astuce, String? conseil) = switch (v) {
     TechniqueSol.butteLasagne => (
         l10n.glossaireTechButteLasagneDef,
@@ -267,7 +271,7 @@ TermeGlossaire _pageTechnique(AppLocalizations l10n, TechniqueSol v) {
       ),
     TechniqueSol.paillage => (
         l10n.glossaireTechPaillageDef,
-        l10n.glossaireTechPaillageAstuce,
+        l10n.glossaireTechPaillageAstuce(mesures.plageLongueurCm(5, 10)),
         l10n.glossaireTechPaillageConseil1
       ),
     TechniqueSol.brf => (

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/unites_provider.dart';
 import '../../application/state/fiches_personnelles_notifier.dart';
 import '../../domain/entities/fiche_plante_personnelle.dart';
 import '../../domain/enums/besoin_eau.dart';
@@ -16,6 +17,7 @@ import '../../domain/value_objects/modele_fiche_personnelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
+import 'saisie_mesures.dart';
 
 /// Opens the personal-sheet form and returns the saved [FichePlantePersonnelle],
 /// or `null` if the user cancelled.
@@ -69,6 +71,7 @@ class _FormulaireFichePersonnelleState
   final _nomScientifique = TextEditingController();
   final _famille = TextEditingController();
   final _espacement = TextEditingController();
+  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
   final _recolteMin = TextEditingController();
   final _recolteMax = TextEditingController();
   final _description = TextEditingController();
@@ -100,7 +103,7 @@ class _FormulaireFichePersonnelleState
     _nomEn.text = m.nomCommunEn ?? '';
     _nomScientifique.text = m.nomScientifique;
     _famille.text = m.familleBotanique;
-    _espacement.text = m.espacementCm.toString();
+    _espacement.text = _saisie.longueurPourChamp(m.espacementCm);
     _recolteMin.text = m.dureeAvantRecolteJoursMin.toString();
     _recolteMax.text = m.dureeAvantRecolteJoursMax.toString();
     _description.text = m.descriptionFr ?? '';
@@ -154,7 +157,8 @@ class _FormulaireFichePersonnelleState
       qualitesSol: _qualitesSol,
       phMin: _ph.start,
       phMax: _ph.end,
-      espacementCm: int.parse(_espacement.text.trim()),
+      espacementCm:
+          _saisie.longueurVersCm(int.parse(_espacement.text.trim())),
       dureeAvantRecolteJoursMin: int.parse(_recolteMin.text.trim()),
       dureeAvantRecolteJoursMax: int.parse(_recolteMax.text.trim()),
       difficulte: _difficulte,
@@ -320,7 +324,8 @@ class _FormulaireFichePersonnelleState
             _espace(),
             _champEntier(
               controller: _espacement,
-              label: l10n.fichePersoFormEspacement,
+              label:
+                  l10n.fichePersoFormEspacement(_saisie.symboleLongueur(l10n)),
             ),
             _espace(),
             _champEntier(

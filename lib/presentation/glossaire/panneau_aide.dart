@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../application/providers/unites_provider.dart';
 import '../../app/router.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../l10n/app_localizations.dart';
@@ -51,6 +52,7 @@ class _PanneauAideState extends ConsumerState<PanneauAide> {
             l10n: l10n,
             familles: data.familles,
             bioagresseurs: data.bioagresseurs,
+            unites: ref.watch(unitesProvider),
           );
           final requete = _controleur.text;
           return Column(

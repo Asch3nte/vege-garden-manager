@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/unites_provider.dart';
 import '../../application/state/catalogue_notifier.dart';
 import '../../application/state/plantations_notifier.dart';
 import '../../domain/entities/fiche_plante.dart';
 import '../../domain/entities/plantation.dart';
 import '../../domain/enums/methode_mise_en_place.dart';
 import '../../domain/exceptions/surface_insuffisante_exception.dart';
-import '../../domain/value_objects/preferences_unites.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/champ_deroulant_decrit.dart';
@@ -20,6 +20,7 @@ import '../widgets/langue_contexte.dart';
 import '../widgets/libelles_enums.dart';
 import '../glossaire/terme_glossaire.dart';
 import 'enregistrement_formulaire.dart';
+import 'saisie_mesures.dart';
 
 /// Opens the "new plantation" form for [parcelleId] and returns the created
 /// [Plantation].
@@ -70,7 +71,8 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
     with EnregistrementFormulaire {
   final _cleForm = GlobalKey<FormState>();
   final _pieds = TextEditingController(text: '1');
-  final _surface = TextEditingController(text: '0.5');
+  final _surface = TextEditingController();
+  late final SaisieMesures _saisie = SaisieMesures(ref.read(unitesProvider));
   FichePlante? _plante;
   DateTime _date = DateTime.now();
   MethodeMiseEnPlace _methode = MethodeMiseEnPlace.semisDirect;
@@ -80,6 +82,7 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
   void initState() {
     super.initState();
     _plante = widget.planteInitiale;
+    _surface.text = _saisie.surfacePourChamp(0.5);
   }
 
   @override
@@ -105,21 +108,21 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
     if (!formOk || _plante == null) return;
 
     final l10n = AppLocalizations.of(context)!;
+    // Read before the await: the form may be gone when the error comes back.
+    final mesures = formateurMesuresLu(context, ref);
     await enregistrer(
         () => ref.read(plantationsProvider(widget.parcelleId).notifier).creer(
               planteId: _plante!.id,
               dateMiseEnPlace: _date,
               methode: _methode,
-              surfaceOccupee: Surface.enMetresCarres(
+              surfaceOccupee: Surface.enMetresCarres(_saisie.surfaceVersM2(
                 double.parse(_surface.text.trim().replaceAll(',', '.')),
-              ),
+              )),
               nombrePieds: int.parse(_pieds.text.trim()),
             ),
         messageErreur: (e) => e is SurfaceInsuffisanteException
-            // In m², the unit of the surface field.
             ? l10n.plantationSurfaceInsuffisante(
-                FormateurMesures(l10n, const PreferencesUnites())
-                    .surfaceM2(e.disponible.enMetresCarres))
+                mesures.surfaceM2(e.disponible.enMetresCarres))
             : null);
   }
 
@@ -219,7 +222,8 @@ class _FormulairePlantationState extends ConsumerState<FormulairePlantation>
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
               ],
               decoration: InputDecoration(
-                labelText: l10n.formPlantationSurface,
+                labelText:
+                    l10n.formPlantationSurface(_saisie.symboleSurface(l10n)),
                 border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
               ),
               validator: (v) => _validerDecimalPositif(v, l10n),

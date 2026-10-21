@@ -11,6 +11,9 @@ import 'package:pot_a_gerer/domain/enums/unite_quantite.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_recolte_repository.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_recolte.dart';
+import 'package:pot_a_gerer/application/providers/unites_provider.dart';
+import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 class MockRecoltes extends Mock implements AbstractRecolteRepository {}
 
@@ -27,12 +30,14 @@ void main() {
     when(() => recoltes.sauvegarder(any())).thenAnswer((_) async {});
   });
 
-  Future<void> monter(WidgetTester tester) async {
+  Future<void> monter(WidgetTester tester,
+      {PreferencesUnites unites = const PreferencesUnites()}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           recolteRepositoryProvider.overrideWithValue(recoltes),
           horlogeProvider.overrideWithValue(() => maintenant),
+          unitesProvider.overrideWithValue(unites),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -61,6 +66,46 @@ void main() {
     expect(recolte.quantite.valeur, 2.5);
     expect(recolte.quantite.unite, UniteQuantite.kg); // default
     expect(recolte.date, maintenant); // default = today
+  });
+
+  group('imperial', () {
+    const imperial = PreferencesUnites.uniforme(SystemeUnites.imperial);
+
+    Future<Recolte> enregistrer(WidgetTester tester, String valeur) async {
+      await tester.enterText(
+          find.widgetWithText(TextFormField, 'Quantité'), valeur);
+      await tester.tap(find.text('Enregistrer'));
+      await tester.pumpAndSettle();
+      return verify(() => recoltes.sauvegarder(captureAny())).captured.single
+          as Recolte;
+    }
+
+    testWidgets('pounds by default, stored as kilograms', (tester) async {
+      await monter(tester, unites: imperial);
+      expect(find.text('lb'), findsOneWidget);
+
+      final recolte = await enregistrer(tester, '2');
+      expect(recolte.quantite.unite, UniteQuantite.kg);
+      expect(recolte.quantite.valeur, closeTo(0.907, 0.001));
+    });
+
+    testWidgets('ounces and fluid ounces are offered, not grams or litres',
+        (tester) async {
+      await monter(tester, unites: imperial);
+      await tester.tap(find.text('lb'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('oz').last, findsOneWidget);
+      expect(find.text('fl oz').last, findsOneWidget);
+      expect(find.text('g'), findsNothing);
+      expect(find.text('L'), findsNothing);
+
+      await tester.tap(find.text('oz').last);
+      await tester.pumpAndSettle();
+      final recolte = await enregistrer(tester, '10');
+      expect(recolte.quantite.unite, UniteQuantite.g);
+      expect(recolte.quantite.valeur, closeTo(283.5, 0.1));
+    });
   });
 
   testWidgets('a non-positive quantity blocks saving', (tester) async {

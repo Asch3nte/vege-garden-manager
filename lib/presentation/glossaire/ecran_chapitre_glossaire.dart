@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../application/providers/unites_provider.dart';
 import '../../app/theme/dimensions_app.dart';
 import '../../l10n/app_localizations.dart';
 import 'chapitre_glossaire.dart';
@@ -41,6 +42,7 @@ class EcranChapitreGlossaire extends ConsumerWidget {
                   l10n: l10n,
                   familles: data.familles,
                   bioagresseurs: data.bioagresseurs,
+                  unites: ref.watch(unitesProvider),
                 ).where((t) => t.chapitre == chapitre);
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(EspacementsApp.s4,
