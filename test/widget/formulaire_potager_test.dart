@@ -107,7 +107,7 @@ void main() {
     // The suggestion caption and the position with its origin are shown.
     expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
     expect(find.text('Position GPS'), findsOneWidget);
-    expect(find.text('5.0° N, 10.0° E'), findsOneWidget);
+    expect(find.text('5,0° N, 10,0° E'), findsOneWidget);
 
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
@@ -138,7 +138,7 @@ void main() {
     await choisirSurGlobe(tester, 5, 25);
 
     expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
-    expect(find.text('5.0° N, 25.0° E'), findsOneWidget);
+    expect(find.text('5,0° N, 25,0° E'), findsOneWidget);
     expect(find.text('Choisie sur le globe'), findsOneWidget);
 
     await tester.tap(find.text('Enregistrer'));
@@ -285,6 +285,6 @@ void main() {
         ));
 
     expect(find.text('Haybes'), findsOneWidget);
-    expect(find.text('Choisie sur le globe · 50.0° N, 4.7° E'), findsOneWidget);
+    expect(find.text('Choisie sur le globe · 50,0° N, 4,7° E'), findsOneWidget);
   });
 }

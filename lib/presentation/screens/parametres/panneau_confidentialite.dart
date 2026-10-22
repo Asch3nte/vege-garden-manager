@@ -392,7 +392,7 @@ class _LigneReglage extends StatelessWidget {
   }
 }
 
-/// Subtitle for the position row: the region/city when set, else a prompt.
+/// Subtitle for the position row: place and origin when set, else a prompt.
 String _statutPosition(AppLocalizations l10n, Localisation? localisation) {
   if (localisation == null || !localisation.estDefinie) {
     return l10n.confidPositionAucune;

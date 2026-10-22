@@ -308,7 +308,7 @@ void main() {
     await tester.tap(find.text('Confidentialité & opt-outs'));
     await tester.pumpAndSettle();
 
-    expect(find.text('GPS · 50.6° N, 5.4° E'), findsOneWidget);
+    expect(find.text('GPS · 50,6° N, 5,4° E'), findsOneWidget);
   });
 
   testWidgets('privacy panel edits the active garden climate', (tester) async {

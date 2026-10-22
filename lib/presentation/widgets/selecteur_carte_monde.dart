@@ -151,7 +151,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
     _jetonPoint++;
     final (lat, lon) = point;
     Navigator.of(context).pop(Localisation.manuelle(
-      ville: _lieu?.nom ?? LibellePosition.coordonnees(lat, lon),
+      ville: _lieu?.nom ?? LibellePosition.libelleStocke(lat, lon),
       latitude: lat,
       longitude: lon,
     ));
@@ -264,7 +264,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
     if (point == null) {
       return Text(l10n.carteMondeAucunePosition, style: secondaire);
     }
-    final coords = LibellePosition.coordonnees(point.$1, point.$2);
+    final coords = LibellePosition.coordonnees(l10n, point.$1, point.$2);
     final lieu = _lieu;
     final titre = lieu?.nom ?? (_nommage ? l10n.carteMondeNomEnCours : coords);
     final contexte = lieu == null ? null : _contexte(lieu);
