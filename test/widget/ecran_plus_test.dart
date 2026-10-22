@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/router.dart';
+import 'package:pot_a_gerer/app/theme/couleurs_app.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -388,6 +389,20 @@ void main() {
     expect(find.text('Jardin de la grand-mère'), findsOneWidget);
     expect(find.text('Méditerranéen'), findsNothing);
     expect(find.text('Mon potager'), findsOneWidget);
+
+    // Each garden block sits on its own contrasted surface.
+    final actif = find.byKey(const ValueKey('bloc-potager-pot-1'));
+    final autre = find.byKey(const ValueKey('bloc-potager-pot-2'));
+    expect(find.descendant(of: actif, matching: find.text('Mon potager')),
+        findsOneWidget);
+    expect(find.descendant(of: actif, matching: find.text('Climat')),
+        findsOneWidget);
+    expect(
+        find.descendant(
+            of: autre, matching: find.text('Jardin de la grand-mère')),
+        findsOneWidget);
+    expect(tester.widget<Material>(actif).color,
+        CouleursApp.surfaceAlterneeClair);
 
     await tester.tap(find.text('Jardin de la grand-mère'));
     await tester.pumpAndSettle();

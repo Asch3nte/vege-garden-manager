@@ -40,7 +40,6 @@ class PanneauConfidentialite extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final prefs = ref.watch(preferencesProvider).value;
     final notifier = ref.read(preferencesProvider.notifier);
     final enregistreur = EnregistreurPreferences.de(context);
@@ -123,9 +122,9 @@ class PanneauConfidentialite extends ConsumerWidget {
       }
     }
 
-    // Per-garden block (tabulated under the geolocation row). Always present so
-    // climate/hardiness stay reachable even with geoloc off; a prompt replaces
-    // it when there is no active garden to store them on.
+    // Per-garden block, on its own surface under the geolocation row. Always
+    // present so climate/hardiness stay reachable even with geoloc off; a
+    // prompt replaces it when there is no active garden to store them on.
     final List<Widget> groupePotager;
     if (potager == null) {
       groupePotager = [
@@ -139,40 +138,31 @@ class PanneauConfidentialite extends ConsumerWidget {
       final z = potager.zoneClimatique;
       final positionActive = mode != ModeGeolocalisation.desactivee;
       groupePotager = [
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(EspacementsApp.s6,
-                EspacementsApp.s2, EspacementsApp.s3, EspacementsApp.s1),
-            child: Text(
-              potager.nom,
-              style: theme.textTheme.labelMedium
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        _SurfacePotager(
+          idPotager: potager.id,
+          enfants: [
+            _NomPotager(potager.nom),
+            _LigneReglage(
+              icone: PhosphorIconsRegular.globe,
+              titre: l10n.confidPosition,
+              sousTitre: positionActive
+                  ? _statutPosition(l10n, potager.localisation)
+                  : l10n.confidPositionDesactivee,
+              onTap: positionActive ? definirPosition : null,
             ),
-          ),
-        ),
-        _LigneReglage(
-          icone: PhosphorIconsRegular.globe,
-          titre: l10n.confidPosition,
-          sousTitre: positionActive
-              ? _statutPosition(l10n, potager.localisation)
-              : l10n.confidPositionDesactivee,
-          onTap: positionActive ? definirPosition : null,
-          indent: true,
-        ),
-        _LigneReglage(
-          icone: PhosphorIconsRegular.thermometer,
-          titre: l10n.confidClimat,
-          valeur: l10n.climat(z.type),
-          onTap: changerClimat,
-          indent: true,
-        ),
-        _LigneReglage(
-          icone: PhosphorIconsRegular.snowflake,
-          titre: l10n.confidRusticite,
-          valeur: l10n.rusticite(z.rusticite),
-          onTap: changerRusticite,
-          indent: true,
+            _LigneReglage(
+              icone: PhosphorIconsRegular.thermometer,
+              titre: l10n.confidClimat,
+              valeur: l10n.climat(z.type),
+              onTap: changerClimat,
+            ),
+            _LigneReglage(
+              icone: PhosphorIconsRegular.snowflake,
+              titre: l10n.confidRusticite,
+              valeur: l10n.rusticite(z.rusticite),
+              onTap: changerRusticite,
+            ),
+          ],
         ),
       ];
     }
@@ -234,6 +224,63 @@ class PanneauConfidentialite extends ConsumerWidget {
   }
 }
 
+/// Contrasted rounded surface grouping the settings of one garden.
+class _SurfacePotager extends StatelessWidget {
+  final String idPotager;
+  final List<Widget> enfants;
+
+  const _SurfacePotager({required this.idPotager, required this.enfants});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: EspacementsApp.s3, vertical: EspacementsApp.s1),
+      // A Material (not a bare box) so the rows' ink stays visible on it.
+      child: Material(
+        key: ValueKey('bloc-potager-$idPotager'),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: RayonsApp.brMd,
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: enfants,
+        ),
+      ),
+    );
+  }
+}
+
+/// Name header of a garden block, with an optional trailing widget.
+class _NomPotager extends StatelessWidget {
+  final String nom;
+  final Widget? suffixe;
+
+  const _NomPotager(this.nom, {this.suffixe});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final suffixe = this.suffixe;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(EspacementsApp.s3, EspacementsApp.s2,
+          EspacementsApp.s3, EspacementsApp.s2),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              nom,
+              style: theme.textTheme.labelMedium
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+          ?suffixe,
+        ],
+      ),
+    );
+  }
+}
+
 /// A collapsible group for a **non-active** garden: name + chevron,
 /// tap to reveal its position/climate/hardiness as read-only rows — only the
 /// active garden is editable in this panel.
@@ -254,33 +301,19 @@ class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final z = widget.potager.zoneClimatique;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return _SurfacePotager(
+      idPotager: widget.potager.id,
+      enfants: [
         InkWell(
           onTap: () => setState(() => _ouvert = !_ouvert),
-          child: Padding(
-            // Same left inset as the active garden's name label, so both
-            // names line up on the same tab stop (no leading icon here).
-            padding: const EdgeInsets.fromLTRB(EspacementsApp.s6,
-                EspacementsApp.s2, EspacementsApp.s3, EspacementsApp.s2),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.potager.nom,
-                    style: theme.textTheme.labelMedium
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                ),
-                AnimatedRotation(
-                  turns: _ouvert ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 150),
-                  child: Icon(PhosphorIconsRegular.caretDown,
-                      size: TaillesIconesApp.md,
-                      color: theme.colorScheme.onSurfaceVariant),
-                ),
-              ],
+          child: _NomPotager(
+            widget.potager.nom,
+            suffixe: AnimatedRotation(
+              turns: _ouvert ? 0.5 : 0,
+              duration: const Duration(milliseconds: 150),
+              child: Icon(PhosphorIconsRegular.caretDown,
+                  size: TaillesIconesApp.md,
+                  color: theme.colorScheme.onSurfaceVariant),
             ),
           ),
         ),
@@ -289,19 +322,16 @@ class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
             icone: PhosphorIconsRegular.globe,
             titre: l10n.confidPosition,
             sousTitre: _statutPosition(l10n, widget.potager.localisation),
-            indent: true,
           ),
           _LigneReglage(
             icone: PhosphorIconsRegular.thermometer,
             titre: l10n.confidClimat,
             valeur: l10n.climat(z.type),
-            indent: true,
           ),
           _LigneReglage(
             icone: PhosphorIconsRegular.snowflake,
             titre: l10n.confidRusticite,
             valeur: l10n.rusticite(z.rusticite),
-            indent: true,
           ),
         ],
       ],

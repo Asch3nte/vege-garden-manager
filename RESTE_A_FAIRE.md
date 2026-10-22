@@ -19,7 +19,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 | Élément | Manque | Où |
 |---|---|---|
-| Visibilité du bloc par potager (Confidentialité) | Surface contrastée ou tranche repliable | `panneau_confidentialite.dart` |
 | Menu « Plus » | Racine Paramètres directe ; menu à ajouter si Post-récolte/Communauté arrivent | `ecran_plus.dart` |
 | Dérivation climat/rusticité fine | Altitude via Open-Meteo | `DerivateurLocalisation` |
 | Swipe : action par sens au choix | Choix dans Paramètres de l'action de chaque sens, quand une liste en offre plus de deux | `ElementBalayable`, `panneau_general.dart` |
