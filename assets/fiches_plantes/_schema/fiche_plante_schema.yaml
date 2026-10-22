@@ -79,6 +79,7 @@ cycle:
   duree_germination_jours: [] # (optionnel) [min, max]
   duree_avant_recolte_jours: [] # (requis) [min, max]
   hauteur_adulte_cm: [] # (optionnel) [min, max]
+  etalement_adulte_cm: [] # (optionnel) [min, max] — largeur de la plante adulte
   espacement_cm: # (requis) entier
   profondeur_semis_cm: # (optionnel)
   profondeur_sol_min_cm: # (optionnel) entier — profondeur minimale de terre nécessaire (§D doc-16)

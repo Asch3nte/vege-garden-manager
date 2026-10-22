@@ -32,6 +32,8 @@ FichePlante _fiche({
   int espacementCm = 60,
   int dureeMin = 70,
   int dureeMax = 90,
+  int? etalementMin,
+  int? etalementMax,
   Map<Hemisphere, Map<TypeClimat, PeriodesCulture>>? periodes,
   Set<String>? benefiques,
   Set<String>? negatives,
@@ -52,6 +54,8 @@ FichePlante _fiche({
       nomsLocalises: noms ?? {'fr': 'Tomate', 'en': 'Tomato'},
       besoins: _besoins(),
       espacementCm: espacementCm,
+      etalementAdulteCmMin: etalementMin,
+      etalementAdulteCmMax: etalementMax,
       dureeAvantRecolteJoursMin: dureeMin,
       dureeAvantRecolteJoursMax: dureeMax,
       periodes: periodes,
@@ -95,6 +99,15 @@ void main() {
         () => _fiche(dureeMin: 90, dureeMax: 70),
         throwsA(isA<InvariantDomaineException>()),
       );
+    });
+
+    test('rejects an inverted or non-positive spread', () {
+      expect(() => _fiche(etalementMin: 50, etalementMax: 20),
+          throwsA(isA<InvariantDomaineException>()));
+      expect(() => _fiche(etalementMin: 0, etalementMax: 20),
+          throwsA(isA<InvariantDomaineException>()));
+      expect(_fiche(etalementMin: 20, etalementMax: 40).etalementAdulteCmMax,
+          40);
     });
   });
 

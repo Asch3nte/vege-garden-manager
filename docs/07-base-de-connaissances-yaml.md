@@ -113,6 +113,7 @@ cycle:
   duree_germination_jours: [6, 10]
   duree_avant_recolte_jours: [70, 90]
   hauteur_adulte_cm: [80, 200]
+  etalement_adulte_cm: [40, 60] # optionnel, largeur adulte
   espacement_cm: 60
   profondeur_semis_cm: 1
 
