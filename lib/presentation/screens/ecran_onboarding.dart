@@ -63,6 +63,9 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
   Localisation _position = const Localisation.nonDefinie();
   TypeClimat _climat = TypeClimat.oceanique;
   ZoneRusticite _rusticite = ZoneRusticite.zone8;
+
+  /// Whether the user picked the climate or hardiness by hand.
+  bool _zoneChoisie = false;
   NiveauExperience _niveau = NiveauExperience.debutant;
   bool _notifications = true;
   // Per-category notification choices (intermediate+); absent = default on.
@@ -90,23 +93,20 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
       _position = position;
       _climat = suggestion.climat;
       _rusticite = suggestion.rusticite;
+      _zoneChoisie = false;
     });
-    unawaited(_affinerParAltitude(position, suggestion));
+    unawaited(_affinerParAltitude(position));
   }
 
-  /// Refines the pre-fill with the altitude (network opt-out respected),
-  /// unless the position or the pre-filled values changed meanwhile.
-  Future<void> _affinerParAltitude(
-      Localisation position, SuggestionClimat initiale) async {
-    final reseau = ref.read(preferencesProvider).value?.meteoAutoActive ?? false;
-    if (!reseau) return;
-    final affinee = await ref
-        .read(suggererClimatPositionProvider)
-        .executer(position, reseauAutorise: true);
-    if (!mounted ||
+  /// Refines the pre-fill with the altitude, unless the position changed or
+  /// the user picked a climate or hardiness meanwhile.
+  Future<void> _affinerParAltitude(Localisation position) async {
+    final affinee =
+        await ref.read(suggererClimatPositionProvider).executer(position);
+    if (affinee == null ||
+        !mounted ||
         _position != position ||
-        _climat != initiale.climat ||
-        _rusticite != initiale.rusticite) {
+        _zoneChoisie) {
       return;
     }
     setState(() {
@@ -391,7 +391,10 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
           description: l10n.climatDescription,
           labelText: l10n.formPotagerClimat,
           idAideGlossaire: TermeGlossaire.idNotion('type-climat'),
-          onChanged: (v) => setState(() => _climat = v),
+          onChanged: (v) => setState(() {
+                _climat = v;
+                _zoneChoisie = true;
+              }),
         ),
         const SizedBox(height: EspacementsApp.s4),
         ChampDeroulantDecrit<ZoneRusticite>(
@@ -402,7 +405,10 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
               l10n.rusticiteDescription(z, formateurMesuresLu(context, ref)),
           labelText: l10n.formPotagerRusticite,
           idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
-          onChanged: (v) => setState(() => _rusticite = v),
+          onChanged: (v) => setState(() {
+                _rusticite = v;
+                _zoneChoisie = true;
+              }),
         ),
       ],
     );

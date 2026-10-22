@@ -2,6 +2,8 @@
 //
 // Fills the name, keeps the sensible climate/hardiness defaults, taps save and
 // checks the garden is persisted (and the form pops the created entity).
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
@@ -37,14 +39,20 @@ class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 class _FakePotager extends Fake implements Potager {}
 
 void main() {
-  setUpAll(() => registerFallbackValue(_FakePotager()));
+  setUpAll(() {
+    registerFallbackValue(_FakePotager());
+    registerFallbackValue(const Localisation.nonDefinie());
+  });
 
   late MockPotagers repo;
   late MockGeoloc geoloc;
+  late MockMeteo meteo;
 
   setUp(() {
     repo = MockPotagers();
     geoloc = MockGeoloc();
+    meteo = MockMeteo();
+    when(() => meteo.obtenirElevation(any())).thenAnswer((_) async => null);
     when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
     when(() => repo.obtenirTous()).thenAnswer((_) async => []);
   });
@@ -56,6 +64,7 @@ void main() {
         overrides: [
           potagerRepositoryProvider.overrideWithValue(repo),
           geolocalisationServiceProvider.overrideWithValue(geoloc),
+          meteoServiceProvider.overrideWithValue(meteo),
           ...extra,
         ],
         child: MaterialApp(
@@ -300,7 +309,6 @@ void main() {
 
   testWidgets('the altitude refines the pre-filled climate and hardiness',
       (tester) async {
-    final meteo = MockMeteo();
     final preferences = MockPreferences();
     when(() => preferences.charger())
         .thenAnswer((_) async => PreferencesUtilisateur());
@@ -314,7 +322,6 @@ void main() {
     addTearDown(tester.view.reset);
 
     await monter(tester, extra: [
-      meteoServiceProvider.overrideWithValue(meteo),
       preferencesRepositoryProvider.overrideWithValue(preferences),
     ]);
     await tester.enterText(find.byType(TextFormField).first, 'Briançon');
@@ -328,5 +335,37 @@ void main() {
         verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
     expect(potager.zoneClimatique.type, TypeClimat.montagnard);
     expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone6);
+  });
+
+  testWidgets('a late altitude never overrides a climate picked by hand',
+      (tester) async {
+    final preferences = MockPreferences();
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    final position = Localisation.gps(latitude: 44.9, longitude: 6.64);
+    final altitude = Completer<double?>();
+    when(() => meteo.obtenirElevation(position))
+        .thenAnswer((_) => altitude.future);
+    when(() => geoloc.demanderPermission())
+        .thenAnswer((_) async => PermissionLocalisation.accordee);
+    when(() => geoloc.positionActuelle()).thenAnswer((_) async => position);
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await monter(tester, extra: [
+      preferencesRepositoryProvider.overrideWithValue(preferences),
+    ]);
+    await tester.tap(find.text('Détecter ma position'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Méditerranéen'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Océanique').last);
+    await tester.pumpAndSettle();
+
+    altitude.complete(1326);
+    await tester.pumpAndSettle();
+    expect(find.text('Océanique'), findsOneWidget);
+    expect(find.text('Montagnard'), findsNothing);
   });
 }

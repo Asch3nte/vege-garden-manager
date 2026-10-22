@@ -10,35 +10,36 @@ class _MockMeteo extends Mock implements AbstractMeteoService {}
 
 void main() {
   late _MockMeteo meteo;
-  late SuggererClimatPosition suggerer;
+  var reseau = true;
   final briancon = Localisation.gps(latitude: 44.9, longitude: 6.64);
 
   setUpAll(() => registerFallbackValue(const Localisation.nonDefinie()));
 
   setUp(() {
     meteo = _MockMeteo();
-    suggerer = SuggererClimatPosition(meteo);
+    reseau = true;
   });
+
+  SuggererClimatPosition suggerer() =>
+      SuggererClimatPosition(meteo, () => reseau);
 
   test('refines the suggestion with the altitude when the network is allowed',
       () async {
     when(() => meteo.obtenirElevation(briancon)).thenAnswer((_) async => 1326);
-    final s = await suggerer.executer(briancon, reseauAutorise: true);
-    expect(s.climat, TypeClimat.montagnard);
+    final s = await suggerer().executer(briancon);
+    expect(s!.climat, TypeClimat.montagnard);
     expect(s.rusticite, ZoneRusticite.zone6);
   });
 
-  test('stays on the latitude alone when the network is not allowed',
+  test('sends nothing and suggests nothing with the network opt-out',
       () async {
-    final s = await suggerer.executer(briancon, reseauAutorise: false);
-    expect(s.climat, TypeClimat.mediterraneen);
-    expect(s.rusticite, ZoneRusticite.zone7);
+    reseau = false;
+    expect(await suggerer().executer(briancon), isNull);
     verifyNever(() => meteo.obtenirElevation(any()));
   });
 
-  test('stays on the latitude alone when the altitude is unknown', () async {
+  test('suggests nothing when the altitude is unknown', () async {
     when(() => meteo.obtenirElevation(briancon)).thenAnswer((_) async => null);
-    final s = await suggerer.executer(briancon, reseauAutorise: true);
-    expect(s.climat, TypeClimat.mediterraneen);
+    expect(await suggerer().executer(briancon), isNull);
   });
 }
