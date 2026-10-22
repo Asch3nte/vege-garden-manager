@@ -60,6 +60,22 @@ class SaisieMesures {
       ? '${math.max(1, _convertisseur.centimetresVersPouces(cm.toDouble()).round())}'
       : '$cm';
 
+  String symboleCote(AppLocalizations l10n) =>
+      _imperial(GrandeurMesure.longueur) ? l10n.saisiePieds : l10n.saisieMetres;
+
+  /// A zone side typed in metres or feet, in whole centimetres.
+  int coteVersCm(double saisie) => (_imperial(GrandeurMesure.longueur)
+          ? _convertisseur.piedsVersMetres(saisie) * 100
+          : saisie * 100)
+      .round();
+
+  /// A stored zone side, as the field shows it.
+  String cotePourChamp(int cm) => _champ.format(
+    _imperial(GrandeurMesure.longueur)
+        ? _convertisseur.metresVersPieds(cm / 100)
+        : cm / 100,
+  );
+
   /// A default surface as the field shows it: [m2] in metric, the round
   /// [ft2] in imperial.
   String surfaceParDefaut(double m2, double ft2) =>

@@ -20,6 +20,10 @@ import 'package:pot_a_gerer/domain/enums/type_observation.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/enums/type_recurrence.dart';
 import 'package:pot_a_gerer/domain/enums/type_tache.dart';
+import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
+import 'package:pot_a_gerer/domain/entities/parcelle.dart';
+import 'package:pot_a_gerer/domain/exceptions/surface_insuffisante_exception.dart';
+import 'package:pot_a_gerer/domain/value_objects/dimensions_zone.dart';
 import 'package:pot_a_gerer/domain/enums/unite_quantite.dart';
 import 'package:pot_a_gerer/domain/value_objects/quantite.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
@@ -93,6 +97,41 @@ void main() {
     final apresSuppr = await container.read(parcellesProvider('pot1').future);
     expect(apresSuppr, hasLength(depart));
     expect(apresSuppr.map((e) => e.id), isNot(contains(p.id)));
+  });
+
+  Parcelle par1({required double m2, DimensionsZone? dimensions}) => Parcelle(
+        id: 'par1',
+        nom: 'P',
+        potagerId: 'pot1',
+        type: TypeParcelle.bacSureleve,
+        surface: Surface.enMetresCarres(m2),
+        exposition: NiveauSoleil.pleinSoleil,
+        dimensions: dimensions,
+        besoinEau: BesoinEau.faible,
+      );
+
+  test('parcelles: edit persists dimensions and water need', () async {
+    final notifier = container.read(parcellesProvider('pot1').notifier);
+    final dimensions = DimensionsZone(longueurCm: 200, largeurCm: 150);
+
+    await notifier.modifier(par1(m2: 3, dimensions: dimensions));
+
+    final relue = (await container.read(parcellesProvider('pot1').future))
+        .singleWhere((p) => p.id == 'par1');
+    expect(relue.surface, Surface.enMetresCarres(3));
+    expect(relue.dimensions, dimensions);
+    expect(relue.besoinEau, BesoinEau.faible);
+  });
+
+  test('parcelles: edit refuses a surface below its plantations', () async {
+    final notifier = container.read(parcellesProvider('pot1').notifier);
+
+    await expectLater(notifier.modifier(par1(m2: 0.5)),
+        throwsA(isA<SurfaceInsuffisanteException>()));
+
+    final relue = (await container.read(parcellesProvider('pot1').future))
+        .singleWhere((p) => p.id == 'par1');
+    expect(relue.surface, Surface.enMetresCarres(4));
   });
 
   test('plantations: create scoped by parcelle', () async {

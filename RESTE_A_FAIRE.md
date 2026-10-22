@@ -20,13 +20,13 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 | Élément | Manque | Où |
 |---|---|---|
 | Gabarit / hauteur de plante | Champ absent | YAML + `FichePlante` |
-| Métadonnées de zone | Dimensions L×l, besoin en eau de zone | `Parcelle` (actuellement `surface` seule) |
 | Swipe sur les listes | Préférence `SensSwipe` présente, geste non généralisé | listes tâches/cultures |
 | Visibilité du bloc par potager (Confidentialité) | Surface contrastée ou tranche repliable | `panneau_confidentialite.dart` |
 | Menu « Plus » | Racine Paramètres directe ; menu à ajouter si Post-récolte/Communauté arrivent | `ecran_plus.dart` |
 | Dérivation climat/rusticité fine | Altitude via Open-Meteo | `DerivateurLocalisation` |
 | Vue Réseau | Rendu canvas des nœuds (performance) | `vue_reseau_catalogue.dart` |
 | Liens « documentation » et « signaler un bug » | Lignes absentes de l'UI | `panneau_a_propos.dart` |
+| Position du potager par localité | Recherche par nom (Nominatim `/search`) en plus de la carte ; origine de la position visible sur la fiche potager | `formulaire_potager.dart`, `ecran_onboarding.dart`, `NominatimClient` |
 | Appairage d'appareils | Fonction réseau local à concevoir | — |
 | Export CSV | Optionnel (JSON ré-importable déjà livré) | — |
 | Journal d'accès aux données | Différé (valeur faible pour une app 100 % locale) | — |

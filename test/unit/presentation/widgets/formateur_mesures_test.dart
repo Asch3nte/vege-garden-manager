@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
+import 'package:pot_a_gerer/domain/value_objects/dimensions_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 import 'package:pot_a_gerer/l10n/app_localizations_en.dart';
 import 'package:pot_a_gerer/l10n/app_localizations_fr.dart';
@@ -21,6 +22,12 @@ void main() {
     expect(imperial.symboleTemperature, '°F');
     expect(metrique.ecartTemperature(2), '2 °C');
     expect(imperial.ecartTemperature(2), '3.6 °F');
+  });
+
+  test('zone dimensions in metres or feet', () {
+    final d = DimensionsZone(longueurCm: 300, largeurCm: 120);
+    expect(metrique.dimensionsZone(d), '3 × 1,2 m');
+    expect(imperial.dimensionsZone(d), '9.8 × 3.9 ft');
   });
 
   test('lengths: inches under a foot, then feet and inches', () {

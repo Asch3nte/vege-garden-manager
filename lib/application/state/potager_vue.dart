@@ -1,7 +1,9 @@
+import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/teinte_zone.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/value_objects/couleur_zone.dart';
+import '../../domain/value_objects/dimensions_zone.dart';
 import '../../domain/value_objects/etat_croissance.dart';
 
 /// One active crop of a zone, projected for the UI.
@@ -48,6 +50,8 @@ class ZonePotager {
   final List<CulturePotager> _cultures;
   final bool _aTacheAujourdhui;
   final CouleurZone _couleur;
+  final DimensionsZone? _dimensions;
+  final BesoinEau? _besoinEau;
 
   ZonePotager._(
     this._id,
@@ -58,6 +62,8 @@ class ZonePotager {
     List<CulturePotager> cultures,
     this._aTacheAujourdhui,
     this._couleur,
+    this._dimensions,
+    this._besoinEau,
   ) : _cultures = List.unmodifiable(cultures);
 
   /// Creates a zone projection. [cultures] are the active crops (id + name).
@@ -70,6 +76,8 @@ class ZonePotager {
     required List<CulturePotager> cultures,
     bool aTacheAujourdhui = false,
     CouleurZone couleur = const CouleurZone.teinte(TeinteZone.vertProfond),
+    DimensionsZone? dimensions,
+    BesoinEau? besoinEau,
   }) =>
       ZonePotager._(
         id,
@@ -80,6 +88,8 @@ class ZonePotager {
         cultures,
         aTacheAujourdhui,
         couleur,
+        dimensions,
+        besoinEau,
       );
 
   /// Zone (parcelle) identifier.
@@ -105,6 +115,12 @@ class ZonePotager {
 
   /// Colour of the zone on the plan and its detail.
   CouleurZone get couleur => _couleur;
+
+  /// Length and width, when known.
+  DimensionsZone? get dimensions => _dimensions;
+
+  /// Water need of the zone itself, when known.
+  BesoinEau? get besoinEau => _besoinEau;
 
   /// Number of active crops in this zone.
   int get nombreCultures => _cultures.length;

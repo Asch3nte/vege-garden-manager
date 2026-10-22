@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 
 import '../../domain/entities/parcelle.dart';
+import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/source_type_sol.dart';
@@ -8,9 +9,11 @@ import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/value_objects/couleur_zone.dart';
+import '../../domain/value_objects/dimensions_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../providers/repository_providers.dart';
 import '../use_cases/creer_parcelle.dart';
+import '../use_cases/modifier_parcelle.dart';
 
 /// Exposes the parcelles of a given potager and the actions that mutate them.
 ///
@@ -32,6 +35,8 @@ class ParcellesNotifier extends AsyncNotifier<List<Parcelle>> {
     required TypeParcelle type,
     required Surface surface,
     required NiveauSoleil exposition,
+    DimensionsZone? dimensions,
+    BesoinEau? besoinEau,
     int ordre = 0,
     CouleurZone? couleur,
     TextureSol? texture,
@@ -47,6 +52,8 @@ class ParcellesNotifier extends AsyncNotifier<List<Parcelle>> {
           type: type,
           surface: surface,
           exposition: exposition,
+          dimensions: dimensions,
+          besoinEau: besoinEau,
           ordre: ordre,
           couleur: couleur,
           texture: texture,
@@ -67,8 +74,11 @@ class ParcellesNotifier extends AsyncNotifier<List<Parcelle>> {
 
   /// Persists changes to an existing parcelle (upsert) and reloads the list.
   /// The caller mutates the entity through its domain methods first.
+  ///
+  /// Throws `SurfaceInsuffisanteException` when the surface no longer holds
+  /// the active plantations.
   Future<void> modifier(Parcelle parcelle) async {
-    await ref.read(parcelleRepositoryProvider).sauvegarder(parcelle);
+    await ref.read(modifierParcelleProvider).executer(parcelle);
     await _recharger();
   }
 

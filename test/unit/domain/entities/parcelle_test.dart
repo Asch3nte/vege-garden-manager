@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/equipement.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
 import 'package:pot_a_gerer/domain/entities/plantation.dart';
+import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/source_type_sol.dart';
@@ -14,6 +15,7 @@ import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/exceptions/invariant_domaine_exception.dart';
 import 'package:pot_a_gerer/domain/exceptions/surface_insuffisante_exception.dart';
 import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
+import 'package:pot_a_gerer/domain/value_objects/dimensions_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 
 Parcelle _parcelle({double surfaceM2 = 4}) => Parcelle(
@@ -87,6 +89,59 @@ void main() {
         ),
         throwsA(isA<InvariantDomaineException>()),
       );
+    });
+  });
+
+  group('Parcelle — metadata', () {
+    Parcelle avec({DimensionsZone? dimensions, double surfaceM2 = 3.6}) =>
+        Parcelle(
+          id: 'par1',
+          nom: 'Planche',
+          potagerId: 'pot1',
+          type: TypeParcelle.pleineTerre,
+          surface: Surface.enMetresCarres(surfaceM2),
+          exposition: NiveauSoleil.pleinSoleil,
+          dimensions: dimensions,
+          besoinEau: BesoinEau.eleve,
+        );
+
+    test('dimensions and water need are unknown by default', () {
+      final p = _parcelle();
+      expect(p.dimensions, isNull);
+      expect(p.besoinEau, isNull);
+    });
+
+    test('keeps dimensions matching the surface and the water need', () {
+      final d = DimensionsZone(longueurCm: 300, largeurCm: 120);
+      final p = avec(dimensions: d);
+      expect(p.dimensions, d);
+      expect(p.besoinEau, BesoinEau.eleve);
+    });
+
+    test('rejects dimensions that do not match the surface', () {
+      expect(
+        () => avec(
+            dimensions: DimensionsZone(longueurCm: 300, largeurCm: 120),
+            surfaceM2: 4),
+        throwsA(isA<InvariantDomaineException>()),
+      );
+    });
+
+    test('fits the active plantations it holds', () {
+      final p = _parcelle(surfaceM2: 3);
+      expect(
+          () => p.verifierContenance(
+              [_plantation('a', 2), _plantation('b', 1), _plantation('c', 5, active: false)]),
+          returnsNormally);
+    });
+
+    test('rejects active plantations larger than its surface', () {
+      final p = _parcelle(surfaceM2: 2);
+      expect(() => p.verifierContenance([_plantation('a', 2), _plantation('b', 1)]),
+          throwsA(isA<SurfaceInsuffisanteException>()
+              .having((e) => e.requise, 'requise', Surface.enMetresCarres(3))
+              .having((e) => e.disponible, 'disponible',
+                  Surface.enMetresCarres(2))));
     });
   });
 

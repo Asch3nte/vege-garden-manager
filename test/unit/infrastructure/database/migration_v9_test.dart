@@ -10,6 +10,7 @@ void main() {
       NativeDatabase.memory(
         setup: (raw) {
           raw.execute(preferencesV9);
+          raw.execute(parcellesV10);
           raw.execute('PRAGMA user_version = 8');
         },
       ),

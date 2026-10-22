@@ -918,5 +918,15 @@
   "fichePersoFormDescription": "Description (optional)",
   "fichePersoFormDifficulte": "Difficulty (optional)",
   "fichePersoFormDifficulteNon": "Not set",
-  "fichePersoFormDifficulteValeur": "{n} / 3"
+  "fichePersoFormDifficulteValeur": "{n} / 3",
+  "saisieMetres": "m",
+  "saisiePieds": "ft",
+  "mesureDimensionsMetres": "{longueur} × {largeur} m",
+  "mesureDimensionsPieds": "{longueur} × {largeur} ft",
+  "formZoneLongueur": "Length ({unite})",
+  "formZoneLargeur": "Width ({unite})",
+  "formZoneDimensionsAide": "Optional. Once both sides are set, the area is computed.",
+  "formZoneDimensionsIncompletes": "Fill in both sides, or neither.",
+  "formZoneBesoinEau": "Zone water need",
+  "zoneSurfaceTropPetite": "Area smaller than the crops in place ({occupee})."
 }

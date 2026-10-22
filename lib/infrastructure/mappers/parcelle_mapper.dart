@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 
 import '../../domain/entities/parcelle.dart';
+import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/source_type_sol.dart';
@@ -11,6 +12,7 @@ import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/value_objects/couleur_zone.dart';
+import '../../domain/value_objects/dimensions_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../database/app_database.dart';
 
@@ -22,15 +24,19 @@ import '../database/app_database.dart';
 class ParcelleMapper {
   const ParcelleMapper();
 
-  Parcelle versEntite(ParcelleRow r) => Parcelle(
+  Parcelle versEntite(ParcelleRow r) {
+    final surface = r.surfaceUnite == 'cm2'
+        ? Surface.enCentimetresCarres(r.surfaceValeur)
+        : Surface.enMetresCarres(r.surfaceValeur);
+    return Parcelle(
         id: r.id,
         nom: r.nom,
         potagerId: r.potagerId,
         type: TypeParcelle.values.byName(r.type),
-        surface: r.surfaceUnite == 'cm2'
-            ? Surface.enCentimetresCarres(r.surfaceValeur)
-            : Surface.enMetresCarres(r.surfaceValeur),
+        surface: surface,
         exposition: NiveauSoleil.values.byName(r.exposition),
+        dimensions: _dimensions(r, surface),
+        besoinEau: BesoinEau.values.asNameMap()[r.besoinEau],
         texture:
             r.textureSol == null ? null : TextureSol.values.byName(r.textureSol!),
         textureSource: SourceTypeSol.values.byName(r.textureSolSource),
@@ -41,6 +47,7 @@ class ParcelleMapper {
         couleur: _couleur(r),
         notes: r.notes,
       );
+  }
 
   ParcellesCompanion versCompanion(Parcelle p) {
     final maintenant = DateTime.now().toUtc().toIso8601String();
@@ -52,6 +59,9 @@ class ParcelleMapper {
       surfaceValeur: Value(p.surface.enMetresCarres),
       surfaceUnite: const Value('m2'),
       exposition: Value(p.exposition.name),
+      longueurCm: Value(p.dimensions?.longueurCm),
+      largeurCm: Value(p.dimensions?.largeurCm),
+      besoinEau: Value(p.besoinEau?.name),
       textureSol: Value(p.texture?.name),
       phSol: Value(p.ph?.name),
       textureSolSource: Value(p.textureSource.name),
@@ -66,6 +76,19 @@ class ParcelleMapper {
       createdAt: Value(maintenant),
       updatedAt: Value(maintenant),
     );
+  }
+
+  /// Half or inconsistent sides read as unknown: the surface prevails, so the
+  /// zone stays readable.
+  DimensionsZone? _dimensions(ParcelleRow r, Surface surface) {
+    final longueur = r.longueurCm;
+    final largeur = r.largeurCm;
+    if (longueur == null || largeur == null || longueur <= 0 || largeur <= 0) {
+      return null;
+    }
+    final dimensions =
+        DimensionsZone(longueurCm: longueur, largeurCm: largeur);
+    return dimensions.concordeAvec(surface) ? dimensions : null;
   }
 
   /// A missing or unknown tint falls back to the first palette tint, so the

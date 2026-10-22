@@ -6,6 +6,7 @@ import '../../application/providers/unites_provider.dart';
 import '../../domain/enums/grandeur_mesure.dart';
 import '../../domain/enums/systeme_unites.dart';
 import '../../domain/services/convertisseur_unites.dart';
+import '../../domain/value_objects/dimensions_zone.dart';
 import '../../domain/value_objects/preferences_unites.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -133,6 +134,17 @@ class FormateurMesures {
           _nombre(_convertisseur.millimetresVersPouces(max), 2),
         )
       : _l10n.mesurePlageLitresM2(_nombre(min, 1), _nombre(max, 1));
+
+  /// « 3 × 1,2 m », or in feet.
+  String dimensionsZone(DimensionsZone d) {
+    if (!_imperial(GrandeurMesure.longueur)) {
+      return _l10n.mesureDimensionsMetres(
+          _nombre(d.longueurCm / 100, 2), _nombre(d.largeurCm / 100, 2));
+    }
+    String pieds(int cm) =>
+        _nombre(_convertisseur.metresVersPieds(cm / 100), 1);
+    return _l10n.mesureDimensionsPieds(pieds(d.longueurCm), pieds(d.largeurCm));
+  }
 
   String surfaceM2(double m2) => _imperial(GrandeurMesure.surface)
       ? _l10n.mesureFt2(_nombre(_convertisseur.m2VersFt2(m2), 1))
