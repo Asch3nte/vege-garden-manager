@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/couleurs_app.dart';
@@ -199,6 +201,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   final TextEditingController _ctrlRecherche = TextEditingController();
   bool _rechercheOuverte = false;
   bool _rechercheSansResultat = false;
+  final _initiales = _CacheInitiales();
 
   @override
   void initState() {
@@ -232,6 +235,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     _feuille.dispose();
     _ctrlRecherche.dispose();
     _ctrl.dispose();
+    _initiales.vider();
     super.dispose();
   }
 
@@ -403,12 +407,11 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     }
   }
 
-  /// Voronoï-style canvas hit-testing: a tap that missed every disc
-  /// selects the **nearest** node when within [_hitboxMax] screen pixels, so the
-  /// shrunk discs (dezoom) stay easy to hit. Precise taps landing on a disc (or
-  /// on a grouped name, control, search…) are handled by those widgets' own
-  /// recognizers, which win the gesture arena — this only catches taps in the
-  /// empty space around a node. The nearest-point assignment makes the hitboxes
+  /// Voronoï-style hit-testing of the painted discs: a tap selects the
+  /// **nearest** node when within [_hitboxMax] screen pixels, so the shrunk
+  /// discs (dezoom) stay easy to hit. Taps on a grouped name, control or the
+  /// search are handled by those widgets' own recognizers, which win the
+  /// gesture arena. The nearest-point assignment makes the hitboxes
   /// non-overlapping and self-deforming by construction.
   void _surTapCanvas(TapUpDetails d) {
     if (widget.fiches.isEmpty) return;
@@ -845,18 +848,12 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   Widget _construireCanvas(BuildContext context) {
     final theme = Theme.of(context);
     final voisins = _selection == null ? const <int>{} : _voisins(_selection!);
-    // Selected node + its links — full-name labels and paint order (#8a).
-    final surlignes = _selection == null
-        ? const <int>{}
-        : {_selection!, ...voisins};
-    // Paint dimmed (attenuated) nodes first and highlighted ones on top, so a
-    // displaced node under an attenuated disc keeps its full opacity (#8b).
-    final ordreNoeuds = [
-      for (var i = 0; i < widget.fiches.length; i++)
-        if (!surlignes.contains(i)) i,
-      for (var i = 0; i < widget.fiches.length; i++)
-        if (surlignes.contains(i)) i,
-    ];
+    final langue = context.langue;
+    final styleInitiale = theme.textTheme.labelMedium?.copyWith(
+      color: Colors.white,
+      fontWeight: FontWeight.w700,
+    );
+    final echelleTexte = MediaQuery.textScalerOf(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -875,14 +872,8 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
         final decalages = _decalages;
         Offset posAffichee(int i) => _posAffichee(i);
 
-        // Node disc radius at this zoom; attenuated nodes (in focus) halve it
-        // and fade more. Bubbles scale with zoom.
+        // Node disc radius at this zoom. Bubbles scale with zoom.
         final rBase = _rayonEcran(t);
-        double rayonDe(int i) =>
-            (_selection != null &&
-                    _etatNoeud(i, voisins) == _EtatNoeud.attenue)
-                ? rBase / 2
-                : rBase;
         // Which nodes show a full-name label: in focus, the focus set (#8a); in
         // the global view, those whose label fits without overlap at this zoom
         //.
@@ -891,51 +882,43 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
             ? _labelsQuiTiennent(t, style)
             : const <int>{};
 
-        // Node + label layer. Global view: plain discs + the labels that fit
-        //. Focus: same-family links collapse into one grouped node — family
+        // Widget layer over the painted discs. Global view: the labels that
+        // fit. Focus: same-family links collapse into one grouped node — family
         // name above, species listed below, each tappable.
         final List<Widget> coucheNoeuds;
         if (_selection == null) {
           coucheNoeuds = [
-            for (final i in ordreNoeuds)
-              Positioned(
-                left: t.versEcran(posAffichee(i)).dx - rayonDe(i),
-                top: t.versEcran(posAffichee(i)).dy - rayonDe(i),
-                child: _Noeud(
-                  fiche: widget.fiches[i],
-                  rayon: rayonDe(i),
-                  etat: _etatNoeud(i, voisins),
-                  onTap: () => _toucherNoeud(i),
-                ),
-              ),
             for (final i in nommes)
               Positioned(
                 left: t.versEcran(posAffichee(i)).dx,
                 top: t.versEcran(posAffichee(i)).dy + rBase + 2,
                 child: IgnorePointer(
-                  child: FractionalTranslation(
-                    translation: const Offset(-0.5, 0),
-                    child: _EtiquetteNoeud(
-                      nom: widget.fiches[i].nomLocalise(context.langue),
-                      couleur: couleurCategorie(widget.fiches[i].categorie),
+                  // The painted node already announces the name.
+                  child: ExcludeSemantics(
+                    child: FractionalTranslation(
+                      translation: const Offset(-0.5, 0),
+                      child: _EtiquetteNoeud(
+                        nom: widget.fiches[i].nomLocalise(context.langue),
+                        couleur: couleurCategorie(widget.fiches[i].categorie),
+                      ),
                     ),
                   ),
                 ),
               ),
           ];
         } else {
-          coucheNoeuds = _coucheFocus(t, rBase, voisins);
+          coucheNoeuds = _coucheFocus(t, voisins);
         }
 
-        // The whole canvas pans/zooms; the gesture arena lets node taps and the
-        // controls win their own taps, while drags pan/zoom.
+        // The whole canvas pans/zooms; the gesture arena lets the grouped names
+        // and the controls win their own taps, while drags pan/zoom.
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onScaleStart: _debutGeste,
           onScaleUpdate: _majGeste,
-          // A stationary tap on the empty canvas resolves to this recognizer
-          // (a drag/pinch goes to the scale one); it selects the nearest node
-          // within [_hitboxMax] (Voronoï hit-testing).
+          // A stationary tap on the canvas resolves to this recognizer (a
+          // drag/pinch goes to the scale one); it selects the nearest painted
+          // node within [_hitboxMax] (Voronoï hit-testing).
           onTapUp: _surTapCanvas,
           child: ClipRect(
             child: Stack(
@@ -972,6 +955,28 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                       couleurMauvais: theme.colorScheme.error,
                     ),
                   ),
+                // Plain discs: the whole constellation in the global view, the
+                // faded context in focus (halved, dimmed).
+                CustomPaint(
+                  size: _viewport,
+                  painter: _PeintreNoeuds(
+                    fiches: widget.fiches,
+                    positions: _positions,
+                    decalages:
+                        _selection == null ? decalages : const <int, Offset>{},
+                    masques: _selection == null
+                        ? const <int>{}
+                        : {_selection!, ...voisins},
+                    attenues: _selection != null,
+                    rayon: _selection == null ? rBase : rBase / 2,
+                    transform: t,
+                    langue: langue,
+                    initiales: _initiales,
+                    styleInitiale: styleInitiale,
+                    echelleTexte: echelleTexte,
+                    onTap: _toucherNoeud,
+                  ),
+                ),
                 ...coucheNoeuds,
                 Positioned(
                   top: EspacementsApp.s2,
@@ -1016,12 +1021,6 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     );
   }
 
-  _EtatNoeud _etatNoeud(int i, Set<int> voisins) {
-    if (_selection == null) return _EtatNoeud.normal;
-    if (_selection == i) return _EtatNoeud.selectionne;
-    return voisins.contains(i) ? _EtatNoeud.lie : _EtatNoeud.attenue;
-  }
-
   int _compter(int i, {required bool bon}) =>
       _aretes.where((a) => a.touche(i) && a.bon == bon).length;
 
@@ -1037,13 +1036,12 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     return null;
   }
 
-  /// The focus node layer: faded context bubbles plus **one grouped node per
-  /// family among the selection and its links**. The selected node
-  /// merges **into** its own family group — listed first with a neutral label —
+  /// The focus node layer: **one grouped node per family among the selection
+  /// and its links**. The selected node merges **into** its own family group — listed first with a neutral label —
   /// so a same-family companion sits beside it under a single family node (no
   /// separate "selected node" disc). Each name is tappable (the selection →
   /// opens its sheet, a link → re-focus on it); links are tinted green/red.
-  List<Widget> _coucheFocus(_TransformReseau t, double rBase, Set<int> voisins) {
+  List<Widget> _coucheFocus(_TransformReseau t, Set<int> voisins) {
     final sel = _selection!;
     // Group the selection together with its links, so same-family links fuse
     // with it instead of with a standalone node.
@@ -1056,22 +1054,8 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
       indices.sort((a, b) => a == sel ? -1 : (b == sel ? 1 : 0));
     }
     final fams = groupes.keys.toList()..sort();
-    Offset ecran(int i) => t.versEcran(_positions[i]);
 
     return [
-      // Faded context: non-link, non-selected bubbles (halved, dimmed).
-      for (var i = 0; i < widget.fiches.length; i++)
-        if (i != sel && !voisins.contains(i))
-          Positioned(
-            left: ecran(i).dx - rBase / 2,
-            top: ecran(i).dy - rBase / 2,
-            child: _Noeud(
-              fiche: widget.fiches[i],
-              rayon: rBase / 2,
-              etat: _EtatNoeud.attenue,
-              onTap: () => _toucherNoeud(i),
-            ),
-          ),
       // One grouped node per family (including the selection's own family), at
       // the centroid of its members.
       for (final fam in fams)
@@ -1143,63 +1127,6 @@ class _LigneVarieteReseau extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-enum _EtatNoeud { normal, selectionne, lie, attenue }
-
-/// A single constellation node (category-coloured disc with the plant initial).
-class _Noeud extends StatelessWidget {
-  final FichePlante fiche;
-  final double rayon;
-  final _EtatNoeud etat;
-  final VoidCallback onTap;
-
-  const _Noeud({
-    required this.fiche,
-    required this.rayon,
-    required this.etat,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final couleur = couleurCategorie(fiche.categorie);
-    final attenue = etat == _EtatNoeud.attenue;
-    final selectionne = etat == _EtatNoeud.selectionne;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Opacity(
-        // Attenuated nodes (in focus) fade further so the focus reads clearly
-        //.
-        opacity: attenue ? 0.15 : 1,
-        child: Container(
-          width: rayon * 2,
-          height: rayon * 2,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: couleur.withValues(alpha: 0.85),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: selectionne ? theme.colorScheme.primary : Colors.white,
-              width: selectionne ? 3 : 1.5,
-            ),
-          ),
-          // The initial only fits once the zoomed disc is big enough.
-          child: rayon < 10
-              ? null
-              : Text(
-                  fiche.nomLocalise(context.langue).characters.first.toUpperCase(),
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
         ),
       ),
     );
@@ -1774,4 +1701,138 @@ class _PeintreAretes extends CustomPainter {
       old.afficherAEviter != afficherAEviter ||
       old.transform != transform ||
       !identical(old.decalages, decalages);
+}
+
+/// Laid-out node initials, reused across frames instead of re-laid out on each
+/// pan/zoom.
+class _CacheInitiales {
+  final Map<String, TextPainter> _peintres = {};
+  TextStyle? _style;
+  TextScaler _echelle = TextScaler.noScaling;
+
+  /// The laid-out [initiale]; the cache resets when [style] or [echelle] change.
+  TextPainter peintre(String initiale, TextStyle? style, TextScaler echelle) {
+    if (style != _style || echelle != _echelle) {
+      vider();
+      _style = style;
+      _echelle = echelle;
+    }
+    return _peintres.putIfAbsent(
+      initiale,
+      () => TextPainter(
+        text: TextSpan(text: initiale, style: style),
+        textDirection: TextDirection.ltr,
+        textScaler: echelle,
+      )..layout(),
+    );
+  }
+
+  void vider() {
+    for (final p in _peintres.values) {
+      p.dispose();
+    }
+    _peintres.clear();
+  }
+}
+
+/// Paints the plain node discs (category colour, white rim, initial once the
+/// disc is big enough) and exposes each as a tappable semantics node. Nodes in
+/// [masques] are skipped; [attenues] fades them all (focus context).
+class _PeintreNoeuds extends CustomPainter {
+  final List<FichePlante> fiches;
+  final List<Offset> positions;
+  final Map<int, Offset> decalages;
+  final Set<int> masques;
+  final bool attenues;
+  final double rayon;
+  final _TransformReseau transform;
+  final String langue;
+  final _CacheInitiales initiales;
+  final TextStyle? styleInitiale;
+  final TextScaler echelleTexte;
+  final void Function(int) onTap;
+
+  // Below this radius the initial no longer fits in the disc.
+  static const double _rayonInitialeMin = 10;
+  static const double _bordure = 1.5;
+
+  _PeintreNoeuds({
+    required this.fiches,
+    required this.positions,
+    required this.decalages,
+    required this.masques,
+    required this.attenues,
+    required this.rayon,
+    required this.transform,
+    required this.langue,
+    required this.initiales,
+    required this.styleInitiale,
+    required this.echelleTexte,
+    required this.onTap,
+  });
+
+  Offset _centre(int i) =>
+      transform.versEcran(positions[i] + (decalages[i] ?? Offset.zero));
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final opacite = attenues ? 0.15 : 1.0;
+    final fond = Paint();
+    final bord = Paint()
+      ..color = Colors.white.withValues(alpha: opacite)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = _bordure;
+    final avecInitiale = rayon >= _rayonInitialeMin;
+    for (var i = 0; i < fiches.length; i++) {
+      if (masques.contains(i)) continue;
+      final centre = _centre(i);
+      fond.color = couleurCategorie(
+        fiches[i].categorie,
+      ).withValues(alpha: 0.85 * opacite);
+      canvas.drawCircle(centre, rayon, fond);
+      canvas.drawCircle(centre, rayon - _bordure / 2, bord);
+      // Faded discs are always below the initial threshold (half radius).
+      if (avecInitiale && !attenues) {
+        final tp = initiales.peintre(
+          _initiale(fiches[i]),
+          styleInitiale,
+          echelleTexte,
+        );
+        tp.paint(canvas, centre - Offset(tp.width / 2, tp.height / 2));
+      }
+    }
+  }
+
+  String _initiale(FichePlante f) =>
+      f.nomLocalise(langue).characters.first.toUpperCase();
+
+  @override
+  SemanticsBuilderCallback get semanticsBuilder => (size) => [
+    for (var i = 0; i < fiches.length; i++)
+      if (!masques.contains(i))
+        CustomPainterSemantics(
+          rect: Rect.fromCircle(center: _centre(i), radius: rayon),
+          properties: SemanticsProperties(
+            identifier: 'reseau-noeud-${fiches[i].id}',
+            label: fiches[i].nomLocalise(langue),
+            textDirection: TextDirection.ltr,
+            onTap: () => onTap(i),
+          ),
+        ),
+  ];
+
+  @override
+  bool shouldRepaint(_PeintreNoeuds old) =>
+      old.transform != transform ||
+      old.rayon != rayon ||
+      old.attenues != attenues ||
+      old.langue != langue ||
+      old.styleInitiale != styleInitiale ||
+      old.echelleTexte != echelleTexte ||
+      !identical(old.fiches, fiches) ||
+      !identical(old.decalages, decalages) ||
+      !setEquals(old.masques, masques);
+
+  @override
+  bool shouldRebuildSemantics(_PeintreNoeuds old) => shouldRepaint(old);
 }

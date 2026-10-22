@@ -747,8 +747,9 @@ void main() {
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
 
-    // Only the species node 'T' is drawn; the variety 'Tomate Cerise' is not.
-    expect(find.text('T'), findsOneWidget);
+    // Only the species node is drawn; the variety 'Tomate Cerise' is not.
+    expect(_noeud('tomate'), findsOne);
+    expect(_noeud('tomate-v1'), findsNothing);
     expect(find.text('Tomate Cerise'), findsNothing);
   });
 
@@ -794,8 +795,7 @@ void main() {
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
 
-    // Tap the Tomate node (its initial).
-    await tester.tap(find.text('T'));
+    tester.semantics.tap(_noeud('tomate'));
     await tester.pumpAndSettle();
 
     // The panel names the plant (also shown as a node label since #8a) and
@@ -809,7 +809,7 @@ void main() {
 
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('T'));
+    tester.semantics.tap(_noeud('tomate'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Voir la fiche'));
@@ -826,3 +826,8 @@ void main() {
     expect(find.text('Associations'), findsOneWidget);
   });
 }
+
+/// The network canvas node of fiche [id], located by its semantics identifier.
+SemanticsFinder _noeud(String id) => find.semantics.byPredicate(
+  (n) => n.identifier == 'reseau-noeud-$id',
+);
