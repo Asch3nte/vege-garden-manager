@@ -36,7 +36,8 @@ cas où une information quitte votre appareil, et toujours de façon minimale :
 
 - **Open-Meteo** (prévisions météo & évapotranspiration) : l'application envoie
   les **coordonnées géographiques** de votre potager pour récupérer la météo
-  locale. Aucune donnée de jardin, aucun identifiant n'est transmis. Open-Meteo
+  locale, et pour connaître son altitude quand vous choisissez sa position
+  (afin de proposer climat et rusticité). Aucune donnée de jardin, aucun identifiant n'est transmis. Open-Meteo
   n'exige ni compte ni clé.
 - **Nominatim / OpenStreetMap** (nom de ville) : si vous saisissez une position,
   l'application peut envoyer des **coordonnées** (arrondies au kilomètre) pour

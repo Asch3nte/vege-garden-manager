@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/derivateur_localisation.dart';
+import '../../application/use_cases/suggerer_climat_position.dart';
 import '../../application/providers/service_providers.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../domain/entities/potager.dart';
@@ -60,6 +63,9 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
   TypeEmplacement _emplacement = TypeEmplacement.jardin;
   TypeClimat _climat = TypeClimat.oceanique;
   ZoneRusticite _rusticite = ZoneRusticite.zone8;
+
+  /// Whether the user picked the climate or hardiness by hand.
+  bool _zoneChoisie = false;
   Localisation _position = const Localisation.nonDefinie();
   bool _suggere = false; // climate/hardiness were pre-filled from the position
   bool _detection = false;
@@ -108,8 +114,27 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
       _position = position;
       _climat = suggestion.climat;
       _rusticite = suggestion.rusticite;
+      _zoneChoisie = false;
       _suggere = true;
       _positionManquante = false;
+    });
+    unawaited(_affinerParAltitude(position));
+  }
+
+  /// Refines the pre-fill with the altitude, unless the position changed or
+  /// the user picked a climate or hardiness meanwhile.
+  Future<void> _affinerParAltitude(Localisation position) async {
+    final affinee =
+        await ref.read(suggererClimatPositionProvider).executer(position);
+    if (affinee == null ||
+        !mounted ||
+        _position != position ||
+        _zoneChoisie) {
+      return;
+    }
+    setState(() {
+      _climat = affinee.climat;
+      _rusticite = affinee.rusticite;
     });
   }
 
@@ -241,7 +266,10 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
               description: l10n.climatDescription,
               labelText: l10n.formPotagerClimat,
               idAideGlossaire: TermeGlossaire.idNotion('type-climat'),
-              onChanged: (v) => setState(() => _climat = v),
+              onChanged: (v) => setState(() {
+                _climat = v;
+                _zoneChoisie = true;
+              }),
             ),
             const SizedBox(height: EspacementsApp.s4),
             ChampDeroulantDecrit<ZoneRusticite>(
@@ -252,7 +280,10 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
                   l10n.rusticiteDescription(z, formateurMesuresLu(context, ref)),
               labelText: l10n.formPotagerRusticite,
               idAideGlossaire: TermeGlossaire.idNotion('zone-rusticite'),
-              onChanged: (v) => setState(() => _rusticite = v),
+              onChanged: (v) => setState(() {
+                _rusticite = v;
+                _zoneChoisie = true;
+              }),
             ),
             const SizedBox(height: EspacementsApp.s6),
             FilledButton(

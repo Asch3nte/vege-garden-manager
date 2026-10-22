@@ -10,6 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
 import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
@@ -38,6 +41,8 @@ class _MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
 class _MockFamilles extends Mock implements AbstractFamilleBotaniqueRepository {}
 
+class _MockMeteo extends Mock implements AbstractMeteoService {}
+
 class _FakePrefs extends Fake implements PreferencesUtilisateur {}
 
 class _FakePotager extends Fake implements Potager {}
@@ -46,6 +51,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(_FakePrefs());
     registerFallbackValue(_FakePotager());
+    registerFallbackValue(const Localisation.nonDefinie());
   });
 
   /// Mounts the app with [onboardingTermine] as the initial preference value.
@@ -69,6 +75,8 @@ void main() {
     final preferences = _MockPreferences();
     final fiches = _MockFiches();
     final familles = _MockFamilles();
+    final meteo = _MockMeteo();
+    when(() => meteo.obtenirElevation(any())).thenAnswer((_) async => null);
     // Stateful so a garden created mid-onboarding actually shows up in
     // obtenirTous() — this is what would (wrongly) trip the data-gate and bounce
     // the user out of onboarding if the redirect regressed.
@@ -101,6 +109,7 @@ void main() {
           parcelleRepositoryProvider.overrideWithValue(parcelles),
           tacheRepositoryProvider.overrideWithValue(taches),
           preferencesRepositoryProvider.overrideWithValue(preferences),
+          meteoServiceProvider.overrideWithValue(meteo),
           fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
           familleBotaniqueRepositoryProvider
               .overrideWith((ref) async => familles),
