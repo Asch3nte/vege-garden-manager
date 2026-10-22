@@ -40,7 +40,6 @@ class PanneauConfidentialite extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final prefs = ref.watch(preferencesProvider).value;
     final notifier = ref.read(preferencesProvider.notifier);
     final enregistreur = EnregistreurPreferences.de(context);
@@ -142,18 +141,7 @@ class PanneauConfidentialite extends ConsumerWidget {
         _SurfacePotager(
           idPotager: potager.id,
           enfants: [
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(EspacementsApp.s3,
-                    EspacementsApp.s2, EspacementsApp.s3, EspacementsApp.s1),
-                child: Text(
-                  potager.nom,
-                  style: theme.textTheme.labelMedium
-                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                ),
-              ),
-            ),
+            _NomPotager(potager.nom),
             _LigneReglage(
               icone: PhosphorIconsRegular.globe,
               titre: l10n.confidPosition,
@@ -251,13 +239,43 @@ class _SurfacePotager extends StatelessWidget {
       // A Material (not a bare box) so the rows' ink stays visible on it.
       child: Material(
         key: ValueKey('bloc-potager-$idPotager'),
-        color: Theme.of(context).colorScheme.surfaceContainerHigh,
-        borderRadius: RayonsApp.brLg,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: RayonsApp.brMd,
         clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: enfants,
         ),
+      ),
+    );
+  }
+}
+
+/// Name header of a garden block, with an optional trailing widget.
+class _NomPotager extends StatelessWidget {
+  final String nom;
+  final Widget? suffixe;
+
+  const _NomPotager(this.nom, {this.suffixe});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final suffixe = this.suffixe;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(EspacementsApp.s3, EspacementsApp.s2,
+          EspacementsApp.s3, EspacementsApp.s2),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              nom,
+              style: theme.textTheme.labelMedium
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+          ?suffixe,
+        ],
       ),
     );
   }
@@ -288,28 +306,14 @@ class _GroupePotagerAutreState extends State<_GroupePotagerAutre> {
       enfants: [
         InkWell(
           onTap: () => setState(() => _ouvert = !_ouvert),
-          child: Padding(
-            // Same left inset as the active garden's name label, so both
-            // names line up on the same tab stop (no leading icon here).
-            padding: const EdgeInsets.fromLTRB(EspacementsApp.s3,
-                EspacementsApp.s2, EspacementsApp.s3, EspacementsApp.s2),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.potager.nom,
-                    style: theme.textTheme.labelMedium
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                ),
-                AnimatedRotation(
-                  turns: _ouvert ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 150),
-                  child: Icon(PhosphorIconsRegular.caretDown,
-                      size: TaillesIconesApp.md,
-                      color: theme.colorScheme.onSurfaceVariant),
-                ),
-              ],
+          child: _NomPotager(
+            widget.potager.nom,
+            suffixe: AnimatedRotation(
+              turns: _ouvert ? 0.5 : 0,
+              duration: const Duration(milliseconds: 150),
+              child: Icon(PhosphorIconsRegular.caretDown,
+                  size: TaillesIconesApp.md,
+                  color: theme.colorScheme.onSurfaceVariant),
             ),
           ),
         ),

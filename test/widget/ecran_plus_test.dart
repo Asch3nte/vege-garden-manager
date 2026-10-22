@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/router.dart';
+import 'package:pot_a_gerer/app/theme/couleurs_app.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/potager.dart';
@@ -400,9 +401,8 @@ void main() {
         find.descendant(
             of: autre, matching: find.text('Jardin de la grand-mère')),
         findsOneWidget);
-    final contexte = tester.element(actif);
     expect(tester.widget<Material>(actif).color,
-        Theme.of(contexte).colorScheme.surfaceContainerHigh);
+        CouleursApp.surfaceAlterneeClair);
 
     await tester.tap(find.text('Jardin de la grand-mère'));
     await tester.pumpAndSettle();
