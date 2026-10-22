@@ -73,6 +73,12 @@ class AccueilNotifier extends AsyncNotifier<AccueilVue> {
     ref.invalidateSelf();
   }
 
+  /// Deletes [tache], then reloads the dashboard.
+  Future<void> supprimerTache(Tache tache) async {
+    await ref.read(tacheRepositoryProvider).supprimer(tache.id);
+    ref.invalidateSelf();
+  }
+
   /// Ticks a whole [groupe] off in one go, then reloads the dashboard.
   ///
   /// Same rule as the Calendrier: a partially done group is **completed**, only

@@ -96,7 +96,7 @@ d'expérience · contenu éducatif · à propos · lien GitHub. Détail :
 | `AppSnackbar` | Feedback transitoire (4 variantes ; **pas de toast**) |
 | `AppBottomSheet` | Confirmation modérée + formulaires |
 | `AppDialog` | Confirmation critique |
-| `AppDismissible` | Swipe unifié (respecte le paramètre `sens_swipe` global) |
+| `ElementBalayable` | Swipe unifié (respecte le paramètre `sens_swipe` global) |
 
 ## 7. Patterns d'interaction
 
@@ -106,7 +106,11 @@ d'expérience · contenu éducatif · à propos · lien GitHub. Détail :
 - **Sauvegarde** : auto-save pour les paramètres ; submit explicite pour les
   formulaires.
 - **Gestes** : swipe configurable globalement via `sens_swipe` (standard / inversé,
-  avec aperçu interactif).
+  avec aperçu interactif). Standard : vers la gauche = supprimer (confirmation),
+  vers la droite = archiver (tâche faite, culture arrachée, équipement retiré) ;
+  inversé permute. Fond coloré + icône pendant le geste ; un sens sans action
+  reste inerte. Le menu de chaque élément garde toutes les actions (bureau,
+  lecteurs d'écran).
 - **Accessibilité** : touch targets ≥ 48dp, contrastes ≥ 4.5:1, labels sémantiques.
 
 ## 8. Règles de cohérence globales

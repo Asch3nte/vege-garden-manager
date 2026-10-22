@@ -8,6 +8,7 @@ import '../../domain/entities/fiche_plante_personnelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_fiche_personnelle.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/element_balayable.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
 
@@ -49,13 +50,13 @@ class EcranFichesPersonnelles extends ConsumerWidget {
 }
 
 /// The loaded list of sheets, most recently modified first (repo ordering).
-class _Liste extends StatelessWidget {
+class _Liste extends ConsumerWidget {
   final List<FichePlantePersonnelle> fiches;
 
   const _Liste({required this.fiches});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         EspacementsApp.s4,
@@ -65,7 +66,12 @@ class _Liste extends StatelessWidget {
       ),
       children: [
         for (final f in fiches) ...[
-          _CarteFiche(fiche: f),
+          ElementBalayable(
+            cle: f.id,
+            arrondi: const BorderRadius.all(RayonsApp.lg),
+            surSupprimer: () => _supprimer(context, ref, f),
+            child: _CarteFiche(fiche: f),
+          ),
           const SizedBox(height: EspacementsApp.s3),
         ],
       ],
@@ -173,7 +179,7 @@ class _MenuActions extends ConsumerWidget {
       tooltip: l10n.fichesPersoTitre,
       onSelected: (action) => switch (action) {
         _ActionFiche.modifier => _modifier(context, ref),
-        _ActionFiche.supprimer => _supprimer(context, ref),
+        _ActionFiche.supprimer => _supprimer(context, ref, fiche),
       },
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -210,20 +216,24 @@ class _MenuActions extends ConsumerWidget {
     messenger.showSnackBar(SnackBar(content: Text(l10n.fichesPersoSnackModifiee)));
   }
 
-  Future<void> _supprimer(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    final ok = await confirmerAction(
-      context,
-      titre: l10n.fichesPersoSupprimerTitre,
-      message: l10n.fichesPersoSupprimerMessage(fiche.nomCommunFr),
-      libelleConfirmer: l10n.actionSupprimer,
-      destructif: true,
-    );
-    if (!ok) return;
-    await ref.read(fichesPersonnellesProvider.notifier).supprimer(fiche.id);
-    messenger.showSnackBar(SnackBar(content: Text(l10n.fichesPersoSnackSupprimee)));
-  }
+}
+
+/// Confirms then deletes [fiche]; resolves to whether it was.
+Future<bool> _supprimer(
+    BuildContext context, WidgetRef ref, FichePlantePersonnelle fiche) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await confirmerAction(
+    context,
+    titre: l10n.fichesPersoSupprimerTitre,
+    message: l10n.fichesPersoSupprimerMessage(fiche.nomCommunFr),
+    libelleConfirmer: l10n.actionSupprimer,
+    destructif: true,
+  );
+  if (!ok) return false;
+  await ref.read(fichesPersonnellesProvider.notifier).supprimer(fiche.id);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.fichesPersoSnackSupprimee)));
+  return true;
 }
 
 /// Per-sheet actions in the card menu.

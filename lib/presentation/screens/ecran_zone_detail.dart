@@ -31,6 +31,7 @@ import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/couleur_zone_ui.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/element_balayable.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
@@ -151,8 +152,8 @@ Future<void> _supprimerZone(
 }
 
 /// Marks a crop as pulled out (`arrachee`): it leaves the active crops but stays
-/// in the database as history.
-Future<void> _arracher(
+/// in the database as history. Resolves to whether it was.
+Future<bool> _arracher(
   BuildContext context,
   WidgetRef ref,
   String zoneId,
@@ -164,7 +165,7 @@ Future<void> _arracher(
   final plantations = await ref.read(plantationsProvider(zoneId).future);
   final plantation =
       plantations.where((p) => p.id == culture.plantationId).firstOrNull;
-  if (plantation == null) return;
+  if (plantation == null) return false;
 
   try {
     plantation.changerStatut(StatutPlantation.arrachee, dateFin: maintenant);
@@ -175,15 +176,17 @@ Future<void> _arracher(
     ref.invalidate(plantationsProvider(zoneId));
     messenger.showSnackBar(
         SnackBar(content: Text(l10n.formEnregistrementErreur)));
-    return;
+    return false;
   }
   ref.invalidate(potagerProvider);
   messenger
       .showSnackBar(SnackBar(content: Text(l10n.snackPlanteArrachee(culture.nom))));
+  return true;
 }
 
 /// Confirms then soft-deletes a crop entirely (removes a mistaken entry).
-Future<void> _supprimerPlante(
+/// Resolves to whether it was.
+Future<bool> _supprimerPlante(
   BuildContext context,
   WidgetRef ref,
   String zoneId,
@@ -198,13 +201,14 @@ Future<void> _supprimerPlante(
     libelleConfirmer: l10n.actionSupprimer,
     destructif: true,
   );
-  if (!ok) return;
+  if (!ok) return false;
 
   await ref.read(plantationsProvider(zoneId).notifier).supprimer(culture.plantationId);
   ref.invalidate(potagerProvider);
   messenger.showSnackBar(
     SnackBar(content: Text(l10n.snackPlanteSupprimee(culture.nom))),
   );
+  return true;
 }
 
 /// Records a harvest for a crop, then refreshes the dashboard's season count.
@@ -249,8 +253,8 @@ class _Detail extends ConsumerWidget {
   final VoidCallback onAjouterPlante;
   final VoidCallback onModifierZone;
   final VoidCallback onSupprimerZone;
-  final void Function(CulturePotager) onArracher;
-  final void Function(CulturePotager) onSupprimerPlante;
+  final Future<bool> Function(CulturePotager) onArracher;
+  final Future<bool> Function(CulturePotager) onSupprimerPlante;
   final void Function(CulturePotager) onRecolter;
   final void Function(CulturePotager) onObserver;
 
@@ -373,14 +377,22 @@ class _Detail extends ConsumerWidget {
           else
             for (var i = 0; i < zone.cultures.length; i++) ...[
               if (i > 0) const SizedBox(height: EspacementsApp.s2),
-              _LigneCulture(
-                culture: zone.cultures[i],
-                couleur: couleur,
-                prochaineTache: prochainesTaches[zone.cultures[i].plantationId],
-                onRecolter: () => onRecolter(zone.cultures[i]),
-                onObserver: () => onObserver(zone.cultures[i]),
-                onArracher: () => onArracher(zone.cultures[i]),
-                onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
+              ElementBalayable(
+                cle: zone.cultures[i].plantationId,
+                arrondi: const BorderRadius.all(RayonsApp.lg),
+                surArchiver: () => onArracher(zone.cultures[i]),
+                libelleArchiver: l10n.cultureArracher,
+                surSupprimer: () => onSupprimerPlante(zone.cultures[i]),
+                child: _LigneCulture(
+                  culture: zone.cultures[i],
+                  couleur: couleur,
+                  prochaineTache:
+                      prochainesTaches[zone.cultures[i].plantationId],
+                  onRecolter: () => onRecolter(zone.cultures[i]),
+                  onObserver: () => onObserver(zone.cultures[i]),
+                  onArracher: () => onArracher(zone.cultures[i]),
+                  onSupprimer: () => onSupprimerPlante(zone.cultures[i]),
+                ),
               ),
             ],
           // Crop rotation of this zone (expert).
