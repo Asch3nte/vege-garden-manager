@@ -41,7 +41,7 @@ void main() {
     when(() => repo.obtenirTous()).thenAnswer((_) async => []);
   });
 
-  Future<void> monter(WidgetTester tester) async {
+  Future<void> monter(WidgetTester tester, {Potager? initial}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -52,7 +52,7 @@ void main() {
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const FormulairePotager(),
+          home: FormulairePotager(potagerInitial: initial),
         ),
       ),
     );
@@ -61,6 +61,7 @@ void main() {
 
   testWidgets('saving is blocked until a position is set', (tester) async {
     await monter(tester);
+    expect(find.text('Aucune position'), findsOneWidget);
 
     await tester.enterText(find.byType(TextFormField).first, 'Mon potager');
     await tester.tap(find.text('Enregistrer'));
@@ -93,6 +94,9 @@ void main() {
         .thenAnswer((_) async => PermissionLocalisation.accordee);
     when(() => geoloc.positionActuelle())
         .thenAnswer((_) async => Localisation.gps(latitude: 5, longitude: 10));
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
 
     await monter(tester);
 
@@ -100,8 +104,10 @@ void main() {
     await tester.tap(find.text('Détecter ma position'));
     await tester.pumpAndSettle();
 
-    // The suggestion caption is shown.
+    // The suggestion caption and the position with its origin are shown.
     expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
+    expect(find.text('Position GPS'), findsOneWidget);
+    expect(find.text('5,0° N, 10,0° E'), findsOneWidget);
 
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
@@ -132,6 +138,8 @@ void main() {
     await choisirSurGlobe(tester, 5, 25);
 
     expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
+    expect(find.text('5,0° N, 25,0° E'), findsOneWidget);
+    expect(find.text('Choisie sur le globe'), findsOneWidget);
 
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
@@ -261,5 +269,22 @@ void main() {
 
     expect(find.text('Ce champ est obligatoire.'), findsOneWidget);
     verifyNever(() => repo.sauvegarder(any()));
+  });
+
+  testWidgets('editing a garden shows its stored position and origin',
+      (tester) async {
+    await monter(tester,
+        initial: Potager(
+          id: 'pot-1',
+          nom: 'Flémalle',
+          zoneClimatique:
+              const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+          dateCreation: DateTime(2026, 1, 1),
+          localisation: Localisation.manuelle(
+              ville: 'Haybes', latitude: 50, longitude: 4.71),
+        ));
+
+    expect(find.text('Haybes'), findsOneWidget);
+    expect(find.text('Choisie sur le globe · 50,0° N, 4,7° E'), findsOneWidget);
   });
 }

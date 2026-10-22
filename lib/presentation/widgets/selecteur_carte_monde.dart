@@ -13,6 +13,7 @@ import '../../domain/value_objects/localisation.dart';
 import '../../l10n/app_localizations.dart';
 import 'globe/camera_globe.dart';
 import 'globe/globe_terrestre.dart';
+import 'libelle_position.dart';
 
 /// Opens the globe position picker and returns the chosen [Localisation]
 /// (manual source), or `null` if the user cancelled.
@@ -150,19 +151,10 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
     _jetonPoint++;
     final (lat, lon) = point;
     Navigator.of(context).pop(Localisation.manuelle(
-      ville: _lieu?.nom ?? _libelleCoords(lat, lon),
+      ville: _lieu?.nom ?? LibellePosition.libelleStocke(lat, lon),
       latitude: lat,
       longitude: lon,
     ));
-  }
-
-  /// Compact coordinate label (e.g. `48.2° N, 2.4° E`). The cardinal letters
-  /// are geographic notation, intentionally kept literal.
-  static String _libelleCoords(double lat, double lon) {
-    final ns = lat >= 0 ? 'N' : 'S';
-    final eo = lon >= 0 ? 'E' : 'O';
-    return '${lat.abs().toStringAsFixed(1)}° $ns, '
-        '${lon.abs().toStringAsFixed(1)}° $eo';
   }
 
   static String? _contexte(LieuTrouve lieu) {
@@ -272,7 +264,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
     if (point == null) {
       return Text(l10n.carteMondeAucunePosition, style: secondaire);
     }
-    final coords = _libelleCoords(point.$1, point.$2);
+    final coords = LibellePosition.coordonnees(l10n, point.$1, point.$2);
     final lieu = _lieu;
     final titre = lieu?.nom ?? (_nommage ? l10n.carteMondeNomEnCours : coords);
     final contexte = lieu == null ? null : _contexte(lieu);

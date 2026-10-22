@@ -14,6 +14,7 @@ import '../../domain/value_objects/localisation.dart';
 import '../../domain/value_objects/zone_climatique.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
+import '../widgets/libelle_position.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/selecteur_carte_monde.dart';
 import '../widgets/champ_deroulant_decrit.dart';
@@ -194,6 +195,8 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
               onChanged: (v) => setState(() => _emplacement = v!),
             ),
             const SizedBox(height: EspacementsApp.s4),
+            _LignePosition(LibellePosition(_position, l10n)),
+            const SizedBox(height: EspacementsApp.s2),
             OutlinedButton.icon(
               onPressed: _detection ? null : _detecterPosition,
               icon: _detection
@@ -259,6 +262,41 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Current position of the garden with its origin (GPS or chosen by hand).
+class _LignePosition extends StatelessWidget {
+  final LibellePosition position;
+
+  const _LignePosition(this.position);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final detail = position.detail;
+    return Row(
+      children: [
+        Icon(position.icone,
+            size: TaillesIconesApp.md,
+            color: theme.colorScheme.onSurfaceVariant),
+        const SizedBox(width: EspacementsApp.s3),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(position.titre, style: theme.textTheme.titleSmall),
+              if (detail != null)
+                Text(
+                  detail,
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

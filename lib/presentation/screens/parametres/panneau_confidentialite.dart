@@ -17,6 +17,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../widgets/capture_localisation.dart';
 import '../../widgets/formateur_mesures.dart';
 import '../../widgets/selecteur_carte_monde.dart';
+import '../../widgets/libelle_position.dart';
 import '../../widgets/libelles_enums.dart';
 import '../../widgets/position_potager_actions.dart';
 import '../../widgets/selecteur_decrit.dart';
@@ -391,10 +392,10 @@ class _LigneReglage extends StatelessWidget {
   }
 }
 
-/// Subtitle for the position row: the region/city when set, else a prompt.
+/// Subtitle for the position row: place and origin when set, else a prompt.
 String _statutPosition(AppLocalizations l10n, Localisation? localisation) {
   if (localisation == null || !localisation.estDefinie) {
     return l10n.confidPositionAucune;
   }
-  return localisation.ville ?? l10n.confidPositionDefinie;
+  return LibellePosition(localisation, l10n).court;
 }
