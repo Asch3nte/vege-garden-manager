@@ -8,8 +8,18 @@ import '../../../l10n/app_localizations.dart';
 import 'widgets_parametres.dart';
 
 /// Public source repository ("lien GitHub").
-final Uri _urlCodeSource =
-    Uri.parse('https://github.com/Asch3nte/vege-garden-manager');
+const String _depot = '/Asch3nte/vege-garden-manager';
+
+final Uri _urlCodeSource = Uri.https('github.com', _depot);
+
+final Uri _urlDocumentation = Uri.https('github.com', '$_depot/tree/main/docs');
+
+/// The bug form, prefilled with the app [version] and nothing else.
+Uri _urlSignalerBug(String? version) => Uri.https(
+      'github.com',
+      '$_depot/issues/new',
+      {'template': 'bug.yml', 'version': ?version},
+    );
 
 /// Category 6 — **À propos**: identity, version, MIT licence, source/links,
 /// credits, and the standard third-party licences page.
@@ -20,7 +30,8 @@ class PanneauAPropos extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final version = ref.watch(versionAppliProvider).value ?? '…';
+    final versionConnue = ref.watch(versionAppliProvider).value;
+    final version = versionConnue ?? '…';
 
     return PanneauParametres(
       titre: l10n.categApropos,
@@ -62,6 +73,17 @@ class PanneauAPropos extends ConsumerWidget {
               icone: PhosphorIconsRegular.code,
               label: l10n.aproposCodeSource,
               onTap: () => _ouvrirLien(context, ref, _urlCodeSource),
+            ),
+            _LigneAction(
+              icone: PhosphorIconsRegular.bookOpen,
+              label: l10n.aproposDocumentation,
+              onTap: () => _ouvrirLien(context, ref, _urlDocumentation),
+            ),
+            _LigneAction(
+              icone: PhosphorIconsRegular.bug,
+              label: l10n.aproposSignalerBug,
+              onTap: () =>
+                  _ouvrirLien(context, ref, _urlSignalerBug(versionConnue)),
             ),
             _LigneAction(
               icone: PhosphorIconsRegular.fileText,

@@ -930,5 +930,7 @@
   "formZoneBesoinEau": "Zone water need",
   "zoneSurfaceTropPetite": "Area smaller than the crops in place ({occupee}).",
   "planteArracherTitre": "Pull out this plant?",
-  "planteArracherMessage": "\"{plante}\" will leave the active crops and stay in the history. Continue?"
+  "planteArracherMessage": "\"{plante}\" will leave the active crops and stay in the history. Continue?",
+  "aproposDocumentation": "Documentation",
+  "aproposSignalerBug": "Report a bug"
 }

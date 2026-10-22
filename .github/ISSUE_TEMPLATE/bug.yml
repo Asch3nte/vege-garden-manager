@@ -1,0 +1,56 @@
+name: Bug
+description: Signaler un comportement inattendu de l'application.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Merci pour le signalement. Ne joindre aucune donnée personnelle
+        (position précise, sauvegarde complète) : l'application est 100 % locale.
+  - type: textarea
+    id: description
+    attributes:
+      label: Ce qui se passe
+      description: Le problème observé.
+    validations:
+      required: true
+  - type: textarea
+    id: etapes
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: |
+        1. Ouvrir…
+        2. Toucher…
+        3. Constater…
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Comportement attendu
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version de l'application
+      description: Paramètres › À propos (pré-rempli depuis l'application).
+    validations:
+      required: true
+  - type: dropdown
+    id: plateforme
+    attributes:
+      label: Plateforme
+      options:
+        - Android
+        - iOS
+        - Linux
+        - Windows
+        - macOS
+    validations:
+      required: true
+  - type: textarea
+    id: complements
+    attributes:
+      label: Compléments
+      description: Captures d'écran, messages d'erreur…

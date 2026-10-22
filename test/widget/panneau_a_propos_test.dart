@@ -1,5 +1,7 @@
-// Widget tests for the "À propos" settings panel: the version is read from
-// [AbstractInfoApplicationService] rather than a hardcoded constant.
+// Widget tests for the "À propos" settings panel: the version read from
+// [AbstractInfoApplicationService], and the external links.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,7 +30,7 @@ void main() {
     lienService = _MockOuvertureLien();
   });
 
-  Future<void> monter(WidgetTester tester) async {
+  Future<void> monter(WidgetTester tester, {bool attendre = true}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -42,7 +44,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    attendre ? await tester.pumpAndSettle() : await tester.pump();
   }
 
   testWidgets('shows the version reported by the info service', (tester) async {
@@ -71,6 +73,48 @@ void main() {
           Uri.parse('https://github.com/Asch3nte/vege-garden-manager'),
         )).called(1);
     expect(find.byType(SnackBar), findsNothing);
+  });
+
+  testWidgets('tapping "documentation" opens the docs folder', (tester) async {
+    when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
+    await monter(tester);
+
+    await tester.tap(find.text('Documentation'));
+    await tester.pumpAndSettle();
+
+    verify(() => lienService.ouvrir(Uri.parse(
+          'https://github.com/Asch3nte/vege-garden-manager/tree/main/docs',
+        ))).called(1);
+  });
+
+  testWidgets('"signaler un bug" opens the bug form with the version only',
+      (tester) async {
+    when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
+    await monter(tester);
+
+    await tester.tap(find.text('Signaler un bug'));
+    await tester.pumpAndSettle();
+
+    final url =
+        verify(() => lienService.ouvrir(captureAny())).captured.single as Uri;
+    expect(url.origin, 'https://github.com');
+    expect(url.path, '/Asch3nte/vege-garden-manager/issues/new');
+    expect(url.queryParameters, {'template': 'bug.yml', 'version': '9.9.9+42'});
+  });
+
+  testWidgets('an unknown version is left out of the bug form',
+      (tester) async {
+    when(() => service.obtenirVersionAffichee())
+        .thenAnswer((_) => Completer<String>().future);
+    when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
+    await monter(tester, attendre: false);
+
+    await tester.tap(find.text('Signaler un bug'));
+    await tester.pump();
+
+    final url =
+        verify(() => lienService.ouvrir(captureAny())).captured.single as Uri;
+    expect(url.queryParameters, {'template': 'bug.yml'});
   });
 
   testWidgets('shows a snackbar when no handler can open the link',

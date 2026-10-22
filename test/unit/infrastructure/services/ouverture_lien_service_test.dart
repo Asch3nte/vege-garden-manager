@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -47,5 +48,15 @@ void main() {
 
     expect(resultat, isFalse);
     verifyNever(() => platform.launchUrl(any(), any()));
+  });
+
+  test('a refused launch reports false instead of throwing', () async {
+    when(() => platform.canLaunch(any())).thenAnswer((_) async => true);
+    when(() => platform.launchUrl(any(), any()))
+        .thenThrow(PlatformException(code: 'ACTIVITY_NOT_FOUND'));
+
+    final resultat = await service.ouvrir(Uri.parse('https://example.org'));
+
+    expect(resultat, isFalse);
   });
 }
