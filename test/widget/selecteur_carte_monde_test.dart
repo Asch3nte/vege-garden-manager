@@ -1,37 +1,54 @@
-// Widget tests for the zoomable world-map position picker.
-//
-// The picker is opened via [choisirSurCarteMonde]; these tests drive the
-// region-shortcut + confirm flow and a direct tap, asserting the returned
-// [Localisation]. The map image decode is irrelevant here (taps hit the
-// gesture layer, not the pixels), so it is left to load lazily.
+// Widget tests for the globe position picker opened by [choisirSurCarteMonde]:
+// place search, tap on the globe, footer naming and the returned location.
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:mocktail/mocktail.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/domain/enums/source_localisation.dart';
+import 'package:pot_a_gerer/domain/exceptions/geocodage_indisponible_exception.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_geocodage_service.dart';
+import 'package:pot_a_gerer/domain/value_objects/lieu_trouve.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
+import 'package:pot_a_gerer/presentation/widgets/globe/globe_terrestre.dart';
 import 'package:pot_a_gerer/presentation/widgets/selecteur_carte_monde.dart';
 
+class _MockGeocodage extends Mock implements AbstractGeocodageService {}
+
 void main() {
-  /// A one-slot holder the host writes the picker's result into.
+  late _MockGeocodage geocodage;
   late List<Localisation?> capture;
 
-  /// Mounts a host with a button that opens the picker and records its result.
-  /// Defaults to a wide surface so the whole horizontal region band fits
-  /// without scrolling (the presets are what most tests tap).
-  Future<void> monter(WidgetTester tester,
-      {Size taille = const Size(1600, 800)}) async {
-    tester.view.physicalSize = taille;
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+  final namur = LieuTrouve(
+      nom: 'Namur',
+      region: 'Wallonie',
+      pays: 'Belgique',
+      latitude: 50.4669,
+      longitude: 4.8675);
+  final namurUsa = LieuTrouve(
+      nom: 'Namur',
+      region: 'Wisconsin',
+      pays: 'États-Unis',
+      latitude: 44.8,
+      longitude: -87.5);
 
-    capture = <Localisation?>[];
-    await tester.pumpWidget(
-      MaterialApp(
+  setUp(() {
+    geocodage = _MockGeocodage();
+    capture = [];
+  });
+
+  Future<void> ouvrir(WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(ProviderScope(
+      overrides: [geocodageServiceProvider.overrideWithValue(geocodage)],
+      child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('fr'),
         home: Builder(
           builder: (context) => Scaffold(
             body: Center(
@@ -44,67 +61,151 @@ void main() {
           ),
         ),
       ),
-    );
+    ));
+    await tester.tap(find.text('ouvrir'));
+    await tester.pumpAndSettle();
   }
 
-  testWidgets('a region shortcut drops the pin and confirming returns its '
-      'coordinates', (tester) async {
-    await monter(tester);
-
-    await tester.tap(find.text('ouvrir'));
+  Future<void> rechercher(WidgetTester tester, String texte) async {
+    await tester.enterText(find.byType(TextField), texte);
+    await tester.testTextInput.receiveAction(TextInputAction.search);
     await tester.pumpAndSettle();
+  }
 
-    // No selection yet: no pin, confirm is disabled.
-    expect(find.byIcon(PhosphorIconsBold.mapPin), findsNothing);
+  bool validerActif(WidgetTester tester) =>
+      tester.widget<FilledButton>(find.byType(FilledButton)).onPressed != null;
 
-    await tester.ensureVisible(find.text('Zone tropicale'));
-    await tester.tap(find.text('Zone tropicale'));
-    await tester.pumpAndSettle();
-
-    // The pin is now shown.
-    expect(find.byIcon(PhosphorIconsBold.mapPin), findsOneWidget);
-
+  Future<Localisation> valider(WidgetTester tester) async {
     await tester.tap(find.text('Valider'));
     await tester.pumpAndSettle();
+    return capture.single!;
+  }
 
-    final loc = capture.single;
-    expect(loc, isNotNull);
-    expect(loc!.estDefinie, isTrue);
-    expect(loc.source, SourceLocalisation.manuelle);
-    // Tropical preset latitude (5°), rounded to ~1 km by the value object.
-    expect(loc.latitude, closeTo(5, 0.01));
+  testWidgets('starts with a search field, the globe and nothing chosen',
+      (tester) async {
+    await ouvrir(tester);
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byType(GlobeTerrestre), findsOneWidget);
+    expect(find.byType(ActionChip), findsNothing);
+    expect(find.text('Aucune position choisie'), findsOneWidget);
+    expect(validerActif(tester), isFalse);
   });
 
-  testWidgets('the interactive zone fills the available height, not just the '
-      '2:1 band', (tester) async {
-    // Tall portrait surface: the zoom/pan canvas should span the whole free
-    // height (so zooming uses every pixel), well beyond the contained image
-    // band (width / 2).
-    await monter(tester, taille: const Size(400, 900));
-    await tester.pumpAndSettle();
+  testWidgets('a single match drops the pin and names the footer',
+      (tester) async {
+    when(() => geocodage.rechercherLieux('Namur'))
+        .thenAnswer((_) async => [namur]);
+    await ouvrir(tester);
 
-    await tester.tap(find.text('ouvrir'));
-    await tester.pumpAndSettle();
-
-    final zone = tester.getSize(find.byType(InteractiveViewer));
-    final hauteurBande = zone.width / (2058 / 1036);
-    expect(zone.height, greaterThan(hauteurBande * 2),
-        reason: 'the interactive zone must fill far more than the image band');
-  });
-
-  testWidgets('a direct tap on the map drops the pin', (tester) async {
-    await monter(tester);
-
-    await tester.tap(find.text('ouvrir'));
-    await tester.pumpAndSettle();
-
-    expect(find.byIcon(PhosphorIconsBold.mapPin), findsNothing);
-
-    // Tap somewhere inside the map image.
-    await tester.tap(find.byType(Image));
-    await tester.pumpAndSettle();
+    await rechercher(tester, 'Namur');
 
     expect(find.byIcon(PhosphorIconsBold.mapPin), findsOneWidget);
-    expect(find.text('Valider'), findsOneWidget);
+    expect(find.text('Namur'), findsWidgets);
+    expect(find.textContaining('Wallonie, Belgique'), findsOneWidget);
+    final loc = await valider(tester);
+    expect(loc.ville, 'Namur');
+    expect(loc.source, SourceLocalisation.manuelle);
+    expect(loc.latitude, 50.47);
+    expect(loc.longitude, 4.87);
+    verifyNever(() => geocodage.identifierLieu(any(), any()));
+  });
+
+  testWidgets('several matches list suggestions with region and country',
+      (tester) async {
+    when(() => geocodage.rechercherLieux('Namur'))
+        .thenAnswer((_) async => [namur, namurUsa]);
+    await ouvrir(tester);
+
+    await rechercher(tester, 'Namur');
+
+    expect(find.text('Wallonie, Belgique'), findsOneWidget);
+    expect(find.text('Wisconsin, États-Unis'), findsOneWidget);
+    expect(validerActif(tester), isFalse);
+
+    await tester.tap(find.text('Wisconsin, États-Unis'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Wallonie, Belgique'), findsNothing);
+    final loc = await valider(tester);
+    expect(loc.latitude, 44.8);
+    expect(loc.longitude, -87.5);
+  });
+
+  testWidgets('no match says so', (tester) async {
+    when(() => geocodage.rechercherLieux(any())).thenAnswer((_) async => []);
+    await ouvrir(tester);
+    await rechercher(tester, 'Zzz');
+    expect(find.text('Aucune localité trouvée.'), findsOneWidget);
+  });
+
+  testWidgets('an unreachable service says so and leaves the globe usable',
+      (tester) async {
+    when(() => geocodage.rechercherLieux(any()))
+        .thenThrow(GeocodageIndisponibleException('offline'));
+    await ouvrir(tester);
+    await rechercher(tester, 'Namur');
+    expect(find.textContaining('Recherche indisponible'), findsOneWidget);
+  });
+
+  testWidgets('a blank search sends nothing', (tester) async {
+    await ouvrir(tester);
+    await rechercher(tester, '   ');
+    verifyNever(() => geocodage.rechercherLieux(any()));
+  });
+
+  testWidgets('a tap on the globe pins the point and names it',
+      (tester) async {
+    when(() => geocodage.identifierLieu(any(), any())).thenAnswer((i) async =>
+        LieuTrouve(
+            nom: 'Ghardaïa',
+            pays: 'Algérie',
+            latitude: i.positionalArguments[0] as double,
+            longitude: i.positionalArguments[1] as double));
+    await ouvrir(tester);
+
+    await tester.tapAt(tester.getCenter(find.byType(GlobeTerrestre)));
+    await tester.pump();
+    expect(find.byIcon(PhosphorIconsBold.mapPin), findsOneWidget);
+    expect(find.text('Recherche du nom…'), findsOneWidget);
+    expect(validerActif(tester), isTrue);
+
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+    expect(find.text('Ghardaïa'), findsOneWidget);
+    expect(find.textContaining('Algérie'), findsOneWidget);
+    verify(() => geocodage.identifierLieu(any(), any())).called(1);
+
+    final loc = await valider(tester);
+    expect(loc.ville, 'Ghardaïa');
+  });
+
+  testWidgets('quick successive taps name only the last point',
+      (tester) async {
+    when(() => geocodage.identifierLieu(any(), any()))
+        .thenAnswer((_) async => null);
+    await ouvrir(tester);
+    final centre = tester.getCenter(find.byType(GlobeTerrestre));
+
+    await tester.tapAt(centre);
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.tapAt(centre + const Offset(30, 0));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+
+    verify(() => geocodage.identifierLieu(any(), any())).called(1);
+  });
+
+  testWidgets('an unnamed point is stored under its coordinates',
+      (tester) async {
+    when(() => geocodage.identifierLieu(any(), any()))
+        .thenAnswer((_) async => null);
+    await ouvrir(tester);
+
+    await tester.tapAt(tester.getCenter(find.byType(GlobeTerrestre)));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+
+    final loc = await valider(tester);
+    expect(loc.ville, matches(RegExp(r'^\d+\.\d° [NS], \d+\.\d° [EO]$')));
   });
 }

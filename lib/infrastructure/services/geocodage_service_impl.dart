@@ -1,4 +1,5 @@
 import '../../domain/repositories/abstract_geocodage_service.dart';
+import '../../domain/value_objects/lieu_trouve.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../api/nominatim_client.dart';
 
@@ -16,4 +17,12 @@ class GeocodageServiceImpl implements AbstractGeocodageService {
   @override
   Future<String?> obtenirNomLocalite(Localisation loc) =>
       _client.obtenirNomLocalite(loc);
+
+  @override
+  Future<LieuTrouve?> identifierLieu(double latitude, double longitude) =>
+      _client.identifierLieu(latitude, longitude);
+
+  @override
+  Future<List<LieuTrouve>> rechercherLieux(String texte) =>
+      _client.rechercherLieux(texte);
 }

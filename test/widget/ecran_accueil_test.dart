@@ -43,6 +43,8 @@ import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_accueil.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_zone_detail.dart';
 
+import '../helpers/globe.dart';
+
 /// Fixed weather view so the card renders a known verdict.
 class _FakeMeteo extends MeteoAccueilNotifier {
   @override
@@ -267,7 +269,7 @@ void main() {
   });
 
   testWidgets('the weather prompt sets the garden position', (tester) async {
-    // Wide surface so the map's region band fits without horizontal scrolling.
+    // Wide surface for the whole flow.
     tester.view.physicalSize = const Size(1600, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -300,14 +302,11 @@ void main() {
     await tester.tap(find.textContaining('Ajoute ta position'));
     await tester.pumpAndSettle();
 
-    // Sheet → open the world map → jump to a region preset → confirm. The
+    // Sheet → open the globe picker → pick a tropical point → confirm. The
     // chosen position is stored on the active garden.
     await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Zone tropicale'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Valider'));
-    await tester.pumpAndSettle();
+    await choisirSurGlobe(tester, 5, 25);
 
     final potager =
         verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;

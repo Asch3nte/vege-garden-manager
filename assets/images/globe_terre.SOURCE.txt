@@ -1,0 +1,16 @@
+Fichier : globe_terre.jpg (4096 × 2048 px)
+Usage   : texture du globe du sélecteur de position
+          (lib/presentation/widgets/globe/).
+
+Source  : NASA Earth Observatory — « Blue Marble: Next Generation »,
+          topographie + bathymétrie, juillet 2004 (world.topo.bathy.200407,
+          5400 × 2700 px), réduite à 4096 × 2048 (lanczos).
+          https://visibleearth.nasa.gov/images/73751
+
+Licence : Domaine public (œuvre de la NASA). Aucune attribution requise ;
+          citée ici par transparence.
+
+Projection : plate carrée plein globe, sans marge ni graticule — l'axe
+             horizontal couvre la longitude [-180°, +180°], l'axe vertical la
+             latitude [+90°, -90°]. Indispensable au shader
+             shaders/globe.frag ; ne pas remplacer par une autre projection.

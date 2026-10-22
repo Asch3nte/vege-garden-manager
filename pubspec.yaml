@@ -92,6 +92,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Globe du sélecteur de position (texture : assets/images/globe_terre.jpg).
+  shaders:
+    - shaders/globe.frag
+
   # Génère le code d'internationalisation (ARB -> AppLocalizations) depuis lib/l10n/.
   generate: true
 
