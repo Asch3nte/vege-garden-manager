@@ -141,7 +141,7 @@ class FormateurMesures {
       return _l10n.mesureDimensionsMetres(
           _nombre(d.longueurCm / 100, 2), _nombre(d.largeurCm / 100, 2));
     }
-    String pieds(int cm) =>
+    String pieds(double cm) =>
         _nombre(_convertisseur.metresVersPieds(cm / 100), 1);
     return _l10n.mesureDimensionsPieds(pieds(d.longueurCm), pieds(d.largeurCm));
   }

@@ -47,6 +47,7 @@ void main() {
         .thenAnswer((_) async => []);
     when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
     when(() => repo.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => repo.obtenirParId(any())).thenAnswer((_) async => null);
   });
 
   Future<void> monter(
@@ -427,8 +428,9 @@ void main() {
       await tester.enterText(champ('Longueur (ft)'), '10');
       await tester.enterText(champ('Largeur (ft)'), '4');
 
+      expect(find.text('40'), findsOneWidget);
       expect((await enregistrer(tester)).dimensions,
-          DimensionsZone(longueurCm: 305, largeurCm: 122));
+          DimensionsZone(longueurCm: 304.8, largeurCm: 121.92));
     });
 
     testWidgets('the water need is persisted', (tester) async {
@@ -444,7 +446,7 @@ void main() {
 
     testWidgets('edit keeps untouched dimensions and water need',
         (tester) async {
-      final dimensions = DimensionsZone(longueurCm: 305, largeurCm: 122);
+      final dimensions = DimensionsZone(longueurCm: 304.8, largeurCm: 121.92);
       await monter(tester,
           initiale: zone(dimensions: dimensions),
           unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
@@ -463,6 +465,22 @@ void main() {
       await tester.enterText(champ('Longueur (m)'), '');
       await tester.enterText(champ('Largeur (m)'), '');
       await tester.enterText(champ('Surface (m²)'), '2');
+
+      final parcelle = await enregistrer(tester);
+      expect(parcelle.dimensions, isNull);
+      expect(parcelle.surface.enMetresCarres, 2);
+    });
+
+    testWidgets('clearing a side restores the surface typed by hand',
+        (tester) async {
+      await monter(tester, initiale: zone(m2: 2));
+      await tester.enterText(champ('Longueur (m)'), '3');
+      await tester.enterText(champ('Largeur (m)'), '1');
+      await tester.pump();
+      await tester.enterText(champ('Largeur (m)'), '');
+      await tester.pump();
+      expect(find.text('2'), findsOneWidget);
+      await tester.enterText(champ('Longueur (m)'), '');
 
       final parcelle = await enregistrer(tester);
       expect(parcelle.dimensions, isNull);

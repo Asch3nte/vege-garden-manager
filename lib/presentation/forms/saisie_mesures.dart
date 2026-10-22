@@ -63,14 +63,17 @@ class SaisieMesures {
   String symboleCote(AppLocalizations l10n) =>
       _imperial(GrandeurMesure.longueur) ? l10n.saisiePieds : l10n.saisieMetres;
 
-  /// A zone side typed in metres or feet, in whole centimetres.
-  int coteVersCm(double saisie) => (_imperial(GrandeurMesure.longueur)
-          ? _convertisseur.piedsVersMetres(saisie) * 100
-          : saisie * 100)
-      .round();
+  /// A zone side typed in metres or feet, in centimetres to the
+  /// tenth of a millimetre.
+  double coteVersCm(double saisie) {
+    final metres = _imperial(GrandeurMesure.longueur)
+        ? _convertisseur.piedsVersMetres(saisie)
+        : saisie;
+    return (metres * 10000).round() / 100;
+  }
 
   /// A stored zone side, as the field shows it.
-  String cotePourChamp(int cm) => _champ.format(
+  String cotePourChamp(double cm) => _champ.format(
     _imperial(GrandeurMesure.longueur)
         ? _convertisseur.metresVersPieds(cm / 100)
         : cm / 100,

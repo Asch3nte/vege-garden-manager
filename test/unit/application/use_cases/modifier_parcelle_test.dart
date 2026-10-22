@@ -52,12 +52,22 @@ void main() {
     when(() => parcelles.sauvegarder(any())).thenAnswer((_) async {});
     when(() => plantations.obtenirParParcelle('par1'))
         .thenAnswer((_) async => [plantation(2)]);
+    when(() => parcelles.obtenirParId('par1')).thenAnswer((_) async => zone(3));
   });
 
   test('saves a zone that still holds its plantations', () async {
     final modifiee = zone(2);
     await useCase.executer(modifiee);
     verify(() => parcelles.sauvegarder(modifiee)).called(1);
+  });
+
+  test('an unchanged surface is saved even when already overfull', () async {
+    when(() => parcelles.obtenirParId('par1'))
+        .thenAnswer((_) async => zone(1.5));
+    final renommee = zone(1.5)..renommer('Planche sud');
+    await useCase.executer(renommee);
+    verify(() => parcelles.sauvegarder(renommee)).called(1);
+    verifyNever(() => plantations.obtenirParParcelle(any()));
   });
 
   test('refuses a surface below the one its plantations take up', () async {

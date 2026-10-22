@@ -83,6 +83,12 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   /// The sides as first shown; kept unchanged when left as is.
   late final String _longueurInitiale;
   late final String _largeurInitiale;
+
+  /// The sides typed so far, when both are valid.
+  DimensionsZone? _dimensions;
+
+  /// The surface typed by hand, shown again once the sides are cleared.
+  String? _surfaceManuelle;
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
   BesoinEau? _besoinEau;
@@ -117,6 +123,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
     _largeurInitiale = d == null ? '' : _saisie.cotePourChamp(d.largeurCm);
     _longueur.text = _longueurInitiale;
     _largeur.text = _largeurInitiale;
+    _dimensions = d;
     if (p != null) {
       _nom.text = p.nom;
       _type = p.type;
@@ -138,8 +145,8 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
     super.dispose();
   }
 
-  /// A typed side in whole centimetres, or null when empty or invalid.
-  int? _coteCm(String texte) {
+  /// A typed side in centimetres, or null when empty or invalid.
+  double? _coteCm(String texte) {
     final n = double.tryParse(texte.trim().replaceAll(',', '.'));
     if (n == null || n <= 0) return null;
     final cm = _saisie.coteVersCm(n);
@@ -147,7 +154,7 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   }
 
   /// The typed sides, or null unless both are valid.
-  DimensionsZone? get _dimensions {
+  DimensionsZone? _lireDimensions() {
     final initiales = widget.parcelleInitiale?.dimensions;
     if (initiales != null &&
         _longueur.text == _longueurInitiale &&
@@ -161,14 +168,19 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
         : DimensionsZone(longueurCm: longueur, largeurCm: largeur);
   }
 
-  /// Shows the surface the sides enclose.
+  /// Shows the surface the sides enclose, or the one typed by hand once
+  /// they no longer do.
   void _coteModifiee(String _) {
-    final dimensions = _dimensions;
+    final dimensions = _lireDimensions();
     setState(() {
       if (dimensions != null) {
+        if (_dimensions == null) _surfaceManuelle = _surface.text;
         _surface.text =
             _saisie.surfacePourChamp(dimensions.surface.enMetresCarres);
+      } else if (_dimensions != null && _surfaceManuelle != null) {
+        _surface.text = _surfaceManuelle!;
       }
+      _dimensions = dimensions;
     });
   }
 

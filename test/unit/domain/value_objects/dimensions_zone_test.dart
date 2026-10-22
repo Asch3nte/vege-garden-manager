@@ -23,10 +23,9 @@ void main() {
           throwsA(isA<InvariantDomaineException>()));
     });
 
-    test('agrees with its own area only', () {
-      final d = DimensionsZone(longueurCm: 300, largeurCm: 120);
-      expect(d.concordeAvec(Surface.enMetresCarres(3.6)), isTrue);
-      expect(d.concordeAvec(Surface.enMetresCarres(3.7)), isFalse);
+    test('keeps fractional centimetres', () {
+      final d = DimensionsZone(longueurCm: 304.8, largeurCm: 121.92);
+      expect(d.surface.enMetresCarres, closeTo(3.7161216, 1e-9));
     });
 
     test('equality by value', () {

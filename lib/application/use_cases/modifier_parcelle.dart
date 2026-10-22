@@ -7,8 +7,8 @@ import '../providers/repository_providers.dart';
 
 /// Use case: save an edited parcelle.
 ///
-/// Throws `SurfaceInsuffisanteException` when its surface no longer holds its
-/// active plantations.
+/// Throws `SurfaceInsuffisanteException` when a reduced surface no longer
+/// holds its active plantations.
 class ModifierParcelle {
   final AbstractParcelleRepository _parcelles;
   final AbstractPlantationRepository _plantations;
@@ -16,8 +16,12 @@ class ModifierParcelle {
   ModifierParcelle(this._parcelles, this._plantations);
 
   Future<void> executer(Parcelle parcelle) async {
-    parcelle.verifierContenance(
-        await _plantations.obtenirParParcelle(parcelle.id));
+    final stockee = await _parcelles.obtenirParId(parcelle.id);
+    // An unreduced surface is saved as is, even on an already overfull zone.
+    if (stockee == null || stockee.surface.depasse(parcelle.surface)) {
+      parcelle.verifierContenance(
+          await _plantations.obtenirParParcelle(parcelle.id));
+    }
     await _parcelles.sauvegarder(parcelle);
   }
 }

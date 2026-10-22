@@ -33,8 +33,9 @@ void main() {
   test('zone sides are typed in metres or feet, stored in centimetres', () {
     expect(metrique.coteVersCm(1.2), 120);
     expect(metrique.cotePourChamp(120), '1,2');
-    expect(imperial.coteVersCm(10), 305);
-    expect(imperial.cotePourChamp(305), '10,01');
+    expect(imperial.coteVersCm(10), 304.8);
+    expect(imperial.coteVersCm(4), 121.92);
+    expect(imperial.cotePourChamp(304.8), '10');
   });
 
   test('harvest units follow the mass and volume systems', () {

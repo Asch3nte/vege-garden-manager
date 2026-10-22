@@ -96,4 +96,19 @@ void main() {
       expect(Surface.enMetresCarres(1) == Surface.enMetresCarres(2), isFalse);
     });
   });
+
+  group('Surface — rounding-tolerant comparison', () {
+    test('egaleA ignores float noise only', () {
+      final a = Surface.enMetresCarres(0.1 + 0.2);
+      expect(a.egaleA(Surface.enMetresCarres(0.3)), isTrue);
+      expect(a.egaleA(Surface.enMetresCarres(0.31)), isFalse);
+    });
+
+    test('depasse ignores float noise only', () {
+      expect(Surface.enMetresCarres(0.1 + 0.2).depasse(Surface.enMetresCarres(0.3)),
+          isFalse);
+      expect(Surface.enMetresCarres(0.31).depasse(Surface.enMetresCarres(0.3)),
+          isTrue);
+    });
+  });
 }

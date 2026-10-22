@@ -88,7 +88,7 @@ class ParcelleMapper {
     }
     final dimensions =
         DimensionsZone(longueurCm: longueur, largeurCm: largeur);
-    return dimensions.concordeAvec(surface) ? dimensions : null;
+    return dimensions.surface.egaleA(surface) ? dimensions : null;
   }
 
   /// A missing or unknown tint falls back to the first palette tint, so the

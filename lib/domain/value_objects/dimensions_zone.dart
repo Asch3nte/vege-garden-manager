@@ -1,14 +1,14 @@
 import '../exceptions/invariant_domaine_exception.dart';
 import 'surface.dart';
 
-/// Length and width of a rectangular zone, in whole centimetres.
+/// Length and width of a rectangular zone, in centimetres.
 class DimensionsZone {
-  final int _longueurCm;
-  final int _largeurCm;
+  final double _longueurCm;
+  final double _largeurCm;
 
   const DimensionsZone._(this._longueurCm, this._largeurCm);
 
-  factory DimensionsZone({required int longueurCm, required int largeurCm}) {
+  factory DimensionsZone({required double longueurCm, required double largeurCm}) {
     InvariantDomaineException.verifier(
       longueurCm > 0 && largeurCm > 0,
       'zone sides must be > 0',
@@ -16,19 +16,12 @@ class DimensionsZone {
     return DimensionsZone._(longueurCm, largeurCm);
   }
 
-  int get longueurCm => _longueurCm;
-  int get largeurCm => _largeurCm;
+  double get longueurCm => _longueurCm;
+  double get largeurCm => _largeurCm;
 
   /// The area the two sides enclose.
   Surface get surface =>
-      Surface.enCentimetresCarres((_longueurCm * _largeurCm).toDouble());
-
-  /// Whether [autre] is the area of these sides, give or take rounding.
-  bool concordeAvec(Surface autre) =>
-      (surface.enMetresCarres - autre.enMetresCarres).abs() <= _toleranceM2;
-
-  /// Rounding slack of a surface comparison (1 mm²).
-  static const double _toleranceM2 = 1e-6;
+      Surface.enCentimetresCarres(_longueurCm * _largeurCm);
 
   @override
   bool operator ==(Object other) =>

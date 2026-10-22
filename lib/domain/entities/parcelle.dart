@@ -77,7 +77,7 @@ class Parcelle {
     InvariantDomaineException.verifier(
         _surface.enMetresCarres > 0, 'surface must be > 0');
     InvariantDomaineException.verifier(
-        _dimensions?.concordeAvec(_surface) ?? true,
+        _dimensions?.surface.egaleA(_surface) ?? true,
         'surface must equal the dimensions');
   }
 
@@ -164,9 +164,7 @@ class Parcelle {
       {required Iterable<Plantation> enPlace}) {
     if (!plantation.estActive()) return;
     final libre = _libreApres(enPlace);
-    // Float sums of surfaces must not refuse an exact fit.
-    if (plantation.surfaceOccupee.enMetresCarres >
-        libre.enMetresCarres + _toleranceM2) {
+    if (plantation.surfaceOccupee.depasse(libre)) {
       throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
     }
   }
@@ -175,13 +173,10 @@ class Parcelle {
   /// [enPlace] need more room than this parcelle's surface.
   void verifierContenance(Iterable<Plantation> enPlace) {
     final occupee = _occupeePar(enPlace);
-    if (occupee.enMetresCarres > _surface.enMetresCarres + _toleranceM2) {
+    if (occupee.depasse(_surface)) {
       throw SurfaceInsuffisanteException(occupee, _surface);
     }
   }
-
-  /// Rounding slack of a surface comparison (1 mm²).
-  static const double _toleranceM2 = 1e-6;
 
   /// Surface left free by the active plantations among [plantations].
   Surface _libreApres(Iterable<Plantation> plantations) {

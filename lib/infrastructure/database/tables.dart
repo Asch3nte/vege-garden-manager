@@ -54,8 +54,8 @@ class Parcelles extends Table {
   TextColumn get surfaceUnite => text()();
   TextColumn get exposition => text()();
   // Zone sides, written together; the surface then equals their product.
-  IntColumn get longueurCm => integer().nullable()();
-  IntColumn get largeurCm => integer().nullable()();
+  RealColumn get longueurCm => real().nullable()();
+  RealColumn get largeurCm => real().nullable()();
   TextColumn get besoinEau => text().nullable()();
   TextColumn get textureSol => text().nullable()();
   TextColumn get phSol => text().nullable()();

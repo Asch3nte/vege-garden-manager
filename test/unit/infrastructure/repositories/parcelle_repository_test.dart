@@ -97,7 +97,7 @@ void main() {
   });
 
   test('save then read round-trips dimensions and water need', () async {
-    final dimensions = DimensionsZone(longueurCm: 250, largeurCm: 100);
+    final dimensions = DimensionsZone(longueurCm: 304.8, largeurCm: 121.92);
     await repo.sauvegarder(Parcelle(
       id: 'par1',
       nom: 'Planche',
