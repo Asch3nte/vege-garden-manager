@@ -9,6 +9,7 @@ import '../../application/engine/derivateur_localisation.dart';
 import '../../application/providers/service_providers.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../application/state/preferences_notifier.dart';
+import '../../application/use_cases/suggerer_climat_position.dart';
 import '../../domain/enums/mode_geolocalisation.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../domain/enums/source_localisation.dart';
@@ -89,6 +90,28 @@ class _EcranOnboardingState extends ConsumerState<EcranOnboarding> {
       _position = position;
       _climat = suggestion.climat;
       _rusticite = suggestion.rusticite;
+    });
+    unawaited(_affinerParAltitude(position, suggestion));
+  }
+
+  /// Refines the pre-fill with the altitude (network opt-out respected),
+  /// unless the position or the pre-filled values changed meanwhile.
+  Future<void> _affinerParAltitude(
+      Localisation position, SuggestionClimat initiale) async {
+    final reseau = ref.read(preferencesProvider).value?.meteoAutoActive ?? false;
+    if (!reseau) return;
+    final affinee = await ref
+        .read(suggererClimatPositionProvider)
+        .executer(position, reseauAutorise: true);
+    if (!mounted ||
+        _position != position ||
+        _climat != initiale.climat ||
+        _rusticite != initiale.rusticite) {
+      return;
+    }
+    setState(() {
+      _climat = affinee.climat;
+      _rusticite = affinee.rusticite;
     });
   }
 

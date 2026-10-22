@@ -4,8 +4,12 @@
 // checks the garden is persisted (and the form pops the created entity).
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/providers/service_providers.dart';
@@ -26,6 +30,10 @@ class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockGeoloc extends Mock implements AbstractGeolocalisationService {}
 
+class MockMeteo extends Mock implements AbstractMeteoService {}
+
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
 class _FakePotager extends Fake implements Potager {}
 
 void main() {
@@ -41,12 +49,14 @@ void main() {
     when(() => repo.obtenirTous()).thenAnswer((_) async => []);
   });
 
-  Future<void> monter(WidgetTester tester, {Potager? initial}) async {
+  Future<void> monter(WidgetTester tester,
+      {Potager? initial, List<Override> extra = const []}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           potagerRepositoryProvider.overrideWithValue(repo),
           geolocalisationServiceProvider.overrideWithValue(geoloc),
+          ...extra,
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -286,5 +296,37 @@ void main() {
 
     expect(find.text('Haybes'), findsOneWidget);
     expect(find.text('Choisie sur le globe · 50,0° N, 4,7° E'), findsOneWidget);
+  });
+
+  testWidgets('the altitude refines the pre-filled climate and hardiness',
+      (tester) async {
+    final meteo = MockMeteo();
+    final preferences = MockPreferences();
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
+    final position = Localisation.gps(latitude: 44.9, longitude: 6.64);
+    when(() => meteo.obtenirElevation(position)).thenAnswer((_) async => 1326);
+    when(() => geoloc.demanderPermission())
+        .thenAnswer((_) async => PermissionLocalisation.accordee);
+    when(() => geoloc.positionActuelle()).thenAnswer((_) async => position);
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await monter(tester, extra: [
+      meteoServiceProvider.overrideWithValue(meteo),
+      preferencesRepositoryProvider.overrideWithValue(preferences),
+    ]);
+    await tester.enterText(find.byType(TextFormField).first, 'Briançon');
+    await tester.tap(find.text('Détecter ma position'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Montagnard'), findsOneWidget);
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+    final potager =
+        verify(() => repo.sauvegarder(captureAny())).captured.single as Potager;
+    expect(potager.zoneClimatique.type, TypeClimat.montagnard);
+    expect(potager.zoneClimatique.rusticite, ZoneRusticite.zone6);
   });
 }

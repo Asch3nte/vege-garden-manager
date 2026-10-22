@@ -17,27 +17,44 @@ class SuggestionClimat {
   ZoneRusticite get rusticite => _rusticite;
 }
 
-/// Derives a climate context from a position's latitude.
+/// Derives a climate context from a position's latitude and, when known, its
+/// altitude.
 ///
 /// The [Hemisphere] is exact (sign of the latitude). The climate type and the
-/// hardiness zone are **coarse latitude-band heuristics**: they ignore
-/// longitude, altitude, oceanic influence and local microclimates, so they are
-/// only meant to *pre-fill* the onboarding form for the user to confirm or
-/// adjust — never presented as precise. Aridity and mountain climates cannot be
-/// inferred from latitude alone and are left to the user.
+/// hardiness zone are **coarse heuristics** (latitude bands, corrected for
+/// altitude): they ignore longitude, oceanic influence and local
+/// microclimates, so they are only meant to *pre-fill* a form for the user to
+/// confirm or adjust — never presented as precise. Aridity cannot be inferred
+/// and is left to the user.
 class DerivateurLocalisation {
   const DerivateurLocalisation();
 
-  /// Suggests a climate context for [localisation]. The position must be defined
+  /// Altitude lowering the hardiness by one zone: about 0.65 °C per 100 m
+  /// against about 5.6 °C per USDA zone.
+  static const double metresParZone = 800;
+
+  /// Altitude from which a mountain climate is suggested.
+  static const double altitudeMontagnardM = 1200;
+
+  /// Suggests a climate context for [localisation], refined by [altitudeM]
+  /// (metres) when known. The position must be defined
   /// ([Localisation.estDefinie]); callers obtain it from GPS or a map pick.
-  SuggestionClimat deriver(Localisation localisation) {
+  SuggestionClimat deriver(Localisation localisation, {double? altitudeM}) {
     final latitude = localisation.latitude;
     if (latitude == null) {
       throw ArgumentError('a defined position is required to derive a climate');
     }
     final hemisphere = localisation.hemisphere!;
     final abs = latitude.abs();
-    return SuggestionClimat._(hemisphere, _climat(abs), _rusticite(abs));
+    final altitude = altitudeM == null || altitudeM < 0 ? 0.0 : altitudeM;
+    var climat = _climat(abs);
+    if (altitude >= altitudeMontagnardM && climat != TypeClimat.polaire) {
+      climat = TypeClimat.montagnard;
+    }
+    final crans = (altitude / metresParZone).floor();
+    final zone = ZoneRusticite.values[
+        (_rusticite(abs).index - crans).clamp(0, ZoneRusticite.values.length - 1)];
+    return SuggestionClimat._(hemisphere, climat, zone);
   }
 
   /// Climate type by absolute latitude band (suggestion only).

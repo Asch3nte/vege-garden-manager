@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_meteo_service.dart';
 import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
@@ -67,6 +68,8 @@ class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
 class MockGeoloc extends Mock implements AbstractGeolocalisationService {}
 
+class MockMeteo extends Mock implements AbstractMeteoService {}
+
 class _FakePotager extends Fake implements Potager {}
 
 class _FakePrefs extends Fake implements PreferencesUtilisateur {}
@@ -75,6 +78,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(_FakePotager());
     registerFallbackValue(_FakePrefs());
+    registerFallbackValue(const Localisation.nonDefinie());
   });
 
   final maintenant = DateTime(2026, 6, 9, 8, 24);
@@ -86,6 +90,7 @@ void main() {
   late MockTaches taches;
   late MockPreferences preferences;
   late MockGeoloc geoloc;
+  late MockMeteo meteo;
 
   setUp(() {
     potagers = MockPotagers();
@@ -95,6 +100,8 @@ void main() {
     taches = MockTaches();
     preferences = MockPreferences();
     geoloc = MockGeoloc();
+    meteo = MockMeteo();
+    when(() => meteo.obtenirElevation(any())).thenAnswer((_) async => null);
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);
     when(() => plantations.obtenirParParcelle(any()))
@@ -189,6 +196,7 @@ void main() {
         fichePlanteRepositoryProvider.overrideWith((ref) async => fiches),
         preferencesRepositoryProvider.overrideWithValue(preferences),
         geolocalisationServiceProvider.overrideWithValue(geoloc),
+        meteoServiceProvider.overrideWithValue(meteo),
         horlogeProvider.overrideWithValue(() => maintenant),
         accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
         unitesProvider.overrideWithValue(unites),

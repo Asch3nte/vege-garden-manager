@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/engine/derivateur_localisation.dart';
+import '../../application/state/preferences_notifier.dart';
+import '../../application/use_cases/suggerer_climat_position.dart';
 import '../../application/providers/service_providers.dart';
 import '../../application/state/potagers_notifier.dart';
 import '../../domain/entities/potager.dart';
@@ -110,6 +114,28 @@ class _FormulairePotagerState extends ConsumerState<FormulairePotager>
       _rusticite = suggestion.rusticite;
       _suggere = true;
       _positionManquante = false;
+    });
+    unawaited(_affinerParAltitude(position, suggestion));
+  }
+
+  /// Refines the pre-fill with the altitude (network opt-out respected),
+  /// unless the position or the pre-filled values changed meanwhile.
+  Future<void> _affinerParAltitude(
+      Localisation position, SuggestionClimat initiale) async {
+    final reseau = ref.read(preferencesProvider).value?.meteoAutoActive ?? false;
+    if (!reseau) return;
+    final affinee = await ref
+        .read(suggererClimatPositionProvider)
+        .executer(position, reseauAutorise: true);
+    if (!mounted ||
+        _position != position ||
+        _climat != initiale.climat ||
+        _rusticite != initiale.rusticite) {
+      return;
+    }
+    setState(() {
+      _climat = affinee.climat;
+      _rusticite = affinee.rusticite;
     });
   }
 

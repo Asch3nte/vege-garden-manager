@@ -44,4 +44,47 @@ void main() {
       throwsArgumentError,
     );
   });
+
+  group('altitude', () {
+    test('without altitude, the latitude bands are unchanged', () {
+      final s = derivateur.deriver(pos(42), altitudeM: null);
+      expect(s.climat, TypeClimat.mediterraneen);
+      expect(s.rusticite, ZoneRusticite.zone7);
+    });
+
+    test('below 800 m nothing changes', () {
+      final s = derivateur.deriver(pos(42), altitudeM: 790);
+      expect(s.climat, TypeClimat.mediterraneen);
+      expect(s.rusticite, ZoneRusticite.zone7);
+    });
+
+    test('each 800 m lowers the hardiness by one zone', () {
+      expect(derivateur.deriver(pos(42), altitudeM: 1000).rusticite,
+          ZoneRusticite.zone6);
+      expect(derivateur.deriver(pos(42), altitudeM: 1650).rusticite,
+          ZoneRusticite.zone5);
+    });
+
+    test('from 1200 m the climate is mountain', () {
+      expect(derivateur.deriver(pos(42), altitudeM: 1199).climat,
+          TypeClimat.mediterraneen);
+      expect(derivateur.deriver(pos(42), altitudeM: 1200).climat,
+          TypeClimat.montagnard);
+    });
+
+    test('a polar climate stays polar at altitude', () {
+      expect(derivateur.deriver(pos(70), altitudeM: 2000).climat,
+          TypeClimat.polaire);
+    });
+
+    test('the hardiness never goes below the coldest zone', () {
+      expect(derivateur.deriver(pos(70), altitudeM: 9000).rusticite,
+          ZoneRusticite.values.first);
+    });
+
+    test('a negative altitude changes nothing', () {
+      expect(derivateur.deriver(pos(42), altitudeM: -30).rusticite,
+          ZoneRusticite.zone7);
+    });
+  });
 }
