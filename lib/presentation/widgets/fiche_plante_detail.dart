@@ -650,6 +650,8 @@ class _Faits extends ConsumerWidget {
         : l10n.exposition(b.soleil);
     final hMin = fiche.hauteurAdulteCmMin;
     final hMax = fiche.hauteurAdulteCmMax;
+    final eMin = fiche.etalementAdulteCmMin;
+    final eMax = fiche.etalementAdulteCmMax;
     // (icon, label, value, glossary id) — a non-null id renders the label as a
     // clickable term towards its concept page.
     final faits = <(IconData, String, String, String?)>[
@@ -678,6 +680,15 @@ class _Faits extends ConsumerWidget {
           (hMin != null && hMax != null && hMin != hMax)
               ? mesures.plageLongueurCm(hMin, hMax)
               : mesures.longueurCm((hMax ?? hMin)!),
+          null,
+        ),
+      if (eMin != null || eMax != null)
+        (
+          PhosphorIconsRegular.arrowsHorizontal,
+          l10n.ficheEtalement,
+          (eMin != null && eMax != null && eMin != eMax)
+              ? mesures.plageLongueurCm(eMin, eMax)
+              : mesures.longueurCm((eMax ?? eMin)!),
           null,
         ),
       (

@@ -289,6 +289,7 @@
   "ficheRecolteJours": "{min}–{max} days",
   "ficheExpositionPlage": "{min} to {max}",
   "ficheHauteur": "Mature height",
+  "ficheEtalement": "Adult spread",
   "fichePh": "Soil pH",
   "fichePhPlage": "{min} to {max}",
   "ficheCalendrierTitre": "Sowing & harvest",

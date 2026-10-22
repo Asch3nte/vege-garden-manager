@@ -30,6 +30,7 @@
 | `besoins.temperature_min_germination` | — | 🔵 parsé, non utilisé |
 | `besoins.temperature_optimale` | — | 🔵 parsé, non utilisé |
 | `cycle.hauteur_adulte_cm` | — | 🔵 parsé, non utilisé |
+| `cycle.etalement_adulte_cm` | `FichePlante.etalementAdulteCmMin/Max` | ✅ affiché dans la fiche |
 | Rusticité USDA de la plante | — | ⚪ absent |
 | Température de survie (gel) | — | ⚪ absent |
 | Niveau de difficulté | — | ⚪ absent |

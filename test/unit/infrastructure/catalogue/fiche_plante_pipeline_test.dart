@@ -404,6 +404,7 @@ cycle:
   duree_avant_recolte_jours: [60, 80]
   charge_tuteur: legere
   hauteur_adulte_cm: [40, 60]
+  etalement_adulte_cm: [25, 45]
 repulsif_contre: [nematode, puceron]
 piege_a: [puceron]
 ''';
@@ -413,7 +414,7 @@ piege_a: [puceron]
       expect(() => _validator.valider(map, source: 'x'), returnsNormally);
     });
 
-    test('loads the defence slugs, support load and adult height', () {
+    test('loads the defence slugs, support load and adult size', () {
       final f = _mapper.versEntite(map);
       expect(f.repulsifContre, {'nematode', 'puceron'});
       expect(f.piegeA, {'puceron'});
@@ -422,6 +423,34 @@ piege_a: [puceron]
       expect(f.chargeTuteur, ChargeTuteur.legere);
       expect(f.hauteurAdulteCmMin, 40);
       expect(f.hauteurAdulteCmMax, 60);
+      expect(f.etalementAdulteCmMin, 25);
+      expect(f.etalementAdulteCmMax, 45);
+    });
+
+    test('rejects an inverted etalement_adulte_cm', () {
+      const mauvais = '''
+id: x
+nom_scientifique: X x
+famille_botanique: Xaceae
+categorie: legume
+usages: [alimentaire]
+i18n:
+  fr:
+    nom_commun: X
+besoins:
+  ensoleillement: plein_soleil
+  arrosage: eleve
+  qualites_sol: [riche]
+  ph_min: 6.0
+  ph_max: 7.0
+cycle:
+  espacement_cm: 30
+  duree_avant_recolte_jours: [60, 80]
+  etalement_adulte_cm: [50, 20]
+''';
+      final m = _parser.parser(mauvais, source: 'x');
+      expect(() => _validator.valider(m, source: 'x'),
+          throwsA(isA<FichePlanteInvalideException>()));
     });
 
     test('rejects an unknown charge_tuteur', () {

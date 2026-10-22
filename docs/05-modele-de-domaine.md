@@ -169,7 +169,9 @@ Défense ciblée (ADR-0010 Lot 2) : `repulsifContre` / `piegeA`
 (`Set<String>` de slugs `Bioagresseur` repoussés / piégés), `chargeTuteur`
 (`ChargeTuteur?` — poids de la grimpante sur son support) et `hauteurAdulteCmMin`
 / `hauteurAdulteCmMax` (`int?`, §F — alimentent les règles d'étagement /
-tuteurage / concurrence lumière du moteur de dérivation).
+tuteurage / concurrence lumière du moteur de dérivation) ;
+`etalementAdulteCmMin` / `etalementAdulteCmMax` (`int?`, largeur adulte,
+affichée dans la fiche).
 Méthodes : `nomLocalise(locale)`, `estPlantableEn(date, hemisphere, climat)`,
 `sAssocieBienAvec(id)`, `entreEnConflitAvec(id)`,
 `associationBenefiqueAvec(id)` / `associationConflitAvec(id)` (renvoient le VO

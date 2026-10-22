@@ -64,6 +64,8 @@ class FichePlante {
   final bool _cultureVerticale;
   final int? _hauteurAdulteCmMin;
   final int? _hauteurAdulteCmMax;
+  final int? _etalementAdulteCmMin;
+  final int? _etalementAdulteCmMax;
   // Nitrogen dynamics
   final bool _fixeAzote;
   final NiveauBesoin? _besoinAzote;
@@ -109,6 +111,8 @@ class FichePlante {
     this._cultureVerticale,
     this._hauteurAdulteCmMin,
     this._hauteurAdulteCmMax,
+    this._etalementAdulteCmMin,
+    this._etalementAdulteCmMax,
     this._fixeAzote,
     this._besoinAzote,
     this._repulsifContre,
@@ -175,6 +179,8 @@ class FichePlante {
     bool cultureVerticale = false,
     int? hauteurAdulteCmMin,
     int? hauteurAdulteCmMax,
+    int? etalementAdulteCmMin,
+    int? etalementAdulteCmMax,
     bool fixeAzote = false,
     NiveauBesoin? besoinAzote,
     Set<String>? repulsifContre,
@@ -218,6 +224,8 @@ class FichePlante {
         cultureVerticale,
         hauteurAdulteCmMin,
         hauteurAdulteCmMax,
+        etalementAdulteCmMin,
+        etalementAdulteCmMax,
         fixeAzote,
         besoinAzote,
         Set<String>.unmodifiable(repulsifContre ?? const <String>{}),
@@ -291,6 +299,10 @@ class FichePlante {
   bool get cultureVerticale => _cultureVerticale;
   int? get hauteurAdulteCmMin => _hauteurAdulteCmMin;
   int? get hauteurAdulteCmMax => _hauteurAdulteCmMax;
+
+  /// Adult spread (width of the plant), in cm.
+  int? get etalementAdulteCmMin => _etalementAdulteCmMin;
+  int? get etalementAdulteCmMax => _etalementAdulteCmMax;
   bool get fixeAzote => _fixeAzote;
   NiveauBesoin? get besoinAzote => _besoinAzote;
 

@@ -115,17 +115,19 @@ class FichePlanteValidator {
       );
     }
 
-    final hauteur = cycle['hauteur_adulte_cm'];
-    if (hauteur != null) {
-      exiger(
-        hauteur is List &&
-            hauteur.length == 2 &&
-            hauteur[0] is int &&
-            hauteur[1] is int &&
-            (hauteur[0] as int) > 0 &&
-            (hauteur[0] as int) <= (hauteur[1] as int),
-        'cycle.hauteur_adulte_cm must be [min, max] with 0 < min <= max',
-      );
+    for (final cle in const ['hauteur_adulte_cm', 'etalement_adulte_cm']) {
+      final plage = cycle[cle];
+      if (plage != null) {
+        exiger(
+          plage is List &&
+              plage.length == 2 &&
+              plage[0] is int &&
+              plage[1] is int &&
+              (plage[0] as int) > 0 &&
+              (plage[0] as int) <= (plage[1] as int),
+          'cycle.$cle must be [min, max] with 0 < min <= max',
+        );
+      }
     }
 
     final profondeur = cycle['profondeur_sol_min_cm'];

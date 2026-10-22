@@ -90,6 +90,10 @@ class FichePlanteMapper {
       cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
       hauteurAdulteCmMin: (cycle['hauteur_adulte_cm'] as List?)?[0] as int?,
       hauteurAdulteCmMax: (cycle['hauteur_adulte_cm'] as List?)?[1] as int?,
+      etalementAdulteCmMin:
+          (cycle['etalement_adulte_cm'] as List?)?[0] as int?,
+      etalementAdulteCmMax:
+          (cycle['etalement_adulte_cm'] as List?)?[1] as int?,
       fixeAzote: rotation?['fixe_azote'] as bool? ?? false,
       besoinAzote: rotation?['besoin_azote'] == null
           ? null
