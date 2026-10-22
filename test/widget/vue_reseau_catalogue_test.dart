@@ -3,6 +3,7 @@
 // They pin the behaviour (nodes, selection → panel, re-tap → sheet, "à éviter"
 // toggle) so zoom/pan/fit changes can't regress it silently.
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -23,6 +24,7 @@ import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/widgets/vue_reseau_catalogue.dart';
 import '../helpers/favoris_mock.dart';
+import '../helpers/noeud_reseau.dart';
 
 class _MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
@@ -64,8 +66,7 @@ FichePlante _fiche(
 );
 
 void main() {
-  // Distinct initials so a node can be tapped by its letter (T/C/B/F), and
-  // distinct families so each sits in its own bubble.
+  // Distinct families so each sits in its own bubble.
   final fiches = [
     _fiche(
       'tomate',
@@ -139,10 +140,13 @@ void main() {
   testWidgets('renders a node per fiche and the idle hint', (tester) async {
     await pomper(tester);
 
-    // One initial per fiche (T/C/B/F) and the "tap a plant" hint panel.
-    for (final initiale in const ['T', 'C', 'B', 'F']) {
-      expect(find.text(initiale), findsOneWidget, reason: initiale);
+    // One canvas node per fiche, announced by its full name.
+    for (final f in fiches) {
+      final noeud = noeudReseau(f.id).evaluate().single;
+      expect(noeud.label, f.nomLocalise('fr'));
+      expect(noeud.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
     }
+    expect(find.text('T'), findsNothing, reason: 'initials are painted');
     expect(
       find.text('Touchez une plante pour voir ses associations.'),
       findsOneWidget,
@@ -152,7 +156,7 @@ void main() {
   testWidgets('tapping a node selects it and shows its panel', (tester) async {
     await pomper(tester);
 
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     // The bottom panel shows the plant name (also surfaced as a node label since
@@ -163,6 +167,59 @@ void main() {
     expect(
       find.text('Touchez une plante pour voir ses associations.'),
       findsNothing,
+    );
+  });
+
+  testWidgets('the node semantics tap action selects it', (tester) async {
+    await pomper(tester);
+
+    tester.semantics.tap(noeudReseau('tomate'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('bon compagnon'), findsOneWidget);
+  });
+
+  testWidgets('in focus only the faded nodes stay on the canvas, tappable', (
+    tester,
+  ) async {
+    await pomper(tester);
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
+    await tester.pumpAndSettle();
+
+    // The selection and its links move to the grouped family nodes.
+    expect(noeudReseau('tomate'), findsNothing);
+    expect(noeudReseau('basilic'), findsNothing);
+    expect(noeudReseau('courgette'), findsOne);
+
+    await tester.tapAt(centreNoeudReseau(tester, 'courgette'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Courgette'), findsWidgets);
+    expect(noeudReseau('courgette'), findsNothing);
+  });
+
+  testWidgets('discs are painted in the category colour, faded in focus', (
+    tester,
+  ) async {
+    await pomper(tester);
+    final legume = couleurCategorie(CategoriePlante.legume);
+    final vue = find.byType(VueReseauCatalogue);
+
+    expect(vue, paints..circle(color: legume.withValues(alpha: 0.85)));
+
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
+    await tester.pumpAndSettle();
+
+    // Courgette (unrelated) becomes faded context: one layer at 0.15 opacity.
+    expect(
+      vue,
+      paints
+        ..something(
+          (methode, args) =>
+              methode == #saveLayer &&
+              ((args[1] as Paint).color.a - 0.15).abs() < 0.01,
+        )
+        ..circle(color: legume.withValues(alpha: 0.85)),
     );
   });
 
@@ -264,7 +321,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    await tester.tap(find.text('T')); // select Tomate (Solanaceae)
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     // Its links appear as family-grouped nodes: the family name above and the
@@ -304,7 +361,7 @@ void main() {
     );
 
     await tester.pomperReseau(tomate, [patate, basilic]);
-    await tester.tap(find.text('T')); // select Tomate (the hub initial)
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     // A single Solanaceae node lists both the selection and its same-family link.
@@ -323,9 +380,9 @@ void main() {
   ) async {
     await pomper(tester);
 
-    // Tap a little to the side of the dezoomed "T" disc — off the disc but
+    // Tap a little to the side of the dezoomed Tomate disc — off the disc but
     // within the enlarged hitbox — and assert Tomate gets selected anyway.
-    final centre = tester.getCenter(find.text('T'));
+    final centre = centreNoeudReseau(tester, 'tomate');
     await tester.tapAt(centre + const Offset(16, 0));
     await tester.pumpAndSettle();
 
@@ -343,7 +400,7 @@ void main() {
     await pomper(tester);
 
     // First tap selects Tomate.
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
     // Since #2 the selection merges into its family group (no standalone disc);
     // its tappable name label is the first "Tomate" in tree order (canvas before
@@ -379,7 +436,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    final avant = tester.getCenter(find.text('T'));
+    final avant = centreNoeudReseau(tester, 'tomate');
     // Manual multi-step drag from an empty point on the left of the canvas
     // (past the side padding, far from the centred constellation, the top-right
     // controls and the bottom panel) so the scale recognizer engages. Since the
@@ -399,7 +456,7 @@ void main() {
     await geste.up();
     await tester.pumpAndSettle();
 
-    final apres = tester.getCenter(find.text('T'));
+    final apres = centreNoeudReseau(tester, 'tomate');
     expect(
       apres.dx - avant.dx,
       greaterThan(30),
@@ -413,7 +470,7 @@ void main() {
   ) async {
     await pomper(tester);
 
-    final baseline = tester.getCenter(find.text('T'));
+    final baseline = centreNoeudReseau(tester, 'tomate');
 
     // The zoom/recenter controls live in the collapsible display menu; open it.
     await tester.tap(find.byIcon(PhosphorIconsRegular.slidersHorizontal));
@@ -421,7 +478,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Zoomer'));
     await tester.pumpAndSettle();
-    final zoome = tester.getCenter(find.text('T'));
+    final zoome = centreNoeudReseau(tester, 'tomate');
     expect(
       (zoome - baseline).distance,
       greaterThan(2),
@@ -430,7 +487,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Recentrer'));
     await tester.pumpAndSettle();
-    final recentre = tester.getCenter(find.text('T'));
+    final recentre = centreNoeudReseau(tester, 'tomate');
     expect(
       (recentre - baseline).distance,
       lessThan(1),
@@ -448,7 +505,7 @@ void main() {
     // In the global view, names show where they fit; selecting a node
     // then restricts the labels to it and its links (Basilic/Fenouil are linked
     // to Tomate, Courgette is unrelated).
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     expect(find.text('Basilic'), findsOneWidget, reason: 'linked → named');
@@ -469,8 +526,8 @@ void main() {
   ) async {
     await pomper(tester);
 
-    final basilicAvant = tester.getCenter(find.text('B'));
-    await tester.tap(find.text('T'));
+    final basilicAvant = centreNoeudReseau(tester, 'basilic');
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
     final basilicApres = tester.getCenter(find.text('B'));
 
@@ -487,8 +544,6 @@ void main() {
   testWidgets('selecting spreads the labels so none overlap', (tester) async {
     // A hub linked to several long-named spokes, in a constrained surface, so
     // the labels would collide without the anti-overlap separation.
-    // Initials kept distinct and away from the hub's "T" so the hub node can be
-    // tapped unambiguously by its initial.
     const noms = [
       'Capucine grimpante',
       'Souci officinal des jardins',
@@ -507,7 +562,7 @@ void main() {
     ];
 
     await tester.pomperReseau(hub, spokes);
-    await tester.tap(find.text('T')); // the hub initial
+    await tester.tapAt(centreNoeudReseau(tester, 'hub'));
     await tester.pumpAndSettle();
 
     _aucunChevauchement(tester, noms);
@@ -532,7 +587,7 @@ void main() {
     ];
 
     await tester.pomperReseau(hub, spokes);
-    await tester.tap(find.text('T')); // the hub initial
+    await tester.tapAt(centreNoeudReseau(tester, 'hub'));
     await tester.pumpAndSettle();
 
     // The single family node shows the family once and lists both species.
@@ -562,7 +617,7 @@ void main() {
     ];
 
     await tester.pomperReseau(hub, spokes);
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'hub'));
     await tester.pumpAndSettle();
 
     final canvas = tester.getRect(find.byType(VueReseauCatalogue));
@@ -608,7 +663,7 @@ void main() {
     ];
 
     await tester.pomperReseau(hub, spokes);
-    await tester.tap(find.text('R')); // the hub initial
+    await tester.tapAt(centreNoeudReseau(tester, 'hub'));
     await tester.pumpAndSettle();
 
     _aucunChevauchement(tester, noms);
@@ -649,7 +704,7 @@ void main() {
     ];
 
     await tester.pomperReseau(hub, spokes);
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'hub'));
     await tester.pumpAndSettle();
 
     // Open the collapsible display menu to reach the zoom controls.
@@ -700,7 +755,7 @@ void main() {
     // No selection yet → no variety rows.
     expect(find.text('Coeur de boeuf'), findsNothing);
 
-    await tester.tap(find.text('T')); // select the Tomate species
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     // Expand BOX 2 (the fiches sheet) so every variety is laid out.
@@ -740,7 +795,7 @@ void main() {
     ];
 
     await tester.pomperEspece([tomate, basilic], {'tomate': varietes});
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     // The companion's full-name label is shown — and stays shown whether BOX 1
@@ -775,7 +830,7 @@ void main() {
     );
 
     await tester.pomperEspece([tomate, basilic], const {});
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
 
     // Reduce BOX 1 (expand BOX 2).
@@ -816,7 +871,7 @@ void main() {
     );
 
     await tester.pomperEspece([tomate, basilic], const {});
-    await tester.tap(find.text('T'));
+    await tester.tapAt(centreNoeudReseau(tester, 'tomate'));
     await tester.pumpAndSettle();
     final avant = tester.getCenter(find.text('T').first);
 
@@ -861,7 +916,7 @@ void main() {
     ];
 
     await tester.pomperReseau(hub, spokes);
-    await tester.tap(find.text('L').first); // select Laitue
+    await tester.tapAt(centreNoeudReseau(tester, 'laitue'));
     await tester.pumpAndSettle();
 
     // Companion labels are rendered (uniform behaviour), not dropped.

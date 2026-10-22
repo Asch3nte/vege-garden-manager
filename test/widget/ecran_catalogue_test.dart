@@ -39,6 +39,7 @@ import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/providers/ajout_plante_provider.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_catalogue.dart';
 import '../helpers/favoris_mock.dart';
+import '../helpers/noeud_reseau.dart';
 
 class MockFiches extends Mock implements AbstractFichePlanteRepository {}
 
@@ -747,8 +748,9 @@ void main() {
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
 
-    // Only the species node 'T' is drawn; the variety 'Tomate Cerise' is not.
-    expect(find.text('T'), findsOneWidget);
+    // Only the species node is drawn; the variety 'Tomate Cerise' is not.
+    expect(noeudReseau('tomate'), findsOne);
+    expect(noeudReseau('tomate-v1'), findsNothing);
     expect(find.text('Tomate Cerise'), findsNothing);
   });
 
@@ -794,8 +796,7 @@ void main() {
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
 
-    // Tap the Tomate node (its initial).
-    await tester.tap(find.text('T'));
+    tester.semantics.tap(noeudReseau('tomate'));
     await tester.pumpAndSettle();
 
     // The panel names the plant (also shown as a node label since #8a) and
@@ -809,7 +810,7 @@ void main() {
 
     await tester.tap(find.text('Réseau'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('T'));
+    tester.semantics.tap(noeudReseau('tomate'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Voir la fiche'));
@@ -826,3 +827,4 @@ void main() {
     expect(find.text('Associations'), findsOneWidget);
   });
 }
+
