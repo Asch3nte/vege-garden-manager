@@ -436,6 +436,8 @@ void main() {
     await tester.enterText(find.byType(TextFormField).first, 'Second jardin');
     await tester.tap(find.text('Détecter ma position'));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
 

@@ -21,6 +21,7 @@ import 'package:pot_a_gerer/domain/enums/mode_geolocalisation.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/zone_rusticite.dart';
+import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/zone_climatique.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
@@ -283,6 +284,31 @@ void main() {
     final potager =
         verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;
     expect(potager.localisation.estDefinie, isTrue);
+  });
+
+  testWidgets('privacy panel shows where the garden position comes from',
+      (tester) async {
+    when(() => repo.charger()).thenAnswer(
+      (_) async =>
+          PreferencesUtilisateur(modeGeolocalisation: ModeGeolocalisation.gps),
+    );
+    when(() => potagers.obtenirPotagerActif()).thenAnswer(
+      (_) async => Potager(
+        id: 'pot-1',
+        nom: 'Mon potager',
+        zoneClimatique:
+            const ZoneClimatique(TypeClimat.oceanique, ZoneRusticite.zone8),
+        dateCreation: DateTime(2026, 1, 1),
+        localisation: Localisation.gps(latitude: 50.61, longitude: 5.42),
+      ),
+    );
+    when(() => potagers.obtenirTous()).thenAnswer((_) async => []);
+
+    await monter(tester);
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('GPS · 50.6° N, 5.4° E'), findsOneWidget);
   });
 
   testWidgets('privacy panel edits the active garden climate', (tester) async {
