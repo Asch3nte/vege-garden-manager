@@ -184,6 +184,17 @@ Future<bool> _arracher(
   return true;
 }
 
+/// Asks to confirm pulling [culture] out.
+Future<bool> _confirmerArrachage(BuildContext context, CulturePotager culture) {
+  final l10n = AppLocalizations.of(context)!;
+  return confirmerAction(
+    context,
+    titre: l10n.planteArracherTitre,
+    message: l10n.planteArracherMessage(culture.nom),
+    libelleConfirmer: l10n.cultureArracher,
+  );
+}
+
 /// Confirms then soft-deletes a crop entirely (removes a mistaken entry).
 /// Resolves to whether it was.
 Future<bool> _supprimerPlante(
@@ -380,7 +391,10 @@ class _Detail extends ConsumerWidget {
               ElementBalayable(
                 cle: zone.cultures[i].plantationId,
                 arrondi: const BorderRadius.all(RayonsApp.lg),
-                surArchiver: () => onArracher(zone.cultures[i]),
+                // A swipe is easier to slip than a menu pick: it confirms.
+                surArchiver: () async =>
+                    await _confirmerArrachage(context, zone.cultures[i]) &&
+                    await onArracher(zone.cultures[i]),
                 libelleArchiver: l10n.cultureArracher,
                 surSupprimer: () => onSupprimerPlante(zone.cultures[i]),
                 child: _LigneCulture(

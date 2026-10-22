@@ -928,5 +928,7 @@
   "formZoneDimensionsAide": "Optional. Once both sides are set, the area is computed.",
   "formZoneDimensionsIncompletes": "Fill in both sides, or neither.",
   "formZoneBesoinEau": "Zone water need",
-  "zoneSurfaceTropPetite": "Area smaller than the crops in place ({occupee})."
+  "zoneSurfaceTropPetite": "Area smaller than the crops in place ({occupee}).",
+  "planteArracherTitre": "Pull out this plant?",
+  "planteArracherMessage": "\"{plante}\" will leave the active crops and stay in the history. Continue?"
 }

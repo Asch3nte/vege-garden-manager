@@ -14,6 +14,9 @@ import '../../l10n/app_localizations.dart';
 /// A swipe action; resolves to whether the item leaves its list.
 typedef ActionBalayage = Future<bool> Function();
 
+/// Fraction of the width past which a swipe acts.
+const double _seuilBalayage = 0.4;
+
 /// A list item swiped to delete or archive, sides set by [sensSwipeProvider].
 ///
 /// Standard: towards the start deletes, towards the end archives. Both actions
@@ -28,6 +31,10 @@ class ElementBalayable extends ConsumerStatefulWidget {
   /// Screen-reader label of [surArchiver].
   final String? libelleArchiver;
 
+  /// Icon of [surArchiver], for an archiving side that does something else
+  /// (reopening a done task).
+  final IconData iconeArchiver;
+
   /// Deleting action, confirmation included; none leaves the side inert.
   final ActionBalayage? surSupprimer;
 
@@ -41,6 +48,7 @@ class ElementBalayable extends ConsumerStatefulWidget {
     required this.child,
     this.surArchiver,
     this.libelleArchiver,
+    this.iconeArchiver = PhosphorIconsBold.archive,
     this.surSupprimer,
     this.arrondi,
   })  : assert(surArchiver == null || libelleArchiver != null,
@@ -75,8 +83,22 @@ class _ElementBalayableState extends ConsumerState<ElementBalayable> {
     return versDebut ? DismissDirection.endToStart : DismissDirection.startToEnd;
   }
 
+  /// Runs [action]; a failure is reported and keeps the item in place.
+  Future<bool> _lancer(ActionBalayage action) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      return await action();
+    } on Exception catch (e) {
+      debugPrint('Swipe action failed: $e');
+      messenger?.showSnackBar(
+          SnackBar(content: Text(l10n.formEnregistrementErreur)));
+      return false;
+    }
+  }
+
   Future<void> _executer(ActionBalayage action) async {
-    if (await action() && mounted) setState(() => _parti = true);
+    if (await _lancer(action) && mounted) setState(() => _parti = true);
   }
 
   @override
@@ -95,7 +117,7 @@ class _ElementBalayableState extends ConsumerState<ElementBalayable> {
     _Fond archiver(AlignmentDirectional cote) => _Fond(
           couleur: scheme.primary,
           surCouleur: scheme.onPrimary,
-          icone: PhosphorIconsBold.archive,
+          icone: widget.iconeArchiver,
           cote: cote,
           progression: _progression,
         );
@@ -115,6 +137,10 @@ class _ElementBalayableState extends ConsumerState<ElementBalayable> {
       child: _clip(Dismissible(
         key: ValueKey(widget.cle),
         direction: _directionsPermises(sens),
+        dismissThresholds: const {
+          DismissDirection.startToEnd: _seuilBalayage,
+          DismissDirection.endToStart: _seuilBalayage,
+        },
         background: suppressionAuDebut ? supprimer(debut) : archiver(debut),
         secondaryBackground:
             suppressionAuDebut ? archiver(fin) : supprimer(fin),
@@ -126,7 +152,7 @@ class _ElementBalayableState extends ConsumerState<ElementBalayable> {
         },
         confirmDismiss: (direction) async {
           final action = _actionVers(direction);
-          return action != null && await action();
+          return action != null && await _lancer(action);
         },
         onDismissed: (_) => setState(() => _parti = true),
         child: widget.child,
@@ -149,8 +175,6 @@ class _Fond extends StatelessWidget {
   final AlignmentDirectional cote;
   final double progression;
 
-  /// Default swipe threshold of [Dismissible].
-  static const double _seuil = 0.4;
   static const double _opaciteDepart = 0.25;
   static const double _echelleDepart = 0.8;
   static const double _echelleAtteinte = 1.2;
@@ -166,7 +190,7 @@ class _Fond extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avancee = (progression / _seuil).clamp(0.0, 1.0);
+    final avancee = (progression / _seuilBalayage).clamp(0.0, 1.0);
     final atteint = avancee >= 1;
     return Container(
       color: Color.lerp(

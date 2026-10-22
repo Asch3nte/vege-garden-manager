@@ -10,7 +10,6 @@ import '../../app/theme/theme_app.dart';
 import '../../application/providers/service_providers.dart';
 import '../../application/state/accueil_notifier.dart';
 import '../../application/state/accueil_vue.dart';
-import '../../application/state/calendrier_notifier.dart';
 import '../../application/state/geste_groupe.dart';
 import '../../application/state/meteo_accueil_notifier.dart';
 import '../../application/state/nom_plante_plantation_provider.dart';
@@ -21,9 +20,9 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
-import '../widgets/element_balayable.dart';
 import '../widgets/position_potager_actions.dart';
 import '../widgets/suppression_tache.dart';
+import '../widgets/tache_balayable.dart';
 import '../widgets/titre_tache.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
@@ -94,12 +93,11 @@ Future<bool> _supprimerTache(
   final messenger = ScaffoldMessenger.of(context);
   final l10n = AppLocalizations.of(context)!;
   final nomCible = tache.titre == null && tache.cible == CibleTache.plantation
-      ? ref.read(nomPlantePlantationProvider(tache.cibleId)).value
+      ? await ref.read(nomPlantePlantationProvider(tache.cibleId).future)
       : null;
+  if (!context.mounted) return false;
   if (!await confirmerSuppressionTache(context, tache, nomCible)) return false;
   await ref.read(accueilProvider.notifier).supprimerTache(tache);
-  // The agenda tab stays alive in the shell: drop its copy of the task.
-  ref.invalidate(calendrierProvider);
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
   return true;
 }
@@ -487,15 +485,9 @@ class _LigneGesteState extends State<_LigneGeste> {
 
     return Column(
       children: [
-        // The whole group ticks off by swipe too; deleting stays per task.
-        ElementBalayable(
-          cle: 'groupe-${geste.type.name}',
-          surArchiver: () async {
-            widget.onToggleGeste(geste);
-            return false;
-          },
-          libelleArchiver:
-              fait ? l10n.gesteGroupeToutRouvrir : l10n.gesteGroupeToutCocher,
+        GesteBalayable(
+          geste: geste,
+          onBasculer: () => widget.onToggleGeste(geste),
           child: InkWell(
             // Tapping the summary expands; ticking the whole group is the
             // explicit check button, so a mis-tap never completes several crops.
@@ -592,15 +584,10 @@ class _LigneTache extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final fait = tache.estFaite;
-    return ElementBalayable(
-      cle: tache.id,
-      // A ticked task stays listed, struck through.
-      surArchiver: () async {
-        onToggle();
-        return false;
-      },
-      libelleArchiver: fait ? l10n.tacheRouvrir : l10n.tacheMarquerFaite,
-      surSupprimer: onSupprimer,
+    return TacheBalayable(
+      tache: tache,
+      onBasculer: onToggle,
+      onSupprimer: onSupprimer,
       child: InkWell(
         onTap: onOuvrir,
         child: Padding(

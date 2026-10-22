@@ -23,8 +23,8 @@ import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
-import '../widgets/element_balayable.dart';
 import '../widgets/suppression_tache.dart';
+import '../widgets/tache_balayable.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
@@ -1009,10 +1009,10 @@ class _CarteGesteState extends State<_CarteGeste> {
     // A lone task keeps the exact card it had before grouping existed.
     if (geste.estSeule) {
       final tache = geste.tacheUnique;
-      return _TacheBalayable(
+      return TacheBalayable(
         tache: tache,
-        onCocher: widget.onCocher,
-        onSupprimer: widget.onSupprimer,
+        onBasculer: () => widget.onCocher(tache),
+        onSupprimer: () => widget.onSupprimer(tache),
         arrondi: RayonsApp.brLg,
         child: _CarteTache(
           tache: tache,
@@ -1032,16 +1032,9 @@ class _CarteGesteState extends State<_CarteGeste> {
     return Card(
       child: Column(
         children: [
-          // The whole group ticks off by swipe too; deleting stays per task.
-          ElementBalayable(
-            cle: 'groupe-${geste.type.name}',
-            surArchiver: () async {
-              widget.onCocherGroupe(geste);
-              return false;
-            },
-            libelleArchiver: fait
-                ? l10n.gesteGroupeToutRouvrir
-                : l10n.gesteGroupeToutCocher,
+          GesteBalayable(
+            geste: geste,
+            onBasculer: () => widget.onCocherGroupe(geste),
             child: InkWell(
               borderRadius: RayonsApp.brLg,
               // Tapping the summary expands: ticking is an explicit target, so a
@@ -1133,10 +1126,10 @@ class _CarteGesteState extends State<_CarteGeste> {
           if (_deplie)
             for (final tache in geste.taches) ...[
               const Divider(height: 1),
-              _TacheBalayable(
+              TacheBalayable(
                 tache: tache,
-                onCocher: widget.onCocher,
-                onSupprimer: widget.onSupprimer,
+                onBasculer: () => widget.onCocher(tache),
+                onSupprimer: () => widget.onSupprimer(tache),
                 child: _LigneSousTache(
                   tache: tache,
                   cibleLabel: widget.cibleLabelDe(tache),
@@ -1149,40 +1142,6 @@ class _CarteGesteState extends State<_CarteGeste> {
             ],
         ],
       ),
-    );
-  }
-}
-
-/// A task line swiped to tick it off (it stays listed) or to delete it.
-class _TacheBalayable extends StatelessWidget {
-  final Tache tache;
-  final ValueChanged<Tache> onCocher;
-  final Future<bool> Function(Tache) onSupprimer;
-  final BorderRadius? arrondi;
-  final Widget child;
-
-  const _TacheBalayable({
-    required this.tache,
-    required this.onCocher,
-    required this.onSupprimer,
-    required this.child,
-    this.arrondi,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return ElementBalayable(
-      cle: tache.id,
-      arrondi: arrondi,
-      surArchiver: () async {
-        onCocher(tache);
-        return false;
-      },
-      libelleArchiver:
-          tache.estFaite ? l10n.tacheRouvrir : l10n.tacheMarquerFaite,
-      surSupprimer: () => onSupprimer(tache),
-      child: child,
     );
   }
 }

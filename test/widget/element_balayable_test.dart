@@ -6,15 +6,21 @@ import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/sens_swipe_provider.dart';
 import 'package:pot_a_gerer/domain/enums/sens_swipe.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
+import 'package:pot_a_gerer/domain/entities/tache.dart';
+import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
+import 'package:pot_a_gerer/domain/enums/type_tache.dart';
 import 'package:pot_a_gerer/presentation/widgets/element_balayable.dart';
+import 'package:pot_a_gerer/presentation/widgets/tache_balayable.dart';
 
 void main() {
   late List<String> appels;
   late bool quitte;
+  late bool echoue;
 
   setUp(() {
     appels = [];
     quitte = false;
+    echoue = false;
   });
 
   Future<void> monter(
@@ -43,6 +49,7 @@ void main() {
                       : null,
                   surSupprimer: () async {
                     appels.add('supprimer');
+                    if (echoue) throw Exception('disque plein');
                     return quitte;
                   },
                   child: const ListTile(title: Text('Arroser')),
@@ -120,6 +127,53 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Pailler'), findsOneWidget);
+  });
+
+  testWidgets('a failed action is reported and the item comes back',
+      (tester) async {
+    echoue = true;
+    await monter(tester);
+    await balayer(tester, -500);
+
+    expect(find.text('Arroser'), findsOneWidget);
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+  });
+
+  testWidgets('a done task shows the reopening icon', (tester) async {
+    final tache = Tache(
+      id: 't-1',
+      titre: 'Arroser',
+      type: TypeTache.arrosage,
+      cible: CibleTache.potager,
+      cibleId: 'pot-1',
+      datePrevue: DateTime(2026, 6, 1),
+    )..marquerFaite(DateTime(2026, 6, 1));
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: TacheBalayable(
+              tache: tache,
+              onBasculer: () {},
+              onSupprimer: () async => false,
+              child: const ListTile(title: Text('Arroser')),
+            ),
+          ),
+        ),
+      ),
+    );
+    final geste =
+        await tester.startGesture(tester.getCenter(find.text('Arroser')));
+    await geste.moveBy(const Offset(20, 0));
+    await geste.moveBy(const Offset(180, 0));
+    await tester.pump();
+
+    expect(find.byIcon(PhosphorIconsBold.arrowCounterClockwise), findsOneWidget);
+    await geste.up();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('a short swipe triggers nothing', (tester) async {

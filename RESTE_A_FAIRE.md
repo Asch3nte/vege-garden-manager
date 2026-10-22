@@ -26,7 +26,7 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 | Vue Réseau | Rendu canvas des nœuds (performance) | `vue_reseau_catalogue.dart` |
 | Liens « documentation » et « signaler un bug » | Lignes absentes de l'UI | `panneau_a_propos.dart` |
 | Swipe : action par sens au choix | Choix dans Paramètres de l'action de chaque sens, quand une liste en offre plus de deux | `ElementBalayable`, `panneau_general.dart` |
-| Swipe : suppression sans confirmation | Option « Ne plus afficher » la confirmation, livrée avec un snackbar « Annuler » (5 s) et la restauration par type | `ElementBalayable`, notifiers |
+| Swipe : suppression / arrachage sans confirmation | Option « Ne plus afficher » la confirmation, livrée avec un snackbar « Annuler » (5 s) et la restauration par type | `ElementBalayable`, notifiers |
 | Position du potager par localité | Recherche par nom (Nominatim `/search`) en plus de la carte ; origine de la position visible sur la fiche potager | `formulaire_potager.dart`, `ecran_onboarding.dart`, `NominatimClient` |
 | Appairage d'appareils | Fonction réseau local à concevoir | — |
 | Export CSV | Optionnel (JSON ré-importable déjà livré) | — |

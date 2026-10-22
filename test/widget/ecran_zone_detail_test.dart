@@ -440,11 +440,14 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('rightwards pulls it out', (tester) async {
+    testWidgets('rightwards pulls it out after confirmation', (tester) async {
       semerUneCulture();
       await monter(tester, 'z-1');
 
       await balayer(tester, 600);
+      expect(find.text('Arracher cette plante ?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Arracher'));
+      await tester.pumpAndSettle();
 
       final p = verify(() => plantations.sauvegarder(captureAny()))
           .captured
@@ -462,6 +465,18 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(() => plantations.supprimer('p-1')).called(1);
+    });
+
+    testWidgets('a cancelled pull-out changes nothing', (tester) async {
+      semerUneCulture();
+      await monter(tester, 'z-1');
+
+      await balayer(tester, 600);
+      await tester.tap(find.text('Annuler'));
+      await tester.pumpAndSettle();
+
+      verifyNever(() => plantations.sauvegarder(any()));
+      expect(find.text('Tomate'), findsOneWidget);
     });
 
     testWidgets('a cancelled deletion keeps the crop', (tester) async {
