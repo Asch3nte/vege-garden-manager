@@ -6,6 +6,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/service_providers.dart';
+import '../../application/state/preferences_notifier.dart';
 import '../../domain/exceptions/geocodage_indisponible_exception.dart';
 import '../../domain/value_objects/lieu_trouve.dart';
 import '../../domain/value_objects/localisation.dart';
@@ -48,8 +49,13 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
   bool _nommage = false;
   Timer? _minuterieNommage;
 
-  /// Bumped on every new point or search so late answers are ignored.
-  int _jeton = 0;
+  // Bumped so late answers are ignored: one counter per kind of request.
+  int _jetonRecherche = 0;
+  int _jetonPoint = 0;
+
+  /// Whether the tapped point is named automatically; off with the automatic
+  /// network opt-out.
+  bool _nommageAuto = false;
 
   _EtatRecherche _recherche = _EtatRecherche.inactive;
   List<LieuTrouve> _suggestions = const [];
@@ -64,7 +70,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
 
   Future<void> _rechercher(String texte) async {
     if (texte.trim().isEmpty) return;
-    final jeton = ++_jeton;
+    final jeton = ++_jetonRecherche;
     setState(() {
       _recherche = _EtatRecherche.enCours;
       _suggestions = const [];
@@ -73,12 +79,12 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
     try {
       lieux = await ref.read(geocodageServiceProvider).rechercherLieux(texte);
     } on GeocodageIndisponibleException {
-      if (mounted && jeton == _jeton) {
+      if (mounted && jeton == _jetonRecherche) {
         setState(() => _recherche = _EtatRecherche.indisponible);
       }
       return;
     }
-    if (!mounted || jeton != _jeton) return;
+    if (!mounted || jeton != _jetonRecherche) return;
     if (lieux.length == 1) {
       _choisirLieu(lieux.single);
       return;
@@ -91,7 +97,8 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
   }
 
   void _choisirLieu(LieuTrouve lieu) {
-    _jeton++;
+    _jetonRecherche++;
+    _jetonPoint++;
     _minuterieNommage?.cancel();
     FocusScope.of(context).unfocus();
     _camera.viser(lieu.latitude, lieu.longitude, zoom: _zoomLieu);
@@ -105,20 +112,21 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
   }
 
   void _poser(double latitude, double longitude) {
-    final jeton = ++_jeton;
+    final jeton = ++_jetonPoint;
     _minuterieNommage?.cancel();
     setState(() {
       _point = (latitude, longitude);
       _lieu = null;
-      _nommage = true;
+      _nommage = _nommageAuto;
       _suggestions = const [];
       _recherche = _EtatRecherche.inactive;
     });
+    if (!_nommageAuto) return;
     _minuterieNommage = Timer(_delaiNommage, () async {
       final lieu = await ref
           .read(geocodageServiceProvider)
           .identifierLieu(latitude, longitude);
-      if (!mounted || jeton != _jeton) return;
+      if (!mounted || jeton != _jetonPoint) return;
       setState(() {
         _lieu = lieu;
         _nommage = false;
@@ -128,7 +136,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
 
   void _effacer() {
     _champ.clear();
-    _jeton++;
+    _jetonRecherche++;
     setState(() {
       _suggestions = const [];
       _recherche = _EtatRecherche.inactive;
@@ -139,7 +147,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
     final point = _point;
     if (point == null) return;
     _minuterieNommage?.cancel();
-    _jeton++;
+    _jetonPoint++;
     final (lat, lon) = point;
     Navigator.of(context).pop(Localisation.manuelle(
       ville: _lieu?.nom ?? _libelleCoords(lat, lon),
@@ -166,6 +174,8 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    _nommageAuto =
+        ref.watch(preferencesProvider).value?.meteoAutoActive ?? false;
 
     final message = switch (_recherche) {
       _EtatRecherche.aucune => l10n.carteMondeRechercheAucune,
@@ -225,6 +235,7 @@ class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
                       left: EspacementsApp.s4,
                       right: EspacementsApp.s4,
                       top: 0,
+                      bottom: EspacementsApp.s4,
                       child: _ListeSuggestions(
                         lieux: _suggestions,
                         contexte: _contexte,
@@ -298,25 +309,28 @@ class _ListeSuggestions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 3,
-      borderRadius: RayonsApp.brMd,
-      clipBehavior: Clip.antiAlias,
-      child: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        children: [
-          for (final lieu in lieux)
-            ListTile(
-              leading: const Icon(PhosphorIconsRegular.mapPin),
-              title: Text(lieu.nom),
-              subtitle: switch (contexte(lieu)) {
-                final c? => Text(c),
-                null => null,
-              },
-              onTap: () => onChoix(lieu),
-            ),
-        ],
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Material(
+        elevation: 3,
+        borderRadius: RayonsApp.brMd,
+        clipBehavior: Clip.antiAlias,
+        child: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          children: [
+            for (final lieu in lieux)
+              ListTile(
+                leading: const Icon(PhosphorIconsRegular.mapPin),
+                title: Text(lieu.nom),
+                subtitle: switch (contexte(lieu)) {
+                  final c? => Text(c),
+                  null => null,
+                },
+                onTap: () => onChoix(lieu),
+              ),
+          ],
+        ),
       ),
     );
   }

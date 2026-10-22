@@ -5,10 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/providers/service_providers.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/enums/source_localisation.dart';
 import 'package:pot_a_gerer/domain/exceptions/geocodage_indisponible_exception.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_geocodage_service.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/lieu_trouve.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
@@ -17,8 +20,11 @@ import 'package:pot_a_gerer/presentation/widgets/selecteur_carte_monde.dart';
 
 class _MockGeocodage extends Mock implements AbstractGeocodageService {}
 
+class _MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
 void main() {
   late _MockGeocodage geocodage;
+  late _MockPreferences preferences;
   late List<Localisation?> capture;
 
   final namur = LieuTrouve(
@@ -36,6 +42,9 @@ void main() {
 
   setUp(() {
     geocodage = _MockGeocodage();
+    preferences = _MockPreferences();
+    when(() => preferences.charger())
+        .thenAnswer((_) async => PreferencesUtilisateur());
     capture = [];
   });
 
@@ -44,7 +53,10 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(ProviderScope(
-      overrides: [geocodageServiceProvider.overrideWithValue(geocodage)],
+      overrides: [
+        geocodageServiceProvider.overrideWithValue(geocodage),
+        preferencesRepositoryProvider.overrideWithValue(preferences),
+      ],
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
@@ -207,5 +219,38 @@ void main() {
 
     final loc = await valider(tester);
     expect(loc.ville, matches(RegExp(r'^\d+\.\d° [NS], \d+\.\d° [EO]$')));
+  });
+
+  testWidgets('with automatic network calls off, a tapped point is not named',
+      (tester) async {
+    when(() => preferences.charger()).thenAnswer(
+        (_) async => PreferencesUtilisateur(meteoAutoActive: false));
+    await ouvrir(tester);
+
+    await tester.tapAt(tester.getCenter(find.byType(GlobeTerrestre)));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+
+    expect(find.text('Recherche du nom…'), findsNothing);
+    verifyNever(() => geocodage.identifierLieu(any(), any()));
+    final loc = await valider(tester);
+    expect(loc.ville, matches(RegExp(r'^\d+\.\d° [NS], \d+\.\d° [EO]$')));
+  });
+
+  testWidgets('a search started while a point is being named keeps its name',
+      (tester) async {
+    when(() => geocodage.identifierLieu(any(), any())).thenAnswer((_) async =>
+        LieuTrouve(nom: 'Ghardaïa', latitude: 30, longitude: 10));
+    when(() => geocodage.rechercherLieux(any())).thenAnswer((_) async => []);
+    await ouvrir(tester);
+
+    await tester.tapAt(tester.getCenter(find.byType(GlobeTerrestre)));
+    await tester.pump();
+    await rechercher(tester, 'Zzz');
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+
+    expect(find.text('Ghardaïa'), findsOneWidget);
+    expect(find.text('Recherche du nom…'), findsNothing);
   });
 }

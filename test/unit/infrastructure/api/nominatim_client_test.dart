@@ -201,6 +201,7 @@ void main() {
         resultat('A', '1', '2'),
         resultat('A', '1', '2'),
         {'name': 'B', 'lat': 'x', 'lon': '2'},
+        {'name': 'C', 'lat': 'NaN', 'lon': '2'},
         {'name': '', 'lat': '1', 'lon': '2'},
         'pas un objet',
       ]).rechercherLieux('A');

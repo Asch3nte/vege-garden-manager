@@ -147,6 +147,7 @@ class NominatimClient {
     final lat = double.tryParse('${item['lat']}');
     final lon = double.tryParse('${item['lon']}');
     if (nom == null || lat == null || lon == null) return null;
+    if (!lat.isFinite || !lon.isFinite) return null;
     if (lat.abs() > 90 || lon.abs() > 180) return null;
     return LieuTrouve(
       nom: nom,

@@ -30,7 +30,9 @@ en guise de nom (`48.2° N, 2.4° E`).
   pose. Plusieurs : liste de suggestions avec région et pays.
 - **Nom du point touché** (Nominatim `/reverse`) : une requête par point,
   après 500 ms sans nouveau toucher ; coordonnées arrondies à ~1 km avant
-  envoi.
+  envoi ;
+  désactivé avec la récupération météo automatique (opt-out « aucun appel
+  réseau automatique ») : le point garde alors ses coordonnées pour nom.
 - **Pied de l'écran** : nom de la localité, région, pays et coordonnées, à
   gauche de « Valider ».
 - **Enregistrement** : `Localisation.ville` reçoit le nom de la localité ;

@@ -111,7 +111,6 @@ class _GlobeTerrestreState extends State<GlobeTerrestre>
       _dernier = Duration.zero;
       _ticker.start();
     }
-    setState(() {});
   }
 
   void _tick(Duration t) {
@@ -144,11 +143,7 @@ class _GlobeTerrestreState extends State<GlobeTerrestre>
     final couleurRepli = Theme.of(context).colorScheme.surfaceContainerHighest;
     return LayoutBuilder(builder: (context, contraintes) {
       final taille = contraintes.biggest;
-      final rayon = _rayon(taille);
       final camera = widget.camera;
-      final pin = widget.pin;
-      final pointPin =
-          pin == null ? null : camera.projection.versDisque(pin.$1, pin.$2);
       return Semantics(
         label: widget.libelle,
         image: true,
@@ -158,49 +153,63 @@ class _GlobeTerrestreState extends State<GlobeTerrestre>
             behavior: HitTestBehavior.opaque,
             onScaleStart: (_) {
               _echellePrecedente = 1;
-              camera.glisser(Offset.zero, rayon);
+              camera.glisser(Offset.zero, _rayon(taille));
             },
             onScaleUpdate: (d) {
-              camera.glisser(d.focalPointDelta, rayon);
+              camera.glisser(d.focalPointDelta, _rayon(taille));
               if (d.scale != _echellePrecedente) {
                 camera.zoomer(d.scale / _echellePrecedente);
                 _echellePrecedente = d.scale;
               }
             },
             onScaleEnd: (d) {
-              camera.lacher(d.velocity.pixelsPerSecond, rayon);
-              if (camera.enMouvement) _surCamera();
+              camera.lacher(d.velocity.pixelsPerSecond, _rayon(taille));
+              _surCamera();
             },
             onTapUp: (d) => _taper(d.localPosition, taille),
-            child: Stack(clipBehavior: Clip.hardEdge, children: [
-              CustomPaint(
-                size: taille,
-                painter: _PeintreGlobe(
-                  shader: _shader,
-                  texture: _texture,
-                  rayon: rayon,
-                  latitude: camera.latitude,
-                  longitude: camera.longitude,
-                  couleurRepli: couleurRepli,
-                ),
-              ),
-              if (pointPin != null)
-                Positioned(
-                  left: taille.width / 2 + pointPin.dx * rayon - _taillePin / 2,
-                  top: taille.height / 2 + pointPin.dy * rayon - _taillePin,
-                  child: IgnorePointer(
-                    child: Icon(
-                      PhosphorIconsBold.mapPin,
-                      size: _taillePin,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                ),
-            ]),
+            // Only the painting and the pin follow the camera, not the
+            // gesture tree.
+            child: AnimatedBuilder(
+              animation: camera,
+              builder: (context, _) => _vue(taille, couleurRepli),
+            ),
           ),
         ),
       );
     });
+  }
+
+  Widget _vue(Size taille, Color couleurRepli) {
+    final camera = widget.camera;
+    final rayon = _rayon(taille);
+    final pin = widget.pin;
+    final pointPin =
+        pin == null ? null : camera.projection.versDisque(pin.$1, pin.$2);
+    return Stack(clipBehavior: Clip.hardEdge, children: [
+      CustomPaint(
+        size: taille,
+        painter: _PeintreGlobe(
+          shader: _shader,
+          texture: _texture,
+          rayon: rayon,
+          latitude: camera.latitude,
+          longitude: camera.longitude,
+          couleurRepli: couleurRepli,
+        ),
+      ),
+      if (pointPin != null)
+        Positioned(
+          left: taille.width / 2 + pointPin.dx * rayon - _taillePin / 2,
+          top: taille.height / 2 + pointPin.dy * rayon - _taillePin,
+          child: IgnorePointer(
+            child: Icon(
+              PhosphorIconsBold.mapPin,
+              size: _taillePin,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ),
+    ]);
   }
 }
 
