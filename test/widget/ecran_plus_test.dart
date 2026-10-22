@@ -389,6 +389,21 @@ void main() {
     expect(find.text('Méditerranéen'), findsNothing);
     expect(find.text('Mon potager'), findsOneWidget);
 
+    // Each garden block sits on its own contrasted surface.
+    final actif = find.byKey(const ValueKey('bloc-potager-pot-1'));
+    final autre = find.byKey(const ValueKey('bloc-potager-pot-2'));
+    expect(find.descendant(of: actif, matching: find.text('Mon potager')),
+        findsOneWidget);
+    expect(find.descendant(of: actif, matching: find.text('Climat')),
+        findsOneWidget);
+    expect(
+        find.descendant(
+            of: autre, matching: find.text('Jardin de la grand-mère')),
+        findsOneWidget);
+    final contexte = tester.element(actif);
+    expect(tester.widget<Material>(actif).color,
+        Theme.of(contexte).colorScheme.surfaceContainerHigh);
+
     await tester.tap(find.text('Jardin de la grand-mère'));
     await tester.pumpAndSettle();
 
