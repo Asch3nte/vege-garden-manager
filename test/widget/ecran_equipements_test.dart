@@ -35,7 +35,11 @@ class MockTaches extends Mock implements AbstractTacheRepository {}
 
 class MockEquipements extends Mock implements AbstractEquipementRepository {}
 
+class _FakeEquipement extends Fake implements Equipement {}
+
 void main() {
+  setUpAll(() => registerFallbackValue(_FakeEquipement()));
+
   final maintenant = DateTime(2026, 6, 9, 8, 24);
 
   late MockPotagers potagers;
@@ -138,6 +142,52 @@ void main() {
     await tester.tap(find.text('Retirés'));
     await tester.pumpAndSettle();
     expect(find.text('Vieux tuteur'), findsOneWidget);
+  });
+
+  group('swipe on an in-service equipment', () {
+    setUp(() {
+      when(() => equipements.obtenirParPotager(any())).thenAnswer(
+        (_) async => [
+          Equipement(
+            id: 'eq-1',
+            nom: 'Oya du carré',
+            potagerId: 'pot-1',
+            type: TypeEquipement.oya,
+            dateInstallation: DateTime(2026, 4, 1),
+          ),
+        ],
+      );
+      when(() => equipements.sauvegarder(any())).thenAnswer((_) async {});
+      when(() => equipements.supprimer(any())).thenAnswer((_) async {});
+    });
+
+    Future<void> balayer(WidgetTester tester, double dx) async {
+      await tester.drag(find.text('Oya du carré'), Offset(dx, 0));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('rightwards retires it after confirmation', (tester) async {
+      await monter(tester);
+      await balayer(tester, 700);
+      expect(find.text("Retirer l'équipement ?"), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Retirer'));
+      await tester.pumpAndSettle();
+
+      final retire = verify(() => equipements.sauvegarder(captureAny()))
+          .captured
+          .single as Equipement;
+      expect(retire.estEnService, isFalse);
+    });
+
+    testWidgets('leftwards deletes it after confirmation', (tester) async {
+      await monter(tester);
+      await balayer(tester, -700);
+      expect(find.text("Supprimer l'équipement ?"), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+
+      verify(() => equipements.supprimer('eq-1')).called(1);
+    });
   });
 
   testWidgets('shows the empty state when there is no equipment',

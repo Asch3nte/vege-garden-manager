@@ -12,6 +12,7 @@ import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/qualite_sol.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_favori_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_personnelle_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/modele_fiche_personnelle.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
@@ -19,6 +20,8 @@ import 'package:pot_a_gerer/presentation/screens/ecran_fiches_personnelles.dart'
 
 class MockFichesPerso extends Mock
     implements AbstractFichePlantePersonnelleRepository {}
+
+class MockFavoris extends Mock implements AbstractFavoriRepository {}
 
 FichePlantePersonnelle _uneFiche() => FichePlantePersonnelle(
       id: 'fp-1',
@@ -44,9 +47,13 @@ FichePlantePersonnelle _uneFiche() => FichePlantePersonnelle(
 
 void main() {
   late MockFichesPerso repo;
+  late MockFavoris favoris;
 
   setUp(() {
     repo = MockFichesPerso();
+    favoris = MockFavoris();
+    when(() => favoris.obtenirIds()).thenAnswer((_) async => {});
+    when(() => favoris.retirer(any())).thenAnswer((_) async {});
   });
 
   Future<void> monter(WidgetTester tester) async {
@@ -59,6 +66,7 @@ void main() {
       ProviderScope(
         overrides: [
           fichePlantePersonnelleRepositoryProvider.overrideWithValue(repo),
+          favoriRepositoryProvider.overrideWithValue(favoris),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -80,6 +88,33 @@ void main() {
     expect(find.text('Basilic pourpre'), findsOneWidget);
     expect(find.text('Aromatiques'), findsOneWidget);
     expect(find.text('Modifiée le 09/06/2026'), findsOneWidget);
+  });
+
+  testWidgets('a leftward swipe deletes a sheet after confirmation',
+      (tester) async {
+    when(() => repo.obtenirToutes()).thenAnswer((_) async => [_uneFiche()]);
+    when(() => repo.supprimer(any())).thenAnswer((_) async {});
+    await monter(tester);
+
+    await tester.drag(find.text('Basilic pourpre'), const Offset(-700, 0));
+    await tester.pumpAndSettle();
+    expect(find.text('Supprimer la fiche ?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+    await tester.pumpAndSettle();
+
+    verify(() => repo.supprimer('fp-1')).called(1);
+    verify(() => favoris.retirer('perso_basilic_pourpre')).called(1);
+  });
+
+  testWidgets('a sheet has no archiving swipe', (tester) async {
+    when(() => repo.obtenirToutes()).thenAnswer((_) async => [_uneFiche()]);
+    await monter(tester);
+
+    await tester.drag(find.text('Basilic pourpre'), const Offset(700, 0));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.text('Basilic pourpre'), findsOneWidget);
   });
 
   testWidgets('shows the empty state when there is no sheet', (tester) async {

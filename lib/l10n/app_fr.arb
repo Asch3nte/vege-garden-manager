@@ -3173,5 +3173,9 @@
   "formZoneBesoinEau": "Besoin en eau de la zone",
   "@formZoneBesoinEau": {"description": "Champ : besoin en eau propre à la zone (sol, exposition)."},
   "zoneSurfaceTropPetite": "Surface inférieure à celle des cultures en place ({occupee}).",
-  "@zoneSurfaceTropPetite": {"description": "Erreur : la nouvelle surface ne contient plus les cultures actives.", "placeholders": {"occupee": {"type": "String"}}}
+  "@zoneSurfaceTropPetite": {"description": "Erreur : la nouvelle surface ne contient plus les cultures actives.", "placeholders": {"occupee": {"type": "String"}}},
+  "planteArracherTitre": "Arracher cette plante ?",
+  "@planteArracherTitre": {"description": "Titre de la confirmation d'arrachage par balayage."},
+  "planteArracherMessage": "« {plante} » quittera les cultures en place et restera dans l'historique. Continuer ?",
+  "@planteArracherMessage": {"description": "Message de la confirmation d'arrachage par balayage.", "placeholders": {"plante": {"type": "String"}}}
 }

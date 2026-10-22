@@ -239,6 +239,37 @@ void main() {
     verify(() => taches.supprimer('t1')).called(1);
   });
 
+  group('swipe on an agenda task', () {
+    setUp(() {
+      when(() => taches.obtenirEntreDates(any(), any())).thenAnswer((_) async =>
+          [uneTache('t1', 'Arroser les tomates', DateTime(2026, 6, 8, 10))]);
+      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+      when(() => taches.supprimer(any())).thenAnswer((_) async {});
+    });
+
+    testWidgets('rightwards ticks it off', (tester) async {
+      await monter(tester);
+      await tester.drag(find.text('Arroser les tomates'), const Offset(600, 0));
+      await tester.pumpAndSettle();
+
+      final tache = verify(() => taches.sauvegarder(captureAny()))
+          .captured
+          .single as Tache;
+      expect(tache.estFaite, isTrue);
+    });
+
+    testWidgets('leftwards deletes it after confirmation', (tester) async {
+      await monter(tester);
+      await tester.drag(find.text('Arroser les tomates'), const Offset(-600, 0));
+      await tester.pumpAndSettle();
+      expect(find.text('Supprimer cette tâche ?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+
+      verify(() => taches.supprimer('t1')).called(1);
+    });
+  });
+
   testWidgets('empty window shows the empty state', (tester) async {
     when(() => taches.obtenirEntreDates(any(), any()))
         .thenAnswer((_) async => []);

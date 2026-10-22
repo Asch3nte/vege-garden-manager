@@ -434,6 +434,64 @@ void main() {
     verify(() => plantations.supprimer('p-1')).called(1);
   });
 
+  group('swipe on a crop', () {
+    Future<void> balayer(WidgetTester tester, double dx) async {
+      await tester.drag(find.text('Tomate'), Offset(dx, 0));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('rightwards pulls it out after confirmation', (tester) async {
+      semerUneCulture();
+      await monter(tester, 'z-1');
+
+      await balayer(tester, 600);
+      expect(find.text('Arracher cette plante ?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Arracher'));
+      await tester.pumpAndSettle();
+
+      final p = verify(() => plantations.sauvegarder(captureAny()))
+          .captured
+          .single as Plantation;
+      expect(p.statut, StatutPlantation.arrachee);
+    });
+
+    testWidgets('leftwards deletes it after confirmation', (tester) async {
+      semerUneCulture();
+      await monter(tester, 'z-1');
+
+      await balayer(tester, -600);
+      expect(find.text('Supprimer cette plante ?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+
+      verify(() => plantations.supprimer('p-1')).called(1);
+    });
+
+    testWidgets('a cancelled pull-out changes nothing', (tester) async {
+      semerUneCulture();
+      await monter(tester, 'z-1');
+
+      await balayer(tester, 600);
+      await tester.tap(find.text('Annuler'));
+      await tester.pumpAndSettle();
+
+      verifyNever(() => plantations.sauvegarder(any()));
+      expect(find.text('Tomate'), findsOneWidget);
+    });
+
+    testWidgets('a cancelled deletion keeps the crop', (tester) async {
+      semerUneCulture();
+      await monter(tester, 'z-1');
+
+      await balayer(tester, -600);
+      await tester.tap(find.text('Annuler'));
+      await tester.pumpAndSettle();
+
+      verifyNever(() => plantations.supprimer(any()));
+      expect(find.text('Tomate'), findsOneWidget);
+    });
+  });
+
   testWidgets('deleting the zone confirms then soft-deletes it and returns',
       (tester) async {
     final router = GoRouter(

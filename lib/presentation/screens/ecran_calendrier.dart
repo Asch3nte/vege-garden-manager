@@ -23,7 +23,8 @@ import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
-import '../widgets/dialogue_confirmation.dart';
+import '../widgets/suppression_tache.dart';
+import '../widgets/tache_balayable.dart';
 import '../widgets/carte_teaser_palier.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
@@ -919,7 +920,7 @@ class _GroupeJour extends StatelessWidget {
   final ValueChanged<Tache> onCocher;
   final ValueChanged<GesteGroupe> onCocherGroupe;
   final ValueChanged<Tache> onModifier;
-  final ValueChanged<Tache> onSupprimer;
+  final Future<bool> Function(Tache) onSupprimer;
   final ValueChanged<Tache> onOuvrir;
 
   const _GroupeJour({
@@ -977,7 +978,7 @@ class _CarteGeste extends StatefulWidget {
   final ValueChanged<Tache> onCocher;
   final ValueChanged<GesteGroupe> onCocherGroupe;
   final ValueChanged<Tache> onModifier;
-  final ValueChanged<Tache> onSupprimer;
+  final Future<bool> Function(Tache) onSupprimer;
 
   /// Opens a task's detail route. Grouping is a display aggregation, so it must
   /// not cost access to the detail: every individual task stays openable, lone
@@ -1008,13 +1009,19 @@ class _CarteGesteState extends State<_CarteGeste> {
     // A lone task keeps the exact card it had before grouping existed.
     if (geste.estSeule) {
       final tache = geste.tacheUnique;
-      return _CarteTache(
+      return TacheBalayable(
         tache: tache,
-        cibleLabel: widget.cibleLabelDe(tache),
-        onCocher: widget.onCocher,
-        onModifier: widget.onModifier,
-        onSupprimer: widget.onSupprimer,
-        onOuvrir: widget.onOuvrir,
+        onBasculer: () => widget.onCocher(tache),
+        onSupprimer: () => widget.onSupprimer(tache),
+        arrondi: RayonsApp.brLg,
+        child: _CarteTache(
+          tache: tache,
+          cibleLabel: widget.cibleLabelDe(tache),
+          onCocher: widget.onCocher,
+          onModifier: widget.onModifier,
+          onSupprimer: widget.onSupprimer,
+          onOuvrir: widget.onOuvrir,
+        ),
       );
     }
 
@@ -1025,103 +1032,112 @@ class _CarteGesteState extends State<_CarteGeste> {
     return Card(
       child: Column(
         children: [
-          InkWell(
-            borderRadius: RayonsApp.brLg,
-            // Tapping the summary expands: ticking is an explicit target, so a
-            // mis-tap never completes several crops at once.
-            onTap: () => setState(() => _deplie = !_deplie),
-            child: Padding(
-              padding: const EdgeInsets.all(EspacementsApp.s3),
-              child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.secondary.withValues(alpha: 0.3),
-                      borderRadius: const BorderRadius.all(RayonsApp.md),
+          GesteBalayable(
+            geste: geste,
+            onBasculer: () => widget.onCocherGroupe(geste),
+            child: InkWell(
+              borderRadius: RayonsApp.brLg,
+              // Tapping the summary expands: ticking is an explicit target, so a
+              // mis-tap never completes several crops at once.
+              onTap: () => setState(() => _deplie = !_deplie),
+              child: Padding(
+                padding: const EdgeInsets.all(EspacementsApp.s3),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.secondary.withValues(alpha: 0.3),
+                        borderRadius: const BorderRadius.all(RayonsApp.md),
+                      ),
+                      child: Icon(
+                        iconeTypeTache(geste.type),
+                        size: TaillesIconesApp.md,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
-                    child: Icon(
-                      iconeTypeTache(geste.type),
-                      size: TaillesIconesApp.md,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(width: EspacementsApp.s3),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.typeTache(geste.type),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color:
-                                fait ? theme.colorScheme.onSurfaceVariant : null,
-                            decoration:
-                                fait ? TextDecoration.lineThrough : null,
+                    const SizedBox(width: EspacementsApp.s3),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.typeTache(geste.type),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color:
+                                  fait ? theme.colorScheme.onSurfaceVariant : null,
+                              decoration:
+                                  fait ? TextDecoration.lineThrough : null,
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              l10n.gesteGroupeCompte(geste.nombre),
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant),
-                            ),
-                            Text(
-                              ' · ',
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant),
-                            ),
-                            Text(
-                              l10n.calendrierProgression(
-                                  geste.nombreFaites, geste.nombre),
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant),
-                            ),
-                          ],
-                        ),
-                      ],
+                          Row(
+                            children: [
+                              Text(
+                                l10n.gesteGroupeCompte(geste.nombre),
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant),
+                              ),
+                              Text(
+                                ' · ',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant),
+                              ),
+                              Text(
+                                l10n.calendrierProgression(
+                                    geste.nombreFaites, geste.nombre),
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: EspacementsApp.s2),
-                  IconButton(
-                    tooltip: fait
-                        ? l10n.gesteGroupeToutRouvrir
-                        : l10n.gesteGroupeToutCocher,
-                    onPressed: () => widget.onCocherGroupe(geste),
-                    icon: Icon(
-                      fait
-                          ? PhosphorIconsBold.checkCircle
-                          : geste.partiellementFaite
-                              ? PhosphorIconsRegular.circleHalf
-                              : PhosphorIconsRegular.circle,
-                      color: fait || geste.partiellementFaite
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.outline,
+                    const SizedBox(width: EspacementsApp.s2),
+                    IconButton(
+                      tooltip: fait
+                          ? l10n.gesteGroupeToutRouvrir
+                          : l10n.gesteGroupeToutCocher,
+                      onPressed: () => widget.onCocherGroupe(geste),
+                      icon: Icon(
+                        fait
+                            ? PhosphorIconsBold.checkCircle
+                            : geste.partiellementFaite
+                                ? PhosphorIconsRegular.circleHalf
+                                : PhosphorIconsRegular.circle,
+                        color: fait || geste.partiellementFaite
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.outline,
+                      ),
                     ),
-                  ),
-                  Icon(
-                    _deplie ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown,
-                    color: theme.colorScheme.onSurfaceVariant,
-                    semanticLabel: _deplie
-                        ? l10n.gesteGroupeReplier
-                        : l10n.gesteGroupeDeplier,
-                  ),
-                ],
+                    Icon(
+                      _deplie ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown,
+                      color: theme.colorScheme.onSurfaceVariant,
+                      semanticLabel: _deplie
+                          ? l10n.gesteGroupeReplier
+                          : l10n.gesteGroupeDeplier,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           if (_deplie)
             for (final tache in geste.taches) ...[
               const Divider(height: 1),
-              _LigneSousTache(
+              TacheBalayable(
                 tache: tache,
-                cibleLabel: widget.cibleLabelDe(tache),
-                onCocher: widget.onCocher,
-                onModifier: widget.onModifier,
-                onSupprimer: widget.onSupprimer,
-                onOuvrir: widget.onOuvrir,
+                onBasculer: () => widget.onCocher(tache),
+                onSupprimer: () => widget.onSupprimer(tache),
+                child: _LigneSousTache(
+                  tache: tache,
+                  cibleLabel: widget.cibleLabelDe(tache),
+                  onCocher: widget.onCocher,
+                  onModifier: widget.onModifier,
+                  onSupprimer: widget.onSupprimer,
+                  onOuvrir: widget.onOuvrir,
+                ),
               ),
             ],
         ],
@@ -1137,7 +1153,7 @@ class _LigneSousTache extends StatelessWidget {
   final String? cibleLabel;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
-  final ValueChanged<Tache> onSupprimer;
+  final Future<bool> Function(Tache) onSupprimer;
 
   /// Opens the task detail. Tapping the row ticks the task off (a
   /// grouped crop must be tickable without the others), so opening the detail
@@ -1225,7 +1241,7 @@ class _CarteTache extends StatelessWidget {
   final String? cibleLabel;
   final ValueChanged<Tache> onCocher;
   final ValueChanged<Tache> onModifier;
-  final ValueChanged<Tache> onSupprimer;
+  final Future<bool> Function(Tache) onSupprimer;
   final ValueChanged<Tache> onOuvrir;
 
   const _CarteTache({
@@ -1373,24 +1389,20 @@ Future<void> _modifierTache(
 }
 
 /// Asks for confirmation, then deletes [tache] and reloads the agenda.
-Future<void> _supprimerTache(
+/// Resolves to whether it was.
+Future<bool> _supprimerTache(
   BuildContext context,
   WidgetRef ref,
   Tache tache,
 ) async {
   final messenger = ScaffoldMessenger.of(context);
   final l10n = AppLocalizations.of(context)!;
-  final confirme = await confirmerAction(
-    context,
-    titre: l10n.tacheSupprimerTitre,
-    message: l10n.tacheSupprimerMessage(TitreTache.texte(
-        l10n, tache, ref.read(calendrierProvider).value?.cibleNom(tache))),
-    libelleConfirmer: l10n.actionSupprimer,
-    destructif: true,
-  );
-  if (!confirme) return;
+  final confirme = await confirmerSuppressionTache(
+      context, tache, ref.read(calendrierProvider).value?.cibleNom(tache));
+  if (!confirme) return false;
   await ref.read(calendrierProvider.notifier).supprimer(tache);
   messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
+  return true;
 }
 
 class _EtatVide extends StatelessWidget {

@@ -20,6 +20,7 @@ import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
 import 'package:pot_a_gerer/domain/enums/cible_tache.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
+import 'package:pot_a_gerer/domain/enums/sens_swipe.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/type_climat.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
@@ -165,9 +166,11 @@ void main() {
             .overrideWith((ref) async => _StubGenererTachesArrosage()),
       ];
 
-  Future<void> monter(WidgetTester tester, NiveauExperience niveau) async {
+  Future<void> monter(WidgetTester tester, NiveauExperience niveau,
+      {SensSwipe sensSwipe = SensSwipe.standard}) async {
     when(() => preferences.charger()).thenAnswer(
-      (_) async => PreferencesUtilisateur(niveauExperience: niveau),
+      (_) async => PreferencesUtilisateur(
+          niveauExperience: niveau, sensSwipe: sensSwipe),
     );
 
     await tester.pumpWidget(
@@ -521,5 +524,61 @@ void main() {
     expect(captured, hasLength(3));
     expect(captured.map((t) => (t as Tache).id), ['t-1', 't-2', 't-3']);
     expect(captured.map((t) => (t as Tache).estFaite), everyElement(isTrue));
+  });
+
+  group('swipe', () {
+    Future<void> balayer(WidgetTester tester, String texte, double dx) async {
+      await tester.drag(find.text(texte), Offset(dx, 0));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('rightwards ticks a task off, which stays listed',
+        (tester) async {
+      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+      await monter(tester, NiveauExperience.intermediaire);
+
+      await balayer(tester, 'Arroser les tomates', 600);
+
+      final tache = verify(() => taches.sauvegarder(captureAny()))
+          .captured
+          .single as Tache;
+      expect(tache.estFaite, isTrue);
+      expect(find.text('Arroser les tomates'), findsOneWidget);
+    });
+
+    testWidgets('leftwards deletes a task after confirmation', (tester) async {
+      when(() => taches.supprimer(any())).thenAnswer((_) async {});
+      await monter(tester, NiveauExperience.intermediaire);
+
+      await balayer(tester, 'Arroser les tomates', -600);
+      expect(find.text('Supprimer cette tâche ?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+
+      verify(() => taches.supprimer('t-1')).called(1);
+    });
+
+    testWidgets('the inverse setting swaps the sides', (tester) async {
+      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+      await monter(tester, NiveauExperience.intermediaire,
+          sensSwipe: SensSwipe.inverse);
+
+      await balayer(tester, 'Arroser les tomates', -600);
+
+      expect(find.byType(AlertDialog), findsNothing);
+      verify(() => taches.sauvegarder(any())).called(1);
+    });
+
+    testWidgets('a group summary ticks every task off', (tester) async {
+      plusieursTaches();
+      when(() => taches.sauvegarder(any())).thenAnswer((_) async {});
+      await monter(tester, NiveauExperience.intermediaire);
+
+      await tester.drag(find.textContaining('3 tâches'), const Offset(600, 0));
+      await tester.pumpAndSettle();
+
+      final captured = verify(() => taches.sauvegarder(captureAny())).captured;
+      expect(captured, hasLength(3));
+    });
   });
 }

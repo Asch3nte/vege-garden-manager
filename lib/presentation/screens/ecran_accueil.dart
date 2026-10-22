@@ -12,13 +12,17 @@ import '../../application/state/accueil_notifier.dart';
 import '../../application/state/accueil_vue.dart';
 import '../../application/state/geste_groupe.dart';
 import '../../application/state/meteo_accueil_notifier.dart';
+import '../../application/state/nom_plante_plantation_provider.dart';
 import '../../domain/entities/tache.dart';
+import '../../domain/enums/cible_tache.dart';
 import '../../domain/enums/niveau_experience.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/capture_localisation.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/position_potager_actions.dart';
+import '../widgets/suppression_tache.dart';
+import '../widgets/tache_balayable.dart';
 import '../widgets/titre_tache.dart';
 
 /// Tab 1 — **Accueil** (dashboard): garden overview, today's tasks, experience
@@ -69,6 +73,7 @@ class EcranAccueil extends ConsumerWidget {
                 ref.read(accueilProvider.notifier).basculerTache(t),
             onToggleGeste: (g) =>
                 ref.read(accueilProvider.notifier).basculerGeste(g),
+            onSupprimerTache: (t) => _supprimerTache(context, ref, t),
             // "See all tasks" jumps to the Calendrier tab (its full agenda).
             onVoirTaches: () => context.go(RoutesApp.calendrier),
             // A task row opens its detail (revisit / edit notes, priority…).
@@ -81,11 +86,28 @@ class EcranAccueil extends ConsumerWidget {
 }
 
 /// Scrollable dashboard body for a loaded [AccueilVue].
+/// Confirms then deletes [tache] from the dashboard; resolves to whether it
+/// was.
+Future<bool> _supprimerTache(
+    BuildContext context, WidgetRef ref, Tache tache) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final l10n = AppLocalizations.of(context)!;
+  final nomCible = tache.titre == null && tache.cible == CibleTache.plantation
+      ? await ref.read(nomPlantePlantationProvider(tache.cibleId).future)
+      : null;
+  if (!context.mounted) return false;
+  if (!await confirmerSuppressionTache(context, tache, nomCible)) return false;
+  await ref.read(accueilProvider.notifier).supprimerTache(tache);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
+  return true;
+}
+
 class _Contenu extends StatelessWidget {
   final AccueilVue vue;
   final void Function(String zoneId) onZoneTap;
   final void Function(Tache tache) onToggleTache;
   final void Function(GesteGroupe geste) onToggleGeste;
+  final Future<bool> Function(Tache tache) onSupprimerTache;
   final VoidCallback onVoirTaches;
   final void Function(Tache tache) onOuvrirTache;
 
@@ -94,6 +116,7 @@ class _Contenu extends StatelessWidget {
     required this.onZoneTap,
     required this.onToggleTache,
     required this.onToggleGeste,
+    required this.onSupprimerTache,
     required this.onVoirTaches,
     required this.onOuvrirTache,
   });
@@ -117,6 +140,7 @@ class _Contenu extends StatelessWidget {
           nombreAFaire: vue.nombreTachesAFaire,
           onToggle: onToggleTache,
           onToggleGeste: onToggleGeste,
+          onSupprimer: onSupprimerTache,
           onVoirTaches: onVoirTaches,
           onOuvrir: onOuvrirTache,
         ),
@@ -347,6 +371,7 @@ class _SectionTaches extends StatelessWidget {
   final int nombreAFaire;
   final void Function(Tache tache) onToggle;
   final void Function(GesteGroupe geste) onToggleGeste;
+  final Future<bool> Function(Tache tache) onSupprimer;
   final VoidCallback onVoirTaches;
   final void Function(Tache tache) onOuvrir;
 
@@ -355,6 +380,7 @@ class _SectionTaches extends StatelessWidget {
     required this.nombreAFaire,
     required this.onToggle,
     required this.onToggleGeste,
+    required this.onSupprimer,
     required this.onVoirTaches,
     required this.onOuvrir,
   });
@@ -390,6 +416,7 @@ class _SectionTaches extends StatelessWidget {
                           geste: gestes[i],
                           onToggle: onToggle,
                           onToggleGeste: onToggleGeste,
+                          onSupprimer: onSupprimer,
                           onOuvrir: onOuvrir,
                         ),
                       ],
@@ -420,6 +447,7 @@ class _LigneGeste extends StatefulWidget {
   final GesteGroupe geste;
   final void Function(Tache tache) onToggle;
   final void Function(GesteGroupe geste) onToggleGeste;
+  final Future<bool> Function(Tache tache) onSupprimer;
   final void Function(Tache tache) onOuvrir;
 
   const _LigneGeste({
@@ -427,6 +455,7 @@ class _LigneGeste extends StatefulWidget {
     required this.geste,
     required this.onToggle,
     required this.onToggleGeste,
+    required this.onSupprimer,
     required this.onOuvrir,
   });
 
@@ -445,6 +474,7 @@ class _LigneGesteState extends State<_LigneGeste> {
       return _LigneTache(
         tache: tache,
         onToggle: () => widget.onToggle(tache),
+        onSupprimer: () => widget.onSupprimer(tache),
         onOuvrir: () => widget.onOuvrir(tache),
       );
     }
@@ -455,62 +485,66 @@ class _LigneGesteState extends State<_LigneGeste> {
 
     return Column(
       children: [
-        InkWell(
-          // Tapping the summary expands; ticking the whole group is the
-          // explicit check button, so a mis-tap never completes several crops.
-          onTap: () => setState(() => _deplie = !_deplie),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: EspacementsApp.s2),
-            child: Row(
-              children: [
-                IconButton(
-                  tooltip: fait
-                      ? l10n.gesteGroupeToutRouvrir
-                      : l10n.gesteGroupeToutCocher,
-                  onPressed: () => widget.onToggleGeste(geste),
-                  icon: Icon(
-                    fait
-                        ? PhosphorIconsBold.checkCircle
-                        : geste.partiellementFaite
-                            ? PhosphorIconsRegular.circleHalf
-                            : PhosphorIconsRegular.circle,
-                    size: TaillesIconesApp.lg,
-                    color: fait || geste.partiellementFaite
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.outline,
+        GesteBalayable(
+          geste: geste,
+          onBasculer: () => widget.onToggleGeste(geste),
+          child: InkWell(
+            // Tapping the summary expands; ticking the whole group is the
+            // explicit check button, so a mis-tap never completes several crops.
+            onTap: () => setState(() => _deplie = !_deplie),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: EspacementsApp.s2),
+              child: Row(
+                children: [
+                  IconButton(
+                    tooltip: fait
+                        ? l10n.gesteGroupeToutRouvrir
+                        : l10n.gesteGroupeToutCocher,
+                    onPressed: () => widget.onToggleGeste(geste),
+                    icon: Icon(
+                      fait
+                          ? PhosphorIconsBold.checkCircle
+                          : geste.partiellementFaite
+                              ? PhosphorIconsRegular.circleHalf
+                              : PhosphorIconsRegular.circle,
+                      size: TaillesIconesApp.lg,
+                      color: fait || geste.partiellementFaite
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline,
+                    ),
                   ),
-                ),
-                const SizedBox(width: EspacementsApp.s1),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.typeTache(geste.type),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color:
-                              fait ? theme.colorScheme.onSurfaceVariant : null,
-                          decoration: fait ? TextDecoration.lineThrough : null,
+                  const SizedBox(width: EspacementsApp.s1),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.typeTache(geste.type),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color:
+                                fait ? theme.colorScheme.onSurfaceVariant : null,
+                            decoration: fait ? TextDecoration.lineThrough : null,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${l10n.gesteGroupeCompte(geste.nombre)} · '
-                        '${l10n.calendrierProgression(geste.nombreFaites, geste.nombre)}',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant),
-                      ),
-                    ],
+                        Text(
+                          '${l10n.gesteGroupeCompte(geste.nombre)} · '
+                          '${l10n.calendrierProgression(geste.nombreFaites, geste.nombre)}',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Icon(
-                  _deplie ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown,
-                  color: theme.colorScheme.onSurfaceVariant,
-                  semanticLabel: _deplie
-                      ? l10n.gesteGroupeReplier
-                      : l10n.gesteGroupeDeplier,
-                ),
-              ],
+                  Icon(
+                    _deplie ? PhosphorIconsRegular.caretUp : PhosphorIconsRegular.caretDown,
+                    color: theme.colorScheme.onSurfaceVariant,
+                    semanticLabel: _deplie
+                        ? l10n.gesteGroupeReplier
+                        : l10n.gesteGroupeDeplier,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -521,6 +555,7 @@ class _LigneGesteState extends State<_LigneGeste> {
               child: _LigneTache(
                 tache: tache,
                 onToggle: () => widget.onToggle(tache),
+                onSupprimer: () => widget.onSupprimer(tache),
                 onOuvrir: () => widget.onOuvrir(tache),
               ),
             ),
@@ -534,11 +569,13 @@ class _LigneGesteState extends State<_LigneGeste> {
 class _LigneTache extends StatelessWidget {
   final Tache tache;
   final VoidCallback onToggle;
+  final Future<bool> Function() onSupprimer;
   final VoidCallback onOuvrir;
 
   const _LigneTache({
     required this.tache,
     required this.onToggle,
+    required this.onSupprimer,
     required this.onOuvrir,
   });
 
@@ -547,34 +584,39 @@ class _LigneTache extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final fait = tache.estFaite;
-    return InkWell(
-      onTap: onOuvrir,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s1),
-        child: Row(
-          children: [
-            IconButton(
-              tooltip: l10n.tacheMarquerFaite,
-              onPressed: onToggle,
-              icon: Icon(
-                fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
-                size: TaillesIconesApp.lg,
-                color:
-                    fait ? theme.colorScheme.primary : theme.colorScheme.outline,
-              ),
-            ),
-            const SizedBox(width: EspacementsApp.s2),
-            Expanded(
-              child: TitreTache(
-                tache,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: fait ? theme.colorScheme.onSurfaceVariant : null,
-                  decoration: fait ? TextDecoration.lineThrough : null,
+    return TacheBalayable(
+      tache: tache,
+      onBasculer: onToggle,
+      onSupprimer: onSupprimer,
+      child: InkWell(
+        onTap: onOuvrir,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: EspacementsApp.s1),
+          child: Row(
+            children: [
+              IconButton(
+                tooltip: l10n.tacheMarquerFaite,
+                onPressed: onToggle,
+                icon: Icon(
+                  fait ? PhosphorIconsBold.checkCircle : PhosphorIconsRegular.circle,
+                  size: TaillesIconesApp.lg,
+                  color:
+                      fait ? theme.colorScheme.primary : theme.colorScheme.outline,
                 ),
               ),
-            ),
-            Icon(PhosphorIconsRegular.caretRight, color: theme.colorScheme.outline),
-          ],
+              const SizedBox(width: EspacementsApp.s2),
+              Expanded(
+                child: TitreTache(
+                  tache,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: fait ? theme.colorScheme.onSurfaceVariant : null,
+                    decoration: fait ? TextDecoration.lineThrough : null,
+                  ),
+                ),
+              ),
+              Icon(PhosphorIconsRegular.caretRight, color: theme.colorScheme.outline),
+            ],
+          ),
         ),
       ),
     );

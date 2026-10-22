@@ -16,6 +16,7 @@ import '../glossaire/catalogue/outils.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/element_balayable.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
@@ -106,10 +107,17 @@ class _Contenu extends ConsumerWidget {
           ),
           const SizedBox(height: EspacementsApp.s3),
           for (final e in enService) ...[
-            _CarteEquipement(
-              equipement: e,
-              potagerId: potagerId,
-              nomZone: e.parcelleId == null ? null : nomsZones[e.parcelleId],
+            ElementBalayable(
+              cle: e.id,
+              arrondi: const BorderRadius.all(RayonsApp.lg),
+              surArchiver: () => _retirer(context, ref, e, potagerId),
+              libelleArchiver: l10n.equipRetirer,
+              surSupprimer: () => _supprimer(context, ref, e, potagerId),
+              child: _CarteEquipement(
+                equipement: e,
+                potagerId: potagerId,
+                nomZone: e.parcelleId == null ? null : nomsZones[e.parcelleId],
+              ),
             ),
             const SizedBox(height: EspacementsApp.s3),
           ],
@@ -128,11 +136,17 @@ class _Contenu extends ConsumerWidget {
               ),
               children: [
                 for (final e in retires) ...[
-                  _CarteEquipement(
-                    equipement: e,
-                    potagerId: potagerId,
-                    nomZone:
-                        e.parcelleId == null ? null : nomsZones[e.parcelleId],
+                  ElementBalayable(
+                    cle: e.id,
+                    arrondi: const BorderRadius.all(RayonsApp.lg),
+                    surSupprimer: () => _supprimer(context, ref, e, potagerId),
+                    child: _CarteEquipement(
+                      equipement: e,
+                      potagerId: potagerId,
+                      nomZone: e.parcelleId == null
+                          ? null
+                          : nomsZones[e.parcelleId],
+                    ),
                   ),
                   const SizedBox(height: EspacementsApp.s3),
                 ],
@@ -422,8 +436,10 @@ class _MenuActions extends ConsumerWidget {
       tooltip: l10n.equipTitre,
       onSelected: (action) => switch (action) {
         _ActionEquipement.modifier => _modifier(context, ref),
-        _ActionEquipement.retirer => _retirer(context, ref),
-        _ActionEquipement.supprimer => _supprimer(context, ref),
+        _ActionEquipement.retirer =>
+          _retirer(context, ref, equipement, potagerId),
+        _ActionEquipement.supprimer =>
+          _supprimer(context, ref, equipement, potagerId),
       },
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -473,47 +489,53 @@ class _MenuActions extends ConsumerWidget {
     if (maj == null) return;
     messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackModifie)));
   }
+}
 
-  Future<void> _retirer(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    final ok = await confirmerAction(
-      context,
-      titre: l10n.equipRetirerTitre,
-      message: l10n.equipRetirerMessage(equipement.nom),
-      libelleConfirmer: l10n.equipRetirer,
-    );
-    if (!ok) return;
-    try {
-      equipement.retirer(ref.read(horlogeProvider)());
-      await ref
-          .read(equipementsProvider(potagerId).notifier)
-          .modifier(equipement);
-    } on Exception catch (e) {
-      // Reloads the stored state over the entity changed in memory.
-      debugPrint('Retirement failed: $e');
-      ref.invalidate(equipementsProvider(potagerId));
-      messenger.showSnackBar(
-          SnackBar(content: Text(l10n.formEnregistrementErreur)));
-      return;
-    }
-    messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackRetire)));
+/// Confirms then retires [equipement]; resolves to whether it was.
+Future<bool> _retirer(BuildContext context, WidgetRef ref,
+    Equipement equipement, String potagerId) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await confirmerAction(
+    context,
+    titre: l10n.equipRetirerTitre,
+    message: l10n.equipRetirerMessage(equipement.nom),
+    libelleConfirmer: l10n.equipRetirer,
+  );
+  if (!ok) return false;
+  try {
+    equipement.retirer(ref.read(horlogeProvider)());
+    await ref
+        .read(equipementsProvider(potagerId).notifier)
+        .modifier(equipement);
+  } on Exception catch (e) {
+    // Reloads the stored state over the entity changed in memory.
+    debugPrint('Retirement failed: $e');
+    ref.invalidate(equipementsProvider(potagerId));
+    messenger.showSnackBar(
+        SnackBar(content: Text(l10n.formEnregistrementErreur)));
+    return false;
   }
+  messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackRetire)));
+  return true;
+}
 
-  Future<void> _supprimer(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    final ok = await confirmerAction(
-      context,
-      titre: l10n.equipSupprimerTitre,
-      message: l10n.equipSupprimerMessage(equipement.nom),
-      libelleConfirmer: l10n.actionSupprimer,
-      destructif: true,
-    );
-    if (!ok) return;
-    await ref.read(equipementsProvider(potagerId).notifier).supprimer(equipement.id);
-    messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackSupprime)));
-  }
+/// Confirms then deletes [equipement]; resolves to whether it was.
+Future<bool> _supprimer(BuildContext context, WidgetRef ref,
+    Equipement equipement, String potagerId) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await confirmerAction(
+    context,
+    titre: l10n.equipSupprimerTitre,
+    message: l10n.equipSupprimerMessage(equipement.nom),
+    libelleConfirmer: l10n.actionSupprimer,
+    destructif: true,
+  );
+  if (!ok) return false;
+  await ref.read(equipementsProvider(potagerId).notifier).supprimer(equipement.id);
+  messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackSupprime)));
+  return true;
 }
 
 /// Per-equipment actions in the card menu.
