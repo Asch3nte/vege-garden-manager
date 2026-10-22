@@ -1,5 +1,5 @@
-// Widget tests for the "À propos" settings panel: the version is read from
-// [AbstractInfoApplicationService] rather than a hardcoded constant.
+// Widget tests for the "À propos" settings panel: the version read from
+// [AbstractInfoApplicationService], and the external links.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ void main() {
     lienService = _MockOuvertureLien();
   });
 
-  Future<void> monter(WidgetTester tester) async {
+  Future<void> monter(WidgetTester tester, {bool attendre = true}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -44,7 +44,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    attendre ? await tester.pumpAndSettle() : await tester.pump();
   }
 
   testWidgets('shows the version reported by the info service', (tester) async {
@@ -107,20 +107,7 @@ void main() {
     when(() => service.obtenirVersionAffichee())
         .thenAnswer((_) => Completer<String>().future);
     when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          infoApplicationServiceProvider.overrideWithValue(service),
-          ouvertureLienServiceProvider.overrideWithValue(lienService),
-        ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const PanneauAPropos(),
-        ),
-      ),
-    );
-    await tester.pump();
+    await monter(tester, attendre: false);
 
     await tester.tap(find.text('Signaler un bug'));
     await tester.pump();

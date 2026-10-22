@@ -8,16 +8,16 @@ import '../../../l10n/app_localizations.dart';
 import 'widgets_parametres.dart';
 
 /// Public source repository ("lien GitHub").
-final Uri _urlCodeSource =
-    Uri.parse('https://github.com/Asch3nte/vege-garden-manager');
+const String _depot = '/Asch3nte/vege-garden-manager';
 
-final Uri _urlDocumentation = Uri.parse(
-    'https://github.com/Asch3nte/vege-garden-manager/tree/main/docs');
+final Uri _urlCodeSource = Uri.https('github.com', _depot);
+
+final Uri _urlDocumentation = Uri.https('github.com', '$_depot/tree/main/docs');
 
 /// The bug form, prefilled with the app [version] and nothing else.
 Uri _urlSignalerBug(String? version) => Uri.https(
       'github.com',
-      '/Asch3nte/vege-garden-manager/issues/new',
+      '$_depot/issues/new',
       {'template': 'bug.yml', 'version': ?version},
     );
 
