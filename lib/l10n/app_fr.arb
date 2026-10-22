@@ -3177,5 +3177,9 @@
   "planteArracherTitre": "Arracher cette plante ?",
   "@planteArracherTitre": {"description": "Titre de la confirmation d'arrachage par balayage."},
   "planteArracherMessage": "« {plante} » quittera les cultures en place et restera dans l'historique. Continuer ?",
-  "@planteArracherMessage": {"description": "Message de la confirmation d'arrachage par balayage.", "placeholders": {"plante": {"type": "String"}}}
+  "@planteArracherMessage": {"description": "Message de la confirmation d'arrachage par balayage.", "placeholders": {"plante": {"type": "String"}}},
+  "aproposDocumentation": "Documentation",
+  "@aproposDocumentation": {"description": "Lien : documentation du projet (dépôt)."},
+  "aproposSignalerBug": "Signaler un bug",
+  "@aproposSignalerBug": {"description": "Lien : formulaire de signalement de bug (dépôt)."}
 }

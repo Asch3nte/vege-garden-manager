@@ -1,5 +1,7 @@
 // Widget tests for the "À propos" settings panel: the version is read from
 // [AbstractInfoApplicationService] rather than a hardcoded constant.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -71,6 +73,61 @@ void main() {
           Uri.parse('https://github.com/Asch3nte/vege-garden-manager'),
         )).called(1);
     expect(find.byType(SnackBar), findsNothing);
+  });
+
+  testWidgets('tapping "documentation" opens the docs folder', (tester) async {
+    when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
+    await monter(tester);
+
+    await tester.tap(find.text('Documentation'));
+    await tester.pumpAndSettle();
+
+    verify(() => lienService.ouvrir(Uri.parse(
+          'https://github.com/Asch3nte/vege-garden-manager/tree/main/docs',
+        ))).called(1);
+  });
+
+  testWidgets('"signaler un bug" opens the bug form with the version only',
+      (tester) async {
+    when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
+    await monter(tester);
+
+    await tester.tap(find.text('Signaler un bug'));
+    await tester.pumpAndSettle();
+
+    final url =
+        verify(() => lienService.ouvrir(captureAny())).captured.single as Uri;
+    expect(url.origin, 'https://github.com');
+    expect(url.path, '/Asch3nte/vege-garden-manager/issues/new');
+    expect(url.queryParameters, {'template': 'bug.yml', 'version': '9.9.9+42'});
+  });
+
+  testWidgets('an unknown version is left out of the bug form',
+      (tester) async {
+    when(() => service.obtenirVersionAffichee())
+        .thenAnswer((_) => Completer<String>().future);
+    when(() => lienService.ouvrir(any())).thenAnswer((_) async => true);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          infoApplicationServiceProvider.overrideWithValue(service),
+          ouvertureLienServiceProvider.overrideWithValue(lienService),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const PanneauAPropos(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.text('Signaler un bug'));
+    await tester.pump();
+
+    final url =
+        verify(() => lienService.ouvrir(captureAny())).captured.single as Uri;
+    expect(url.queryParameters, {'template': 'bug.yml'});
   });
 
   testWidgets('shows a snackbar when no handler can open the link',

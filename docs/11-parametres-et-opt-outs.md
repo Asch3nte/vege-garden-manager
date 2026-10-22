@@ -78,6 +78,8 @@ Stocké dans `preferences.notifications_par_categorie` (JSON) +
 
 Version + numéro de build · licence (MIT) · lien GitHub · crédits (contributeurs,
 données, librairies) · liens utiles (doc, signaler un bug, contribuer).
+« Documentation » ouvre `docs/` du dépôt ; « Signaler un bug » ouvre le
+formulaire d'issue `bug.yml`, pré-rempli avec la seule version de l'app.
 
 ## 8. Registre des clés `parametres.*` (état technique)
 
