@@ -24,6 +24,7 @@ class ConvertisseurUnites {
   double millimetresVersPouces(double mm) => mm / _mmParPouce;
   double kmhVersMph(double kmh) => kmh / _kmParMille;
   double metresVersPieds(double m) => m / _mParPied;
+  double piedsVersMetres(double pieds) => pieds * _mParPied;
 
   double m2VersFt2(double m2) => m2 / _m2ParFt2;
   double ft2VersM2(double ft2) => ft2 * _m2ParFt2;

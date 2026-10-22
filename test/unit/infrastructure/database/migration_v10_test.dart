@@ -10,6 +10,7 @@ void main() {
       NativeDatabase.memory(
         setup: (raw) {
           raw.execute(preferencesV9);
+          raw.execute(parcellesV10);
           raw.execute(
             "INSERT INTO preferences (id, systeme_unites, "
             "derniere_modification) VALUES ('singleton', 'imperial', 'x')",

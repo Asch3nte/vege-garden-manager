@@ -43,6 +43,7 @@ import 'package:pot_a_gerer/domain/repositories/abstract_potager_repository.dart
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/besoins_culture.dart';
+import 'package:pot_a_gerer/domain/value_objects/dimensions_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/prevision_meteo.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
@@ -246,6 +247,37 @@ void main() {
     // Derived growth stage: sown 2026-04-01, clock 2026-06-09 (69 days) for a
     // 60-day-min crop → past the harvest window.
     expect(find.text('Récolte'), findsOneWidget);
+  });
+
+  testWidgets('shows the zone dimensions and water need when known',
+      (tester) async {
+    final dimensions = DimensionsZone(longueurCm: 200, largeurCm: 100);
+    when(() => parcelles.obtenirParPotager('pot-1')).thenAnswer(
+      (_) async => [
+        Parcelle(
+          id: 'z-1',
+          nom: 'Carré nord',
+          potagerId: 'pot-1',
+          type: TypeParcelle.bacSureleve,
+          surface: dimensions.surface,
+          exposition: NiveauSoleil.pleinSoleil,
+          dimensions: dimensions,
+          besoinEau: BesoinEau.eleve,
+        ),
+      ],
+    );
+
+    await monter(tester, 'z-1');
+
+    expect(find.text('2 × 1 m'), findsOneWidget);
+    expect(find.text('Arrosage élevé'), findsOneWidget);
+  });
+
+  testWidgets('hides unknown dimensions and water need', (tester) async {
+    await monter(tester, 'z-1');
+
+    expect(find.byIcon(PhosphorIconsRegular.boundingBox), findsNothing);
+    expect(find.byIcon(PhosphorIconsRegular.drop), findsNothing);
   });
 
   testWidgets('shows the next pending task of a crop (tâche↔plantation link)',

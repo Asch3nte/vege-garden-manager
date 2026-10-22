@@ -74,6 +74,8 @@ class PotagerNotifier extends AsyncNotifier<PotagerVue> {
               parcelle, plantations, fiches, calculateur, now),
           aTacheAujourdhui: parcellesAvecTache.contains(parcelle.id),
           couleur: parcelle.couleur,
+          dimensions: parcelle.dimensions,
+          besoinEau: parcelle.besoinEau,
         ),
       );
     }

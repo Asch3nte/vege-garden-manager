@@ -8,14 +8,19 @@ import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/application/state/acces_niveau_provider.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
+import 'package:pot_a_gerer/domain/entities/plantation.dart';
+import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
+import 'package:pot_a_gerer/domain/enums/methode_mise_en_place.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_experience.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/teinte_zone.dart';
 import 'package:pot_a_gerer/domain/enums/technique_sol.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_parcelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_plantation_repository.dart';
 import 'package:pot_a_gerer/domain/services/acces_niveau.dart';
 import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
+import 'package:pot_a_gerer/domain/value_objects/dimensions_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_zone.dart';
@@ -25,23 +30,31 @@ import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
 class MockParcelles extends Mock implements AbstractParcelleRepository {}
 
+class MockPlantations extends Mock implements AbstractPlantationRepository {}
+
 class _FakeParcelle extends Fake implements Parcelle {}
 
 void main() {
   setUpAll(() => registerFallbackValue(_FakeParcelle()));
 
   late MockParcelles repo;
+  late MockPlantations plantations;
 
   setUp(() {
     repo = MockParcelles();
+    plantations = MockPlantations();
+    when(() => plantations.obtenirParParcelle(any()))
+        .thenAnswer((_) async => []);
     when(() => repo.sauvegarder(any())).thenAnswer((_) async {});
     when(() => repo.obtenirParPotager(any())).thenAnswer((_) async => []);
+    when(() => repo.obtenirParId(any())).thenAnswer((_) async => null);
   });
 
   Future<void> monter(
     WidgetTester tester, {
     NiveauExperience niveau = NiveauExperience.debutant,
     PreferencesUnites unites = const PreferencesUnites(),
+    Parcelle? initiale,
   }) async {
     // Tall surface so the whole (scrollable) form — including the gated soil
     // controls and the save button — is laid out without lazy off-screen drops.
@@ -54,6 +67,7 @@ void main() {
       ProviderScope(
         overrides: [
           parcelleRepositoryProvider.overrideWithValue(repo),
+          plantationRepositoryProvider.overrideWithValue(plantations),
           accesNiveauProvider.overrideWithValue(AccesNiveau(niveau)),
           unitesProvider.overrideWithValue(unites),
         ],
@@ -61,7 +75,7 @@ void main() {
           theme: ThemeApp.clair(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const FormulaireZone(potagerId: 'pot-1'),
+          home: FormulaireZone(potagerId: 'pot-1', parcelleInitiale: initiale),
         ),
       ),
     );
@@ -311,18 +325,7 @@ void main() {
       notes: 'mémo sol',
     );
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [parcelleRepositoryProvider.overrideWithValue(repo)],
-        child: MaterialApp(
-          theme: ThemeApp.clair(),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: FormulaireZone(potagerId: 'pot-1', parcelleInitiale: initiale),
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
+    await monter(tester, initiale: initiale);
 
     // Pre-filled from the existing zone.
     expect(find.text('Modifier la zone'), findsOneWidget);
@@ -351,22 +354,9 @@ void main() {
       surface: Surface.enMetresCarres(1),
       exposition: NiveauSoleil.pleinSoleil,
     );
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          parcelleRepositoryProvider.overrideWithValue(repo),
-          unitesProvider.overrideWithValue(
-              const PreferencesUnites.uniforme(SystemeUnites.imperial)),
-        ],
-        child: MaterialApp(
-          theme: ThemeApp.clair(),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: FormulaireZone(potagerId: 'pot-1', parcelleInitiale: initiale),
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
+    await monter(tester,
+        initiale: initiale,
+        unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
 
     await tester.enterText(
         find.widgetWithText(TextFormField, 'Nom de la zone'), 'Carré sud');
@@ -376,5 +366,151 @@ void main() {
     final parcelle =
         verify(() => repo.sauvegarder(captureAny())).captured.single as Parcelle;
     expect(parcelle.surface.enMetresCarres, 1);
+  });
+
+  group('dimensions and water need', () {
+    Finder champ(String libelle) => find.widgetWithText(TextFormField, libelle);
+
+    Future<Parcelle> enregistrer(WidgetTester tester) async {
+      await tester.tap(find.text('Enregistrer'));
+      await tester.pumpAndSettle();
+      return verify(() => repo.sauvegarder(captureAny())).captured.single
+          as Parcelle;
+    }
+
+    Parcelle zone({DimensionsZone? dimensions, double m2 = 3}) => Parcelle(
+          id: 'z-9',
+          nom: 'Planche',
+          potagerId: 'pot-1',
+          type: TypeParcelle.pleineTerre,
+          surface: dimensions?.surface ?? Surface.enMetresCarres(m2),
+          exposition: NiveauSoleil.pleinSoleil,
+          dimensions: dimensions,
+          besoinEau: BesoinEau.modere,
+        );
+
+    testWidgets('both sides compute the surface, which locks', (tester) async {
+      await monter(tester);
+      await tester.enterText(champ('Nom de la zone'), 'Planche');
+      await tester.enterText(champ('Longueur (m)'), '3');
+      await tester.enterText(champ('Largeur (m)'), '1,2');
+      await tester.pump();
+
+      expect(find.text('3,6'), findsOneWidget);
+      expect(
+          tester
+              .widget<TextField>(find.descendant(
+                  of: champ('Surface (m²)'), matching: find.byType(TextField)))
+              .enabled,
+          isFalse);
+
+      final parcelle = await enregistrer(tester);
+      expect(parcelle.dimensions,
+          DimensionsZone(longueurCm: 300, largeurCm: 120));
+      expect(parcelle.surface.enMetresCarres, closeTo(3.6, 1e-9));
+    });
+
+    testWidgets('a single side blocks saving', (tester) async {
+      await monter(tester);
+      await tester.enterText(champ('Nom de la zone'), 'Planche');
+      await tester.enterText(champ('Longueur (m)'), '3');
+      await tester.tap(find.text('Enregistrer'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Renseigner les deux côtés, ou aucun.'), findsOneWidget);
+      verifyNever(() => repo.sauvegarder(any()));
+    });
+
+    testWidgets('imperial sides are typed in feet', (tester) async {
+      await monter(tester,
+          unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+      await tester.enterText(champ('Nom de la zone'), 'Planche');
+      await tester.enterText(champ('Longueur (ft)'), '10');
+      await tester.enterText(champ('Largeur (ft)'), '4');
+
+      expect(find.text('40'), findsOneWidget);
+      expect((await enregistrer(tester)).dimensions,
+          DimensionsZone(longueurCm: 304.8, largeurCm: 121.92));
+    });
+
+    testWidgets('the water need is persisted', (tester) async {
+      await monter(tester);
+      await tester.enterText(champ('Nom de la zone'), 'Planche');
+      await tester.tap(find.text('Non renseigné').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Arrosage élevé').last);
+      await tester.pumpAndSettle();
+
+      expect((await enregistrer(tester)).besoinEau, BesoinEau.eleve);
+    });
+
+    testWidgets('edit keeps untouched dimensions and water need',
+        (tester) async {
+      final dimensions = DimensionsZone(longueurCm: 304.8, largeurCm: 121.92);
+      await monter(tester,
+          initiale: zone(dimensions: dimensions),
+          unites: const PreferencesUnites.uniforme(SystemeUnites.imperial));
+      await tester.enterText(champ('Nom de la zone'), 'Planche est');
+
+      final parcelle = await enregistrer(tester);
+      expect(parcelle.dimensions, dimensions);
+      expect(parcelle.surface, dimensions.surface);
+      expect(parcelle.besoinEau, BesoinEau.modere);
+    });
+
+    testWidgets('clearing both sides frees the surface again', (tester) async {
+      await monter(tester,
+          initiale:
+              zone(dimensions: DimensionsZone(longueurCm: 200, largeurCm: 150)));
+      await tester.enterText(champ('Longueur (m)'), '');
+      await tester.enterText(champ('Largeur (m)'), '');
+      await tester.enterText(champ('Surface (m²)'), '2');
+
+      final parcelle = await enregistrer(tester);
+      expect(parcelle.dimensions, isNull);
+      expect(parcelle.surface.enMetresCarres, 2);
+    });
+
+    testWidgets('clearing a side restores the surface typed by hand',
+        (tester) async {
+      await monter(tester, initiale: zone(m2: 2));
+      await tester.enterText(champ('Longueur (m)'), '3');
+      await tester.enterText(champ('Largeur (m)'), '1');
+      await tester.pump();
+      await tester.enterText(champ('Largeur (m)'), '');
+      await tester.pump();
+      expect(find.text('2'), findsOneWidget);
+      await tester.enterText(champ('Longueur (m)'), '');
+
+      final parcelle = await enregistrer(tester);
+      expect(parcelle.dimensions, isNull);
+      expect(parcelle.surface.enMetresCarres, 2);
+    });
+
+    testWidgets('a surface below the crops in place is refused',
+        (tester) async {
+      when(() => plantations.obtenirParParcelle('z-9'))
+          .thenAnswer((_) async => [
+                Plantation(
+                  id: 'p-1',
+                  planteId: 'tomate',
+                  parcelleId: 'z-9',
+                  dateMiseEnPlace: DateTime(2026, 4, 1),
+                  methode: MethodeMiseEnPlace.repiquage,
+                  surfaceOccupee: Surface.enMetresCarres(2.5),
+                  nombrePieds: 3,
+                ),
+              ]);
+      await monter(tester, initiale: zone());
+      await tester.enterText(champ('Surface (m²)'), '2');
+      await tester.tap(find.text('Enregistrer'));
+      await tester.pumpAndSettle();
+
+      expect(
+          find.text(
+              'Surface inférieure à celle des cultures en place (2,5 m²).'),
+          findsOneWidget);
+      verifyNever(() => repo.sauvegarder(any()));
+    });
   });
 }

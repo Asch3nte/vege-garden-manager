@@ -322,6 +322,17 @@ class _Detail extends ConsumerWidget {
                       texte: formateurMesures(context, ref)
                           .surfaceM2(zone.surfaceM2),
                     ),
+                    if (zone.dimensions case final dimensions?)
+                      _Fait(
+                        icone: PhosphorIconsRegular.boundingBox,
+                        texte: formateurMesures(context, ref)
+                            .dimensionsZone(dimensions),
+                      ),
+                    if (zone.besoinEau case final besoinEau?)
+                      _Fait(
+                        icone: PhosphorIconsRegular.drop,
+                        texte: l10n.besoinEau(besoinEau),
+                      ),
                     _Fait(
                       icone: PhosphorIconsRegular.sun,
                       texte: l10n.exposition(zone.exposition),

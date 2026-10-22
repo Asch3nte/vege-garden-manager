@@ -31,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -124,6 +124,12 @@ class AppDatabase extends _$AppDatabase {
             final affectations =
                 colonnes.map((c) => '${c.name} = systeme_unites').join(', ');
             await customStatement('UPDATE preferences SET $affectations');
+          }
+          // v10 → v11: optional zone dimensions and water need.
+          if (from < 11) {
+            await m.addColumn(parcelles, parcelles.longueurCm);
+            await m.addColumn(parcelles, parcelles.largeurCm);
+            await m.addColumn(parcelles, parcelles.besoinEau);
           }
         },
         beforeOpen: (details) async {

@@ -2,6 +2,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/parcelle.dart';
+import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/source_type_sol.dart';
@@ -10,6 +11,7 @@ import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
 import '../../domain/repositories/abstract_parcelle_repository.dart';
 import '../../domain/value_objects/couleur_zone.dart';
+import '../../domain/value_objects/dimensions_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../providers/repository_providers.dart';
 
@@ -33,6 +35,8 @@ class CreerParcelle {
     required TypeParcelle type,
     required Surface surface,
     required NiveauSoleil exposition,
+    DimensionsZone? dimensions,
+    BesoinEau? besoinEau,
     int ordre = 0,
     CouleurZone? couleur,
     TextureSol? texture,
@@ -49,6 +53,8 @@ class CreerParcelle {
       type: type,
       surface: surface,
       exposition: exposition,
+      dimensions: dimensions,
+      besoinEau: besoinEau,
       ordre: ordre,
       couleur: couleur ??
           CouleurZone.suivante(

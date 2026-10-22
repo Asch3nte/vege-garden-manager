@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/entities/parcelle.dart';
+import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/ph_sol.dart';
 import 'package:pot_a_gerer/domain/enums/source_type_sol.dart';
@@ -10,6 +11,7 @@ import 'package:pot_a_gerer/domain/enums/technique_sol.dart';
 import 'package:pot_a_gerer/domain/enums/texture_sol.dart';
 import 'package:pot_a_gerer/domain/enums/type_parcelle.dart';
 import 'package:pot_a_gerer/domain/value_objects/couleur_zone.dart';
+import 'package:pot_a_gerer/domain/value_objects/dimensions_zone.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/parcelle_repository_impl.dart';
@@ -92,6 +94,42 @@ void main() {
     const premiere = CouleurZone.teinte(TeinteZone.vertProfond);
     expect((await repo.obtenirParId('a'))!.couleur, premiere);
     expect((await repo.obtenirParId('b'))!.couleur, premiere);
+  });
+
+  test('save then read round-trips dimensions and water need', () async {
+    final dimensions = DimensionsZone(longueurCm: 304.8, largeurCm: 121.92);
+    await repo.sauvegarder(Parcelle(
+      id: 'par1',
+      nom: 'Planche',
+      potagerId: 'pot1',
+      type: TypeParcelle.pleineTerre,
+      surface: dimensions.surface,
+      exposition: NiveauSoleil.pleinSoleil,
+      dimensions: dimensions,
+      besoinEau: BesoinEau.modere,
+    ));
+    final p = (await repo.obtenirParId('par1'))!;
+    expect(p.dimensions, dimensions);
+    expect(p.besoinEau, BesoinEau.modere);
+  });
+
+  test('invalid dimensions or water need read as unknown, the zone kept',
+      () async {
+    await repo.sauvegarder(parcelle(id: 'a'));
+    await db.customStatement(
+        "UPDATE parcelles SET longueur_cm = 200, besoin_eau = 'inconnu' "
+        "WHERE id = 'a'");
+    await repo.sauvegarder(parcelle(id: 'b'));
+    await db.customStatement(
+        "UPDATE parcelles SET longueur_cm = 200, largeur_cm = 200 "
+        "WHERE id = 'b'");
+
+    for (final id in ['a', 'b']) {
+      final p = (await repo.obtenirParId(id))!;
+      expect(p.dimensions, isNull);
+      expect(p.besoinEau, isNull);
+      expect(p.surface, Surface.enMetresCarres(2.5));
+    }
   });
 
   test('creation order breaks position ties', () async {

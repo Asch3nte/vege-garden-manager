@@ -49,6 +49,17 @@ class Surface implements Comparable<Surface> {
   bool operator >(Surface autre) => _metresCarres > autre._metresCarres;
   bool operator <(Surface autre) => _metresCarres < autre._metresCarres;
 
+  /// Whether this surface equals [autre], give or take rounding.
+  bool egaleA(Surface autre) =>
+      (_metresCarres - autre._metresCarres).abs() <= _toleranceM2;
+
+  /// Whether this surface exceeds [autre] beyond rounding, so float sums do
+  /// not refuse an exact fit.
+  bool depasse(Surface autre) => _metresCarres > autre._metresCarres + _toleranceM2;
+
+  /// Rounding slack of a comparison (1 mm²).
+  static const double _toleranceM2 = 1e-6;
+
   @override
   int compareTo(Surface autre) =>
       _metresCarres.compareTo(autre._metresCarres);

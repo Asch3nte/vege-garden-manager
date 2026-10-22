@@ -1,3 +1,4 @@
+import '../enums/besoin_eau.dart';
 import '../enums/niveau_soleil.dart';
 import '../enums/ph_sol.dart';
 import '../enums/source_type_sol.dart';
@@ -9,13 +10,15 @@ import '../enums/type_parcelle.dart';
 import '../exceptions/invariant_domaine_exception.dart';
 import '../exceptions/surface_insuffisante_exception.dart';
 import '../value_objects/couleur_zone.dart';
+import '../value_objects/dimensions_zone.dart';
 import '../value_objects/surface.dart';
 import 'equipement.dart';
 import 'plantation.dart';
 
 /// A homogeneous cultivation zone (bed, planter, pot, greenhouse, mound…).
 ///
-/// Its [surface] is entered by the user (source of truth). Soil management
+/// Its [surface] is entered by the user (source of truth), or equals the
+/// optional [dimensions] when they are known. Soil management
 /// techniques are multi-valued and orthogonal to the [type] (structure). The
 /// soil [texture] is nullable (unknown by default); its origin is traced by
 /// [textureSource].
@@ -32,7 +35,9 @@ class Parcelle {
   final String _potagerId;
   final TypeParcelle _type;
   final Surface _surface;
+  final DimensionsZone? _dimensions;
   NiveauSoleil _exposition;
+  final BesoinEau? _besoinEau;
   TextureSol? _texture;
   SourceTypeSol _textureSource;
   PhSol? _ph;
@@ -50,7 +55,9 @@ class Parcelle {
     this._potagerId,
     this._type,
     this._surface,
+    this._dimensions,
     this._exposition,
+    this._besoinEau,
     this._texture,
     this._textureSource,
     this._ph,
@@ -69,10 +76,13 @@ class Parcelle {
         _potagerId.isNotEmpty, 'potagerId must not be empty');
     InvariantDomaineException.verifier(
         _surface.enMetresCarres > 0, 'surface must be > 0');
+    InvariantDomaineException.verifier(
+        _dimensions?.surface.egaleA(_surface) ?? true,
+        'surface must equal the dimensions');
   }
 
-  /// Creates a parcelle. Soil texture is unknown by default; techniques and
-  /// contents start empty.
+  /// Creates a parcelle. Soil texture, [dimensions] and [besoinEau] are
+  /// unknown by default; techniques and contents start empty.
   factory Parcelle({
     required String id,
     required String nom,
@@ -80,6 +90,8 @@ class Parcelle {
     required TypeParcelle type,
     required Surface surface,
     required NiveauSoleil exposition,
+    DimensionsZone? dimensions,
+    BesoinEau? besoinEau,
     int ordre = 0,
     CouleurZone couleur = const CouleurZone.teinte(TeinteZone.vertProfond),
     TextureSol? texture,
@@ -97,7 +109,9 @@ class Parcelle {
         potagerId,
         type,
         surface,
+        dimensions,
         exposition,
+        besoinEau,
         texture,
         textureSource,
         ph,
@@ -115,7 +129,11 @@ class Parcelle {
   String get potagerId => _potagerId;
   TypeParcelle get type => _type;
   Surface get surface => _surface;
+  DimensionsZone? get dimensions => _dimensions;
   NiveauSoleil get exposition => _exposition;
+
+  /// Water need of the zone itself (soil, exposure), when known.
+  BesoinEau? get besoinEau => _besoinEau;
   TextureSol? get texture => _texture;
   SourceTypeSol get textureSource => _textureSource;
   PhSol? get ph => _ph;
@@ -146,24 +164,31 @@ class Parcelle {
       {required Iterable<Plantation> enPlace}) {
     if (!plantation.estActive()) return;
     final libre = _libreApres(enPlace);
-    // Float sums of surfaces must not refuse an exact fit.
-    if (plantation.surfaceOccupee.enMetresCarres >
-        libre.enMetresCarres + _toleranceM2) {
+    if (plantation.surfaceOccupee.depasse(libre)) {
       throw SurfaceInsuffisanteException(plantation.surfaceOccupee, libre);
     }
   }
 
-  /// Rounding slack of a surface comparison (1 mm²).
-  static const double _toleranceM2 = 1e-6;
+  /// Throws [SurfaceInsuffisanteException] when the active plantations among
+  /// [enPlace] need more room than this parcelle's surface.
+  void verifierContenance(Iterable<Plantation> enPlace) {
+    final occupee = _occupeePar(enPlace);
+    if (occupee.depasse(_surface)) {
+      throw SurfaceInsuffisanteException(occupee, _surface);
+    }
+  }
 
   /// Surface left free by the active plantations among [plantations].
   Surface _libreApres(Iterable<Plantation> plantations) {
-    final occupee = plantations
-        .where((p) => p.estActive())
-        .map((p) => p.surfaceOccupee)
-        .fold(Surface.zero, (total, s) => total + s);
+    final occupee = _occupeePar(plantations);
     return occupee >= _surface ? Surface.zero : _surface - occupee;
   }
+
+  /// Surface taken up by the active plantations among [plantations].
+  static Surface _occupeePar(Iterable<Plantation> plantations) => plantations
+      .where((p) => p.estActive())
+      .map((p) => p.surfaceOccupee)
+      .fold(Surface.zero, (total, s) => total + s);
 
   /// Adds a [plantation] to this parcelle.
   ///

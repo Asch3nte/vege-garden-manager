@@ -8,14 +8,18 @@ import '../../application/providers/unites_provider.dart';
 import '../../application/state/acces_niveau_provider.dart';
 import '../../application/state/parcelles_notifier.dart';
 import '../../domain/entities/parcelle.dart';
+import '../../domain/enums/besoin_eau.dart';
 import '../../domain/enums/niveau_soleil.dart';
 import '../../domain/enums/ph_sol.dart';
 import '../../domain/enums/technique_sol.dart';
 import '../../domain/enums/texture_sol.dart';
 import '../../domain/enums/type_parcelle.dart';
+import '../../domain/exceptions/surface_insuffisante_exception.dart';
 import '../../domain/value_objects/couleur_zone.dart';
+import '../../domain/value_objects/dimensions_zone.dart';
 import '../../domain/value_objects/surface.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/selecteur_couleur_zone.dart';
 import '../glossaire/terme_glossaire.dart';
@@ -43,8 +47,8 @@ Future<Parcelle?> ouvrirFormulaireZone(
   );
 }
 
-/// Minimal zone form: name + type + surface (m²) + sun exposure, scoped to a
-/// garden. Creates a zone, or edits [parcelleInitiale] when provided. Persists
+/// Zone form: name, type, optional sides (which then set the surface),
+/// surface, sun exposure and water need, scoped to a garden. Creates a zone, or edits [parcelleInitiale] when provided. Persists
 /// via the family-scoped [parcellesProvider].
 class FormulaireZone extends ConsumerStatefulWidget {
   /// Garden the zone belongs to.
@@ -68,13 +72,26 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   final _cleForm = GlobalKey<FormState>();
   final _nom = TextEditingController();
   final _surface = TextEditingController();
+  final _longueur = TextEditingController();
+  final _largeur = TextEditingController();
   late final SaisieMesures _saisie =
       SaisieMesures(ref.read(unitesProvider), ref.read(codeLangueProvider));
 
   /// The surface as first shown; saved unchanged when left as is.
   late final String _surfaceInitiale;
+
+  /// The sides as first shown; kept unchanged when left as is.
+  late final String _longueurInitiale;
+  late final String _largeurInitiale;
+
+  /// The sides typed so far, when both are valid.
+  DimensionsZone? _dimensions;
+
+  /// The surface typed by hand, shown again once the sides are cleared.
+  String? _surfaceManuelle;
   TypeParcelle _type = TypeParcelle.bacSureleve;
   NiveauSoleil _exposition = NiveauSoleil.pleinSoleil;
+  BesoinEau? _besoinEau;
   // Soil fields: techniques are intermediate+, texture/pH expert.
   // Edited only when the level unlocks them; otherwise preserved as-is.
   TextureSol? _texture;
@@ -101,10 +118,17 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
         ? _saisie.surfaceParDefaut(1, 10)
         : _saisie.surfacePourChamp(p.surface.enMetresCarres);
     _surface.text = _surfaceInitiale;
+    final d = p?.dimensions;
+    _longueurInitiale = d == null ? '' : _saisie.cotePourChamp(d.longueurCm);
+    _largeurInitiale = d == null ? '' : _saisie.cotePourChamp(d.largeurCm);
+    _longueur.text = _longueurInitiale;
+    _largeur.text = _largeurInitiale;
+    _dimensions = d;
     if (p != null) {
       _nom.text = p.nom;
       _type = p.type;
       _exposition = p.exposition;
+      _besoinEau = p.besoinEau;
       _texture = p.texture;
       _ph = p.ph;
       _techniques.addAll(p.techniquesSol);
@@ -116,17 +140,63 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
   void dispose() {
     _nom.dispose();
     _surface.dispose();
+    _longueur.dispose();
+    _largeur.dispose();
     super.dispose();
+  }
+
+  /// A typed side in centimetres, or null when empty or invalid.
+  double? _coteCm(String texte) {
+    final n = double.tryParse(texte.trim().replaceAll(',', '.'));
+    if (n == null || n <= 0) return null;
+    final cm = _saisie.coteVersCm(n);
+    return cm > 0 ? cm : null;
+  }
+
+  /// The typed sides, or null unless both are valid.
+  DimensionsZone? _lireDimensions() {
+    final initiales = widget.parcelleInitiale?.dimensions;
+    if (initiales != null &&
+        _longueur.text == _longueurInitiale &&
+        _largeur.text == _largeurInitiale) {
+      return initiales;
+    }
+    final longueur = _coteCm(_longueur.text);
+    final largeur = _coteCm(_largeur.text);
+    return longueur == null || largeur == null
+        ? null
+        : DimensionsZone(longueurCm: longueur, largeurCm: largeur);
+  }
+
+  /// Shows the surface the sides enclose, or the one typed by hand once
+  /// they no longer do.
+  void _coteModifiee(String _) {
+    final dimensions = _lireDimensions();
+    setState(() {
+      if (dimensions != null) {
+        if (_dimensions == null) _surfaceManuelle = _surface.text;
+        _surface.text =
+            _saisie.surfacePourChamp(dimensions.surface.enMetresCarres);
+      } else if (_dimensions != null && _surfaceManuelle != null) {
+        _surface.text = _surfaceManuelle!;
+      }
+      _dimensions = dimensions;
+    });
   }
 
   Future<void> _enregistrer() async {
     if (!_cleForm.currentState!.validate()) return;
     final texte = _surface.text.trim();
     final initiale = widget.parcelleInitiale;
-    final surface = initiale != null && texte == _surfaceInitiale
-        ? initiale.surface
-        : Surface.enMetresCarres(
-            _saisie.surfaceVersM2(double.parse(texte.replaceAll(',', '.'))));
+    final dimensions = _dimensions;
+    final surface = dimensions != null
+        ? dimensions.surface
+        : initiale != null && texte == _surfaceInitiale
+            ? initiale.surface
+            : Surface.enMetresCarres(_saisie
+                .surfaceVersM2(double.parse(texte.replaceAll(',', '.'))));
+    final mesures = formateurMesures(context, ref);
+    final l10n = AppLocalizations.of(context)!;
     final notifier = ref.read(parcellesProvider(widget.potagerId).notifier);
 
     await enregistrer(() async {
@@ -140,6 +210,8 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
           type: _type,
           surface: surface,
           exposition: _exposition,
+          dimensions: dimensions,
+          besoinEau: _besoinEau,
           ordre: initiale.ordre,
           couleur: _couleurAffichee,
           texture: _texture,
@@ -157,12 +229,18 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
         type: _type,
         surface: surface,
         exposition: _exposition,
+        dimensions: dimensions,
+        besoinEau: _besoinEau,
         couleur: _couleurAffichee,
         texture: _texture,
         ph: _ph,
         techniquesSol: _techniques,
       );
-    });
+    },
+        messageErreur: (e) => e is SurfaceInsuffisanteException
+            ? l10n.zoneSurfaceTropPetite(
+                mesures.surfaceM2(e.requise.enMetresCarres))
+            : null);
   }
 
   @override
@@ -210,8 +288,28 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
               onChanged: (v) => setState(() => _type = v!),
             ),
             const SizedBox(height: EspacementsApp.s4),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: _champCote(_longueur,
+                        l10n.formZoneLongueur(_saisie.symboleCote(l10n)), l10n)),
+                const SizedBox(width: EspacementsApp.s3),
+                Expanded(
+                    child: _champCote(_largeur,
+                        l10n.formZoneLargeur(_saisie.symboleCote(l10n)), l10n)),
+              ],
+            ),
+            const SizedBox(height: EspacementsApp.s1),
+            Text(
+              l10n.formZoneDimensionsAide,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: EspacementsApp.s4),
             TextFormField(
               controller: _surface,
+              enabled: _dimensions == null,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
@@ -237,6 +335,21 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
                   DropdownMenuItem(value: s, child: Text(l10n.exposition(s))),
               ],
               onChanged: (v) => setState(() => _exposition = v!),
+            ),
+            const SizedBox(height: EspacementsApp.s4),
+            DropdownButtonFormField<BesoinEau?>(
+              initialValue: _besoinEau,
+              decoration: InputDecoration(
+                labelText: l10n.formZoneBesoinEau,
+                border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+              ),
+              items: [
+                DropdownMenuItem(
+                    value: null, child: Text(l10n.formZoneNonRenseigne)),
+                for (final e in BesoinEau.values)
+                  DropdownMenuItem(value: e, child: Text(l10n.besoinEau(e))),
+              ],
+              onChanged: (v) => setState(() => _besoinEau = v),
             ),
             const SizedBox(height: EspacementsApp.s5),
             Text(l10n.formZoneCouleur, style: theme.textTheme.titleMedium),
@@ -330,7 +443,35 @@ class _FormulaireZoneState extends ConsumerState<FormulaireZone>
     );
   }
 
+  Widget _champCote(TextEditingController controleur, String libelle,
+          AppLocalizations l10n) =>
+      TextFormField(
+        controller: controleur,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+        ],
+        decoration: InputDecoration(
+          labelText: libelle,
+          border: const OutlineInputBorder(borderRadius: RayonsApp.brMd),
+        ),
+        onChanged: _coteModifiee,
+        validator: (v) => _validerCote(v, l10n),
+      );
+
+  /// Both sides or neither; a typed side must be a positive length.
+  String? _validerCote(String? v, AppLocalizations l10n) {
+    final saisies = [_longueur.text, _largeur.text]
+        .where((t) => t.trim().isNotEmpty)
+        .length;
+    if (v == null || v.trim().isEmpty) {
+      return saisies == 1 ? l10n.formZoneDimensionsIncompletes : null;
+    }
+    return _coteCm(v) == null ? l10n.champNombrePositif : null;
+  }
+
   String? _validerSurface(String? v, AppLocalizations l10n) {
+    if (_dimensions != null) return null;
     if (v == null || v.trim().isEmpty) return l10n.champObligatoire;
     final n = double.tryParse(v.trim().replaceAll(',', '.'));
     if (n == null || n <= 0) return l10n.champNombrePositif;
