@@ -32,6 +32,8 @@
 - ✅ **Nominatim / OpenStreetMap** (gratuit, sans compte, sans clé API) — validé
   avec le dev 2026-06-18 dans [ADR-0016](decisions/0016-refonte-ecran-meteo.md).
   - *Reverse Geocoding API* : coordonnées → nom de localité.
+  - *Search API* : nom de localité → coordonnées, à la validation du champ de
+    recherche du sélecteur de position ([ADR-0023](decisions/0023-globe-et-recherche-de-localite.md)).
   - Isolation derrière `AbstractGeocodageService` (domaine) /
     `NominatimClient` + `GeocodageServiceImpl` (infra).
   - Conformité politique OSM : `User-Agent` applicatif, ≤ 1 req/s, données non

@@ -39,10 +39,13 @@ cas où une information quitte votre appareil, et toujours de façon minimale :
   locale. Aucune donnée de jardin, aucun identifiant n'est transmis. Open-Meteo
   n'exige ni compte ni clé.
 - **Nominatim / OpenStreetMap** (nom de ville) : si vous saisissez une position,
-  l'application peut envoyer des **coordonnées** pour retrouver le nom de la
-  commune correspondante, afin de l'afficher.
+  l'application peut envoyer des **coordonnées** (arrondies au kilomètre) pour
+  retrouver le nom de la commune correspondante, afin de l'afficher. Si vous
+  **recherchez une localité** par son nom, le **texte saisi** est envoyé pour
+  trouver ses coordonnées.
 
-Ces échanges se limitent à des coordonnées et aux données météo renvoyées.
+Ces échanges se limitent à des coordonnées, au nom de localité recherché et
+aux données renvoyées.
 **Ils sont facultatifs** : voir les options ci-dessous.
 
 ## 4. Données sensibles et permissions
