@@ -37,6 +37,8 @@ class FichePlanteMapper {
     final duree = cycle['duree_avant_recolte_jours'] as List;
     final rotation = y['rotation'] as Map?;
     final rusticite = y['rusticite'] as Map?;
+    final hauteur = _plage(cycle['hauteur_adulte_cm']);
+    final etalement = _plage(cycle['etalement_adulte_cm']);
 
     return FichePlante(
       id: y['id'] as String,
@@ -88,12 +90,10 @@ class FichePlanteMapper {
       profondeurSolMinCm: cycle['profondeur_sol_min_cm'] as int?,
       compatibleHorsSol: cycle['compatible_hors_sol'] as bool? ?? true,
       cultureVerticale: cycle['culture_verticale'] as bool? ?? false,
-      hauteurAdulteCmMin: (cycle['hauteur_adulte_cm'] as List?)?[0] as int?,
-      hauteurAdulteCmMax: (cycle['hauteur_adulte_cm'] as List?)?[1] as int?,
-      etalementAdulteCmMin:
-          (cycle['etalement_adulte_cm'] as List?)?[0] as int?,
-      etalementAdulteCmMax:
-          (cycle['etalement_adulte_cm'] as List?)?[1] as int?,
+      hauteurAdulteCmMin: hauteur.$1,
+      hauteurAdulteCmMax: hauteur.$2,
+      etalementAdulteCmMin: etalement.$1,
+      etalementAdulteCmMax: etalement.$2,
       fixeAzote: rotation?['fixe_azote'] as bool? ?? false,
       besoinAzote: rotation?['besoin_azote'] == null
           ? null
@@ -255,6 +255,10 @@ class FichePlanteMapper {
 
   /// Resolves an enum value from a snake_case YAML token (e.g. `petit_fruit` →
   /// `CategoriePlante.petitFruit`).
+  /// `[min, max]` of an optional validated range field.
+  static (int?, int?) _plage(Object? valeur) =>
+      valeur is List ? (valeur[0] as int, valeur[1] as int) : (null, null);
+
   static T _enum<T extends Enum>(List<T> valeurs, String snake) =>
       valeurs.byName(_versCamel(snake));
 

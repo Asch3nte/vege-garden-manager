@@ -139,6 +139,12 @@ class FichePlante {
     InvariantDomaineException.verifier(
         _espacementCm > 0, 'espacementCm must be > 0');
     InvariantDomaineException.verifier(
+        (_etalementAdulteCmMin ?? 1) > 0 &&
+            (_etalementAdulteCmMax ?? 1) > 0 &&
+            (_etalementAdulteCmMin ?? 0) <=
+                (_etalementAdulteCmMax ?? _etalementAdulteCmMin ?? 0),
+        'etalementAdulteCm must be > 0 with min <= max');
+    InvariantDomaineException.verifier(
         _dureeAvantRecolteJoursMin > 0 &&
             _dureeAvantRecolteJoursMin <= _dureeAvantRecolteJoursMax,
         'duration must be positive with min <= max');
@@ -300,8 +306,10 @@ class FichePlante {
   int? get hauteurAdulteCmMin => _hauteurAdulteCmMin;
   int? get hauteurAdulteCmMax => _hauteurAdulteCmMax;
 
-  /// Adult spread (width of the plant), in cm.
+  /// Minimum adult spread (width of the plant), in cm.
   int? get etalementAdulteCmMin => _etalementAdulteCmMin;
+
+  /// Maximum adult spread (width of the plant), in cm.
   int? get etalementAdulteCmMax => _etalementAdulteCmMax;
   bool get fixeAzote => _fixeAzote;
   NiveauBesoin? get besoinAzote => _besoinAzote;

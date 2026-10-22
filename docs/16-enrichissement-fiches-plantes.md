@@ -29,7 +29,7 @@
 | `besoins.ph_min / ph_max` | `BesoinsCulture.phMin/Max` | 🔵 parsé, non utilisé |
 | `besoins.temperature_min_germination` | — | 🔵 parsé, non utilisé |
 | `besoins.temperature_optimale` | — | 🔵 parsé, non utilisé |
-| `cycle.hauteur_adulte_cm` | — | 🔵 parsé, non utilisé |
+| `cycle.hauteur_adulte_cm` | `FichePlante.hauteurAdulteCmMin/Max` | ✅ affiché dans la fiche, règles d'étagement |
 | `cycle.etalement_adulte_cm` | `FichePlante.etalementAdulteCmMin/Max` | ✅ affiché dans la fiche |
 | Rusticité USDA de la plante | — | ⚪ absent |
 | Température de survie (gel) | — | ⚪ absent |

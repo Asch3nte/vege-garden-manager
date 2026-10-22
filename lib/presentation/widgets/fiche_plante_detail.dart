@@ -637,6 +637,13 @@ class _Faits extends ConsumerWidget {
   static String _ph(double v, String langue) =>
       NumberFormat('0.#', langue).format(v);
 
+  /// A length range, or its single value when both ends are equal or one is
+  /// missing; at least one end must be set.
+  static String _plageCm(FormateurMesures mesures, int? min, int? max) =>
+      (min != null && max != null && min != max)
+          ? mesures.plageLongueurCm(min, max)
+          : mesures.longueurCm((max ?? min)!);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mesures = formateurMesures(context, ref);
@@ -677,18 +684,14 @@ class _Faits extends ConsumerWidget {
         (
           PhosphorIconsRegular.arrowsVertical,
           l10n.ficheHauteur,
-          (hMin != null && hMax != null && hMin != hMax)
-              ? mesures.plageLongueurCm(hMin, hMax)
-              : mesures.longueurCm((hMax ?? hMin)!),
+          _plageCm(mesures, hMin, hMax),
           null,
         ),
       if (eMin != null || eMax != null)
         (
           PhosphorIconsRegular.arrowsHorizontal,
           l10n.ficheEtalement,
-          (eMin != null && eMax != null && eMin != eMax)
-              ? mesures.plageLongueurCm(eMin, eMax)
-              : mesures.longueurCm((eMax ?? eMin)!),
+          _plageCm(mesures, eMin, eMax),
           null,
         ),
       (
