@@ -15,6 +15,7 @@ import '../../domain/services/resolveur_compagnonnage.dart';
 import '../../l10n/app_localizations.dart';
 import 'fiche_plante_detail.dart';
 import 'langue_contexte.dart';
+import 'reseau/cible_tap_reseau.dart';
 import 'reseau/halo_famille.dart';
 import 'reseau/layout_reseau_familles.dart';
 
@@ -52,6 +53,10 @@ class _TransformReseau {
   const _TransformReseau(this.echelle, this.offset);
 
   Offset versEcran(Offset virtuel) => virtuel * echelle + offset;
+
+  /// Screen centre of a node at [position], honouring its [decalage] (#8b).
+  Offset noeudVersEcran(Offset position, Offset? decalage) =>
+      versEcran(position + (decalage ?? Offset.zero));
 
   static _TransformReseau lerp(
     _TransformReseau a,
@@ -111,11 +116,10 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
   static const double _rayonNoeudVirtuel = 13;
   static const double _rayonNoeudMin = 3;
 
-  // Max screen distance (px) from a node centre at which a tap that missed every
-  // disc still selects it (Voronoï hit-testing): the shrunk discs
-  // (dezoom) keep a generous hitbox — bounded and never overlapping by
-  // construction (nearest-point assignment) — without changing the visual.
-  static const double _hitboxMax = 28;
+  // A tap that missed every disc still selects the nearest node within 28 px,
+  // so the shrunk discs (dezoom) keep a generous hitbox without changing the
+  // visual.
+  static const _cibleTap = CibleTapReseau(28);
 
   /// On-screen node radius at transform [t]: virtual radius × scale, clamped
   /// between the floor and the cap.
@@ -407,32 +411,29 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     }
   }
 
-  /// Voronoï-style hit-testing of the painted discs: a tap selects the
-  /// **nearest** node when within [_hitboxMax] screen pixels, so the shrunk
-  /// discs (dezoom) stay easy to hit. Taps on a grouped name, control or the
-  /// search are handled by those widgets' own recognizers, which win the
-  /// gesture arena. The nearest-point assignment makes the hitboxes
-  /// non-overlapping and self-deforming by construction.
+  /// Nodes without a painted disc: in focus, the selection and its links
+  /// (shown by the grouped family nodes).
+  Set<int> _masques() =>
+      _selection == null ? const {} : {_selection!, ..._voisins(_selection!)};
+
+  /// Hit-testing of the painted discs (see [CibleTapReseau]). Taps on a
+  /// grouped name, control or the search are handled by those widgets' own
+  /// recognizers, which win the gesture arena.
   void _surTapCanvas(TapUpDetails d) {
-    if (widget.fiches.isEmpty) return;
     final t = _transformActuel(_viewport);
-    int? plusProche;
-    var meilleure = double.infinity;
-    for (var i = 0; i < widget.fiches.length; i++) {
-      // Use the same on-screen centre the canvas renders: displaced in the
-      // global view (#8b), canonical in focus (grouped nodes ignore #8b).
-      final centre = t.versEcran(
-        _selection == null ? _posAffichee(i) : _positions[i],
-      );
-      final dist = (centre - d.localPosition).distance;
-      if (dist < meilleure) {
-        meilleure = dist;
-        plusProche = i;
-      }
-    }
-    if (plusProche != null && meilleure <= _hitboxMax) {
-      _toucherNoeud(plusProche);
-    }
+    final rayon = _rayonEcran(t);
+    final i = _cibleTap.trouver(
+      point: d.localPosition,
+      // Same on-screen centres the canvas renders: displaced in the global
+      // view (#8b), canonical in focus (grouped nodes ignore #8b).
+      centres: [
+        for (var i = 0; i < widget.fiches.length; i++)
+          t.versEcran(_selection == null ? _posAffichee(i) : _positions[i]),
+      ],
+      rayonDisque: _selection == null ? rayon : rayon / 2,
+      masques: _masques(),
+    );
+    if (i != null) _toucherNoeud(i);
   }
 
   static String _normaliser(String s) => const ComparateurNoms().replier(s);
@@ -849,11 +850,17 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
     final theme = Theme.of(context);
     final voisins = _selection == null ? const <int>{} : _voisins(_selection!);
     final langue = context.langue;
-    final styleInitiale = theme.textTheme.labelMedium?.copyWith(
-      color: Colors.white,
-      fontWeight: FontWeight.w700,
+    final direction = Directionality.of(context);
+    _initiales.preparer(
+      fiches: widget.fiches,
+      langue: langue,
+      style: theme.textTheme.labelMedium?.copyWith(
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+      ),
+      echelle: MediaQuery.textScalerOf(context),
+      direction: direction,
     );
-    final echelleTexte = MediaQuery.textScalerOf(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -918,7 +925,7 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
           onScaleUpdate: _majGeste,
           // A stationary tap on the canvas resolves to this recognizer (a
           // drag/pinch goes to the scale one); it selects the nearest painted
-          // node within [_hitboxMax] (Voronoï hit-testing).
+          // node (Voronoï hit-testing).
           onTapUp: _surTapCanvas,
           child: ClipRect(
             child: Stack(
@@ -964,16 +971,13 @@ class _VueReseauCatalogueState extends State<VueReseauCatalogue>
                     positions: _positions,
                     decalages:
                         _selection == null ? decalages : const <int, Offset>{},
-                    masques: _selection == null
-                        ? const <int>{}
-                        : {_selection!, ...voisins},
+                    masques: _masques(),
                     attenues: _selection != null,
                     rayon: _selection == null ? rBase : rBase / 2,
                     transform: t,
                     langue: langue,
+                    direction: direction,
                     initiales: _initiales,
-                    styleInitiale: styleInitiale,
-                    echelleTexte: echelleTexte,
                     onTap: _toucherNoeud,
                   ),
                 ),
@@ -1678,8 +1682,7 @@ class _PeintreAretes extends CustomPainter {
 
   /// Screen position of node [i], honouring its #8b displacement so edges stay
   /// attached to displaced nodes.
-  Offset _pos(int i) =>
-      transform.versEcran(positions[i] + (decalages[i] ?? Offset.zero));
+  Offset _pos(int i) => transform.noeudVersEcran(positions[i], decalages[i]);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1703,35 +1706,63 @@ class _PeintreAretes extends CustomPainter {
       !identical(old.decalages, decalages);
 }
 
-/// Laid-out node initials, reused across frames instead of re-laid out on each
-/// pan/zoom.
+/// Laid-out node initials, computed once per catalogue/language/style instead
+/// of on each pan/zoom frame.
 class _CacheInitiales {
-  final Map<String, TextPainter> _peintres = {};
+  final Map<String, TextPainter> _parLettre = {};
+  List<TextPainter?> _parNoeud = const [];
+  List<FichePlante>? _fiches;
+  String? _langue;
   TextStyle? _style;
   TextScaler _echelle = TextScaler.noScaling;
+  TextDirection _direction = TextDirection.ltr;
 
-  /// The laid-out [initiale]; the cache resets when [style] or [echelle] change.
-  TextPainter peintre(String initiale, TextStyle? style, TextScaler echelle) {
-    if (style != _style || echelle != _echelle) {
+  /// Resets what [fiches], [langue], [style], [echelle] or [direction]
+  /// invalidate.
+  void preparer({
+    required List<FichePlante> fiches,
+    required String langue,
+    required TextStyle? style,
+    required TextScaler echelle,
+    required TextDirection direction,
+  }) {
+    if (style != _style || echelle != _echelle || direction != _direction) {
       vider();
       _style = style;
       _echelle = echelle;
+      _direction = direction;
     }
-    return _peintres.putIfAbsent(
-      initiale,
+    if (!identical(fiches, _fiches) || langue != _langue ||
+        _parNoeud.length != fiches.length) {
+      _fiches = fiches;
+      _langue = langue;
+      _parNoeud = List<TextPainter?>.filled(fiches.length, null);
+    }
+  }
+
+  /// The laid-out initial of node [i], or `null` when its name is empty.
+  TextPainter? peintre(int i) {
+    final deja = _parNoeud[i];
+    if (deja != null) return deja;
+    final nom = _fiches![i].nomLocalise(_langue!);
+    if (nom.isEmpty) return null;
+    final lettre = nom.characters.first.toUpperCase();
+    return _parNoeud[i] = _parLettre.putIfAbsent(
+      lettre,
       () => TextPainter(
-        text: TextSpan(text: initiale, style: style),
-        textDirection: TextDirection.ltr,
-        textScaler: echelle,
+        text: TextSpan(text: lettre, style: _style),
+        textDirection: _direction,
+        textScaler: _echelle,
       )..layout(),
     );
   }
 
   void vider() {
-    for (final p in _peintres.values) {
+    for (final p in _parLettre.values) {
       p.dispose();
     }
-    _peintres.clear();
+    _parLettre.clear();
+    _parNoeud = List<TextPainter?>.filled(_parNoeud.length, null);
   }
 }
 
@@ -1747,9 +1778,8 @@ class _PeintreNoeuds extends CustomPainter {
   final double rayon;
   final _TransformReseau transform;
   final String langue;
+  final TextDirection direction;
   final _CacheInitiales initiales;
-  final TextStyle? styleInitiale;
-  final TextScaler echelleTexte;
   final void Function(int) onTap;
 
   // Below this radius the initial no longer fits in the disc.
@@ -1765,21 +1795,25 @@ class _PeintreNoeuds extends CustomPainter {
     required this.rayon,
     required this.transform,
     required this.langue,
+    required this.direction,
     required this.initiales,
-    required this.styleInitiale,
-    required this.echelleTexte,
     required this.onTap,
   });
 
-  Offset _centre(int i) =>
-      transform.versEcran(positions[i] + (decalages[i] ?? Offset.zero));
+  Offset _centre(int i) => transform.noeudVersEcran(positions[i], decalages[i]);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final opacite = attenues ? 0.15 : 1.0;
+    // One layer fades every disc uniformly (rim included).
+    if (attenues) {
+      canvas.saveLayer(
+        Offset.zero & size,
+        Paint()..color = Colors.black.withValues(alpha: 0.15),
+      );
+    }
     final fond = Paint();
     final bord = Paint()
-      ..color = Colors.white.withValues(alpha: opacite)
+      ..color = Colors.white
       ..style = PaintingStyle.stroke
       ..strokeWidth = _bordure;
     final avecInitiale = rayon >= _rayonInitialeMin;
@@ -1788,23 +1822,14 @@ class _PeintreNoeuds extends CustomPainter {
       final centre = _centre(i);
       fond.color = couleurCategorie(
         fiches[i].categorie,
-      ).withValues(alpha: 0.85 * opacite);
+      ).withValues(alpha: 0.85);
       canvas.drawCircle(centre, rayon, fond);
       canvas.drawCircle(centre, rayon - _bordure / 2, bord);
-      // Faded discs are always below the initial threshold (half radius).
-      if (avecInitiale && !attenues) {
-        final tp = initiales.peintre(
-          _initiale(fiches[i]),
-          styleInitiale,
-          echelleTexte,
-        );
-        tp.paint(canvas, centre - Offset(tp.width / 2, tp.height / 2));
-      }
+      final tp = avecInitiale ? initiales.peintre(i) : null;
+      tp?.paint(canvas, centre - Offset(tp.width / 2, tp.height / 2));
     }
+    if (attenues) canvas.restore();
   }
-
-  String _initiale(FichePlante f) =>
-      f.nomLocalise(langue).characters.first.toUpperCase();
 
   @override
   SemanticsBuilderCallback get semanticsBuilder => (size) => [
@@ -1815,7 +1840,7 @@ class _PeintreNoeuds extends CustomPainter {
           properties: SemanticsProperties(
             identifier: 'reseau-noeud-${fiches[i].id}',
             label: fiches[i].nomLocalise(langue),
-            textDirection: TextDirection.ltr,
+            textDirection: direction,
             onTap: () => onTap(i),
           ),
         ),
@@ -1827,12 +1852,14 @@ class _PeintreNoeuds extends CustomPainter {
       old.rayon != rayon ||
       old.attenues != attenues ||
       old.langue != langue ||
-      old.styleInitiale != styleInitiale ||
-      old.echelleTexte != echelleTexte ||
+      old.direction != direction ||
+      !identical(old.initiales, initiales) ||
       !identical(old.fiches, fiches) ||
       !identical(old.decalages, decalages) ||
       !setEquals(old.masques, masques);
 
+  // Disc rects follow the transform; this only runs while an assistive
+  // technology has the semantics tree enabled.
   @override
   bool shouldRebuildSemantics(_PeintreNoeuds old) => shouldRepaint(old);
 }
