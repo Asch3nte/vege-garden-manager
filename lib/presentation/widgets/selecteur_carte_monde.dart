@@ -1,52 +1,21 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
+import '../../application/providers/service_providers.dart';
+import '../../application/state/preferences_notifier.dart';
+import '../../domain/exceptions/geocodage_indisponible_exception.dart';
+import '../../domain/value_objects/lieu_trouve.dart';
 import '../../domain/value_objects/localisation.dart';
 import '../../l10n/app_localizations.dart';
+import 'globe/camera_globe.dart';
+import 'globe/globe_terrestre.dart';
 
-/// Approximate world regions used as quick-jump shortcuts on the map: each maps
-/// to representative coordinates. Shared so the list lives in one place.
-List<(String, double, double)> regionsLocalisation(AppLocalizations l10n) => [
-      (l10n.regionEuropeOuest, 48, 2),
-      (l10n.regionMediterranee, 38, 12),
-      (l10n.regionEuropeNord, 60, 18),
-      (l10n.regionTropiques, 5, 25),
-      (l10n.regionAmeriqueNord, 42, -90),
-      (l10n.regionHemisphereSud, -33, 18),
-    ];
-
-/// Linear plate-carrée (equirectangular) projection between a point's
-/// **fractional position** on the world map image and its **geographic
-/// coordinates**.
-///
-/// The embedded map (`assets/images/carte_monde.jpg`, NASA Blue Marble, public
-/// domain) is a full-globe equirectangular image: the horizontal axis maps
-/// linearly to longitude `[-180, +180]` (left → right) and the vertical axis to
-/// latitude `[+90, -90]` (top → bottom). Pure and side-effect-free so the
-/// mapping can be unit-tested without a widget tree.
-class ProjectionEquirectangulaire {
-  const ProjectionEquirectangulaire._();
-
-  /// Geographic `(latitude, longitude)` for a fractional position `(fx, fy)`,
-  /// each in `[0, 1]` (clamped). `(0,0)` is the top-left (−180°, +90°).
-  static (double latitude, double longitude) versCoords(double fx, double fy) {
-    final x = fx.clamp(0.0, 1.0);
-    final y = fy.clamp(0.0, 1.0);
-    return (90 - y * 180, x * 360 - 180);
-  }
-
-  /// Fractional position `(fx, fy)` in `[0, 1]` for geographic coordinates.
-  static (double fx, double fy) versFraction(double latitude, double longitude) {
-    final fx = ((longitude + 180) / 360).clamp(0.0, 1.0);
-    final fy = ((90 - latitude) / 180).clamp(0.0, 1.0);
-    return (fx, fy);
-  }
-}
-
-/// Opens the zoomable world-map picker and returns the chosen [Localisation]
-/// (manual source), or `null` if the user cancelled. The map replaces the older
-/// coarse region list: the user pans/zooms to pick the precision they want.
+/// Opens the globe position picker and returns the chosen [Localisation]
+/// (manual source), or `null` if the user cancelled.
 Future<Localisation?> choisirSurCarteMonde(BuildContext context) {
   return Navigator.of(context).push<Localisation>(
     MaterialPageRoute(
@@ -56,243 +25,312 @@ Future<Localisation?> choisirSurCarteMonde(BuildContext context) {
   );
 }
 
-class _EcranCarteMonde extends StatefulWidget {
+class _EcranCarteMonde extends ConsumerStatefulWidget {
   const _EcranCarteMonde();
 
   @override
-  State<_EcranCarteMonde> createState() => _EcranCarteMondeState();
+  ConsumerState<_EcranCarteMonde> createState() => _EcranCarteMondeState();
 }
 
-class _EcranCarteMondeState extends State<_EcranCarteMonde> {
-  /// Asset aspect ratio (2058 × 1036 px) — kept exact so the full image spans
-  /// the full lon/lat range without distortion under `BoxFit.fill`.
-  static const double _ratioCarte = 2058 / 1036;
-  static const String _chemin = 'assets/images/carte_monde.jpg';
-  static const double _zoomMax = 14;
-  static const double _zoomPreset = 4;
+enum _EtatRecherche { inactive, enCours, aucune, indisponible }
 
-  final TransformationController _tc = TransformationController();
+class _EcranCarteMondeState extends ConsumerState<_EcranCarteMonde> {
+  static const double _zoomLieu = 6;
 
-  /// Selected point as a fractional position on the map, or `null` if none yet.
-  Offset? _fraction;
+  /// Waits for taps to calm down before naming the point, so a burst of taps
+  /// sends a single lookup.
+  static const Duration _delaiNommage = Duration(milliseconds: 500);
 
-  /// Interactive viewport size and the image's box within it (the map is
-  /// contained, keeping its 2:1 ratio, so the zoom/pan canvas fills the whole
-  /// available space while the image stays proportional). Captured in [build]
-  /// so presets/pin can convert between image space and the viewport.
-  Size? _viewport;
-  Rect _imageRect = Rect.zero;
+  final CameraGlobe _camera = CameraGlobe(latitude: 30, longitude: 10);
+  final TextEditingController _champ = TextEditingController();
+
+  (double, double)? _point;
+  LieuTrouve? _lieu;
+  bool _nommage = false;
+  Timer? _minuterieNommage;
+
+  // Bumped so late answers are ignored: one counter per kind of request.
+  int _jetonRecherche = 0;
+  int _jetonPoint = 0;
+
+  /// Whether the tapped point is named automatically; off with the automatic
+  /// network opt-out.
+  bool _nommageAuto = false;
+
+  _EtatRecherche _recherche = _EtatRecherche.inactive;
+  List<LieuTrouve> _suggestions = const [];
 
   @override
   void dispose() {
-    _tc.dispose();
+    _minuterieNommage?.cancel();
+    _camera.dispose();
+    _champ.dispose();
     super.dispose();
   }
 
-  void _poser(Offset positionLocale, Size taille) {
+  Future<void> _rechercher(String texte) async {
+    if (texte.trim().isEmpty) return;
+    final jeton = ++_jetonRecherche;
     setState(() {
-      _fraction = Offset(
-        (positionLocale.dx / taille.width).clamp(0.0, 1.0),
-        (positionLocale.dy / taille.height).clamp(0.0, 1.0),
-      );
+      _recherche = _EtatRecherche.enCours;
+      _suggestions = const [];
+    });
+    final List<LieuTrouve> lieux;
+    try {
+      lieux = await ref.read(geocodageServiceProvider).rechercherLieux(texte);
+    } on GeocodageIndisponibleException {
+      if (mounted && jeton == _jetonRecherche) {
+        setState(() => _recherche = _EtatRecherche.indisponible);
+      }
+      return;
+    }
+    if (!mounted || jeton != _jetonRecherche) return;
+    if (lieux.length == 1) {
+      _choisirLieu(lieux.single);
+      return;
+    }
+    setState(() {
+      _suggestions = lieux;
+      _recherche =
+          lieux.isEmpty ? _EtatRecherche.aucune : _EtatRecherche.inactive;
     });
   }
 
-  /// Maps a fractional map position to a point in the InteractiveViewer child's
-  /// coordinate space (the viewport-sized canvas at scale 1).
-  Offset _pointCanevas(Offset fraction) => Offset(
-        _imageRect.left + fraction.dx * _imageRect.width,
-        _imageRect.top + fraction.dy * _imageRect.height,
-      );
+  void _choisirLieu(LieuTrouve lieu) {
+    _jetonRecherche++;
+    _jetonPoint++;
+    _minuterieNommage?.cancel();
+    FocusScope.of(context).unfocus();
+    _camera.viser(lieu.latitude, lieu.longitude, zoom: _zoomLieu);
+    setState(() {
+      _point = (lieu.latitude, lieu.longitude);
+      _lieu = lieu;
+      _nommage = false;
+      _suggestions = const [];
+      _recherche = _EtatRecherche.inactive;
+    });
+  }
 
-  /// Centres the view on [fraction] at a moderate zoom (region presets) and
-  /// drops the pin there.
-  void _allerVers(Offset fraction) {
-    final v = _viewport;
-    if (v == null) return;
-    final s = _zoomPreset;
-    final p = _pointCanevas(fraction);
-    _tc.value = Matrix4.identity()
-      ..translateByDouble(v.width / 2 - s * p.dx, v.height / 2 - s * p.dy, 0, 1)
-      ..scaleByDouble(s, s, s, 1);
-    setState(() => _fraction = fraction);
+  void _poser(double latitude, double longitude) {
+    final jeton = ++_jetonPoint;
+    _minuterieNommage?.cancel();
+    setState(() {
+      _point = (latitude, longitude);
+      _lieu = null;
+      _nommage = _nommageAuto;
+      _suggestions = const [];
+      _recherche = _EtatRecherche.inactive;
+    });
+    if (!_nommageAuto) return;
+    _minuterieNommage = Timer(_delaiNommage, () async {
+      final lieu = await ref
+          .read(geocodageServiceProvider)
+          .identifierLieu(latitude, longitude);
+      if (!mounted || jeton != _jetonPoint) return;
+      setState(() {
+        _lieu = lieu;
+        _nommage = false;
+      });
+    });
+  }
+
+  void _effacer() {
+    _champ.clear();
+    _jetonRecherche++;
+    setState(() {
+      _suggestions = const [];
+      _recherche = _EtatRecherche.inactive;
+    });
   }
 
   void _valider() {
-    final f = _fraction;
-    if (f == null) return;
-    final (lat, lon) = ProjectionEquirectangulaire.versCoords(f.dx, f.dy);
-    Navigator.of(context).pop(
-      Localisation.manuelle(ville: _libelleCoords(lat, lon), latitude: lat, longitude: lon),
-    );
+    final point = _point;
+    if (point == null) return;
+    _minuterieNommage?.cancel();
+    _jetonPoint++;
+    final (lat, lon) = point;
+    Navigator.of(context).pop(Localisation.manuelle(
+      ville: _lieu?.nom ?? _libelleCoords(lat, lon),
+      latitude: lat,
+      longitude: lon,
+    ));
   }
 
-  /// Compact human-readable coordinate label (e.g. `48.2° N, 2.4° E`). The
-  /// cardinal letters are geographic notation, intentionally kept literal.
-  String _libelleCoords(double lat, double lon) {
+  /// Compact coordinate label (e.g. `48.2° N, 2.4° E`). The cardinal letters
+  /// are geographic notation, intentionally kept literal.
+  static String _libelleCoords(double lat, double lon) {
     final ns = lat >= 0 ? 'N' : 'S';
     final eo = lon >= 0 ? 'E' : 'O';
     return '${lat.abs().toStringAsFixed(1)}° $ns, '
         '${lon.abs().toStringAsFixed(1)}° $eo';
   }
 
+  static String? _contexte(LieuTrouve lieu) {
+    final parties = [lieu.region, lieu.pays].whereType<String>();
+    return parties.isEmpty ? null : parties.join(', ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    _nommageAuto =
+        ref.watch(preferencesProvider).value?.meteoAutoActive ?? false;
+
+    final message = switch (_recherche) {
+      _EtatRecherche.aucune => l10n.carteMondeRechercheAucune,
+      _EtatRecherche.indisponible => l10n.carteMondeRechercheIndisponible,
+      _ => null,
+    };
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.carteMondeTitre)),
       body: SafeArea(
         child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(EspacementsApp.s4,
-                EspacementsApp.s4, EspacementsApp.s4, EspacementsApp.s2),
-            child: Text(
-              l10n.carteMondeInstruction,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-            ),
-          ),
-          // Region shortcuts at the top (above the map).
-          _BandeRegions(
-            onRegion: (lat, lon) {
-              final (fx, fy) =
-                  ProjectionEquirectangulaire.versFraction(lat, lon);
-              _allerVers(Offset(fx, fy));
-            },
-            regions: regionsLocalisation(l10n),
-          ),
-          // The interactive zone fills all the available vertical space: the
-          // zoom/pan canvas spans the whole area (so zooming uses every pixel
-          // up to these bounds), while the 2:1 image stays contained inside it.
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final vw = constraints.maxWidth;
-                final vh = constraints.maxHeight;
-                // Contain the map keeping its ratio: fit by width unless that
-                // overflows the height, then fit by height.
-                var imgW = vw;
-                var imgH = vw / _ratioCarte;
-                if (imgH > vh) {
-                  imgH = vh;
-                  imgW = vh * _ratioCarte;
-                }
-                final rect = Rect.fromLTWH(
-                    (vw - imgW) / 2, (vh - imgH) / 2, imgW, imgH);
-                _viewport = Size(vw, vh);
-                _imageRect = rect;
-                return Stack(
-                  clipBehavior: Clip.hardEdge,
-                  children: [
-                    Positioned.fill(
-                      child: InteractiveViewer(
-                        transformationController: _tc,
-                        minScale: 1,
-                        maxScale: _zoomMax,
-                        child: SizedBox(
-                          width: vw,
-                          height: vh,
-                          child: Stack(
-                            children: [
-                              Positioned.fromRect(
-                                rect: rect,
-                                child: GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTapUp: (d) =>
-                                      _poser(d.localPosition, rect.size),
-                                  child:
-                                      Image.asset(_chemin, fit: BoxFit.fill),
-                                ),
-                              ),
-                            ],
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(EspacementsApp.s4,
+                  EspacementsApp.s4, EspacementsApp.s4, EspacementsApp.s2),
+              child: TextField(
+                controller: _champ,
+                textInputAction: TextInputAction.search,
+                onSubmitted: _rechercher,
+                decoration: InputDecoration(
+                  hintText: l10n.carteMondeRechercheIndice,
+                  prefixIcon: const Icon(PhosphorIconsRegular.magnifyingGlass),
+                  suffixIcon: _recherche == _EtatRecherche.enCours
+                      ? const Padding(
+                          padding: EdgeInsets.all(EspacementsApp.s3),
+                          child: SizedBox.square(
+                            dimension: TaillesIconesApp.sm,
+                            child: CircularProgressIndicator(strokeWidth: 2),
                           ),
+                        )
+                      : IconButton(
+                          tooltip: l10n.carteMondeRechercheEffacer,
+                          icon: const Icon(PhosphorIconsRegular.x),
+                          onPressed: _effacer,
                         ),
+                  helperText: message ?? l10n.carteMondeInstruction,
+                  helperMaxLines: 2,
+                  helperStyle: message == null
+                      ? null
+                      : TextStyle(color: theme.colorScheme.error),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: GlobeTerrestre(
+                      camera: _camera,
+                      pin: _point,
+                      libelle: l10n.carteMondeGlobe,
+                      onTap: _poser,
+                    ),
+                  ),
+                  if (_suggestions.isNotEmpty)
+                    Positioned(
+                      left: EspacementsApp.s4,
+                      right: EspacementsApp.s4,
+                      top: 0,
+                      bottom: EspacementsApp.s4,
+                      child: _ListeSuggestions(
+                        lieux: _suggestions,
+                        contexte: _contexte,
+                        onChoix: _choisirLieu,
                       ),
                     ),
-                    // Pin overlay: re-projected through the live transform, at
-                    // constant screen size (it does not zoom with the map).
-                    if (_fraction != null)
-                      AnimatedBuilder(
-                        animation: _tc,
-                        builder: (context, _) => _pin(),
-                      ),
-                  ],
-                );
-              },
+                ],
+              ),
             ),
-          ),
-          // Confirm button, bottom-right — same look as the onboarding "Suivant"
-          // (FilledButton: grey when disabled, primary when a point is set).
-          Padding(
-            padding: const EdgeInsets.all(EspacementsApp.s4),
-            child: Row(
-              children: [
-                const Spacer(),
-                FilledButton(
-                  onPressed: _fraction == null ? null : _valider,
-                  child: Text(l10n.carteMondeValider),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(EspacementsApp.s4),
+              child: Row(
+                children: [
+                  Expanded(child: _piedLieu(l10n, theme)),
+                  const SizedBox(width: EspacementsApp.s3),
+                  FilledButton(
+                    onPressed: _point == null ? null : _valider,
+                    child: Text(l10n.carteMondeValider),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      ),
-    );
-  }
-
-  Widget _pin() {
-    final p = MatrixUtils.transformPoint(_tc.value, _pointCanevas(_fraction!));
-    const double largeur = 32;
-    const double hauteur = 36;
-    return Positioned(
-      left: p.dx - largeur / 2,
-      top: p.dy - hauteur,
-      width: largeur,
-      height: hauteur,
-      child: IgnorePointer(
-        child: Icon(
-          PhosphorIconsBold.mapPin,
-          size: hauteur,
-          color: Theme.of(context).colorScheme.error,
+          ],
         ),
       ),
     );
   }
+
+  /// Name and whereabouts of the chosen point, left of the confirm button.
+  Widget _piedLieu(AppLocalizations l10n, ThemeData theme) {
+    final secondaire = theme.textTheme.bodySmall
+        ?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final point = _point;
+    if (point == null) {
+      return Text(l10n.carteMondeAucunePosition, style: secondaire);
+    }
+    final coords = _libelleCoords(point.$1, point.$2);
+    final lieu = _lieu;
+    final titre = lieu?.nom ?? (_nommage ? l10n.carteMondeNomEnCours : coords);
+    final contexte = lieu == null ? null : _contexte(lieu);
+    final detail = lieu == null
+        ? (_nommage ? coords : null)
+        : [?contexte, coords].join(' · ');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(titre,
+            style: theme.textTheme.titleSmall,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis),
+        if (detail != null)
+          Text(detail,
+              style: secondaire, maxLines: 2, overflow: TextOverflow.ellipsis),
+      ],
+    );
+  }
 }
 
-/// Horizontal band of region shortcuts: tapping one jumps the map to that
-/// region (and drops the pin there) so the user can then refine by zooming.
-class _BandeRegions extends StatelessWidget {
-  final List<(String, double, double)> regions;
-  final void Function(double lat, double lon) onRegion;
+/// Matches of a place search, each with its region and country.
+class _ListeSuggestions extends StatelessWidget {
+  final List<LieuTrouve> lieux;
+  final String? Function(LieuTrouve) contexte;
+  final ValueChanged<LieuTrouve> onChoix;
 
-  const _BandeRegions({required this.regions, required this.onRegion});
+  const _ListeSuggestions({
+    required this.lieux,
+    required this.contexte,
+    required this.onChoix,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s3),
-        children: [
-          for (final (label, lat, lon) in regions)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: EspacementsApp.s1),
-              child: Center(
-                child: ActionChip(
-                  avatar: const Icon(PhosphorIconsRegular.globe,
-                      size: TaillesIconesApp.sm),
-                  label: Text(label),
-                  onPressed: () => onRegion(lat, lon),
-                ),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Material(
+        elevation: 3,
+        borderRadius: RayonsApp.brMd,
+        clipBehavior: Clip.antiAlias,
+        child: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          children: [
+            for (final lieu in lieux)
+              ListTile(
+                leading: const Icon(PhosphorIconsRegular.mapPin),
+                title: Text(lieu.nom),
+                subtitle: switch (contexte(lieu)) {
+                  final c? => Text(c),
+                  null => null,
+                },
+                onTap: () => onChoix(lieu),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

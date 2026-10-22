@@ -24,6 +24,8 @@ import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.
 import 'package:pot_a_gerer/domain/repositories/abstract_tache_repository.dart';
 import 'package:pot_a_gerer/main.dart';
 
+import '../helpers/globe.dart';
+
 class _MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class _MockParcelles extends Mock implements AbstractParcelleRepository {}
@@ -138,7 +140,7 @@ void main() {
   testWidgets('walking the whole flow creates the garden and lifts the gate',
       (tester) async {
     final saved = <PreferencesUtilisateur>[];
-    // Wide surface so the map's region band fits without horizontal scrolling.
+    // Wide surface for the whole flow.
     await monter(tester,
         onboardingTermine: false, saved: saved, taille: const Size(1600, 800));
 
@@ -152,10 +154,7 @@ void main() {
     // climate step (no extra "Suivant").
     await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Zone tropicale'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Valider'));
-    await tester.pumpAndSettle();
+    await choisirSurGlobe(tester, 5, 25);
 
     // Climate → experience level → garden.
     await tester.tap(find.text('Suivant'));
@@ -185,13 +184,10 @@ void main() {
         potagersSauves: sauves,
         taille: const Size(1600, 800));
 
-    Future<void> choisirRegion(String region) async {
+    Future<void> choisirPosition(double latitude, double longitude) async {
       await tester.tap(find.text('Choisir sur la carte'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text(region));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Valider'));
-      await tester.pumpAndSettle();
+      await choisirSurGlobe(tester, latitude, longitude);
     }
 
     Future<void> taper(String libelle, [int fois = 1]) async {
@@ -203,7 +199,7 @@ void main() {
 
     await taper('Commencer');
     await taper('Suivant');
-    await choisirRegion('Zone tropicale');
+    await choisirPosition(5, 25);
     await taper('Suivant', 2);
     await tester.enterText(find.byType(TextField), 'Mon potager');
     await tester.pump();
@@ -211,7 +207,7 @@ void main() {
     final initial = sauves.last.localisation;
 
     await taper('Précédent', 4); // back to the position step
-    await choisirRegion("Europe du Nord");
+    await choisirPosition(60, 18);
     await taper('Suivant', 3);
     await taper('Terminer');
 
@@ -231,10 +227,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Zone tropicale'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Valider'));
-    await tester.pumpAndSettle();
+    await choisirSurGlobe(tester, 5, 25);
     await tester.tap(find.text('Suivant')); // climate → experience
     await tester.pumpAndSettle();
     // Pick Intermédiaire, then go to the garden + notifications steps.

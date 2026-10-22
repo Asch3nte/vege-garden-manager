@@ -34,6 +34,8 @@ import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
 import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
 import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
 
+import '../helpers/globe.dart';
+
 class MockPreferences extends Mock implements AbstractPreferencesRepository {}
 
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
@@ -241,7 +243,7 @@ void main() {
 
   testWidgets('privacy panel sets the garden position (manual mode)',
       (tester) async {
-    // Wide surface so the map's region band fits without horizontal scrolling.
+    // Wide surface for the whole flow.
     tester.view.physicalSize = const Size(1600, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -272,14 +274,11 @@ void main() {
     expect(find.text('Position du potager'), findsOneWidget);
     expect(find.text('Aucune — touchez pour la définir'), findsOneWidget);
 
-    // Tapping it opens the world map; jumping to a region and confirming
+    // Tapping it opens the globe picker; picking a point and confirming
     // stores the position.
     await tester.tap(find.text('Position du potager'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Zone tropicale'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Valider'));
-    await tester.pumpAndSettle();
+    await choisirSurGlobe(tester, 5, 25);
 
     final potager =
         verify(() => potagers.sauvegarder(captureAny())).captured.last as Potager;

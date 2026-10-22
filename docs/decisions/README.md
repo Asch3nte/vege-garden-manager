@@ -38,6 +38,8 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0019](0019-report-post-recolte-v11.md) | Report de la fonctionnalité « Post-récolte » de V1 vers V1.1 | Accepté |
 | [0020](0020-regroupement-taches-par-geste.md) | Regroupement des tâches par geste (agrégation d'affichage, notification unique par jour) | Accepté |
 | [0021](0021-racine-de-composition.md) | Racine de composition dans `lib/app/` | Accepté |
+| [0022](0022-unites-de-mesure.md) | Unités de mesure par grandeur | Accepté |
+| [0023](0023-globe-et-recherche-de-localite.md) | Sélecteur de position : globe rotatif et recherche de localité | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

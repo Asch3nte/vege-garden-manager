@@ -235,6 +235,10 @@ AppBar  ← titre dynamique (nom du potager)
 
 ---
 
+> **Addendum 2026-10-22** — `NominatimClient` sert aussi le sélecteur de
+> position : recherche de localité (`/search`) et nom du point touché
+> ([ADR-0023](0023-globe-et-recherche-de-localite.md)).
+
 ## Plan de lots
 
 | Lot | Contenu | État |

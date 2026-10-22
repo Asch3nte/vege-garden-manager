@@ -20,6 +20,8 @@ import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/forms/formulaire_potager.dart';
 
+import '../helpers/globe.dart';
+
 class MockPotagers extends Mock implements AbstractPotagerRepository {}
 
 class MockGeoloc extends Mock implements AbstractGeolocalisationService {}
@@ -114,7 +116,7 @@ void main() {
 
   testWidgets('picking a point on the world map pre-fills climate and stores '
       'the location', (tester) async {
-    // Wide surface so the region band's presets fit without horizontal scroll.
+    // Wide surface for the whole flow.
     tester.view.physicalSize = const Size(1600, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -123,14 +125,11 @@ void main() {
     await monter(tester);
 
     await tester.enterText(find.byType(TextFormField).first, 'Potager');
-    // Open the zoomable world map, jump to a region preset (drops the pin),
+    // Open the globe picker, pick a tropical point (drops the pin),
     // then confirm.
     await tester.tap(find.text('Choisir sur la carte'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Zone tropicale'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Valider'));
-    await tester.pumpAndSettle();
+    await choisirSurGlobe(tester, 5, 25);
 
     expect(find.textContaining('pré-remplis depuis ta position'), findsWidgets);
 
