@@ -40,6 +40,8 @@ FichePlante _fiche({int? difficulte}) => FichePlante(
       dureeAvantRecolteJoursMax: 60,
       hauteurAdulteCmMin: 15,
       hauteurAdulteCmMax: 30,
+      etalementAdulteCmMin: 20,
+      etalementAdulteCmMax: 40,
       difficulte: difficulte,
     );
 
@@ -118,6 +120,17 @@ void main() {
     expect(find.text('6 à 7'), findsOneWidget);
   });
 
+  testWidgets('the sheet shows the adult spread when known', (tester) async {
+    await _ouvrir(tester, _fiche(), niveau: NiveauExperience.debutant);
+    expect(find.text('Étalement adulte'), findsOneWidget);
+    expect(find.text('20–40 cm'), findsOneWidget);
+  });
+
+  testWidgets('no spread fact when the sheet has none', (tester) async {
+    await _ouvrir(tester, _ficheAvecDetail(), niveau: NiveauExperience.debutant);
+    expect(find.text('Étalement adulte'), findsNothing);
+  });
+
   testWidgets('imperial units convert spacing and height',
       (tester) async {
     const imperial = PreferencesUnites.uniforme(SystemeUnites.imperial);
@@ -125,6 +138,7 @@ void main() {
         niveau: NiveauExperience.debutant, unites: imperial);
     expect(find.text('11,8 in'), findsOneWidget);
     expect(find.text('5,9 in – 11,8 in'), findsOneWidget);
+    expect(find.text('7,9 in – 1 ft 4 in'), findsOneWidget);
   });
 
   testWidgets('imperial watering reads in inches of water', (tester) async {

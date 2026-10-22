@@ -948,6 +948,8 @@
   },
   "ficheHauteur": "Hauteur adulte",
   "@ficheHauteur": { "description": "Libellé de la hauteur adulte dans la fiche." },
+  "ficheEtalement": "Étalement adulte",
+  "@ficheEtalement": { "description": "Libellé de l'étalement (largeur) adulte dans la fiche." },
   "fichePh": "pH du sol",
   "@fichePh": { "description": "Libellé du pH dans la fiche." },
   "fichePhPlage": "{min} à {max}",

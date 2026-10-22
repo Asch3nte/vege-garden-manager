@@ -19,7 +19,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 | Élément | Manque | Où |
 |---|---|---|
-| Gabarit / hauteur de plante | Champ absent | YAML + `FichePlante` |
 | Menu « Plus » | Racine Paramètres directe ; menu à ajouter si Post-récolte/Communauté arrivent | `ecran_plus.dart` |
 | Dérivation climat/rusticité fine | Altitude via Open-Meteo | `DerivateurLocalisation` |
 | Swipe : action par sens au choix | Choix dans Paramètres de l'action de chaque sens, quand une liste en offre plus de deux | `ElementBalayable`, `panneau_general.dart` |
@@ -31,6 +30,7 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 ## 4. Contenu (parallèle au code)
 
 - **Catalogue** : 445 fiches sur ~1 288 visées ([FICHES A CREER.md](FICHES%20A%20CREER.md)). Priorité : mères fruitières manquantes (~21), puis petits fruits. Arbitrages ouverts : vigne 'Isabelle' (mère distincte), potiron/potimarron, cornichon, pop-corn, fraisier des bois.
+- **Gabarit** : renseigner `cycle.etalement_adulte_cm` (largeur adulte, sourcée) dans les fiches.
 - **Associations** : typer et renseigner le contenu des paires (`type` + `raison_i18n`).
 - **Référentiels** : `code_eppo` et descriptions des bioagresseurs restants ; prose des familles non utilisées ; traductions `en`. Contrôle : `dart run tool/verifier_referentiels.dart --strict`.
 - **Arrosage détaillé** : chiffres de fréquence/volume des 6 espèces seedées, à sourcer.

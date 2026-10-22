@@ -637,6 +637,13 @@ class _Faits extends ConsumerWidget {
   static String _ph(double v, String langue) =>
       NumberFormat('0.#', langue).format(v);
 
+  /// A length range, or its single value when both ends are equal or one is
+  /// missing; at least one end must be set.
+  static String _plageCm(FormateurMesures mesures, int? min, int? max) =>
+      (min != null && max != null && min != max)
+          ? mesures.plageLongueurCm(min, max)
+          : mesures.longueurCm((max ?? min)!);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mesures = formateurMesures(context, ref);
@@ -650,6 +657,8 @@ class _Faits extends ConsumerWidget {
         : l10n.exposition(b.soleil);
     final hMin = fiche.hauteurAdulteCmMin;
     final hMax = fiche.hauteurAdulteCmMax;
+    final eMin = fiche.etalementAdulteCmMin;
+    final eMax = fiche.etalementAdulteCmMax;
     // (icon, label, value, glossary id) — a non-null id renders the label as a
     // clickable term towards its concept page.
     final faits = <(IconData, String, String, String?)>[
@@ -675,9 +684,14 @@ class _Faits extends ConsumerWidget {
         (
           PhosphorIconsRegular.arrowsVertical,
           l10n.ficheHauteur,
-          (hMin != null && hMax != null && hMin != hMax)
-              ? mesures.plageLongueurCm(hMin, hMax)
-              : mesures.longueurCm((hMax ?? hMin)!),
+          _plageCm(mesures, hMin, hMax),
+          null,
+        ),
+      if (eMin != null || eMax != null)
+        (
+          PhosphorIconsRegular.arrowsHorizontal,
+          l10n.ficheEtalement,
+          _plageCm(mesures, eMin, eMax),
           null,
         ),
       (
