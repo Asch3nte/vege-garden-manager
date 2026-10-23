@@ -33,7 +33,13 @@ jour possible.
    | `ANDROID_KEY_ALIAS` | `pot-a-gerer` |
    | `ANDROID_KEY_PASSWORD` | mot de passe de la clé |
 
-4. Build local signé (facultatif) : `android/key.properties`, ignoré par git :
+4. Vérifier les secrets : onglet Actions › Release › « Run workflow » (ou
+   `gh workflow run release.yml`). Ce lancement manuel signe l'APK et l'AAB
+   sans créer de Release ; le journal de l'étape « Refuse a debug-signed APK
+   or AAB » affiche l'empreinte `SHA-256` du certificat, à comparer avec
+   `keytool -list -v -keystore ~/cles/pot-a-gerer.jks | grep SHA256`
+   (sans les deux-points, en minuscules).
+5. Build local signé (facultatif) : `android/key.properties`, ignoré par git :
 
    ```properties
    storeFile=~/cles/pot-a-gerer.jks

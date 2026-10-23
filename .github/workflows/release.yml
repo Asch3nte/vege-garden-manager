@@ -2,9 +2,11 @@ name: Release
 
 # Pushing a v* tag (e.g. v1.0.0) builds the signed APK and AAB, then opens a
 # draft GitHub Release with them; nothing is public until the draft is published.
+# A manual run only signs, to check the key secrets: no Release is created.
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,6 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Check the tag is on main and matches the pubspec version
+        if: github.event_name == 'push'
         run: |
           if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
             echo "::error::Tag $TAG is not on main"
@@ -89,7 +92,7 @@ jobs:
           apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
           apk=$("$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk)
           aab=$(keytool -J-Duser.language=en -printcert -jarfile build/app/outputs/bundle/release/app-release.aab)
-          echo "$apk" | grep 'Signer #1 certificate DN'
+          echo "$apk" | grep -E 'Signer #1 certificate (DN|SHA-256)'
           echo "$aab" | grep -m1 'Owner:'
           if echo "$apk" | grep -q 'CN=Android Debug' || echo "$aab" | grep -q 'CN=Android Debug' \
             || ! echo "$aab" | grep -q 'Owner:'; then
@@ -105,6 +108,7 @@ jobs:
           (cd dist && sha256sum * > SHA256SUMS)
 
       - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
         with:
           name: release
           path: dist/
@@ -112,6 +116,7 @@ jobs:
 
   # Separate job: only it holds the write token, never the release key.
   draft:
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
