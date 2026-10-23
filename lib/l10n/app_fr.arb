@@ -3214,5 +3214,11 @@
   "aproposDocumentation": "Documentation",
   "@aproposDocumentation": {"description": "Lien : documentation du projet (dépôt)."},
   "aproposSignalerBug": "Signaler un bug",
-  "@aproposSignalerBug": {"description": "Lien : formulaire de signalement de bug (dépôt)."}
+  "@aproposSignalerBug": {"description": "Lien : formulaire de signalement de bug (dépôt)."},
+  "politiqueConfidentialite": "Politique de confidentialité",
+  "@politiqueConfidentialite": { "description": "Titre et lien : politique de confidentialité embarquée." },
+  "politiqueConfidentialiteSub": "Ce qui reste sur l'appareil, ce qui en sort",
+  "@politiqueConfidentialiteSub": { "description": "Sous-titre du lien vers la politique de confidentialité." },
+  "politiqueConfidentialiteErreur": "Impossible d'afficher la politique de confidentialité.",
+  "@politiqueConfidentialiteErreur": { "description": "Erreur de chargement de la politique de confidentialité." }
 }

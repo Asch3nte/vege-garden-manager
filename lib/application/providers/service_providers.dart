@@ -6,6 +6,7 @@ import '../../domain/repositories/abstract_info_application_service.dart';
 import '../../domain/repositories/abstract_meteo_service.dart';
 import '../../domain/repositories/abstract_notification_service.dart';
 import '../../domain/repositories/abstract_ouverture_lien_service.dart';
+import '../../domain/repositories/abstract_politique_confidentialite_source.dart';
 import '../../domain/repositories/abstract_reinitialisation_service.dart';
 import '../../domain/repositories/abstract_sauvegarde_service.dart';
 import '../../domain/repositories/abstract_statistiques_donnees_service.dart';
@@ -66,4 +67,9 @@ final versionAppliProvider = FutureProvider<String>(
 
 final ouvertureLienServiceProvider = Provider<AbstractOuvertureLienService>(
   (ref) => nonBranche('ouvertureLienServiceProvider'),
+);
+
+final politiqueConfidentialiteSourceProvider =
+    Provider<AbstractPolitiqueConfidentialiteSource>(
+  (ref) => nonBranche('politiqueConfidentialiteSourceProvider'),
 );

@@ -33,7 +33,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 - **Référentiels** : `code_eppo` et descriptions des bioagresseurs restants ; prose des familles non utilisées ; traductions `en`. Contrôle : `dart run tool/verifier_referentiels.dart --strict`.
 - **Arrosage détaillé** : chiffres de fréquence/volume des 6 espèces seedées, à sourcer.
 - **Glossaire** : illustrations au fil de l'eau ([docs/17](docs/17-illustrations-glossaire.md)), DP/CC0 uniquement tant que l'attribution n'est pas câblée.
-- **Politique de confidentialité** : finaliser [docs/politique-confidentialite.md](docs/politique-confidentialite.md).
 
 ## 5. Pré-release
 

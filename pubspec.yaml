@@ -113,6 +113,8 @@ flutter:
     - assets/fiches_plantes/cereales/
     - assets/fiches_plantes/engrais_verts/
     - assets/docs_aide/
+    - docs/politique-confidentialite.md
+    - docs/politique-confidentialite.en.md
     - assets/images/
     # Illustrations du glossaire (ADR-0017 D4) : provenance dans SOURCES.txt.
     - assets/images/glossaire/

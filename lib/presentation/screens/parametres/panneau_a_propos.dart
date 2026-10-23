@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../../app/router.dart';
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../widgets/ouverture_lien.dart';
 import 'widgets_parametres.dart';
 
 /// Public source repository ("lien GitHub").
@@ -72,18 +75,23 @@ class PanneauAPropos extends ConsumerWidget {
             _LigneAction(
               icone: PhosphorIconsRegular.code,
               label: l10n.aproposCodeSource,
-              onTap: () => _ouvrirLien(context, ref, _urlCodeSource),
+              onTap: () => ouvrirLienExterne(context, ref, _urlCodeSource),
             ),
             _LigneAction(
               icone: PhosphorIconsRegular.bookOpen,
               label: l10n.aproposDocumentation,
-              onTap: () => _ouvrirLien(context, ref, _urlDocumentation),
+              onTap: () => ouvrirLienExterne(context, ref, _urlDocumentation),
             ),
             _LigneAction(
               icone: PhosphorIconsRegular.bug,
               label: l10n.aproposSignalerBug,
               onTap: () =>
-                  _ouvrirLien(context, ref, _urlSignalerBug(versionConnue)),
+                  ouvrirLienExterne(context, ref, _urlSignalerBug(versionConnue)),
+            ),
+            _LigneAction(
+              icone: PhosphorIconsRegular.shieldCheck,
+              label: l10n.politiqueConfidentialite,
+              onTap: () => context.go(RoutesApp.plusPolitique),
             ),
             _LigneAction(
               icone: PhosphorIconsRegular.fileText,
@@ -105,20 +113,6 @@ class PanneauAPropos extends ConsumerWidget {
         ),
       ],
     );
-  }
-
-  /// Opens [url] externally; shows a snackbar if no handler is available.
-  Future<void> _ouvrirLien(
-    BuildContext context,
-    WidgetRef ref,
-    Uri url,
-  ) async {
-    final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    final ouvert = await ref.read(ouvertureLienServiceProvider).ouvrir(url);
-    if (!ouvert) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.aproposLienErreur)));
-    }
   }
 }
 
