@@ -96,4 +96,35 @@ void main() {
       throwsA(isA<NotificationIndisponibleException>()),
     );
   });
+
+  test('afficher shows now, and wraps a plugin error', () async {
+    when(() => plugin.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        )).thenAnswer((_) async {});
+    final n = notif();
+
+    await service.afficher(n);
+
+    verify(() => plugin.show(
+          id: NotificationServiceImpl.intIdPour(n.id),
+          title: 'Arrosage',
+          body: n.corps,
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: '/plantation/42',
+        )).called(1);
+
+    when(() => plugin.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        )).thenThrow(UnimplementedError());
+    await expectLater(
+        service.afficher(n), throwsA(isA<NotificationIndisponibleException>()));
+  });
 }

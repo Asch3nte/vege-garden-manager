@@ -27,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"pot_a_gerer", origin, size)) {
+  if (!window.Create(L"Pot'\u00e0 G\u00e9rer", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

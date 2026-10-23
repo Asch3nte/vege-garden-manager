@@ -45,11 +45,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "pot_a_gerer");
+    gtk_header_bar_set_title(header_bar, "Pot'\u00e0 G\u00e9rer");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "pot_a_gerer");
+    gtk_window_set_title(window, "Pot'\u00e0 G\u00e9rer");
   }
 
   gtk_window_set_default_size(window, 1280, 720);

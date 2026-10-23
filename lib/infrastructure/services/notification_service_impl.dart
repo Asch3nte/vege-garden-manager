@@ -25,11 +25,25 @@ import '../../domain/value_objects/notification_locale.dart';
 ///
 /// Before first use the app must call [initialiser] (timezone database + plugin
 /// init); the device's local zone should be set at bootstrap (`tz.setLocalLocation`).
-class NotificationServiceImpl implements AbstractNotificationService {
+
+/// A notification service needing a one-time setup at startup.
+abstract interface class NotificationsAInitialiser {
+  Future<void> initialiser();
+}
+
+class NotificationServiceImpl
+    implements AbstractNotificationService, NotificationsAInitialiser {
   /// Notification channel used for every reminder (Android requirement).
   static const _channelId = 'potager_rappels';
   static const _channelName = 'Rappels';
   static const _channelDescription = 'Rappels et alertes du potager';
+
+  /// Windows toast identity; the GUID must never change.
+  static const _windows = WindowsInitializationSettings(
+    appName: "Pot'à Gérer",
+    appUserModelId: 'PotAGerer.PotAGerer',
+    guid: '8461ee25-e6b5-458e-a574-836ae38fb99c',
+  );
 
   final FlutterLocalNotificationsPlugin _plugin;
 
@@ -37,6 +51,7 @@ class NotificationServiceImpl implements AbstractNotificationService {
 
   /// Initialises the timezone database and the platform plugin. Idempotent on
   /// the plugin side; call once at startup.
+  @override
   Future<void> initialiser() async {
     tzdata.initializeTimeZones();
     await _plugin.initialize(
@@ -45,6 +60,7 @@ class NotificationServiceImpl implements AbstractNotificationService {
         iOS: DarwinInitializationSettings(),
         macOS: DarwinInitializationSettings(),
         linux: LinuxInitializationSettings(defaultActionName: 'Ouvrir'),
+        windows: _windows,
       ),
     );
   }
@@ -64,6 +80,24 @@ class NotificationServiceImpl implements AbstractNotificationService {
     } catch (e) {
       throw NotificationIndisponibleException(
         'Failed to schedule notification "${notif.id}".',
+        cause: e,
+      );
+    }
+  }
+
+  /// Shows [notif] now.
+  Future<void> afficher(NotificationLocale notif) async {
+    try {
+      await _plugin.show(
+        id: intIdPour(notif.id),
+        title: notif.titre,
+        body: notif.corps,
+        notificationDetails: _detailsPour(notif.categorie),
+        payload: notif.cibleRoute,
+      );
+    } catch (e) {
+      throw NotificationIndisponibleException(
+        'Failed to show notification "${notif.id}".',
         cause: e,
       );
     }
@@ -118,6 +152,7 @@ class NotificationServiceImpl implements AbstractNotificationService {
       iOS: DarwinNotificationDetails(threadIdentifier: categorie),
       macOS: DarwinNotificationDetails(threadIdentifier: categorie),
       linux: const LinuxNotificationDetails(),
+      windows: const WindowsNotificationDetails(),
     );
   }
 

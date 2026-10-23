@@ -62,8 +62,8 @@ class Bootstrap {
     final amorce = ProviderContainer(overrides: overrides);
     try {
       final service = amorce.read(notificationServiceProvider);
-      if (service is NotificationServiceImpl) {
-        await service.initialiser();
+      if (service case final NotificationsAInitialiser aInitialiser) {
+        await aInitialiser.initialiser();
       }
     } finally {
       amorce.dispose();
