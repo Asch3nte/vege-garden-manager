@@ -12,7 +12,7 @@ Seule la dernière version publiée reçoit des correctifs.
 
 ## Vérifier un APK
 
-Les versions officielles sont publiées dans les
+Les versions officielles (Android, Linux, Windows) sont publiées dans les
 [Releases](https://github.com/Asch3nte/vege-garden-manager/releases), avec
 leurs sommes `SHA256SUMS`. Certificat de signature :
 
@@ -20,7 +20,7 @@ leurs sommes `SHA256SUMS`. Certificat de signature :
 - SHA-256 : `17f2f38541624c38f1d84d8c35f346a9b267beea10a1ae8d3f657be7542a1e3e`
 
 ```sh
-apksigner verify --print-certs pot-a-gerer-vX.Y.Z.apk
+apksigner verify --print-certs pot-a-gerer-vX.Y.Z-android.apk
 ```
 
 Un APK signé par un autre certificat ne vient pas de ce projet.
