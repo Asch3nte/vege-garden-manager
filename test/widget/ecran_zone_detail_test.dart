@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/historique_navigation.dart';
+import 'package:pot_a_gerer/application/state/suppressions_differees_notifier.dart';
 import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
@@ -431,6 +432,9 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Supprimer')); // confirm
     await tester.pumpAndSettle();
 
+    verifyNever(() => plantations.supprimer('p-1'));
+    await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+    await tester.pumpAndSettle();
     verify(() => plantations.supprimer('p-1')).called(1);
   });
 
@@ -464,6 +468,9 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
       await tester.pumpAndSettle();
 
+      verifyNever(() => plantations.supprimer('p-1'));
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
       verify(() => plantations.supprimer('p-1')).called(1);
     });
 

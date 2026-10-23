@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/sens_swipe_provider.dart';
+import 'package:pot_a_gerer/application/state/suppressions_differees_notifier.dart';
 import 'package:pot_a_gerer/domain/enums/sens_swipe.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/domain/entities/tache.dart';
@@ -210,5 +211,38 @@ void main() {
     final libelles = noeud.getSemanticsData().customSemanticsActionIds;
     expect(libelles, hasLength(2));
     semantique.dispose();
+  });
+
+  group('pending deletion', () {
+    SuppressionsDiffereesNotifier suppressions(WidgetTester tester) =>
+        ProviderScope.containerOf(tester.element(find.byType(ListView)))
+            .read(suppressionsDiffereesProvider.notifier);
+
+    testWidgets('hides the item, which comes back once cancelled',
+        (tester) async {
+      await monter(tester);
+
+      suppressions(tester).programmer('a', (_) async {});
+      await tester.pump();
+      expect(find.text('Arroser'), findsNothing);
+
+      suppressions(tester).annuler('a');
+      await tester.pump();
+      expect(find.text('Arroser'), findsOneWidget);
+    });
+
+    testWidgets('a swiped-away item comes back once cancelled',
+        (tester) async {
+      quitte = true;
+      await monter(tester);
+      await balayer(tester, -500);
+      suppressions(tester).programmer('a', (_) async {});
+      await tester.pump();
+      expect(find.text('Arroser'), findsNothing);
+
+      suppressions(tester).annuler('a');
+      await tester.pumpAndSettle();
+      expect(find.text('Arroser'), findsOneWidget);
+    });
   });
 }

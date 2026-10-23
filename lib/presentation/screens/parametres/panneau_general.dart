@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../app/router.dart';
 import '../../../application/state/preferences_notifier.dart';
+import '../../../application/state/suppressions_differees_notifier.dart';
 import '../../../domain/enums/grandeur_mesure.dart';
 import '../../../domain/enums/langue.dart';
 import '../../../domain/enums/niveau_experience.dart';
@@ -106,6 +108,19 @@ class PanneauGeneral extends ConsumerWidget {
                 ],
                 onChanged: enregistreur.pour(notifier.definirSensSwipe),
               ),
+            ),
+          ],
+        ),
+        ZoneParametres(
+          enfants: [
+            RangeeInterrupteur(
+              icone: PhosphorIconsRegular.trash,
+              label: l10n.prefConfirmerSuppressions,
+              sousTitre: l10n.prefConfirmerSuppressionsSub(
+                  SuppressionsDiffereesNotifier.delaiParDefaut.inSeconds),
+              valeur: prefs.confirmerSuppressions,
+              onChanged:
+                  enregistreur.pour(notifier.definirConfirmerSuppressions),
             ),
           ],
         ),

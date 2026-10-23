@@ -115,6 +115,21 @@ void main() {
     expect(c.read(preferencesProvider).value!.meteoAutoActive, isFalse);
   });
 
+  test('deletions are confirmed by default, and the opt-out persists',
+      () async {
+    final c = conteneur();
+    expect((await c.read(preferencesProvider.future)).confirmerSuppressions,
+        isTrue);
+
+    await c
+        .read(preferencesProvider.notifier)
+        .definirConfirmerSuppressions(false);
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.last as PreferencesUtilisateur).confirmerSuppressions,
+        isFalse);
+  });
+
   test('terminerOnboarding marks the flag and persists it', () async {
     final c = conteneur();
     await c.read(preferencesProvider.future);

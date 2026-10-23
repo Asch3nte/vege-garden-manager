@@ -31,6 +31,7 @@ import '../forms/formulaire_zone.dart';
 import '../providers/ajout_plante_provider.dart';
 import '../widgets/couleur_zone_ui.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/suppression_differee.dart';
 import '../widgets/element_balayable.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
@@ -204,21 +205,23 @@ Future<bool> _supprimerPlante(
   CulturePotager culture,
 ) async {
   final l10n = AppLocalizations.of(context)!;
-  final messenger = ScaffoldMessenger.of(context);
-  final ok = await confirmerAction(
+  final ok = await confirmerSuppression(
     context,
+    ref,
     titre: l10n.planteSupprimerTitre,
     message: l10n.planteSupprimerMessage(culture.nom),
-    libelleConfirmer: l10n.actionSupprimer,
-    destructif: true,
   );
-  if (!ok) return false;
-
-  await ref.read(plantationsProvider(zoneId).notifier).supprimer(culture.plantationId);
-  ref.invalidate(potagerProvider);
-  messenger.showSnackBar(
-    SnackBar(content: Text(l10n.snackPlanteSupprimee(culture.nom))),
-  );
+  if (!ok || !context.mounted) return false;
+  programmerSuppression(context, ref,
+      id: culture.plantationId,
+      message: l10n.snackPlanteSupprimee(culture.nom),
+      effacer: (r) async {
+        await r
+            .read(plantationsProvider(zoneId).notifier)
+            .supprimer(culture.plantationId);
+        r.invalidate(potagerProvider);
+        await r.read(potagerProvider.future);
+      });
   return true;
 }
 

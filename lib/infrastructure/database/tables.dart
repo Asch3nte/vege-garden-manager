@@ -448,6 +448,8 @@ class Preferences extends Table {
           "unite_masse IN ('metrique', 'imperial')"))
       .withDefault(const Constant('metrique'))();
   TextColumn get sensSwipe => text().withDefault(const Constant('standard'))();
+  BoolColumn get confirmerSuppressions =>
+      boolean().withDefault(const Constant(true))();
   TextColumn get niveauExperience =>
       text().withDefault(const Constant('debutant'))();
   TextColumn get modeGeolocalisation =>

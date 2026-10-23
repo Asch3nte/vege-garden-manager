@@ -1267,6 +1267,15 @@
   "@prefSensSwipe": { "description": "Réglage : sens des gestes (balayage)." },
   "prefSensSwipeSub": "S'applique partout où une liste se balaie (tâches, plantations…).",
   "@prefSensSwipeSub": { "description": "Note du réglage sens des gestes." },
+  "prefConfirmerSuppressions": "Confirmer les suppressions",
+  "@prefConfirmerSuppressions": { "description": "Réglage : demander confirmation avant de supprimer un élément de liste." },
+  "prefConfirmerSuppressionsSub": "Une suppression reste annulable pendant {secondes} secondes.",
+  "@prefConfirmerSuppressionsSub": {
+    "description": "Sous-titre du réglage de confirmation des suppressions.",
+    "placeholders": { "secondes": { "type": "int" } }
+  },
+  "suppressionNePlusDemander": "Ne plus demander",
+  "@suppressionNePlusDemander": { "description": "Case du dialogue de suppression : ne plus demander confirmation." },
   "prefNiveau": "Niveau d'expérience",
   "@prefNiveau": { "description": "Réglage : niveau d'expérience." },
   "prefNiveauSub": "Un niveau plus élevé affiche des conseils plus pointus et déverrouille les options avancées.",

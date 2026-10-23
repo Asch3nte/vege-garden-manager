@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui' show AppExitResponse;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -7,6 +10,7 @@ import 'app/bootstrap.dart';
 import 'app/router.dart';
 import 'app/theme/theme_app.dart';
 import 'application/state/preferences_notifier.dart';
+import 'application/state/suppressions_differees_notifier.dart';
 import 'domain/enums/langue.dart';
 import 'domain/enums/theme_app.dart' as prefs_theme;
 import 'l10n/app_localizations.dart';
@@ -60,11 +64,42 @@ void _enregistrerLicencesPolices() {
 ///
 /// The active [ThemeMode] follows the user's theme preference; until the
 /// preferences load (or if they fail), it falls back to `ThemeMode.system`.
-class PotAGererApp extends ConsumerWidget {
+///
+/// Pending deletions are erased as soon as the app leaves the screen, since it
+/// may then be killed.
+class PotAGererApp extends ConsumerStatefulWidget {
   const PotAGererApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PotAGererApp> createState() => _PotAGererAppState();
+}
+
+class _PotAGererAppState extends ConsumerState<PotAGererApp> {
+  late final AppLifecycleListener _cycleDeVie;
+
+  @override
+  void initState() {
+    super.initState();
+    _cycleDeVie = AppLifecycleListener(
+      onHide: _validerSuppressions,
+      onExitRequested: () async {
+        await ref.read(suppressionsDiffereesProvider.notifier).toutValider();
+        return AppExitResponse.exit;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _cycleDeVie.dispose();
+    super.dispose();
+  }
+
+  void _validerSuppressions() =>
+      unawaited(ref.read(suppressionsDiffereesProvider.notifier).toutValider());
+
+  @override
+  Widget build(BuildContext context) {
     final prefs = ref.watch(preferencesProvider).value;
     // Cached for the app's lifetime by the provider (a GoRouter must not be
     // rebuilt every frame).

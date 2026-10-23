@@ -7,7 +7,7 @@ import '../../application/state/fiches_personnelles_notifier.dart';
 import '../../domain/entities/fiche_plante_personnelle.dart';
 import '../../l10n/app_localizations.dart';
 import '../forms/formulaire_fiche_personnelle.dart';
-import '../widgets/dialogue_confirmation.dart';
+import '../widgets/suppression_differee.dart';
 import '../widgets/element_balayable.dart';
 import '../widgets/icones_communes.dart';
 import '../widgets/libelles_enums.dart';
@@ -222,17 +222,18 @@ class _MenuActions extends ConsumerWidget {
 Future<bool> _supprimer(
     BuildContext context, WidgetRef ref, FichePlantePersonnelle fiche) async {
   final l10n = AppLocalizations.of(context)!;
-  final messenger = ScaffoldMessenger.of(context);
-  final ok = await confirmerAction(
+  final ok = await confirmerSuppression(
     context,
+    ref,
     titre: l10n.fichesPersoSupprimerTitre,
     message: l10n.fichesPersoSupprimerMessage(fiche.nomCommunFr),
-    libelleConfirmer: l10n.actionSupprimer,
-    destructif: true,
   );
-  if (!ok) return false;
-  await ref.read(fichesPersonnellesProvider.notifier).supprimer(fiche.id);
-  messenger.showSnackBar(SnackBar(content: Text(l10n.fichesPersoSnackSupprimee)));
+  if (!ok || !context.mounted) return false;
+  programmerSuppression(context, ref,
+      id: fiche.id,
+      message: l10n.fichesPersoSnackSupprimee,
+      effacer: (r) =>
+          r.read(fichesPersonnellesProvider.notifier).supprimer(fiche.id));
   return true;
 }
 

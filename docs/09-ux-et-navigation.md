@@ -106,7 +106,8 @@ d'expérience · contenu éducatif · à propos · lien GitHub. Détail :
 - **Sauvegarde** : auto-save pour les paramètres ; submit explicite pour les
   formulaires.
 - **Gestes** : swipe configurable globalement via `sens_swipe` (standard / inversé,
-  avec aperçu interactif). Standard : vers la gauche = supprimer (confirmation),
+  avec aperçu interactif). Standard : vers la gauche = supprimer (confirmation désactivable,
+  « Annuler » 5 s : l'effacement en base n'a lieu qu'après ce délai),
   vers la droite = archiver (tâche faite, culture arrachée, équipement retiré) ;
   inversé permute. Fond coloré + icône pendant le geste ; un sens sans action
   reste inerte. Le menu de chaque élément garde toutes les actions (bureau,

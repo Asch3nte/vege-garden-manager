@@ -7,7 +7,7 @@ import '../database/teintes_zone_v8.dart';
 /// data reshaped by a migration is rewritten here.
 class MonteeSauvegarde {
   /// Schema version the backups are brought to; follows the database's.
-  static const int versionCible = 11;
+  static const int versionCible = 12;
 
   const MonteeSauvegarde();
 

@@ -25,6 +25,7 @@ class PreferencesUtilisateur {
   final ThemeApp _theme;
   final PreferencesUnites _unites;
   final SensSwipe _sensSwipe;
+  final bool _confirmerSuppressions;
   final NiveauExperience _niveauExperience;
   final ModeGeolocalisation _modeGeolocalisation;
   final bool _notificationsGlobalesActives;
@@ -46,6 +47,7 @@ class PreferencesUtilisateur {
     this._theme,
     this._unites,
     this._sensSwipe,
+    this._confirmerSuppressions,
     this._niveauExperience,
     this._modeGeolocalisation,
     this._notificationsGlobalesActives,
@@ -82,6 +84,7 @@ class PreferencesUtilisateur {
     ThemeApp theme = ThemeApp.auto,
     PreferencesUnites unites = const PreferencesUnites(),
     SensSwipe sensSwipe = SensSwipe.standard,
+    bool confirmerSuppressions = true,
     NiveauExperience niveauExperience = NiveauExperience.debutant,
     ModeGeolocalisation modeGeolocalisation = ModeGeolocalisation.desactivee,
     bool notificationsGlobalesActives = true,
@@ -103,6 +106,7 @@ class PreferencesUtilisateur {
         theme,
         unites,
         sensSwipe,
+        confirmerSuppressions,
         niveauExperience,
         modeGeolocalisation,
         notificationsGlobalesActives,
@@ -126,6 +130,9 @@ class PreferencesUtilisateur {
   /// Display unit chosen for each quantity.
   PreferencesUnites get unites => _unites;
   SensSwipe get sensSwipe => _sensSwipe;
+
+  /// Whether deleting a list item asks for confirmation first.
+  bool get confirmerSuppressions => _confirmerSuppressions;
   NiveauExperience get niveauExperience => _niveauExperience;
   ModeGeolocalisation get modeGeolocalisation => _modeGeolocalisation;
   bool get notificationsGlobalesActives => _notificationsGlobalesActives;
@@ -178,6 +185,7 @@ class PreferencesUtilisateur {
     ThemeApp? theme,
     PreferencesUnites? unites,
     SensSwipe? sensSwipe,
+    bool? confirmerSuppressions,
     NiveauExperience? niveauExperience,
     ModeGeolocalisation? modeGeolocalisation,
     bool? notificationsGlobalesActives,
@@ -197,6 +205,8 @@ class PreferencesUtilisateur {
         theme: theme ?? _theme,
         unites: unites ?? _unites,
         sensSwipe: sensSwipe ?? _sensSwipe,
+        confirmerSuppressions:
+            confirmerSuppressions ?? _confirmerSuppressions,
         niveauExperience: niveauExperience ?? _niveauExperience,
         modeGeolocalisation: modeGeolocalisation ?? _modeGeolocalisation,
         notificationsGlobalesActives:
@@ -242,6 +252,7 @@ class PreferencesUtilisateur {
         theme: _theme,
         unites: _unites,
         sensSwipe: _sensSwipe,
+        confirmerSuppressions: _confirmerSuppressions,
         niveauExperience: _niveauExperience,
         modeGeolocalisation: _modeGeolocalisation,
         notificationsGlobalesActives: _notificationsGlobalesActives,
@@ -266,6 +277,7 @@ class PreferencesUtilisateur {
       other._theme == _theme &&
       other._unites == _unites &&
       other._sensSwipe == _sensSwipe &&
+      other._confirmerSuppressions == _confirmerSuppressions &&
       other._niveauExperience == _niveauExperience &&
       other._modeGeolocalisation == _modeGeolocalisation &&
       other._notificationsGlobalesActives == _notificationsGlobalesActives &&
@@ -301,6 +313,7 @@ class PreferencesUtilisateur {
           _nePasDerangerDebut,
           _nePasDerangerFin,
           _onboardingTermine,
+          _confirmerSuppressions,
         ),
         _notificationsParCategorie.entries
             .fold<int>(0, (h, e) => h ^ Object.hash(e.key, e.value)),

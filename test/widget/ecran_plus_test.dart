@@ -31,6 +31,7 @@ import 'package:pot_a_gerer/presentation/screens/ecran_plus.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_a_propos.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_confidentialite.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_general.dart';
+import 'package:pot_a_gerer/presentation/screens/parametres/widgets_parametres.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_notifications.dart';
 import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
 import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
@@ -138,6 +139,25 @@ void main() {
 
     final captured = verify(() => repo.sauvegarder(captureAny())).captured;
     expect((captured.last as PreferencesUtilisateur).langue, Langue.en);
+  });
+
+  testWidgets('general panel turns the deletion confirmation off',
+      (tester) async {
+    await monter(tester);
+    await tester.tap(find.text('Préférences générales'));
+    await tester.pumpAndSettle();
+
+    final libelle = find.text('Confirmer les suppressions');
+    await tester.scrollUntilVisible(libelle, 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.descendant(
+        of: find.ancestor(of: libelle, matching: find.byType(RangeeInterrupteur)),
+        matching: find.byType(Switch)));
+    await tester.pumpAndSettle();
+
+    final captured = verify(() => repo.sauvegarder(captureAny())).captured;
+    expect((captured.last as PreferencesUtilisateur).confirmerSuppressions,
+        isFalse);
   });
 
   group('units', () {

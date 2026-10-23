@@ -3,12 +3,15 @@
 // Overrides the four repositories + the clock so the screen renders a known
 // view-model, then checks the rendered sections and the progressive-disclosure
 // rule (season stats unlock at expert level).
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/router.dart';
+import 'package:pot_a_gerer/application/state/suppressions_differees_notifier.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
@@ -554,7 +557,30 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
       await tester.pumpAndSettle();
 
+      verifyNever(() => taches.supprimer('t-1'));
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
       verify(() => taches.supprimer('t-1')).called(1);
+    });
+
+    testWidgets('an erased task stays hidden while the dashboard reloads',
+        (tester) async {
+      when(() => taches.supprimer(any())).thenAnswer((_) async {});
+      await monter(tester, NiveauExperience.intermediaire);
+      await balayer(tester, 'Arroser les tomates', -600);
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+
+      final rechargement = Completer<List<Tache>>();
+      when(() => taches.obtenirEntreDates(any(), any()))
+          .thenAnswer((_) => rechargement.future);
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pump();
+      expect(find.text('Arroser les tomates'), findsNothing);
+
+      rechargement.complete([]);
+      await tester.pumpAndSettle();
+      expect(find.text('Arroser les tomates'), findsNothing);
     });
 
     testWidgets('the inverse setting swaps the sides', (tester) async {

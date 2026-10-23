@@ -31,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -130,6 +130,11 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(parcelles, parcelles.longueurCm);
             await m.addColumn(parcelles, parcelles.largeurCm);
             await m.addColumn(parcelles, parcelles.besoinEau);
+          }
+          // v11 → v12: deletion confirmation opt-out; defaults to true, so
+          // existing installs keep confirming.
+          if (from < 12) {
+            await m.addColumn(preferences, preferences.confirmerSuppressions);
           }
         },
         beforeOpen: (details) async {
