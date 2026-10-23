@@ -31,7 +31,7 @@ jour possible.
 4. Build local signé (facultatif) : `android/key.properties`, ignoré par git :
 
    ```properties
-   storeFile=/home/<vous>/cles/pot-a-gerer.jks
+   storeFile=~/cles/pot-a-gerer.jks
    storePassword=…
    keyAlias=pot-a-gerer
    keyPassword=…
@@ -50,10 +50,11 @@ jour possible.
    git tag v1.0.0 && git push origin v1.0.0
    ```
 
-3. Le workflow `release.yml` :
-   - refuse un tag différent de la version du `pubspec.yaml` ;
+3. Le workflow `release.yml` (ADR-0025) :
+   - refuse un tag hors de `main` ou différent de la version du
+     `pubspec.yaml` ;
    - construit l'APK et l'AAB signés ;
-   - refuse un APK signé avec la clé de debug ;
+   - refuse un APK ou un AAB signé avec la clé de debug ;
    - crée un **brouillon** de Release GitHub avec l'APK, l'AAB et
-     `SHA256SUMS`.
+     `SHA256SUMS` (relancé, il met à jour le brouillon existant).
 4. Relire le brouillon, puis le publier depuis GitHub.

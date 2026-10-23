@@ -12,6 +12,13 @@ val proprietesCle = Properties().apply {
     if (fichier.exists()) fichier.inputStream().use { load(it) }
 }
 val cleReleaseDisponible = !proprietesCle.isEmpty
+if (cleReleaseDisponible) {
+    val manquantes = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+        .filter { proprietesCle.getProperty(it).isNullOrBlank() }
+    if (manquantes.isNotEmpty()) {
+        throw GradleException("android/key.properties: missing $manquantes")
+    }
+}
 
 android {
     namespace = "com.potagerer.pot_a_gerer"
@@ -41,7 +48,10 @@ android {
     signingConfigs {
         if (cleReleaseDisponible) {
             create("release") {
-                storeFile = file(proprietesCle.getProperty("storeFile"))
+                storeFile = file(
+                    proprietesCle.getProperty("storeFile")
+                        .replaceFirst(Regex("^~(?=/|$)"), System.getProperty("user.home")),
+                )
                 storePassword = proprietesCle.getProperty("storePassword")
                 keyAlias = proprietesCle.getProperty("keyAlias")
                 keyPassword = proprietesCle.getProperty("keyPassword")
@@ -52,7 +62,7 @@ android {
     buildTypes {
         release {
             // Without android/key.properties, a local release build falls back
-            // to the debug key; the release workflow refuses such an APK.
+            // to the debug key: such a build is never to be distributed.
             signingConfig = if (cleReleaseDisponible) {
                 signingConfigs.getByName("release")
             } else {
