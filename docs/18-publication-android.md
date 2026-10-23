@@ -13,9 +13,14 @@ jour possible.
 1. Générer la clé, hors du dépôt :
 
    ```sh
+   mkdir -p ~/cles && chmod 700 ~/cles
    keytool -genkeypair -keystore ~/cles/pot-a-gerer.jks -alias pot-a-gerer \
-     -keyalg RSA -keysize 4096 -validity 10000
+     -keyalg RSA -keysize 4096 -validity 10000 -dname "CN=Pot'à Gérer"
    ```
+
+   Le nom (`-dname`) est **public** : il est lisible dans le certificat de
+   chaque APK distribué. Rien n'y est vérifié ni obligatoire ; un nom de
+   projet ou un pseudonyme suffit, sans nom, ville ni pays.
 
 2. **La sauvegarder** (mot de passe compris) en deux endroits sûrs. Perdue,
    plus aucune mise à jour n'est possible pour les installations existantes.
