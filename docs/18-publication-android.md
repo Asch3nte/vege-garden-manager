@@ -5,8 +5,12 @@ Linux (`.tar.gz`) et Windows (`.zip`) ne le sont pas : Windows affiche un
 avertissement SmartScreen au premier lancement.
 
 **Limite desktop** : sous Linux, le plugin de notifications ne sait pas
-programmer ; un rappel ne s'affiche que si l'application est ouverte à son
-heure.
+programmer ; l'application ouverte vérifie chaque minute les rappels échus
+(un rappel échu pendant une mise en veille s'affiche au réveil), mais aucun
+ne s'affiche tant qu'elle est fermée.
+
+Le workflow exécuté est celui du **commit du tag** : une modification de
+`release.yml` ne s'applique qu'aux tags posés après sa fusion.
 
 ## Identifiant
 

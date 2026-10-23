@@ -42,6 +42,7 @@ import '../infrastructure/services/geocodage_service_impl.dart';
 import '../infrastructure/services/geolocalisation_service_impl.dart';
 import '../infrastructure/services/info_application_service_impl.dart';
 import '../infrastructure/services/notification_service_impl.dart';
+import '../infrastructure/services/notification_service_minuterie.dart';
 import '../infrastructure/services/ouverture_lien_service_impl.dart';
 import '../infrastructure/services/politique_confidentialite_source_impl.dart';
 import '../infrastructure/services/reinitialisation_service_impl.dart';
@@ -149,9 +150,13 @@ class Composition {
             .overrideWith((ref) => GeocodageServiceImpl(NominatimClient())),
         meteoServiceProvider
             .overrideWith((ref) => MeteoServiceImpl(base, OpenMeteoClient())),
-        notificationServiceProvider.overrideWith((ref) =>
-            NotificationServiceImpl(FlutterLocalNotificationsPlugin(),
-                programmationInterne: Platform.isLinux)),
+        notificationServiceProvider.overrideWith((ref) {
+          final service =
+              NotificationServiceImpl(FlutterLocalNotificationsPlugin());
+          return Platform.isLinux
+              ? NotificationServiceMinuterie(service)
+              : service;
+        }),
         textesNotificationsProvider.overrideWith(
             (ref) => TextesNotificationsArb(() => ref.read(codeLangueProvider))),
         geolocalisationServiceProvider

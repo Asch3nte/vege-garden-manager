@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:developer' as developer;
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
@@ -28,10 +25,14 @@ import '../../domain/value_objects/notification_locale.dart';
 ///
 /// Before first use the app must call [initialiser] (timezone database + plugin
 /// init); the device's local zone should be set at bootstrap (`tz.setLocalLocation`).
-///
-/// Where the plugin cannot schedule (Linux), [programmationInterne] holds each
-/// notification in a timer instead: it shows only if the app is running then.
-class NotificationServiceImpl implements AbstractNotificationService {
+
+/// A notification service needing a one-time setup at startup.
+abstract interface class NotificationsAInitialiser {
+  Future<void> initialiser();
+}
+
+class NotificationServiceImpl
+    implements AbstractNotificationService, NotificationsAInitialiser {
   /// Notification channel used for every reminder (Android requirement).
   static const _channelId = 'potager_rappels';
   static const _channelName = 'Rappels';
@@ -45,18 +46,12 @@ class NotificationServiceImpl implements AbstractNotificationService {
   );
 
   final FlutterLocalNotificationsPlugin _plugin;
-  final bool _programmationInterne;
-  final DateTime Function() _maintenant;
-  final Map<int, Timer> _minuteries = {};
 
-  NotificationServiceImpl(
-    this._plugin, {
-    this._programmationInterne = false,
-    DateTime Function()? maintenant,
-  }) : _maintenant = maintenant ?? DateTime.now;
+  NotificationServiceImpl(this._plugin);
 
   /// Initialises the timezone database and the platform plugin. Idempotent on
   /// the plugin side; call once at startup.
+  @override
   Future<void> initialiser() async {
     tzdata.initializeTimeZones();
     await _plugin.initialize(
@@ -72,10 +67,6 @@ class NotificationServiceImpl implements AbstractNotificationService {
 
   @override
   Future<void> programmer(NotificationLocale notif) async {
-    if (_programmationInterne) {
-      _programmerEnInterne(notif);
-      return;
-    }
     try {
       await _plugin.zonedSchedule(
         id: intIdPour(notif.id),
@@ -94,31 +85,26 @@ class NotificationServiceImpl implements AbstractNotificationService {
     }
   }
 
-  void _programmerEnInterne(NotificationLocale notif) {
-    final id = intIdPour(notif.id);
-    _minuteries.remove(id)?.cancel();
-    final delai = notif.dateProgrammee.difference(_maintenant());
-    if (delai.isNegative) return;
-    _minuteries[id] = Timer(delai, () async {
-      _minuteries.remove(id);
-      try {
-        await _plugin.show(
-          id: id,
-          title: notif.titre,
-          body: notif.corps,
-          notificationDetails: _detailsPour(notif.categorie),
-          payload: notif.cibleRoute,
-        );
-      } on Exception catch (e) {
-        developer.log('Notification ${notif.id} not shown',
-            name: 'notifications', error: e);
-      }
-    });
+  /// Shows [notif] now.
+  Future<void> afficher(NotificationLocale notif) async {
+    try {
+      await _plugin.show(
+        id: intIdPour(notif.id),
+        title: notif.titre,
+        body: notif.corps,
+        notificationDetails: _detailsPour(notif.categorie),
+        payload: notif.cibleRoute,
+      );
+    } catch (e) {
+      throw NotificationIndisponibleException(
+        'Failed to show notification "${notif.id}".',
+        cause: e,
+      );
+    }
   }
 
   @override
   Future<void> annuler(String id) async {
-    _minuteries.remove(intIdPour(id))?.cancel();
     try {
       await _plugin.cancel(id: intIdPour(id));
     } catch (e) {

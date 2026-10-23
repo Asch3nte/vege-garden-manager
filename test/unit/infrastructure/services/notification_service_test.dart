@@ -97,81 +97,34 @@ void main() {
     );
   });
 
-  group('without platform scheduling', () {
-    const avance = Duration(milliseconds: 20);
-    late NotificationServiceImpl interne;
-    late NotificationLocale n;
-
-    setUp(() {
-      n = notif();
-      interne = NotificationServiceImpl(plugin,
-          programmationInterne: true,
-          maintenant: () => n.dateProgrammee.subtract(avance));
-      when(() => plugin.show(
-            id: any(named: 'id'),
-            title: any(named: 'title'),
-            body: any(named: 'body'),
-            notificationDetails: any(named: 'notificationDetails'),
-            payload: any(named: 'payload'),
-          )).thenAnswer((_) async {});
-      when(() => plugin.cancel(id: any(named: 'id'))).thenAnswer((_) async {});
-    });
-
-    test('shows the notification when its time comes', () async {
-      await interne.programmer(n);
-      verifyNever(() => plugin.show(
+  test('afficher shows now, and wraps a plugin error', () async {
+    when(() => plugin.show(
           id: any(named: 'id'),
           title: any(named: 'title'),
           body: any(named: 'body'),
           notificationDetails: any(named: 'notificationDetails'),
-          payload: any(named: 'payload')));
+          payload: any(named: 'payload'),
+        )).thenAnswer((_) async {});
+    final n = notif();
 
-      await Future<void>.delayed(avance * 3);
+    await service.afficher(n);
 
-      verify(() => plugin.show(
-            id: NotificationServiceImpl.intIdPour(n.id),
-            title: 'Arrosage',
-            body: n.corps,
-            notificationDetails: any(named: 'notificationDetails'),
-            payload: '/plantation/42',
-          )).called(1);
-      verifyNever(() => plugin.zonedSchedule(
-            id: any(named: 'id'),
-            title: any(named: 'title'),
-            body: any(named: 'body'),
-            scheduledDate: any(named: 'scheduledDate'),
-            notificationDetails: any(named: 'notificationDetails'),
-            androidScheduleMode: any(named: 'androidScheduleMode'),
-            payload: any(named: 'payload'),
-          ));
-    });
+    verify(() => plugin.show(
+          id: NotificationServiceImpl.intIdPour(n.id),
+          title: 'Arrosage',
+          body: n.corps,
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: '/plantation/42',
+        )).called(1);
 
-    test('a cancelled notification never shows', () async {
-      await interne.programmer(n);
-      await interne.annuler(n.id);
-      await Future<void>.delayed(avance * 3);
-
-      verifyNever(() => plugin.show(
+    when(() => plugin.show(
           id: any(named: 'id'),
           title: any(named: 'title'),
           body: any(named: 'body'),
           notificationDetails: any(named: 'notificationDetails'),
-          payload: any(named: 'payload')));
-    });
-
-    test('a past time shows nothing', () async {
-      final passee = NotificationServiceImpl(plugin,
-          programmationInterne: true,
-          maintenant: () => n.dateProgrammee.add(const Duration(minutes: 1)));
-      await passee.programmer(n);
-      await Future<void>.delayed(avance * 3);
-
-      verifyNever(() => plugin.show(
-          id: any(named: 'id'),
-          title: any(named: 'title'),
-          body: any(named: 'body'),
-          notificationDetails: any(named: 'notificationDetails'),
-          payload: any(named: 'payload')));
-    });
+          payload: any(named: 'payload'),
+        )).thenThrow(UnimplementedError());
+    await expectLater(
+        service.afficher(n), throwsA(isA<NotificationIndisponibleException>()));
   });
 }
