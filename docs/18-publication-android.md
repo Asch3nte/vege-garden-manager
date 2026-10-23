@@ -1,6 +1,12 @@
-# 18 — Publication Android
+# 18 — Publication (Android, Linux, Windows)
 
-Procédure de signature et de publication d'une version Android.
+Procédure de signature et de publication d'une version. Android est signé ;
+Linux (`.tar.gz`) et Windows (`.zip`) ne le sont pas : Windows affiche un
+avertissement SmartScreen au premier lancement.
+
+**Limite desktop** : sous Linux, le plugin de notifications ne sait pas
+programmer ; un rappel ne s'affiche que si l'application est ouverte à son
+heure.
 
 ## Identifiant
 
@@ -64,8 +70,9 @@ jour possible.
 3. Le workflow `release.yml` (ADR-0025) :
    - refuse un tag hors de `main` ou différent de la version du
      `pubspec.yaml` ;
-   - construit l'APK et l'AAB signés ;
+   - construit l'APK et l'AAB signés, l'archive Linux (sur Ubuntu 22.04,
+     pour les glibc anciennes) et l'archive Windows ;
    - refuse un APK ou un AAB signé avec la clé de debug ;
-   - crée un **brouillon** de Release GitHub avec l'APK, l'AAB et
+   - crée un **brouillon** de Release GitHub avec tous ces fichiers et
      `SHA256SUMS` (relancé, il met à jour le brouillon existant).
 4. Relire le brouillon, puis le publier depuis GitHub.

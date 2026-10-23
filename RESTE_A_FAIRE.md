@@ -38,7 +38,7 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 - Générer la clé de release et renseigner les secrets du dépôt ([docs/18](docs/18-publication-android.md)).
 - Icône et splash (dépendances à valider ou ressources manuelles).
-- Packaging iOS / Linux / Windows / macOS.
+- Packaging iOS / macOS (compte Apple requis) ; Linux et Windows livrés en archives, sans signature Windows.
 - Relecture éditoriale de tout le glossaire, puis sa traduction `en`.
 - **Vérification développeur Android** (Google) : en vigueur depuis le 30/09/2026 dans quatre pays, globale en 2027. Décision à prendre : vérification complète, distribution restreinte (≤ 20 appareils) ou hors Play Protect. [Source](https://developer.android.com/developer-verification).
 - README à jour.

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:riverpod/misc.dart';
 import 'package:riverpod/riverpod.dart';
@@ -148,7 +150,8 @@ class Composition {
         meteoServiceProvider
             .overrideWith((ref) => MeteoServiceImpl(base, OpenMeteoClient())),
         notificationServiceProvider.overrideWith((ref) =>
-            NotificationServiceImpl(FlutterLocalNotificationsPlugin())),
+            NotificationServiceImpl(FlutterLocalNotificationsPlugin(),
+                programmationInterne: Platform.isLinux)),
         textesNotificationsProvider.overrideWith(
             (ref) => TextesNotificationsArb(() => ref.read(codeLangueProvider))),
         geolocalisationServiceProvider

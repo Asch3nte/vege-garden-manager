@@ -21,6 +21,8 @@ du gabarit Flutter.
   code), refuse une signature de debug ; un second job, seul à pouvoir écrire
   dans le dépôt, crée un **brouillon** de Release GitHub. La publication
   reste manuelle.
+- **Desktop** : le même tag produit une archive Linux (`.tar.gz`, construite
+  sur Ubuntu 22.04) et une archive Windows (`.zip`), non signées.
 - Procédure : [docs/18](../18-publication-android.md).
 
 ## Conséquences
