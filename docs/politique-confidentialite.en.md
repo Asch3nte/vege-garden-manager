@@ -89,9 +89,12 @@ verifiable: anyone can check that these commitments are kept.
 
 ## 10. Changes
 
-This policy may change along with the app. The applicable version is always
-the one **embedded in the version you use**, readable offline in Settings ›
-Privacy & opt-outs.
+This policy may change along with the app, notably with the planned community
+feature. Any change will keep to the app's two principles, **anonymity** and
+**autonomy**: the policy will only change to describe solutions that meet them.
+
+The applicable version is always the one **embedded in the version you use**,
+readable offline in Settings › Privacy & opt-outs.
 
 ## 11. Contact
 
