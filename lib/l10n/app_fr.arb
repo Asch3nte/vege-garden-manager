@@ -1271,7 +1271,7 @@
   "@prefConfirmerSuppressions": { "description": "Réglage : demander confirmation avant de supprimer ou d'arracher un élément de liste." },
   "prefConfirmerSuppressionsSub": "Une suppression ou un arrachage reste annulable pendant {secondes} secondes.",
   "@prefConfirmerSuppressionsSub": {
-    "description": "Sous-titre du réglage de confirmation des suppressions.",
+    "description": "Sous-titre du réglage de confirmation des suppressions et arrachages.",
     "placeholders": { "secondes": { "type": "int" } }
   },
   "suppressionNePlusDemander": "Ne plus demander",

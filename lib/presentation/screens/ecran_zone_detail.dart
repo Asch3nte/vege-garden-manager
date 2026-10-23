@@ -155,14 +155,26 @@ Future<void> _supprimerZone(
 /// Marks a crop as pulled out (`arrachee`) once the undo window has passed: it
 /// leaves the active crops but stays in the database as history. Resolves to
 /// whether it leaves the list.
-bool _arracher(
+Future<bool> _arracher(
   BuildContext context,
   WidgetRef ref,
   String zoneId,
   CulturePotager culture,
-) {
+) async {
   final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
   final maintenant = ref.read(horlogeProvider)();
+  final plantations = await ref.read(plantationsProvider(zoneId).future);
+  final plantation =
+      plantations.where((p) => p.id == culture.plantationId).firstOrNull;
+  if (plantation == null) return false;
+  // Refused now rather than after the undo window.
+  if (!plantation.peutFinirLe(maintenant)) {
+    messenger.showSnackBar(
+        SnackBar(content: Text(l10n.formEnregistrementErreur)));
+    return false;
+  }
+  if (!context.mounted) return false;
   programmerSuppression(context, ref,
       id: culture.plantationId,
       message: l10n.snackPlanteArrachee(culture.nom),
@@ -271,7 +283,7 @@ class _Detail extends ConsumerWidget {
   final VoidCallback onAjouterPlante;
   final VoidCallback onModifierZone;
   final VoidCallback onSupprimerZone;
-  final bool Function(CulturePotager) onArracher;
+  final Future<bool> Function(CulturePotager) onArracher;
   final Future<bool> Function(CulturePotager) onSupprimerPlante;
   final void Function(CulturePotager) onRecolter;
   final void Function(CulturePotager) onObserver;
@@ -402,7 +414,7 @@ class _Detail extends ConsumerWidget {
                 surArchiver: () async =>
                     await _confirmerArrachage(context, ref, zone.cultures[i]) &&
                     context.mounted &&
-                    onArracher(zone.cultures[i]),
+                    await onArracher(zone.cultures[i]),
                 libelleArchiver: l10n.cultureArracher,
                 surSupprimer: () => onSupprimerPlante(zone.cultures[i]),
                 child: _LigneCulture(

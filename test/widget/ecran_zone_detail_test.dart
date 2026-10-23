@@ -169,19 +169,21 @@ void main() {
         periodes: const {},
       );
 
-  Plantation unePlantation(String id, String planteId) => Plantation(
+  Plantation unePlantation(String id, String planteId,
+          {DateTime? miseEnPlace}) =>
+      Plantation(
         id: id,
         planteId: planteId,
         parcelleId: 'z-1',
-        dateMiseEnPlace: DateTime(2026, 4, 1),
+        dateMiseEnPlace: miseEnPlace ?? DateTime(2026, 4, 1),
         methode: MethodeMiseEnPlace.semisDirect,
         surfaceOccupee: Surface.enMetresCarres(0.5),
         nombrePieds: 3,
       );
 
   // Seeds zone z-1 with one active crop (Tomate).
-  void semerUneCulture() {
-    final pl = unePlantation('p-1', 'tomate');
+  void semerUneCulture({DateTime? miseEnPlace}) {
+    final pl = unePlantation('p-1', 'tomate', miseEnPlace: miseEnPlace);
     when(() => plantations.obtenirParParcelle('z-1'))
         .thenAnswer((_) async => [pl]);
     when(() => plantations.obtenirParId('p-1')).thenAnswer((_) async => pl);
@@ -403,6 +405,21 @@ void main() {
         .single as Plantation;
     expect(p.id, 'p-1');
     expect(p.statut, StatutPlantation.arrachee);
+  });
+
+  testWidgets('a crop planted later than today is not pulled out',
+      (tester) async {
+    semerUneCulture(miseEnPlace: DateTime(2026, 7, 1));
+    await monter(tester, 'z-1');
+
+    await tester.tap(find.byIcon(PhosphorIconsRegular.dotsThreeVertical));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Arracher'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+    expect(find.text('Tomate'), findsOneWidget);
+    expect(find.byType(SnackBarAction), findsNothing);
   });
 
   testWidgets('a failed pull-out is reported, the crop stays in place',
