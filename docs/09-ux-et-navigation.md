@@ -108,7 +108,8 @@ d'expérience · contenu éducatif · à propos · lien GitHub. Détail :
 - **Gestes** : swipe configurable globalement via `sens_swipe` (standard / inversé,
   avec aperçu interactif). Standard : vers la gauche = supprimer (confirmation désactivable,
   « Annuler » 5 s : l'effacement en base n'a lieu qu'après ce délai),
-  vers la droite = archiver (tâche faite, culture arrachée, équipement retiré) ;
+  vers la droite = archiver (tâche faite, culture arrachée — même confirmation
+  et même « Annuler » que la suppression —, équipement retiré) ;
   inversé permute. Fond coloré + icône pendant le geste ; un sens sans action
   reste inerte. Le menu de chaque élément garde toutes les actions (bureau,
   lecteurs d'écran).

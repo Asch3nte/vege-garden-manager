@@ -131,7 +131,7 @@ class PreferencesUtilisateur {
   PreferencesUnites get unites => _unites;
   SensSwipe get sensSwipe => _sensSwipe;
 
-  /// Whether deleting a list item asks for confirmation first.
+  /// Whether deleting or pulling out a list item asks for confirmation first.
   bool get confirmerSuppressions => _confirmerSuppressions;
   NiveauExperience get niveauExperience => _niveauExperience;
   ModeGeolocalisation get modeGeolocalisation => _modeGeolocalisation;

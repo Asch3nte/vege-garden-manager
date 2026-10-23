@@ -8,13 +8,15 @@ import '../../application/state/suppressions_differees_notifier.dart';
 import '../../l10n/app_localizations.dart';
 import '../screens/parametres/enregistreur_preferences.dart';
 
-/// Asks to confirm a list item's deletion, unless the user opted out; the
-/// dialog offers to stop asking.
+/// Asks to confirm a list item's deletion or pull-out, unless the user opted
+/// out; the dialog offers to stop asking.
 Future<bool> confirmerSuppression(
   BuildContext context,
   WidgetRef ref, {
   required String titre,
   required String message,
+  String? libelleConfirmer,
+  bool destructif = true,
 }) async {
   if (!(ref.read(preferencesProvider).value?.confirmerSuppressions ?? true)) {
     return true;
@@ -22,7 +24,12 @@ Future<bool> confirmerSuppression(
   final enregistreur = EnregistreurPreferences.de(context);
   final reponse = await showDialog<_Reponse>(
     context: context,
-    builder: (_) => _DialogueSuppression(titre: titre, message: message),
+    builder: (_) => _DialogueSuppression(
+      titre: titre,
+      message: message,
+      libelleConfirmer: libelleConfirmer,
+      destructif: destructif,
+    ),
   );
   if (reponse == null || !reponse.confirme) return false;
   if (reponse.nePlusDemander) {
@@ -33,8 +40,8 @@ Future<bool> confirmerSuppression(
   return true;
 }
 
-/// Hides the item [id] at once and erases it with [effacer] once the undo
-/// window of the [message] snackbar has passed.
+/// Hides the item [id] at once and runs [effacer] once the undo window of the
+/// [message] snackbar has passed; a failure is reported and brings it back.
 void programmerSuppression(
   BuildContext context,
   WidgetRef ref, {
@@ -46,10 +53,18 @@ void programmerSuppression(
   final messenger = ScaffoldMessenger.of(context);
   var annulable = true;
   final suppressions = ref.read(suppressionsDiffereesProvider.notifier)
-    ..programmer(id, (r) {
+    ..programmer(id, (r) async {
       // An undo still shown past this point would do nothing.
       if (annulable && messenger.mounted) messenger.hideCurrentSnackBar();
-      return effacer(r);
+      try {
+        await effacer(r);
+      } on Exception {
+        if (messenger.mounted) {
+          messenger.showSnackBar(
+              SnackBar(content: Text(l10n.formEnregistrementErreur)));
+        }
+        rethrow;
+      }
     });
   // A queued snackbar would offer its undo after the erasure.
   messenger.clearSnackBars();
@@ -70,8 +85,15 @@ typedef _Reponse = ({bool confirme, bool nePlusDemander});
 class _DialogueSuppression extends StatefulWidget {
   final String titre;
   final String message;
+  final String? libelleConfirmer;
+  final bool destructif;
 
-  const _DialogueSuppression({required this.titre, required this.message});
+  const _DialogueSuppression({
+    required this.titre,
+    required this.message,
+    required this.libelleConfirmer,
+    required this.destructif,
+  });
 
   @override
   State<_DialogueSuppression> createState() => _DialogueSuppressionState();
@@ -109,11 +131,13 @@ class _DialogueSuppressionState extends State<_DialogueSuppression> {
         FilledButton(
           onPressed: () => Navigator.of(context)
               .pop((confirme: true, nePlusDemander: _nePlusDemander)),
-          style: FilledButton.styleFrom(
-            backgroundColor: scheme.error,
-            foregroundColor: scheme.onError,
-          ),
-          child: Text(l10n.actionSupprimer),
+          style: widget.destructif
+              ? FilledButton.styleFrom(
+                  backgroundColor: scheme.error,
+                  foregroundColor: scheme.onError,
+                )
+              : null,
+          child: Text(widget.libelleConfirmer ?? l10n.actionSupprimer),
         ),
       ],
     );

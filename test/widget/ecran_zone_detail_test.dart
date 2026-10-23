@@ -395,6 +395,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Arracher'));
     await tester.pumpAndSettle();
+    await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+    await tester.pumpAndSettle();
 
     final p = verify(() => plantations.sauvegarder(captureAny()))
         .captured
@@ -414,8 +416,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Arracher'));
     await tester.pumpAndSettle();
+    await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+    await tester.pumpAndSettle();
 
     expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+    expect(find.text('Tomate'), findsOneWidget);
     verify(() => plantations.obtenirParParcelle(any())).called(greaterThan(1));
   });
 
@@ -453,10 +458,29 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Arracher'));
       await tester.pumpAndSettle();
 
+      verifyNever(() => plantations.sauvegarder(any()));
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
       final p = verify(() => plantations.sauvegarder(captureAny()))
           .captured
           .single as Plantation;
       expect(p.statut, StatutPlantation.arrachee);
+    });
+
+    testWidgets('an undone pull-out leaves the crop growing', (tester) async {
+      semerUneCulture();
+      await monter(tester, 'z-1');
+
+      await balayer(tester, 600);
+      await tester.tap(find.widgetWithText(FilledButton, 'Arracher'));
+      await tester.pumpAndSettle();
+      expect(find.text('Tomate'), findsNothing);
+      await tester.tap(find.widgetWithText(SnackBarAction, 'Annuler'));
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Tomate'), findsOneWidget);
+      verifyNever(() => plantations.sauvegarder(any()));
     });
 
     testWidgets('leftwards deletes it after confirmation', (tester) async {
