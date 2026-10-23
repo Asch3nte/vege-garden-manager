@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,20 +43,26 @@ void programmerSuppression(
   required Effacement effacer,
 }) {
   final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  var annulable = true;
   final suppressions = ref.read(suppressionsDiffereesProvider.notifier)
-    ..programmer(id, effacer);
-  ScaffoldMessenger.of(context)
-    // A queued snackbar would offer its undo after the erasure.
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(
-      content: Text(message),
-      duration: suppressions.delai,
-      persist: false,
-      action: SnackBarAction(
-        label: l10n.actionAnnuler,
-        onPressed: () => suppressions.annuler(id),
-      ),
-    ));
+    ..programmer(id, (r) {
+      // An undo still shown past this point would do nothing.
+      if (annulable && messenger.mounted) messenger.hideCurrentSnackBar();
+      return effacer(r);
+    });
+  // A queued snackbar would offer its undo after the erasure.
+  messenger.clearSnackBars();
+  final affichage = messenger.showSnackBar(SnackBar(
+    content: Text(message),
+    duration: suppressions.delai,
+    persist: false,
+    action: SnackBarAction(
+      label: l10n.actionAnnuler,
+      onPressed: () => suppressions.annuler(id),
+    ),
+  ));
+  unawaited(affichage.closed.then((_) => annulable = false));
 }
 
 typedef _Reponse = ({bool confirme, bool nePlusDemander});

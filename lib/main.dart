@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show AppExitResponse;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,13 @@ class _PotAGererAppState extends ConsumerState<PotAGererApp> {
   @override
   void initState() {
     super.initState();
-    _cycleDeVie = AppLifecycleListener(onHide: _validerSuppressions);
+    _cycleDeVie = AppLifecycleListener(
+      onHide: _validerSuppressions,
+      onExitRequested: () async {
+        await ref.read(suppressionsDiffereesProvider.notifier).toutValider();
+        return AppExitResponse.exit;
+      },
+    );
   }
 
   @override

@@ -220,6 +220,7 @@ Future<bool> _supprimerPlante(
             .read(plantationsProvider(zoneId).notifier)
             .supprimer(culture.plantationId);
         r.invalidate(potagerProvider);
+        await r.read(potagerProvider.future);
       });
   return true;
 }

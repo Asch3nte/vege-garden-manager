@@ -77,7 +77,7 @@ void main() {
     expect(c.read(suppressionsDiffereesProvider), isEmpty);
   });
 
-  test('scheduling the same id again restarts its delay once', () async {
+  test('an id already pending is not scheduled twice', () async {
     service()
       ..programmer('a', (_) => effacer('a'))
       ..programmer('a', (_) => effacer('a'));

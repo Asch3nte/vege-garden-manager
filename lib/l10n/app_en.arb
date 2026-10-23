@@ -450,7 +450,7 @@
   "prefSensSwipe": "Swipe direction",
   "prefSensSwipeSub": "Applies everywhere a list can be swiped (tasks, plantings…).",
   "prefConfirmerSuppressions": "Confirm deletions",
-  "prefConfirmerSuppressionsSub": "A deletion can be undone for 5 seconds.",
+  "prefConfirmerSuppressionsSub": "A deletion can be undone for {secondes} seconds.",
   "suppressionNePlusDemander": "Don't ask again",
   "prefNiveau": "Experience level",
   "prefNiveauSub": "A higher level shows more advanced tips and unlocks additional options.",

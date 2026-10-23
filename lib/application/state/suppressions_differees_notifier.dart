@@ -3,7 +3,8 @@ import 'dart:developer' as developer;
 
 import 'package:riverpod/riverpod.dart';
 
-/// Erases an item from the database once its deletion can no longer be undone.
+/// Erases an item from the database once its deletion can no longer be undone,
+/// resolving once the lists showing it have reloaded without it.
 typedef Effacement = Future<void> Function(Ref ref);
 
 /// Ids of the items deleted from a list whose erasure is still pending.
@@ -30,9 +31,10 @@ class SuppressionsDiffereesNotifier extends Notifier<Set<String>> {
     return const {};
   }
 
-  /// Hides [id] now and runs [effacer] once [delai] has passed.
+  /// Hides [id] now and runs [effacer] once [delai] has passed; an id
+  /// already pending or being erased is left as is.
   void programmer(String id, Effacement effacer) {
-    _attentes.remove(id)?.$1.cancel();
+    if (state.contains(id)) return;
     _attentes[id] = (Timer(delai, () => unawaited(valider(id))), effacer);
     state = Set.unmodifiable({...state, id});
   }

@@ -103,7 +103,10 @@ Future<bool> _supprimerTache(
   programmerSuppression(context, ref,
       id: tache.id,
       message: l10n.snackTacheSupprimee,
-      effacer: (r) => r.read(accueilProvider.notifier).supprimerTache(tache));
+      effacer: (r) async {
+        await r.read(accueilProvider.notifier).supprimerTache(tache);
+        await r.read(accueilProvider.future);
+      });
   return true;
 }
 
