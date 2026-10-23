@@ -110,6 +110,7 @@ jobs:
           fi
 
       - name: Collect the release files
+        if: github.event_name == 'push'
         run: |
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk "dist/pot-a-gerer-$TAG.apk"
