@@ -46,7 +46,7 @@ information quitte votre appareil, et toujours de façon minimale :
 
 Comme pour toute connexion à Internet, ces services voient l'**adresse IP** de
 votre connexion. L'application ne leur transmet aucun identifiant, aucun compte
-et aucune donnée de jardin : elle ne se présente que par son nom.
+et aucune donnée de jardin.
 
 ## 4. Données sensibles et permissions
 

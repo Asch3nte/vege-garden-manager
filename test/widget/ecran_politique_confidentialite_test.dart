@@ -11,6 +11,8 @@ import 'package:pot_a_gerer/domain/repositories/abstract_ouverture_lien_service.
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/ecran_politique_confidentialite.dart';
 
+import '../helpers/politique_fichiers.dart';
+
 class _MockOuvertureLien extends Mock implements AbstractOuvertureLienService {}
 
 void main() {
@@ -28,10 +30,8 @@ void main() {
       ProviderScope(
         overrides: [
           ouvertureLienServiceProvider.overrideWithValue(liens),
-          // Synchronous read: the asset bundle's real I/O never completes
-          // under the test clock.
-          lectureAssetTexteProvider.overrideWithValue(
-              (chemin) async => File(chemin).readAsStringSync()),
+          politiqueConfidentialiteSourceProvider
+              .overrideWithValue(PolitiqueDepuisFichiers()),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),

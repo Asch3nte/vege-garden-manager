@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pot_a_gerer/application/providers/service_providers.dart';
 import 'package:pot_a_gerer/app/router.dart';
 import 'package:pot_a_gerer/app/theme/couleurs_app.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
@@ -37,6 +38,8 @@ import 'package:pot_a_gerer/presentation/screens/parametres/panneau_notification
 import 'package:pot_a_gerer/domain/enums/grandeur_mesure.dart';
 import 'package:pot_a_gerer/domain/enums/systeme_unites.dart';
 import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
+
+import '../helpers/politique_fichiers.dart';
 
 import '../helpers/globe.dart';
 
@@ -108,8 +111,8 @@ void main() {
         overrides: [
           preferencesRepositoryProvider.overrideWithValue(repo),
           potagerRepositoryProvider.overrideWithValue(potagers),
-          lectureAssetTexteProvider.overrideWithValue(
-              (chemin) async => File(chemin).readAsStringSync()),
+          politiqueConfidentialiteSourceProvider
+              .overrideWithValue(PolitiqueDepuisFichiers()),
         ],
         child: MaterialApp.router(
           theme: ThemeApp.clair(),

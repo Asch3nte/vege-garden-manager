@@ -18,13 +18,16 @@ La politique de confidentialité doit être consultable hors ligne dans l'app
   de Markdown (titres `#` à `###`, paragraphes, puces `- `, `**gras**`,
   `[texte](https://…)`) ; `VueDocument` l'affiche avec le thème. Seuls les
   liens `https` sont actifs, ouverts par `AbstractOuvertureLienService`.
-- **Langue** : anglais si l'app est en anglais, français sinon.
+- **Lecture** : `AbstractPolitiqueConfidentialiteSource` (domaine), lue par
+  `rootBundle` en infrastructure ; anglais si l'app est en anglais, français
+  sinon.
 - **Accès** : Paramètres › Confidentialité & opt-outs, et À propos.
 
 ## Conséquences
 
 - Les deux fichiers doivent rester dans le sous-ensemble lu ; un test les
-  analyse et vérifie leurs sections et leurs liens.
+  analyse, vérifie sections et liens, et échoue si une syntaxe non lue
+  apparaîtrait brute.
 - Une modification de la politique passe par une nouvelle version de l'app,
   ce que la politique annonce (point 10).
 - Écartés : clés ARB (deux copies à synchroniser), `flutter_markdown_plus`

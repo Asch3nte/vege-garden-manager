@@ -43,8 +43,7 @@ information leaves your device, always kept to a minimum:
   [OpenStreetMap privacy policy](https://osmfoundation.org/wiki/Privacy_Policy)
 
 As with any Internet connection, these services see your connection's **IP
-address**. The app sends them no identifier, no account and no garden data: it
-only introduces itself by its name.
+address**. The app sends them no identifier, no account and no garden data.
 
 ## 4. Sensitive data and permissions
 

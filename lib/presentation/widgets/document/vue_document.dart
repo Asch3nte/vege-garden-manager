@@ -16,7 +16,24 @@ class VueDocument extends StatefulWidget {
 }
 
 class _VueDocumentState extends State<VueDocument> {
-  final List<TapGestureRecognizer> _reconnaisseurs = [];
+  /// One recognizer per link, kept across rebuilds so a tap in progress
+  /// survives them.
+  final Map<SegmentTexte, TapGestureRecognizer> _reconnaisseurs = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _creerReconnaisseurs();
+  }
+
+  @override
+  void didUpdateWidget(VueDocument ancien) {
+    super.didUpdateWidget(ancien);
+    if (!identical(ancien.blocs, widget.blocs)) {
+      _liberer();
+      _creerReconnaisseurs();
+    }
+  }
 
   @override
   void dispose() {
@@ -24,8 +41,17 @@ class _VueDocumentState extends State<VueDocument> {
     super.dispose();
   }
 
+  void _creerReconnaisseurs() {
+    for (final s in widget.blocs.expand((b) => b.segments)) {
+      if (s.lien case final lien?) {
+        _reconnaisseurs[s] = TapGestureRecognizer()
+          ..onTap = () => widget.onLien(lien);
+      }
+    }
+  }
+
   void _liberer() {
-    for (final r in _reconnaisseurs) {
+    for (final r in _reconnaisseurs.values) {
       r.dispose();
     }
     _reconnaisseurs.clear();
@@ -33,7 +59,6 @@ class _VueDocumentState extends State<VueDocument> {
 
   @override
   Widget build(BuildContext context) {
-    _liberer();
     final theme = Theme.of(context);
     final corps = theme.textTheme.bodyMedium;
     return Column(
@@ -46,9 +71,11 @@ class _VueDocumentState extends State<VueDocument> {
                     top: EspacementsApp.s4, bottom: EspacementsApp.s2),
                 child: Text.rich(
                   _texte(bloc, theme),
-                  style: niveau == 1
-                      ? theme.textTheme.headlineSmall
-                      : theme.textTheme.titleMedium,
+                  style: switch (niveau) {
+                    1 => theme.textTheme.headlineSmall,
+                    2 => theme.textTheme.titleMedium,
+                    _ => theme.textTheme.titleSmall,
+                  },
                 ),
               ),
             ParagrapheDocument() => Padding(
@@ -74,14 +101,14 @@ class _VueDocumentState extends State<VueDocument> {
 
   TextSpan _texte(BlocDocument bloc, ThemeData theme) => TextSpan(children: [
         for (final s in bloc.segments)
-          if (s.lien case final lien?)
+          if (_reconnaisseurs[s] case final reconnaisseur?)
             TextSpan(
               text: s.texte,
               style: TextStyle(
                 color: theme.colorScheme.primary,
                 decoration: TextDecoration.underline,
               ),
-              recognizer: _reconnaisseur(() => widget.onLien(lien)),
+              recognizer: reconnaisseur,
             )
           else
             TextSpan(
@@ -89,10 +116,4 @@ class _VueDocumentState extends State<VueDocument> {
               style: s.gras ? const TextStyle(fontWeight: FontWeight.w600) : null,
             ),
       ]);
-
-  TapGestureRecognizer _reconnaisseur(VoidCallback onTap) {
-    final r = TapGestureRecognizer()..onTap = onTap;
-    _reconnaisseurs.add(r);
-    return r;
-  }
 }

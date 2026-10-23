@@ -58,6 +58,16 @@ sur deux lignes.
           hasLength(12));
       expect(blocs.expand((b) => b.segments).where((s) => s.lien != null),
           hasLength(2));
+      // Markdown outside the read subset would show raw.
+      for (final bloc in blocs) {
+        expect(bloc.texteBrut, isNot(contains('**')), reason: 'politique$langue');
+        expect(bloc.texteBrut, isNot(contains('](')), reason: 'politique$langue');
+        if (bloc is! TitreDocument) {
+          expect(bloc.texteBrut,
+              isNot(matches(RegExp(r'^(#|>|\* |\+ |\d+\. |---)'))),
+              reason: 'politique$langue');
+        }
+      }
     }
   });
 }

@@ -41,6 +41,7 @@ import '../infrastructure/services/geolocalisation_service_impl.dart';
 import '../infrastructure/services/info_application_service_impl.dart';
 import '../infrastructure/services/notification_service_impl.dart';
 import '../infrastructure/services/ouverture_lien_service_impl.dart';
+import '../infrastructure/services/politique_confidentialite_source_impl.dart';
 import '../infrastructure/services/reinitialisation_service_impl.dart';
 import '../infrastructure/services/sauvegarde_service_impl.dart';
 import '../infrastructure/services/statistiques_donnees_service_impl.dart';
@@ -162,5 +163,7 @@ class Composition {
             .overrideWith((ref) => InfoApplicationServiceImpl()),
         ouvertureLienServiceProvider
             .overrideWith((ref) => OuvertureLienServiceImpl()),
+        politiqueConfidentialiteSourceProvider
+            .overrideWith((ref) => PolitiqueConfidentialiteSourceImpl()),
       ];
 }
