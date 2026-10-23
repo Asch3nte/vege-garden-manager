@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../../app/router.dart';
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../l10n/app_localizations.dart';
@@ -84,6 +86,11 @@ class PanneauAPropos extends ConsumerWidget {
               label: l10n.aproposSignalerBug,
               onTap: () =>
                   _ouvrirLien(context, ref, _urlSignalerBug(versionConnue)),
+            ),
+            _LigneAction(
+              icone: PhosphorIconsRegular.shieldCheck,
+              label: l10n.politiqueConfidentialite,
+              onTap: () => context.go(RoutesApp.plusPolitique),
             ),
             _LigneAction(
               icone: PhosphorIconsRegular.fileText,

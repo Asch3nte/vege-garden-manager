@@ -25,6 +25,7 @@ import '../presentation/screens/ecran_equipements.dart';
 import '../presentation/screens/ecran_potager.dart';
 import '../presentation/screens/ecran_tache_detail.dart';
 import '../presentation/screens/ecran_zone_detail.dart';
+import '../presentation/screens/parametres/ecran_politique_confidentialite.dart';
 import '../presentation/screens/parametres/panneau_a_propos.dart';
 import '../presentation/screens/parametres/panneau_confidentialite.dart';
 import '../presentation/screens/parametres/panneau_donnees.dart';
@@ -105,6 +106,7 @@ abstract final class RoutesApp {
   static const String plusPonderationSegment = 'ponderation';
   static const String plusDonneesSegment = 'donnees';
   static const String plusAProposSegment = 'apropos';
+  static const String plusPolitiqueSegment = 'politique-confidentialite';
 
   static const String plusGeneral = '$plus/$plusGeneralSegment';
   static const String plusConfidentialite = '$plus/$plusConfidentialiteSegment';
@@ -113,6 +115,7 @@ abstract final class RoutesApp {
   static const String plusPonderation = '$plus/$plusPonderationSegment';
   static const String plusDonnees = '$plus/$plusDonneesSegment';
   static const String plusAPropos = '$plus/$plusAProposSegment';
+  static const String plusPolitique = '$plus/$plusPolitiqueSegment';
 
   // « Aide & lexique » glossary: the panel and its chapter/term
   // pages are sub-routes of [plus] so they join the global back history —
@@ -479,6 +482,11 @@ final routeurProvider = Provider<GoRouter>((ref) {
                     path: RoutesApp.plusAProposSegment,
                     builder: (context, state) =>
                         const _RetourGlobal(child: PanneauAPropos()),
+                  ),
+                  GoRoute(
+                    path: RoutesApp.plusPolitiqueSegment,
+                    builder: (context, state) => const _RetourGlobal(
+                        child: EcranPolitiqueConfidentialite()),
                   ),
                   GoRoute(
                     path: RoutesApp.plusAideSegment,

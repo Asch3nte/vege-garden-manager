@@ -40,6 +40,7 @@ Chaque ADR est un fichier `NNNN-titre-court.md` avec :
 | [0021](0021-racine-de-composition.md) | Racine de composition dans `lib/app/` | Accepté |
 | [0022](0022-unites-de-mesure.md) | Unités de mesure par grandeur | Accepté |
 | [0023](0023-globe-et-recherche-de-localite.md) | Sélecteur de position : globe rotatif et recherche de localité | Accepté |
+| [0024](0024-politique-de-confidentialite-embarquee.md) | Politique de confidentialité embarquée | Accepté |
 
 > Pour proposer une nouvelle décision, dupliquer un ADR existant, incrémenter le
 > numéro, et ouvrir une PR.

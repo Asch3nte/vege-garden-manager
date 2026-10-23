@@ -947,5 +947,8 @@
   "planteArracherTitre": "Pull out this plant?",
   "planteArracherMessage": "\"{plante}\" will leave the active crops and stay in the history. Continue?",
   "aproposDocumentation": "Documentation",
-  "aproposSignalerBug": "Report a bug"
+  "aproposSignalerBug": "Report a bug",
+  "politiqueConfidentialite": "Privacy policy",
+  "politiqueConfidentialiteSub": "What stays on the device, what leaves it",
+  "politiqueConfidentialiteErreur": "Couldn't show the privacy policy."
 }

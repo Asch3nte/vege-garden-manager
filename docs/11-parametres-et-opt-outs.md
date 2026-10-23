@@ -72,8 +72,9 @@ Stocké dans `preferences.notifications_par_categorie` (JSON) +
   — **différé** : nécessiterait un sous-système de journalisation à instrumenter
   partout ; valeur discutable pour une app 100 % locale (à reconsidérer si le
   besoin émerge).
-- ⏭️ **Politique de confidentialité** : texte clair, **hors-ligne**, consultable
-  à tout moment — **à rédiger** (contenu éditorial du dev).
+- ✅ **Politique de confidentialité** (livré 2026-10-23) : texte clair,
+  **hors ligne**, consultable depuis Confidentialité & opt-outs et À propos
+  (ADR-0024).
 
 ## 7. Catégorie 6 — À propos
 

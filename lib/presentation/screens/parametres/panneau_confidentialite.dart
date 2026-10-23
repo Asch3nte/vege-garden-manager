@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../../app/router.dart';
 import '../../../app/theme/dimensions_app.dart';
 import '../../../application/providers/service_providers.dart';
 import '../../../application/state/acces_niveau_provider.dart';
@@ -218,6 +220,12 @@ class PanneauConfidentialite extends ConsumerWidget {
               onChanged: null,
             ),
           ],
+        ),
+        LigneCategorie(
+          icone: PhosphorIconsRegular.shieldCheck,
+          titre: l10n.politiqueConfidentialite,
+          sousTitre: l10n.politiqueConfidentialiteSub,
+          onTap: () => context.go(RoutesApp.plusPolitique),
         ),
       ],
     );

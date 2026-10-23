@@ -30,6 +30,7 @@ import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_plus.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_a_propos.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_confidentialite.dart';
+import 'package:pot_a_gerer/presentation/screens/parametres/ecran_politique_confidentialite.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_general.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/widgets_parametres.dart';
 import 'package:pot_a_gerer/presentation/screens/parametres/panneau_notifications.dart';
@@ -93,6 +94,11 @@ void main() {
               path: RoutesApp.plusAProposSegment,
               builder: (context, state) => const PanneauAPropos(),
             ),
+            GoRoute(
+              path: RoutesApp.plusPolitiqueSegment,
+              builder: (context, state) =>
+                  const EcranPolitiqueConfidentialite(),
+            ),
           ],
         ),
       ],
@@ -102,6 +108,8 @@ void main() {
         overrides: [
           preferencesRepositoryProvider.overrideWithValue(repo),
           potagerRepositoryProvider.overrideWithValue(potagers),
+          lectureAssetTexteProvider.overrideWithValue(
+              (chemin) async => File(chemin).readAsStringSync()),
         ],
         child: MaterialApp.router(
           theme: ThemeApp.clair(),
@@ -243,6 +251,21 @@ void main() {
     await tester.tap(find.byType(Switch).first);
     await tester.pumpAndSettle();
     expect(find.text('Enregistrement impossible. Réessayez.'), findsOneWidget);
+  });
+
+  testWidgets('privacy panel opens the embedded privacy policy',
+      (tester) async {
+    await monter(tester);
+    await tester.tap(find.text('Confidentialité & opt-outs'));
+    await tester.pumpAndSettle();
+
+    final lien = find.text('Politique de confidentialité');
+    await tester.scrollUntilVisible(lien, 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(lien);
+    await tester.pumpAndSettle();
+
+    expect(find.text('En bref'), findsOneWidget);
   });
 
   testWidgets('privacy panel cycles the geolocation mode', (tester) async {
