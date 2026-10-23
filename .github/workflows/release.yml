@@ -90,8 +90,17 @@ jobs:
       - name: Refuse a debug-signed APK or AAB
         run: |
           apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
-          apk=$("$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk)
-          aab=$(keytool -J-Duser.language=en -printcert -jarfile build/app/outputs/bundle/release/app-release.aab)
+          # Both tools print their errors on stdout: shown before failing.
+          if ! apk=$("$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk 2>&1); then
+            echo "$apk"
+            echo "::error::APK signature does not verify"
+            exit 1
+          fi
+          if ! aab=$(keytool -J-Duser.language=en -printcert -jarfile build/app/outputs/bundle/release/app-release.aab 2>&1); then
+            echo "$aab"
+            echo "::error::AAB certificate unreadable"
+            exit 1
+          fi
           echo "$apk" | grep -E 'Signer #1 certificate (DN|SHA-256)'
           echo "$aab" | grep -m1 'Owner:'
           if echo "$apk" | grep -q 'CN=Android Debug' || echo "$aab" | grep -q 'CN=Android Debug' \
