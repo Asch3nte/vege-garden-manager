@@ -60,6 +60,10 @@ class PreferencesNotifier extends AsyncNotifier<PreferencesUtilisateur> {
   Future<void> definirSensSwipe(SensSwipe sens) =>
       _modifier((p) => p.copierAvec(sensSwipe: sens));
 
+  /// Turns the confirmation before deleting a list item on or off.
+  Future<void> definirConfirmerSuppressions(bool active) =>
+      _modifier((p) => p.copierAvec(confirmerSuppressions: active));
+
   /// Sets the experience level (drives advice verbosity and unlocks).
   Future<void> definirNiveau(NiveauExperience niveau) =>
       _modifier((p) => p.copierAvec(niveauExperience: niveau));

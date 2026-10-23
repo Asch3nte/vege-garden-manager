@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/router.dart';
+import 'package:pot_a_gerer/application/state/suppressions_differees_notifier.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
@@ -554,6 +555,9 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
       await tester.pumpAndSettle();
 
+      verifyNever(() => taches.supprimer('t-1'));
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
       verify(() => taches.supprimer('t-1')).called(1);
     });
 

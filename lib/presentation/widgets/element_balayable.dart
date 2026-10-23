@@ -8,6 +8,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../app/theme/dimensions_app.dart';
 import '../../application/providers/sens_swipe_provider.dart';
+import '../../application/state/suppressions_differees_notifier.dart';
 import '../../domain/enums/sens_swipe.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -20,7 +21,8 @@ const double _seuilBalayage = 0.4;
 /// A list item swiped to delete or archive, sides set by [sensSwipeProvider].
 ///
 /// Standard: towards the start deletes, towards the end archives. Both actions
-/// stay reachable from the item's menu and as screen-reader actions.
+/// stay reachable from the item's menu and as screen-reader actions. An item
+/// whose deletion is pending in [suppressionsDiffereesProvider] is hidden.
 class ElementBalayable extends ConsumerStatefulWidget {
   /// Identity of the item within its list.
   final String cle;
@@ -103,7 +105,13 @@ class _ElementBalayableState extends ConsumerState<ElementBalayable> {
 
   @override
   Widget build(BuildContext context) {
-    if (_parti) return const SizedBox.shrink();
+    final enAttente = suppressionsDiffereesProvider
+        .select((ids) => ids.contains(widget.cle));
+    // An undone deletion brings back an item already swiped away.
+    ref.listen(enAttente, (avant, maintenant) {
+      if (avant == true && !maintenant) setState(() => _parti = false);
+    });
+    if (_parti || ref.watch(enAttente)) return const SizedBox.shrink();
     final sens = ref.watch(sensSwipeProvider);
     final l10n = AppLocalizations.of(context)!;
     final scheme = Theme.of(context).colorScheme;

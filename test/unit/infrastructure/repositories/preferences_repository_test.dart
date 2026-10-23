@@ -106,6 +106,13 @@ void main() {
     expect((await repo.charger()).potagerActifId, 'pot-2');
   });
 
+  test('save then load round-trips the deletion confirmation opt-out',
+      () async {
+    await repo.sauvegarder(
+        (await repo.charger()).copierAvec(confirmerSuppressions: false));
+    expect((await repo.charger()).confirmerSuppressions, isFalse);
+  });
+
   test('reinitialiser clears the active-garden selection', () async {
     await repo.sauvegarder(
         (await repo.charger()).copierAvec(potagerActifId: 'pot-2'));
@@ -138,6 +145,7 @@ void main() {
       expect(p.modeGeolocalisation, ModeGeolocalisation.desactivee);
       expect(p.syncLocaleActive, isFalse);
       expect(p.onboardingTermine, isTrue);
+      expect(p.confirmerSuppressions, isTrue);
     });
 
     test('are never overwritten', () async {

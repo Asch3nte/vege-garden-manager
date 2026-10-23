@@ -23,6 +23,7 @@ import '../../domain/value_objects/periode.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/format_dates.dart';
 import '../forms/formulaire_tache.dart';
+import '../widgets/suppression_differee.dart';
 import '../widgets/suppression_tache.dart';
 import '../widgets/tache_balayable.dart';
 import '../widgets/carte_teaser_palier.dart';
@@ -1395,13 +1396,14 @@ Future<bool> _supprimerTache(
   WidgetRef ref,
   Tache tache,
 ) async {
-  final messenger = ScaffoldMessenger.of(context);
   final l10n = AppLocalizations.of(context)!;
-  final confirme = await confirmerSuppressionTache(
-      context, tache, ref.read(calendrierProvider).value?.cibleNom(tache));
-  if (!confirme) return false;
-  await ref.read(calendrierProvider.notifier).supprimer(tache);
-  messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
+  final confirme = await confirmerSuppressionTache(context, ref, tache,
+      ref.read(calendrierProvider).value?.cibleNom(tache));
+  if (!confirme || !context.mounted) return false;
+  programmerSuppression(context, ref,
+      id: tache.id,
+      message: l10n.snackTacheSupprimee,
+      effacer: (r) => r.read(calendrierProvider.notifier).supprimer(tache));
   return true;
 }
 

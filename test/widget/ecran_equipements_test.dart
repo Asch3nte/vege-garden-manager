@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
+import 'package:pot_a_gerer/application/state/suppressions_differees_notifier.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/equipement.dart';
@@ -186,6 +187,9 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
       await tester.pumpAndSettle();
 
+      verifyNever(() => equipements.supprimer('eq-1'));
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
       verify(() => equipements.supprimer('eq-1')).called(1);
     });
   });

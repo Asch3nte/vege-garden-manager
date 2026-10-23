@@ -21,6 +21,7 @@ import '../widgets/capture_localisation.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/libelles_enums.dart';
 import '../widgets/position_potager_actions.dart';
+import '../widgets/suppression_differee.dart';
 import '../widgets/suppression_tache.dart';
 import '../widgets/tache_balayable.dart';
 import '../widgets/titre_tache.dart';
@@ -90,15 +91,19 @@ class EcranAccueil extends ConsumerWidget {
 /// was.
 Future<bool> _supprimerTache(
     BuildContext context, WidgetRef ref, Tache tache) async {
-  final messenger = ScaffoldMessenger.of(context);
   final l10n = AppLocalizations.of(context)!;
   final nomCible = tache.titre == null && tache.cible == CibleTache.plantation
       ? await ref.read(nomPlantePlantationProvider(tache.cibleId).future)
       : null;
   if (!context.mounted) return false;
-  if (!await confirmerSuppressionTache(context, tache, nomCible)) return false;
-  await ref.read(accueilProvider.notifier).supprimerTache(tache);
-  messenger.showSnackBar(SnackBar(content: Text(l10n.snackTacheSupprimee)));
+  if (!await confirmerSuppressionTache(context, ref, tache, nomCible) ||
+      !context.mounted) {
+    return false;
+  }
+  programmerSuppression(context, ref,
+      id: tache.id,
+      message: l10n.snackTacheSupprimee,
+      effacer: (r) => r.read(accueilProvider.notifier).supprimerTache(tache));
   return true;
 }
 

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
+import 'package:pot_a_gerer/application/state/suppressions_differees_notifier.dart';
 import 'package:pot_a_gerer/application/providers/repository_providers.dart';
 import 'package:pot_a_gerer/domain/entities/fiche_plante_personnelle.dart';
 import 'package:pot_a_gerer/domain/enums/besoin_eau.dart';
@@ -12,8 +13,10 @@ import 'package:pot_a_gerer/domain/enums/categorie_plante.dart';
 import 'package:pot_a_gerer/domain/enums/niveau_soleil.dart';
 import 'package:pot_a_gerer/domain/enums/qualite_sol.dart';
 import 'package:pot_a_gerer/domain/enums/usage_plante.dart';
+import 'package:pot_a_gerer/domain/entities/preferences_utilisateur.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_favori_repository.dart';
 import 'package:pot_a_gerer/domain/repositories/abstract_fiche_plante_personnelle_repository.dart';
+import 'package:pot_a_gerer/domain/repositories/abstract_preferences_repository.dart';
 import 'package:pot_a_gerer/domain/value_objects/modele_fiche_personnelle.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_fiches_personnelles.dart';
@@ -22,6 +25,10 @@ class MockFichesPerso extends Mock
     implements AbstractFichePlantePersonnelleRepository {}
 
 class MockFavoris extends Mock implements AbstractFavoriRepository {}
+
+class MockPreferences extends Mock implements AbstractPreferencesRepository {}
+
+class _FakePrefs extends Fake implements PreferencesUtilisateur {}
 
 FichePlantePersonnelle _uneFiche() => FichePlantePersonnelle(
       id: 'fp-1',
@@ -48,8 +55,18 @@ FichePlantePersonnelle _uneFiche() => FichePlantePersonnelle(
 void main() {
   late MockFichesPerso repo;
   late MockFavoris favoris;
+  late MockPreferences preferences;
+  late PreferencesUtilisateur prefs;
+
+  setUpAll(() => registerFallbackValue(_FakePrefs()));
 
   setUp(() {
+    prefs = PreferencesUtilisateur();
+    preferences = MockPreferences();
+    when(() => preferences.charger()).thenAnswer((_) async => prefs);
+    when(() => preferences.sauvegarder(any())).thenAnswer((i) async {
+      prefs = i.positionalArguments.single as PreferencesUtilisateur;
+    });
     repo = MockFichesPerso();
     favoris = MockFavoris();
     when(() => favoris.obtenirIds()).thenAnswer((_) async => {});
@@ -67,6 +84,7 @@ void main() {
         overrides: [
           fichePlantePersonnelleRepositoryProvider.overrideWithValue(repo),
           favoriRepositoryProvider.overrideWithValue(favoris),
+          preferencesRepositoryProvider.overrideWithValue(preferences),
         ],
         child: MaterialApp(
           theme: ThemeApp.clair(),
@@ -102,8 +120,60 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
     await tester.pumpAndSettle();
 
+    verifyNever(() => repo.supprimer('fp-1'));
+    await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+    await tester.pumpAndSettle();
     verify(() => repo.supprimer('fp-1')).called(1);
     verify(() => favoris.retirer('perso_basilic_pourpre')).called(1);
+  });
+
+  group('after a deletion', () {
+    Future<void> supprimer(WidgetTester tester) async {
+      await tester.drag(find.text('Basilic pourpre'), const Offset(-700, 0));
+      await tester.pumpAndSettle();
+    }
+
+    setUp(() {
+      when(() => repo.obtenirToutes()).thenAnswer((_) async => [_uneFiche()]);
+      when(() => repo.supprimer(any())).thenAnswer((_) async {});
+    });
+
+    testWidgets('undoing brings the sheet back and erases nothing',
+        (tester) async {
+      await monter(tester);
+      await supprimer(tester);
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+      expect(find.text('Basilic pourpre'), findsNothing);
+
+      await tester.tap(find.widgetWithText(SnackBarAction, 'Annuler'));
+      await tester.pumpAndSettle();
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Basilic pourpre'), findsOneWidget);
+      verifyNever(() => repo.supprimer(any()));
+    });
+
+    testWidgets('« Ne plus demander » skips the next confirmations',
+        (tester) async {
+      await monter(tester);
+      await supprimer(tester);
+      await tester.tap(find.text('Ne plus demander'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+      await tester.pumpAndSettle();
+      expect(prefs.confirmerSuppressions, isFalse);
+
+      await tester.tap(find.widgetWithText(SnackBarAction, 'Annuler'));
+      await tester.pumpAndSettle();
+      await supprimer(tester);
+
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.text('Basilic pourpre'), findsNothing);
+      await tester.pump(SuppressionsDiffereesNotifier.delaiParDefaut);
+      await tester.pumpAndSettle();
+      verify(() => repo.supprimer('fp-1')).called(1);
+    });
   });
 
   testWidgets('a sheet has no archiving swipe', (tester) async {

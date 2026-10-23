@@ -43,6 +43,7 @@ class PreferencesMapper {
         masse: _systeme(row.uniteMasse),
       ),
       sensSwipe: SensSwipe.values.byName(row.sensSwipe),
+      confirmerSuppressions: row.confirmerSuppressions,
       niveauExperience: NiveauExperience.values.byName(row.niveauExperience),
       modeGeolocalisation:
           ModeGeolocalisation.values.byName(row.modeGeolocalisation),
@@ -115,6 +116,7 @@ class PreferencesMapper {
         uniteVolume: Value(p.unites.pour(GrandeurMesure.volume).name),
         uniteMasse: Value(p.unites.pour(GrandeurMesure.masse).name),
         sensSwipe: Value(p.sensSwipe.name),
+        confirmerSuppressions: Value(p.confirmerSuppressions),
         niveauExperience: Value(p.niveauExperience.name),
         modeGeolocalisation: Value(p.modeGeolocalisation.name),
         notificationsGlobalesActives: Value(p.notificationsGlobalesActives),

@@ -16,6 +16,7 @@ import '../glossaire/catalogue/outils.dart';
 import '../glossaire/terme_cliquable.dart';
 import '../glossaire/type_terme_glossaire.dart';
 import '../widgets/dialogue_confirmation.dart';
+import '../widgets/suppression_differee.dart';
 import '../widgets/element_balayable.dart';
 import '../widgets/formateur_mesures.dart';
 import '../widgets/icones_communes.dart';
@@ -524,17 +525,19 @@ Future<bool> _retirer(BuildContext context, WidgetRef ref,
 Future<bool> _supprimer(BuildContext context, WidgetRef ref,
     Equipement equipement, String potagerId) async {
   final l10n = AppLocalizations.of(context)!;
-  final messenger = ScaffoldMessenger.of(context);
-  final ok = await confirmerAction(
+  final ok = await confirmerSuppression(
     context,
+    ref,
     titre: l10n.equipSupprimerTitre,
     message: l10n.equipSupprimerMessage(equipement.nom),
-    libelleConfirmer: l10n.actionSupprimer,
-    destructif: true,
   );
-  if (!ok) return false;
-  await ref.read(equipementsProvider(potagerId).notifier).supprimer(equipement.id);
-  messenger.showSnackBar(SnackBar(content: Text(l10n.equipSnackSupprime)));
+  if (!ok || !context.mounted) return false;
+  programmerSuppression(context, ref,
+      id: equipement.id,
+      message: l10n.equipSnackSupprime,
+      effacer: (r) => r
+          .read(equipementsProvider(potagerId).notifier)
+          .supprimer(equipement.id));
   return true;
 }
 
