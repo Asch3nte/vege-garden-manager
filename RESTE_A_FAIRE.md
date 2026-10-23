@@ -36,8 +36,7 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 
 ## 5. Pré-release
 
-- Keystore release réel (`signingConfigs.release`, `key.properties` hors VCS) ; actuellement clé debug.
-- Job CI de build et signature d'APK.
+- Générer la clé de release et renseigner les secrets du dépôt ([docs/18](docs/18-publication-android.md)).
 - Icône et splash (dépendances à valider ou ressources manuelles).
 - Packaging iOS / Linux / Windows / macOS.
 - Relecture éditoriale de tout le glossaire, puis sa traduction `en`.

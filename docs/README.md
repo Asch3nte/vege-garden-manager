@@ -41,6 +41,7 @@ conservées hors du repo).
 | [14 — Couverture UI](14-couverture-ui.md) | Matrice fonction → écran : checklist de couverture du moteur par l'UI |
 | [16 — Enrichissement fiches plantes](16-enrichissement-fiches-plantes.md) | Champs manquants dans les fiches YAML pour le moteur de recommandation (rusticité, gel, difficulté, contenants, ravageurs…) |
 | [17 — Illustrations du glossaire](17-illustrations-glossaire.md) | Procédure pas à pas : ajouter une image à une page du lexique (dossier, format WebP ≤ 800 px, licences PD/CC0, registre, SOURCES.txt, lint) |
+| [18 — Publication Android](18-publication-android.md) | Clé de release, secrets CI, tag `v*` → brouillon de Release signé |
 | [Audit 2026-10](audit-2026-10.md) | Audit du code : 44 constats classés gravité/effort, lints stricts, purge des commentaires |
 | [decisions/](decisions/) | ADR — décisions d'architecture |
 
