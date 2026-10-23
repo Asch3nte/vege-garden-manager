@@ -101,8 +101,8 @@ jobs:
             echo "::error::AAB certificate unreadable"
             exit 1
           fi
-          echo "$apk" | grep -E 'Signer #1 certificate (DN|SHA-256)'
-          echo "$aab" | grep -m1 'Owner:'
+          echo "$apk"
+          echo "$aab" | grep -E 'Owner:|SHA256:' || true
           if echo "$apk" | grep -q 'CN=Android Debug' || echo "$aab" | grep -q 'CN=Android Debug' \
             || ! echo "$aab" | grep -q 'Owner:'; then
             echo "::error::Release signed with the debug key, or unsigned"
