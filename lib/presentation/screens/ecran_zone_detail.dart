@@ -152,8 +152,9 @@ Future<void> _supprimerZone(
   }
 }
 
-/// Marks a crop as pulled out (`arrachee`): it leaves the active crops but stays
-/// in the database as history. Resolves to whether it was.
+/// Marks a crop as pulled out (`arrachee`) once the undo window has passed: it
+/// leaves the active crops but stays in the database as history. Resolves to
+/// whether it leaves the list.
 Future<bool> _arracher(
   BuildContext context,
   WidgetRef ref,
@@ -167,32 +168,47 @@ Future<bool> _arracher(
   final plantation =
       plantations.where((p) => p.id == culture.plantationId).firstOrNull;
   if (plantation == null) return false;
-
-  try {
-    plantation.changerStatut(StatutPlantation.arrachee, dateFin: maintenant);
-    await ref.read(plantationsProvider(zoneId).notifier).modifier(plantation);
-  } on Exception catch (e) {
-    // Reloads the stored state over the entity changed in memory.
-    debugPrint('Pull-out failed: $e');
-    ref.invalidate(plantationsProvider(zoneId));
+  // Refused now rather than after the undo window.
+  if (!plantation.peutFinirLe(maintenant)) {
     messenger.showSnackBar(
         SnackBar(content: Text(l10n.formEnregistrementErreur)));
     return false;
   }
-  ref.invalidate(potagerProvider);
-  messenger
-      .showSnackBar(SnackBar(content: Text(l10n.snackPlanteArrachee(culture.nom))));
+  if (!context.mounted) return false;
+  programmerSuppression(context, ref,
+      id: culture.plantationId,
+      message: l10n.snackPlanteArrachee(culture.nom),
+      effacer: (r) async {
+        final plantations = await r.read(plantationsProvider(zoneId).future);
+        final plantation =
+            plantations.where((p) => p.id == culture.plantationId).firstOrNull;
+        if (plantation == null) return;
+        try {
+          plantation.changerStatut(StatutPlantation.arrachee,
+              dateFin: maintenant);
+          await r.read(plantationsProvider(zoneId).notifier).modifier(plantation);
+        } on Exception {
+          // Reloads the stored state over the entity changed in memory.
+          r.invalidate(plantationsProvider(zoneId));
+          rethrow;
+        }
+        r.invalidate(potagerProvider);
+        await r.read(potagerProvider.future);
+      });
   return true;
 }
 
-/// Asks to confirm pulling [culture] out.
-Future<bool> _confirmerArrachage(BuildContext context, CulturePotager culture) {
+/// Asks to confirm pulling [culture] out, unless the user opted out.
+Future<bool> _confirmerArrachage(
+    BuildContext context, WidgetRef ref, CulturePotager culture) {
   final l10n = AppLocalizations.of(context)!;
-  return confirmerAction(
+  return confirmerSuppression(
     context,
+    ref,
     titre: l10n.planteArracherTitre,
     message: l10n.planteArracherMessage(culture.nom),
     libelleConfirmer: l10n.cultureArracher,
+    destructif: false,
   );
 }
 
@@ -396,7 +412,8 @@ class _Detail extends ConsumerWidget {
                 arrondi: const BorderRadius.all(RayonsApp.lg),
                 // A swipe is easier to slip than a menu pick: it confirms.
                 surArchiver: () async =>
-                    await _confirmerArrachage(context, zone.cultures[i]) &&
+                    await _confirmerArrachage(context, ref, zone.cultures[i]) &&
+                    context.mounted &&
                     await onArracher(zone.cultures[i]),
                 libelleArchiver: l10n.cultureArracher,
                 surSupprimer: () => onSupprimerPlante(zone.cultures[i]),

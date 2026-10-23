@@ -25,7 +25,7 @@ préférences et son propre état.
 | Thème | auto / clair / sombre | auto |
 | Système d'unités | métrique / impérial | métrique |
 | Sens des gestes swipe | standard / inversé (aperçu interactif, global) | standard |
-| Confirmer les suppressions | oui / non (aussi « Ne plus demander » dans le dialogue) ; « Annuler » 5 s dans tous les cas | oui |
+| Confirmer suppressions et arrachages | oui / non (aussi « Ne plus demander » dans le dialogue) ; « Annuler » 5 s dans tous les cas | oui |
 | Niveau d'expérience | débutant / intermédiaire / expert | débutant |
 
 Le niveau d'expérience influence le détail des recommandations et la visibilité

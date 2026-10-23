@@ -147,7 +147,7 @@ void main() {
     await tester.tap(find.text('Préférences générales'));
     await tester.pumpAndSettle();
 
-    final libelle = find.text('Confirmer les suppressions');
+    final libelle = find.text('Confirmer suppressions et arrachages');
     await tester.scrollUntilVisible(libelle, 200,
         scrollable: find.byType(Scrollable).first);
     await tester.tap(find.descendant(

@@ -458,7 +458,7 @@ CREATE TABLE preferences (
   theme TEXT NOT NULL DEFAULT 'auto' CHECK (theme IN ('auto','clair','sombre')),
   systeme_unites TEXT NOT NULL DEFAULT 'metrique' CHECK (systeme_unites IN ('metrique','imperial')),
   sens_swipe TEXT NOT NULL DEFAULT 'standard' CHECK (sens_swipe IN ('standard','inverse')),
-  confirmer_suppressions INTEGER NOT NULL DEFAULT 1, -- confirmation avant suppression d'un élément de liste
+  confirmer_suppressions INTEGER NOT NULL DEFAULT 1, -- confirmation avant suppression ou arrachage d'un élément de liste
   niveau_experience TEXT NOT NULL DEFAULT 'debutant'
     CHECK (niveau_experience IN ('debutant','intermediaire','expert')),
   mode_geolocalisation TEXT NOT NULL DEFAULT 'desactivee'

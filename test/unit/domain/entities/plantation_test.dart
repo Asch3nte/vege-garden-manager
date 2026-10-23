@@ -147,6 +147,12 @@ void main() {
       );
     });
 
+    test('peutFinirLe accepts no end date before the planting date', () {
+      final p = _plantation();
+      expect(p.peutFinirLe(DateTime(2026, 4, 1)), isFalse);
+      expect(p.peutFinirLe(DateTime(2026, 9, 1)), isTrue);
+    });
+
     test('moving back to enCours clears the end date and reason', () {
       final p = _plantation();
       p.changerStatut(StatutPlantation.recoltee, dateFin: DateTime(2026, 9, 1));

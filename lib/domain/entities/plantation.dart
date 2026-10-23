@@ -138,12 +138,15 @@ class Plantation {
     InvariantDomaineException.verifier(
         dateFin != null, 'a terminal status requires an end date');
     InvariantDomaineException.verifier(
-        dateFin == null || !dateFin.isBefore(_dateMiseEnPlace),
+        dateFin == null || peutFinirLe(dateFin),
         'the end date cannot precede the planting date');
     _statut = nouveau;
     _dateFinReelle = dateFin;
     _raisonFin = raison;
   }
+
+  /// Whether the crop can end on [dateFin]: not before its planting date.
+  bool peutFinirLe(DateTime dateFin) => !dateFin.isBefore(_dateMiseEnPlace);
 
   @override
   bool operator ==(Object other) => other is Plantation && other._id == _id;

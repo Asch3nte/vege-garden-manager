@@ -21,7 +21,6 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
 |---|---|---|
 | Menu « Plus » | Racine Paramètres directe ; menu à ajouter si Post-récolte/Communauté arrivent | `ecran_plus.dart` |
 | Swipe : action par sens au choix | En attente : choix dans Paramètres de l'action de chaque sens, quand une liste en offre plus de deux | `ElementBalayable`, `panneau_general.dart` |
-| Swipe : arrachage sans confirmation | Même option que la suppression (« Ne plus demander » + « Annuler »), à décider | `ecran_zone_detail.dart` |
 | Appairage d'appareils | Fonction réseau local à concevoir | — |
 | Export CSV | Optionnel (JSON ré-importable déjà livré) | — |
 | Journal d'accès aux données | Différé (valeur faible pour une app 100 % locale) | — |
