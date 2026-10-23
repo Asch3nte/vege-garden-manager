@@ -95,9 +95,14 @@ vérifiable : chacun peut contrôler que ces engagements sont tenus.
 
 ## 10. Modifications
 
-Cette politique pourra évoluer avec l'application. La version applicable est
-toujours celle **embarquée dans la version que vous utilisez**, consultable
-hors ligne dans Paramètres › Confidentialité & opt-outs.
+Cette politique pourra évoluer avec l'application, notamment avec la fonction
+communautaire prévue. Toute évolution respectera ses deux principes,
+l'**anonymat** et l'**autonomie** : la politique ne changera que pour décrire
+des solutions qui y répondent.
+
+La version applicable est toujours celle **embarquée dans la version que vous
+utilisez**, consultable hors ligne dans Paramètres › Confidentialité &
+opt-outs.
 
 ## 11. Contact
 
