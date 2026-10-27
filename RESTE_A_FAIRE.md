@@ -11,6 +11,8 @@ Ordre d'exécution : §2 et §3 (§1, l'audit, est soldé).
 
 Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10.md).
 
+- **Audit pré-V1 (2026-11)** : en cours — design et plan dans `docs/superpowers/` ; tests de non-perte, promesses, éducatif, puis rapport `docs/audit-2026-11.md` et lots.
+
 ## 2. Dette technique hors audit
 
 - **Thème** : le thème actuel est un placeholder ; thème général à refaire entièrement, clair et sombre (valeurs `CouleursApp.*Sombre` jamais validées). Maquetter puis revoir docs/08.
