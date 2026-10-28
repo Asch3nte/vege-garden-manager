@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:drift/native.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_notifier.dart';
 import 'package:pot_a_gerer/application/state/notifications_notifier.dart';
@@ -22,6 +24,11 @@ import 'package:pot_a_gerer/domain/value_objects/conseil_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
+import 'package:pot_a_gerer/infrastructure/repositories/preferences_repository_impl.dart';
+import 'package:pot_a_gerer/l10n/app_localizations.dart';
+import 'package:pot_a_gerer/presentation/screens/ecran_plus.dart';
+import 'package:pot_a_gerer/presentation/screens/ecran_potager.dart';
+import 'package:pot_a_gerer/presentation/widgets/astuce_post_onboarding.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/parcelle_repository_impl.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/plantation_repository_impl.dart';
 
@@ -290,27 +297,70 @@ void main() {
     });
   });
 
-  test(
-    'opt-out contextual help is effective',
-    () {
-      // The setting is stored but nothing outside persistence ever reads it.
-      final lecteurs = [
-        for (final f in Directory('lib/presentation').listSync(recursive: true))
-          if (f is File &&
-              f.readAsStringSync().contains('aideContextuelleActive'))
-            f.path,
-      ];
-      expect(lecteurs, isNotEmpty);
-    },
-    skip: 'Contextual help setting is never read by the UI: it has no effect.',
-  );
+  /// Pumps [ecran] on the real app wiring with a seeded garden, the given help
+  /// settings and the post-onboarding hint raised.
+  Future<void> monterAvecAide(
+    WidgetTester tester,
+    Widget ecran, {
+    bool contextuelle = true,
+    bool docComplete = true,
+  }) async {
+    final banc = (await tester.runAsync(_Banc.creer))!;
+    final repo = PreferencesRepositoryImpl(banc.db);
+    await tester.runAsync(() async {
+      final prefs = await repo.charger();
+      await repo.sauvegarder(
+        prefs.copierAvec(
+          aideContextuelleActive: contextuelle,
+          aideDocCompleteActive: docComplete,
+        ),
+      );
+    });
+    banc.container.read(astucePotagerZonesProvider.notifier).afficher();
+    tester.view.physicalSize = const Size(1600, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: banc.container,
+        child: MaterialApp(
+          theme: ThemeApp.clair(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('fr'),
+          home: ecran,
+        ),
+      ),
+    );
+    for (var i = 0; i < 10; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+  }
 
-  test('opt-out full documentation help is effective', () {
-    final lecteurs = [
-      for (final f in Directory('lib/presentation').listSync(recursive: true))
-        if (f is File && f.readAsStringSync().contains('aideDocCompleteActive'))
-          f.path,
-    ];
-    expect(lecteurs, isNotEmpty);
-  }, skip: 'Full-doc help setting is never read by the UI: it has no effect.');
+  // Contextual help is not gated by its setting: the post-onboarding hint on
+  // the garden screen is still shown with the setting off. Asserts the
+  // behaviour; should pass once `aideContextuelleActive` is wired.
+  testWidgets('opt-out contextual help is effective', (tester) async {
+    const astuce = 'Touchez une zone pour y ajouter vos plantes.';
+    await monterAvecAide(tester, const EcranPotager());
+    expect(find.text(astuce), findsOneWidget);
+
+    await monterAvecAide(tester, const EcranPotager(), contextuelle: false);
+    expect(find.text(astuce), findsNothing);
+  }, skip: true);
+
+  // The « Aide & lexique » entry is not gated by its setting: it is still
+  // listed with the setting off. Asserts the behaviour; should pass once
+  // `aideDocCompleteActive` is wired.
+  testWidgets('opt-out full documentation help is effective', (tester) async {
+    await monterAvecAide(tester, const EcranPlus());
+    expect(find.text('Aide & lexique'), findsOneWidget);
+
+    await monterAvecAide(tester, const EcranPlus(), docComplete: false);
+    expect(find.text('Aide & lexique'), findsNothing);
+  }, skip: true);
 }
