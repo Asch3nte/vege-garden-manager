@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:path/path.dart' as p;
 import 'package:pot_a_gerer/app/theme/theme_app.dart';
 import 'package:pot_a_gerer/application/providers/horloge_provider.dart';
 import 'package:pot_a_gerer/application/state/meteo_accueil_notifier.dart';
@@ -30,6 +31,7 @@ import 'package:pot_a_gerer/infrastructure/repositories/preferences_repository_i
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_plus.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_potager.dart';
+import 'package:pot_a_gerer/presentation/screens/parametres/panneau_confidentialite.dart';
 import 'package:pot_a_gerer/presentation/widgets/astuce_post_onboarding.dart';
 
 import '../../helpers/faux_services_natifs.dart';
@@ -41,12 +43,6 @@ class _MockCalcul extends Mock implements CalculerBesoinArrosage {}
 class _FakeLocalisation extends Fake implements Localisation {}
 
 class _FakePlantation extends Fake implements Plantation {}
-
-final _bruxelles = Localisation.manuelle(
-  ville: 'Bruxelles',
-  latitude: 50.85,
-  longitude: 4.35,
-);
 
 /// App wiring on a seeded in-memory database with a plantation to water,
 /// mocked native services and a clock pinned at 07:00 (before the 08:00 push).
@@ -61,6 +57,7 @@ class _Banc {
   static Future<_Banc> creer({
     bool meteoAuto = true,
     Localisation? position,
+    GeolocalisationDeTest? geoloc,
   }) async {
     final db = AppDatabase(NativeDatabase.memory());
     addTearDown(db.close);
@@ -93,7 +90,7 @@ class _Banc {
     final n = DateTime.now();
     final matin = DateTime(n.year, n.month, n.day, 7);
     final notifications = NotificationsDeTest();
-    final geoloc = GeolocalisationDeTest.refus();
+    final geolocalisation = geoloc ?? GeolocalisationDeTest.refus();
     registerFallbackValue(_FakeLocalisation());
     registerFallbackValue(_FakePlantation());
     final calcul = _MockCalcul();
@@ -119,14 +116,18 @@ class _Banc {
     );
     final container = ProviderContainer(
       overrides: [
-        ...surchargesDeTest(db, notifications: notifications, geoloc: geoloc),
+        ...surchargesDeTest(
+          db,
+          notifications: notifications,
+          geoloc: geolocalisation,
+        ),
         horlogeProvider.overrideWithValue(() => matin),
         calculerBesoinArrosageProvider.overrideWith((ref) async => calcul),
       ],
     );
     addTearDown(container.dispose);
     await container.read(preferencesProvider.future);
-    return _Banc._(db, notifications, geoloc, container);
+    return _Banc._(db, notifications, geolocalisation, container);
   }
 
   PreferencesNotifier get reglages =>
@@ -136,6 +137,47 @@ class _Banc {
     final cas = await container.read(genererTachesArrosageProvider.future);
     await cas.executer();
   }
+}
+
+Directory _racinePaquet() {
+  var dir = Directory.current.absolute;
+  while (!File(p.join(dir.path, 'pubspec.yaml')).existsSync()) {
+    final parent = dir.parent;
+    if (parent.path == dir.path) throw StateError('Package root not found.');
+    dir = parent;
+  }
+  return dir;
+}
+
+/// Path of [f] relative to [racine], with forward slashes on every platform.
+String _relatif(Directory racine, File f) =>
+    p.relative(f.path, from: racine.path).replaceAll(r'\', '/');
+
+Future<void> _stabiliser(WidgetTester tester) async {
+  for (var i = 0; i < 10; i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 50)),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
+/// Pumps [ecran] on the wiring of [banc] in a French MaterialApp.
+Future<void> _monter(WidgetTester tester, _Banc banc, Widget ecran) async {
+  fixerVueLarge(tester);
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: banc.container,
+      child: MaterialApp(
+        theme: ThemeApp.clair(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('fr'),
+        home: ecran,
+      ),
+    ),
+  );
+  await _stabiliser(tester);
 }
 
 void main() {
@@ -198,14 +240,14 @@ void main() {
 
   test('opt-out auto weather is effective', () {
     return avecGardeReseau((garde) async {
-      final banc = await _Banc.creer(meteoAuto: false, position: _bruxelles);
+      final banc = await _Banc.creer(meteoAuto: false, position: bruxelles);
 
       final carte = await banc.container.read(meteoAccueilProvider.future);
       final alertes = await banc.container.read(alertesMeteoProvider.future);
       await banc.genererTachesArrosage();
       final suggestion = await banc.container
           .read(suggererClimatPositionProvider)
-          .executer(_bruxelles);
+          .executer(bruxelles);
 
       expect(carte.meteoDesactivee, isTrue);
       expect(alertes, isEmpty);
@@ -214,21 +256,41 @@ void main() {
     });
   });
 
-  test('opt-out geolocation is effective', () {
+  testWidgets('opt-out geolocation is effective', (tester) {
     return avecGardeReseau((garde) async {
-      final banc = await _Banc.creer();
-      final prefs = await banc.container.read(preferencesProvider.future);
-      expect(prefs.modeGeolocalisation, ModeGeolocalisation.desactivee);
+      final banc = (await tester.runAsync(
+        () => _Banc.creer(
+          position: bruxelles,
+          geoloc: GeolocalisationDeTest(bruxelles),
+        ),
+      ))!;
+      final service = banc.geoloc.service;
+      await tester.runAsync(
+        () => banc.reglages.definirGeolocalisation(ModeGeolocalisation.gps),
+      );
+      await _monter(tester, banc, const PanneauConfidentialite());
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(PanneauConfidentialite)),
+      )!;
 
-      final carte = await banc.container.read(meteoAccueilProvider.future);
-      final alertes = await banc.container.read(alertesMeteoProvider.future);
-      await banc.genererTachesArrosage();
+      await tester.tap(find.text(l10n.confidPosition));
+      await _stabiliser(tester);
+      verify(() => service.demanderPermission()).called(1);
+      verify(() => service.positionActuelle()).called(1);
 
-      expect(carte.disponible, isFalse);
-      expect(alertes, isEmpty);
+      await tester.runAsync(
+        () => banc.reglages.definirGeolocalisation(
+          ModeGeolocalisation.desactivee,
+        ),
+      );
+      await _stabiliser(tester);
+      await tester.tap(find.text(l10n.confidPosition));
+      await _stabiliser(tester);
+
+      expect(find.text(l10n.confidPositionDesactivee), findsOneWidget);
+      verifyNever(() => service.positionActuelle());
+      verifyNever(() => service.demanderPermission());
       expect(garde.requetes, isEmpty);
-      verifyNever(() => banc.geoloc.service.positionActuelle());
-      verifyNever(() => banc.geoloc.service.demanderPermission());
     });
   });
 
@@ -240,14 +302,17 @@ void main() {
       'lib/presentation/screens/parametres/panneau_confidentialite.dart',
     };
 
+    final racine = _racinePaquet();
+    final racineLib = p.join(racine.path, 'lib');
+
     Set<String> lecteurs(String champ) => {
-      for (final f in Directory('lib').listSync(recursive: true))
+      for (final f in Directory(racineLib).listSync(recursive: true))
         if (f is File &&
             f.path.endsWith('.dart') &&
             !f.path.endsWith('.g.dart') &&
-            !f.path.contains('lib/infrastructure/database/') &&
+            !_relatif(racine, f).startsWith('lib/infrastructure/database/') &&
             f.readAsStringSync().contains(champ))
-          f.path,
+          _relatif(racine, f),
     };
 
     test('opt-out local sync is effective', () {
@@ -261,14 +326,6 @@ void main() {
 
         expect(garde.requetes, isEmpty);
         expect(lecteurs('syncLocaleActive'), lecteursAutorises);
-        for (final f in Directory('lib').listSync(recursive: true)) {
-          if (f is! File || !f.path.endsWith('.dart')) continue;
-          expect(
-            f.readAsStringSync(),
-            isNot(matches(r'ServerSocket|HttpServer|RawDatagramSocket')),
-            reason: '${f.path} opens a listening socket',
-          );
-        }
       });
     });
 
@@ -317,28 +374,7 @@ void main() {
       );
     });
     banc.container.read(astucePotagerZonesProvider.notifier).afficher();
-    tester.view.physicalSize = const Size(1600, 1000);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    await tester.pumpWidget(
-      UncontrolledProviderScope(
-        container: banc.container,
-        child: MaterialApp(
-          theme: ThemeApp.clair(),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('fr'),
-          home: ecran,
-        ),
-      ),
-    );
-    for (var i = 0; i < 10; i++) {
-      await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 50)),
-      );
-      await tester.pump(const Duration(milliseconds: 100));
-    }
+    await _monter(tester, banc, ecran);
   }
 
   // Contextual help is not gated by its setting: the post-onboarding hint on

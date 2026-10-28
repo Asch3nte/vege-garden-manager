@@ -12,11 +12,6 @@ import '../../helpers/faux_services_natifs.dart';
 import '../../helpers/garde_reseau.dart';
 import '../../helpers/potager_actif.dart';
 
-const _hotesAutorises = {'api.open-meteo.com', 'nominatim.openstreetmap.org'};
-
-Localisation get _bruxelles =>
-    Localisation.manuelle(ville: 'Bruxelles', latitude: 50.85, longitude: 4.35);
-
 /// Launches the whole app on a seeded in-memory database, wired with the real
 /// weather and geocoding services.
 Future<AppDatabase> _lancer(
@@ -24,10 +19,7 @@ Future<AppDatabase> _lancer(
   required bool meteoAuto,
   required Localisation position,
 }) async {
-  tester.view.physicalSize = const Size(1600, 1000);
-  tester.view.devicePixelRatio = 1.0;
-  addTearDown(tester.view.resetPhysicalSize);
-  addTearDown(tester.view.resetDevicePixelRatio);
+  fixerVueLarge(tester);
 
   final db = AppDatabase(NativeDatabase.memory());
   addTearDown(db.close);
@@ -54,15 +46,13 @@ Future<void> _stabiliser(WidgetTester tester) async {
 AppLocalizations _l10n(WidgetTester tester) =>
     AppLocalizations.of(tester.element(find.byType(Navigator).first))!;
 
-Future<void> _taper(WidgetTester tester, String libelle) async {
-  await tester.tap(find.text(libelle).last);
-  await _stabiliser(tester);
-}
+Future<void> _taper(WidgetTester tester, String libelle) =>
+    taper(tester, libelle, _stabiliser);
 
 void main() {
   testWidgets('only allowed hosts are ever contacted', (tester) {
     return avecGardeReseau((garde) async {
-      await _lancer(tester, meteoAuto: true, position: _bruxelles);
+      await _lancer(tester, meteoAuto: true, position: bruxelles);
       final l10n = _l10n(tester);
       final routeur = GoRouter.of(tester.element(find.byType(Navigator).first));
 
@@ -90,13 +80,13 @@ void main() {
       await _stabiliser(tester);
       await tester.pump(const Duration(hours: 1));
 
-      expect(garde.hotes, _hotesAutorises);
+      expect(garde.hotes, hotesAutorises);
     });
   });
 
   testWidgets('weather auto off: no automatic request', (tester) {
     return avecGardeReseau((garde) async {
-      await _lancer(tester, meteoAuto: false, position: _bruxelles);
+      await _lancer(tester, meteoAuto: false, position: bruxelles);
       final l10n = _l10n(tester);
 
       for (final onglet in [l10n.navCalendrier, l10n.navPotager]) {
@@ -134,14 +124,14 @@ void main() {
 
   testWidgets('user-triggered weather screen may call open-meteo', (tester) {
     return avecGardeReseau((garde) async {
-      await _lancer(tester, meteoAuto: true, position: _bruxelles);
+      await _lancer(tester, meteoAuto: true, position: bruxelles);
       GoRouter.of(
         tester.element(find.byType(Navigator).first),
       ).go('/accueil/meteo');
       await _stabiliser(tester);
 
       expect(garde.hotes, contains('api.open-meteo.com'));
-      expect(garde.hotes.difference(_hotesAutorises), isEmpty);
+      expect(garde.hotes.difference(hotesAutorises), isEmpty);
     });
   });
 }
