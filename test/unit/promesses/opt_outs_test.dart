@@ -24,13 +24,13 @@ import 'package:pot_a_gerer/domain/value_objects/conseil_arrosage.dart';
 import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/surface.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
+import 'package:pot_a_gerer/infrastructure/repositories/parcelle_repository_impl.dart';
+import 'package:pot_a_gerer/infrastructure/repositories/plantation_repository_impl.dart';
 import 'package:pot_a_gerer/infrastructure/repositories/preferences_repository_impl.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_plus.dart';
 import 'package:pot_a_gerer/presentation/screens/ecran_potager.dart';
 import 'package:pot_a_gerer/presentation/widgets/astuce_post_onboarding.dart';
-import 'package:pot_a_gerer/infrastructure/repositories/parcelle_repository_impl.dart';
-import 'package:pot_a_gerer/infrastructure/repositories/plantation_repository_impl.dart';
 
 import '../../helpers/faux_services_natifs.dart';
 import '../../helpers/garde_reseau.dart';
@@ -345,7 +345,9 @@ void main() {
   // the garden screen is still shown with the setting off. Asserts the
   // behaviour; should pass once `aideContextuelleActive` is wired.
   testWidgets('opt-out contextual help is effective', (tester) async {
-    const astuce = 'Touchez une zone pour y ajouter vos plantes.';
+    final astuce = lookupAppLocalizations(
+      const Locale('fr'),
+    ).astucePotagerZones;
     await monterAvecAide(tester, const EcranPotager());
     expect(find.text(astuce), findsOneWidget);
 
@@ -358,9 +360,15 @@ void main() {
   // `aideDocCompleteActive` is wired.
   testWidgets('opt-out full documentation help is effective', (tester) async {
     await monterAvecAide(tester, const EcranPlus());
-    expect(find.text('Aide & lexique'), findsOneWidget);
+    expect(
+      find.text(lookupAppLocalizations(const Locale('fr')).categAide),
+      findsOneWidget,
+    );
 
     await monterAvecAide(tester, const EcranPlus(), docComplete: false);
-    expect(find.text('Aide & lexique'), findsNothing);
+    expect(
+      find.text(lookupAppLocalizations(const Locale('fr')).categAide),
+      findsNothing,
+    );
   }, skip: true);
 }
