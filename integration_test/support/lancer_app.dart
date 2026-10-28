@@ -1,8 +1,13 @@
 import 'package:drift/native.dart';
+import 'dart:ui';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
+import 'package:pot_a_gerer/application/providers/langue_provider.dart';
+import 'package:pot_a_gerer/l10n/app_localizations.dart';
 import 'package:pot_a_gerer/main.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
@@ -28,6 +33,14 @@ Future<AppDatabase> lancerApp(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        // Same device-language resolution as Bootstrap, so the catalogue and
+        // the UI follow the same language whatever the runner's locale.
+        codeLangueSystemeProvider.overrideWithValue(
+          basicLocaleListResolution(
+            PlatformDispatcher.instance.locales,
+            AppLocalizations.supportedLocales,
+          ).languageCode,
+        ),
         ...surchargesDeTest(
           db,
           notifications: notifications,
