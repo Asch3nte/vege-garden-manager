@@ -12,6 +12,11 @@ Ordre d'exécution : audit pré-V1 phases 1 à 3 (§1), puis thème (§2), puis 
 Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10.md).
 
 - **Audit pré-V1 (2026-11)** : en cours — design approuvé, plan dans `docs/superpowers/`. Phases 1 à 3 (tests de non-perte, promesses, éducatif) et rapport `docs/audit-2026-11.md` avant le thème ; lots de correction après le thème.
+  Constats déjà relevés (tests `skip`, lots à ouvrir au rapport) :
+  - Fusion d'une sauvegarde : la sauvegarde gagne toujours, sans comparer `updated_at`, et écrase aussi les préférences locales (`fusion_sauvegarde_test.dart`).
+  - Fusion : une ligne supprimée localement réapparaît (aucune trace de suppression).
+  - Formulaires tâche, observation, équipement et fiche personnelle : un échec d'enregistrement n'affiche rien et bloque le bouton (`echec_enregistrement_test.dart`).
+  - Après réinitialisation, restaurer une sauvegarde impose de recréer un potager (Paramètres inaccessibles depuis l'onboarding).
 
 ## 2. Dette technique hors audit
 
