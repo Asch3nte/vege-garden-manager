@@ -19,6 +19,34 @@ void main() {
     );
     addTearDown(db.close);
 
-    expect(jsonDecode(jsonEncode(await instantane(db))), equals(attendu));
+    final actuel =
+        jsonDecode(jsonEncode(await instantane(db))) as Map<String, dynamic>;
+    final gele = attendu as Map<String, dynamic>;
+    for (final table in gele.keys) {
+      final lignesActuelles = actuel[table] as List<dynamic>?;
+      expect(lignesActuelles, isNotNull, reason: 'table $table missing');
+      final lignesGelees = gele[table] as List<dynamic>;
+      expect(
+        lignesActuelles!.length,
+        lignesGelees.length,
+        reason: 'row count of $table',
+      );
+      for (var i = 0; i < lignesGelees.length; i++) {
+        final gelee = lignesGelees[i] as Map<String, dynamic>;
+        final ligne = lignesActuelles[i] as Map<String, dynamic>;
+        for (final colonne in gelee.keys) {
+          expect(
+            ligne.containsKey(colonne),
+            isTrue,
+            reason: '$table[$i].$colonne missing',
+          );
+          expect(
+            ligne[colonne],
+            equals(gelee[colonne]),
+            reason: '$table[$i].$colonne',
+          );
+        }
+      }
+    }
   });
 }
