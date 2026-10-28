@@ -4,7 +4,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pot_a_gerer/app/historique_navigation.dart';
@@ -21,14 +21,25 @@ import '../test/helpers/faux_services_natifs.dart';
 import '../test/helpers/jeu_donnees_riche.dart';
 import 'support/lancer_app.dart';
 
+class _MockHttpClient extends Mock implements http.Client {}
+
 /// Fails every outgoing request and counts the attempts.
 class _ReseauRefuse {
   int tentatives = 0;
 
-  late final http.Client client = MockClient((_) async {
-    tentatives++;
-    throw const SocketException('network blocked in tests');
-  });
+  late final http.Client client = _creerClient();
+
+  http.Client _creerClient() {
+    registerFallbackValue(Uri());
+    final c = _MockHttpClient();
+    when(() => c.get(any(), headers: any(named: 'headers'))).thenAnswer((
+      _,
+    ) async {
+      tentatives++;
+      throw const SocketException('network blocked in tests');
+    });
+    return c;
+  }
 }
 
 /// Safety net: no socket may be opened outside the injected clients.
@@ -115,12 +126,12 @@ void scenarioParcoursDonnees() {
     HttpOverrides.global = sockets;
     addTearDown(() => HttpOverrides.global = precedent);
 
-    final fichiers = FauxGestionnaireSauvegardeFichier();
+    final fichiers = FichiersDeTest();
     final base = AppDatabase(NativeDatabase.memory());
     final db = await lancerApp(
       tester,
       base: base,
-      geoloc: FauxGeolocalisationService.refus(),
+      geoloc: GeolocalisationDeTest.refus(),
       fichiers: fichiers,
       surcharges: [
         geocodageServiceProvider.overrideWith(

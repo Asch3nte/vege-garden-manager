@@ -43,6 +43,20 @@ Future<void> main(List<String> args) async {
       exitCode = 1;
       return;
     }
+    final fixtures = Directory.fromUri(
+      Platform.script.resolve('../test/fixtures'),
+    );
+    final sqlFile = File('${fixtures.path}/base_v$version.sql');
+    final jsonFile = File('${fixtures.path}/base_v${version}_attendue.json');
+    final existants = [sqlFile, jsonFile].where((f) => f.existsSync());
+    if (existants.isNotEmpty) {
+      stderr.writeln(
+        'Refusing to overwrite frozen fixtures: '
+        '${existants.map((f) => f.path).join(', ')}',
+      );
+      exitCode = 1;
+      return;
+    }
     await peuplerJeuRiche(db, horodatage: DateTime.utc(2026, 6, 1));
     final snapshot = await instantane(db);
 
@@ -68,11 +82,9 @@ Future<void> main(List<String> args) async {
     sql.writeln('PRAGMA user_version = $version;');
 
     final json = const JsonEncoder.withIndent('  ').convert(snapshot);
-    File('test/fixtures/base_v$version.sql').writeAsStringSync(sql.toString());
-    File(
-      'test/fixtures/base_v${version}_attendue.json',
-    ).writeAsStringSync('$json\n');
-    stdout.writeln('Wrote test/fixtures/base_v$version.*');
+    sqlFile.writeAsStringSync(sql.toString());
+    jsonFile.writeAsStringSync('$json\n');
+    stdout.writeln('Wrote ${fixtures.path}/base_v$version.*');
   } finally {
     await db.close();
   }

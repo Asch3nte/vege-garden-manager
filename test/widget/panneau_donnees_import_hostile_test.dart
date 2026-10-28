@@ -73,7 +73,7 @@ void main() {
     final avant = await instantane(db);
     final l10n = await monter(
       tester,
-      FauxGestionnaireSauvegardeFichier()..aLire = '{"schemaVersion": 1, "tab',
+      FichiersDeTest(aLire: '{"schemaVersion": 1, "tab').service,
     );
 
     await tester.tap(find.text(l10n.donneesImportBouton));

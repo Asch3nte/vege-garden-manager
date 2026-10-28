@@ -147,7 +147,7 @@ void main() {
         _verifier(r, debut, fin, [_cle(dimanche)]);
       }, timeout: delai);
 
-      test('custom interval 1 and 3: exact arithmetic across the switch', () {
+      test('custom intervals 1, 2, 3 and 7: exact arithmetic across the switch', () {
         for (final n in [1, 2, 3, 7]) {
           final r = _rappel(
             TypeRecurrence.personnalise,

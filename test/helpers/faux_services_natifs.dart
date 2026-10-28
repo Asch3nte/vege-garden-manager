@@ -10,85 +10,105 @@ import 'package:pot_a_gerer/domain/value_objects/localisation.dart';
 import 'package:pot_a_gerer/domain/value_objects/notification_locale.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/presentation/services/gestionnaire_sauvegarde_fichier.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:riverpod/misc.dart';
 
-/// Records the scheduled notifications instead of talking to the OS.
-class FauxNotificationService implements AbstractNotificationService {
-  final List<NotificationLocale> _programmees = [];
+class MockNotificationService extends Mock
+    implements AbstractNotificationService {}
 
-  List<NotificationLocale> get programmees => List.unmodifiable(_programmees);
+class MockGeolocalisationService extends Mock
+    implements AbstractGeolocalisationService {}
 
-  @override
-  Future<void> programmer(NotificationLocale notif) async {
-    _programmees.removeWhere((n) => n.id == notif.id);
-    _programmees.add(notif);
+class MockGestionnaireSauvegardeFichier extends Mock
+    implements AbstractGestionnaireSauvegardeFichier {}
+
+class MockInfoApplicationService extends Mock
+    implements AbstractInfoApplicationService {}
+
+class MockOuvertureLienService extends Mock
+    implements AbstractOuvertureLienService {}
+
+class _FallbackNotification extends Fake implements NotificationLocale {}
+
+/// Notification mock that keeps the scheduled notifications readable.
+class NotificationsDeTest {
+  /// The mock to inject.
+  final MockNotificationService service = MockNotificationService();
+
+  NotificationsDeTest() {
+    registerFallbackValue(_FallbackNotification());
+    when(() => service.programmer(any())).thenAnswer((i) async {
+      final notif = i.positionalArguments.first as NotificationLocale;
+      _programmees.removeWhere((n) => n.id == notif.id);
+      _programmees.add(notif);
+    });
+    when(() => service.annuler(any())).thenAnswer((i) async {
+      final id = i.positionalArguments.first as String;
+      _programmees.removeWhere((n) => n.id == id);
+    });
+    when(() => service.sontAutorisees()).thenAnswer((_) async => true);
   }
 
-  @override
-  Future<void> annuler(String id) async =>
-      _programmees.removeWhere((n) => n.id == id);
+  final List<NotificationLocale> _programmees = [];
 
-  @override
-  Future<bool> sontAutorisees() async => true;
+  /// Currently scheduled notifications.
+  List<NotificationLocale> get programmees => List.unmodifiable(_programmees);
 }
 
-/// Fixed position, or a refusal.
-class FauxGeolocalisationService implements AbstractGeolocalisationService {
-  final Localisation? _position;
+/// Geolocation mock with a fixed position, or a refusal.
+class GeolocalisationDeTest {
+  /// The mock to inject.
+  final MockGeolocalisationService service = MockGeolocalisationService();
 
   /// Grants permission and returns [position].
-  FauxGeolocalisationService(Localisation position) : _position = position;
+  GeolocalisationDeTest(Localisation position) {
+    when(() => service.serviceActif()).thenAnswer((_) async => true);
+    when(
+      () => service.permission(),
+    ).thenAnswer((_) async => PermissionLocalisation.accordee);
+    when(
+      () => service.demanderPermission(),
+    ).thenAnswer((_) async => PermissionLocalisation.accordee);
+    when(() => service.positionActuelle()).thenAnswer((_) async => position);
+  }
 
   /// Denies permission; reading the position fails.
-  FauxGeolocalisationService.refus() : _position = null;
-
-  @override
-  Future<bool> serviceActif() async => _position != null;
-
-  @override
-  Future<PermissionLocalisation> permission() async => _position != null
-      ? PermissionLocalisation.accordee
-      : PermissionLocalisation.refusee;
-
-  @override
-  Future<PermissionLocalisation> demanderPermission() => permission();
-
-  @override
-  Future<Localisation> positionActuelle() async =>
-      _position ??
-      (throw GeolocalisationIndisponibleException('Permission denied.'));
+  GeolocalisationDeTest.refus() {
+    when(() => service.serviceActif()).thenAnswer((_) async => false);
+    when(
+      () => service.permission(),
+    ).thenAnswer((_) async => PermissionLocalisation.refusee);
+    when(
+      () => service.demanderPermission(),
+    ).thenAnswer((_) async => PermissionLocalisation.refusee);
+    when(
+      () => service.positionActuelle(),
+    ).thenThrow(GeolocalisationIndisponibleException('Permission denied.'));
+  }
 }
 
-/// In-memory stand-in for the share sheet and the file picker.
-class FauxGestionnaireSauvegardeFichier
-    implements AbstractGestionnaireSauvegardeFichier {
+/// File manager mock: canned read and recorded shares.
+class FichiersDeTest {
+  /// The mock to inject.
+  final MockGestionnaireSauvegardeFichier service =
+      MockGestionnaireSauvegardeFichier();
+
+  /// Content returned by `choisirEtLire`; `null` simulates a cancel.
+  String? aLire;
+
   /// Content of the last shared document.
   String? dernierPartage;
 
   /// Name of the last shared document.
   String? dernierNomFichier;
 
-  /// Content returned by [choisirEtLire]; `null` simulates a cancel.
-  String? aLire;
-
-  @override
-  Future<void> partager(String contenu, String nomFichier) async {
-    dernierPartage = contenu;
-    dernierNomFichier = nomFichier;
+  FichiersDeTest({this.aLire}) {
+    when(() => service.partager(any(), any())).thenAnswer((i) async {
+      dernierPartage = i.positionalArguments[0] as String;
+      dernierNomFichier = i.positionalArguments[1] as String;
+    });
+    when(() => service.choisirEtLire()).thenAnswer((_) async => aLire);
   }
-
-  @override
-  Future<String?> choisirEtLire() async => aLire;
-}
-
-class _FauxInfoApplicationService implements AbstractInfoApplicationService {
-  @override
-  Future<String> obtenirVersionAffichee() async => '0.0.0-test';
-}
-
-class _FauxOuvertureLienService implements AbstractOuvertureLienService {
-  @override
-  Future<bool> ouvrir(Uri url) async => true;
 }
 
 final Set<Object> _natifs = {
@@ -100,25 +120,32 @@ final Set<Object> _natifs = {
 };
 
 /// Overrides wiring the real implementations on [base] and replacing every
-/// platform-bound service with a fake.
+/// platform-bound service with a mock.
 List<Override> surchargesDeTest(
   AppDatabase base, {
-  FauxNotificationService? notifications,
-  FauxGeolocalisationService? geoloc,
-  FauxGestionnaireSauvegardeFichier? fichiers,
-}) => [
-  ...Composition.surcharges(base).where((o) => !_natifs.contains(o.origin)),
-  notificationServiceProvider.overrideWithValue(
-    notifications ?? FauxNotificationService(),
-  ),
-  geolocalisationServiceProvider.overrideWithValue(
-    geoloc ?? FauxGeolocalisationService.refus(),
-  ),
-  gestionnaireSauvegardeFichierProvider.overrideWithValue(
-    fichiers ?? FauxGestionnaireSauvegardeFichier(),
-  ),
-  infoApplicationServiceProvider.overrideWithValue(
-    _FauxInfoApplicationService(),
-  ),
-  ouvertureLienServiceProvider.overrideWithValue(_FauxOuvertureLienService()),
-];
+  NotificationsDeTest? notifications,
+  GeolocalisationDeTest? geoloc,
+  FichiersDeTest? fichiers,
+}) {
+  registerFallbackValue(Uri());
+  final info = MockInfoApplicationService();
+  when(
+    () => info.obtenirVersionAffichee(),
+  ).thenAnswer((_) async => '0.0.0-test');
+  final lien = MockOuvertureLienService();
+  when(() => lien.ouvrir(any())).thenAnswer((_) async => true);
+  return [
+    ...Composition.surcharges(base).where((o) => !_natifs.contains(o.origin)),
+    notificationServiceProvider.overrideWithValue(
+      (notifications ?? NotificationsDeTest()).service,
+    ),
+    geolocalisationServiceProvider.overrideWithValue(
+      (geoloc ?? GeolocalisationDeTest.refus()).service,
+    ),
+    gestionnaireSauvegardeFichierProvider.overrideWithValue(
+      (fichiers ?? FichiersDeTest()).service,
+    ),
+    infoApplicationServiceProvider.overrideWithValue(info),
+    ouvertureLienServiceProvider.overrideWithValue(lien),
+  ];
+}
