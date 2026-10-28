@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pot_a_gerer/app/historique_navigation.dart';
@@ -20,7 +19,7 @@ import 'package:pot_a_gerer/presentation/widgets/globe/globe_terrestre.dart';
 
 import '../test/helpers/faux_services_natifs.dart';
 import '../test/helpers/jeu_donnees_riche.dart';
-import 'support/app_de_test.dart';
+import 'support/lancer_app.dart';
 
 /// Fails every outgoing request and counts the attempts.
 class _ReseauRefuse {
@@ -102,9 +101,8 @@ Future<void> _ouvrirDonnees(WidgetTester tester) async {
   await _taper(tester, l10n.categDonnees);
 }
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+/// Registers this scenario's tests.
+void scenarioParcoursDonnees() {
   testWidgets('onboarding to restore: nothing lost', (tester) async {
     tester.view.physicalSize = const Size(1600, 1000);
     tester.view.devicePixelRatio = 1.0;

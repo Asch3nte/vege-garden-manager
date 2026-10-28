@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:pot_a_gerer/l10n/app_localizations.dart';
 
-import 'support/app_de_test.dart';
+import 'support/lancer_app.dart';
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+/// Registers this scenario's tests.
+void scenarioDemarrage() {
   testWidgets('first launch shows onboarding', (tester) async {
     await lancerApp(tester);
 
