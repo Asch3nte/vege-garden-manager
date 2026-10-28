@@ -4,16 +4,18 @@ Source unique du reste à faire. Remplace `docs/13-roadmap-et-versioning.md` et
 `docs/15-elements-differes.md` (historique : `git log -- docs/13* docs/15*`).
 Une entrée résolue est retirée dans le commit qui la résout.
 
-Ordre d'exécution : §2 et §3 (§1, l'audit, est soldé).
+Ordre d'exécution : audit pré-V1 phases 1 à 3 (§1), puis thème (§2), puis lots de l'audit et §3.
 §4 avance en parallèle. §5 juste avant la sortie.
 
 ## 1. Corrections issues de l'audit
 
 Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10.md).
 
+- **Audit pré-V1 (2026-11)** : en cours — design approuvé, plan dans `docs/superpowers/`. Phases 1 à 3 (tests de non-perte, promesses, éducatif) et rapport `docs/audit-2026-11.md` avant le thème ; lots de correction après le thème.
+
 ## 2. Dette technique hors audit
 
-- **Thème** : le thème actuel est un placeholder ; thème général à refaire entièrement, clair et sombre (valeurs `CouleursApp.*Sombre` jamais validées). Maquetter puis revoir docs/08.
+- **Thème** : après les phases 1 à 3 de l'audit (§1). Le thème actuel est un placeholder ; thème général à refaire entièrement, clair et sombre (valeurs `CouleursApp.*Sombre` jamais validées). Maquetter dans Artifact puis revoir docs/08.
 
 ## 3. Finitions V1
 
