@@ -1,6 +1,6 @@
 # Audit pré-V1 — design
 
-Date : 2026-10-27. Statut : en attente d'approbation du dev.
+Date : 2026-10-27. Statut : approuvé le 2026-10-28.
 
 ## 1. Intention
 
