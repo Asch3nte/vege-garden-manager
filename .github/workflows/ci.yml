@@ -37,6 +37,11 @@ jobs:
           TZ: Europe/Brussels
         run: flutter test
 
+      - name: Run daylight-saving tests (southern hemisphere)
+        env:
+          TZ: Australia/Sydney
+        run: flutter test --tags dst
+
   e2e-linux:
     runs-on: ubuntu-latest
     timeout-minutes: 30
