@@ -1,5 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/infrastructure/database/app_database.dart';
 import 'package:pot_a_gerer/main.dart';
@@ -15,17 +16,21 @@ Future<AppDatabase> lancerApp(
   FauxNotificationService? notifications,
   FauxGeolocalisationService? geoloc,
   FauxGestionnaireSauvegardeFichier? fichiers,
+  List<Override> surcharges = const [],
 }) async {
   tzdata.initializeTimeZones();
   final db = base ?? AppDatabase(NativeDatabase.memory());
   await tester.pumpWidget(
     ProviderScope(
-      overrides: surchargesDeTest(
-        db,
-        notifications: notifications,
-        geoloc: geoloc,
-        fichiers: fichiers,
-      ),
+      overrides: [
+        ...surchargesDeTest(
+          db,
+          notifications: notifications,
+          geoloc: geoloc,
+          fichiers: fichiers,
+        ).where((o) => !surcharges.any((s) => s.origin == o.origin)),
+        ...surcharges,
+      ],
       child: const PotAGererApp(),
     ),
   );
