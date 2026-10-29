@@ -43,6 +43,7 @@ conservées hors du repo).
 | [17 — Illustrations du glossaire](17-illustrations-glossaire.md) | Procédure pas à pas : ajouter une image à une page du lexique (dossier, format WebP ≤ 800 px, licences PD/CC0, registre, SOURCES.txt, lint) |
 | [18 — Publication](18-publication-android.md) | Clé de release, secrets CI, tag `v*` → brouillon de Release (Android signé, Linux, Windows) |
 | [Audit 2026-10](audit-2026-10.md) | Audit du code : 44 constats classés gravité/effort, lints stricts, purge des commentaires |
+| [Audit 2026-11](audit-2026-11.md) | Audit pré-V1 : preuves de non-perte, promesses, éducatif, sécurité ; lots de correction |
 | [decisions/](decisions/) | ADR — décisions d'architecture |
 
 ## Pour le développement

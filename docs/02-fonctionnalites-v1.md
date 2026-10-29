@@ -91,6 +91,8 @@ sa propre position.
 
 ## 8. Post-récolte
 
+> Reporté en V1.1 ([ADR-0019](decisions/0019-report-post-recolte-v11.md)) ; non livré en V1.
+
 - Suggestions de **conservation** (frais, conserves, lactofermentation, séchage…).
 - Suggestions d'**utilisations culinaires** / recettes.
 - Données portées par les fiches plantes YAML (section `conservation` et
@@ -98,7 +100,7 @@ sa propre position.
 
 ## 9. Export / sauvegarde
 
-- Export **JSON** (intégral, format pivot) ou **CSV** (par table).
+- Export **JSON** (intégral, format pivot). Export **CSV** (par table) : optionnel.
 - Import / restauration depuis un export antérieur (modes : remplacer / fusionner).
 - Réinitialisation complète avec double confirmation.
 
