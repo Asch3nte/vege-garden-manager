@@ -18,6 +18,8 @@ Tous les lots sont livrés. Détail : [docs/audit-2026-10.md](docs/audit-2026-10
   - Formulaires tâche, observation, équipement et fiche personnelle : un échec d'enregistrement n'affiche rien et bloque le bouton (`echec_enregistrement_test.dart`).
   - Après réinitialisation, restaurer une sauvegarde impose de recréer un potager (Paramètres inaccessibles depuis l'onboarding).
   - Opt-outs d'aide (`aideContextuelleActive`, `aideDocCompleteActive`) : stockés, sans interrupteur ni effet dans l'UI ; promesse de docs/11 §9 non tenue (`opt_outs_test.dart`).
+  - Verbosité des conseils selon le palier d'expérience non implémentée (`paliers_experience_test.dart`).
+  - Conseil d'arrosage « pas nécessaire » sans pluie prévue : aucune ligne ni explication affichée, à trancher (`pourquoi_present_test.dart`).
 
 ## 2. Dette technique hors audit
 
