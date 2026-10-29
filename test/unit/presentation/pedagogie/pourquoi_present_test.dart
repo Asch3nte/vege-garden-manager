@@ -76,11 +76,7 @@ Widget _app(String locale, Widget home, List<Override> overrides, [Key? key]) =>
       ),
     );
 
-Set<String> _texts(WidgetTester tester) => {
-  for (final t in tester.widgetList<Text>(find.byType(Text)))
-    if ((t.data ?? t.textSpan?.toPlainText() ?? '').trim().isNotEmpty)
-      (t.data ?? t.textSpan!.toPlainText()).trim(),
-};
+String _textOf(Text t) => (t.data ?? t.textSpan?.toPlainText() ?? '').trim();
 
 void main() {
   group('RaisonReco', () {
@@ -136,12 +132,14 @@ void main() {
 
           final card = find.byType(Card);
           expect(card, findsOneWidget);
-          // Title and detail line, both non-empty.
-          final textes = tester
-              .widgetList<Text>(
-                find.descendant(of: card, matching: find.byType(Text)),
-              )
-              .map((t) => (t.data ?? '').trim())
+          // Title and detail are the first two Text children of the card's
+          // text column.
+          final colonne = tester.widget<Column>(
+            find.descendant(of: card, matching: find.byType(Column)).first,
+          );
+          final textes = colonne.children
+              .whereType<Text>()
+              .map(_textOf)
               .toList();
           expect(textes.length, greaterThanOrEqualTo(2));
           expect(textes[0], isNotEmpty, reason: 'title');
@@ -241,28 +239,30 @@ void main() {
       ];
     });
 
-    /// Texts the advice adds to the zone screen, compared with no advice.
-    Future<Set<String>> textesAjoutes(
+    /// Text of the advice row itself, rendered in the zone screen.
+    Future<String> texteLigne(
       WidgetTester tester,
       String locale,
       ConseilArrosage conseil,
     ) async {
-      Future<Set<String>> monter(ConseilArrosage? c, Key key) async {
-        await tester.pumpWidget(
-          _app(locale, const EcranZoneDetail(zoneId: 'z-1'), [
-            ...overridesBase,
-            conseilArrosagePlantationProvider(
-              'p-1',
-            ).overrideWith((ref) async => c),
-          ], key),
-        );
-        await tester.pumpAndSettle();
-        return _texts(tester);
-      }
-
-      final sans = await monter(null, const ValueKey('sans'));
-      final avec = await monter(conseil, const ValueKey('avec'));
-      return avec.difference(sans);
+      await tester.pumpWidget(
+        _app(locale, const EcranZoneDetail(zoneId: 'z-1'), [
+          ...overridesBase,
+          conseilArrosagePlantationProvider(
+            'p-1',
+          ).overrideWith((ref) async => conseil),
+        ]),
+      );
+      await tester.pumpAndSettle();
+      final ligne = find.byWidgetPredicate(
+        (w) => w.runtimeType.toString() == '_LigneConseilArrosage',
+      );
+      expect(ligne, findsOneWidget);
+      return find
+          .descendant(of: ligne, matching: find.byType(Text))
+          .evaluate()
+          .map((e) => _textOf(e.widget as Text))
+          .join();
     }
 
     // Representative day count: `joursAvantArrosage` is a nullable int.
@@ -295,12 +295,12 @@ void main() {
                 'message ($locale, ${u.name}, recente=$recente, '
                 'prevue=$prevue, retention=$retention)',
                 (tester) async {
-                  final ajoutes = await textesAjoutes(
+                  final texte = await texteLigne(
                     tester,
                     locale,
                     conseil(u, recente, prevue, retention),
                   );
-                  expect(ajoutes, isNotEmpty);
+                  expect(texte, isNotEmpty);
                 },
               );
             }
@@ -316,7 +316,7 @@ void main() {
         (tester) async {
           for (final recente in [false, true]) {
             for (final retention in [false, true]) {
-              final ajoutes = await textesAjoutes(
+              final texte = await texteLigne(
                 tester,
                 locale,
                 conseil(
@@ -327,7 +327,7 @@ void main() {
                 ),
               );
               expect(
-                ajoutes,
+                texte,
                 isNotEmpty,
                 reason: 'recente=$recente retention=$retention',
               );

@@ -5,6 +5,11 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pot_a_gerer/domain/value_objects/preferences_unites.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseur_asset_source.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/bioagresseurs_loader.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/famille_asset_source.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/familles_loader.dart';
+import 'package:pot_a_gerer/infrastructure/catalogue/filesystem_fiche_asset_source.dart';
 import 'package:pot_a_gerer/l10n/app_localizations_fr.dart';
 import 'package:pot_a_gerer/presentation/glossaire/liens_glossaire.dart';
 import 'package:pot_a_gerer/presentation/glossaire/registre_glossaire.dart';
@@ -63,12 +68,23 @@ Map<String, Object?> _fr(Map<Object?, Object?> fiche) {
       : <String, Object?>{};
 }
 
-/// Sheet with its `i18n.fr` completed from [mere] (a child only declares what
-/// differs from its parent).
+/// Sheet with its `i18n.fr` completed along the parent chain (child, parent,
+/// grandparent, ...); a cycle stops the walk.
 Map<String, Object?> _frEffectif(
   Map<Object?, Object?> fiche,
-  Map<Object?, Object?>? mere,
-) => {if (mere != null) ..._fr(mere), ..._fr(fiche)};
+  Map<String, Map<Object?, Object?>> parId,
+) {
+  final chaine = [fiche];
+  final vus = {'${fiche['id']}'};
+  var courant = fiche;
+  while (courant['parent_id'] != null) {
+    final mere = parId['${courant['parent_id']}'];
+    if (mere == null || !vus.add('${mere['id']}')) break;
+    chaine.add(mere);
+    courant = mere;
+  }
+  return {for (final f in chaine.reversed) ..._fr(f)};
+}
 
 /// Free-text values of `i18n.fr` and of every `*_i18n.fr` field.
 Iterable<String> _textes(Object? noeud, {bool dansFr = false}) sync* {
@@ -113,13 +129,15 @@ MesuresPedagogie mesurer({
   required Map<String, String> arbFr,
   required List<Map<Object?, Object?>> fiches,
 }) {
-  final parId = {for (final f in fiches) '${f['id']}': f};
+  final parId = {
+    for (final f in fiches)
+      if (f['id'] != null) '${f['id']}': f,
+  };
 
   var sectionsVides = 0;
   var fichesSansConseil = 0;
   for (final fiche in fiches) {
-    final mere = parId['${fiche['parent_id']}'];
-    final fr = _frEffectif(fiche, mere);
+    final fr = _frEffectif(fiche, parId);
     sectionsVides += _sections.where((s) => _vide(fr[s])).length;
     if (_champsConseil.every((c) => _vide(fr[c]))) fichesSansConseil++;
   }
@@ -177,11 +195,15 @@ MesuresPedagogie mesurer({
 }
 
 void main() {
-  test('pedagogy metrics never regress', () {
+  test('pedagogy metrics never regress', () async {
     final termes = construireGlossaire(
       l10n: AppLocalizationsFr(),
-      familles: const [],
-      bioagresseurs: const [],
+      familles: (await FamillesLoader(
+        FilesystemFamilleAssetSource(),
+      ).charger()).toutes(),
+      bioagresseurs: (await BioagresseursLoader(
+        FilesystemBioagresseurAssetSource(),
+      ).charger()).tous(),
       unites: const PreferencesUnites(),
     );
     final arb =
@@ -190,14 +212,16 @@ void main() {
             .entries
             .where((e) => e.value is String)
             .map((e) => MapEntry(e.key, e.value as String));
+    final source = FilesystemFicheAssetSource();
     final fiches = <Map<Object?, Object?>>[
-      for (final fichier
-          in Directory('assets/fiches_plantes')
-              .listSync(recursive: true)
-              .whereType<File>()
-              .where((f) => f.path.endsWith('.yaml'))
-              .where((f) => !f.path.contains('/_')))
-        loadYaml(fichier.readAsStringSync()) as Map<Object?, Object?>,
+      for (final chemin in await source.listerCheminsFiches())
+        // An empty or comment-only file parses to null: a sheet with every
+        // section empty, so it is still counted.
+        switch (loadYaml(await source.lireFiche(chemin))) {
+          final Map<Object?, Object?> m => m,
+          null => <Object?, Object?>{},
+          _ => throw StateError('$chemin: root is not a mapping'),
+        },
     ];
 
     final mesures = mesurer(
@@ -208,14 +232,15 @@ void main() {
     // ignore: avoid_print
     print('pedagogy measures: $mesures');
 
-    if (Platform.environment['MAJ_REFERENCE'] == '1') {
-      File(_fichierReference).writeAsStringSync(
+    final fichier = File(_fichierReference);
+    final maj = Platform.environment['MAJ_REFERENCE'] == '1';
+    if (maj && !fichier.existsSync()) {
+      fichier.writeAsStringSync(
         '${const JsonEncoder.withIndent('  ').convert(mesures.toJson())}\n',
       );
     }
     final reference =
-        (jsonDecode(File(_fichierReference).readAsStringSync())
-                as Map<String, dynamic>)
+        (jsonDecode(fichier.readAsStringSync()) as Map<String, dynamic>)
             .cast<String, int>();
 
     mesures.toJson().forEach((nom, valeur) {
@@ -224,10 +249,18 @@ void main() {
         lessThanOrEqualTo(reference[nom]!),
         reason: '$nom regressed',
       );
-      if (valeur < reference[nom]!) {
-        // ignore: avoid_print
-        print('$nom: $valeur < ${reference[nom]}, lower the reference.');
-      }
     });
+    if (maj) {
+      fichier.writeAsStringSync(
+        '${const JsonEncoder.withIndent('  ').convert(mesures.toJson())}\n',
+      );
+    } else {
+      mesures.toJson().forEach((nom, valeur) {
+        if (valeur < reference[nom]!) {
+          // ignore: avoid_print
+          print('$nom: $valeur < ${reference[nom]}, lower the reference.');
+        }
+      });
+    }
   });
 }
