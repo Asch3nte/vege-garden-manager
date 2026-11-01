@@ -126,7 +126,7 @@ jobs:
           cp build/app/outputs/flutter-apk/app-release.apk "dist/pot-a-gerer-$TAG-android.apk"
           cp build/app/outputs/bundle/release/app-release.aab "dist/pot-a-gerer-$TAG-android.aab"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: github.event_name == 'push'
         with:
           name: release-android
@@ -167,7 +167,7 @@ jobs:
           cp -r build/linux/x64/release/bundle "pot-a-gerer-$TAG-linux-x64"
           tar -czf "dist/pot-a-gerer-$TAG-linux-x64.tar.gz" "pot-a-gerer-$TAG-linux-x64"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: github.event_name == 'push'
         with:
           name: release-linux
@@ -205,7 +205,7 @@ jobs:
           Copy-Item -Recurse build/windows/x64/runner/Release "pot-a-gerer-$env:TAG-windows-x64"
           Compress-Archive -Path "pot-a-gerer-$env:TAG-windows-x64" -DestinationPath "dist/pot-a-gerer-$env:TAG-windows-x64.zip"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: github.event_name == 'push'
         with:
           name: release-windows
